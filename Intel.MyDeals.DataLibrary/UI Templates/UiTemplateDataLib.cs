@@ -333,17 +333,6 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.PRD_EXCLDS_IDS,
-                Label = "Exclude Product Ids",
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
-                Width = 220,
-                IsReadOnly = false,
-                IsHidden = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
                 AtrbCd = AttributeCodes.CUST_ACCNT_DIV,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 120,
@@ -1059,7 +1048,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.DSCNT_PER_LN,    
+                AtrbCd = AttributeCodes.DSCNT_PER_LN,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
@@ -1567,7 +1556,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 110,
                 IsFilterable = true,
                 IsSortable = true,
@@ -1576,7 +1565,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-			items.Add(new UiTemplateContainerItem
+            items.Add(new UiTemplateContainerItem
             {
                 Id = 38,
                 AtrbCd = AttributeCodes.MRKT_SEG,

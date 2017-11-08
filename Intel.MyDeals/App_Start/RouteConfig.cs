@@ -16,13 +16,13 @@ namespace Intel.MyDeals
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
                 name: "DefaultVer",
                 url: "{controller}/{action}/{id}/{ver}",
-                defaults: new { controller = "Home", action = "Index", ver = UrlParameter.Optional }
+                defaults: new { controller = "Dashboard", action = "Index", ver = UrlParameter.Optional }
             );
         }
     }

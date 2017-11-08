@@ -91,7 +91,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		"CUST_ACCNT_DIV"
     ]
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
-	
+
     function init() {
         // force a resize event to format page
         //$scope.resizeEvent();
@@ -177,8 +177,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") { // no EXCLUDE IDS
 			// TODO: Phil please check that this is the correct mapping.
-        	root.colToLetter["PRD_EXCLDS"] = root.colToLetter["PTR_USER_PRD"];
-            root.colToLetter["PRD_EXCLDS_IDS"] = root.colToLetter["PTR_SYS_INVLD_PRD"];
+        	// root.colToLetter["PRD_EXCLDS"] = root.colToLetter["PTR_USER_PRD"];
             root.colToLetter["FIRST_DEAL_ATRB"] = root.colToLetter["ECAP_PRICE"];
         }
 
@@ -381,7 +380,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
-                sheet.range(root.colToLetter["PRD_EXCLDS_IDS"] + (rowStart)).value(usrInput.excludeProductIds);
             }
 
             systemModifiedProductInclude = false;
@@ -475,7 +473,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     // Performance and UX... removed this.  We will need to handle these in the MT rules
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "PRD_EXCLDS_IDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     // On Spreadsheet change
@@ -643,15 +641,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     	}
                     	var numToDel = rowStop + 1 - rowStart;
                     	cnt = cnt + 2;
-                    	if (root.colToLetter["PRD_EXCLDS_IDS"] !== undefined) {
-                    		disableRange(sheet.range(root.colToLetter["PRD_EXCLDS_IDS"] + cnt + ":" + root.colToLetter["PRD_EXCLDS_IDS"] + (cnt + numToDel - 1)));
-                    	}
 
 						// Disable user editable columns
                     	disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":Z" + (cnt + numToDel - 1)));
 
                     	// Re-enable Product column
-                    	var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel - 1));                    	
+                    	var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel - 1));
                     	prdRange.enable(true);
                     	prdRange.background(null);
 
@@ -792,7 +787,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var newItems = 0;
 
                 cleanupData(data);
-				
+
                 for (var r = 0; r < data.length; r++) {
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
@@ -1100,22 +1095,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         // Product Status
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
+                            sheet.range(root.colToLetter["PTR_USER_PRD"] + row + ":" + root.colToLetter["PTR_USER_PRD"]  + row).color("#FC4C02").bold(true);
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
 								sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).color("#FC4C02").bold(true);
-								//sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).borderLeft({ size: 6, color: "#FC4C02" });
-                                sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#FC4C02").bold(true);
                             }
                         } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
                             //vol tier
+                            sheet.range(root.colToLetter["PTR_USER_PRD"] + row + ":" + root.colToLetter["PTR_USER_PRD"] + row).color("#9bc600").bold(true);
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
                             	sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).color("#9bc600").bold(true);
-                            	sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#9bc600").bold(true);
                             }
-                        } else { // not validated                            
-                        	if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
+                        } else { // not validated
+                            sheet.range(root.colToLetter["PTR_USER_PRD"] + row + ":" + root.colToLetter["PTR_USER_PRD"] + row).color("#000000").bold(false);
+                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
 								sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).color("#000000").bold(false);
-								//sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + LTR_PRD_EXCLDS + row).borderLeft({ size: 6, color: "transparent" });
-                                sheet.range(LTR_FIRST_DEAL_ATRB + row).color("#000000").bold(false);
                             }
                         }
                     } else {
@@ -1791,12 +1784,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return x.ROW_NUMBER == currentRowNumber;
             });
         }
- 
+
 
         var hasProductDependencyErr = false;
 
     	// Validate columns that product is dependent on
-        for (var i=0; i<currentPricingTableRowData.length; i++) {			
+        for (var i=0; i<currentPricingTableRowData.length; i++) {
         	for (var d = 0; d < productValidationDependencies.length; d++) {
         		if (currentPricingTableRowData[i][productValidationDependencies[d]] === null || currentPricingTableRowData[i][productValidationDependencies[d]] === "") {
 
@@ -1811,7 +1804,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         			hasProductDependencyErr = true;
         		}
         		else {
-        			if (currentPricingTableRowData[i]._behaviors !== undefined 
+        			if (currentPricingTableRowData[i]._behaviors !== undefined
         				&& currentPricingTableRowData[i]._behaviors.isError !== undefined
 						&& currentPricingTableRowData[i]._behaviors.validMsg !== undefined
 						&& currentPricingTableRowData[i]._behaviors.isRequired !== undefined)
@@ -1865,7 +1858,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var object = {
                         "ROW_NUMBER": obj.ROW_NUMBER,
                         "USR_INPUT": obj.PRD_EXCLDS,
-                        "PRD_EXCLDS_IDS": obj.PRD_EXCLDS_IDS,
                         "EXCLUDE": true,
                         "FILTER": obj.PROD_INCLDS,
                         "START_DATE": moment(obj.START_DT).format("l"),
@@ -1985,10 +1977,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var excludeProducts = userInput.excludeProducts;
                     data[r].PRD_EXCLDS = excludeProducts;
                     sourceData[r].PRD_EXCLDS = excludeProducts;
-
-                    var excludeProductIds = userInput.excludeProductIds;
-                    data[r].PRD_EXCLDS_IDS = excludeProductIds;
-                    sourceData[r].PRD_EXCLDS_IDS = excludeProductIds;
                 }
             }
         }
@@ -2084,8 +2072,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
                                     data[r].PRD_EXCLDS = products.excludeProducts;
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
-                                    data[r].PRD_EXCLDS_IDS = products.excludeProductIds;
-                                    sourceData[r].PRD_EXCLDS_IDS = products.excludeProductIds;
                                 }
 
                                 // For VOL_TIER update the merged cells
@@ -2185,12 +2171,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!validProducts) {
             return "";
         }
-        var input = { 'contractProducts': '', 'excludeProducts': '', 'excludeProductIds': '' };
+        var input = { 'contractProducts': '', 'excludeProducts': '' };
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
                 var contractProducts = "";
                 var excludeProducts = "";
-                var excludeProductIds = "";
 
                 // Include products
                 var products = validProducts[prd].filter(function (x) {
@@ -2219,10 +2204,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     } else {
                         excludeProducts = exclDerivedUserInput.length == 1 ? getFullNameOfProduct(exclDerivedUserInput[0], exclDerivedUserInput[0].DERIVED_USR_INPUT) : exclDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
-                    excludeProductIds = exclDerivedUserInput[0].PRD_MBR_SID;
                     if (excludeProducts !== "") {
                         input.excludeProducts = input.excludeProducts === "" ? excludeProducts : input.excludeProducts + "," + excludeProducts;
-                        input.excludeProductIds = input.excludeProductIds === "" ? excludeProductIds : input.excludeProductIds + "," + excludeProductIds;
                     }
                 }
             }
@@ -2234,7 +2217,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!validProducts) {
             return "";
         }
-        var products = { 'contractProducts': '', 'excludeProducts': '', 'excludeProductIds': '' };
+        var products = { 'contractProducts': '', 'excludeProducts': ''};
         for (var prd in validProducts) {
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
                 var autoTranslated = {};
@@ -2257,7 +2240,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             else if (validProducts.hasOwnProperty(prd)) {
                 products.contractProducts = getUserInput(products.contractProducts, validProducts[prd], "I", 'HIER_VAL_NM');
                 products.excludeProducts = getUserInput(products.excludeProducts, validProducts[prd], "E", 'HIER_VAL_NM');
-                products.excludeProductIds = getUserInput(products.excludeProducts, validProducts[prd], "E", 'PRD_MBR_SID');
             }
         }
         return products;

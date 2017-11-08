@@ -269,7 +269,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 {
                     if (key == AttributeCodes.ECAP_PRICE)
                     {
-                        var items = JsonConvert.DeserializeObject<Dictionary<string,float>>(opFlatItem[key].ToString());
+                        var items = JsonConvert.DeserializeObject<Dictionary<string, float>>(opFlatItem[key].ToString());
                         retItems[key] = items["20___0"];
                     }
                     else if (key == AttributeCodes.GEO_COMBINED)
@@ -298,23 +298,23 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 }
             }
 
-			// PTR 
-			retItems[AttributeCodes.DC_ID] = opFlatItem[AttributeCodes.DC_PARENT_ID];
+            // PTR
+            retItems[AttributeCodes.DC_ID] = opFlatItem[AttributeCodes.DC_PARENT_ID];
             retItems[AttributeCodes.dc_type] = elMapping.ParentOpDataElementType;
             retItems[AttributeCodes.OBJ_SET_TYPE_CD] = elMapping.ParentOpDataElementSetType;
 
-			if (pricingTable.Count > 0)
-			{
-				retItems[AttributeCodes.DC_PARENT_ID] = pricingTable[AttributeCodes.DC_ID];
-				retItems[AttributeCodes.dc_parent_type] = pricingTable[AttributeCodes.dc_type];
-			}
-			else
-			{
-				retItems[AttributeCodes.DC_PARENT_ID] = 0;
-				retItems[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
-			}
+            if (pricingTable.Count > 0)
+            {
+                retItems[AttributeCodes.DC_PARENT_ID] = pricingTable[AttributeCodes.DC_ID];
+                retItems[AttributeCodes.dc_parent_type] = pricingTable[AttributeCodes.dc_type];
+            }
+            else
+            {
+                retItems[AttributeCodes.DC_PARENT_ID] = 0;
+                retItems[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
+            }
 
-			return retItems;
+            return retItems;
         }
 
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItemLocal, OpDataElementTypeMapping elMapping,
@@ -378,7 +378,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     break;
             }
 
-
             foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))
             {
                 if (singleDimAtrbs.Contains(key))
@@ -416,6 +415,13 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             newItem[AttributeCodes.dc_type] = elMapping.ChildOpDataElementType;
             newItem[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
             newItem[AttributeCodes.OBJ_SET_TYPE_CD] = elMapping.ChildOpDataElementSetType;
+
+            // Get the exclude Ids from the Product JSON
+            // Remove PRD_EXCLDS_IDS from PTR UI Template from Database
+            if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)
+            {
+                newItem[AttributeCodes.PRD_EXCLDS_IDS] = string.Join(",", pMaps.Where(p => p.EXCLUDE).Select(x => x.PRD_MBR_SID).Distinct());
+            }
 
             retItems.Add(newItem);
         }
