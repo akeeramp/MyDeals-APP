@@ -302,7 +302,6 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.DC_ID,
                 IsKey = true,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "number",
                 Label = "Row ID",
                 Width = 50,
                 IsReadOnly = true
@@ -805,6 +804,8 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 90,
                 Label = "Prc Table Row ID",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DC_PARENT_ID')#",
+                IsFilterable = true,
+                IsSortable = true,
                 IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
