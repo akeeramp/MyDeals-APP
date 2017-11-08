@@ -39,11 +39,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.switchingTabs = false;
     var unlimitedVal = "Unlimited"; // TODO: Hook up to default from db maybe?
 
-    var LTR_PTR_SYS_PRD = "B";
-    var LTR_PTR_SYS_INVLD_PRD = "C";
-    var LTR_PRD_EXCLDS_IDS = "D";
-    var LTR_PTR_USER_PRD = "E";
-    var LTR_PRD_EXCLDS = "F";
+	// TODO: Phil: What attribute does this map to? We should make this reference the root.coloLetter dictionary instead.
     var LTR_FIRST_DEAL_ATRB = "G";
 
 
@@ -84,11 +80,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
+	// Hard-coded sadnesses, but are better than other hard-coded sadness solutions
     var productValidationDependencies = [
 		"GEO_COMBINED",
 		"PROGRAM_PAYMENT",
 		"PROD_INCLDS"
     ]
+    var firstEditableColBeforeProduct = null; // used along with to properly disable/enable cols before PTR_USR_PRD. Is calucated using editableColsBeforeProduct. Defaults to PTR_USR_PRD when editableColsBeforeProduct is empty
+    var editableColsBeforeProduct = [ // keep track of columns that are before the PTR_USR_PRD column that can be edited by users, to properly enable/disable them
+		"CUST_ACCNT_DIV"
+    ]
+    var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
 	
     function init() {
         // force a resize event to format page
@@ -171,13 +173,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         $scope.numTiers = 1;
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
-        if (root.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") { // no EXCLUDE IDS
-            LTR_PTR_USER_PRD = "D";
-            LTR_PRD_EXCLDS = "E";
-            LTR_FIRST_DEAL_ATRB = "F";
-        }
-
         columns = vm.getColumns(ptTemplate);
+
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") { // no EXCLUDE IDS
+			// TODO: Phil please check that this is the correct mapping.
+        	root.colToLetter["PRD_EXCLDS"] = root.colToLetter["PTR_USER_PRD"];
+            root.colToLetter["PRD_EXCLDS_IDS"] = root.colToLetter["PTR_SYS_INVLD_PRD"];
+            root.colToLetter["FIRST_DEAL_ATRB"] = root.colToLetter["ECAP_PRICE"];
+        }
 
         ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
 
@@ -372,18 +375,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var usrInput = updateUserInput(validatedSelectedProducts);
             var contractProducts = usrInput.contractProducts;
             //PTR_SYS_PRD
-            sheet.range(LTR_PTR_SYS_PRD + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
+            sheet.range(root.colToLetter["PTR_SYS_PRD"] +(rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
 
             if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
-                sheet.range(LTR_PRD_EXCLDS_IDS + (rowStart)).value(usrInput.excludeProductIds);
+                sheet.range(root.colToLetter["PRD_EXCLDS_IDS"] + (rowStart)).value(usrInput.excludeProductIds);
             }
 
             systemModifiedProductInclude = false;
-            // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
-            sheet.range(LTR_PTR_SYS_INVLD_PRD + (rowStart)).value("");
+            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowStart)).value("");
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
@@ -416,25 +418,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         for (var a = row; a < mergedRows ; a++) {
                             var validJSON = {};
                             validJSON[key] = singleProductJSON[key];
-                            // can't use colToLetter for PTR_SYS_PRD because it is hidden
-                            sheet.range(LTR_PTR_SYS_PRD + (a)).value(JSON.stringify(validJSON));
+                            sheet.range(root.colToLetter["PTR_SYS_PRD"] + (a)).value(JSON.stringify(validJSON));
                             systemModifiedProductInclude = true;
                             sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(key);
                             systemModifiedProductInclude = false;
-                            // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
-                            sheet.range(LTR_PTR_SYS_INVLD_PRD + (a)).value("");
+                            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (a)).value("");
                         }
                         row = mergedRows - 1;
                     } else {
                         var validJSON = {};
                         validJSON[key] = singleProductJSON[key];
-                        // can't use colToLetter for PTR_SYS_PRD because it is hidden
-                        sheet.range(LTR_PTR_SYS_PRD + (row)).value(JSON.stringify(validJSON));
+                        sheet.range(root.colToLetter["PTR_SYS_PRD"] + (row)).value(JSON.stringify(validJSON));
                         systemModifiedProductInclude = true;
                         sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
                         systemModifiedProductInclude = false;
-                        // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
-                        sheet.range(LTR_PTR_SYS_INVLD_PRD + (row)).value("");
+                        sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (row)).value("");
                     }
                     row++;
                 }
@@ -464,14 +462,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 cols.push(col);
 
                 c += 1;
-                if (value.hidden === false) {
-                    // Create column to letter mapping
-                    var letter = String.fromCharCode(intA + c);
-                    root.colToLetter[value.field] = letter;
-                    root.letterToCol[letter] = value.field;
-                }
+            	// Create column to letter mapping
+                var letter = String.fromCharCode(intA + c);
+                root.colToLetter[value.field] = letter;
+                root.letterToCol[letter] = value.field;
             });
         }
+
+        lastHiddenBeginningColLetter = String.fromCharCode(root.colToLetter[GetFirstEdiatableBeforeProductCol()].charCodeAt(0) - 1);
+
         return cols;
     }
 
@@ -586,8 +585,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
-        var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
-
+        var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
         var hasValueInAtLeastOneCell = false;
 
@@ -599,7 +597,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         );
 
-        if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell || isRangeValueEmptyString)) { // Delete row
+        if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell)) { // Delete row
             var rowStart = topLeftRowIndex - 2;
             var rowStop = bottomRightRowIndex - 2;
             if (root.spreadDs !== undefined) {
@@ -621,8 +619,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.spreadDs.sync();
 
                                     $timeout(function () {
-                                        var n = data.length + 2;
-                                        disableRange(sheet.range(LTR_PTR_USER_PRD + n + ":" + LTR_PTR_USER_PRD + (n + numToDel + numToDel)));
+                                    	var n = data.length + 2;
+                                        disableRange(sheet.range(root.colToLetter['PTR_USER_PRD'] + n + ":" + root.colToLetter['PTR_USER_PRD'] + (n + numToDel + numToDel)));
                                         disableRange(sheet.range(LTR_FIRST_DEAL_ATRB + n + ":Z" + (n + numToDel + numToDel)));
                                     }, 10);
 
@@ -635,18 +633,29 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         },
                         function () { });
                     stealthOnChangeMode = false;
-                } else {
+                } else { // delete row with a temp id (ex: -101)
                     cleanupData(data);
                     root.spreadDs.sync();
                     $timeout(function () {
-                        var cnt = 0;
-                        for (var c = 0; c < data.length; c++) {
-                            if (data[c].DC_ID !== null) cnt++;
-                        }
-                        var numToDel = rowStop + 1 - rowStart;
-                        cnt = cnt + 2;
-                        disableRange(sheet.range(LTR_PRD_EXCLDS_IDS + cnt + ":" + LTR_PRD_EXCLDS_IDS + (cnt + numToDel - 1)));
-                        disableRange(sheet.range(LTR_PRD_EXCLDS + cnt + ":Z" + (cnt + numToDel - 1)));
+                    	var cnt = 0;
+                    	for (var c = 0; c < data.length; c++) {
+                    		if (data[c].DC_ID !== null) cnt++;
+                    	}
+                    	var numToDel = rowStop + 1 - rowStart;
+                    	cnt = cnt + 2;
+                    	if (root.colToLetter["PRD_EXCLDS_IDS"] !== undefined) {
+                    		disableRange(sheet.range(root.colToLetter["PRD_EXCLDS_IDS"] + cnt + ":" + root.colToLetter["PRD_EXCLDS_IDS"] + (cnt + numToDel - 1)));
+                    	}
+
+						// Disable user editable columns
+                    	disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":Z" + (cnt + numToDel - 1)));
+
+                    	// Re-enable Product column
+                    	var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel - 1));                    	
+                    	prdRange.enable(true);
+                    	prdRange.background(null);
+
+
                         clearUndoHistory();
                     }, 10);
                 }
@@ -656,7 +665,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Trigger only if the changed range contains the product column
 
             // check for empty strings
-            if (isRangeValueEmptyString) {
+        	if (isRangeValueEmptyString && !hasValueInAtLeastOneCell) {
                 return;
             }
 
@@ -676,7 +685,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
                     // NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
-                    sheet.range(LTR_PTR_SYS_PRD + topLeftRowIndex + ":" + LTR_PRD_EXCLDS_IDS + bottomRightRowIndex).value("");
+                	sheet.range(root.colToLetter["PTR_SYS_PRD"] + topLeftRowIndex + ":" + lastHiddenBeginningColLetter + bottomRightRowIndex).value("");
 
                     range.forEachCell(
                         function (rowIndex, colIndex, value) {
@@ -708,11 +717,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             if (isTrackerNumFlushed) {
                 // Clear out tracker number
-                var data = root.spreadDs.data();
-                data[topLeftRowIndex - 2].ORIG_ECAP_TRKR_NBR = null;
+            	var data = root.spreadDs.data();
+            	if (data[topLeftRowIndex - 2] !== undefined) { // NOTE: this will be undefined if user enters a new product while skipping rows
+            		data[topLeftRowIndex - 2].ORIG_ECAP_TRKR_NBR = null;
+            	}
             }
 
-            if (isTrackerNumFlushed || (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) || (isPtrSysPrdFlushed && isExcludeProductColumnIncludedInChanges)) {
+            if ((isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) || (isPtrSysPrdFlushed && isExcludeProductColumnIncludedInChanges)) {
                 syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
@@ -899,7 +910,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var startVolIndex = (root.colToLetter["STRT_VOL"]).charCodeAt(0);
 
                         // Enable cols except voltier
-                        range = sheet.range(LTR_PTR_USER_PRD + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
+                        range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
                         range = sheet.range(letterAfterTierCol + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
@@ -925,7 +936,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         );
                     }
                     else {
-                        range = sheet.range(LTR_PTR_USER_PRD + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                    	range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
                     }
@@ -955,6 +966,31 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.child.setRowIdStyle(data);
             }
         }, 10);
+    }
+
+    function GetFirstEdiatableBeforeProductCol() {
+    	if (firstEditableColBeforeProduct !== null) {
+    		return firstEditableColBeforeProduct;
+    	} else {
+    		return CalculateFirstEdiatableBeforeProductCol();
+    	}
+    }
+
+    function CalculateFirstEdiatableBeforeProductCol() {
+    	if (editableColsBeforeProduct.length > 0) {
+    		for (var i = 0; i < editableColsBeforeProduct.length; i++) {
+    			if (firstEditableColBeforeProduct === null) {
+    				firstEditableColBeforeProduct = editableColsBeforeProduct[i];
+    			} else if (root.colToLetter[firstEditableColBeforeProduct] > root.colToLetter[editableColsBeforeProduct[i]]) {
+    				// set to new firstEditableColBeforeProduct if that column is the before the previous firstEditableColBeforeProduct because they might be out of order
+    				firstEditableColBeforeProduct = editableColsBeforeProduct;
+    			}
+    		}
+    	} else {
+    		firstEditableColBeforeProduct = "PTR_USER_PRD";
+    	}
+
+    	return firstEditableColBeforeProduct;
     }
 
     function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
@@ -1064,21 +1100,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         // Product Status
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
-                            sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).color("#FC4C02").bold(true);
-                            //sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).borderLeft({ size: 6, color: "#FC4C02" });
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
+								sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).color("#FC4C02").bold(true);
+								//sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).borderLeft({ size: 6, color: "#FC4C02" });
                                 sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#FC4C02").bold(true);
                             }
                         } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
-                            sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).color("#9bc600").bold(true);
                             //vol tier
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
-                                sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#9bc600").bold(true);
+                            	sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).color("#9bc600").bold(true);
+                            	sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#9bc600").bold(true);
                             }
-                        } else { // not validated
-                            sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).color("#000000").bold(false);
-                            //sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).borderLeft({ size: 6, color: "transparent" });
-                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
+                        } else { // not validated                            
+                        	if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
+								sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + root.colToLetter["PRD_EXCLDS"] + row).color("#000000").bold(false);
+								//sheet.range(root.colToLetter["PRD_EXCLDS"] + row + ":" + LTR_PRD_EXCLDS + row).borderLeft({ size: 6, color: "transparent" });
                                 sheet.range(LTR_FIRST_DEAL_ATRB + row).color("#000000").bold(false);
                             }
                         }
@@ -2139,7 +2175,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var cnt = data.length;
             var numToDel = dataCountBeforeDelete - cnt;
             cnt = cnt + 2;
-            disableRange(sheet.range(LTR_PTR_USER_PRD + cnt + ":" + LTR_PTR_USER_PRD + (cnt + numToDel)));
+            disableRange(sheet.range(root.colToLetter['PTR_USER_PRD'] + cnt + ":" + root.colToLetter['PTR_USER_PRD'] + (cnt + numToDel)));
             disableRange(sheet.range(LTR_FIRST_DEAL_ATRB + cnt + ":Z" + (cnt + numToDel)));
         }
     }
