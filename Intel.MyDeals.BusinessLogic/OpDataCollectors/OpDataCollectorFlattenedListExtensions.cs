@@ -96,7 +96,7 @@ namespace Intel.MyDeals.BusinessLogic
             };
 
             OpDataCollectorFlattenedDictList opFlatDictList = dataCollectorLib
-                .SavePackets(data, contractToken, new List<int>(), false, "", false)
+                .SavePackets(data, new SavePacket(contractToken))
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
             if (opFlatDictList.ContainsKey(opDataElementType))

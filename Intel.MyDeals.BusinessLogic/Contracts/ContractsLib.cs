@@ -109,17 +109,15 @@ namespace Intel.MyDeals.BusinessLogic
         /// Save a contract header
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="validateIds"></param>
-        /// <param name="forcePublish"></param>
-        /// <param name="sourceEvent"></param>
+        /// <param name="savePacket"></param>
         /// <returns>MyDealsData</returns>
-        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.CNTRCT] = data
-            }, contractToken, validateIds, forcePublish, sourceEvent, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         /// <summary>
@@ -130,10 +128,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="pricingTables">Pricing Table collection</param>
         /// <param name="pricingTableRows">Pricing table Row collection</param>
         /// <param name="wipDeals">Wip Deals collection</param>
-        /// <param name="contractToken"></param>
-        /// <param name="validateIds"></param>
-        /// <param name="forcePublish"></param>
-        /// <param name="sourceEvent"></param>
+        /// <param name="savePacket"></param>
         /// <returns>MyDealsData</returns>
         public MyDealsData SaveContract(
             OpDataCollectorFlattenedList contracts,
@@ -141,18 +136,14 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorFlattenedList pricingTables,
             OpDataCollectorFlattenedList pricingTableRows,
             OpDataCollectorFlattenedList wipDeals,
-            ContractToken contractToken,
-            List<int> validateIds,
-            bool forcePublish,
-            string sourceEvent,
-            bool resetValidationChild)
+            SavePacket savePacket)
         {
             OpLog.Log("contractsLib.SaveContract - Start.");
             Stopwatch stopwatch = new Stopwatch();
             if (EN.GLOBAL.DEBUG >= 1)
             {
                 stopwatch.Start();
-                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaving Contract {1}", stopwatch.Elapsed.TotalMilliseconds, contractToken.ContractId, DateTime.Now);
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaving Contract {1}", stopwatch.Elapsed.TotalMilliseconds, savePacket.MyContractToken.ContractId, DateTime.Now);
             }
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
@@ -185,7 +176,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Don't check for ANY becuase we might have to delete the last item
-            if (pricingTableRows != null && (contractToken.DelPtr || pricingTableRows.Any()))
+            if (pricingTableRows != null && (savePacket.MyContractToken.DelPtr || pricingTableRows.Any()))
             {
                 data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
                 secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
@@ -198,18 +189,18 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             MyDealsData rtn = _dataCollectorLib.SavePackets(
-                data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild,
+                data, savePacket,
                 primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
                 secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
 
             if (EN.GLOBAL.DEBUG >= 1)
-                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaved Contract {1}", stopwatch.Elapsed.TotalMilliseconds, contractToken.ContractId, DateTime.Now);
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaved Contract {1}", stopwatch.Elapsed.TotalMilliseconds, savePacket.MyContractToken.ContractId, DateTime.Now);
 
             OpLog.Log("contractsLib.SaveContract - Complete.");
             return rtn;
         }
 
-        public OpDataCollectorFlattenedDictList SaveFullContract(ContractToken contractToken, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public OpDataCollectorFlattenedDictList SaveFullContract(OpDataCollectorFlattenedDictList fullContracts, SavePacket savePacket)
         {
             return SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.CNTRCT) ? fullContracts[OpDataElementType.CNTRCT] : new OpDataCollectorFlattenedList(),
@@ -217,7 +208,7 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                contractToken, validateIds, forcePublish, sourceEvent, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
@@ -261,17 +252,23 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            SavePacket savePacket = new SavePacket
+            {
+                MyContractToken = contractToken,
+                ValidateIds = validationIds,
+                ForcePublish = forcePublish,
+                SourceEvent = contractAndStrategy.EventSource,
+                ResetValidationChild = resetValidationChild
+
+            };
+
             MyDealsData myDealsData = SaveContract(
                 contractAndStrategy.Contract,
                 contractAndStrategy.PricingStrategy,
                 contractAndStrategy.PricingTable,
                 isWipDealSource ? translatedFlattenedList : contractAndStrategy.PricingTableRow, //
                 isPrcTblSource ? translatedFlattenedList : contractAndStrategy.WipDeals,
-                contractToken,
-                validationIds,
-                forcePublish,
-                contractAndStrategy.EventSource,
-                resetValidationChild);
+                savePacket);
             //.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();

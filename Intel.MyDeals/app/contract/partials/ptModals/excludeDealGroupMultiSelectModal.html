@@ -30,39 +30,53 @@
 				<div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
 					Select which deals you would like to exclude:
 				</div>
-				<div class="row" style="margin:0px">
+				<div class="row" style="margin: 0px;">
 					<!-- Grid -->
-					<div style="height: 250px; overflow: scroll;"> <!--  -->
-						<div id="suggestionProdGrid"
-							 kendo-grid="grid"
-							 kendo-grid-check-box
-							 k-grid-checkbox="vm"
-							 checkbox-is-generic="true"
-							 checkbox-attr="'OVLP_DEAL_ID'"
-							 class="opUiContainer kendoGridHeight md k-grid"
-							 k-on-change="vm.addChange(data, dataItem, columns)"
-							 k-options="vm.gridOptionsSuggested">
-						</div>
+				    <div id="ExcldGrid"
+						 kendo-grid="grid"
+						 kendo-grid-check-box 
+						 k-grid-checkbox="vm"
+						 checkbox-is-generic="true"
+						 checkbox-attr="'OVLP_DEAL_ID'"
+						 class="opUiContainer md k-grid"
+						 k-on-change="vm.addChange(data, dataItem, columns)"
+						 k-options="vm.gridOptionsSuggested">
 					</div>
 				</div>
 
 				<div>
-					<div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
-						Provide reason for the exclusion(s):
-					</div>
-					<textarea kendo-editor
-						k-ng-model="vm.returnVal.DEAL_GRP_CMNT"
-						k-tools="[]"
-						style="height: 100%;"></textarea>
+				    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
+				        Provide reason for the exclusion(s):
+				    </div>
+				    <div class="fr" style="color: #f3D54E; font-weight: bold; margin-bottom: 5px; margin-top: 20px;" ng-show="!vm.returnVal.DEAL_GRP_CMNT">
+				        * Reason is Required
+				    </div>
+                    <div class="clearboth"></div>
+				    <textarea kendo-editor
+                              k-ng-model="vm.returnVal.DEAL_GRP_CMNT"
+                              k-tools="[]"
+                              style="height: 100%;"></textarea>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-12" style="padding-bottom:20px;">
 			<div class="fr">
 				<button class="btn btn-warning prdBtn" type="button" ng-click="vm.cancel()">Cancel</button>
-				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()">Save And Close</button>
+				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()" ng-disabled="vm.hasComment" ng-disable style="margin-left: 10px;">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 <!--<div class="modal-footer">	</div>-->
+
+<style>
+    #ExcldGrid.k-grid {
+        height: calc(85vh - 400px) !important;
+        overflow: auto;
+    }    
+
+    #ExcldGrid.k-grid .k-grid-content {
+        height: calc(85vh - 440px) !important;
+    }    
+    
+</style>

@@ -14,6 +14,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	vm.colInfo = colInfo;
 	vm.isLoading = true;
 	vm.gridData = [];
+	vm.hasComment = false;
 
 	var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
@@ -83,19 +84,18 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		pageable: false,
 		scrollable: true,
 		filter: "startsWith",
-		//height: 300, // this isn't working for some reason
 		noRecords: {
 			template: "<div style='padding:40px;'>No overlapping deal groups were found.<div>"
 		},
 		columns: [
-			{ field: "OVLP_DEAL_ID", title: "Deal #" },
-			{ field: "OVLP_DEAL_TYPE", title: "Deal Type" },
+			{ field: "OVLP_DEAL_ID", title: "Deal #", width: "120px" },
+			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
 			{ field: "OVLP_CNTRCT_NM", title: "Contract" },
-			{ field: "OVLP_WF_STG_CD", title: "Stage" },
-			{ field: "OVLP_DEAL_STRT_DT", title: "Deal Start", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_STRT_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #" },
-			{ field: "OVLP_DEAL_END_DT", title: "Deal End", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_END_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #" },
-			{ field: "OVLP_ADDITIVE", title: "Additive" },
-			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" },
+			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "120px" },
+			{ field: "OVLP_DEAL_STRT_DT", title: "Deal Start", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_STRT_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #", width: "120px" },
+			{ field: "OVLP_DEAL_END_DT", title: "Deal End", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_END_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #", width: "120px" },
+			{ field: "OVLP_ADDITIVE", title: "Additive", width: "120px" },
+			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" }
 		]
 	};
 
@@ -110,10 +110,16 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	}
 
 	vm.ok = function () {
+
 		// turn dictionary to csv string
 		vm.returnVal.DEAL_GRP_EXCLDS = Object.keys(selectedGridDict).map(function (key) {
-			return key
+		    return key;
 		}).join(",").replace(/,\s*$/, "");
+
+		if (vm.returnVal.DEAL_GRP_EXCLDS !== null && vm.returnVal.DEAL_GRP_EXCLDS !== "" && vm.returnVal.DEAL_GRP_CMNT === "") {
+		    kendo.alert("When excluding deals, a reason must be provied.");
+		    return;
+		}
 
 		//// Remove comment if no selected exluded deal groups
 		//if (vm.returnVal.DEAL_GRP_EXCLDS === null || vm.returnVal.DEAL_GRP_EXCLDS === "") {
@@ -121,7 +127,6 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		//}
 		$uibModalInstance.close(vm.returnVal);
 	};
-
 
 	vm.cancel = function () {
 		$uibModalInstance.dismiss();

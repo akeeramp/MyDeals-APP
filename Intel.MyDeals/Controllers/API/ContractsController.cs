@@ -66,11 +66,13 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveContract(int custId, int contractId, OpDataCollectorFlattenedList contracts)
         {
-            return SafeExecutor(() => _contractsLib.SaveContract(contracts, new ContractToken
-            {
-                CustId = custId,
-                ContractId = contractId
-            }, new List<int>(), false, "")
+            SavePacket savePacket = new SavePacket(new ContractToken
+                {
+                    CustId = custId,
+                    ContractId = contractId
+                });
+
+            return SafeExecutor(() => _contractsLib.SaveContract(contracts, savePacket)
                 , "Unable to save the Contract"
             );
         }
@@ -80,12 +82,13 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveFullContract(int custId, int contractId, bool delPtr, OpDataCollectorFlattenedDictList fullContracts)
         {
-            return SafeExecutor(() => _contractsLib.SaveFullContract(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken
             {
                 CustId = custId,
                 ContractId = contractId,
                 DelPtr = delPtr
-            }, fullContracts, new List<int>(), false, "")
+            });
+            return SafeExecutor(() => _contractsLib.SaveFullContract(fullContracts, savePacket)
                 , "Unable to save the Contract"
             );
         }

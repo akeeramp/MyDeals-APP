@@ -132,6 +132,7 @@
     <Compile Include="ProductSelectorDrillDownLevels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailPullData.cs" />
+    <Compile Include="SavePacket.cs" />
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />

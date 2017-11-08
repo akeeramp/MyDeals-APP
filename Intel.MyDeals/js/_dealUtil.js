@@ -472,7 +472,6 @@ dealUtil.saveFullContract = function (fullContracts) {
     }, 50);
 
     op.ajaxPostAsync(dealUtil.saveFullContractUrl, fullContracts, function (data) {
-        //debugger;
         window.setTimeout(function () {
             if (!(dealUtil.savedDataFunc === null || dealUtil.savedDataFunc === undefined)) dealUtil.savedDataFunc(data);
         }, 50);

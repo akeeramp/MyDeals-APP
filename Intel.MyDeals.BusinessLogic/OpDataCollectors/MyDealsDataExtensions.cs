@@ -648,23 +648,14 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, ContractToken contractToken, bool resetValidationChild)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, SavePacket savePacket)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
             bool tblModifiedTrigger = false;
             List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
-            if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
-            if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
-
-            //if (validateIds.Any() && sourceEvent == OpDataElementType.PRC_TBL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
-            //{
-            //    myDealsData.InjectParentStages(sourceEvent);
-            //}
-            //if (validateIds.Any() && sourceEvent == OpDataElementType.WIP_DEAL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
-            //{
-            //    myDealsData.InjectParentStages(sourceEvent);
-            //}
+            if (savePacket.SourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
+            if (savePacket.SourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
 
             if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements.Any(d => d.State == OpDataElementState.Modified && d.AtrbCd != AttributeCodes.PASSED_VALIDATION && d.AtrbCd != AttributeCodes.WF_STG_CD))
             {
@@ -680,54 +671,44 @@ namespace Intel.MyDeals.BusinessLogic
                     var dcHasErrors = false;
 
                     OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave);
-                    if (validateIds.Any())
+                    if (savePacket.ValidateIds.Any())
                     {
-                        if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW)
-                        {
-                            if (validateIds.Contains(dc.DcID))
-                            {
-                                dc.ApplyRules(MyRulesTrigger.OnValidate, null, contractToken.CustId);
-                            }
-                        }
-                        else
-                        {
-                            dc.ApplyRules(MyRulesTrigger.OnValidate, null, contractToken.CustId);
-                        }
+                        dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
                     }
 
-                    if (!ignoreTypes.Contains(opDataElementType))
+                    foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
                     {
-                        foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
+                        dcHasErrors = true;
+                        if (!ignoreTypes.Contains(opDataElementType))
                         {
                             dataHasValidationErrors = true;
-                            dcHasErrors = true;
-
-                            dc.Message.Messages.Add(new OpMsg
-                            {
-                                DebugMessage = OpMsg.MessageType.Warning.ToString(),
-                                KeyIdentifier = de.DcID,
-                                Message = de.ValidationMessage,
-                                MsgType = OpMsg.MessageType.Warning
-                            });
-
-                            myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
-                            {
-                                DebugMessage = OpMsg.MessageType.Warning.ToString(),
-                                KeyIdentifier = de.DcID,
-                                Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
-                                MsgType = OpMsg.MessageType.Warning
-                            });
-                            //dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
-                            //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
                         }
+
+                        dc.Message.Messages.Add(new OpMsg
+                        {
+                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                            KeyIdentifier = de.DcID,
+                            Message = de.ValidationMessage,
+                            MsgType = OpMsg.MessageType.Warning
+                        });
+
+                        myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
+                        {
+                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                            KeyIdentifier = de.DcID,
+                            Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
+                            MsgType = OpMsg.MessageType.Warning
+                        });
                     }
 
-                    if (validateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
+                    if (savePacket.ValidateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
                         // only force publish to PTR
                         PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL
                             ? PassedValidation.Complete
-                            : forcePublish ? PassedValidation.Finalizing : PassedValidation.Valid;
+                            : savePacket.ForcePublish
+                                ? PassedValidation.Finalizing 
+                                : PassedValidation.Valid;
 
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
                         {
@@ -751,7 +732,7 @@ namespace Intel.MyDeals.BusinessLogic
                         dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
                     }
 
-                    if (validateIds.Any() && !dcHasErrors && opDataElementType == OpDataElementType.WIP_DEAL)
+                    if (savePacket.ValidateIds.Any() && !dcHasErrors && opDataElementType == OpDataElementType.WIP_DEAL)
                     {
                         // apply finalize save rules (things like major change checks)
                         dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
@@ -972,7 +953,7 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild)
+        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, SavePacket savePacket)
         {
             OpLog.Log("SavePacketsBase - Start.");
 
@@ -984,7 +965,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken, resetValidationChild);
+            bool hasErrors = myDealsData.ValidationApplyRules(savePacket);
             if (hasErrors)
             {
                 // "Clone" to object...
@@ -999,7 +980,7 @@ namespace Intel.MyDeals.BusinessLogic
                 myDealsData.SavePacketByDictionary(data.ContainsKey(opDataElementType) ? data[opDataElementType] : null, opDataElementType, Guid.NewGuid());
             }
 
-            MyDealsData myDealsDataResults = myDealsData.PerformTasks(OpActionType.Save, contractToken);  // execute all save perform task items now
+            MyDealsData myDealsDataResults = myDealsData.PerformTasks(OpActionType.Save, savePacket.MyContractToken);  // execute all save perform task items now
 
             if (hasErrors) TransferActions(myDealsDataResults, myDealsDataWithErrors);
 
