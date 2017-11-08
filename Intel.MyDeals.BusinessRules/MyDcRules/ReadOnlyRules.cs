@@ -179,6 +179,8 @@ namespace Intel.MyDeals.BusinessRules
                                 //AttributeCodes.REBATE_TYPE,
                                 //AttributeCodes.START_DT,
                                 //AttributeCodes.TERMS,
+                                AttributeCodes.PRODUCT_CATEGORIES,
+                                AttributeCodes.PROD_INCLDS,
                                 AttributeCodes.TITLE,
                                 //AttributeCodes.VOLUME,
                                 AttributeCodes.WF_STG_CD,

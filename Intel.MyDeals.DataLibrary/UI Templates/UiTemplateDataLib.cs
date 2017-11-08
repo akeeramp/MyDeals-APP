@@ -913,6 +913,32 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Width = 150
             });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 49,
+                AtrbCd = AttributeCodes.PRODUCT_CATEGORIES,
+                Label = "Product Category",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_CATEGORIES')#",          
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 50,
+                AtrbCd = AttributeCodes.PROD_INCLDS,
+                Label = "Media",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                Template = "#=gridUtils.uiControlWrapper(data, 'PROD_INCLDS')#",          
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150
+            });
+
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,

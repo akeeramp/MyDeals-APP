@@ -148,6 +148,12 @@
                     "PTR_USER_PRD": {
                         "Groups": ["Deal Info"]
                     },
+                    "PRODUCT_CATEGORIES": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PROD_INCLDS": {
+                        "Groups": ["Deal Info"]
+                    },
                     "TITLE": {
                         "Groups": ["Deal Info"]
                     },
@@ -339,6 +345,9 @@
                     "PTR_USER_PRD": {
                         "Groups": ["Deal Info", "RPU"]
                     },
+                    "PRODUCT_CATEGORIES": {
+                        "Groups": ["Deal Info"]
+                    },
                     "TITLE": {
                         "Groups": ["Deal Info", "RPU"]
                     },
@@ -460,6 +469,9 @@
                     },
                     "PTR_USER_PRD": {
                         "Groups": ["Deal Info", "RPU"]
+                    },
+                    "PRODUCT_CATEGORIES": {
+                        "Groups": ["Deal Info"]
                     },
                     "TITLE": {
                         "Groups": ["Deal Info", "RPU"]
