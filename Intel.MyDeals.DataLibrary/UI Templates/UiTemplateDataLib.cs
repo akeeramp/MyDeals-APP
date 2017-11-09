@@ -956,7 +956,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
-                Label = "Deal Comb Type",
+                Label = "Group Type",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 140,

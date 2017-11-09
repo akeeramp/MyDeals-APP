@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/7/2017 4:43:18 PM
-On: JJYEH-MOBL1
+File Updated: 11/9/2017 9:41:27 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -989,7 +989,7 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute DEAL_COMB_TYPE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEAL_COMB_TYPE",
-			ATRB_DESC = "Deal Combination type",
+			ATRB_DESC = "Group Type",
 			ATRB_LBL = "Additive",
 			ATRB_MAX_LEN = 50,
 			ATRB_SID = 3594,
