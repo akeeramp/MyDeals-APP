@@ -610,7 +610,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
-                Label = "Start Vol"
+                Label = "Start Vol *"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -620,7 +620,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
-                Label = "End Vol"
+                Label = "End Vol *"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -630,7 +630,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
-                Label = "Rate"
+                Label = "Rate *"
             });
 
             items.Add(new UiTemplateContainerItem
