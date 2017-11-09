@@ -330,17 +330,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.selectFirstTab();
             }
 
+            $scope.defaultColumnOrderArr = [];
             $scope.defaultLayout = function () {
                 $scope.opOptions.groups = [];
 
                 $timeout(function () {
                     $scope.cloneWithOrder("default");
-                    $scope.opOptions.columns = $scope.assignColSettings();
-                    $scope.grid.setOptions({ columns: $scope.opOptions.columns });
 
                     $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
                     $scope.configureSortableTab();
                     $scope.selectFirstTab();
+                    $scope.reorderGridColumns($scope.defaultColumnOrderArr);
                 }, 10);
             }
 
@@ -353,7 +353,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $scope.opOptions.groups = [];
                             $scope.opOptions.custom = {};
 
-                            // 'Groups'
+                            // 'Groups' (which tabs to show)
                             var groupsSetting = response.data.filter(function (obj) {
                                 return obj.PRFR_KEY == "Groups";
                             });
@@ -361,7 +361,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.opOptions.custom.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
                             }
 
-                            // 'GroupColumns'
+                            // 'GroupColumns' (which columns to show for each of the tabs)
                             var groupColumnsSetting = response.data.filter(function (obj) {
                                 return obj.PRFR_KEY == "GroupColumns";
                             });
@@ -369,15 +369,23 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.opOptions.custom.groupColumns = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
                             }
 
+                            // 'ColumnOrder' (the column order, remember that all tabs 'share' a single grid)
+                            var customColumnOrderArr = [];
+                            var columnOrderSetting = response.data.filter(function (obj) {
+                                return obj.PRFR_KEY == "ColumnOrder";
+                            });
+                            if (columnOrderSetting && columnOrderSetting.length > 0) {
+                                customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
+                            }                            
+
                             // Apply the settings.
                             $timeout(function () {
                                 $scope.cloneWithOrder("custom");
-                                $scope.opOptions.columns = $scope.assignColSettings();
-                                $scope.grid.setOptions({ columns: $scope.opOptions.columns });
 
                                 $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
                                 $scope.configureSortableTab();
                                 $scope.selectFirstTab();
+                                $scope.reorderGridColumns(customColumnOrderArr);
                             }, 10);
                         } else {
                             if (reportError) {
@@ -387,6 +395,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }, function (response) {
                         logger.error("Unable to get Custom Layout.", response, response.statusText);
                     });
+            }
+
+            $scope.reorderGridColumns = function (columnOrderArr) {
+                var grid = $scope.grid;
+
+                for (var c = 0; c < columnOrderArr.length; c++) {
+                    var fieldToMatch = columnOrderArr[c];
+
+                    for (var i = 0; i < grid.columns.length; i++) {
+                        if (grid.columns[i]["field"] === fieldToMatch) {
+                            grid.reorderColumn(c, grid.columns[i]);
+                            break;
+                        }
+                    }
+                }
             }
 
             $scope.saveLayout = function () {
@@ -419,6 +442,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }, function (response) {
                         logger.error("Unable to save Custom Layout.", response, response.statusText);
                     });
+
+                // Persist the current column order.
+                userPreferencesService.updateAction(
+                    "DealEditor", // CATEGORY
+                    "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
+                    "ColumnOrder", // ID
+                    JSON.stringify($scope.getColumnOrder($scope.grid))) // VALUE
+                    .then(function (response) {
+                    }, function (response) {
+                        logger.error("Unable to save Custom Layout.", response, response.statusText);
+                    });
+            }
+
+            $scope.getColumnOrder = function(grid) {
+                var columnOrderArr = [];
+
+                for (var i = 0; i < grid.columns.length; i++) {
+                    columnOrderArr.push(grid.columns[i]["field"]);
+                }
+
+                return columnOrderArr;
             }
 
             $scope.displayDealTypes = function () {
@@ -586,22 +630,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 resizable: $scope.resizable,
                 reorderable: true,
                 pageable: $scope.pageable,
-                columnReorder: function (e) {
-                    setTimeout(function () {
-                        // Make sure that $scope.opOptions.groupColumns reflects the current column order,
-                        // incase the user later saves the Custom Layout.
-                        var newGroupColumns = {}
-                        angular.forEach($scope.grid.columns, function (c) {
-                            angular.forEach($scope.opOptions.groupColumns, function (v, k) {
-                                if (k === c.field) {
-                                    newGroupColumns[k] = v;
-                                    return;
-                                }
-                            });
-                        });
-                        $scope.opOptions.groupColumns = newGroupColumns;
-                    }, 10);
-                },
+
                 save: function (e) {
                 	var newField = util.getFirstKey(e.values);
 
@@ -639,10 +668,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
 
-                    // If the user has previously saved a custom layout, apply it.
                     if (!triedToApplyCustomLayout) {
-                        triedToApplyCustomLayout = true;
+		    	        // Squirrel away the default column order, before we apply the custom layout.
+			            $scope.defaultColumnOrderArr = $scope.getColumnOrder(grid);
 
+                        // Apply the custom layout.
+                        triedToApplyCustomLayout = true;
                         $timeout(function () {
                             $scope.customLayout(false);
                         }, 10);
