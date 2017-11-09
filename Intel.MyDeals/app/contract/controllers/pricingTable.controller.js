@@ -39,10 +39,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.switchingTabs = false;
     var unlimitedVal = "Unlimited"; // TODO: Hook up to default from db maybe?
 
-	// TODO: Phil: What attribute does this map to? We should make this reference the root.coloLetter dictionary instead.
-    var LTR_FIRST_DEAL_ATRB = "G";
-
-
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
     var cellStyle = {
@@ -174,12 +170,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
         columns = vm.getColumns(ptTemplate);
-
-        if (root.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") { // no EXCLUDE IDS
-			// TODO: Phil please check that this is the correct mapping.
-        	// root.colToLetter["PRD_EXCLDS"] = root.colToLetter["PTR_USER_PRD"];
-            root.colToLetter["FIRST_DEAL_ATRB"] = root.colToLetter["ECAP_PRICE"];
-        }
 
         ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
 
@@ -618,8 +608,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     $timeout(function () {
                                     	var n = data.length + 2;
-                                        disableRange(sheet.range(root.colToLetter['PTR_USER_PRD'] + n + ":" + root.colToLetter['PTR_USER_PRD'] + (n + numToDel + numToDel)));
-                                        disableRange(sheet.range(LTR_FIRST_DEAL_ATRB + n + ":Z" + (n + numToDel + numToDel)));
+
+                                    	sheet.batch(function () {
+                                    		// Disable user editable columns
+                                    		disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + n + ":Z" + (n + numToDel + numToDel)));
+
+                                    		// Re-enable Product column
+                                    		var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (n + numToDel + numToDel));
+                                    		prdRange.enable(true);
+                                    		prdRange.background(null);
+                                    	});
                                     }, 10);
 
                                     clearUndoHistory();
@@ -627,7 +625,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     //root.saveEntireContract(true, true, true);
                                 }
                             },
-                                10);
+                          10);
                         },
                         function () { });
                     stealthOnChangeMode = false;
@@ -2158,11 +2156,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet.activeSheet();
         if (!!sheet) {
-            var cnt = data.length;
-            var numToDel = dataCountBeforeDelete - cnt;
-            cnt = cnt + 2;
-            disableRange(sheet.range(root.colToLetter['PTR_USER_PRD'] + cnt + ":" + root.colToLetter['PTR_USER_PRD'] + (cnt + numToDel)));
-            disableRange(sheet.range(LTR_FIRST_DEAL_ATRB + cnt + ":Z" + (cnt + numToDel)));
+        	var cnt = data.length;
+        	var numToDel = dataCountBeforeDelete - cnt;
+        	cnt = cnt + 2;
+			sheet.batch(function(){
+        		// Disable user editable columns
+        		disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":Z" + (cnt + numToDel)));
+
+        		// Re-enable Product column
+        		var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + cnt + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel));
+        		prdRange.enable(true);
+        		prdRange.background(null);
+			});
         }
     }
 
