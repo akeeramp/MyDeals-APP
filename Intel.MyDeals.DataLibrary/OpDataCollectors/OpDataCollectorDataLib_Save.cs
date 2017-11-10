@@ -15,6 +15,10 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class OpDataCollectorDataLib : IOpDataCollectorDataLib
     {
+
+        private const string ATRB_SID = "ATRB_SID";
+        private const string ATRB_VAL = "ATRB_VAL";
+
         public MyDealsData SaveMyDealsData(MyDealsData packets, ContractToken contractToken, bool batchMode)
         {
             // Save Data Cycle: Point 15
@@ -117,15 +121,6 @@ namespace Intel.MyDeals.DataLibrary
             var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), custId, wwid);
             var dtAction = OpDataPacketToImportActionTable(new OpDataPacket<OpDataElementType>(), groupBatchId, wwid);
 
-            //foreach (var odp in packets.Where(p => p.PacketType == OpDataElementType.Group && OpTypeConverter.IsValidGuid(p.BatchID)))
-            //{
-            //    if (groupBatchId != Guid.Empty && groupBatchId != odp.BatchID)
-            //    {
-            //        throw new ArgumentException("Multiple non-distinct groups (workbooks) were passed to the save routine.  It is expected that each save call contains only one workbook of data.");
-            //    }
-            //    groupBatchId = odp.BatchID;
-            //}
-
             if (!OpTypeConverter.IsValidGuid(groupBatchId))
             {
                 // So we can make sure all packets are always married together, if no valid group is in the set,
@@ -162,6 +157,23 @@ namespace Intel.MyDeals.DataLibrary
                     }
                 }
             });
+
+            foreach (DataRow row in dtData.Rows)
+            {
+                var attributeCol = row.Table.Columns.IndexOf(ATRB_SID);
+                if (row[attributeCol].ToString() != 3676.ToString())
+                    continue;
+
+                var attributeValueCol = row.Table.Columns.IndexOf(ATRB_VAL);
+                if (row[attributeValueCol].ToString().ToUpper() == false.ToString().ToUpper())
+                {
+                    row[attributeValueCol] = 0;
+                }
+                else if (row[7].ToString().ToUpper() == true.ToString().ToUpper())
+                {
+                    row[attributeValueCol] = 1;
+                }
+            }
 
             if (dtData.Rows.Count != 0 && dtAction.Rows.Count != 0) // If there is nothing to send to the DB, just pre-empt the whole process.
             {
