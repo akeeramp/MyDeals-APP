@@ -24,7 +24,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
-    $scope.numTiers = 1;
 
 
     // If product corrector or selector modifies the product column do not clear PRD_SYS
@@ -72,20 +71,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     //root.wipOptions;
     var ssTools;
     var stealthOnChangeMode = false;
-    var tieredColIndexesDict = {}; // AKA col indexes with non merged cells
+    var nonMergedColIndexesDict = {}; // AKA col indexes with non merged cells
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
 	// Hard-coded sadnesses, but are better than other hard-coded sadness solutions
     var productValidationDependencies = [
-		"GEO_COMBINED",
-		"PROGRAM_PAYMENT",
-		"PROD_INCLDS"
-    ]
+        "GEO_COMBINED",
+        "PROGRAM_PAYMENT",
+        "PROD_INCLDS"
+    ];
     var firstEditableColBeforeProduct = null; // used along with to properly disable/enable cols before PTR_USR_PRD. Is calucated using editableColsBeforeProduct. Defaults to PTR_USR_PRD when editableColsBeforeProduct is empty
-    var editableColsBeforeProduct = [ // keep track of columns that are before the PTR_USR_PRD column that can be edited by users, to properly enable/disable them
-		"CUST_ACCNT_DIV"
-    ]
+    var editableColsBeforeProduct = [
+// keep track of columns that are before the PTR_USR_PRD column that can be edited by users, to properly enable/disable them
+        "CUST_ACCNT_DIV"
+    ];
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
     var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
 	
@@ -140,24 +140,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-    function getMergedCells(numTiers) {
-        //return [];
-        var mergedCells = [];
-        var rowNum = 2;
-        while (rowNum < $scope.root.ptRowCount) {
-            for (var c = 0; c < ptTemplate.columns.length; c++) {
-                var letter = String.fromCharCode(intA + c);
-                if (!ptTemplate.columns[c].isDimKey) {
-                    mergedCells.push(letter + rowNum + ":" + letter + (rowNum + numTiers - 1));
-                } else {
-                    tieredColIndexesDict[c] = true;
-                }
-            }
-            rowNum += numTiers;
-        }
-        return mergedCells;
-    }
-
     function colToInt(colName) {
         return root.colToLetter[colName].charCodeAt(0) - "A".charCodeAt(0);
     }
@@ -166,8 +148,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function generateKendoSpreadSheetOptions() {
         pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
 
-        var mergedCells = [];
-        $scope.numTiers = 1;
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
         columns = vm.getColumns(ptTemplate);
@@ -188,11 +168,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
         }
 
-        if (!!root.curPricingTable.NUM_OF_TIERS) {
-            $scope.numTiers = parseInt(root.curPricingTable.NUM_OF_TIERS);
-            mergedCells = getMergedCells($scope.numTiers);
-        }
-
         $scope.ptSpreadOptions = {
             headerWidth: 0, /* Hide the Row numbers */
             change: onChange,
@@ -211,7 +186,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheets: [
                 {
                     name: "Main",
-                    mergedCells: mergedCells,
                     columns: columns
                 },
                 {
@@ -225,6 +199,46 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         gridUtils.onDataValueChange = function (e) {
             root._dirty = true;
         }
+    }
+
+    $scope.applySpreadsheetMerge = function (w) {
+        var c, letter;
+        var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        var numTiers = 2;
+        var rowOffset = 2;
+        var data = root.spreadDs._data;
+        var dcId = 0;
+        nonMergedColIndexesDict = {};
+        var numDeleted = 0;
+
+        sheet.batch(function () {
+
+            for (var d = 0; d < data.length; d++) {
+                if (dcId !== data[d].DC_ID) {
+                    dcId = data[d].DC_ID;
+                    numTiers = root.numOfPivot(data[d]);
+
+                    for (c = 0; c < ptTemplate.columns.length; c++) {
+                        letter = String.fromCharCode(intA + c);
+                        if (!ptTemplate.columns[c].isDimKey) {
+                            sheet.range(letter + rowOffset + ":" + letter + (rowOffset + numTiers - 1)).merge();
+                        } else {
+                            nonMergedColIndexesDict[c] = true;
+                        }
+                    }
+
+                    if (data[d].id === null) numDeleted++;
+                    rowOffset += numTiers;
+                }
+            }
+
+            // TODO maybe we need to clean up items past data length to merge = 1
+            //debugger;
+            sheet.range("A" + (rowOffset - numDeleted) + ":ZZ" + root.ptRowCount).unmerge();
+
+        });
+
     }
 
     // Generates options that kendo's html directives will use
@@ -402,8 +416,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             for (var key in singleProductJSON) {
                 if (singleProductJSON.hasOwnProperty(key)) {
-                    if (!!root.curPricingTable.NUM_OF_TIERS) {
-                        var mergedRows = parseInt(row) + parseInt(root.curPricingTable.NUM_OF_TIERS);
+                    if (root.isPivotable()) {
+                        var mergedRows = parseInt(row) + root.numOfPivot();
                         for (var a = row; a < mergedRows ; a++) {
                             var validJSON = {};
                             validJSON[key] = singleProductJSON[key];
@@ -491,8 +505,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         var topLeftRowIndex = (range._ref.topLeft.row + 1);
-        var bottomRightRowIndex = (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 1);
-
+        // THIS ASSUMES ALL PIVOTS ROWS ARE THE SAME NUMBER
+        //var bottomRightRowIndex = (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.numOfPivot()) + 1);
+        var bottomRightRowIndex = (range._ref.bottomRight.row + 1);
+        
         var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
         var excludeProductColIndex = root.colToLetter["PRD_EXCLDS"] ? (root.colToLetter["PRD_EXCLDS"].charCodeAt(0) - intA) : -1;
 
@@ -525,7 +541,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 
                             var isEndVolUnlimited = false;
-                            var numOfTiers = parseInt(root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS);
+                            var numOfTiers = root.numOfPivot(myRow);
 
                             if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
                                 isEndVolUnlimited = true;
@@ -650,8 +666,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     	prdRange.enable(true);
                     	prdRange.background(null);
 
+                    	clearUndoHistory();
 
-                        clearUndoHistory();
+                    	$scope.applySpreadsheetMerge();
+
                     }, 10);
                 }
             }
@@ -721,11 +739,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if ((isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) || (isPtrSysPrdFlushed && isExcludeProductColumnIncludedInChanges)) {
                 syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
+
+            $timeout(function () {
+                $scope.applySpreadsheetMerge();
+            }, 10); 
+
         }
 
         if (!root._dirty) {
             root._dirty = true;
         }
+
     }
 
     function cleanupData(data) {
@@ -742,8 +766,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // fix merge issues
         if (data.length > 0) {
             var lastItem = data[data.length - 1];
-            var numTier = root.child.numTiers;
-            var offset = data.length % numTier;
+            var numTier = root.numOfPivot(lastItem);
+            var offset = getOffsetByIndex(data, data.length - 1, numTier);
             if (offset > 0) {
                 for (var a = 0; a < numTier - offset; a++) {
                     data.push(util.deepClone(lastItem));
@@ -752,6 +776,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         return data;
+    }
+
+    function getOffsetByIndex(data, indx, numTier) {
+        var offset = 0;
+        if (data.length <= 0) return offset;
+
+        var i = indx;
+        var lastItem = data[indx];
+        var dcId = lastItem.DC_ID;
+
+        if (numTier === undefined) numTier = root.numOfPivot(lastItem);
+
+        while (i >= 0 && data[i].DC_ID === dcId) {
+            offset++;
+            i--;
+        }
+
+        return offset % numTier;
     }
 
     function hasDataOrPurge(data, rowStart, rowStop) {
@@ -785,6 +827,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (root.spreadDs !== undefined) {
                 var data = root.spreadDs.data();
                 var newItems = 0;
+                var pivotDim = 1;
+
+                // before we clean the data, need to check for offset to see if the top row needs updating
+                for (var k = 0; k < (topLeftRowIndex-2); k++) {
+                    if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
+                }
 
                 cleanupData(data);
 
@@ -792,7 +840,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
                     newItems++;
-                    data[r]["DC_ID"] = ((r + 1) % root.child.numTiers === 0) ? $scope.uid-- : $scope.uid;
+                    var numPivotRows = root.numOfPivot(data[r]);
+                    data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
                     data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
                     if (!isAddedByTrackerNumber) {
@@ -800,16 +849,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         data[r]["ECAP_PRICE"] = null;
                     }
 
-                    if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
+                    if (!root.curPricingTable || root.isPivotable()) {
                         if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
-                            var tierNumVal = (r % root.child.numTiers) + 1;
-                            data[r]["TIER_NBR"] = tierNumVal;
-                            data[r]["NUM_OF_TIERS"] = root.curPricingTable.NUM_OF_TIERS;
+                            // must be a new row... use the autofilter tier number info
+                            data[r]["TIER_NBR"] = pivotDim;
+                            data[r]["NUM_OF_TIERS"] = numPivotRows;
 
                             // Default to 0
                             data[r]["RATE"] = 0;
 
-                            if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
+                            if (pivotDim === parseInt(numPivotRows)) {
                                 // default last end vol to "unlimited"
                                 data[r]["END_VOL"] = unlimitedVal;
                             } else {
@@ -817,7 +866,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r]["END_VOL"] = 0;
                             }
                             // disable non-first start vols
-                            if (tierNumVal != 1) {
+                            if (pivotDim !== 1) {
                                 if (!data[r]._behaviors) {
                                     data[r]._behaviors = {};
                                 }
@@ -862,6 +911,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         }
                     }
+
+                    // increment pivot dim (example tier 1 to tier 2)
+                    pivotDim++;
+                    if (pivotDim > numPivotRows) pivotDim = 1;
                 }
 
                 // now apply array to Datasource... one event triggered
@@ -881,15 +934,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                         bottomRightRowIndex -= numBlanks;
                         stealthOnChangeMode = false;
-                    } else {
-                        //topLeftRowIndex = data.length;
-                        //bottomRightRowIndex = topLeftRowIndex + newItems;
                     }
 
                     // check merge issues
-                    var offset = ((bottomRightRowIndex - 1) % root.child.numTiers);
+                    var numPivotRows = root.numOfPivot(data[data.length-1]);
+                    var offset = getOffsetByIndex(data, bottomRightRowIndex - 2);
                     if (offset > 0) {
-                        bottomRightRowIndex += root.child.numTiers - offset;
+                        bottomRightRowIndex += numPivotRows - offset;
                     }
 
                     // Enable other cells
@@ -958,6 +1009,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 });
 
                 root.child.setRowIdStyle(data);
+
+                $scope.applySpreadsheetMerge();
             }
         }, 10);
     }
@@ -1019,6 +1072,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             sheetBatchOnRender(sheet, dropdownValuesSheet); // Do all spreadsheet cell changes here
 
+            $scope.applySpreadsheetMerge();
+
             vm.initCustomPaste("#pricingTableSpreadsheet");
             vm.customDragDropAutoFill("#pricingTableSpreadsheet");
             replaceUndoRedoBtns();
@@ -1047,7 +1102,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (!item || item.length === 0) return;
 
-            var t = 95 + (20 * $scope.numTiers);
+            var t = 95 + (20 * root.numOfPivot());
             $("#divHelpAddProd").css("left", item.offset().left - 300);
             $("#divHelpAddProd").animate({
                 opacity: 1,
@@ -1401,7 +1456,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // total HACK here.  there must be a better way, but trying to POC options
                 // pasting accross merged cells is not allowed, so need to bypass it
-                if (!status.canPaste && !root.child.numTiers) {
+                if (!status.canPaste && !root.numOfPivot()) {
                     if (status.menuInvoked) {
                         return {
                             reason: 'error',
@@ -1435,7 +1490,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 if (preventDefault) {
                     this._event.preventDefault();
-                } else if (!!root.child.numTiers) {
+                } else if (root.isPivotable()) {
                     this.customMergedPaste();
                     //range._adjustRowHeight();
                 } else {
@@ -1501,6 +1556,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     recalc: true,
                     ref: pasteRef
                 });
+                $scope.applySpreadsheetMerge();
             },
             customMergedPaste: function () {
                 //
@@ -1516,15 +1572,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // set paste data to Kendo cell (default Kendo code)
                 var pasteRef = clip.pasteRef();
 
-                if (clip.isExternal()) {
+                //if (clip.isExternal()) {
                     clip.origin = state.origRef;
 
                     // IDEA:
                     // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
-                    var numTiers = root.child.numTiers;
                     var colNum = pasteRef.topLeft.col;
-                    if (!tieredColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only
+                    if (!nonMergedColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only
                         for (row = 0; row < state.data.length; row++) {
+                            var numTiers = root.numOfPivot(row);
                             for (var t = 0; t < numTiers; t++) {
                                 newData.push(util.deepClone(state.data[row]));
                             }
@@ -1532,7 +1588,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                         state.data = newData;
                     }
-                }
+                //}
 
                 // Non-default Kendo code for paste event
                 for (row = 0; row < state.data.length; row++) {
@@ -1590,6 +1646,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     recalc: true,
                     ref: pasteRef
                 });
+                $scope.applySpreadsheetMerge();
             }
         });
     }
@@ -1671,8 +1728,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             else { // open the selector
                 var currentPricingTableRowData = context.range._sheet.dataSource._data[currentRow];
                 var enableSplitProducts = context.range._sheet.dataSource._data.length <= context.range._ref.row;
-                if (!!root.curPricingTable.NUM_OF_TIERS) {
-                    enableSplitProducts = context.range._sheet.dataSource._data.length - parseInt(root.curPricingTable.NUM_OF_TIERS) <= context.range._ref.row;
+                if (root.isPivotable()) {
+                    enableSplitProducts = context.range._sheet.dataSource._data.length - root.numOfPivot(currentPricingTableRowData) <= context.range._ref.row;
                 }
                 if (!!currentPricingTableRowData && currentPricingTableRowData.PROGRAM_PAYMENT !== null
                     && currentPricingTableRowData.PROGRAM_PAYMENT !== "" && currentPricingTableRowData.PROD_INCLDS != null && currentPricingTableRowData.PROD_INCLDS !== ""
@@ -2081,8 +2138,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
 
                                 // For VOL_TIER update the merged cells
-                                if (!!root.curPricingTable.NUM_OF_TIERS && (products.contractProducts === "" || !products.contractProducts)) {
-                                    var mergedRowsws = parseInt(r) + parseInt(root.curPricingTable.NUM_OF_TIERS);
+                                if (root.isPivotable() && (products.contractProducts === "" || !products.contractProducts)) {
+                                    var mergedRowsws = parseInt(r) + root.numOfPivot(data[r]);
                                     for (var a = r; a < mergedRowsws ; a++) {
                                         data[a].DC_ID = null;
                                         sourceData[a].DC_ID = null;

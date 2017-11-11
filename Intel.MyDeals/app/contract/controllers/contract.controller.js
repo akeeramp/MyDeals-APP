@@ -1218,7 +1218,7 @@
                 windowClass: 'autofill-modal-window',
                 size: 'lg',
                 resolve: {
-                    autofillData: autofillData,
+                    autofillData: autofillData
                 }
             });
 
@@ -1256,6 +1256,7 @@
             if (!!nptDefaults["MEET_COMP_PRICE_QSTN"]) nptDefaults["MEET_COMP_PRICE_QSTN"].value = pt["MEET_COMP_PRICE_QSTN"];
             if (!!nptDefaults["PROGRAM_PAYMENT"]) nptDefaults["PROGRAM_PAYMENT"].value = pt["PROGRAM_PAYMENT"];
             if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
+            if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
 
             //not sure if necessary, javascript pass by value/reference always throwin' me off. :(
             $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
@@ -2375,67 +2376,80 @@
             }
         }
 
-        $scope.pivotData = function (data) {
-            if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
-                var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
-                if (numTiers <= 0) {
-                    return data;
-                }
-                var newData = [];
+        $scope.isPivotable = function () {
+            // this is for vol tier right now, but Kits will have to read off dim of products
+            var pivotFieldName = "NUM_OF_TIERS";
+            return !!$scope.curPricingTable && !!$scope.curPricingTable[pivotFieldName];
+        }
+        $scope.numOfPivot = function (dataItem) {
+            // this is for vol tier right now, but Kits will have to read off dim of products
+            var pivotFieldName = "NUM_OF_TIERS";
 
-                for (var d = 0; d < data.length; d++) {
-                    for (var t = 1; t <= numTiers; t++) {
-                        var lData = util.deepClone(data[d]);
-                        // Vol-tier specific cols with tiers
-                        for (var i = 0; i < tierAtrbs.length; i++) {
-                            var tieredItem = tierAtrbs[i];
-                            lData[tieredItem] = lData[tieredItem + "_____10___" + t];
+            if (!$scope.isPivotable) return 1;
 
-                            mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
-                        }
-                        // Disable all Start vols except the first
-                        if (t != 1 && !!data[d]._behaviors) {
-                            if (!data[d]._behaviors.isReadOnly) {
-                                data[d]._behaviors.isReadOnly = {};
-                            }
-                            lData._behaviors.isReadOnly["STRT_VOL"] = true;
-                        }
-
-                        newData.push(lData);
-                    }
-                }
-
-                return newData;
+            if (dataItem === undefined) {
+                return parseInt($scope.curPricingTable[pivotFieldName]);
             }
-            return data;
+
+            if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);
+
+            return parseInt($scope.curPricingTable[pivotFieldName]);
+        }
+
+        $scope.pivotData = function (data) {
+            if (!$scope.isPivotable()) return data;
+
+            var newData = [];
+
+            for (var d = 0; d < data.length; d++) {
+                var numTiers = $scope.numOfPivot(data[d]);
+                for (var t = 1; t <= numTiers; t++) {
+                    var lData = util.deepClone(data[d]);
+                    // Vol-tier specific cols with tiers
+                    for (var i = 0; i < tierAtrbs.length; i++) {
+                        var tieredItem = tierAtrbs[i];
+                        lData[tieredItem] = lData[tieredItem + "_____10___" + t];
+
+                        mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
+                    }
+                    // Disable all Start vols except the first
+                    if (t !== 1 && !!data[d]._behaviors) {
+                        if (!data[d]._behaviors.isReadOnly) {
+                            data[d]._behaviors.isReadOnly = {};
+                        }
+                        lData._behaviors.isReadOnly["STRT_VOL"] = true;
+                    }
+
+                    newData.push(lData);
+                }
+            }
+
+            return newData;
         }
         $scope.deNormalizeData = function (data) {
-            if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
-                var a;
-                var numTiers = parseInt($scope.curPricingTable.NUM_OF_TIERS);
-                if (numTiers <= 0) return data;
-                var newData = [];
-                var lData = {};
-                var tierDimKey = "_____10___";
+            if (!$scope.isPivotable()) return data;
+            var a;
+            var newData = [];
+            var lData = {};
+            var tierDimKey = "_____10___";
 
-                for (var d = 0; d < data.length; d) {
-                    for (var t = 1; t <= numTiers; t++) {
-                        if (t === 1) lData = data[d];
-                        for (a = 0; a < tierAtrbs.length; a++)
-                            lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
-                        if (t === numTiers) {
-                            for (a = 0; a < tierAtrbs.length; a++) {
-                                delete lData[tierAtrbs[a]];
-                            }
-                            newData.push(lData);
+            for (var d = 0; d < data.length; d) {
+                var numTiers = $scope.numOfPivot(data[d]);
+                for (var t = 1; t <= numTiers; t++) {
+                    if (t === 1) lData = data[d];
+                    for (a = 0; a < tierAtrbs.length; a++)
+                        lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
+                    if (t === numTiers) {
+                        for (a = 0; a < tierAtrbs.length; a++) {
+                            delete lData[tierAtrbs[a]];
                         }
-                        d++;
+                        newData.push(lData);
                     }
+                    d++;
                 }
-
-                return newData;
             }
-            return data;
+
+            return newData;
         }
 
         $scope.myDealsValidation = function (isError, msg, isReq) {
@@ -2490,7 +2504,7 @@
             }
         }
         $scope.mapProperty = function (src, data) {
-            if (!!$scope.curPricingTable.NUM_OF_TIERS) {
+            if ($scope.isPivotable()) {
                 if (src["DC_ID"] === data["DC_ID"] && (!src.TIER_NBR && data.TIER_NBR === "1" || src.TIER_NBR === data.TIER_NBR)) {
                     var arItems = data;
                     for (var key in arItems) {
@@ -2948,18 +2962,6 @@
                     }
                 });
 
-            //// No Extra Atrb check (like num_of_tiers) because once set it cannot be edited.
-            //angular.forEach($scope.newPricingTable["_extraAtrbs"],
-            //function (value, key) {
-            //    if (value.isRequired === true && (value.value === undefined || value.value === "")) {
-            //        value.validMsg = "* field is required";
-            //        value.isError = true;
-            //        isValid = false;
-            //    } else {
-            //        value.isError = false;
-            //    }
-            //});
-
             // No check for defaultatribs because they are optional
             if (isValid) {
                 $scope.editPricingTable();
@@ -3062,6 +3064,7 @@
                     if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = "Price Only";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
+                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1";
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
@@ -3076,6 +3079,7 @@
                     if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = $scope.currentPricingTable["MEET_COMP_PRICE_QSTN"];
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
+                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = $scope.currentPricingTable["NUM_OF_TIERS"];
                 }
             } else {
                 // TODO: Hook these up to service (add service into injection and physical files)
@@ -3223,7 +3227,7 @@
             // fix merge issues
             if (data.length > 0) {
                 var lastItem = data[data.length - 1];
-                var numTier = $scope.child.numTiers;
+                var numTier = $scope.numOfPivot(lastItem);
                 var offset = data.length % numTier;
                 if (offset > 0) {
                     for (var a = 0; a < numTier - offset; a++) {
