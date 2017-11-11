@@ -34,12 +34,20 @@
 	border-color: #0071c5;
 }
 
-.atrbbasecolorCAP_BAND {
+.atrbbasecolorTENDER {
 	color: #aa00bb;
 	padding-left: 3px;
 	padding-right: 5px;
 	background-color: #aa00bb;
 	border-color: #aa00bb;
+}
+
+.atrbbasecolorKIT {
+	color: #ff00bb;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #ff00bb;
+	border-color: #ff00bb;
 }
 
 .atrbbasecolorPROGRAM {

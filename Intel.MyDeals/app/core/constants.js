@@ -53,7 +53,8 @@
                 "ECAP": "#00AEEF",
                 "PROGRAM": "#FFA300",
                 "VOL_TIER": "#f3D54E",
-                "CAP_BAND": "#C4D600"
+                "TENDER": "#C4D600",
+                "KIT": "#F32300"
             },
             "valid": {
                 "Dirty": "#cccccc",

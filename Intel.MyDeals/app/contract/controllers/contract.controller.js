@@ -614,7 +614,7 @@
         $scope.filterDealTypes = function (items) {
             var result = {};
             angular.forEach(items, function (value, key) {
-                if (value.name !== 'CAP_BAND' && value.name !== 'ALL_TYPES') {
+                if (value.name !== 'ALL_TYPES') {
                     result[key] = value;
                 }
             });
