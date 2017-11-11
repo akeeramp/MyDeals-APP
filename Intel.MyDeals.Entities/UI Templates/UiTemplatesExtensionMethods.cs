@@ -217,10 +217,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
             if (!uiTemplates.ObjectTemplates.ContainsKey(opDataElementType.ToString()))
                 uiTemplates.ObjectTemplates[opDataElementType.ToString()] = new Dictionary<string, UiObjectTemplate>();
 
-            if (objSetType != OpDataElementSetType.CAP_BAND) // temporary until CAP BAND can be removed
-            {
-                uiTemplates.ObjectTemplates[opDataElementType.ToString()][objSetType.ToString()] = BuildUiObjectTemplateItem(opDataElementType, objSetType, templates);
-            }
+            uiTemplates.ObjectTemplates[opDataElementType.ToString()][objSetType.ToString()] = BuildUiObjectTemplateItem(opDataElementType, objSetType, templates);
 
             return uiTemplates;
         }

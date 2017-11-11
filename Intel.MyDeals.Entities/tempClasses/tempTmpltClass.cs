@@ -23,23 +23,15 @@ namespace Intel.MyDeals.Entities
             ///<summary>
             /// ID: 2
             ///</summary>
-            public const string ASP_TIER = @"ASP TIER";
-            ///<summary>
-            /// ID: 7
-            ///</summary>
-            public const string CAP_BAND = @"CAP BAND";
+            public const string TENDER = @"TENDER";
             ///<summary>
             /// ID: 6
             ///</summary>
-            public const string DEAL_GRP = @"DEAL_GRP";
+            public const string KIT = @"KIT";
             ///<summary>
             /// ID: 3
             ///</summary>
             public const string ECAP = @"ECAP";
-            ///<summary>
-            /// ID: 8
-            ///</summary>
-            public const string PLI = @"PLI";
             ///<summary>
             /// ID: 4
             ///</summary>
@@ -52,18 +44,16 @@ namespace Intel.MyDeals.Entities
             ///<summary>
             /// All values associated with this lookup
             ///</summary>
-            public static readonly string[] Values = { @"All Deals", @"ASP TIER", @"CAP BAND", @"DEAL_GRP", @"ECAP", @"PLI", @"PROGRAM", @"VOL TIER" };
+            public static readonly string[] Values = { @"All Deals", @"TENDER", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER" };
 
             ///<summary>
             /// Keyed values associated with the lookup
             ///</summary>
             public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
                 {1, @"All Deals"},
-                {2, @"ASP TIER"},
-                {7, @"CAP BAND"},
-                {6, @"DEAL_GRP"},
+                {2, @"TENDER"},
+                {6, @"KIT"},
                 {3, @"ECAP"},
-                {8, @"PLI"},
                 {4, @"PROGRAM"},
                 {5, @"VOL TIER"}
             };

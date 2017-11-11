@@ -149,47 +149,6 @@ namespace Intel.MyDeals.BusinessRules
 
         //    #region CAPBand
 
-        //    //CAP BAND
-
-        //    #region Atrb Rules
-
-        //    atrbRules = new List<AttributeRule>();
-
-        //    //// READONLY
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunSyncReadOnlyItems, OnSaveTrigger = true, OnLoadTrigger = true, StringArrayVal1 = new[] { AttributeCodes.WF_STG_CD } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnReadonlyTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetReadOnly, AtrbActionTarget = new[] { AttributeCodes.TRGT_RGN_CHK, AttributeCodes.TRGT_RGN, AttributeCodes.RETAIL_CYCLE } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnReadonlyTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetReadOnly, AtrbActionTarget = new[] { "PROGRAM_TYPE" } });  // 5.2 release requirement
-
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnReadonlyTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetReadOnly, NotInStages = new[] { DcsWorkflowStage.Created.ToString() }, AtrbActionTarget = new[] { AttributeCodes.PRODUCT_TITLE, AttributeCodes.START_DT, AttributeCodes.END_CAP, AttributeCodes.STRT_CAP, AttributeCodes.RATE }, AtrbCondIf = de => de.AtrbCdIs(AttributeCodes.END_DT) && de.IsDateInPast() });
-
-        //    //// REQUIRED
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunSyncRequiredItems, OnSaveTrigger = true, OnLoadTrigger = true, StringArrayVal1 = new[] { AttributeCodes.WF_STG_CD } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnRequiredTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetRequired, AtrbActionTarget = new[] { "PROGRAM_TYPE" }, AtrbWhere = de => de.AtrbHasNoValue(AttributeCodes.PROGRAM_TYPE) && (de.DcID < 0) });  // 5.2 release requirement
-
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunForceRequiredBasedOnValue, OnRequiredTrigger = true, StringVal1 = "COST_TEST_OVERRIDE", StringArrayVal1 = new[] { "Yes" }, StringArrayVal2 = new[] { "LEGAL_COMMENTS" } });
-
-        //    //// HIDDEN
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunSyncHiddenItems, OnSaveTrigger = true, OnLoadTrigger = true, StringArrayVal1 = new[] { AttributeCodes.WF_STG_CD } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnHiddenTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetHidden, AtrbActionTarget = new[] { AttributeCodes.BACK_DATE_RSN }, AtrbCondIf = de => de.AtrbCdIs(AttributeCodes.START_DT) && !de.IsDateInPast() && de.State != OpDataElementState.Modified });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnHiddenTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetHidden, AtrbActionTarget = new[] { "PROGRAM_TYPE" }, AtrbWhere = de => de.AtrbHasNoValue(AttributeCodes.PROGRAM_TYPE) && (de.DcID > 0) });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnHiddenTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetHidden, AtrbActionTarget = new[] { AttributeCodes.BACK_DATE_RSN_TXT }, AtrbCondIf = de => de.AtrbHasNoValue(AttributeCodes.BACK_DATE_RSN, EN.VALUES.OTHER) });
-
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunHideBasedOnAtrbValue, OnHiddenTrigger = true, StringVal1 = EN.ATRB.PAYOUT_BASED_ON, StringArrayVal1 = new[] { EN.VALUES.BILLINGS }, StringArrayVal2 = new[] { EN.ATRB.REBATE_BILLING_START, EN.ATRB.REBATE_BILLING_END } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunHideUnusedTiers, OnHiddenTrigger = true, StringVal1 = EN.ATRB.NUM_OF_TIERS, IntVal1 = 5005 });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunForceHiddenBasedOnStartDateAndDealType, OnHiddenTrigger = true, StringArrayVal1 = new[] { EN.ATRB.BACKDATE_REASON, EN.ATRB.BACKDATE_REASON_TXT }, StringArrayVal2 = new[] { EN.VALUES.NONE } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMustBePositive, OnSaveTrigger = true, StringArrayVal1 = new[] { "STRT_CAP", "END_CAP", "PORTFOLIO" }, StringVal2 = ">" });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMustBePositiveOrZero, OnSaveTrigger = true, StringArrayVal1 = new[] { AttributeCodes.REBATE_OA_MAX_VOL, EN.ATRB.REBATE_OA_MAX_AMT }, StringVal2 = ">" });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = EN.ATRB.BACKDATE_REASON_TXT, IntVal1 = 25 });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = EN.ATRB.C2A_DATA_C2A_ID, IntVal1 = 100 });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunClearMessage, OnLoadTrigger = true });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "PRODUCT_TITLE", "DEAL_TYPE_CD", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "NUM_OF_TIERS", "PAYOUT_BASED_ON", AttributeCodes.PROGRAM_PAYMENT, "MRKT_SEG", "TRGT_RGN_CHK", "RATE", "STRT_CAP", "END_CAP", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "REBATE_DISTI", IntVal1 = 50 });
-
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunValidateRequiredFields, OnSaveTrigger = true });
-
-        //    //if (atrbRules.Any()) attrbRules[EN.DEALTYPE.CAP_BAND] = atrbRules;
-
-        //    #endregion
 
         //    #endregion
 

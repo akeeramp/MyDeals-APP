@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/7/2017 11:29:27 AM
-On: PWECKENR-MOBL
+File Updated: 11/10/2017 4:48:14 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -2309,6 +2309,14 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 200
+		/// SRT_ORD: 150
+		/// Copy Contract Contents
+		///</summary>
+		public const string COPY_CONTRACT = "COPY_CONTRACT";
+
+
+		///<summary>
 		/// ACTN_SID: 210
 		/// SRT_ORD: 50
 		/// Roll the deal details back to the last valid active tracker state
@@ -2528,6 +2536,7 @@ namespace Intel.MyDeals.Entities {
 		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
 		public const string ATRB_DELETED = "ATRB_DELETED";
 		public const string CALC_MSP = "CALC_MSP";
+		public const string COPY_CONTRACT = "COPY_CONTRACT";
 		public const string OBJ_DELETE = "OBJ_DELETE";
 		public const string OBJ_DELETED = "OBJ_DELETED";
 		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
@@ -2597,7 +2606,6 @@ namespace Intel.MyDeals.Entities {
 		PROGRAM = 4,
 		VOL_TIER = 5,
 		KIT = 6,
-		CAP_BAND = 7,
 		ALL_TYPES = 9,
 		Unknown = 0
 	}
@@ -2612,7 +2620,6 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },
 				new OpDataElementSetTypeItem {Id = 6, OpDeSetType = OpDataElementSetType.KIT, Alias = "KIT", Description = "KIT Deal Type", TemplateDealNumber = -5, TrackerDtLetter = "K", Order = 6 },
-				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.CAP_BAND, Alias = "CAP_BAND", Description = "CAP BAND Deal Type", TemplateDealNumber = -4, TrackerDtLetter = "C", Order = 7 },
 				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},
 
@@ -2621,10 +2628,10 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.ALL_OBJ_TYPE] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER },
 			}
 		);
