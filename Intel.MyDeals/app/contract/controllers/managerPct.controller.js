@@ -27,7 +27,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
     var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
-    var hasNoPermissionNotLegal = hasNoPermission || window.usrRole !== "Legal";
     var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || ((window.usrRole === "GA" || window.usrRole === "SA") && window.isSuper);
     
     $timeout(function () {
@@ -433,7 +432,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Max RPU",
             format: "{0:c}",
             width: "100px",
-            hidden: hasNoPermissionNotLegal,
+            hidden: !hasPermissionPrice,
             parent: false
         },
         "ECAP_PRC": {
