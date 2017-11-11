@@ -87,7 +87,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		"CUST_ACCNT_DIV"
     ]
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
-
+    var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
+	
     function init() {
         // force a resize event to format page
         //$scope.resizeEvent();
@@ -455,6 +456,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.colToLetter[value.field] = letter;
                 root.letterToCol[letter] = value.field;
             });
+            finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
         }
 
         lastHiddenBeginningColLetter = String.fromCharCode(root.colToLetter[GetFirstEdiatableBeforeProductCol()].charCodeAt(0) - 1);
@@ -611,7 +613,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     	sheet.batch(function () {
                                     		// Disable user editable columns
-                                    		disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + n + ":Z" + (n + numToDel + numToDel)));
+                                    		disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + n + ":" + finalColLetter + (n + numToDel + numToDel)));
 
                                     		// Re-enable Product column
                                     		var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (n + numToDel + numToDel));
@@ -641,7 +643,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     	cnt = cnt + 2;
 
 						// Disable user editable columns
-                    	disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":Z" + (cnt + numToDel - 1)));
+                    	disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":" + finalColLetter + (cnt + numToDel - 1)));
 
                     	// Re-enable Product column
                     	var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel - 1));
@@ -866,8 +868,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
-                    // If we skipped spaces, we already collapsed, so remove the extra data outside the range
-                    var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
+                    // If we skipped spaces, we already collapsed, so remove the extra data outside the range                    
                     var st = data.length + 1;
                     var en = bottomRightRowIndex;
                     var numBlanks = en - st;
@@ -1004,8 +1005,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // On spreadsheet Render
     function onRender(e) {
         if (root.spreadNeedsInitialization) {
-            //console.log("onRender");
-
             root.spreadNeedsInitialization = false;
 
             // Set Active sheet
@@ -1087,7 +1086,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (!!data[key]._behaviors) {
                             var errors = data[key]._behaviors.isError;
                             if (errors && Object.keys(errors).length !== 0) {
-                                sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
+                            	sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
+                            	var myVal = "";
+                            	for (var myKey in data[key]._behaviors.validMsg) {
+                            		myVal += ptTemplate.model.fields[myKey].label + ": " +  data[key]._behaviors.validMsg[myKey];
+                            		console.log(ptTemplate.model.fields[myKey].label);
+                            	}
+                            	data[key]._behaviors.validMsg["DC_ID"] = myVal;
+                            	data[key]._behaviors.isError["DC_ID"] = true;
+                            	console.log(myVal);
+                            	sheet.range("A" + row + ":A" + row).validation(root.myDealsValidation(true, myVal, false));
                             }
                         }
 
@@ -1180,8 +1188,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.textAlign(headerStyle.textAlign);
             headerRange.verticalAlign(headerStyle.verticalAlign);
 
-            sheet.range("A2:Z" + $scope.root.ptRowCount).verticalAlign("center");
-            sheet.range("A2:Z" + $scope.root.ptRowCount).textAlign(cellStyle.textAlign);
+            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).verticalAlign("center");
+            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).textAlign(cellStyle.textAlign);
 
             // Add product selector editor on Product cells
             sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
@@ -2161,7 +2169,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         	cnt = cnt + 2;
 			sheet.batch(function(){
         		// Disable user editable columns
-        		disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":Z" + (cnt + numToDel)));
+        		disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":" + finalColLetter + (cnt + numToDel)));
 
         		// Re-enable Product column
         		var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + cnt + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel));
