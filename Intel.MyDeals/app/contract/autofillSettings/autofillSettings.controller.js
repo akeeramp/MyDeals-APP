@@ -36,11 +36,11 @@
             if (oldValue == null && newValue != null) {
                 return;
             } else {
-                if (oldValue["PAYOUT_BASED_ON"].value == "Billings" && newValue["PAYOUT_BASED_ON"].value == "Consumption") {
-                    newValue["PROGRAM_PAYMENT"].value = "Backend"
+                if (oldValue["PAYOUT_BASED_ON"].value === "Billings" && newValue["PAYOUT_BASED_ON"].value === "Consumption") {
+                    newValue["PROGRAM_PAYMENT"].value = "Backend";
                 }
                 if (newValue["PROGRAM_PAYMENT"].value.toUpperCase().indexOf("FRONTEND") > -1 && oldValue["PROGRAM_PAYMENT"].value.toUpperCase().indexOf("FRONTEND") === -1) {
-                    newValue["PAYOUT_BASED_ON"].value = "Billings"
+                    newValue["PAYOUT_BASED_ON"].value = "Billings";
                 }
             }
 
