@@ -46,7 +46,7 @@
         $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
         $scope.C_DEL_PRICING_STRATEGY = securityService.chkDealRules('C_DEL_PRICING_STRATEGY', window.usrRole, null, null, null);
         $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
-        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);     
+        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_EDIT_PRODUCT = securityService.chkDealRules('C_EDIT_PRODUCT', window.usrRole, null, null, null);
         $scope.C_DELETE_CONTRACT = securityService.chkDealRules('C_DELETE_CONTRACT', window.usrRole, null, null, null);
 
@@ -1397,13 +1397,13 @@
             //var emailSubject = "Javascript Email";
             //var emailBody = "<html><head>/<head><body>" + mailHTML + "</body></html>";
             ////var attach = 'path';
-            //document.location = "mailto:" + emailTo + "?subject=" + emailSubject + "&body=" + emailBody;             
+            //document.location = "mailto:" + emailTo + "?subject=" + emailSubject + "&body=" + emailBody;
 
-           
 
-            //document.location.href = textFile; 
 
-          
+            //document.location.href = textFile;
+
+
             $scope.emailData = [];
         }
 
@@ -1431,7 +1431,7 @@
                 //$scope.setRowIdStyle(args.data.PRC_TBL_ROW);
                 //$scope.root.switchingTabs = false;
                 $scope.openEmailMsg();
-                    
+
             });
 
         $scope.actionPricingStrategies = function (data, emailEnabled) {
@@ -1444,7 +1444,7 @@
                 function (data) {
                     $scope.messages = data.data.Messages;
 
-                   
+
 
                     $timeout(function () {
                         $scope.$broadcast('refresh');
@@ -1456,18 +1456,18 @@
                     }, 50);
 
                     //if (emailEnabled)
-                    //    $scope.$broadcast('FireEmailNotification', null); 
+                    //    $scope.$broadcast('FireEmailNotification', null);
 
-                    $scope.pricingStrategyStatusUpdated = true;                    
+                    $scope.pricingStrategyStatusUpdated = true;
                 },
                 function (result) {
-                   
+
                 }
             );
 
             if (emailEnabled)
                 $scope.openEmailMsg();
-           
+
         }
         $scope.actionWipDeal = function (wip, actn) {
             $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!");
@@ -1712,7 +1712,7 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, bypassLowerContract) {
-			
+
             var source = "";
             var modCt = [];
             var modPs = [];
@@ -2145,7 +2145,7 @@
                     $scope.isAutoSaving = false;
 
                     util.console("updateContractAndCurPricingTable Complete");
-                    
+
                     //if a callback function is provided, invoke it now once everything else is completed
                     if (!!callback) {
                         callback();
@@ -2385,7 +2385,7 @@
             // this is for vol tier right now, but Kits will have to read off dim of products
             var pivotFieldName = "NUM_OF_TIERS";
 
-            if (!$scope.isPivotable) return 1;
+            if (!$scope.isPivotable()) return 1;
 
             if (dataItem === undefined) {
                 return parseInt($scope.curPricingTable[pivotFieldName]);
@@ -3105,7 +3105,7 @@
         //
 
         $scope.validatePricingTable = function (forceRun) {
-			
+
             if (forceRun === undefined || !forceRun) {
             	$scope.saveEntireContractBase($state.current.name, true, true);
             } else {
