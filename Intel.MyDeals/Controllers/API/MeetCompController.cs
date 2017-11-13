@@ -56,10 +56,10 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="CNTRCT_OBJ_SID"></param>
         /// <returns></returns>
         [Authorize]
-        [Route("GetMeetCompProductDetails/{CNTRCT_OBJ_SID}")]
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
+        [Route("GetMeetCompProductDetails/{CNTRCT_OBJ_SID}/{MODE}")]
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
         {
-            return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID)
+            return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE)
                 , $"Unable to {"get Meet Comp"}"
             );
         }

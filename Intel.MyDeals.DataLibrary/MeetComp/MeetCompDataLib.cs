@@ -114,7 +114,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
         {
             OpLog.Log("GetMeetCompProductDetails");
 
@@ -130,7 +130,8 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     @obj_sids = dt,
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd
+                    @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
+                    @MODE = MODE
 
                 }))
                 {
