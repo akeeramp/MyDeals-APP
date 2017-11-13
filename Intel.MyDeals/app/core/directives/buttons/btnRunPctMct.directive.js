@@ -40,14 +40,13 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                     return "Running " + $scope.text;
                 }
                 if (!!$scope.lastRun) {
-                    moment.tz.add('America/Los_Angeles|PST PDT|80 70|0101|1Lzm0 1zb0 Op0');
-                    var now = moment.tz(new Date(), "America/Los_Angeles");
+                    moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+                    var localTime = moment.tz(new Date(), "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
                     var lastruntime = moment($scope.lastRun);
 
-                    var t1 = now.format("MM/DD/YY hh:mm:ss");
-                    var t2 = lastruntime.format("MM/DD/YY hh:mm:ss");
+                    var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
-                    var timeDiff = moment.duration(moment(t2).diff(moment(t1)));
+                    var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                     var hh = Math.abs(timeDiff.asHours());
                     var mm = Math.abs(timeDiff.asMinutes());
                     var ss = Math.abs(timeDiff.asSeconds());

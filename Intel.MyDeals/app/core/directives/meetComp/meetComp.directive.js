@@ -32,9 +32,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                     // if no change in state, simple update the text
                     if ($scope.isBusy === newState) {
-                    	$scope.isBusyMsgTitle = msg;
-                    	$scope.isBusyMsgDetail = !detail ? "" : detail;
-                    	$scope.isBusyType = msgType;
+                        $scope.isBusyMsgTitle = msg;
+                        $scope.isBusyMsgDetail = !detail ? "" : detail;
+                        $scope.isBusyType = msgType;
                         return;
                     }
 
@@ -60,14 +60,46 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 $scope.curentRow = '';
                 $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
                 //WEB API call
-                dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid).then(function (response) {
+                var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
+                $scope.runIfStaleByHours = 3;
+                $scope.MC_MODE = "D";
+                $scope.$parent.IsFirstLoad = true;
+                $scope.IsMeetCompRun = false;
+                if (!!LAST_MEET_COMP_RUN) {
+
+                    moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+                    var localTime = moment.tz(new Date(), "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
+                    var lastruntime = moment(LAST_MEET_COMP_RUN);
+
+                    var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+
+                    var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
+                    var hh = Math.abs(timeDiff.asHours());
+                    var mm = Math.abs(timeDiff.asMinutes());
+                    var ss = Math.abs(timeDiff.asSeconds());
+
+                    var dsplNum = hh;
+                    var dsplMsg = " hours ago";
+
+                    if ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) {
+                        $scope.MC_MODE = "A";
+                        $scope.IsMeetCompRun = true;
+                    } else {
+                        $scope.IsMeetCompRun = false;
+                    }
+
+                } else {
+                    $scope.MC_MODE = "A";
+                    $scope.IsMeetCompRun = true;
+                }
+
+                dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
                     if (response.data.length > 0) {
                         $scope.meetCompMasterdata = response.data;
                         $scope.meetCompUnchangedData = angular.copy(response.data);
                         $scope.meetCompUpdatedList = [];
                         $scope.isDataAvaialable = true;
                         $scope.isBusy = false;
-                        //var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_MEET_COMP_RUN;
 
                         if (usrRole == "GA") {
                             var isValid = isModelValid($scope.meetCompMasterdata);
@@ -596,12 +628,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             data: tempData
                                         },
                                         change: function (e) {
-                                            var selectedIndx = this.selectedIndex;                                            
+                                            var selectedIndx = this.selectedIndex;
                                             $scope.selectedCustomerText = this.value().trim();
                                             this.value($scope.selectedCustomerText);
                                             $scope.selectedCust = options.model.CUST_NM_SID;
                                             $scope.curentRow = options.model.RW_NM;
-                                            if (selectedIndx == -1 && $scope.selectedCustomerText.trim().length > 0) {                                                
+                                            if (selectedIndx == -1 && $scope.selectedCustomerText.trim().length > 0) {
                                                 $scope.addSKUForCustomer("0");
                                                 options.model.COMP_SKU = $scope.selectedCustomerText.trim();
                                             }
@@ -804,7 +836,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                         }
 
-                        
+
                         function addToUpdateList(dataItem, FIELD_NM) {
                             var indx = -1;
                             $scope.meetCompUpdatedList.some(function (e, i) {
@@ -938,10 +970,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         $scope.meetCompUpdatedList = [];
                                         $scope.$root.$broadcast('refreshContractData');
                                     },
-                                    function (response) {
-                                        logger.error("Unable to save data", response, response.statusText);
-                                        $scope.isBusy = false;
-                                    });
+                                        function (response) {
+                                            logger.error("Unable to save data", response, response.statusText);
+                                            $scope.isBusy = false;
+                                        });
                                 }
                                 else {
                                     kendo.alert('No new Meet Comp Changes detected to be saved.');
@@ -1040,7 +1072,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         });
 
                                         $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
-                                            var input = $(this);    
+                                            var input = $(this);
                                             $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value.trim();
                                             editedROW.COMP_OVRRD_RSN = value.trim();
                                             addToUpdateList(editedROW, "COMP_OVRRD_RSN");
