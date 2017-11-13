@@ -8,9 +8,10 @@
     </div>
 
     <!-- Split group icon -->
-    <div class='fl md-icon rotate-270' ng-if="(editable === true) &&(!dataItem._parentCnt || dataItem._parentCnt > 1)">
-        <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()"></i>
+    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1)">
+        <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
     </div>
+    
 
     <!-- Notes icon -->
     <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === '' && dataItem.PS_WF_STG_CD">

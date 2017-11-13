@@ -2393,7 +2393,8 @@
 
             if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);
 
-            return parseInt($scope.curPricingTable[pivotFieldName]);
+            var pivotVal = $scope.curPricingTable[pivotFieldName];
+            return pivotVal === undefined ? 1 : parseInt(pivotVal);
         }
 
         $scope.pivotData = function (data) {
