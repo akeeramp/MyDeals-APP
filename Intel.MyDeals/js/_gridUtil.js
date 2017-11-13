@@ -619,7 +619,7 @@ gridPctUtils.getResultMappingIconClass = function (result) {
 }
 gridPctUtils.getResultSingleIcon = function (result, style) {
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
-    var iconTitle = iconNm === "intelicon-help-outlined" ? "Not run yet" : result;
+    var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
 
     return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
 }
@@ -629,7 +629,7 @@ gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, s
     if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-information-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Overidden"></i>';
 
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
-    var iconTitle = iconNm === "intelicon-help-outlined" ? "Not run yet" : result;
+    var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
 
     rtn += '<i ng-if="' + flg + '" class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
     rtn += "</div>";
