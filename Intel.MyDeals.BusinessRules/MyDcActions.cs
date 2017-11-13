@@ -285,7 +285,7 @@ namespace Intel.MyDeals.BusinessRules
             //        }
             //    }
             //}
-            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString())
+            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString() || r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.PROGRAM.ToString())
             {
                 CheckForCrossVerticalProducts(dePrdUsr, items);
             }
