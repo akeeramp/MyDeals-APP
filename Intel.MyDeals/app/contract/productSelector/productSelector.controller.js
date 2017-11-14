@@ -50,7 +50,7 @@
         vm.animateExclude = false;
         vm.manageSelectedProducts = manageSelectedProducts;
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
-                        suggestedProduct.isExcludeProduct && dealType == 'VOL_TIER' : false;
+                        suggestedProduct.isExcludeProduct && (dealType == 'VOL_TIER' || dealType == 'PROGRAM') : false;
         vm.enableMultipleSelection = dealType == 'VOL_TIER' || dealType == 'PROGRAM';
 
         var searchProcessed = false;
