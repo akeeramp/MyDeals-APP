@@ -162,8 +162,7 @@ namespace Intel.MyDeals.DataLibrary
             var ret = false;
             try
             {
-                // TODO change the proc name after confirmation from Doug
-                var cmd = new Procs.dbo.PR_MYDL_DELETE_ATTCH_DATA_1
+                var cmd = new Procs.dbo.PR_MYDL_DELETE_ATTCH_DATA
                 {
                     CUST_MBR_SID = custMbrSid,
                     OBJ_TYPE_SID = objTypeSid,
