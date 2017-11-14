@@ -106,7 +106,14 @@
                     { "name": "Backdate", "order": 2 },
                     { "name": "RPU", "order": 3 },
                     { "name": "All", "order": 99 }
-                ]
+                ],
+                "KIT": [
+                    { "name": "Deal Info", "order": 0 },
+                    { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
+                    { "name": "Backdate", "order": 2 },
+                    { "name": "CAP Info", "order": 98 },
+                    { "name": "All", "order": 99 }
+                ],
             },
             "templates": {
                 "ECAP": {
@@ -611,6 +618,146 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
+                    }
+                },
+                "KIT": {
+                    "tools": {
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
+                    },
+                    "details": {
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
+                    },
+                    "DC_ID": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DC_PARENT_ID": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PASSED_VALIDATION": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CUST_MBR_SID": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "START_DT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "END_DT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "WF_STG_CD": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "EXPIRE_FLG": {
+                        "Groups": ["All"]
+                    },
+                    "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "OBJ_SET_TYPE_CD": {
+                        "Groups": ["All"]
+                    },
+                    "PTR_USER_PRD": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRODUCT_CATEGORIES": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PROD_INCLDS": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "TITLE": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "SERVER_DEAL_TYPE": {
+                        "Groups": ["All"]
+                    },
+                    "DEAL_COMB_TYPE": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DEAL_GRP_EXCLDS": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DEAL_GRP_CMNT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "ECAP_PRICE": {
+                        "Groups": ["Deal Info", "CAP Info"]
+                    },
+                    "CAP_INFO": {
+                        "Groups": ["Deal Info", "CAP Info"]
+                    },
+                    "CAP": {
+                        "Groups": ["All", "CAP Info"]
+                    },
+                    "CAP_STRT_DT": {
+                        "Groups": ["All", "CAP Info"]
+                    },
+                    "CAP_END_DT": {
+                        "Groups": ["All", "CAP Info"]
+                    },
+                    "YCS2_INFO": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "YCS2_PRC_IRBT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_START_DT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_END_DT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_OVERLAP_OVERRIDE": {
+                        "Groups": ["All"]
+                    },
+                    "VOLUME": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "ON_ADD_DT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DEAL_SOLD_TO_ID": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "EXPIRE_YCS2": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "REBATE_TYPE": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "MRKT_SEG": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "GEO_COMBINED": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "TRGT_RGN": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PAYOUT_BASED_ON": {
+                        "Groups": ["Deal Info", "Consumption"]
+                    },
+                    "PROGRAM_PAYMENT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "TERMS": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "REBATE_BILLING_START": {
+                        "Groups": ["Consumption"]
+                    },
+                    "REBATE_BILLING_END": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_REASON": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_REASON_CMNT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "BACK_DATE_RSN": {
+                        "Groups": ["Backdate"]
                     }
                 }
             }
