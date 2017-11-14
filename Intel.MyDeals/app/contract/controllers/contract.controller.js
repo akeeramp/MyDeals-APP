@@ -1480,6 +1480,20 @@
                             if (!wip._actions) wip._actions = {};
                             wip._actions["Hold"] = true;
                         }
+                        if (wip.WF_STG_CD !== "Hold" && $scope.messages[0].ShortMessage === "Hold") {
+                            // put on hold
+                            if (!wip._behaviors) wip._behaviors = {};
+                            if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
+                            wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
+                            wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
+                        }
+                        if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                            // taken off hold
+                            if (!wip._behaviors) wip._behaviors = {};
+                            if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
+                            wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
+                            wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
+                        }
                         wip.WF_STG_CD = $scope.messages[0].ShortMessage;
                         $scope.$broadcast('refresh');
                         $scope.$broadcast('refreshStage', wip);

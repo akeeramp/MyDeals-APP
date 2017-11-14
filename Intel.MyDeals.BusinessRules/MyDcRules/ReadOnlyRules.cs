@@ -89,6 +89,22 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="Readonly if Deal on Hold",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && de.AtrbValue != null && String.Equals(de.AtrbValue.ToString(),"Hold", StringComparison.OrdinalIgnoreCase) && dc.DcID > 0).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] { AttributeCodes.DEAL_GRP_EXCLDS, AttributeCodes.DEAL_GRP_CMNT }
+                        }
+                    }
+                },
 
                 new MyOpRule
                 {
