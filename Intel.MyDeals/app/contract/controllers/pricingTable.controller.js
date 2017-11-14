@@ -144,11 +144,53 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return root.colToLetter[colName].charCodeAt(0) - "A".charCodeAt(0);
     }
 
+	// Create a fake (not in db nor saved) attribute that exists in the PTR only
+    function createPtrOnlyAttribute(atrbToCopy, newAtrbField, newAtrbTitle, isRenameOriginal, newOriginalTitle, newWidth) {
+    	var fieldIndex;
+    	for (var i = 0; i < ptTemplate.columns.length; i++) {
+    		if (ptTemplate.columns[i].field == atrbToCopy) {
+    			fieldIndex = i;
+    			break;
+    		}
+    	}
+    	var fieldColData = angular.copy(ptTemplate.columns[fieldIndex]);
+    	var fieldModel = angular.copy(ptTemplate.model.fields[atrbToCopy]);
+
+    	// rename original field
+    	if (isRenameOriginal && newOriginalTitle !== null) {
+			fieldColData.title = newOriginalTitle;
+		}
+    	// make and set temp fields
+    	var temp = angular.copy(fieldColData);
+    	temp.field = newAtrbField;
+    	temp.title = newAtrbTitle;
+    	if (newWidth !== null) { temp.width = newWidth; }
+
+    	fieldModel.field = newAtrbField;
+    	fieldModel.label = newAtrbTitle;
+
+    	// add temp fields to the templates
+    	ptTemplate.columns.splice(fieldIndex + 1, 0, temp);
+    	ptTemplate.model.fields[temp.field] = fieldModel;
+	}
+
+
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
         pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
 
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
+
+		// TODO: translate KIT ECAP into ECAP Price
+    	// KIT temp attributes
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+        	// KIT Rebate / Bundle Discount
+        	createPtrOnlyAttribute("ECAP_PRICE", "KIT_Rebate", "KIT Rebate / Bundle Discount", false, null, 120);
+        	ptTemplate.model.fields["KIT_Rebate"].editable = false;
+
+        	// KIT ECAP
+        	createPtrOnlyAttribute("ECAP_PRICE", "KIT_ECAP", "KIT ECAP", true, "ECAP Standalone", null);
+		}
 
         columns = vm.getColumns(ptTemplate);
 
@@ -847,6 +889,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!isAddedByTrackerNumber) {
                         data[r]["VOLUME"] = null;
                         data[r]["ECAP_PRICE"] = null;
+                    }
+
+                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+						// Default Quantity
+                    	data[r]["QTY"] = 1;
                     }
 
                     if (!root.curPricingTable || root.isPivotable()) {
