@@ -422,7 +422,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "IA Bench",
                                     width: 120,
                                     template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
-                                    //template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: editorIABench
                                 },
@@ -430,7 +429,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "COMP_BNCH",
                                     title: "Comp Bench",
                                     width: 120,
-                                    //template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
                                     template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: editorCOMPBench
@@ -439,7 +437,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "MEET_COMP_STS",
                                     title: "Test Results",
                                     width: 120,
-                                    template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}else if(MEET_COMP_STS.toLowerCase() == 'not run yet'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-outlined notRunYetIcon' title='Not run yet' style='font-size:20px !important'></i></div>#}else if(MEET_COMP_STS.toLowerCase() == 'na'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-information-solid notApplicableIcon' title='Not Applicable' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
                                     filterable: { multi: true, search: true }
@@ -1209,7 +1207,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}else if(MEET_COMP_STS.toLowerCase() == 'not run yet'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-outlined notRunYetIcon' title='Not run yet' style='font-size:20px !important'></i></div>#}else if(MEET_COMP_STS.toLowerCase() == 'na'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-information-solid notApplicableIcon' title='Not Applicable' style='font-size:20px !important'></i></div>#}#",
                                         filterable: { multi: true, search: true, search: true }
                                     },
                                     {
