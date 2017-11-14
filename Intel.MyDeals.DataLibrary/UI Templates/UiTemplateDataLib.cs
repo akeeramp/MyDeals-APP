@@ -992,6 +992,16 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
+                AtrbCd = AttributeCodes.DEAL_DESC,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Deal Description",
+                DataType = "string",
+                Width = 200,
+                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_DESC')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
                 AtrbCd = AttributeCodes.ON_ADD_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM },

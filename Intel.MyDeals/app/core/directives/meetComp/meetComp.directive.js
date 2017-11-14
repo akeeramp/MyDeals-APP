@@ -946,6 +946,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         GRP_PRD_NM: x.GRP_PRD_NM,
                                         GRP_PRD_SID: x.GRP_PRD_SID,
                                         DEAL_OBJ_SID: x.DEAL_OBJ_SID,
+                                        DEAL_DESC: x.DEAL_DESC,
                                         COMP_SKU: x.COMP_SKU,
                                         COMP_PRC: x.COMP_PRC,
                                         COMP_BNCH: x.COMP_BNCH,
@@ -1019,6 +1020,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
                                                 CUST_NM_SID: { editable: false, validation: { required: true } },
                                                 DEAL_OBJ_SID: { editable: false, validation: { required: true } },
+                                                DEAL_DESC: { editable: false, validation: { required: true } },
                                                 DEAL_OBJ_TYPE_SID: { editable: false, validation: { required: true } },
                                                 GRP_PRD_NM: { editable: false, validation: { required: true } },
                                                 GRP_PRD_SID: { editable: false, validation: { required: true } },
@@ -1167,6 +1169,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         filterable: { multi: true, search: true },
                                         template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
+                                    },
+                                    {
+                                        field: "DEAL_DESC",
+                                        title: "Deal Description",
+                                        width: 120,
+                                        filterable: { multi: true, search: true },
+                                        template: "<div class='readOnlyCell' title='#=DEAL_DESC#'>#=DEAL_DESC#</div>"
                                     },
                                     {
                                         field: "COMP_SKU",
