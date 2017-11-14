@@ -2597,10 +2597,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             // Get data to filter ECAP numbers against
-            /////// TODO: exact start date, end date, geo, cust product
             var filterData = {
-                'DEAL_STRT_DT': currRowData.START_DT,
-                'DEAL_END_DT': currRowData.END_DT,
+                'START_DT': currRowData.START_DT,
+                'END_DT': currRowData.END_DT,
                 'GEO_COMBINED': currRowData.GEO_COMBINED,
                 'CUST_MBR_SID': currRowData.CUST_MBR_SID,
                 'PRD_MBR_SID': prdList[0]
@@ -2640,8 +2639,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
             'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
             'GEO_MBR_SID': getFormatedGeos(dataItem.GEO_COMBINED),
-            'DEAL_STRT_DT': dataItem.START_DT,
-            'DEAL_END_DT': dataItem.END_DT,
+            'START_DT': dataItem.START_DT,
+            'END_DT': dataItem.END_DT,
             'getAvailable': 'N',
             'priceCondition': priceCondition
         }];
@@ -2652,8 +2651,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
             'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
             'GEO_MBR_SID': getFormatedGeos(dataItem.GEO_COMBINED),
-            'DEAL_STRT_DT': dataItem.START_DT,
-            'DEAL_END_DT': dataItem.END_DT,
+            'START_DT': dataItem.START_DT,
+            'END_DT': dataItem.END_DT,
             'getAvailable': 'N',
             'priceCondition': priceCondition
         }

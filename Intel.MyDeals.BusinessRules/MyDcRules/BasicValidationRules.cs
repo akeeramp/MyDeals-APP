@@ -420,6 +420,13 @@ namespace Intel.MyDeals.BusinessRules
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
 					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate}
 				},
+				new MyOpRule
+				{
+					Title="Adjusted ECAP Units must have a positive value",
+					ActionRule = MyDcActions.CheckEcapAdjUnit,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+				}
 			};
         }
     }

@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace Intel.MyDeals.Entities
 {
+	public class EcapTrackerResult
+	{
+		public string DROP_DOWN { get; set; }
+	}
+
 	public class EcapTrackerFilterData
 	{
-		public DateTime DEAL_STRT_DT { get; set; }
-		public DateTime DEAL_END_DT { get; set; }
+		public DateTime START_DT { get; set; }
+		public DateTime END_DT { get; set; }
 		public string GEO_COMBINED { get; set; }
 		public int CUST_MBR_SID { get; set; }
 		public int PRD_MBR_SID { get; set; }

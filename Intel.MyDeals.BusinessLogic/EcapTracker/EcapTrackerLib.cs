@@ -29,7 +29,7 @@ namespace Intel.MyDeals.BusinessLogic
 		/// Get a list of possible ECAP Adjustment Tracker Numbers that match filterData parameter
 		/// </summary>
 		/// <returns>list of ECAP Adjustment Tracker Numbers</returns>
-		public IEnumerable<string> GetEcapTrackerList(EcapTrackerFilterData filterData)
+		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
 		{
 			return _ecapTrackerDataLib.GetEcapTrackerList(filterData);
 		}

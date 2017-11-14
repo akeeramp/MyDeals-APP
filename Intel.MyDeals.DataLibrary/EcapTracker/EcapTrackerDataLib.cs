@@ -21,9 +21,9 @@ namespace Intel.MyDeals.DataLibrary
 		/// Get a list of possible ECAP Adjustment Tracker Numbers that match filterData parameter
 		/// </summary>
 		/// <returns>list of ECAP Adjustment Tracker Numbers</returns>
-		public IEnumerable<string> GetEcapTrackerList(EcapTrackerFilterData filterData)
+		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
 		{
-			var ret = new List<string>();
+			var ret = new List<EcapTrackerResult>();
 			try
 			{
 				in_t_trkr_atrb dt = new in_t_trkr_atrb();
@@ -35,12 +35,14 @@ namespace Intel.MyDeals.DataLibrary
 
 				using (var rdr = DataAccess.ExecuteReader(cmd))
 				{
-					int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "BRND_NM");
+					int IDX_ORIG_ECAP_TRKR_NBR = DB.GetReaderOrdinal(rdr, "ORIG_ECAP_TRKR_NBR");
 
 					while (rdr.Read())
 					{
-						string rowVal = (IDX_ATRB_VAL < 0 || rdr.IsDBNull(IDX_ATRB_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL);
-						ret.Add(rowVal);
+						ret.Add(new EcapTrackerResult
+						{
+							DROP_DOWN = (IDX_ORIG_ECAP_TRKR_NBR < 0 || rdr.IsDBNull(IDX_ORIG_ECAP_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ORIG_ECAP_TRKR_NBR)
+						});
 					} // while
 				}
 			}

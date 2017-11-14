@@ -23,8 +23,14 @@
 				Select which {{$ctrl.colData.label}} to apply below: <br />
 			</p>
 
-			<select kendo-drop-down-list style="width: 160px;" k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.popupResult" k-ng-delay="$ctrl.isDropdownsLoaded"></select>
-		</div>
+			<select kendo-drop-down-list
+					style="width: 160px;"
+					k-options="$ctrl.dropDownOptions"
+					k-ng-model="$ctrl.popupResult"
+					k-ng-delay="$ctrl.isDropdownsLoaded"
+					k-placeholder="'Select...'"
+					>
+			</select>
 		<br />
 
 		<div class="row">

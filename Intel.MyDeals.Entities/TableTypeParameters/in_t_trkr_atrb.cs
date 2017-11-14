@@ -20,9 +20,9 @@ namespace Intel.MyDeals.Entities
             //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)   
             this.Columns.Add("CUST_MBR_SID", typeof(int));       
             this.Columns.Add("PRD_MBR_SID", typeof(int));  
-            this.Columns.Add("GEO_NMS", typeof(string));
-            this.Columns.Add("DEAL_ST_DT", typeof(string));            
-            this.Columns.Add("DEAL_END_DT", typeof(string));
+            this.Columns.Add("GEO_COMBINED", typeof(string));
+            this.Columns.Add("START_DT", typeof(string));            
+            this.Columns.Add("END_DT", typeof(string));
             //this.Columns.Add("ORIG_ECAP_TRKR_NBR", typeof(string));
             //this.Columns.Add("DC_ID", typeof(int));
         }
@@ -36,9 +36,9 @@ namespace Intel.MyDeals.Entities
             var r = this.NewRow();            
             r["CUST_MBR_SID"] = itm.CUST_MBR_SID;
             r["PRD_MBR_SID"] = itm.PRD_MBR_SID;
-            r["GEO_NMS"] = itm.GEO_COMBINED;
-            r["DEAL_ST_DT"] = itm.DEAL_STRT_DT;                
-            r["DEAL_END_DT"] = itm.DEAL_END_DT;
+            r["GEO_COMBINED"] = itm.GEO_COMBINED;
+            r["START_DT"] = itm.START_DT;                
+            r["END_DT"] = itm.END_DT;
             //r["ORIG_ECAP_TRKR_NBR"] = itm.ORIG_ECAP_TRKR_NBR;
             //r["DC_ID"] = itm.DC_ID;
             this.Rows.Add(r);
@@ -56,9 +56,9 @@ namespace Intel.MyDeals.Entities
                 var r = this.NewRow();
 				r["CUST_MBR_SID"] = itm.CUST_MBR_SID;
 				r["PRD_MBR_SID"] = itm.PRD_MBR_SID;
-				r["GEO_NMS"] = itm.GEO_COMBINED;
-				r["DEAL_ST_DT"] = itm.DEAL_STRT_DT;
-				r["DEAL_END_DT"] = itm.DEAL_END_DT;
+				r["GEO_COMBINED"] = itm.GEO_COMBINED;
+				r["START_DT"] = itm.START_DT;
+				r["END_DT"] = itm.END_DT;
 				//r["ORIG_ECAP_TRKR_NBR"] = itm.ORIG_ECAP_TRKR_NBR;
 				//r["DC_ID"] = itm.DC_ID;
 				this.Rows.Add(r);

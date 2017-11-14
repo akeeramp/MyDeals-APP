@@ -18,14 +18,11 @@ function EcapTrackerModalCtrl($scope, logger, dataService, $uibModalInstance, co
 	$ctrl.isDropdownsLoaded = false;
 	$ctrl.needsProductValidation = false;
 
-	function init() {
 
+	function init() {
 		if (filterData["PRD_MBR_SID"] === undefined || filterData["PRD_MBR_SID"] === null) {
 			$ctrl.needsProductValidation = true;
 		} else {
-			// TODO: get all te filter data for ecap tracker and use it to make the url / get the correct ECAP list
-				console.log("ECAP tracker init");
-
 			// Load dropdown info
 			return dataService.post($ctrl.colData.opLookupUrl, filterData).then(
 				function (response) {
@@ -41,8 +38,8 @@ function EcapTrackerModalCtrl($scope, logger, dataService, $uibModalInstance, co
 	
 	$ctrl.dropDownOptions = {
 		autoBind: false,
-		//select: vm.onObjTypeChange,
 		dataTextField: $ctrl.colData.opLookupText,
+		dataValueField: $ctrl.colData.opLookupValue,
 		dataSource: {
 			type: "json",
 			serverFiltering: true,
@@ -55,7 +52,7 @@ function EcapTrackerModalCtrl($scope, logger, dataService, $uibModalInstance, co
 	};
 
 	$ctrl.ok = function () {
-		var returnVal = $ctrl.popupResult.DROP_DOWN;
+		var returnVal = $ctrl.popupResult[$ctrl.colData.opLookupText];
 		$uibModalInstance.close(returnVal);
 	};
 

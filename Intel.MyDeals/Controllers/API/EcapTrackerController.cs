@@ -18,12 +18,12 @@ namespace Intel.MyDeals.Controllers.API
 
 		[HttpPost]
 		[Route("GetEcapTrackerList")]
-		public IEnumerable<string> GetEcapTrackerList(EcapTrackerFilterData filterData)
+		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
 		{
 			var result = SafeExecutor(() => _ecapTrackerLib.GetEcapTrackerList(filterData)
 				, $"Unable to get ECAP adjustment tracker list"
 			);
-			
+
 			return result;
 		}
 		

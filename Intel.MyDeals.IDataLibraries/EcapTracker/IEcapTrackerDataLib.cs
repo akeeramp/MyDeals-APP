@@ -5,7 +5,7 @@ namespace Intel.MyDeals.IDataLibrary
 {
 	public interface IEcapTrackerDataLib
 	{
-		IEnumerable<string> GetEcapTrackerList(EcapTrackerFilterData filterData);
+		IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData);
 
 		IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers, int custId);
 	}

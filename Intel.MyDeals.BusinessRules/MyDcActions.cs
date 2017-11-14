@@ -47,8 +47,8 @@ namespace Intel.MyDeals.BusinessRules
             string dcEn = DateTime.Parse(dcEnStr == "" ? item[AttributeCodes.END_DT].ToString() : dcEnStr).ToString("MM/dd/yyyy");
             string dcItemSt = DateTime.Parse(item[AttributeCodes.START_DT].ToString()).ToString("MM/dd/yyyy");
             string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
-            string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON].ToString();
-            string mrktSegValue = item[AttributeCodes.MRKT_SEG].ToString();
+            string payoutBasedOn = (item[AttributeCodes.PAYOUT_BASED_ON] != null) ? item[AttributeCodes.PAYOUT_BASED_ON].ToString() : "";
+			string mrktSegValue = (item[AttributeCodes.MRKT_SEG] != null) ? item[AttributeCodes.MRKT_SEG].ToString() : "";
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
 
             // Billing Dates
@@ -115,9 +115,8 @@ namespace Intel.MyDeals.BusinessRules
                     deContractRsn.State = OpDataElementState.Modified;
                 }
             }
-
-            // Frontend -> PROGRAM_PAYMENT
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON)) && item[AttributeCodes.PROGRAM_PAYMENT].ToString() != "Backend")
+			// Frontend -> PROGRAM_PAYMENT
+			if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON)) && item[AttributeCodes.PROGRAM_PAYMENT].ToString() != "Backend")
             {
                 item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
             }
@@ -516,11 +515,12 @@ namespace Intel.MyDeals.BusinessRules
             List<string> eligableDropDowns = new List<string>
             {
                 AttributeCodes.PAYOUT_BASED_ON,
-                AttributeCodes.PROGRAM_PAYMENT,
+				AttributeCodes.MRKT_SEG,
+				AttributeCodes.PROGRAM_PAYMENT,
                 AttributeCodes.REBATE_TYPE,
                 AttributeCodes.MEET_COMP_PRICE_QSTN,
-                AttributeCodes.PROD_INCLDS
-            };
+				AttributeCodes.PROD_INCLDS
+			};
 
             foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligableDropDowns))
             {
@@ -1035,11 +1035,29 @@ namespace Intel.MyDeals.BusinessRules
 
 			foreach (KeyValuePair<string, List<ProdMapping>> entry in prodDict)
 			{
-				if (!String.Equals(entry.Value[0].PRD_CAT_NM.ToString().ToUpper(), "SvrWS", StringComparison.OrdinalIgnoreCase) && String.Equals(meetComp.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase))
+				if (!String.Equals(entry.Value[0].PRD_CAT_NM.ToString(), "SvrWS", StringComparison.OrdinalIgnoreCase) && String.Equals(meetComp.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase))
 				{
 					meetComp.AddMessage("Price Performance is applicable only to Server (SvrWS) products.");
 				}
-			}			
+			}
+		}
+		public static void CheckEcapAdjUnit(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+
+			double parsedRebateType = 0;
+
+			IOpDataElement adjEcapUnit = r.Dc.GetDataElement(AttributeCodes.ADJ_ECAP_UNIT);
+			IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+			if (rebateType == null || adjEcapUnit == null) return;
+
+			double.TryParse(adjEcapUnit.AtrbValue.ToString(), out parsedRebateType);
+
+			if (String.Equals(rebateType.AtrbValue.ToString(), "ECAP ADJ", StringComparison.OrdinalIgnoreCase) && (parsedRebateType <= 0))
+			{
+				adjEcapUnit.AddMessage("Adjusted ECAP Units must have a positive value for ECAP Adj rebate types.");
+			}
 		}
 	}
 }
