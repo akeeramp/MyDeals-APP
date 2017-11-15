@@ -406,8 +406,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Discount per line",
                 Template = "#=gridUtils.uiIconWrapper(data, 'DSCNT_PER_LN')#",
                 Format = "{0:c}",
-                IsRequired = false
-            });
+                IsRequired = false,
+				IsDimKey = true
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -418,8 +419,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Quantity",
                 Template = "#=gridUtils.uiIconWrapper(data, 'QTY')#",
                 Format = "{0:d}",
-                IsRequired = false
-            });
+                IsRequired = false,
+				IsDimKey = true
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
@@ -427,7 +429,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 Width = 100,
-                Label = "Total Dollar Amount",
+                Label = "Total Dollar Amount *",
                 Format = "{0:c}",
                 IsRequired = true
             });
