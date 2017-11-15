@@ -2160,10 +2160,11 @@
 
                     util.console("updateContractAndCurPricingTable Complete");
 
-                    //if a callback function is provided, invoke it now once everything else is completed
-                    if (!!callback) {
-                        callback();
-                    }
+                        //if a callback function is provided, invoke it now once everything else is completed
+                        if (!!callback && typeof callback === "function") {
+                            callback();
+                        }
+                   
                 },
                 function (response) {
                 	$scope.setBusy("Error", "Could not save the contract.", "Error");
