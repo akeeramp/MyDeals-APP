@@ -2621,7 +2621,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
             var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
-            var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
+            var currRowData = root.spreadDs.data()[context.range._ref.row -1]; //root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
 
             if (currRowData.PTR_SYS_PRD === "" || currRowData.PTR_SYS_PRD === null) {
                 // Confirmation Dialog
