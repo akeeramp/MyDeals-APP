@@ -690,6 +690,9 @@
                     "DEAL_GRP_CMNT": {
                         "Groups": ["Deal Info"]
                     },
+                    "DEAL_DESC": {
+                        "Groups": ["Deal Info"]
+                    },
                     "ECAP_PRICE": {
                         "Groups": ["Deal Info", "CAP Info"]
                     },
