@@ -1148,27 +1148,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                 },
 
-                                columns: [
-                                    {
-                                        field: "PRD_CAT_NM",
-                                        title: "Vertical",
-                                        width: 80,
-                                        template: "<div class='readOnlyCell' title='#=PRD_CAT_NM#'>#=PRD_CAT_NM#</div>",
-                                        filterable: { multi: true, search: true },
-                                        editable: function () { return false; }
-                                    },
+                                columns: [                                    
                                     {
                                         field: "OBJ_SET_TYPE",
                                         title: "Deal Type",
                                         template: "<div class='readOnlyCell' title='#=OBJ_SET_TYPE#'>#=OBJ_SET_TYPE#</div>",
-                                        width: 120
-                                    },
-                                    {
-                                        field: "DEAL_OBJ_SID",
-                                        title: "Deal ID",
-                                        width: 120,
-                                        filterable: { multi: true, search: true },
-                                        template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
+                                        width: 80
                                     },
                                     {
                                         field: "DEAL_DESC",
@@ -1177,6 +1162,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         filterable: { multi: true, search: true },
                                         template: "<div class='readOnlyCell' title='#=DEAL_DESC#'>#=DEAL_DESC#</div>"
                                     },
+                                    {
+                                        field: "DEAL_OBJ_SID",
+                                        title: "Deal ID",
+                                        width: 120,
+                                        filterable: { multi: true, search: true },
+                                        template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
+                                    },                                    
                                     {
                                         field: "COMP_SKU",
                                         title: "Meet Comp SKU",
