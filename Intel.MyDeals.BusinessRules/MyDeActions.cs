@@ -68,11 +68,40 @@ namespace Intel.MyDeals.BusinessRules
 
             BasicDropdown match = validConsumptionReasons.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userConsumtionReason.ToUpper());
 
-            if (match == null)  //no match
+            if (userConsumtionReason == null || userConsumtionReason == "")
+            {
+                de.AddMessage("Cannot leave Consumption Reason blank.");
+            }
+            else if (match == null)  //no match
                 de.AddMessage(userConsumtionReason + " is not a valid Consumption Reason.");
             else
             {
                 if (match.DROP_DOWN != null && userConsumtionReason != match.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
+                {
+                    de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
+                }
+            }
+        }
+
+        public static void CheckDealCombType(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            string userDealCombType = de.AtrbValue.ToString();
+
+            List<BasicDropdown> validDealCombTypes = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == AttributeCodes.DEAL_COMB_TYPE).ToList();
+
+            BasicDropdown match = validDealCombTypes.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userDealCombType.ToUpper());
+
+            if (userDealCombType == null || userDealCombType == "")
+            {
+                de.AddMessage("Cannot leave Group Type blank.");
+            }
+            else if (match == null)  //no match
+                de.AddMessage(userDealCombType + " is not a valid Group Type.");
+            else
+            {
+                if (match.DROP_DOWN != null && userDealCombType != match.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
                 {
                     de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
                 }

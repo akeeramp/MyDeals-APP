@@ -373,13 +373,28 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Validate Consumption Reason",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.CONSUMPTION_REASON) && de.HasValue()).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.CONSUMPTION_REASON)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = MyDeActions.CheckConsumptionReason,
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.CONSUMPTION_REASON})
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Validate Group Type",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.DEAL_COMB_TYPE)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckDealCombType,
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.DEAL_COMB_TYPE})
                         }
                     }
                 },
