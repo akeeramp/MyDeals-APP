@@ -2508,7 +2508,9 @@
                     if (data[i]["DC_ID"] !== undefined && data[i]["DC_ID"] !== null) {
                         if (Array.isArray(source)) {
                             for (p = 0; p < source.length; p++) {
-                                if (data[i]["DC_ID"] === source[p]["DC_ID"]) $scope.mapProperty(source[p], data[i]);
+                                if (data[i]["DC_ID"] === source[p]["DC_ID"]) {
+                                    $scope.mapProperty(source[p], data[i]);
+                                }
                                 if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
                             }
                         } else {
@@ -2524,7 +2526,7 @@
                 if (src["DC_ID"] === data["DC_ID"] && (!src.TIER_NBR && data.TIER_NBR === "1" || src.TIER_NBR === data.TIER_NBR)) {
                     var arItems = data;
                     for (var key in arItems) {
-                        if (arItems.hasOwnProperty(key) && key[0] !== '_' && data[key] !== undefined)
+                        if (arItems.hasOwnProperty(key) && data[key] !== undefined)
                             src[key] = data[key];
                     }
                 }
@@ -2532,7 +2534,7 @@
                 if (src["DC_ID"] === data["DC_ID"]) {
                     var arItems = data;
                     for (var key in arItems) {
-                        if (arItems.hasOwnProperty(key) && key[0] !== '_' && data[key] !== undefined)
+                        if (arItems.hasOwnProperty(key) && data[key] !== undefined)
                             src[key] = data[key];
                     }
                 }

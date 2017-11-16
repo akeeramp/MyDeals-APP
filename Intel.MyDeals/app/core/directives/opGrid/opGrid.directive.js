@@ -1200,20 +1200,24 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["TRKR_NBR"] = args.data.WIP_DEAL[i]["TRKR_NBR"];
                             dataItem["AVG_RPU"] = args.data.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.data.WIP_DEAL[i]["MAX_RPU"];
+                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];                            
                         }
                     }
                 }
             });
 
-            $scope.$on('saveWithWarnings', function (event, args) {
-                // need to clean out all flags... dirty, error, validMsg
-                $scope.cleanFlags();
+            $scope.$on('saveWithWarnings', function (event, args) {             
+              // need to clean out all flags... dirty, error, validMsg
+              $scope.cleanFlags();
 
                 // need to set all flags... dirty, error, validMsg
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
-                        if (dataItem != null) dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                        if (dataItem != null) {
+                            dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];                               
+                        }
 
                         if (args.data.WIP_DEAL[i].warningMessages !== undefined && args.data.WIP_DEAL[i].warningMessages.length !== 0) {
                             var beh = args.data.WIP_DEAL[i]._behaviors;
