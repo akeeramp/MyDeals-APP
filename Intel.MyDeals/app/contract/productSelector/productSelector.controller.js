@@ -118,7 +118,8 @@
                 }).map(function (i) {
                     return {
                         name: i.MRK_LVL1,
-                        allowMultiple: vm.enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1),
+                        allowMultiple: vm.enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1) ,
+                                    //&&  getVerticalSelection(i.MRK_LVL1)[0].DEAL_PRD_TYPE == "CPU", Future bug fix
                         parentSelected: false,
                         path: '',
                         id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID,
@@ -314,7 +315,7 @@
                 "drillDownFilter5": null,
                 "custSid": pricingTableRow.CUST_MBR_SID,
                 "geoSid": pricingTableRow.GEO_COMBINED.toString(),
-                "mediaCd":pricingTableRow.PROD_INCLDS,
+                "mediaCd": pricingTableRow.PROD_INCLDS,
                 "dealType": vm.dealType
             }
 
@@ -349,7 +350,7 @@
 
         function sortBySelectionLevelColumn(gridData, selectionLevel) {
             var column = "";
-            switch(selectionLevel) {
+            switch (selectionLevel) {
                 case 7007:
                     column = "DEAL_PRD_NM";
                     break;
@@ -478,7 +479,7 @@
                     // Check if valid combination
                     vm.isCrossVerticalError = isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
                     if (!vm.isCrossVerticalError) {
-                        logger.error(crossVertical.message);
+                        logger.stickyError(crossVertical.message);
                         product.selected = false;
                         return;
                     }
@@ -849,19 +850,7 @@
 
                 // Check if valid combination
                 if (!isValidProductCombination(existingProdTypes, undefined)) {
-                    logger.error(crossVertical.message);
-                    //var modalOptions = {
-                    //    closeButtonText: 'Ok',
-                    //    actionButtonText: '',
-                    //    hasActionButton: false,
-                    //    headerText: '',
-                    //    bodyText: crossVertical.message
-                    //};
-                    //confirmationModal.showModal({}, modalOptions).then(function (result) {
-                    //    //
-                    //}, function (response) {
-                    //    //
-                    //});
+                    logger.stickyError(crossVertical.message);
                     return;
                 }
             }

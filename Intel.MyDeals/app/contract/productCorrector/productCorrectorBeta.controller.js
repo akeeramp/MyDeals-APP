@@ -628,19 +628,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         var isValid = isValidProductCombination(existingProdTypes, item.PRD_CAT_NM);
         // Check if valid combination
         if (!isValid) {
-            logger.error(crossVertical.message);
-            //var modalOptions = {
-            //    closeButtonText: 'Ok',
-            //    actionButtonText: '',
-            //    hasActionButton: false,
-            //    headerText: '',
-            //    bodyText: crossVertical.message
-            //};
-            //confirmationModal.showModal({}, modalOptions).then(function (result) {
-            //    //
-            //}, function (response) {
-            //    //
-            //});
+            logger.stickyError(crossVertical.message);
         }
         return isValid;
     }

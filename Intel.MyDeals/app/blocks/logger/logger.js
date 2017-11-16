@@ -17,7 +17,7 @@
             info: info,
             success: success,
             warning: warning,
-
+            stickyError: stickyError,
             // straight to console; bypass toastr
             log: $log.log
 
@@ -43,6 +43,20 @@
                 }
             }
             op.ajaxPostAsync(URL + "LogError", data);
+        }
+
+        function stickyError(message, data, title) {
+            toastr.options = {
+                timeOut: 0,
+                closeButton: true,
+                tapToDismiss: false,
+                positionClass: 'toast-bottom-right'
+            };
+            error(message, data, title);
+            toastr.options = {
+                closeButton: false,
+                timeOut: 5000
+            };
         }
 
         function info(message, data, title) {
