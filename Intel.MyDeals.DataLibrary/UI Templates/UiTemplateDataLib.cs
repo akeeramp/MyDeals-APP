@@ -1677,6 +1677,20 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 37,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/PROGRAM",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 29,
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
