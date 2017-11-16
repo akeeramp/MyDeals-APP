@@ -515,7 +515,6 @@ namespace Intel.MyDeals.BusinessRules
             List<string> eligableDropDowns = new List<string>
             {
                 AttributeCodes.PAYOUT_BASED_ON,
-				AttributeCodes.MRKT_SEG,
 				AttributeCodes.PROGRAM_PAYMENT,
                 AttributeCodes.REBATE_TYPE,
                 AttributeCodes.MEET_COMP_PRICE_QSTN,
