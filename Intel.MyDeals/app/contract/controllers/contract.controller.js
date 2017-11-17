@@ -31,6 +31,7 @@
         $scope.switchingTabs = false;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY"]
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -2117,7 +2118,7 @@
                                 var dataItem = results.data.WIP_DEAL[i];
                                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
 
-                                if (anyWarnings) {
+                                if (anyWarnings) {              //KITTODO: Jeff note: do i need to do kit tier things here?  need to research what this area is doing
                                     // map tiered warnings
                                     for (var t = 1; t <= dataItem.NUM_OF_TIERS; t++) {
                                         for (var a = 0; a < tierAtrbs.length; a++) {
@@ -2393,49 +2394,77 @@
 
         $scope.isPivotable = function () {
             // this is for vol tier right now, but Kits will have to read off dim of products
-            var pivotFieldName = "NUM_OF_TIERS";
-            return !!$scope.curPricingTable && !!$scope.curPricingTable[pivotFieldName];
+
+            if (!$scope.curPricingTable) return false;
+
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+                var pivotFieldName = "NUM_OF_TIERS";
+                return !!$scope.curPricingTable[pivotFieldName];
+            }
+
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {    //Note: is this redundant?  can't we just have VT and KIt always return true?
+                //var pivotFieldName = "NUM_OF_TIERS";                //KITTODO: which prod atrb do we check on?
+                //return !!$scope.curPricingTable[pivotFieldName];
+                return true;
+            }
         }
         $scope.numOfPivot = function (dataItem) {
             // this is for vol tier right now, but Kits will have to read off dim of products
-            var pivotFieldName = "NUM_OF_TIERS";
+            if (!$scope.curPricingTable) return false;
 
-            if (!$scope.isPivotable()) return 1;
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+                var pivotFieldName = "NUM_OF_TIERS";
 
-            if (dataItem === undefined) {
-                return parseInt($scope.curPricingTable[pivotFieldName]);
+                if (!$scope.isPivotable()) return 1;
+
+                if (dataItem === undefined) {
+                    return parseInt($scope.curPricingTable[pivotFieldName]);
+                }
+
+                if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);
+
+                var pivotVal = $scope.curPricingTable[pivotFieldName];
+                return pivotVal === undefined ? 1 : parseInt(pivotVal);
             }
 
-            if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);
-
-            var pivotVal = $scope.curPricingTable[pivotFieldName];
-            return pivotVal === undefined ? 1 : parseInt(pivotVal);
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {    //KITTODO rather than return 1, look at the prod dim
+                return 1;
+            }
+            
         }
 
         $scope.pivotData = function (data) {
             if (!$scope.isPivotable()) return data;
-
             var newData = [];
 
             for (var d = 0; d < data.length; d++) {
                 var numTiers = $scope.numOfPivot(data[d]);
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
-                    // Vol-tier specific cols with tiers
-                    for (var i = 0; i < tierAtrbs.length; i++) {
-                        var tieredItem = tierAtrbs[i];
-                        lData[tieredItem] = lData[tieredItem + "_____10___" + t];
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+                        // Vol-tier specific cols with tiers
+                        for (var i = 0; i < tierAtrbs.length; i++) {
+                            var tieredItem = tierAtrbs[i];
+                            lData[tieredItem] = lData[tieredItem + "_____10___" + t];
 
-                        mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
-                    }
-                    // Disable all Start vols except the first
-                    if (t !== 1 && !!data[d]._behaviors) {
-                        if (!data[d]._behaviors.isReadOnly) {
-                            data[d]._behaviors.isReadOnly = {};
+                            mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
                         }
-                        lData._behaviors.isReadOnly["STRT_VOL"] = true;
-                    }
+                        // Disable all Start vols except the first
+                        if (t !== 1 && !!data[d]._behaviors) {
+                            if (!data[d]._behaviors.isReadOnly) {
+                                data[d]._behaviors.isReadOnly = {};
+                            }
+                            lData._behaviors.isReadOnly["STRT_VOL"] = true;
+                        }
+                    } else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                        // KIT specific cols with 'tiers'
+                        for (var i = 0; i < kitDimAtrbs.length; i++) {
+                            var tieredItem = kitDimAtrbs[i];
+                            lData[tieredItem] = lData[tieredItem + "_____20___" + t];
 
+                            //mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);  //KITTODO: KIT: throwing errors for tier warning, uncomment out and figure this out later
+                        }
+                    }
                     newData.push(lData);
                 }
             }
@@ -2448,16 +2477,29 @@
             var newData = [];
             var lData = {};
             var tierDimKey = "_____10___";
+            var prodDimKey = "_____20___";
+
+            var dimKey;
+            var dimAtrbs;
+
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+                dimKey = tierDimKey;
+                dimAtrbs = tierAtrbs;
+            }
+            else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                dimKey = prodDimKey;
+                dimAtrbs = kitDimAtrbs;
+            }
 
             for (var d = 0; d < data.length; d) {
-                var numTiers = $scope.numOfPivot(data[d]);
+                var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
                 for (var t = 1; t <= numTiers; t++) {
                     if (t === 1) lData = data[d];
-                    for (a = 0; a < tierAtrbs.length; a++)
-                        lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
+                    for (a = 0; a < dimAtrbs.length; a++)
+                        lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
                     if (t === numTiers) {
-                        for (a = 0; a < tierAtrbs.length; a++) {
-                            delete lData[tierAtrbs[a]];
+                        for (a = 0; a < dimAtrbs.length; a++) {
+                            delete lData[dimAtrbs[a]];
                         }
                         newData.push(lData);
                     }

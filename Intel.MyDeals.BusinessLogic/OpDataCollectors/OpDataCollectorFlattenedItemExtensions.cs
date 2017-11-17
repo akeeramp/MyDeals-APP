@@ -215,7 +215,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         {
                             foreach (string g in geos)
                             {
-                                retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, kvp.Key, new List<ProdMapping> { pMap }, g);
+                                retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, new List<ProdMapping> { pMap }, g);
                             }
                         }
                     }
@@ -224,15 +224,13 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 case OpTranslationType.OneDealPerRow:
 
                     List<ProdMapping> pMaps = new List<ProdMapping>();
-                    string key = "";
                     foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
                     {
-                        key = kvp.Key;
                         pMaps.AddRange((List<ProdMapping>)kvp.Value);
                     }
                     foreach (string g in geos)
                     {
-                        retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, key, pMaps, g);
+                        retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, pMaps, g);
                     }
                     break;
             }
@@ -318,7 +316,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         }
 
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItemLocal, OpDataElementTypeMapping elMapping,
-            List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps, string geo)
+            List<string> singleDimAtrbs, List<string> multiDimAtrbs, List<ProdMapping> pMaps, string geo)
         {
             string baseEcapDimKey = "_____20___0";
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
