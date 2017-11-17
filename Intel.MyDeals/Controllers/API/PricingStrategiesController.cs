@@ -92,6 +92,37 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
+        [Route("RollBackPricingStrategy/{custId}/{contractId}")]
+        [HttpPost]
+        public OpMsg RollBackPricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
+        {
+            // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
+            return SafeExecutor(() => _pricingStrategiesLib.RollBackPricingStrategy(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, pricingStrategies)
+                , "Unable to rollback the Pricing Strategy {id}"
+            );
+        }
+
+        [Authorize]
+        [Route("CancelPricingStrategy/{custId}/{contractId}/{contractCustAccpt}")]
+        [HttpPost]
+        public OpMsgQueue CancelPricingStrategy(int custId, int contractId, string contractCustAccpt, OpDataCollectorFlattenedList pricingStrategies)
+        {
+            return SafeExecutor(() => _pricingStrategiesLib.CancelPricingStrategy(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId,
+                CustAccpt = contractCustAccpt
+            }, pricingStrategies)
+                , "Unable to cancel the Pricing Strategy {id}"
+            );
+        }
+
+
+        [Authorize]
         [Route("ActionPricingStrategy/{custId}/{contractId}/{contractCustAccpt}/{actn}")]
         [HttpPost]
         public OpMsgQueue ActionPricingStrategy(int custId, int contractId, string contractCustAccpt, string actn, OpDataCollectorFlattenedList pricingStrategies)

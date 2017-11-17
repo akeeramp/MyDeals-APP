@@ -190,6 +190,47 @@ namespace Intel.MyDeals.BusinessLogic
             return pricingTables.DeleteByIds(OpDataElementType.PRC_TBL, contractToken, _dataCollectorLib);
         }
 
+        public OpMsg RollBackPricingTable(ContractToken contractToken, OpDataCollectorFlattenedList pricingTables)
+        {
+            // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
+            throw new NotImplementedException();
+            // Remove this pricing strategy redeal with a soft delete/rollback
+            //return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, contractToken, _dataCollectorLib);
+            return null;
+        }
+
+        public OpMsgQueue CancelPricingTable(ContractToken contractToken, OpDataCollectorFlattenedList pricingTables)
+        {
+            // Issue stage changes to Canceled stage for PT and all children deals - Note that PT doesn't actually have a stage and PS stays where it is.
+            // Get all IDs then make a call.
+            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
+            {
+                [WorkFlowActions.Cancel] = pricingTables.Select(item => new WfActnItem
+                {
+                    DC_ID = int.Parse(item[AttributeCodes.DC_ID].ToString()),
+                    WF_STG_CD = item[AttributeCodes.PS_WF_STG_CD].ToString()
+                }).ToList()
+            };
+
+            // make a DB call - Get WIP data
+            MyDealsData myDealsData = OpDataElementType.PRC_TBL.GetByIDs(actnPs[WorkFlowActions.Cancel].Select(d => d.DC_ID).ToList(),
+                new List<OpDataElementType>
+                {
+                    OpDataElementType.WIP_DEAL
+                },
+                new List<int>
+                {
+                    Attributes.WF_STG_CD.ATRB_SID,
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                }
+            );
+
+            OpMsgQueue allActnItems = new OpMsgQueue();
+            allActnItems.Merge(myDealsData.GatherWipStages(_dataCollectorLib, contractToken, WorkFlowActions.Cancel));
+
+            return allActnItems;
+        }
+
         public OpMsg DeletePricingTableRowById(ContractToken contractToken, int ptrId)
         {
             OpDataCollectorFlattenedDictList opDcDict = GetPricingTableRow(ptrId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.UniqueKey);

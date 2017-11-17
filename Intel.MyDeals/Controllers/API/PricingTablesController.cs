@@ -86,6 +86,36 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("RollBackPricingTable/{custId}/{contractId}")]
+        [HttpPost]
+        public OpMsg RollBackPricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
+        {
+            // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
+            return SafeExecutor(() => _pricingTablesLib.RollBackPricingTable(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, pricingTables)
+                , "Unable to rollback the Pricing Table {id}"
+            );
+        }
+
+        [Authorize]
+        [Route("CancelPricingTable/{custId}/{contractId}/{contractCustAccpt}")]
+        [HttpPost]
+        public OpMsgQueue CancelPricingTable(int custId, int contractId, string contractCustAccpt, OpDataCollectorFlattenedList pricingTables)
+        {
+            return SafeExecutor(() => _pricingTablesLib.CancelPricingTable(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId,
+                CustAccpt = contractCustAccpt
+            }, pricingTables)
+                , "Unable to cancel the Pricing Table {id}"
+            );
+        }
+
+        [Authorize]
         [Route("DeletePricingTableRow/{custId}/{contractId}/{ptrId}")]
         [HttpGet]
         public OpMsg DeletePricingTableRow(int custId, int contractId, int ptrId)

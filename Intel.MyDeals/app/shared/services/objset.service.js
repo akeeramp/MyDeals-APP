@@ -25,16 +25,21 @@ function objsetService($http, dataService, logger, $q) {
         readPricingStrategy: readPricingStrategy,
         updatePricingStrategy: updatePricingStrategy,
         deletePricingStrategy: deletePricingStrategy,
+        rollBackPricingStrategy: rollBackPricingStrategy,
+        cancelPricingStrategy: cancelPricingStrategy,
 
         createPricingTable: createPricingTable,
         readPricingTable: readPricingTable,
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
+        rollBackPricingTable: rollBackPricingTable,
+        cancelPricingTable: cancelPricingTable,
 
         readTender: readTender,
         readTenderChildren: readTenderChildren,
 
         deletePricingTableRow: deletePricingTableRow,
+        rollbackPricingTableRow: rollbackPricingTableRow,
         unGroupPricingTableRow: unGroupPricingTableRow,
 
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
@@ -87,6 +92,12 @@ function objsetService($http, dataService, logger, $q) {
     function deletePricingStrategy(custId, contractId, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + custId + '/' + contractId, [ps]);
     }
+    function rollBackPricingStrategy(custId, contractId, ps) {
+        return dataService.post(apiBasePricingStrategyUrl + 'RollBackPricingStrategy/' + custId + '/' + contractId, [ps]);
+    }
+    function cancelPricingStrategy(custId, contractId, contractCustAccpt, ps) {
+        return dataService.post(apiBasePricingStrategyUrl + 'CancelPricingStrategy/' + custId + '/' + contractId + '/' + contractCustAccpt, [ps]);
+    }
 
     // #### PRICING TABLE CRUD ####
 
@@ -102,6 +113,12 @@ function objsetService($http, dataService, logger, $q) {
     function deletePricingTable(custId, contractId, pt) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId + '/' + contractId, [pt]);
     }
+    function rollBackPricingTable(custId, contractId, pt) {
+        return dataService.post(apiBasePricingTableUrl + 'RollBackPricingTable/' + custId + '/' + contractId, [pt]);
+    }
+    function cancelPricingTable(custId, contractId, contractCustAccpt, pt) {
+        return dataService.post(apiBasePricingTableUrl + 'CancelPricingTable/' + custId + '/' + contractId + '/' + contractCustAccpt, [pt]);
+    }
 
     // #### PRICING TABLE CRUD ####
 
@@ -116,6 +133,9 @@ function objsetService($http, dataService, logger, $q) {
 	// #### PRICING TABLE ROW ####
     function deletePricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
+    }
+    function rollbackPricingTableRow(custId, contractId, ptrId) {
+        return dataService.get(apiBasePricingTableUrl + 'RollBackPricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
     }
     function unGroupPricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'UnGroupPricingTableRow/' + custId + '/' + contractId + '/' + ptrId);

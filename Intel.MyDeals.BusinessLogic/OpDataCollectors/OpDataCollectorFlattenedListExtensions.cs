@@ -120,5 +120,6 @@ namespace Intel.MyDeals.BusinessLogic
                 : new OpMsg(OpMsg.MessageType.Info, "Deleted Ids {0}.", string.Join(",", deletedIds));
 
         }
+
     }
 }

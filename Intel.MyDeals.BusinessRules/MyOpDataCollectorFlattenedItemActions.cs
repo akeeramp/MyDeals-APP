@@ -94,11 +94,11 @@ namespace Intel.MyDeals.BusinessRules
                 //mctFailed = false;
                 //mctIncomplete = false;
 
-                if (action == "Cancel" && objsetActionItem.Actions[action])
-                {
-                    objsetActionItem.Actions[action] = false;
-                    objsetActionItem.ActionReasons[action] = "Disabled for UFT3";
-                }
+                //if (action == "Cancel" && objsetActionItem.Actions[action])
+                //{
+                //    objsetActionItem.Actions[action] = false;
+                //    objsetActionItem.ActionReasons[action] = "Disabled for UFT3";
+                //}
 
 
                 if (action == "Approve" && objsetActionItem.Actions[action])

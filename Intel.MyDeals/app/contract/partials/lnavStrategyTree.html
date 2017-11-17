@@ -22,8 +22,15 @@
                 <span class="hasMenuPs{{ ps.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                 <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.DC_ID }}'" k-show-on="'click'">
                     <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
+                    <!-- If you can add PS, give the button to do so -->
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
-                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
+
+                    <!-- If PS has no trackers under it and you can add one, you can remove it -->
+                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER !== '1'"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
+                    <!-- If PS has trackers under it and it is in play and you can add one, you can roll it back -->
+                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER === '1' && !(ps.WF_STG_CD === 'Cancelled' || ps.WF_STG_CD === 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingStrategy(ps)"><i class="fa fa-undo"></i> Undo Pricing Strategy Re-deal</a></li>
+                    <!-- If PS is active and you are allowed to cancel -->
+                    <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingStrategy(ps)"><i class="intelicon-stop-outlined"></i> Cancel Entire Pricing Strategy</a></li>
 
                     <!-- TODO need to check for valid pricing strategy before actions -->                    
                     <!--<li role="presentation" ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
@@ -69,8 +76,15 @@
                         <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.DC_ID }}'" k-show-on="'click'">
                             <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
                             <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
+                            <!-- If you can add PT, give the button to do so -->
                             <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showEditPricingTableDefaults(pt)"><i class="intelicon-edit"></i> Edit Autofill Defaults</a></li>
-                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
+
+                            <!-- If PT has no trackers under it and you can add one, you can remove it -->
+                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && ps.HAS_TRACKER !== '1'"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
+                            <!-- If PT has trackers under it and it is in play and you can add one, you can roll it back -->
+                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && ps.HAS_TRACKER === '1' && (ps.WF_STG_CD !== 'Cancelled' || ps.WF_STG_CD !== 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingTable(ps, pt)"><i class="fa fa-undo"></i> Undo Pricing Table Re-deal</a></li>
+                            <!-- If PS is Active and you are allowed to cancel -->
+                            <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingTable(ps, pt)"><i class="fa fa-undo"></i> Cancel Entire Pricing Table</a></li>
                         </ul>
                     </div>
 

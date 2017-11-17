@@ -1580,6 +1580,94 @@
                 });
             });
         }
+        // ROLLBACK NEED TO VERIFY BELOW WITH PHIL
+        $scope.rollBackPricingStrategy = function (ps) {
+            kendo.confirm("Are you sure that you want to undo this pricing strategy re-deal?").then(function () {
+                $scope.$apply(function () {
+                    $scope.setBusy("RollBack...", "Rolling the Pricing Strategy back");
+                    $scope._dirty = false;
+                    topbar.show();
+                    // Remove from DB first... then remove from screen
+                    objsetService.rollBackPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
+                        function (data) {
+                            if (data.data.MsgType !== 1) {
+                                $scope.setBusy("RollBack Failed", "Unable to RollBack the Pricing Strategy re-deal", "Error");
+                                $timeout(function () {
+                                    $scope.setBusy("", "");
+                                }, 4000);
+                                return;
+                            }
+
+                            var deleteReload = false;
+                            if ($scope.curPricingTableId > 0) {
+                                deleteReload = true;
+                            }
+
+                            // might need to unmark the current selected item
+                            $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
+                            $scope.unmarkCurPricingTableIf(ps.DC_ID);
+
+                            // delete item
+                            $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
+
+                            $scope.setBusy("RollBack Successful", "RollBack the Pricing Strategy re-deal", "Success");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 2000);
+                            topbar.hide();
+
+                            // redirect if focused PT belongs to deleted PS
+                            if (deleteReload) {
+                                $state.go('contract.manager', {
+                                    cid: $scope.contractData.DC_ID
+                                }, { reload: true });
+                            }
+                        },
+                        function (result) {
+                            logger.error("Could not RollBack the Pricing Strategy.", result, result.statusText, "Error");
+                            topbar.hide();
+                            $scope.setBusy("", "");
+                        }
+                    );
+                });
+            });
+        }
+        $scope.cancelPricingStrategy = function (ps) {
+            kendo.confirm("Are you sure that you want to cancel this pricing strategy?").then(function () {
+                $scope.$apply(function () {
+                    $scope.setBusy("Cancel...", "Canceling the Pricing Strategy back");
+                    $scope._dirty = false;
+                    topbar.show();
+                    objsetService.cancelPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps).then(
+                        function (data) {
+                            debugger;
+                            if (data.data.Messages[0].MsgType !== 1) {
+                                $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Strategy", "Error");
+                                $timeout(function () {
+                                    $scope.setBusy("", "");
+                                }, 4000);
+                                return;
+                            }
+
+                            $scope.setBusy("Cancel Successful", "Cancel the Pricing Strategy", "Success");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 2000);
+                            topbar.hide();
+
+                            $state.go('contract.manager', {
+                                cid: $scope.contractData.DC_ID
+                            }, { reload: true });
+                        },
+                        function (result) {
+                            logger.error("Could not Cancel the Pricing Strategy.", result, result.statusText, "Error");
+                            topbar.hide();
+                            $scope.setBusy("", "");
+                        }
+                    );
+                });
+            });
+        }
         $scope.deletePricingTable = function (ps, pt) {
             kendo.confirm("Are you sure that you want to delete this pricing table?").then(function () {
                 $scope.$apply(function () {
@@ -1626,6 +1714,94 @@
                         	logger.error("Could not delete the Pricing Table.", response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
+                        }
+                    );
+                });
+            });
+        }
+        // ROLLBACK NEED TO VERIFY BELOW WITH PHIL
+        $scope.rollBackPricingTable = function (ps, pt) {
+            kendo.confirm("Are you sure that you want to undo this pricing table re-deal?").then(function () {
+                $scope.$apply(function () {
+                    $scope.setBusy("Deleting...", "Deleting the Pricing Table");
+                    $scope._dirty = false;
+                    topbar.show();
+
+                    // Remove from DB first... then remove from screen
+                    objsetService.rollBackPricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
+                        function (data) {
+                            if (data.data.MsgType !== 1) {
+                                $scope.setBusy("RollBack Failed", "Unable to RollBack the Pricing Table re-deal", "Error");
+                                $timeout(function () {
+                                    $scope.setBusy("", "");
+                                }, 4000);
+                                return;
+                            }
+
+                            var deleteReload = false;
+                            if ($scope.curPricingTableId === pt.DC_ID) {
+                                deleteReload = true;
+                            }
+
+                            // might need to unmark the current selected item
+                            $scope.unmarkCurPricingTableIf(ps.DC_ID);
+
+                            // delete item
+                            ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
+
+                            $scope.setBusy("RollBack Successful", "RollBack the Pricing Table re-deal", "Success");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            topbar.hide();
+
+                            // redirect if deleted the currently focused PT
+                            if (deleteReload) {
+                                $state.go('contract.manager', {
+                                    cid: $scope.contractData.DC_ID
+                                }, { reload: true });
+                            }
+                        },
+                        function (response) {
+                            logger.error("Could not RollBack the Pricing Table.", response, response.statusText, "Error");
+                            $scope.setBusy("", "");
+                            topbar.hide();
+                        }
+                    );
+                });
+            });
+        }
+        $scope.cancelPricingTable = function (ps, pt) {
+            kendo.confirm("Are you sure that you want to cancel this pricing table?").then(function () {
+                $scope.$apply(function () {
+                    $scope.setBusy("Canceling...", "Canceling the Pricing Table");
+                    $scope._dirty = false;
+                    topbar.show();
+                    objsetService.cancelPricingTable($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, pt).then(
+                        function (data) {
+                            if (data.data.Messages[0].MsgType !== 1) {
+                                $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Table", "Error");
+                                $timeout(function () {
+                                    $scope.setBusy("", "");
+                                }, 4000);
+                                return;
+                            }
+
+                            $scope.setBusy("Cancel Successful", "Canceled the Pricing Table", "Success");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 2000);
+                            topbar.hide();
+
+                            $state.go('contract.manager', {
+                                cid: $scope.contractData.DC_ID
+                            }, { reload: true });
+                        },
+                        function (result) {
+                            debugger;
+                            logger.error("Could not Cancel the Pricing Table.", result, result.statusText, "Error");
+                            topbar.hide();
+                            $scope.setBusy("", "");
                         }
                     );
                 });

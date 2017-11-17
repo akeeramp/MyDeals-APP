@@ -400,6 +400,19 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 });
             }
 
+            $scope.openCancelDialog = function () {
+                kendo.confirm("<h4>Would you like to cancel this deal?</h4><p>This will set the deal stage to Canceled.</p>").then(function () {
+                    rootScope.actionWipDeal($scope.dataItem, 'Cancel'); 
+                });
+            }
+
+            $scope.openRollBackDialog = function () {
+                // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
+                kendo.confirm("<h4>Would you like to undo this deals current re-deal action?</h4><p>This will remove the deal edits from the Pricing Editor also.</p>").then(function () {
+                    rootScope.deletePricingTableRow($scope.dataItem);
+                });
+            }
+
             $scope.openHoldDialog = function () {
                 kendo.confirm("<h4>Would you like to place the deal on hold?</h4><p>This will keep the deal in the Pricing Table, but it will not get<br/>promoted to active or get a tracker number for payment.</p>").then(function () {
                     rootScope.actionWipDeal($scope.dataItem, 'Hold');

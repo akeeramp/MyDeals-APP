@@ -998,6 +998,25 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
+        public static OpMsgQueue GatherWipStages(this MyDealsData myDealsData, IOpDataCollectorLib dataCollectorLib, ContractToken contractToken, string setStage)
+        {
+            Dictionary<string, List<WfActnItem>> actnWIP = new Dictionary<string, List<WfActnItem>>
+            {
+                [setStage] = new List<WfActnItem>()
+
+            };
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                actnWIP[setStage].Add(new WfActnItem
+                {
+                    DC_ID = dc.DcID,
+                    WF_STG_CD = dc.GetDataElementValue(AttributeCodes.WF_STG_CD).ToString()
+                });
+            }
+
+            return new PricingTablesLib(dataCollectorLib).ActionWipDeals(contractToken, actnWIP);
+        }
+
         public static void SavePacketByDictionary(this MyDealsData myDealsData, OpDataCollectorFlattenedList data, OpDataElementType opDataElementType, Guid myWbBatchId)
         {
             // All save packet calls go through here.  This is the one point where we sift for changes.

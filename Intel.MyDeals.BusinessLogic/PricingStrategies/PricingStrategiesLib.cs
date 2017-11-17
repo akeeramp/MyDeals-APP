@@ -74,7 +74,50 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpMsg DeletePricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies)
         {
+            // Remove this pricing strategy with a hard delete
             return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, contractToken, _dataCollectorLib);
+        }
+
+        public OpMsg RollBackPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies)
+        {
+            // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
+            throw new NotImplementedException();
+            // Remove this pricing strategy redeal with a soft delete/rollback
+            //return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, contractToken, _dataCollectorLib);
+            return null;
+        }
+
+        public OpMsgQueue CancelPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies)
+        {
+            // Issue stage changes to Canceled stage for PS and all children deals
+            // Get all IDs then make a call.
+            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
+            {
+                [WorkFlowActions.Cancel] = pricingStrategies.Select(item => new WfActnItem
+                {
+                    DC_ID = int.Parse(item[AttributeCodes.DC_ID].ToString()),
+                    WF_STG_CD = item[AttributeCodes.WF_STG_CD].ToString()
+                }).ToList()
+            };
+
+            var allActnItems =  ActionPricingStrategies(contractToken, actnPs); // PS and all WIP items that get stage change
+
+            // make a DB call - Get WIP data
+            MyDealsData myDealsData = OpDataElementType.PRC_ST.GetByIDs(actnPs[WorkFlowActions.Cancel].Select(d => d.DC_ID).ToList(),
+                new List<OpDataElementType>
+                {
+                    OpDataElementType.WIP_DEAL
+                },
+                new List<int>
+                {
+                    Attributes.WF_STG_CD.ATRB_SID,
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                }
+            );
+
+            allActnItems.Merge(myDealsData.GatherWipStages(_dataCollectorLib, contractToken, WorkFlowActions.Cancel));
+
+            return allActnItems;
         }
 
         public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
@@ -257,7 +300,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             return opMsgQueue;
         }
-
 
     }
 }
