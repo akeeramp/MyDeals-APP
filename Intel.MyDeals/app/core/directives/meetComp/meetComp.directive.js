@@ -1156,19 +1156,19 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 80
                                     },
                                     {
-                                        field: "DEAL_DESC",
-                                        title: "Deal Description",
-                                        width: 120,
-                                        filterable: { multi: true, search: true },
-                                        template: "<div class='readOnlyCell' title='#=DEAL_DESC#'>#=DEAL_DESC#</div>"
-                                    },
-                                    {
                                         field: "DEAL_OBJ_SID",
                                         title: "Deal ID",
                                         width: 120,
                                         filterable: { multi: true, search: true },
                                         template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
                                     },                                    
+                                    {
+                                        field: "DEAL_DESC",
+                                        title: "Deal Description",
+                                        width: 120,
+                                        filterable: { multi: true, search: true },
+                                        template: "<div class='readOnlyCell' title='#=DEAL_DESC#'>#=DEAL_DESC#</div>"
+                                    },
                                     {
                                         field: "COMP_SKU",
                                         title: "Meet Comp SKU",
