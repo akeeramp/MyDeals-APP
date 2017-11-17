@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'confirmationModal', 'crossVertical'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'crossVertical'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct, confirmationModal, crossVertical) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct, crossVertical) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];

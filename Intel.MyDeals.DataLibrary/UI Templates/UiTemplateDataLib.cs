@@ -513,7 +513,16 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 36,
+				AtrbCd = AttributeCodes.DEAL_DESC,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+				Width = 100,
+				Label = "Deal Description"
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
@@ -718,24 +727,24 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 36,
                 AtrbCd = AttributeCodes.NUM_OF_TIERS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
                 IsHidden = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.TITLE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                Width = 100,
-                Label = "Deal Description"
-            });
+			});
+			//items.Add(new UiTemplateContainerItem
+			//{
+			//	Id = 36,
+			//	AtrbCd = AttributeCodes.TITLE,
+			//	ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+			//	ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+			//	Width = 100,
+			//	Label = "Deal Description"
+			//});
 
-            #endregion PRICING TABLE ROW
+			#endregion PRICING TABLE ROW
 
-            #region WIP DEAL
+			#region WIP DEAL
 
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 1,
                 AtrbCd = AttributeCodes.DC_ID,
@@ -1017,7 +1026,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.TIER_NBR, //AtrbCd = AttributeCodes.TIER_NBR - Moved to a non-always-readonly field to allow for security to drive behaviors
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiControlScheduleWrapper(data)#",
                 Editor = "scheduleEditor",
                 DataType = "object",

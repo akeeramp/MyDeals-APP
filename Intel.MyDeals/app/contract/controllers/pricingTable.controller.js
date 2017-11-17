@@ -153,12 +153,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     			break;
     		}
     	}
-    	var fieldColData = angular.copy(ptTemplate.columns[fieldIndex]);
+    	var fieldColData = ptTemplate.columns[fieldIndex];
     	var fieldModel = angular.copy(ptTemplate.model.fields[atrbToCopy]);
 
     	// rename original field
     	if (isRenameOriginal && newOriginalTitle !== null) {
-			fieldColData.title = newOriginalTitle;
+    		fieldColData.title = newOriginalTitle;
 		}
     	// make and set temp fields
     	var temp = angular.copy(fieldColData);
@@ -185,12 +185,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     	// KIT temp attributes
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
         	// KIT Rebate / Bundle Discount
-        	createPtrOnlyAttribute("ECAP_PRICE", "KIT_Rebate", "KIT Rebate / Bundle Discount", false, null, 120);
-        	ptTemplate.model.fields["KIT_Rebate"].editable = false;
+        	createPtrOnlyAttribute("ECAP_PRICE", "TEMP_KIT_Rebate", "KIT Rebate / Bundle Discount", false, null, 120);
+        	ptTemplate.model.fields["TEMP_KIT_Rebate"].editable = false;
 
         	// KIT ECAP
-        	createPtrOnlyAttribute("ECAP_PRICE", "KIT_ECAP", "KIT ECAP", true, "ECAP Standalone", null);
-		}
+        	createPtrOnlyAttribute("ECAP_PRICE", "TEMP_KIT_ECAP", "KIT ECAP", true, "ECAP Standalone", null);
+			
+        	// Products
+        	createPtrOnlyAttribute("ECAP_PRICE", "TEMP_USR_PRD", "Products", false, null, null);
+        	ptTemplate.model.fields["TEMP_USR_PRD"].editable = false;
+        	ptTemplate.model.fields["TEMP_USR_PRD"].format = "";
+        	ptTemplate.model.fields["TEMP_USR_PRD"].type = "string";
+        }
 
         columns = vm.getColumns(ptTemplate);
 
@@ -524,6 +530,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
+    var dealGrpNamesDict = {};
+
     // On Spreadsheet change
     function onChange(arg) {
         if (stealthOnChangeMode) {
@@ -556,6 +564,112 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
         var isExcludeProductColumnIncludedInChanges = (range._ref.topLeft.col <= excludeProductColIndex) && (range._ref.bottomRight.col >= excludeProductColIndex);
+		
+        var data = root.spreadDs.data();
+        var sourceData = root.pricingTableData.PRC_TBL_ROW;
+        
+
+    	// Check for Deal Group Type merges and renames
+        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+
+        	var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
+        	var isDealGrpColumnIncludedInChanges = (range._ref.topLeft.col <= dealGrpColIndex) && (range._ref.bottomRight.col >= dealGrpColIndex);
+
+        	if (isDealGrpColumnIncludedInChanges) {
+        		var skipUntilRow = null; // HACK: used so we don't check deal group type of merged tiers
+        		var dealGrpSkipVal = "";
+
+        		range.forEachCell(
+					function (rowIndex, colIndex, value) {
+						var myRow = data[(rowIndex - 1)];
+
+						if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null
+							&& value.value != null) {
+
+
+							// HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
+							var myColLetter = String.fromCharCode(intA + (colIndex));
+							var colName = root.letterToCol[myColLetter];
+							var prevValue = myRow[colName];
+							myRow[colName] = value.value;
+							sourceData[(rowIndex - 1)][colName] = value.value;
+
+
+							if (colIndex !== dealGrpColIndex) { return; }
+
+
+							if (skipUntilRow != null && rowIndex < skipUntilRow) {
+								// Set the deal group val to be the same as the first one of the merged rows
+								value.value = dealGrpSkipVal;
+								myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
+								sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
+
+								// Skip deal group merge ui-validation for this row
+								return;
+							}
+
+
+							// If it's a merged cell (multiple tiers) then find out how many rows to skip this deal grp validation for
+							if (myRow["NUM_OF_TIERS"] > 1) { // TODO: maybe rename to not use num of tiers?
+								skipUntilRow = rowIndex + (myRow["NUM_OF_TIERS"]);
+								dealGrpSkipVal = value.value;
+							}
+
+							// Override of an existing deal grp name (new val != old val)
+							if (prevValue !== "" && value.value.toString().toUpperCase() !== prevValue.toString().toUpperCase()) {
+								delete dealGrpNamesDict[prevValue.toString().toUpperCase()];
+							}
+
+							//	check if deal group name exists in dictionary
+							if (dealGrpNamesDict[value.value.toString().toUpperCase()] !== undefined) {
+								// Confirmation Dialog
+								var modalOptions = {
+									closeButtonText: 'Rename deal group',
+									actionButtonText: 'Merge Deal Groups',
+									hasActionButton: true,
+									headerText: 'Deal Group Merge Confirmation',
+									bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
+								};
+
+								// Ask user if they want to merge
+								confirmationModal.showModal({}, modalOptions).then(function (result) {
+									// TODO
+									//				if they do, then ........merge :(
+									//					MERGING brainstorm: 
+									//							we need to know where in the spreadsheet it is? and shift rows of the below rows to merge them? then we need to know how many deals we have in existing currerntly. 
+									//							or maybe we can delete the EXISTING one and the currently changing one, then remake them below? ...but no. then it might delete deals with ids
+									//							or just flag them as would-merge on translate, then let translate do its thing. easiest probs
+									console.log("ok TODOOOOO")
+								}, function (response) {
+									// TODO
+									//				if no, then make them rename deal group name or add a number behind it to make it unique?
+									console.log("not okay TODOOOOO")
+								});
+
+								return;
+							}
+							else { // Brand new Deal Group Name
+								// add to dictionary: Deal group name (in all caps), firstRow Index it's found
+								dealGrpNamesDict[value.value.toString().toUpperCase()] = (rowIndex - 1);
+							}
+						}
+					}
+				);
+        		cleanupData(data);
+        		root.spreadDs.sync();
+        	}
+
+        }
+    	// TODO
+		// initial dict populate
+    	// if user deletes a deal or updates a deal group name
+		//	we need to delet it from dictionary or update it
+
+
+
+
+
+
 
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
@@ -574,8 +688,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // On End_vol col change
             if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged) {
-                var data = root.spreadDs.data();
-                var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
@@ -649,7 +761,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var rowStart = topLeftRowIndex - 2;
             var rowStop = bottomRightRowIndex - 2;
             if (root.spreadDs !== undefined) {
-                var data = root.spreadDs.data();
 
                 var delIds = hasDataOrPurge(data, rowStart, rowStop);
                 if (delIds.length > 0) {
@@ -779,7 +890,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             if ((isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) || (isPtrSysPrdFlushed && isExcludeProductColumnIncludedInChanges)) {
-                syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
+		        syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
 
             $timeout(function () {
@@ -805,19 +916,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
-        // fix merge issues
-        if (data.length > 0) {
-            var lastItem = data[data.length - 1];
-            var numTier = root.numOfPivot(lastItem);
-            var offset = getOffsetByIndex(data, data.length - 1, numTier);
-            if (offset > 0) {
-                for (var a = 0; a < numTier - offset; a++) {
-                    data.push(util.deepClone(lastItem));
-                }
-            }
-        }
+    	// fix merge issues
+    	if (data.length > 0) {
+    		var lastItem = data[data.length - 1];
+    		var numTier = root.numOfPivot(lastItem);
+    		var offset = getOffsetByIndex(data, data.length - 1, numTier);
+    		if (offset > 0) {
+    			for (var a = 0; a < numTier - offset; a++) {
+    				data.push(util.deepClone(lastItem));
+    			}
+    		}
+    	}
 
-        return data;
+    	return data;
     }
 
     function getOffsetByIndex(data, indx, numTier) {
@@ -866,7 +977,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var range;
 
         $timeout(function () {
-            if (root.spreadDs !== undefined) {
+        	if (root.spreadDs !== undefined) {
                 var data = root.spreadDs.data();
                 var newItems = 0;
                 var pivotDim = 1;
@@ -874,6 +985,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex-2); k++) {
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
+                }
+				
+        		// Set the number of cells based on the number of products entered (assumes comma separtaed products)
+        		// NOTE: NUM_OF_TIERS is not actually saved. It is just used so we can dimensionalize.
+        		// ANOTHER NOTE: this block of code needs to be before cleanupData();
+                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                	var prdArr = data[topLeftRowIndex - 2]["PTR_USER_PRD"].split(",");
+
+                	if (prdArr.length > 10) {
+                		// TODO: throw pretty error
+                		alert("You have too many products! You may have up to 10. Please remove "+ (prdArr.length - 10) +" products from this row.");
+						return;
+                	}
+
+                	root.curPricingTable["NUM_OF_TIERS"] = prdArr.length;
                 }
 
                 cleanupData(data);
@@ -1061,6 +1187,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.child.setRowIdStyle(data);
 
                 $scope.applySpreadsheetMerge();
+
+        		// reset num of tiers
+                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                	// TODO: maybe not use NUM_OF_TIERS?
+					root.curPricingTable["NUM_OF_TIERS"] = 1;
+                }
             }
         }, 10);
     }
@@ -1327,7 +1459,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     if (myFieldModel.field === "ORIG_ECAP_TRKR_NBR") {
                         // ecap tracker number
-                        sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
+                    	//// NOTE: We may need to revisit the ECAP Tracker Number dropdwon list in the future, when if we do uncomment the below lines to make the dropdwon re-appear.
+					    //sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
                     }
                     else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
                         // Add validation dropdowns/multiselects onto the cells

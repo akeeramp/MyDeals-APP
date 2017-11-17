@@ -30,7 +30,7 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
 
-        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY"]
 
         $scope.flowMode = "Deal Entry";
@@ -2412,8 +2412,8 @@
             // this is for vol tier right now, but Kits will have to read off dim of products
             if (!$scope.curPricingTable) return false;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
-                var pivotFieldName = "NUM_OF_TIERS";
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {	
+                var pivotFieldName = "NUM_OF_TIERS"; // KITTODO: will need to change if we don't use num tier as the dim atrb indicator for kit deals
 
                 if (!$scope.isPivotable()) return 1;
 
@@ -2425,12 +2425,7 @@
 
                 var pivotVal = $scope.curPricingTable[pivotFieldName];
                 return pivotVal === undefined ? 1 : parseInt(pivotVal);
-            }
-
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {    //KITTODO rather than return 1, look at the prod dim
-                return 1;
-            }
-            
+            }            
         }
 
         $scope.pivotData = function (data) {
