@@ -1032,6 +1032,10 @@ namespace Intel.MyDeals.BusinessRules
 
 			Dictionary<string, List<ProdMapping>> prodDict = JsonConvert.DeserializeObject<Dictionary<string, List<ProdMapping>>>(sysPrd.AtrbValue.ToString());
 
+			if (prodDict == null)
+			{
+				return;
+			}
 			foreach (KeyValuePair<string, List<ProdMapping>> entry in prodDict)
 			{
 				if (!String.Equals(entry.Value[0].PRD_CAT_NM.ToString(), "SvrWS", StringComparison.OrdinalIgnoreCase) && String.Equals(meetComp.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase))
