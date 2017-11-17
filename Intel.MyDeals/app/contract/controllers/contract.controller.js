@@ -2425,7 +2425,9 @@
 
                 var pivotVal = $scope.curPricingTable[pivotFieldName];
                 return pivotVal === undefined ? 1 : parseInt(pivotVal);
-            }            
+            }
+
+            return 1;   //num of pivot is 1 for undim deal types
         }
 
         $scope.pivotData = function (data) {
