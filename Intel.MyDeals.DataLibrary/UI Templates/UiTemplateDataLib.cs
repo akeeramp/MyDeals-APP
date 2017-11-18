@@ -501,6 +501,15 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = AttributeCodes.DEAL_DESC,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 200,
+                Label = "Deal Description",
+                DataType = "string"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 120,
