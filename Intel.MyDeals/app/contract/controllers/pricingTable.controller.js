@@ -211,6 +211,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
+		// KITTODO: maybe have this on pivot instead?
+    	// populate DEAL_GRP_NM dictionary for KITS
+        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+			for (var i = 0; i < root.pricingTableData.PRC_TBL_ROW.length; i++){
+				if (root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"] != "" && dealGrpNamesDict[root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"].toUpperCase()] === undefined) {
+					dealGrpNamesDict[root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"].toUpperCase()] = i;
+				}
+			}
+		}
+
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
             // hide Cust Div
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
@@ -660,13 +670,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         	}
 
         }
-    	// TODO
-		// initial dict populate
-    	// if user deletes a deal or updates a deal group name
-		//	we need to delet it from dictionary or update it
-
-
-
 
 
 
@@ -749,13 +752,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var hasValueInAtLeastOneCell = false;
 
+        var possibleDeletedDealGrpNms = {}; // used only if we delete a prd and kit to update the deal group nm dictionary
+
         range.forEachCell(
             function (rowIndex, colIndex, value) {
                 if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
                     hasValueInAtLeastOneCell = true;
-                }
+                } else if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT" && data[(rowIndex -1)] !== undefined && possibleDeletedDealGrpNms[data[(rowIndex - 1)]["DEAL_GRP_NM"].toString()] != "" ) {
+                	possibleDeletedDealGrpNms[data[(rowIndex - 1)]["DEAL_GRP_NM"].toString().toUpperCase()] = true;
+				}
             }
-        );
+		);
 
         if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell)) { // Delete row
             var rowStart = topLeftRowIndex - 2;
@@ -793,7 +800,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     clearUndoHistory();
                                     root.delPtrs(delIds);
-                                    //root.saveEntireContract(true, true, true);
+                                	//root.saveEntireContract(true, true, true);
+
+                                	// Get the delete of Deal group Name of the deleted and remove from dict
+                                    if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                                    	for (var key in  possibleDeletedDealGrpNms) {
+                                    		delete dealGrpNamesDict[key];
+                                    	}
+                                    }
                                 }
                             },
                           10);
@@ -822,6 +836,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     	clearUndoHistory();
 
                     	$scope.applySpreadsheetMerge();
+
+                    	// Get the delete of Deal group Name of the deleted and remove from dict
+                    	if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                    		for (var key in possibleDeletedDealGrpNms) {
+                    			delete dealGrpNamesDict[key];
+                    		}
+                    	}
 
                     }, 10);
                 }
