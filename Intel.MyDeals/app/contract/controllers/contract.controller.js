@@ -2376,7 +2376,7 @@
                     c += 1;
                     if (value.hidden === false) {
                         // Create column to letter mapping
-                        var letter = String.fromCharCode(intA + c);
+                        var letter = (c >= 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 25) : String.fromCharCode(intA + c);
                         $scope.colToLetter[value.field] = letter;
                         $scope.letterToCol[letter] = value.field;
                     }

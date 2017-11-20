@@ -118,8 +118,8 @@
                 }).map(function (i) {
                     return {
                         name: i.MRK_LVL1,
-                        allowMultiple: vm.enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1) ,
-                                    //&&  getVerticalSelection(i.MRK_LVL1)[0].DEAL_PRD_TYPE == "CPU", Future bug fix
+                        allowMultiple: vm.enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1),
+                        //&&  getVerticalSelection(i.MRK_LVL1)[0].DEAL_PRD_TYPE == "CPU", Future bug fix
                         parentSelected: false,
                         path: '',
                         id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID,
@@ -469,7 +469,7 @@
             if (item.parentSelected && vm.enableMultipleSelection) {
                 manageSelectedProducts('exclude', item);
             } else {
-                if (vm.dealType !== "ECAP") {
+                if (vm.dealType !== "ECAP" || vm.dealType !== "KIT") {
                     // Get unique product types
                     var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
                     existingProdTypes = existingProdTypes.map(function (elem) {
@@ -841,7 +841,7 @@
         }
 
         vm.save = function () {
-            if (vm.dealType !== "ECAP") {
+            if (vm.dealType !== "ECAP" || vm.dealType !== "KIT") {
                 // Get unique product types
                 var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
                 existingProdTypes = existingProdTypes.map(function (elem) {

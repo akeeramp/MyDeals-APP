@@ -55,7 +55,8 @@
             error(message, data, title);
             toastr.options = {
                 closeButton: false,
-                timeOut: 5000
+                timeOut: 5000,
+                positionClass: 'toast-bottom-right'
             };
         }
 

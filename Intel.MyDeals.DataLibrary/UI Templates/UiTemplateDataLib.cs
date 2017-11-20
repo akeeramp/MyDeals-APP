@@ -355,7 +355,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRD_EXCLDS,
                 Label = "Exclude Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 Width = 220,
                 IsReadOnly = false
             });
@@ -407,8 +407,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiIconWrapper(data, 'DSCNT_PER_LN')#",
                 Format = "{0:c}",
                 IsRequired = false,
-				IsDimKey = true
-			});
+                IsDimKey = true
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -420,8 +420,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiIconWrapper(data, 'QTY')#",
                 Format = "{0:d}",
                 IsRequired = false,
-				IsDimKey = true
-			});
+                IsDimKey = true
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
@@ -440,8 +440,8 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.ORIG_ECAP_TRKR_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-				UiType = "DROPDOWN",
-				Label = "Original Tracker #",
+                UiType = "DROPDOWN",
+                Label = "Original Tracker #",
                 LookupUrl = "/api/EcapTracker/GetEcapTrackerList/",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
@@ -522,16 +522,16 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
-			items.Add(new UiTemplateContainerItem
-			{
-				Id = 36,
-				AtrbCd = AttributeCodes.DEAL_DESC,
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
-				Width = 100,
-				Label = "Deal Description"
-			});
-			items.Add(new UiTemplateContainerItem
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.DEAL_DESC,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 100,
+                Label = "Deal Description"
+            });
+            items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
@@ -738,22 +738,22 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
                 IsHidden = true
-			});
-			//items.Add(new UiTemplateContainerItem
-			//{
-			//	Id = 36,
-			//	AtrbCd = AttributeCodes.TITLE,
-			//	ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-			//	ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-			//	Width = 100,
-			//	Label = "Deal Description"
-			//});
+            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //	Id = 36,
+            //	AtrbCd = AttributeCodes.TITLE,
+            //	ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+            //	ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+            //	Width = 100,
+            //	Label = "Deal Description"
+            //});
 
-			#endregion PRICING TABLE ROW
+            #endregion PRICING TABLE ROW
 
-			#region WIP DEAL
+            #region WIP DEAL
 
-			items.Add(new UiTemplateContainerItem
+            items.Add(new UiTemplateContainerItem
             {
                 Id = 1,
                 AtrbCd = AttributeCodes.DC_ID,
@@ -941,7 +941,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Product Category",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
-                Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_CATEGORIES')#",          
+                Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_CATEGORIES')#",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 150
@@ -953,7 +953,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Media",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
-                Template = "#=gridUtils.uiControlWrapper(data, 'PROD_INCLDS')#",          
+                Template = "#=gridUtils.uiControlWrapper(data, 'PROD_INCLDS')#",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 150
@@ -1808,7 +1808,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Original Tracker #",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-				UiType = "DROPDOWN",
+                UiType = "DROPDOWN",
                 Width = 100,
                 Template = "#=gridUtils.uiControlWrapper(data, 'ORIG_ECAP_TRKR_NBR')#",
                 LookupUrl = "/api/EcapTracker/GetEcapTrackerList/",
