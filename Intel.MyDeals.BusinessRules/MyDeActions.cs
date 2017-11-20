@@ -70,7 +70,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (userConsumtionReason == null || userConsumtionReason == "")
             {
-                de.AddMessage("Cannot leave Consumption Reason blank.");
+                if (!de.IsReadOnly) de.AddMessage("Cannot leave Consumption Reason blank.");
             }
             else if (match == null)  //no match
                 de.AddMessage(userConsumtionReason + " is not a valid Consumption Reason.");
@@ -95,7 +95,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (userDealCombType == null || userDealCombType == "")
             {
-                de.AddMessage("Cannot leave Group Type blank.");
+                if (!de.IsReadOnly) de.AddMessage("Cannot leave Group Type blank.");
             }
             else if (match == null)  //no match
                 de.AddMessage(userDealCombType + " is not a valid Group Type.");

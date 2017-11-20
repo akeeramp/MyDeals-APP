@@ -374,6 +374,13 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     $timeout(function () {
                         dataItem.saved = false;
                     }, 3000);
+
+                    kendo.confirm("Would you like to run Price Cost Test now?")
+                        .then(function () {
+                            root.refreshContractData();
+                            debugger;
+                        },
+                        function () { });
                 });
         }
     }

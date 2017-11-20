@@ -393,7 +393,92 @@ namespace Intel.MyDeals.BusinessLogic
         public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
-            return OD.GetOverlappingDeals(PRICING_TABLES_ID);
+            List<Overlapping> overlapps = OD.GetOverlappingDeals(PRICING_TABLES_ID);
+
+            // Need to update
+            List<int> wipIds = overlapps.Select(o => o.WIP_DEAL_OBJ_SID).Distinct().ToList();
+
+            MyDealsData myDealsData = OpDataElementType.PRC_TBL.GetByIDs(
+                new List<int> { PRICING_TABLES_ID},
+                new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, 
+                new List<int>
+                {
+                    Attributes.PASSED_VALIDATION.ATRB_SID,
+                    Attributes.OVERLAP_RESULT.ATRB_SID,
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                    Attributes.CUST_MBR_SID.ATRB_SID
+                });
+
+            ContractToken contractToken = new ContractToken
+            {
+                ContractId = 1,
+                NeedToCheckForDelete = false
+            };
+
+            List<OpDataCollector> allDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.ToList();
+
+            foreach (OpDataCollector dc in allDcs)
+            {
+                IOpDataElement de = dc.GetDataElement(AttributeCodes.OVERLAP_RESULT);
+                IOpDataElement deValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
+                IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+
+                contractToken.CustId = int.Parse(deCust.AtrbValue.ToString());
+
+                string value = wipIds.Contains(deCust.DcID) ? "Fail" : "Pass";
+
+                if (de == null)
+                {
+                    dc.DataElements.Add(new OpDataElement
+                    {
+                        DcID = deCust.DcID,
+                        DcType = deCust.DcType,
+                        DcParentType = deCust.DcParentType,
+                        DcParentID = deCust.DcParentID,
+                        AtrbID = Attributes.OVERLAP_RESULT.ATRB_SID,
+                        AtrbCd = Attributes.OVERLAP_RESULT.ATRB_COL_NM,
+                        AtrbValue = value,
+                        State = OpDataElementState.Modified
+                    });
+                }
+                else
+                {
+                    de.SetAtrbValue(value);
+                    de.State = OpDataElementState.Modified;
+                }
+
+                // Only update passed validation to FALSE... if value failed.  NEVER just blindly set it to PASS
+                if (value != "Fail") continue;
+
+                if (deValid == null)
+                {
+                    dc.DataElements.Add(new OpDataElement
+                    {
+                        DcID = deCust.DcID,
+                        DcType = deCust.DcType,
+                        DcParentType = deCust.DcParentType,
+                        DcParentID = deCust.DcParentID,
+                        AtrbID = Attributes.PASSED_VALIDATION.ATRB_SID,
+                        AtrbCd = Attributes.PASSED_VALIDATION.ATRB_COL_NM,
+                        AtrbValue = PassedValidation.Dirty,
+                        State = OpDataElementState.Modified
+                    });
+                }
+                else
+                {
+                    deValid.SetAtrbValue(PassedValidation.Dirty);
+                    deValid.State = OpDataElementState.Modified;
+                }
+            }
+
+            myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+            myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
+            myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+            myDealsData.EnsureBatchIDs();
+
+            MyDealsData retData = myDealsData.Save(contractToken);
+            //WIP_DEAL_OBJ_SID
+            return overlapps;
         }
 
         public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)

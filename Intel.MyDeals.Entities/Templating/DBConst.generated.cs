@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/10/2017 4:48:14 PM
-On: MHTIPPIN-MOBL
+File Updated: 11/19/2017 2:56:07 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1049,6 +1049,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 4
 		/// DIM_CD: GEO
+		/// ATRB_SID: 4006
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string GEO_FULL_PATH = "GEO_FULL_PATH";
+
+		///<summary>
+		/// DIM_SID: 4
+		/// DIM_CD: GEO
 		/// ATRB_SID: 4002
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1598,6 +1607,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3683
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string OVERLAP_RESULT = "OVERLAP_RESULT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3668
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1639,6 +1657,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string PRD_ATRB = "PRD_ATRB";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3684
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRD_BCKT = "PRD_BCKT";
 
 		///<summary>
 		/// DIM_SID: 7

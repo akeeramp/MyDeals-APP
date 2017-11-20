@@ -1541,7 +1541,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                             var indx = -1;
                             $scope.opData.some(function (e, i) {
-                                if (e.DC_ID == data) {
+                                if (e.DC_ID === data) {
                                     indx = i;
                                     return true;
                                 }
@@ -1552,7 +1552,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.contractDs.read();
                             }
 
-                            if (YCS2_OVERLAP_OVERRIDE == 'N') {
+                            if (YCS2_OVERLAP_OVERRIDE === 'N') {
                                 $scope.ovlpErrorCount.push(data);
                             }
                             else {
@@ -1575,7 +1575,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                             grps[indx].numErrors = $scope.ovlpErrorCount.length;
                             $scope.ovlpDataSource.read();
-
 
                         } else {
                             return false;
@@ -2005,6 +2004,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                                     //Hiding Column Preference and Grid Preferences
                                     $scope.isLayoutConfigurable = false;
+
+                                    $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshContractData', true);
                                 }
                                 else {
                                     //Remove overlapping tab
@@ -2018,12 +2019,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         }
                                     }
 
+                                    $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshContractData', false);
+
                                     util.console("Remove overlapping tab DONE");
                                 }
                             }
+                            $scope.$parent.$parent.setBusy("", "");
                         },
                         function (response) {
                             //empty after moving sync and validate to happen before the getOverlappingDeals call is made
+                            $scope.$parent.$parent.setBusy("", "");
                         });
                 }
             }
@@ -2031,20 +2036,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.saveAndValidateGrid = function () {
 
                 //procedures within sync and validate wip deals must complete before overlapping deals setup is run to ensure user changes are accounted for, thus we pass in overlappingDealsSetup as a callback function
-                $scope.syncAndValidateWipDeals($scope.overlappingDealsSetup)
+                $scope.syncAndValidateWipDeals($scope.overlappingDealsSetup);
 
                 return;
             }
 
-            $scope.syncAndValidateWipDeals = function(callback) {
+            $scope.syncAndValidateWipDeals = function (callback) {
                 $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
                 $timeout(function () {
-                    util.console("syncAndValidateWipDeals");
-                    util.console("contractDs.sync Started");
-                    $scope.contractDs.sync();
-                    util.console("contractDs.sync Ended");
-                    $scope.root.validateWipDeals(callback);
-                }, 100)
+                        util.console("syncAndValidateWipDeals");
+                        util.console("contractDs.sync Started");
+                        $scope.contractDs.sync();
+                        util.console("contractDs.sync Ended");
+                        $scope.root.validateWipDeals(callback);
+                    },
+                    100);
             }
 
             $scope.validateRow = function (row, scope) {

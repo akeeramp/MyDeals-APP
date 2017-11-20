@@ -1435,6 +1435,7 @@
 
             });
 
+
         $scope.actionPricingStrategies = function (data, emailEnabled) {
             $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
 
@@ -2319,7 +2320,8 @@
                             $state.go(toState, toParams, { reload: true });
                         } else {
                             $timeout(function () {
-                                $scope.setBusy("", "");
+                                if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
+                                    $scope.setBusy("", "");
                             }, 1000);
                         }
                     } else {
@@ -3059,7 +3061,7 @@
 
 
         $scope.$on('refreshContractData', function (event, args) {
-            $scope.refreshContractData();
+            $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
         });
 
 

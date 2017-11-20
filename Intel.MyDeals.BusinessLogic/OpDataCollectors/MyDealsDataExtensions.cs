@@ -710,6 +710,13 @@ namespace Intel.MyDeals.BusinessLogic
                                 ? PassedValidation.Finalizing 
                                 : PassedValidation.Valid;
 
+                        // Check overlapping
+                        if (dc.GetAtrbValue(AttributeCodes.OVERLAP_RESULT).ToString() == "Fail")
+                        {
+                            passedValidation = PassedValidation.Dirty;
+                        }
+
+
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
                         {
                             dirtyPtrs.Add(dc.DcID);

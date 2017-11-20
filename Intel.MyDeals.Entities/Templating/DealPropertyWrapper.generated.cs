@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/10/2017 4:48:00 PM
-On: MHTIPPIN-MOBL
+File Updated: 11/19/2017 3:01:28 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -1834,6 +1834,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiGeoSelector"
 		};
+		public static MyDealsAttribute GEO_FULL_PATH = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "GEO_FULL_PATH",
+			ATRB_DESC = "Full Path of the GEO value",
+			ATRB_LBL = "GEO Full Path",
+			ATRB_MAX_LEN = 10,
+			ATRB_SID = 4006,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "GEO",
+			DIM_SID = 4,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
 		public static MyDealsAttribute GEO_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "GEO_NM",
@@ -2810,6 +2826,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TrackerSelector"
 		};
+		public static MyDealsAttribute OVERLAP_RESULT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "OVERLAP_RESULT",
+			ATRB_DESC = "Deal Overlap Result",
+			ATRB_LBL = "Overlap Result",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3683,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute PASSED_VALIDATION = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PASSED_VALIDATION",
@@ -2889,6 +2921,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute PRD_BCKT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRD_BCKT",
+			ATRB_DESC = "Kit Product Bucket",
+			ATRB_LBL = "Kit Field",
+			ATRB_MAX_LEN = 25,
+			ATRB_SID = 3684,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PRD_CAT_NM = new MyDealsAttribute()
 		{
