@@ -522,16 +522,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.DEAL_DESC,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
-                Width = 100,
-                Label = "Deal Description"
-            });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
