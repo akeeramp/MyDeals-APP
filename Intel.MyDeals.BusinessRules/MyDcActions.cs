@@ -840,6 +840,20 @@ namespace Intel.MyDeals.BusinessRules
             deRpuComment.IsRequired = true;
         }
 
+        public static void EcapAdjRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            if (rebateType != "ECAP ADJ") return;
+
+            IOpDataElement deTrkr = r.Dc.GetDataElement(AttributeCodes.ORIG_ECAP_TRKR_NBR);
+            if (deTrkr == null) return;
+
+            deTrkr.IsRequired = true;
+        }
+
         #region Voltier Validations
 
         private static bool IsGreaterThanZero(double attrb)

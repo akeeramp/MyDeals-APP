@@ -90,6 +90,14 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Required if ECAP Adjustment",
+                    ActionRule = MyDcActions.EcapAdjRequired,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()}
+                },
+                new MyOpRule
+                {
                     Title="MUST BE LAST RULE: Fix Required if readonly or hidden",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},

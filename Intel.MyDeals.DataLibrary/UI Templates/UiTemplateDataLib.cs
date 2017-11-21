@@ -355,7 +355,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRD_EXCLDS,
                 Label = "Exclude Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 220,
                 IsReadOnly = false
             });
