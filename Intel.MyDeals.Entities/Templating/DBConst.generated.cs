@@ -2,6 +2,8 @@
 /*
 File Updated: 11/19/2017 2:56:07 PM
 On: PWECKENR-MOBL
+File Updated: 11/20/2017 2:50:45 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -2336,14 +2338,6 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
-		/// ACTN_SID: 200
-		/// SRT_ORD: 150
-		/// Copy Contract Contents
-		///</summary>
-		public const string COPY_CONTRACT = "COPY_CONTRACT";
-
-
-		///<summary>
 		/// ACTN_SID: 210
 		/// SRT_ORD: 50
 		/// Roll the deal details back to the last valid active tracker state
@@ -2381,6 +2375,22 @@ namespace Intel.MyDeals.Entities {
 		/// DB Returned Action Message
 		///</summary>
 		public const string MESSAGE = "MESSAGE";
+
+
+		///<summary>
+		/// ACTN_SID: 201
+		/// SRT_ORD: 2200
+		/// Copy Object Contents Results
+		///</summary>
+		public const string OBJ_COPIED = "OBJ_COPIED";
+
+
+		///<summary>
+		/// ACTN_SID: 200
+		/// SRT_ORD: 150
+		/// Copy Object Contents
+		///</summary>
+		public const string OBJ_COPY = "OBJ_COPY";
 
 
 		///<summary>
@@ -2563,7 +2573,8 @@ namespace Intel.MyDeals.Entities {
 		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
 		public const string ATRB_DELETED = "ATRB_DELETED";
 		public const string CALC_MSP = "CALC_MSP";
-		public const string COPY_CONTRACT = "COPY_CONTRACT";
+		public const string OBJ_COPY = "OBJ_COPY";
+		public const string OBJ_COPIED = "OBJ_COPIED";
 		public const string OBJ_DELETE = "OBJ_DELETE";
 		public const string OBJ_DELETED = "OBJ_DELETED";
 		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
@@ -2596,6 +2607,7 @@ namespace Intel.MyDeals.Entities {
 		WIP_DEAL = 5,
 		DEAL = 6,
 		MASTER = 7,
+		PTR_SNAPSHT = 8,
 		ALL_OBJ_TYPE = 0
 	}
 
@@ -2611,6 +2623,7 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Description = "WipDeals", Order = 50 },
 				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Description = "Deals", Order = 60 },
 				new OpDataElementTypeItem {Id = 7, OpDeType = OpDataElementType.MASTER, Alias = "MASTER", Description = "TenderMaster", Order = 70 },
+				new OpDataElementTypeItem {Id = 8, OpDeType = OpDataElementType.PTR_SNAPSHT, Alias = "PTR_SNAPSHT", Description = "PricingTableRowSnapshot", Order = 80 },
 			},
 
 			new Dictionary<OpDataElementType, OpDataElementType>
@@ -2660,6 +2673,7 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER },
+				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
 			}
 		);
 	}

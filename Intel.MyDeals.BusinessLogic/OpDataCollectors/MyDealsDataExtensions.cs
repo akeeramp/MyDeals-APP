@@ -984,7 +984,7 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 if (!data.ContainsKey(opDataElementType) && !myDealsData.ContainsKey(opDataElementType)) continue;
-                myDealsData.SavePacketByDictionary(data.ContainsKey(opDataElementType) ? data[opDataElementType] : null, opDataElementType, Guid.NewGuid());
+                myDealsData.SavePacketByDictionary(data.ContainsKey(opDataElementType) ? data[opDataElementType] : null, opDataElementType, Guid.NewGuid(), savePacket.MyContractToken);
             }
 
             MyDealsData myDealsDataResults = myDealsData.PerformTasks(OpActionType.Save, savePacket.MyContractToken);  // execute all save perform task items now
@@ -1024,7 +1024,7 @@ namespace Intel.MyDeals.BusinessLogic
             return new PricingTablesLib(dataCollectorLib).ActionWipDeals(contractToken, actnWIP);
         }
 
-        public static void SavePacketByDictionary(this MyDealsData myDealsData, OpDataCollectorFlattenedList data, OpDataElementType opDataElementType, Guid myWbBatchId)
+        public static void SavePacketByDictionary(this MyDealsData myDealsData, OpDataCollectorFlattenedList data, OpDataElementType opDataElementType, Guid myWbBatchId, ContractToken contractToken)
         {
             // All save packet calls go through here.  This is the one point where we sift for changes.
             // Save Data Cycle: Point 10
@@ -1047,6 +1047,11 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             newPacket.AddSaveActions(myDealsData[opDataElementType]);
+
+            if (opDataElementType == OpDataElementType.CNTRCT && contractToken.CopyFromContractId > 0)
+            {
+                newPacket.AddCopyActions(contractToken.CopyFromContractId);
+            }
 
             myDealsData[opDataElementType] = newPacket;
         }

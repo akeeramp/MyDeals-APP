@@ -67,13 +67,30 @@ namespace Intel.MyDeals.Controllers.API
         public OpDataCollectorFlattenedDictList SaveContract(int custId, int contractId, OpDataCollectorFlattenedList contracts)
         {
             SavePacket savePacket = new SavePacket(new ContractToken
-                {
-                    CustId = custId,
-                    ContractId = contractId
-                });
+            {
+                CustId = custId,
+                ContractId = contractId
+            });
 
             return SafeExecutor(() => _contractsLib.SaveContract(contracts, savePacket)
                 , "Unable to save the Contract"
+            );
+        }
+
+        [Authorize]
+        [Route("CopyContract/{custId}/{contractId}/{srcContractId}")]
+        [HttpPost]
+        public OpDataCollectorFlattenedDictList CopyContract(int custId, int contractId, int srcContractId, OpDataCollectorFlattenedList contracts)
+        {
+            SavePacket savePacket = new SavePacket(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId,
+                CopyFromContractId = srcContractId
+            });
+
+            return SafeExecutor(() => _contractsLib.SaveContract(contracts, savePacket)
+                , "Unable to copy the Contract"
             );
         }
 

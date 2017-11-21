@@ -16,6 +16,7 @@ function objsetService($http, dataService, logger, $q) {
 
     var service = {
         createContract: createContract,
+        copyContract: copyContract,
         readContract: readContract,
         updateContract: updateContract,
         deleteContract: deleteContract,
@@ -64,6 +65,9 @@ function objsetService($http, dataService, logger, $q) {
 
     function createContract(custId, contractId, ct) {
         return dataService.post(apiBaseContractUrl + 'SaveContract/' + custId + '/' + contractId, [ct]);
+    }
+    function copyContract(custId, contractId, srcContractId, ct) {
+        return dataService.post(apiBaseContractUrl + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId, [ct]);
     }
     function readContract(id) {
     	// NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()

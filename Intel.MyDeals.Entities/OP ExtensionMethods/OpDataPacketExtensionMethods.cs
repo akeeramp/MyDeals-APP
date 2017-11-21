@@ -23,6 +23,15 @@ namespace Intel.MyDeals.Entities
             }
         }
 
+        public static void AddCopyActions(this OpDataPacket<OpDataElementType> packet, int sourceContractID) // COPY_CONTRACT/OBJECT
+        {
+            if (packet.Data.Count > 0) // Expected that you just created a contract to copy to, otherwise don't issue the action.
+            {
+                int packetId = packet.Data.Select(p => p.Value.DcID).FirstOrDefault();
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_COPY, new List<int> { sourceContractID }, packetId, 150)); // Set action - copy it.
+            }
+        }
+
         public static void AddParentIdActions(this OpDataPacket<OpDataElementType> packet, Dictionary<int, int> data)
         {
             foreach (KeyValuePair<int, int> kvp in data)
