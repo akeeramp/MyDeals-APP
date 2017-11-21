@@ -366,7 +366,7 @@ namespace Intel.MyDeals.BusinessRules
             if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "") return;
 
             //int custId = Convert.ToInt32(strCustId);
-            var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId).ToList();
+            var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId && c.ACTV_IND).ToList();
             List<string> matchedDivs = new List<string>();
             bool foundMisMatch = false;
 

@@ -68,7 +68,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of customer division data flagged as active</returns>
         public List<CustomerDivision> GetCustomerDivisionsActive()
         {
-            return GetCustomerDivisions().Where(c => c.ACTV_IND).ToList();
+            return GetCustomerDivisions().Where(c => c.ACTV_IND).OrderBy(c => c.CUST_DIV_NM).ToList();
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
         {
-            return GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid && c.CUST_DIV_NM != c.CUST_NM).ToList();
+            return GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid && c.ACTV_IND).ToList();
         }
 
         /// <summary>
