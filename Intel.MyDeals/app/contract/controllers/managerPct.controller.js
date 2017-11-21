@@ -155,7 +155,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         }
 
         if ($("#detailGrid_" + pt.DC_ID).length === 0) {
-            var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+            var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
             var template = angular.element(html);
             var linkFunction = $compile(template);
             linkFunction($scope);
@@ -166,7 +166,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
         objsetService.getPctDetails(pt.DC_ID).then(
             function (e) {
-                var secureFields = ["CAP", "MAX_RPU", "ECAP_PRC", "ECAP_FLR", "PRD_COST", "COST_TEST_OVRRD_FLG", "COST_TEST_OVRRD_CMT", "RTL_CYC_NM", "RTL_PULL_DLR"];
                 $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
                 $scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
 
@@ -216,7 +215,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                 val = "<div style='text-align: center;'>" + grp + "</div>";
                             }
 
-                            //if (secureFields.indexOf(cols[c].field) < 0 || !hasNoPermission || !hasNoPermissionOvr) {
                             if (!cols[c].hidden) {
                                 if (cols[c].field === "PRC_CST_TST_STS") {
                                     var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;");
@@ -304,6 +302,17 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                 data[d]["_readonly"] = ps.WF_STG_CD !== "Submitted";
                             }
 
+                            $("#detailGrid_" + pt.DC_ID + " .k-grouping-row .k-icon").on("click", function (e) {
+
+                                var row = $(e.currentTarget).closest("tr");
+                                var distance = $(row).position().top;
+
+                                $(e.currentTarget).parent().closest(".k-grid-content").animate({
+                                    scrollTop: distance
+                                }, 400);
+
+                            });
+
                         }, 100);
                     }
 
@@ -320,6 +329,11 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         );
 
 
+    }
+
+
+    $scope.groupExpand = function(e) {
+        debugger;
     }
 
     $scope.showGroups = function (isDealMode, dealId, dataItem) {
