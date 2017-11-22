@@ -1,8 +1,6 @@
 ﻿
 /*
-File Updated: 11/19/2017 2:56:07 PM
-On: PWECKENR-MOBL
-File Updated: 11/20/2017 2:50:45 PM
+File Updated: 11/22/2017 3:39:01 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2592,6 +2590,9 @@ namespace Intel.MyDeals.Entities {
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
 		public const string C_EDIT_PRODUCT = "C_EDIT_PRODUCT";
+		public const string C_APPROVE = "C_APPROVE";
+		public const string C_CANCEL_DEAL = "C_CANCEL_DEAL";
+		public const string C_REVISE_DEAL = "C_REVISE_DEAL";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
 		public const string C_IS_DEV = "C_IS_DEV";
 	}

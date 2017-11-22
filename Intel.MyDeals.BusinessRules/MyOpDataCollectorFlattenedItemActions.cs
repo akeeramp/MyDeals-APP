@@ -59,7 +59,10 @@ namespace Intel.MyDeals.BusinessRules
                 SecurityActns.CAN_VIEW_COST_TEST,
                 SecurityActns.CAN_VIEW_MEET_COMP,
                 SecurityActns.C_EDIT_COST_TEST,
-                SecurityActns.C_EDIT_MEET_COMP
+                SecurityActns.C_EDIT_MEET_COMP,
+                SecurityActns.C_APPROVE,
+                SecurityActns.C_REVISE_DEAL,
+                SecurityActns.C_CANCEL_DEAL
             };
             foreach (string setting in possibleSettings)
             {
