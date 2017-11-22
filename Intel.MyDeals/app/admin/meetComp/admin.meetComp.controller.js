@@ -187,7 +187,7 @@
         });
 
         $scope.meetCompProdCatNameOptions = {
-            placeholder: "Select customers...",
+            placeholder: "Select Product Category...",
             dataTextField: "PRD_CAT_NM",
             dataValueField: "PRD_CAT_NM",
             valuePrimitive: true,
@@ -272,7 +272,7 @@
         });
 
         $scope.selectBrandNameOptions = {
-            placeholder: "Select customers...",
+            placeholder: "Select Brand Name...",
             dataTextField: "BRND_NM",
             dataValueField: "BRND_NM",
             valuePrimitive: true,
@@ -330,7 +330,7 @@
         });
 
         $scope.selectProdNameOptions = {
-            placeholder: "Select Product name...",
+            placeholder: "All Product(s)...",
             dataTextField: "HIER_VAL_NM",
             dataValueField: "HIER_VAL_NM",
             valuePrimitive: true,
@@ -413,8 +413,7 @@
                     }, function (response) {
                         logger.error("Unable to get Meet Comp Data.", response, response.statusText);
                     }); 
-            }
-            //alert('clicked');
+            }            
         }
 
         var reset = function(){
