@@ -39,6 +39,11 @@ namespace Intel.MyDeals.Controllers
             return View(AppLib.AVM);
         }
 
+        public ActionResult CodeQuality()
+        {
+            return View(AppLib.AVM);
+        }
+
         #endregion
 
 

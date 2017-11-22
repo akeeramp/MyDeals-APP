@@ -1,0 +1,64 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "MyDeals Code Quality Standards" },
+    { "categoryAction", "Flows" },
+    { "sectionTitle", "" },
+    { "sectionAction", "" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 0; padding-bottom: 100px;">
+
+    <div style="margin: 10px;">
+        <h1>MyDeals Code Quality Standards</h1>
+        <p>
+            This is the basic standards for MyDeals Code Quality in the User Interface and Middle Tier.
+        </p>
+        
+        <h4>Check In Process</h4>
+        <div style="padding-left: 30px;">
+            <h6>Expectations</h6>
+            <ul>
+                <li>All checked-in code should compile as to not impact other developers</li>
+            </ul>
+
+            <h6>Scope</h6>
+            <ul>
+                <li>Check-ins should be scoped to a single defect or user story.</li>
+                <li>TFS check-in should have <b>comments</b> on the check-in with the <i>User Story</i> or <i>Defect</i> number in the comment</li>
+            </ul>
+
+            <h6>Lightweight</h6>
+            <ul>
+                <li>Keep LOC (Lines of Code) minimal. More code reviews are better than large code reviews</li>
+                <li>If possible (code must work on check-in), check in large User Stories at convenient milestones to prevent large code reviews and more code redesign post the reviews.</li>
+            </ul>
+        </div>
+
+        <h4>Code Review Request</h4>
+        <div style="padding-left: 30px;">
+            <h6>Type of Code Review</h6>
+            <ul>
+                <li>Small LOC check-ins (typically < 200 LOC) can rely on <b>TFS Code Review</b></li>
+                <li>Large LOC check-ins (User Stories typically > 200 LOC) need a <b>Code Review Meeting</b> prior to checking in code</li>
+            </ul>
+
+            <h6>Type of Code Review</h6>
+            <ul>
+                <li>Code must be checked in prior to making a code review request.</li>
+                <li>Every code check-in <b>MUST be reviewed by the UI/MT Tech Lead</b> (Philip Eckenroth)</li>
+                <li>UI/MT Tech Lead will monitor check-ins for missing code reviews to catch check-ins without a requested code review.</li>
+            </ul>
+        </div>
+
+
+
+
+    </div>
+
+
+
+</div>
+
+

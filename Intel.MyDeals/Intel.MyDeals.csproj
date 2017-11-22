@@ -1675,6 +1675,7 @@
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\TenderManager\Index.cshtml" />
     <Content Include="Views\AdvancedSearch\Index.cshtml" />
+    <Content Include="Views\CodingPractices\CodeQuality.cshtml" />
     <None Include="Web.cons.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
