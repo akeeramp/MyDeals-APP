@@ -78,7 +78,7 @@
                     return response.data;
 
                 }, function (response) {
-                    logger.error("Unable to get Meet Comp Data.", response, response.statusText);
+                    logger.error("Unable to get Meet Comp Data [Customers by ID].", response, response.statusText);
                 });
         }
 
@@ -99,7 +99,7 @@
                     }                    
                     //$scope.meetCompProdCatName.read();
                 }, function (response) {
-                    logger.error("Unable to get Meet Comp Data.", response, response.statusText);
+                    logger.error("Unable to get Meet Comp Data [DIM Data].", response, response.statusText);
                 }); 
         }
 
@@ -120,14 +120,14 @@
                             
                             
                         }, function (response) {
-                            logger.error("Unable to get Meet Comp Data.", response, response.statusText);
+                            logger.error("Unable to get Meet Comp Data [Customers].", response, response.statusText);
                         });
                     
                 }
             }
         });
         $scope.selectCustomerOptions = {
-            placeholder: "Select customers...",
+            placeholder: "Select a Customer...",
             dataTextField: "CUST_NM",
             dataValueField: "CUST_SID",
             valuePrimitive: true,
@@ -187,7 +187,7 @@
         });
 
         $scope.meetCompProdCatNameOptions = {
-            placeholder: "Select Product Category...",
+            placeholder: "Select a Product Category...",
             dataTextField: "PRD_CAT_NM",
             dataValueField: "PRD_CAT_NM",
             valuePrimitive: true,
@@ -272,7 +272,7 @@
         });
 
         $scope.selectBrandNameOptions = {
-            placeholder: "Select Brand Name...",
+            placeholder: "Select customers...",
             dataTextField: "BRND_NM",
             dataValueField: "BRND_NM",
             valuePrimitive: true,
@@ -330,7 +330,7 @@
         });
 
         $scope.selectProdNameOptions = {
-            placeholder: "All Product(s)...",
+            placeholder: "Select Product name...",
             dataTextField: "HIER_VAL_NM",
             dataValueField: "HIER_VAL_NM",
             valuePrimitive: true,
@@ -362,7 +362,7 @@
                     vm.meetCompMasterData = response.data;                    
                     vm.dataSource.read();                    
                 }, function (response) {
-                    logger.error("Unable to get Meet Comp Data.", response, response.statusText);
+                    logger.error("Unable to get Meet Comp Data. [COMP Data]", response, response.statusText);
                 });
         }
 
@@ -411,7 +411,7 @@
                         vm.dataSource.read();
                         $scope.isBusy = false;
                     }, function (response) {
-                        logger.error("Unable to get Meet Comp Data.", response, response.statusText);
+                        logger.error("Unable to get Meet Comp Data [MC Data].", response, response.statusText);
                     }); 
             }            
         }

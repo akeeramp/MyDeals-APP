@@ -825,7 +825,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                             else {
                                 if (usrRole == "DA") {
-                                    logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                    logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is already Passed or you do not have access to for this stage.");
                                 }
                                 else {
                                     logger.warning("Cannot edit the Comp SKU since the Deal could be Active OR Pricing Strategy could be in Pending/Approved/Hold Status");
