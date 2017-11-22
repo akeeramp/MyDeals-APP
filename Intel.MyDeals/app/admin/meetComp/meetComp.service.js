@@ -13,14 +13,19 @@
 
         var service = {
             getMeetCompData: getMeetCompData,
-            activateDeactivateMeetComp: activateDeactivateMeetComp
+            activateDeactivateMeetComp: activateDeactivateMeetComp,
+            getMeetCompDIMData: getMeetCompDIMData
         }
 
         return service;
 
-        function getMeetCompData() {
-            return dataService.get(apiBaseUrl + 'GetMeetCompData');
-        }  
+        function getMeetCompData(cid, prodCatName, brandName, prodName) {
+            return dataService.get(apiBaseUrl + 'GetMeetCompData' + "/" + cid + "/" + prodCatName + "/" + brandName + "/" + prodName );
+        }
+
+        function getMeetCompDIMData(cid, mode) {
+            return dataService.get(apiBaseUrl + 'GetMeetCompDIMData' + "/" + cid + "/" + mode);
+        }        
 
         function activateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND) {
             return dataService.post(apiBaseUrl + 'ActivateDeactivateMeetComp/' + MEET_COMP_SID + "/" + ACTV_IND );

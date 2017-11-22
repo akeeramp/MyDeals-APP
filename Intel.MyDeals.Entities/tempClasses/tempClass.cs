@@ -2235,7 +2235,7 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String PRICE_SEGMENT { set; get; }
 
-        
+
         [DataMember]
         public System.String SBS_NM { set; get; }
 
@@ -2272,7 +2272,7 @@ public partial class DealTemplateDataGram
     {
         [DataMember]
         public System.String GRP { set; get; }
-        
+
         [DataMember]
         public System.Int32 CUST_NM_SID { set; get; }
 
@@ -2311,5 +2311,23 @@ public partial class DealTemplateDataGram
 
         [DataMember]
         public System.Char MEET_COMP_UPD_FLG { set; get; }
+    }
+
+    public class MEET_COMP_DIM
+    {
+        [DataMember]
+        public System.String HIER_VAL_NM { set; get; }
+
+        [DataMember]
+        public System.String PRD_CAT_NM { set; get; }
+
+        [DataMember]
+        public System.Int32 CUST_MBR_SID { set; get; }
+
+        [DataMember]
+        public System.String BRND_NM { set; get; }
+
+        [DataMember]
+        public System.String CUST_NM { set; get; }
     }
 }

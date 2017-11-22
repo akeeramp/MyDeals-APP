@@ -11,7 +11,7 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class MeetCompDataLib : IMeetCompDataLib
     {
-        public List<MeetComp> GetMeetCompData()
+        public List<MeetComp> GetMeetCompData(int CUST_MBR_SID, string PRD_CAT_NM, string BRND_NM, string HIER_VAL_NM)
         {
             OpLog.Log("GetMeetComp");
 
@@ -22,7 +22,12 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_MEET_COMP
                 {
-                    @MODE = "SELECT"
+                    @CUST_MBR_SID = CUST_MBR_SID,
+                    @CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @MODE = "SELECT",
+                    @PRD_CAT_NM = PRD_CAT_NM,
+                    @BRND_NM = BRND_NM,
+                    @HIER_VAL_NM = HIER_VAL_NM
                 }))
                 {
                     int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
@@ -75,6 +80,49 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+        public List<MEET_COMP_DIM> GetMeetCompDIMData(int CUST_MBR_SID, string MODE)
+        {
+            OpLog.Log("GetMeetComp");
+
+            var ret = new List<MEET_COMP_DIM>();
+            var cmd = new Procs.dbo.PR_MYDL_UPD_MEET_COMP { };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_MEET_COMP
+                {
+                    @CUST_MBR_SID = CUST_MBR_SID,
+                    @CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @MODE = MODE.ToUpper()
+                }))
+                {
+                    int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
+                    int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+                    int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM"); 
+                    int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM"); 
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new MEET_COMP_DIM
+                        {                            
+                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+                            PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+                            HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),                            
+                            BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
+                            CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
 
         public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND)
         {

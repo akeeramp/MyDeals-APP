@@ -26,10 +26,23 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <returns>Meet Comp Data</returns>
         [Authorize]
-        [Route("GetMeetCompData")]
-        public IEnumerable<MeetComp> GetMeetCompData()
+        [Route("GetMeetCompData/{cid}/{PRD_CAT_NM}/{BRND_NM}/{HIER_VAL_NM}")]
+        public IEnumerable<MeetComp> GetMeetCompData(int cid, string PRD_CAT_NM, string BRND_NM, string HIER_VAL_NM = "") 
         {
-            return SafeExecutor(() => _meetCompLib.GetMeetCompData()
+            return SafeExecutor(() => _meetCompLib.GetMeetCompData(cid, PRD_CAT_NM, BRND_NM, HIER_VAL_NM)
+                , $"Unable to get {"Meet Comp data"}"
+            );
+        }
+
+        /// <summary>
+        /// Get all Met Comp Data
+        /// </summary>
+        /// <returns>Meet Comp Data</returns>
+        [Authorize]
+        [Route("GetMeetCompDIMData/{cid}/{MODE}")]
+        public IEnumerable<MEET_COMP_DIM> GetMeetCompDIMData(int cid, string MODE)
+        {
+            return SafeExecutor(() => _meetCompLib.GetMeetCompDIMData(cid, MODE)
                 , $"Unable to get {"Meet Comp data"}"
             );
         }

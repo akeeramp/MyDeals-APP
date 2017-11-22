@@ -19,10 +19,19 @@ namespace Intel.MyDeals.BusinessLogic
         /// Get All Meet Comp Data
         /// </summary>
         /// <returns>List of all Meet Comp data</returns>
-        public List<MeetComp> GetMeetCompData()
+        public List<MeetComp> GetMeetCompData(int CUST_MBR_SID, string PRD_CAT_NM, string BRND_NM, string HIER_VAL_NM)
         {
             // TODO :Later need to decide caching will be apply or not
-            return _meetCompCollectorLib.GetMeetCompData();
+            return _meetCompCollectorLib.GetMeetCompData(CUST_MBR_SID, PRD_CAT_NM, BRND_NM, HIER_VAL_NM);
+
+
+        }
+
+        public List<MEET_COMP_DIM> GetMeetCompDIMData(int CUST_MBR_SID, string MODE)
+        {
+            // TODO :Later need to decide caching will be apply or not
+            return _meetCompCollectorLib.GetMeetCompDIMData(CUST_MBR_SID, MODE);            
+
         }
 
         /// <summary>
