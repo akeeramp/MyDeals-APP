@@ -87,14 +87,14 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Check for backdate Reason
-            IOpDataElement deStr = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deStr = r.Dc.GetDataElement(AttributeCodes.START_DT); // R is From DB data - Items is from UI
             if (!string.IsNullOrEmpty(dcSt))
             {
-                string dcPrevSt = string.IsNullOrEmpty(deStr.AtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                string dcPrevSt = string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
                 // && dcPrevSt != dcItemSt  -- removed bacuse it was causing validation issues.
-                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date)
+                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt) // Added above back in for DE33016.  If they complain, they need to get togeather and fully resolve what they want!
                 {
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
                     string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
