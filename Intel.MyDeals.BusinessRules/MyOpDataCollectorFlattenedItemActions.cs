@@ -79,7 +79,12 @@ namespace Intel.MyDeals.BusinessRules
                 w.WFSTG_CD_SRC == stage &&
                 w.ROLE_TIER_NM == opUserToken.Role.RoleTier).Select(w => w.WFSTG_ACTN_NM).ToList();
 
-            foreach (string action in actions)
+            List<string> possibleActions = new List<string>();
+            if (objsetActionItem.Settings[SecurityActns.C_APPROVE]) possibleActions.Add("Approve");
+            if (objsetActionItem.Settings[SecurityActns.C_REVISE_DEAL]) possibleActions.Add("Revise");
+            if (objsetActionItem.Settings[SecurityActns.C_CANCEL_DEAL]) possibleActions.Add("Cancel");
+
+            foreach (string action in actions.Where(a => possibleActions.Contains(a)))
             {
                 objsetActionItem.Actions[action] = true;
 
