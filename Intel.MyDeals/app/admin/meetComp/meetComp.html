@@ -2,48 +2,54 @@
 <div class="col-md-12">
     <h2>Meet Comp</h2>
 </div>
-<div class="fl col-md-12" style="padding-top: 20px;">
-    <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
-    <select id="comboCustomer" ng-class="{'errorCode': vm.isCustomerMissing === true}" class="opUiContainer md"
-            kendo-combo-box
-            k-options="selectCustomerOptions"
-            k-ng-model="selectedCustomerId"            
-            k-value-primitive="true"
-            style="width: 230px; float: left"></select>
-
-    <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Category:</div>
-    <select id="comboCatName" ng-class="{'errorCode': vm.isCatMissing === true}" class="opUiContainer md"
-            kendo-combo-box
-            k-options="meetCompProdCatNameOptions"            
-            k-value-primitive="true"
-            style="width: 230px;float: left"></select>
-
-    <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Brand Name:</div>
-    <select id="comboBrndName" ng-class="{'errorCode': vm.isBrandMissing === true}" class="opUiContainer md"
-            kendo-combo-box
-            k-options="selectBrandNameOptions"            
-            k-value-primitive="true"
-            style="width: 230px; float: left"></select>
-
-    <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Name:</div>
-    <select id="comboProdName" class="opUiContainer md"
-            kendo-multi-select
-            k-options="selectProdNameOptions"            
-            k-value-primitive="true"
-            style="width: 240px; float: left"></select>
-
-    <button style="margin-left:20px" class="btn btn-sm btn-skyblue-sm fl"
-            ng-click="vm.fetchMeetCompData()"
-            title="Get Meet Comp">
-        <i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i>
-    </button>
-    
-</div>
-<div class="col-md-12" style="padding-top: 20px;">
-    <div id="grid" kendo-grid="meetCompGrid" class="table table-bordered md table-striped table-intel" expand-k-grid options="vm.gridOptions">
+<div class="col-md-12" ng-if="vm.isAcess === false" style="padding-top: 10px;">
+    <div class="alert alert-danger" >
+        {{vm.isAcessMessage}}
     </div>
 </div>
+<div ng-if="vm.isAcess === true">
+    <div class="fl col-md-12" style="padding-top: 20px;">
+        <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
+        <select id="comboCustomer" ng-class="{'errorCode': vm.isCustomerMissing === true}" class="opUiContainer md"
+                kendo-combo-box
+                k-options="selectCustomerOptions"
+                k-ng-model="selectedCustomerId"
+                k-value-primitive="true"
+                style="width: 230px; float: left"></select>
 
+        <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Category:</div>
+        <select id="comboCatName" ng-class="{'errorCode': vm.isCatMissing === true}" class="opUiContainer md"
+                kendo-combo-box
+                k-options="meetCompProdCatNameOptions"
+                k-value-primitive="true"
+                style="width: 230px;float: left"></select>
+
+        <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Brand Name:</div>
+        <select id="comboBrndName" ng-class="{'errorCode': vm.isBrandMissing === true}" class="opUiContainer md"
+                kendo-combo-box
+                k-options="selectBrandNameOptions"
+                k-value-primitive="true"
+                style="width: 230px; float: left"></select>
+
+        <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Name:</div>
+        <select id="comboProdName" class="opUiContainer md"
+                kendo-multi-select
+                k-options="selectProdNameOptions"
+                k-value-primitive="true"
+                style="width: 240px; float: left"></select>
+
+        <button style="margin-left:20px" class="btn btn-sm btn-skyblue-sm fl"
+                ng-click="vm.fetchMeetCompData()"
+                title="Get Meet Comp">
+            <i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i>
+        </button>
+
+    </div>
+    <div class="col-md-12" style="padding-top: 20px;">
+        <div id="grid" kendo-grid="meetCompGrid" class="table table-bordered md table-striped table-intel" expand-k-grid options="vm.gridOptions">
+        </div>
+    </div>
+</div>
 <style>
     .k-reset {
         font-weight: bold !important;
