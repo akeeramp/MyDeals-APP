@@ -626,7 +626,7 @@ gridPctUtils.getResultSingleIcon = function (result, style) {
 gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style) {
     var rtn = "<div style='text-align: center;'>";
 
-    if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-information-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Overidden"></i>';
+    if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-passed-completed-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Passed with Override Status"></i>';
 
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
