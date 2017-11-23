@@ -450,7 +450,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 {
                                     field: "MC_LAST_RUN",
                                     title: "Last Run",
-                                    template: "<div class='readOnlyCell' title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') # PST</div>",
+                                    template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(MC_LAST_RUN) #'>#= gridUtils.convertPstToLocal(MC_LAST_RUN) #</div>",
                                     width: 170,
                                     filterable: {
                                         extra: false,
