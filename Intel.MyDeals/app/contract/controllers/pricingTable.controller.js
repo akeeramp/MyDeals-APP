@@ -271,7 +271,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var numDeleted = 0;
 
         sheet.batch(function () {
-
+            sheet.range("A" + (rowOffset) + ":ZZ" + root.ptRowCount).unmerge();
             for (var d = 0; d < data.length; d++) {
                 if (dcId !== data[d].DC_ID) {
                     dcId = data[d].DC_ID;
@@ -445,6 +445,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (root.colToLetter["PRD_EXCLDS"] != undefined) {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
+            }
+            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                var numTiers = sheet.range(root.colToLetter['NUM_OF_TIERS'] + (rowStart)).value();
+                if (root.isPivotable() && numTiers !== null) {
+                    var mergedRows = parseInt(rowStart) + sheet.range(root.colToLetter['NUM_OF_TIERS'] + (rowStart)).value();
+                    for (var a = rowStart; a < mergedRows ; a++) {
+                        sheet.range(root.colToLetter["PTR_SYS_PRD"] + (a)).value(JSON.stringify(validatedSelectedProducts));
+                        systemModifiedProductInclude = true;
+                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts);
+                        systemModifiedProductInclude = false;
+                    }
+                    rowStart = mergedRows - 1;
+                }
             }
 
             systemModifiedProductInclude = false;
@@ -929,9 +942,59 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     }
 
+    function pivotKITDeals(data, n, dcIdDict) {
+        if (data[n]["PTR_USER_PRD"] !== null) {
+            var products = data[n]["PTR_USER_PRD"].split(",");
+            var numTier = products.length;
+            data[n]["NUM_OF_TIERS"] = numTier;
+        }
+        if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n]["PTR_USER_PRD"] !== null) {
+            dcIdDict[data[n].DC_ID] = true;
+            // Check if num of merged rows are more than new num tiers if so delete them
+            var numDcId = $filter('where')(data, { 'DC_ID': data[n].DC_ID });
+            var offset = getOffsetByIndex(data, n, numTier);
+            var offSetRows = offset > 0 ? numTier - offset : offset;
+            var rowAdded = offSetRows;
+            var deleteRows = numDcId.length - numTier;
+            var rowDeleted = 0;
+
+            for (var a = 0; a < numDcId.length - numTier; a++) {
+                //  Make following properties null, it will be picked up for deletion in next iteration
+                data[n - a].DC_ID = null;
+                data[n - a].PTR_USER_PRD = null;
+                data[n - a].NUM_OF_TIERS = numTier;
+                rowDeleted++;
+            }
+
+            // if row deleted count > 0  no need to add rows
+            rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
+            for (var a = numTier - 1; a >= 0; a--) {
+                if (numTier == numDcId.length) {
+                    data[n - (numTier - 1 - a)].TEMP_USR_PRD = products[a];
+                }
+                if (a == numTier - 1) {
+                    data[n - rowDeleted].TEMP_USR_PRD = products[a];
+                } else {
+                    if (rowDeleted == 0 && offSetRows > 0) {
+                        var copy = util.deepClone(data[n - rowDeleted]);
+                        copy.TEMP_USR_PRD = products[a];
+                        data.splice(n, 0, copy);
+                        offSetRows--;
+                    } else {
+                        data[n - rowDeleted + rowAdded - (numTier - 1 - a)].TEMP_USR_PRD = products[a];
+                    }
+                }
+            }
+        }
+    }
+
     function cleanupData(data) {
+        var dcIdDict = {};
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
+            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                pivotKITDeals(data, n, dcIdDict);
+            }
             if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === undefined || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
             } else {
@@ -1022,8 +1085,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         alert("You have too many products! You may have up to 10. Please remove " + (prdArr.length - 10) + " products from this row.");
                         return;
                     }
-
-                    root.curPricingTable["NUM_OF_TIERS"] = prdArr.length;
                 }
 
                 cleanupData(data);
@@ -1107,7 +1168,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 key !== "DC_ID"
                                 && !isAddedByTrackerNumber
                             ) {
-                                data[r][key] = root.curPricingTable[key];
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
+                                    // Dont override the row num tiers with pricing table numtiiers for kit deals
+                                } else {
+                                    data[r][key] = root.curPricingTable[key];
+                                }
                             }
                         }
                     }
@@ -1141,6 +1206,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var offset = getOffsetByIndex(data, bottomRightRowIndex - 2);
                     if (offset > 0) {
                         bottomRightRowIndex += numPivotRows - offset;
+                    }
+                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                        bottomRightRowIndex = (data.length + 1);
                     }
 
                     // Enable other cells
@@ -1181,9 +1249,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         );
                     }
                     else {
+                        // if additional rows are inserted due to change in number of products for KIT deal bottomrowIndexis lower than nuber of rows...Thus aasigning bottomrowIndex same as data.length
                         range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
+
+                        // If row is deleted when num tier changes for KIT. Disable the empty rows.
+                        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + root.ptRowCount));
+                            var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + root.ptRowCount);
+                            prdRange.enable(true);
+                            prdRange.background(null);
+                        }
                     }
 
                     // Re-disable cols that are disabled by template
@@ -1208,9 +1285,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     //}
                 });
 
-                root.child.setRowIdStyle(data);
-
                 $scope.applySpreadsheetMerge();
+
+                root.spreadDs.sync();
+
+                root.child.setRowIdStyle(data);
 
                 // reset num of tiers
                 if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
@@ -1384,7 +1463,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     row++;
                 }
             }
-        }, { layout: true });
+        }, {
+            layout: true
+        });
     }
 
     $scope.$on('saveWithWarnings',
