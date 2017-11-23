@@ -226,18 +226,6 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                IsDefaultable = true,
-                Label = "Meet Comp Analysis",
-                UiType = "BUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
@@ -674,20 +662,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "dropdownName",
                 LookupValue = "dropdownName",
                 IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 41,
-                AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                IsDefaultable = true,
-                Label = "Meet Comp Analysis *",
-                Width = 120,
-                DataType = "string",
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
