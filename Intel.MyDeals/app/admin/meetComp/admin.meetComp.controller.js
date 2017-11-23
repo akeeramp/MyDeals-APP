@@ -36,15 +36,15 @@
                 }
             });
         }
-        vm.isAcess = true;
-        var t = isSuper;
-        if (usrRole != 'GA' && isSuper) {
-            vm.isAcess = false;
-            vm.isAcessMessage = 'You don\'t have access to see this page';
+        vm.isAcess = false;
+        
+        if (usrRole == 'GA' && isSuper) {
+            vm.isAcess = true;            
+        }
+        else {
+            vm.isAcessMessage = 'You don\'t have access to view this page';
         }
         if (vm.isAcess == true) {
-
-
             vm.meetCompDIMMasterData = [];
             vm.isCustomerMissing = false;
             vm.selectedCustomerID = -1;
@@ -457,7 +457,9 @@
                             MEET_COMP_SID: {
                                 editable: false, nullable: true
                             },
-                            HIER_VAL_NM: { validation: { required: true } },
+                            CUST_NM: { validation: { required: true }, type:"string" },
+                            PRD_CAT_NM: { validation: { required: true }, type: "string" },
+                            HIER_VAL_NM: { validation: { required: true }, type: "string"  },                            
                             ACTV_IND: { validation: { required: true }, type: "boolean" },
                             MEET_COMP_PRD: { editable: false, validation: { required: false } },
                             MEET_COMP_PRC: { editable: false, validation: { required: true }, type: "number" },
