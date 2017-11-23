@@ -1230,6 +1230,8 @@
                     if (pt != null) { //pt is null when not yet created
                         //need to trigger a save if it is an existing pricing table, otherwise it will save when user clicks add
                         $scope.customEditPtValidate();
+                    } else {
+                        $scope.customAddPtValidate();
                     }
                 },
                 function (type) {
