@@ -40,13 +40,18 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                     return "Running " + $scope.text;
                 }
                 if (!!$scope.lastRun) {
-                    moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
-                    var localTime = moment.tz(new Date(), "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
-                    var lastruntime = moment($scope.lastRun);
+                    //moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+                    //var localTime = moment.tz(new Date(), "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
+                    //var lastruntime = moment($scope.lastRun);
+                    
+                    //var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
-                    var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+                    //var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
 
-                    var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
+                    var localTime = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+                    var serverUtcTime = moment($scope.lastRun).format('YYYY-MM-DD HH:mm:ss'); // Server date is already being returned in UTC
+
+                    var timeDiff = moment.duration(moment(serverUtcTime).diff(moment(localTime)));
                     var hh = Math.abs(timeDiff.asHours());
                     var mm = Math.abs(timeDiff.asMinutes());
                     var ss = Math.abs(timeDiff.asSeconds());

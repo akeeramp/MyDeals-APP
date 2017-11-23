@@ -67,13 +67,18 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 $scope.IsMeetCompRun = false;
                 if (!!LAST_MEET_COMP_RUN) {
 
-                    moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
-                    var localTime = moment.tz(new Date(), "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
-                    var lastruntime = moment(LAST_MEET_COMP_RUN);
+                    //moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+                    //var localTime = moment.tz(new Date(), "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
+                    //var lastruntime = moment(LAST_MEET_COMP_RUN);
 
-                    var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+                    //var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
-                    var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
+                    //var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
+
+                    var localTime = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+                    var serverUtcTime = moment(LAST_MEET_COMP_RUN).format('YYYY-MM-DD HH:mm:ss'); // Server date is already being returned in UTC
+
+                    var timeDiff = moment.duration(moment(serverUtcTime).diff(moment(localTime)));
                     var hh = Math.abs(timeDiff.asHours());
                     var mm = Math.abs(timeDiff.asMinutes());
                     var ss = Math.abs(timeDiff.asSeconds());
@@ -445,8 +450,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 {
                                     field: "MC_LAST_RUN",
                                     title: "Last Run",
-                                    template: "<div class='readOnlyCell' title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
-                                    width: 150,
+                                    template: "<div class='readOnlyCell' title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') # PST</div>",
+                                    width: 170,
                                     filterable: {
                                         extra: false,
                                         ui: "datepicker"
