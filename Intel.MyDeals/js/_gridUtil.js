@@ -242,7 +242,7 @@ gridUtils.getFormat = function (lType, lFormat) {
 
 gridUtils.convertPstToLocal = function (strDt) {
     moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
-    return moment.tz(strDt, 'America/Los_Angeles').local().format('MM/DD/YYYY hh:mm:ss a');
+    return moment.tz(strDt, 'America/Los_Angeles').local().format('MM/DD/YYYY hh:mm:ss A');
 }
 
 gridUtils.renderCustNm = function (data) {
