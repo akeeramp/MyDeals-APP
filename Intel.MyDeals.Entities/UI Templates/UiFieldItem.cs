@@ -43,5 +43,5 @@ namespace Intel.MyDeals.Entities
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string valuesValue { get; set; }
 
-	}
+    }
 }

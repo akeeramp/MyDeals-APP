@@ -342,16 +342,19 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                         field: "NOTES",
                         title: "Tools",
                         width: "90px",
+                        locked: true,
                         template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>"
                     }, {
                         field: "DC_ID",
                         title: "Deal Id",
                         width: "90px",
+                        locked: true,
                         template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\" || dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>"
                     }, {
                         field: "TRKR_NBR",
                         title: "Tracker Number",
                         width: "150px",
+                        locked: true,
                         template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#"
                     }, {
                         field: "OBJ_SET_TYPE_CD",

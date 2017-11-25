@@ -148,6 +148,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         return null;
     }
 
+    $scope.unLockedGrouData = {};
+
     $scope.togglePt = function (ps, pt) {
 
         if (!!!pt.isPtCollapsed) {
@@ -195,8 +197,9 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
                     if (!gridPctUtils.columns[item.DEAL_ID]) {
                         var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
-                        var tmplt = "<table style='float: left; margin-top: -23px;'>"; // <colgroup><col style='width: 30px;'>
-                        var tr = "<td style='width: 30px;'></td>";
+                        var tmplt = "<table style='float: left; margin-top: -20px;'>"; // <colgroup><col style='width: 30px;'>
+                        var trLocked = "<td style='width: 30px;'></td>";
+                        var trUnLocked = "";
                         for (var c = 0; c < cols.length; c++) {
                             var val = item[cols[c].field];
                             if (!!cols[c].format) {
@@ -216,17 +219,21 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             }
 
                             if (!cols[c].hidden) {
-                                if (cols[c].field === "PRC_CST_TST_STS") {
-                                    var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;");
-                                    tr += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
+                                if (cols[c].locked) {
+                                    if (cols[c].field === "PRC_CST_TST_STS") {
+                                        var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]],"font-size: 20px !important;");
+                                        trLocked += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
+                                    } else {
+                                        trLocked += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                    }
                                 } else {
-                                    tr += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                    trUnLocked += "<td style='padding-left: 0px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
                                 }
                             }
                         }
-                        tmplt += "</colgroup><tbody><tr>" + tr + "</tr></tbody></table>";
 
-                        gridPctUtils.columns[item.DEAL_ID] = tmplt;
+                        gridPctUtils.columns[item.DEAL_ID] = tmplt + "<tbody><tr>" + trLocked + "</tr></tbody></table>";
+                        $scope.unLockedGrouData[item.DEAL_ID] = "<table><tbody><tr>" + trUnLocked + "</tr></tbody></table>";
                     }
                 }
 
@@ -244,6 +251,13 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     height: 250,
                     columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
                     dataBound: function (e) {
+
+                        var grid = this;
+                        this.lockedTable.find(".k-grouping-row").each(function (index) {
+                            var html = $scope.unLockedGrouData[grid.dataItem(this).DEAL_ID];
+                            grid.tbody.find(".k-grouping-row:eq(" + index + ") td").html(html);
+                        });
+
 
                         // Set background colors
                         var rows = e.sender.content.find('tr');
@@ -331,11 +345,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     }
 
-
-    $scope.groupExpand = function(e) {
-        debugger;
-    }
-
     $scope.showGroups = function (isDealMode, dealId, dataItem) {
 
         if (isDealMode) {
@@ -411,6 +420,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "PCT Result",
             width: "120px",
             template: pctTemplate,
+            locked: true,
             parent: true
         },
         "DEAL_ID": {
@@ -419,7 +429,15 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             width: "100px",
             template: "#=DEAL_ID#",
             groupHeaderTemplate: "#= gridPctUtils.getColumnTemplate(value) #",
+            locked: true,
             parent: true
+        },
+        "PRODUCT": {
+            field: "PRODUCT",
+            title: "Product",
+            width: "170px",
+            locked: true,
+            parent: false
         },
         "DEAL_STRT_DT": {
             field: "DEAL_STRT_DT",
@@ -432,12 +450,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             field: "DEAL_STG_CD",
             title: "Deal Stage",
             width: "80px",
-            parent: false
-        },
-        "PRODUCT": {
-            field: "PRODUCT",
-            title: "Product",
-            width: "170px",
             parent: false
         },
         "CAP": {
@@ -570,8 +582,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 fields: {
                     PRC_CST_TST_STS: { type: "string" },
                     DEAL_ID: { type: "number" },
-                    DEAL_STRT_DT: { type: "string" },
                     PRODUCT: { type: "string" },
+                    DEAL_STRT_DT: { type: "string" },
                     CAP: { type: "number" },
                     ECAP_PRC: { type: "number" },
                     ECAP_FLR: { type: "number" },
@@ -595,8 +607,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 fields: {
                     PRC_CST_TST_STS: { type: "string" },
                     DEAL_ID: { type: "number" },
-                    DEAL_STRT_DT: { type: "string" },
                     PRODUCT: { type: "string" },
+                    DEAL_STRT_DT: { type: "string" },
                     MAX_RPU: { type: "number" },
                     LOW_NET_PRC: { type: "number" },
                     PRD_COST: { type: "number" },
@@ -618,8 +630,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 fields: {
                     PRC_CST_TST_STS: { type: "string" },
                     DEAL_ID: { type: "number" },
-                    DEAL_STRT_DT: { type: "string" },
                     PRODUCT: { type: "string" },
+                    DEAL_STRT_DT: { type: "string" },
                     MAX_RPU: { type: "number" },
                     LOW_NET_PRC: { type: "number" },
                     PRD_COST: { type: "number" },
@@ -641,8 +653,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             "ECAP": [
                 $scope.cellColumns["PRC_CST_TST_STS"],
                 $scope.cellColumns["DEAL_ID"],
-                $scope.cellColumns["DEAL_STRT_DT"],
                 $scope.cellColumns["PRODUCT"],
+                $scope.cellColumns["DEAL_STRT_DT"],
                 $scope.cellColumns["CAP"],
                 $scope.cellColumns["ECAP_PRC"],
                 $scope.cellColumns["ECAP_FLR"],
@@ -663,8 +675,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             "VOL_TIER": [
                 $scope.cellColumns["PRC_CST_TST_STS"],
                 $scope.cellColumns["DEAL_ID"],
-                $scope.cellColumns["DEAL_STRT_DT"],
                 $scope.cellColumns["PRODUCT"],
+                $scope.cellColumns["DEAL_STRT_DT"],
                 $scope.cellColumns["MAX_RPU"],
                 $scope.cellColumns["LOW_NET_PRC"],
                 $scope.cellColumns["PRD_COST"],
@@ -683,8 +695,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             "PROGRAM": [
                 $scope.cellColumns["PRC_CST_TST_STS"],
                 $scope.cellColumns["DEAL_ID"],
-                $scope.cellColumns["DEAL_STRT_DT"],
                 $scope.cellColumns["PRODUCT"],
+                $scope.cellColumns["DEAL_STRT_DT"],
                 $scope.cellColumns["MAX_RPU"],
                 $scope.cellColumns["LOW_NET_PRC"],
                 $scope.cellColumns["PRD_COST"],

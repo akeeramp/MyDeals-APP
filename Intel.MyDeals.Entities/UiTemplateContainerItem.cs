@@ -46,5 +46,7 @@ namespace Intel.MyDeals.Entities
         public int AtrbOrder { get; set; }
         public int Order { get; set; }
         public bool IsActive { get; set; }
+        public bool Lockable { get; set; }
+        public bool Locked { get; set; }
     }
 }

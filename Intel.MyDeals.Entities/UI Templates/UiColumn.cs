@@ -48,5 +48,10 @@ namespace Intel.MyDeals.Entities
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string lookupValue { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool locked { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool lockable { get; set; }
     }
 }

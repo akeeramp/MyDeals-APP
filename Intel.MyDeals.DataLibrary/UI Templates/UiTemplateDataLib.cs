@@ -730,6 +730,8 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
+                Locked = true,
+                Lockable = false,
                 Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#"
             });
             items.Add(new UiTemplateContainerItem
@@ -741,6 +743,8 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Details",
                 Width = 260,
                 IsReadOnly = true,
+                Locked = true,
+                Lockable = false,
                 Template = "<deal-detail ng-model='dataItem'></deal-detail>"
             });
             items.Add(new UiTemplateContainerItem
@@ -754,6 +758,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,
+                Locked = true,
+                Lockable = false,
                 Template = "<deal-tools ng-model='dataItem' is-editable='true'></deal-tools>",
                 HeaderTemplate = "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>"
             });
