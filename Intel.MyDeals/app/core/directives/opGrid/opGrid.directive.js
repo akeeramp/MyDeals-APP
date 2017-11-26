@@ -25,6 +25,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.isOvlpAccess = false;
             $scope.ovlpErrorCount = [];
             $scope.ovlpDataRep = [];
+            $scope.numColsLocked = 0;
+
             $timeout(function () {
                 $scope.tabStripDelay = true;
                 $timeout(function () {
@@ -123,6 +125,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     // mark index order
                     cols[c].indx = indxs[cols[c].field] === undefined ? 0 : indxs[cols[c].field];
+
+                    if (cols[c].locked) $scope.numColsLocked++;
 
                     // mark everything hidden by default
                     cols[c].hidden = true;
@@ -642,7 +646,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 edit: function (e) {
                     var grid = this;
                     var isDetailTemplate = !!grid.detailTemplate ? 1 : 0;
-                    var fieldName = grid.columns[e.container.index() - isDetailTemplate].field;
+                    var fieldName = grid.columns[e.container.index() - isDetailTemplate + $scope.numColsLocked].field;
                     if (e.model._behaviors.isReadOnly[fieldName] === true || e.model._behaviors.isHidden[fieldName] === true) {
                         $scope.grid.closeCell();
                     }

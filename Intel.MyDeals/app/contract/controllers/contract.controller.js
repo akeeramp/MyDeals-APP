@@ -2024,9 +2024,9 @@
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                         sData[s]._behaviors.isError['START_DT'] = true;
-                                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + endDate + ")";
+                                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + endDate + ")");
+                                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                     }
                                 }
                                 if (dateFields[d] === "END_DT") {
@@ -2037,9 +2037,10 @@
                                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                             sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + startDate + ")";
+                                            debugger;
+                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + startDate + ")");
+                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                         }
                                     }
                                 }
@@ -2099,38 +2100,32 @@
                         // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
                         if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
                         if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
+
+
+                        // check dates against contract
+                        if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT)) {
+                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                            gData[i]._behaviors.isError['START_DT'] = true;
+                            gData[i]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")");
+                        }
+
+                        if (moment(gData[i]["END_DT"]).isBefore($scope.contractData.START_DT)) {
+                            if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['END_DT'] = true;
+                                gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")");
+                            }
+                        }
+
                     }
                 }
             }
-
-            //// Check PricingTableRow validations before we submit to the API
-            //if (sData !== undefined) {
-            //    var errorList = [];
-
-            //    var intA = "A".charCodeAt(0);
-            //    var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
-            //    var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-            //    var sheet = spreadsheet.activeSheet();
-            //    var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
-
-            //	//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
-            //	//if (errorList.length > 0) {
-            //	//	alert("TODO: better message. Also show the rows where the error is. Error: You have errors on your spreadsheet you still need to fix");
-            //	//	console.log(errorList);
-            //	//	return;
-            //	//}
-
-            //	// Get the rows where products are entered
-            //	// Compare that rowIndex with the greatestRowIndex variable to get the last row where user has enetered data
-            //	// use that last row to get the range which we will iterate thorugh to find errors
-            //	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
-            //	//http://dojo.telerik.com/iCola
-            //}
-
-            //if (Object.getOwnPropertyNames(errs).length > 0 || (needPrdVld.length > 0)) return {
-            //    "errors": errs,
-            //    "needPrdVld": needPrdVld
-            //};
 
             return {
                 "Contract": modCt,
@@ -2138,7 +2133,8 @@
                 "PricingTable": curPricingTableData,
                 "PricingTableRow": sData === undefined ? [] : sData,
                 "WipDeals": gData === undefined ? [] : gData,
-                "EventSource": source
+                "EventSource": source,
+                "Errors": errs
             }
         }
 
@@ -2247,7 +2243,7 @@
             var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
 
 			// If there are critical errors like bad dates, we need to stop immediately and have the user fix them
-            if (!!data.errors && !angular.equals(data.errors, {})) {
+            if (!!data.Errors && !angular.equals(data.Errors, {})) {
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
                 $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
                 $scope.setBusy("", "");
@@ -2397,6 +2393,7 @@
                 $scope.clearValidations();
 
                 var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+                if (spreadsheet === undefined) return;
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
