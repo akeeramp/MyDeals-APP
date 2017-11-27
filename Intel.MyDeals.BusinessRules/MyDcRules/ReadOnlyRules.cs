@@ -42,6 +42,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.DEAL_SOLD_TO_ID,
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.MRKT_SEG,
+                                AttributeCodes.MEET_COMP_PRICE_QSTN,
                                 AttributeCodes.PAYOUT_BASED_ON }
 						}
 					}
@@ -181,7 +182,7 @@ namespace Intel.MyDeals.BusinessRules
 								AttributeCodes.EXPIRE_FLG,
                                 AttributeCodes.GEO_COMBINED,
 								AttributeCodes.MEETCOMP_TEST_RESULT,
-                                //AttributeCodes.MEET_COMP_PRICE_QSTN,
+                                AttributeCodes.MEET_COMP_PRICE_QSTN,
                                 //AttributeCodes.MRKT_SEG,
                                 AttributeCodes.OBJ_SET_TYPE_CD,
 								AttributeCodes.ORIG_ECAP_TRKR_NBR,
@@ -224,8 +225,9 @@ namespace Intel.MyDeals.BusinessRules
 							Target = new[]
 							{
 								AttributeCodes.DC_ID,
-								AttributeCodes.TIER_NBR
-							}
+                                AttributeCodes.TIER_NBR,
+                                AttributeCodes.MEET_COMP_PRICE_QSTN
+                            }
 						}
 					}
 				},
@@ -293,22 +295,22 @@ namespace Intel.MyDeals.BusinessRules
 						}
 					}
 				},
-				//new MyOpRule
-				//{
-				//	Title="Readonly if Meet Comp is Price Performance",
-				//	ActionRule = MyDcActions.ExecuteActions,
-				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-				//	InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-				//	AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && !String.Equals(de.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase)).Any(),
-				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-				//	{
-				//		new OpRuleAction<IOpDataElement>
-				//		{
-				//			Action = BusinessLogicDeActions.SetReadOnly,
-				//			Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
-				//		}
-				//	}
-				//},
+				new MyOpRule
+				{
+					Title="Readonly if Meet Comp is Price Performance",
+					ActionRule = MyDcActions.ExecuteActions,
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && !String.Equals(de.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase)).Any(),
+					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+					{
+						new OpRuleAction<IOpDataElement>
+						{
+							Action = BusinessLogicDeActions.SetReadOnly,
+							Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
+						}
+					}
+				},
 				// TODO: maybe have or not???
 				new MyOpRule
 				{

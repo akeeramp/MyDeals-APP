@@ -377,6 +377,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.MEETCOMP_TEST_FAIL_OVERRIDE.ATRB_SID,
                 Attributes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
                 Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
+                Attributes.MEET_COMP_PRICE_QSTN.ATRB_SID,
                 Attributes.MRKT_SEG.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.PASSED_VALIDATION.ATRB_SID,

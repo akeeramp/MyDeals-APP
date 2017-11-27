@@ -666,6 +666,21 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 41,
+                AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Label = "Meet Comp Analysis",
+                Width = 120,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsReadOnly = true,
+                IsRequired = false
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 41,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 DataType = "string",
