@@ -409,7 +409,6 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> mandatoryMeetCompFields = new List<string>
             {
-                AttributeCodes.MEET_COMP_PRICE_QSTN,
                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
                 AttributeCodes.MEETCOMP_TEST_RESULT
@@ -517,7 +516,6 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.PAYOUT_BASED_ON,
 				AttributeCodes.PROGRAM_PAYMENT,
                 AttributeCodes.REBATE_TYPE,
-                AttributeCodes.MEET_COMP_PRICE_QSTN,
 				AttributeCodes.PROD_INCLDS
 			};
 

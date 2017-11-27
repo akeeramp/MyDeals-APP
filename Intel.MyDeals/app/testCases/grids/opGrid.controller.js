@@ -133,9 +133,9 @@
                     "COST_TEST_FAIL_OVERRIDE_REASON": {
                         "Groups": ["Cost Test"]
                     },
-                    "MEET_COMP_PRICE_QSTN": {
-                        "Groups": ["Meet Comp"]
-                    },
+                    //"MEET_COMP_PRICE_QSTN": {
+                    //    "Groups": ["Meet Comp"]
+                    //},
                     //"COMP_SKU": {
                     //    "Groups": ["Meet Comp"]
                     //},
