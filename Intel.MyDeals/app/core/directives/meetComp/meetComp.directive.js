@@ -415,7 +415,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 },
                                 {
                                     field: "COMP_PRC",
-                                    title: "Meet Comp Price",
+                                    title: "Comp Price",
                                     width: 150,
                                     format: "{0:c}",
                                     template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
