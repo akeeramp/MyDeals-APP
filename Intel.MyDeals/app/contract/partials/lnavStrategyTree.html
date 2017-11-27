@@ -30,7 +30,7 @@
                     <!-- If PS has trackers under it and it is in play and you can add one, you can roll it back -->
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER === '1' && !(ps.WF_STG_CD === 'Cancelled' || ps.WF_STG_CD === 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingStrategy(ps)"><i class="fa fa-undo"></i> Undo Pricing Strategy Re-deal</a></li>
                     <!-- If PS is active and you are allowed to cancel -->
-                    <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingStrategy(ps)"><i class="intelicon-stop-outlined"></i> Cancel Entire Pricing Strategy</a></li>
+                    <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingStrategy(ps)"><i class="intelicon-no-access"></i> Cancel Entire Pricing Strategy</a></li>
 
                     <!-- TODO need to check for valid pricing strategy before actions -->                    
                     <!--<li role="presentation" ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
