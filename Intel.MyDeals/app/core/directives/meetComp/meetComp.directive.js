@@ -169,13 +169,18 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             $scope.hide_MEET_COMP_STS = false;
                         }
 
-                        if (usrRole == 'GA' || usrRole == 'Super GA' || usrRole == 'FSE') {
+                        if (usrRole == 'FSE') { // US87565 - Meet Comp Tab - GA and Super GA should be able see Average Net Price - Removed "usrRole == 'GA' || usrRole == 'Super GA' ||" from check
                             $scope.hide_MC_AVG_RPU = true;
+                        }
+                        else {
+                            $scope.hide_MC_AVG_RPU = false;
+                        }
+
+                        if (usrRole == 'GA' || usrRole == 'Super GA' || usrRole == 'FSE') { 
                             $scope.hide_COMP_OVRRD_FLG = true;
                             $scope.hide_COMP_OVRRD_RSN = true;
                         }
                         else {
-                            $scope.hide_MC_AVG_RPU = false;
                             $scope.hide_COMP_OVRRD_FLG = false;
                             $scope.hide_COMP_OVRRD_RSN = false;
                         }
