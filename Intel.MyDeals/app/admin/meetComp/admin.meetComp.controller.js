@@ -123,9 +123,6 @@
                                 }
                                 response.data.unshift(obj);
                                 e.success(response.data);
-
-
-
                             }, function (response) {
                                 logger.error("Unable to get Meet Comp Data [Customers].", response, response.statusText);
                             });
@@ -148,16 +145,13 @@
                         getCustomerDIMData(vm.selectedCustomerID, 'DIM');
                         $scope.loading = true;
                         $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
-                        $scope.meetCompProdCatName.read();
-
-                        reset();
-
+                        $scope.meetCompProdCatName.read();                        
                     }
                     else {
-                        vm.selectedCustomerID = -1;
-                        //logger.warning('Not a Valid Customer');
+                        vm.selectedCustomerID = -1;                        
                     }
 
+                    reset();
                 }
             };
 
@@ -210,8 +204,7 @@
                     }
                     else {
                         vm.selectedProdCatName = -1;                        
-                    }
-
+                    }                    
                 }
             };
 
@@ -239,11 +232,16 @@
                                 vm.selectedBrandName = brandName[0].BRND_NM;
                                 $scope.selectProdName.read();
                             }
-                            else {
+                            else {                                
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
                                 comboBrndName.enable(true);
+
+                                var comboProdName = $("#comboProdName").data("kendoMultiSelect");
+                                comboProdName.value();
+                                comboProdName.trigger("change");
+
                             }
                             e.success(brandName);
                         } else if (vm.selectedCustomerID == -1) {
@@ -270,7 +268,7 @@
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
-                                comboBrndName.enable(true);
+                                comboBrndName.enable(true);                                
                             }
                             e.success(brandName);
                         }
@@ -296,6 +294,11 @@
                         vm.selectedBrandName = -1;
                         //logger.warning('Not a Valid Customer');
                     }
+
+                    //resetting Prod Name
+                    var comboProdName = $("#comboProdName").data("kendoMultiSelect");
+                    comboProdName.value();
+                    comboProdName.trigger("change");
 
                 }
             };
@@ -388,22 +391,19 @@
                     logger.warning('Not a valid customer');
                     vm.isCustomerMissing = true;
                     //Reset grid to Blank
-                    vm.meetCompMasterData = [];
-                    vm.dataSource.read();
+                    resetGrid();
                 }
                 else if (vm.selectedProdCatName == -1) {
                     logger.warning('Not a valid Product Category');
                     vm.isCatMissing = true;
                     //Reset grid to Blank
-                    vm.meetCompMasterData = [];
-                    vm.dataSource.read();
+                    resetGrid();
                 }
                 else if (vm.selectedBrandName == -1) {
                     logger.warning('Not a valid Brand Name');
                     vm.isBrandMissing = true;
                     //Reset grid to Blank
-                    vm.meetCompMasterData = [];
-                    vm.dataSource.read();
+                    resetGrid();
                 }
                 else {
                     var selectedProdNames = $("#comboProdName").data("kendoMultiSelect");
@@ -414,6 +414,8 @@
                     meetCompService.getMeetCompData(vm.selectedCustomerID, vm.selectedProdCatName, vm.selectedBrandName, value.toString())
                         .then(function (response) {
                             vm.meetCompMasterData = response.data;
+                            var grid = $("#grid").data().kendoGrid;
+                            grid.setDataSource(vm.dataSource);
                             vm.dataSource.read();
                             $scope.isBusy = false;
                         }, function (response) {
@@ -421,7 +423,12 @@
                         });
                 }
             }
-
+            var resetGrid = function () {
+                vm.meetCompMasterData = [];
+                var grid = $("#grid").data().kendoGrid;
+                grid.setDataSource(vm.dataSource);
+                vm.dataSource.read();
+            }
             var reset = function () {
                 var comboCatName = $("#comboCatName").data("kendoComboBox");
                 comboCatName.value();
@@ -439,6 +446,8 @@
 
                 //Reset grid to Blank
                 vm.meetCompMasterData = [];
+                var grid = $("#grid").data().kendoGrid;
+                grid.setDataSource(vm.dataSource);
                 vm.dataSource.read();
             }
 
