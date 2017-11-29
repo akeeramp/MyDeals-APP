@@ -1,6 +1,6 @@
 ﻿
 <div class="dealTools">
-    <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
+    <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}'>{{stgOneChar()}}</div>
 
     <!-- Checkbox -->
     <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">

@@ -44,7 +44,18 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
           
 
             $scope.stgOneChar = function () {
-                return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
+                if ($scope.dataItem.WF_STG_CD === "Draft")
+                {
+                    return $scope.dataItem.PS_WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.PS_WF_STG_CD[0];
+                }
+                else
+                {
+                    return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
+                }
+            }
+
+            $scope.stgFullTitleChar = function () {
+                return $scope.dataItem.WF_STG_CD === "Draft" ? $scope.dataItem.PS_WF_STG_CD : $scope.dataItem.WF_STG_CD;
             }
 
 
