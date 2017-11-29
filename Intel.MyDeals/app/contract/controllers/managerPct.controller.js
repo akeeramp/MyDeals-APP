@@ -38,6 +38,18 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     $scope.selTab = function (tabName) {
         $scope.pctFilter = tabName === "All" ? "" : tabName;
+
+        // If any grids are exposed... update their datasource
+        $(".opUiContainer.k-grid").each(function (i, obj) {
+            var grid = $(obj).data('kendoGrid');
+            var ds = grid.dataSource;
+            ds.filter($scope.getFilters());
+            ds.read();
+        });
+    }
+    $scope.getFilters = function () {
+        if ($scope.pctFilter === "") return [];
+        return [{ field: "PRC_CST_TST_STS", operator: "eq", value: $scope.pctFilter }];
     }
 
     $scope.getStageBgColorStyle = function (c) {
@@ -156,18 +168,28 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             return;
         }
 
-        if ($("#detailGrid_" + pt.DC_ID).length === 0) {
-            var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
-            var template = angular.element(html);
-            var linkFunction = $compile(template);
-            linkFunction($scope);
+        //if ($("#detailGrid_" + pt.DC_ID).length === 0) {
+        //    var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+        //    var template = angular.element(html);
+        //    var linkFunction = $compile(template);
+        //    linkFunction($scope);
 
-            $("#sumWipGrid_" + pt.DC_ID).html(template);
-        }
-
+        //    $("#sumWipGrid_" + pt.DC_ID).html(template);
+        //}
+        $("#sumWipGrid_" + pt.DC_ID).html("<div style='margin: 10px;'><ul class='fa-ul'><li><i class='fa-li fa fa-spinner fa-spin'></i>Loading...</li></ul></div>");
 
         objsetService.getPctDetails(pt.DC_ID).then(
             function (e) {
+
+                if ($("#detailGrid_" + pt.DC_ID).length === 0) {
+                    var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+                    var template = angular.element(html);
+                    var linkFunction = $compile(template);
+                    linkFunction($scope);
+
+                    $("#sumWipGrid_" + pt.DC_ID).html(template);
+                }
+
                 $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
                 $scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
 
@@ -238,12 +260,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 }
 
                 if (!$scope.sumGridOptions) $scope.sumGridOptions = {};
+
                 $scope.sumGridOptions["dc" + pt.DC_ID] = {
                     dataSource: {
                         data: response,
                         schema: {
                             model: $scope.templates.models[pt.OBJ_SET_TYPE_CD]
                         },
+                        filter: $scope.getFilters(),
                         group: { field: "DEAL_ID" }
                     },
                     sortable: false,
@@ -296,10 +320,13 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         });
 
 
+
                         $timeout(function () {
-                            //debugger;
                             var grid = $("#detailGrid_" + pt.DC_ID).data("kendoGrid");
                             if (grid === undefined || grid === null) return;
+
+                            grid.resize();
+
                             if (grid.dataSource.group().length > 0) {
                                 $(".k-grouping-row").each(function () {
                                     grid.collapseGroup(this);
@@ -328,6 +355,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             });
 
                         }, 100);
+
                     }
 
                 }

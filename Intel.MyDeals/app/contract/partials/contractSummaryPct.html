@@ -76,7 +76,7 @@
                         </tr>
                     </table>
                     
-                    <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL">
+                    <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL | filter: customFilter">
                         <table style="width: 100%;">
                             <tr>
                                 <td style="width: 30px; height: 30px;" ng-click="pt.isPtCollapsed = !pt.isPtCollapsed; togglePt(ps, pt)">

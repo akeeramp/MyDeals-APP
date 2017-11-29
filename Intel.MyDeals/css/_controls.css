@@ -316,7 +316,7 @@
 .opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] { font-size: 14px !important; }
 .opUiContainer.md [class^="intelicon-"].valid-icon, .opUiContainer.md [class*=" intelicon-"].valid-icon { font-size: 20px !important; }
 
-.opUiContainer.md.k-grid td { font-size: 12px !important; height: 20px !important;}
+.opUiContainer.md.k-grid td { font-size: 12px !important; height: 33px !important;}
 .opUiContainer.md.k-grid .k-header a { font-size: 12px !important; }
 .opUiContainer.md.k-grid-header th.k-header { padding-left: 0; }
 
