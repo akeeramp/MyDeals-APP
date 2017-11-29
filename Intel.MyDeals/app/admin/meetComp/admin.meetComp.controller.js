@@ -104,7 +104,7 @@
                             var comboCustomer = $("#comboCustomer").data("kendoComboBox");
                             comboCustomer.text("ALL CUSTOMER");
                         }
-                        //$scope.meetCompProdCatName.read();
+                        
                     }, function (response) {
                         logger.error("Unable to get Meet Comp Data [DIM Data].", response, response.statusText);
                     });
@@ -197,7 +197,6 @@
                 autoClose: true,
                 dataSource: $scope.meetCompProdCatName,
                 change: function (e) {
-
                     if (this.selectedIndex > -1) {
                         vm.selectedProdCatName = this.text();
                         $scope.meetCompBrandName.read();
@@ -236,10 +235,11 @@
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
+                                vm.selectedBrandName = '';
                                 comboBrndName.enable(true);
 
                                 var comboProdName = $("#comboProdName").data("kendoMultiSelect");
-                                comboProdName.value();
+                                comboProdName.value([]);                                
                                 comboProdName.trigger("change");
 
                             }
@@ -268,6 +268,7 @@
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
+                                vm.selectedBrandName = '';
                                 comboBrndName.enable(true);                                
                             }
                             e.success(brandName);
@@ -291,13 +292,12 @@
 
                     }
                     else {
-                        vm.selectedBrandName = -1;
-                        //logger.warning('Not a Valid Customer');
+                        vm.selectedBrandName = -1;                        
                     }
 
                     //resetting Prod Name
                     var comboProdName = $("#comboProdName").data("kendoMultiSelect");
-                    comboProdName.value();
+                    comboProdName.value([]);
                     comboProdName.trigger("change");
 
                 }
@@ -353,8 +353,7 @@
 
                     }
                     else {
-                        vm.selectedProductName = -1;
-                        //logger.warning('Not a Valid Customer');
+                        vm.selectedProductName = -1;                        
                     }
 
                 }
@@ -431,18 +430,20 @@
             }
             var reset = function () {
                 var comboCatName = $("#comboCatName").data("kendoComboBox");
-                comboCatName.value();
+                comboCatName.value([]);
                 comboCatName.text("");
+                vm.selectedProdCatName = '';
                 //comboCatName.selectedIndex = -1;
 
                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
-                comboBrndName.value();
+                comboBrndName.value([]);
                 comboBrndName.text("");
+                vm.selectedBrandName = '';
                 //comboBrndName.selectedIndex = -1;
 
                 var comboProdName = $("#comboProdName").data("kendoMultiSelect");
-                comboProdName.value();
-                comboProdName.trigger("change");
+                comboProdName.value([]);
+                comboProdName.trigger("change");                
 
                 //Reset grid to Blank
                 vm.meetCompMasterData = [];
