@@ -40,7 +40,19 @@ namespace Intel.MyDeals.BusinessRules
         }
         private static List<MyOpRule> _attrbRules;
 
+        public static List<MyObjectRule> ObjectRules
+        {
+            get
+            {
+                if (_objectRules != null && _objectRules.Any()) return _objectRules;
 
+                _objectRules = new List<MyObjectRule>();
+                _objectRules.AddRange(AllRules.GetMeetCompRules());
+
+                return _objectRules;
+            }
+        }
+        private static List<MyObjectRule> _objectRules;
         /// <summary>
         /// Apply rules based on a trigger.  Based on the OpDataCollector and the trigger, the appropriate rules will be run
         /// </summary>
@@ -66,6 +78,13 @@ namespace Intel.MyDeals.BusinessRules
             if (EN.GLOBAL.DEBUG >= 3)
                 Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\tApplyRules {3}: [{4} #{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now, ruleTriggerPoint, dc.DcType);
 
+            return msg;
+        }
+
+
+        public static OpMsgQueue ApplyRules(this dynamic[] data, MyRulesTrigger ruleTriggerPoint, params object[] args)
+        {
+            OpMsgQueue msg = MyOpRulesLib.ApplyRules(data, ruleTriggerPoint, ObjectRules, args);
             return msg;
         }
 

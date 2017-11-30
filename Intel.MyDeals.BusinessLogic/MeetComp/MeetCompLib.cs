@@ -3,6 +3,8 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System;
+using System.Linq;
+using Intel.MyDeals.BusinessRules;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -54,7 +56,19 @@ namespace Intel.MyDeals.BusinessLogic
         public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
         {
             // TODO :Later need to decide caching will be apply or not
-            return _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE);
+
+            List<MeetCompResult> data = _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE);
+
+            // Apply rules
+            //
+            // Comment this section in if you want to use rules in the MT
+            //
+            //dynamic[] dynData = data.Cast<dynamic>().ToArray();
+            //MyRulesConfiguration.ApplyRules(dynData, MyRulesTrigger.OnLoadMeetComp);
+            //List<MeetCompResult> retData = dynData.Cast<MeetCompResult>().ToList();
+            //return retData;
+
+            return data;
         }
 
         /// <summary>

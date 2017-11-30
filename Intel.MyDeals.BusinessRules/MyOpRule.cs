@@ -12,4 +12,8 @@ namespace Intel.MyDeals.BusinessRules
     public class MyOpRule : OpRule<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>
     {
     }
+
+    public class MyObjectRule : OpRule<object[], object, MyRulesTrigger, object>
+    {
+    }
 }

@@ -54,5 +54,28 @@ namespace Intel.MyDeals.BusinessRules
 
             return msgQueue;
         }
+
+        public static OpMsgQueue ApplyRules(dynamic[] data, MyRulesTrigger trigger, List<MyObjectRule> ars, params object[] args)
+        {
+            var newArs = new List<OpRule<dynamic[], object, MyRulesTrigger, object>>(ars);
+            return ApplyRules(data, trigger, newArs, args);
+        }
+
+        public static OpMsgQueue ApplyRules(dynamic[] data, MyRulesTrigger trigger, List<OpRule<dynamic[], object, MyRulesTrigger, object>> ars, params object[] args)
+        {
+            if (data == null || !ars.Any()) return new OpMsgQueue();
+
+            OpMsgQueue msgQueue = new OpMsgQueue();
+
+            foreach (OpRule<dynamic[], object, MyRulesTrigger, object> a in ars)
+            {
+                if (!a.Triggers.Contains(trigger)) continue;
+
+                msgQueue.Messages.Add(OpRulesLib<dynamic[], object, MyRulesTrigger, object>.RunAction(data, a, new Dictionary<string, bool>(), args));
+
+            }
+
+            return msgQueue;
+        }
     }
 }
