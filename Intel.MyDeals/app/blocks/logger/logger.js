@@ -48,6 +48,7 @@
         function stickyError(message, data, title) {
             toastr.options = {
                 timeOut: 0,
+                extendedTimeOut:0,
                 closeButton: true,
                 tapToDismiss: false,
                 positionClass: 'toast-bottom-right'
@@ -55,7 +56,8 @@
             error(message, data, title);
             toastr.options = {
                 closeButton: false,
-                timeOut: 5000,
+                extendedTimeOut: 4000,
+                timeOut: 4000,
                 positionClass: 'toast-bottom-right'
             };
         }

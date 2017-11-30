@@ -31,7 +31,7 @@
         $scope.switchingTabs = false;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY"]
+        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -150,42 +150,42 @@
         $scope.removeDimKeyFromWipTemplates();
 
         $scope.setBusy = function (msg, detail, msgType, isInstant) { // msgType can be Success, Error, Warning, and Info
-        	if (isInstant == null) {
-        		isInstant = false;
-        	}
+            if (isInstant == null) {
+                isInstant = false;
+            }
 
-        	if (isInstant) {
-        		$scope.setBusyBase(msg, detail, msgType);
-        	} else {
-        		$timeout(function () {
-        			$scope.setBusyBase(msg, detail, msgType);
-        		});
-        	}
+            if (isInstant) {
+                $scope.setBusyBase(msg, detail, msgType);
+            } else {
+                $timeout(function () {
+                    $scope.setBusyBase(msg, detail, msgType);
+                });
+            }
         }
 
         $scope.setBusyBase = function (msg, detail, msgType) {
-        	var newState = msg != undefined && msg !== "";
+            var newState = msg != undefined && msg !== "";
 
-        	// if no change in state, simple update the text
-        	if ($scope.isBusy === newState) {
-        		$scope.isBusyMsgTitle = msg;
-        		$scope.isBusyMsgDetail = !detail ? "" : detail;
-        		$scope.isBusyType = msgType;
-        		return;
-        	}
+            // if no change in state, simple update the text
+            if ($scope.isBusy === newState) {
+                $scope.isBusyMsgTitle = msg;
+                $scope.isBusyMsgDetail = !detail ? "" : detail;
+                $scope.isBusyType = msgType;
+                return;
+            }
 
-        	$scope.isBusy = newState;
-        	if ($scope.isBusy) {
-        		$scope.isBusyMsgTitle = msg;
-        		$scope.isBusyMsgDetail = !detail ? "" : detail;
-        		$scope.isBusyType = msgType;
-        	} else {
-        		$timeout(function () {
-        			$scope.isBusyMsgTitle = msg;
-        			$scope.isBusyMsgDetail = !detail ? "" : detail;
-        			$scope.isBusyType = msgType;
-        		}, 500);
-        	}
+            $scope.isBusy = newState;
+            if ($scope.isBusy) {
+                $scope.isBusyMsgTitle = msg;
+                $scope.isBusyMsgDetail = !detail ? "" : detail;
+                $scope.isBusyType = msgType;
+            } else {
+                $timeout(function () {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                }, 500);
+            }
         }
         // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
         //
@@ -1115,9 +1115,9 @@
                     controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
-                    	custId:	function () {
-							return $scope.contractData.CUST_MBR_SID;
-						}
+                        custId: function () {
+                            return $scope.contractData.CUST_MBR_SID;
+                        }
                     }
                 });
 
@@ -1443,7 +1443,7 @@
 
             $scope.emailData = data;
             $scope.pricingStrategyStatusUpdated = false;
-           // $scope.openEmailMsg(); // TBD - VN - Testing
+            // $scope.openEmailMsg(); // TBD - VN - Testing
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1575,7 +1575,7 @@
                             }
                         },
                         function (result) {
-                        	logger.error("Could not delete the Pricing Strategy.", result, result.statusText, "Error");
+                            logger.error("Could not delete the Pricing Strategy.", result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1682,7 +1682,7 @@
                     objsetService.deletePricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                            	$scope.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error");
+                                $scope.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1714,7 +1714,7 @@
                             }
                         },
                         function (response) {
-                        	logger.error("Could not delete the Pricing Table.", response, response.statusText, "Error");
+                            logger.error("Could not delete the Pricing Table.", response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
                         }
@@ -1820,7 +1820,7 @@
                 objsetService.deletePricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
                     function (data) {
                         if (data.data.MsgType !== 1) {
-                        	$scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table", "Error");
+                            $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table", "Error");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -1949,22 +1949,25 @@
 
                 if ($scope.spreadDs !== undefined) {
                     // sync all detail data sources into main grid datasource for a single save
-                    var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
-                    $scope.spreadDs.data(data);
-
-                    // sync all detail data sources into main grid datasource for a single save
-                    $scope.spreadDs.sync();
+                    var data = cleanupData($scope.spreadDs._data);
+                    // TODO: Temp fix till sync function is updated
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                        $scope.pricingTableData.PRC_TBL_ROW = data;// Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
+                        $scope.spreadDs.data(data);
+                    } else {
+                        // sync all detail data sources into main grid datasource for a single save
+                        $scope.spreadDs.sync();
+                    }
                 }
 
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
 
                 // Remove any lingering blank rows from the data
                 if (!!sData) {
-                	for (var n = sData.length - 1; n >= 0; n--) {
-                		if (!sData[n].PS_WF_STG_CD)
-                		{
-                			sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;
-                		}
+                    for (var n = sData.length - 1; n >= 0; n--) {
+                        if (!sData[n].PS_WF_STG_CD) {
+                            sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;
+                        }
                         if (sData[n].DC_ID === null && sData[n].PTR_USER_PRD === "") {
                             sData.splice(n, 1);
                         }
@@ -2197,7 +2200,7 @@
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, callback) {
             if (!$scope._dirty && !forceValidation) {
-            	return;
+                return;
             }
 
             // if save already started saving... exit
@@ -2242,7 +2245,7 @@
 
             var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
 
-			// If there are critical errors like bad dates, we need to stop immediately and have the user fix them
+            // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.Errors && !angular.equals(data.Errors, {})) {
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
                 $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
@@ -2261,14 +2264,14 @@
                 return;
             }
 
-			util.console("updateContractAndCurPricingTable Started");
+            util.console("updateContractAndCurPricingTable Started");
             var isDelPtr = !!delPtr && delPtr.length > 0;
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
                     util.console("updateContractAndCurPricingTable Returned");
 
-                	var i;
-                	$scope.setBusy("Saving your data...Done", "Processing results now!");
+                    var i;
+                    $scope.setBusy("Saving your data...Done", "Processing results now!");
 
                     var anyWarnings = false;
 
@@ -2283,7 +2286,11 @@
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         if (!!$scope.spreadDs) {
-                            $scope.spreadDs.read();     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
+                            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                                $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
+                            } else {
+                                $scope.spreadDs.read();
+                            }
                             $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                         }
                     }
@@ -2303,7 +2310,7 @@
                                     // map tiered warnings
                                     for (var t = 1 - isKit; t <= dataItem.NUM_OF_TIERS - isKit; t++) {
                                         for (var a = 0; a < tierAtrbs.length; a++) {
-                                            mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + dimStr + t), t); 
+                                            mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + dimStr + t), t);
                                         }
                                     }
                                 }
@@ -2315,7 +2322,7 @@
                     topbar.hide();
 
                     if (!anyWarnings || !forceValidation) {
-                    	$scope.setBusy("Save Successful", "Saved the contract", "Success");
+                        $scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
 
@@ -2329,7 +2336,7 @@
                             }, 1000);
                         }
                     } else {
-                    	$scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
+                        $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', results);
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -2343,14 +2350,14 @@
 
                     util.console("updateContractAndCurPricingTable Complete");
 
-                        //if a callback function is provided, invoke it now once everything else is completed
-                        if (!!callback && typeof callback === "function") {
-                            callback();
-                        }
-                   
+                    //if a callback function is provided, invoke it now once everything else is completed
+                    if (!!callback && typeof callback === "function") {
+                        callback();
+                    }
+
                 },
                 function (response) {
-                	$scope.setBusy("Error", "Could not save the contract.", "Error");
+                    $scope.setBusy("Error", "Could not save the contract.", "Error");
                     logger.error("Could not save the contract.", response, response.statusText);
                     topbar.hide();
                     $timeout(function () {
@@ -2584,14 +2591,14 @@
                 return !!$scope.curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
             }
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {    
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                 return true;
             }
         }
         $scope.numOfPivot = function (dataItem) {
             if (!$scope.curPricingTable) return false;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {	
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                 var pivotFieldName = "NUM_OF_TIERS";
 
                 if (!$scope.isPivotable()) return 1;
@@ -2776,7 +2783,7 @@
             }
         }
 
-        $scope.delPtrs = function(delIds) {
+        $scope.delPtrs = function (delIds) {
             $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);
         }
 
@@ -3354,9 +3361,9 @@
         $scope.validatePricingTable = function (forceRun) {
 
             if (forceRun === undefined || !forceRun) {
-            	$scope.saveEntireContractBase($state.current.name, true, true);
+                $scope.saveEntireContractBase($state.current.name, true, true);
             } else {
-            	$scope.saveEntireContractRoot($state.current.name, true, false);
+                $scope.saveEntireContractRoot($state.current.name, true, false);
             }
         }
 
@@ -3364,7 +3371,7 @@
             if ($scope.isWip) return;
 
             if ($scope.spreadDs.data().length === 0) {
-            	$scope.setBusy("No Products Found", "Please add products.", "Warning");
+                $scope.setBusy("No Products Found", "Please add products.", "Warning");
                 $timeout(function () {
                     $scope.setBusy("", "");
                 }, 2000);
@@ -3390,7 +3397,7 @@
                 if (!!$scope.child) {
                     $scope.child.validateSavepublishWipDeals();
                 } else {
-                	$scope.publishWipDealsBase();
+                    $scope.publishWipDealsBase();
                 }
             }
         }
@@ -3482,8 +3489,12 @@
                     }
                 }
             }
-
-            return data;
+            // data contains other properties like _events, parent which makes Array.isArray(data) false..
+            var newData = [];
+            for (var a = 0; a < data.length; a++) {
+                newData.push(data[a]);
+            }
+            return newData;
         }
     }
 })();

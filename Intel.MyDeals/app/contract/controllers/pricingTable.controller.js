@@ -925,23 +925,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     }
 
-    function pivotKITDeals(data, n, dcIdDict) {
+    function pivotKITDeals(data, n, dcIdDict, dictId, masterData) {
         if (data[n]["PTR_USER_PRD"] !== null) {
             var products = data[n]["PTR_USER_PRD"].split(",");
             var numTier = products.length;
-            data[n]["NUM_OF_TIERS"] = numTier;
+            data[n]["NUM_OF_TIERS"] = numTier > 10 ? 10 : numTier;
+        }
+        if (numTier !== undefined && numTier > 10) {
+            data[n]["NUM_OF_TIERS"] = numTier = 10;
+            if (data[n] === undefined) { return; }
+            if (!data[n]._behaviors) data[n]._behaviors = {};
+            if (!data[n]._behaviors) data[n]._behaviors = {};
+            if (!data[n]._behaviors.isError) data[n]._behaviors.isError = {};
+            if (!data[n]._behaviors.validMsg) data[n]._behaviors.validMsg = {};
+            data[n]._behaviors.isError["PTR_USER_PRD"] = true;
+            data[n]._behaviors.validMsg["PTR_USER_PRD"] = "You have too many products! You may have up to 10 products";
         }
         if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n]["PTR_USER_PRD"] !== null) {
+            if (data[n].DC_ID === null) {
+                data[n].DC_ID = "k" + dictId;
+            }
             dcIdDict[data[n].DC_ID] = true;
             // Check if num of merged rows are more than new num tiers if so delete them
-            var numDcId = $filter('where')(data, { 'DC_ID': data[n].DC_ID });
+            var pivottedRows = $filter('where')(masterData, { 'DC_ID': data[n].DC_ID });
             var offset = getOffsetByIndex(data, n, numTier);
             var offSetRows = offset > 0 ? numTier - offset : offset;
             var rowAdded = offSetRows;
-            var deleteRows = numDcId.length - numTier;
+            var deleteRows = pivottedRows.length - numTier;
             var rowDeleted = 0;
 
-            for (var a = 0; a < numDcId.length - numTier; a++) {
+            for (var a = 0; a < pivottedRows.length - numTier; a++) {
                 //  Make following properties null, it will be picked up for deletion in next iteration
                 data[n - a].DC_ID = null;
                 data[n - a].PTR_USER_PRD = null;
@@ -952,31 +965,50 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // if row deleted count > 0  no need to add rows
             rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
             for (var a = numTier - 1; a >= 0; a--) {
-                if (numTier == numDcId.length) {
-                    data[n - (numTier - 1 - a)].TEMP_USR_PRD = products[a];
+                if (numTier == pivottedRows.length) {
+                    // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
+                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier);
+                    continue;
                 }
                 if (a == numTier - 1) {
-                    data[n - rowDeleted].TEMP_USR_PRD = products[a];
+                    data[n - rowDeleted] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier);
                 } else {
                     if (rowDeleted == 0 && offSetRows > 0) {
-                        var copy = util.deepClone(data[n - rowDeleted]);
-                        copy.TEMP_USR_PRD = products[a];
+                        var copy = angular.copy(data[n - rowDeleted]);
+                        copy = updateProductBucket(copy, pivottedRows, products[a]);
                         data.splice(n, 0, copy);
+                        data[n].id = null;
                         offSetRows--;
                     } else {
-                        data[n - rowDeleted + rowAdded - (numTier - 1 - a)].TEMP_USR_PRD = products[a];
+                        data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
+                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier);
                     }
                 }
             }
         }
     }
 
+    function updateProductBucket(row, pivottedRows, productBcktName, numTier) {
+        var buckProd = $filter('where')(pivottedRows,
+                        { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
+        if (buckProd.length === 0) {
+            row.PRD_BCKT = productBcktName;
+        } else {
+            row = buckProd[0]; //Select the first one even of there are duplicates
+        }
+        row["NUM_OF_TIERS"] = numTier;
+        return row;
+    }
+
     function cleanupData(data) {
         var dcIdDict = {};
+        var dictId = 0;
+        var copyOfData = angular.copy(data);
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                pivotKITDeals(data, n, dcIdDict);
+                pivotKITDeals(data, n, dcIdDict, dictId, copyOfData);
+                dictId++;
             }
             if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === undefined || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
@@ -1057,23 +1089,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
                 }
 
-                // Set the number of cells based on the number of products entered (assumes comma separtaed products)
-                // NOTE: NUM_OF_TIERS is not actually saved. It is just used so we can dimensionalize.
-                // ANOTHER NOTE: this block of code needs to be before cleanupData();
-                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                    var prdArr = data[topLeftRowIndex - 2]["PTR_USER_PRD"].split(",");
-
-                    if (prdArr.length > 10) {
-                        // TODO: throw pretty error
-                        alert("You have too many products! You may have up to 10. Please remove " + (prdArr.length - 10) + " products from this row.");
-                        return;
-                    }
-                }
-
                 cleanupData(data);
 
                 for (var r = 0; r < data.length; r++) {
-                    if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
+                    if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) continue;
 
                     newItems++;
                     var numPivotRows = root.numOfPivot(data[r]);
@@ -1394,14 +1413,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         sheet.batch(function () {
             var row = 2;
-
             // reset row colors
             sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71");
 
             for (var key in data) {
                 if (data.hasOwnProperty(key) && !data[key]._actions) {
                     if (!!data[key].DC_ID && data[key].DC_ID !== "") {
-
                         // Row error colors
                         if (!!data[key]._behaviors) {
                             var errors = data[key]._behaviors.isError;
@@ -1410,15 +1427,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 var myVal = "";
                                 for (var myKey in data[key]._behaviors.validMsg) {
                                     myVal += ptTemplate.model.fields[myKey].label + ": " + data[key]._behaviors.validMsg[myKey];
-                                    console.log(ptTemplate.model.fields[myKey].label);
                                 }
                                 data[key]._behaviors.validMsg["DC_ID"] = myVal;
-                                data[key]._behaviors.isError["DC_ID"] = true;
-                                console.log(myVal);
-                                sheet.range("A" + row + ":A" + row).validation(root.myDealsValidation(true, myVal, false));
+                                var isError = myVal !== "";
+                                data[key]._behaviors.isError["DC_ID"] = isError;
+                                sheet.range("A" + row + ":A" + row).validation(root.myDealsValidation(isError, myVal, false));
                             }
                         }
-
                         // Product Status
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
                             sheet.range(root.colToLetter["PTR_USER_PRD"] + row + ":" + root.colToLetter["PTR_USER_PRD"] + row).color("#FC4C02").bold(true);
@@ -2310,7 +2325,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }
-        root.spreadDs.sync();       //KITTODO and maybe VolTier: second point of sync failure data corruption - spreadDs still has the correct values, but this call also corrupts root.pricingTableData.PRC_TBL_ROW, need to go make sure spreadDs is correct as well as update the _gridutils update function
+
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            syncSpreadRows(sheet, 2, 200);// This will also call root.spreadDs.sync();
+        } else {
+            root.spreadDs.sync();
+        }
         if (isAllValidated) {
             root.child.setRowIdStyle(data);
             // If current row is undefined its clicked from top bar validate button
@@ -2403,7 +2425,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     data[r].PRD_EXCLDS = products.excludeProducts;
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
                                 }
-
+                                if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                                    var mergedRowsws = parseInt(r) + root.numOfPivot(data[r]);
+                                    for (var a = r; a < mergedRowsws ; a++) {
+                                        data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
+                                        sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
+                                        data[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                                        sourceData[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                                    }
+                                }
                                 // For VOL_TIER update the merged cells
                                 if (root.isPivotable() && (products.contractProducts === "" || !products.contractProducts)) {
                                     var mergedRowsws = parseInt(r) + root.numOfPivot(data[r]);
@@ -2420,8 +2450,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         }
                     }
-                    deleteRowFromCorrector(data);
-                    root.spreadDs.sync();
+
+                    if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                        var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+                        var sheet = spreadsheet.activeSheet();
+                        syncSpreadRows(sheet, 2, 200); // NOTE: 2 accounts for the top row
+                    } else {
+                        deleteRowFromCorrector(data);
+                        root.spreadDs.sync();
+                    }
                     if (root.spreadDs.data().length === 0) {
                         root.setBusy("No Products Found", "Please add products.", "Warning");
                         $timeout(function () {

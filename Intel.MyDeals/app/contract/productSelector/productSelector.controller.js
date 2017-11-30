@@ -854,6 +854,11 @@
                     return;
                 }
             }
+            if (vm.dealType === "KIT" && vm.addedProducts.length > 10) {
+                logger.stickyError("You have too many products! You may have up to 10. Please remove " + (vm.addedProducts.length - 10) + " products from this row.");
+                return;
+            }
+
             vm.addedProducts = vm.addedProducts.map(function (x) {
                 return {
                     BRND_NM: x.BRND_NM,
