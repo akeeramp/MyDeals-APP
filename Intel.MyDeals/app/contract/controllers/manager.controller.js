@@ -158,7 +158,42 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
 
     }
-    
+
+    $scope.refreshContractDataIfNeeded = function () {
+        objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
+            var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
+            var newContractData = $scope.root.initContract(data);
+
+            var tmpNewPs = util.stripContractTree(newContractData, atrbs);
+            var tmpPs = util.stripContractTree($scope.root.contractData, atrbs);
+            var hasKeyDataChanged = angular.toJson(tmpNewPs) !== angular.toJson(tmpPs);
+
+            var anyChecked = false;
+            var items = document.getElementsByClassName('psCheck');
+            for (var c = 0; c < items.length; c++) {
+                if (items[c].checked) anyChecked = true;
+            }
+
+            var anyExpanded = $(".chevron.intelicon-down").length > 0;
+
+            // only update the screen if atrbs changed AND user did not "touch" the screen layout
+            if (hasKeyDataChanged) {
+
+                if (!anyChecked && !anyExpanded) {
+                    $scope.root.contractData = newContractData;
+                    $scope.root.contractData.CUST_ACCNT_DIV_UI = "";
+
+                    $timeout(function() {
+                        $scope.root.$apply();
+                    });
+                } else {
+                    op.notifyInfo("Refresh the screen to see latest Cost Test Results", "Cost Test Complete");
+                }
+
+            }
+        });
+    }
+
     $scope.isPending = root.contractData.CUST_ACCPT === "Pending";
     $scope.pendingChange = function (e) {
         if (!$scope.isPending) {

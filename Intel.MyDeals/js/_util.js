@@ -41,6 +41,34 @@ util.deepClone = function(obj) {
     return angular.fromJson(angular.toJson(obj));
 }
 
+util.stripContractTree = function(srcData, attrbs) {
+    var rtn = {};
+
+    rtn["PRC_ST"] = util.stripContractTreeRecur(srcData, "PRC_ST", attrbs);
+
+    return rtn;
+}
+
+util.stripContractTreeRecur = function (srcData, field, attrbs) {
+    var rtn = [];
+
+    var items = srcData[field];
+    if (items !== undefined && items !== null) {
+        for (var i = 0; i < items.length; i++) {
+            var item = {};
+            for (var a = 0; a < attrbs.length; a++) {
+                item[attrbs[a]] = items[i][attrbs[a]];
+            }
+
+            if (field === "PRC_ST") item["PRC_TBL"] = util.stripContractTreeRecur(items[i], "PRC_TBL", attrbs);
+
+            rtn.push(item);
+        }
+    }
+
+    return rtn;
+}
+
 util.findInArrayWhere = function(myArray, field, val){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i][field] === val) {
