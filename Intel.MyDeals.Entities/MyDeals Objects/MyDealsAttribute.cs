@@ -50,6 +50,7 @@ namespace Intel.MyDeals.Entities
         {
             return ATRB_SID == other?.ATRB_SID;
         }
+
         public override int GetHashCode()
         {
             return ATRB_SID;
@@ -235,5 +236,7 @@ namespace Intel.MyDeals.Entities
                 }
             }
         }
+
+
     }
 }
