@@ -350,18 +350,6 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = "TEMP_USR_PRD",
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 100,
-                Label = "Products",
-                IsDimKey = true,
-                IsReadOnly = true,
-                DataType = "string"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
                 AtrbCd = AttributeCodes.DEAL_GRP_NM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -453,6 +441,18 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 90,
                 Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#",
                 IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "TEMP_USR_PRD",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Label = "Products",
+                IsDimKey = true,
+                IsReadOnly = true,
+                DataType = "string"
             });
             items.Add(new UiTemplateContainerItem
             {
