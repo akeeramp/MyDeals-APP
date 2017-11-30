@@ -350,6 +350,18 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = "TEMP_USR_PRD",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Label = "Products",
+                IsDimKey = true,
+                IsReadOnly = true,
+                DataType = "string"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.DEAL_GRP_NM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -363,52 +375,11 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 100,
                 Label = "ECAP Price *",
-                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE')#",
-                Format = "{0:c}",
                 IsDimKey = true,
                 IsRequired = true
-            });
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.ECAP_PRICE,   //KIT TODO: what do we do here? dummy attribute?
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-            //    Width = 100,
-            //    Label = "KIT ECAP",
-            //    Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE')#",
-            //    Format = "{0:c}",
-            //    IsDimKey = true,
-            //    IsRequired = true
-            //});
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.DSCNT_PER_LN,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 100,
-                Label = "Discount per line",
-                Template = "#=gridUtils.uiIconWrapper(data, 'DSCNT_PER_LN')#",
-                Format = "{0:c}",
-                IsRequired = false,
-                IsDimKey = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.QTY,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 100,
-                Label = "Quantity",
-                Template = "#=gridUtils.uiIconWrapper(data, 'QTY')#",
-                Format = "{0:d}",
-                IsRequired = false,
-                IsDimKey = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -418,7 +389,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 Width = 100,
                 Label = "Total Dollar Amount *",
-                Format = "{0:c}",
                 IsRequired = true
             });
 
@@ -462,8 +432,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Width = 110,
-                Template = "#=gridUtils.uiIconWrapper(data, 'VOLUME')#",
-                Format = "{0:d}",
                 IsRequired = true
             });
             items.Add(new UiTemplateContainerItem
@@ -489,6 +457,78 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = AttributeCodes.ECAP_PRICE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Label = "ECAP Standalone *",    //different name than ECAP deal type, we also move it down here because kit mockup has this attribute listed after st/end dts
+                IsDimKey = true,
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.ECAP_PRICE + "_____20_____1",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Label = "KIT ECAP *",
+                IsDimKey = false,
+                IsRequired = true,
+                DataType = "number",
+                Format = "{0:c}"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "TEMP_KIT_REBATE",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 120,
+                Label = "KIT Rebate / Bundle Discount",
+                IsDimKey = false,
+                IsReadOnly = true,
+                DataType = "number",
+                Format = "{0:c}"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.DSCNT_PER_LN,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Label = "Discount per line",
+                IsRequired = false,
+                IsDimKey = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.QTY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Label = "Quantity",
+                IsRequired = false,
+                IsDimKey = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "TEMP_TOTAL_DSCNT_PER_LN",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 120,
+                Label = "Total Discount per line",
+                IsDimKey = true,
+                IsReadOnly = true,
+                DataType = "number",
+                Format = "{0:c}"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.DEAL_DESC,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 200,
@@ -501,7 +541,6 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 120,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#",
                 IsDefaultable = true,
                 Label = "Payout Based On *",
                 UiType = "DROPDOWN",
@@ -517,7 +556,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 130,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
                 IsDefaultable = true,
                 Label = "Program Payment *",
                 UiType = "DROPDOWN",
@@ -533,7 +571,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.KIT }, //KIT TODO: should it be readonly and thus here or do we move it up to be editable like ECAP?
                 Width = 130,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
                 IsDefaultable = true,
                 Label = "Program Payment *",
                 UiType = "DROPDOWN",

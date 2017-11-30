@@ -2283,9 +2283,15 @@
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         if (!!$scope.spreadDs) {
-                            $scope.spreadDs.read();
+                            $scope.spreadDs.read();     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
                             $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                         }
+                    }
+                    var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
+                    var isKit = 0;
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                        dimStr = "_20___"
+                        isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
                     }
                     if (!!results.data.WIP_DEAL) {
                         if (!$scope.switchingTabs) {
@@ -2293,11 +2299,11 @@
                                 var dataItem = results.data.WIP_DEAL[i];
                                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
 
-                                if (anyWarnings) {              //KITTODO: Jeff note: do i need to do kit tier things here?  need to research what this area is doing
+                                if (anyWarnings) {
                                     // map tiered warnings
-                                    for (var t = 1; t <= dataItem.NUM_OF_TIERS; t++) {
+                                    for (var t = 1 - isKit; t <= dataItem.NUM_OF_TIERS - isKit; t++) {
                                         for (var a = 0; a < tierAtrbs.length; a++) {
-                                            mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + "_10___" + t), t); // NOTE: 10___ is the dim defined in _gridUtil.js
+                                            mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + dimStr + t), t); 
                                         }
                                     }
                                 }
@@ -2570,27 +2576,23 @@
         }
 
         $scope.isPivotable = function () {
-            // this is for vol tier right now, but Kits will have to read off dim of products
 
             if (!$scope.curPricingTable) return false;
 
             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
                 var pivotFieldName = "NUM_OF_TIERS";
-                return !!$scope.curPricingTable[pivotFieldName];
+                return !!$scope.curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
             }
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {    //Note: is this redundant?  can't we just have VT and KIt always return true?
-                //var pivotFieldName = "NUM_OF_TIERS";                //KITTODO: which prod atrb do we check on?
-                //return !!$scope.curPricingTable[pivotFieldName];
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {    
                 return true;
             }
         }
         $scope.numOfPivot = function (dataItem) {
-            // this is for vol tier right now, but Kits will have to read off dim of products
             if (!$scope.curPricingTable) return false;
 
             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {	
-                var pivotFieldName = "NUM_OF_TIERS"; // KITTODO: will need to change if we don't use num tier as the dim atrb indicator for kit deals
+                var pivotFieldName = "NUM_OF_TIERS";
 
                 if (!$scope.isPivotable()) return 1;
 
@@ -2598,16 +2600,26 @@
                     return parseInt($scope.curPricingTable[pivotFieldName]);
                 }
 
-                if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);
+                if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb
 
-                var pivotVal = $scope.curPricingTable[pivotFieldName];
+                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                    //KIT, on load won't have a defined num of tiers
+                    if (!!dataItem["PTR_USER_PRD"]) {
+                        pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
+                        dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
+                    }
+
+                } else {
+                    //VT deal type
+                    var pivotVal = $scope.curPricingTable[pivotFieldName];
+                }
                 return pivotVal === undefined ? 1 : parseInt(pivotVal);
             }
 
             return 1;   //num of pivot is 1 for undim deal types
         }
 
-        $scope.pivotData = function (data) {
+        $scope.pivotData = function (data) {        //convert how we save data in MT to UI spreadsheet consumable format
             if (!$scope.isPivotable()) return data;
             var newData = [];
 
@@ -2634,7 +2646,7 @@
                         // KIT specific cols with 'tiers'
                         for (var i = 0; i < kitDimAtrbs.length; i++) {
                             var tieredItem = kitDimAtrbs[i];
-                            lData[tieredItem] = lData[tieredItem + "_____20___" + t];
+                            lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
 
                             //mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);  //KITTODO: KIT: throwing errors for tier warning, uncomment out and figure this out later
                         }
@@ -2642,10 +2654,9 @@
                     newData.push(lData);
                 }
             }
-
             return newData;
         }
-        $scope.deNormalizeData = function (data) {
+        $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
             if (!$scope.isPivotable()) return data;
             var a;
             var newData = [];
@@ -2655,6 +2666,7 @@
 
             var dimKey;
             var dimAtrbs;
+            var isKit = 0;
 
             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
                 dimKey = tierDimKey;
@@ -2663,15 +2675,16 @@
             else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                 dimKey = prodDimKey;
                 dimAtrbs = kitDimAtrbs;
+                isKit = 1;
             }
 
             for (var d = 0; d < data.length; d) {
                 var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
-                for (var t = 1; t <= numTiers; t++) {
-                    if (t === 1) lData = data[d];
+                for (var t = 1 - isKit; t <= numTiers - isKit; t++) {
+                    if (t === 1 - isKit) lData = data[d];
                     for (a = 0; a < dimAtrbs.length; a++)
                         lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
-                    if (t === numTiers) {
+                    if (t === numTiers - isKit) {
                         for (a = 0; a < dimAtrbs.length; a++) {
                             delete lData[dimAtrbs[a]];
                         }

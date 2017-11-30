@@ -144,59 +144,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return root.colToLetter[colName].charCodeAt(0) - "A".charCodeAt(0);
     }
 
-    // Create a fake (not in db nor saved) attribute that exists in the PTR only
-    function createPtrOnlyAttribute(atrbToCopy, newAtrbField, newAtrbTitle, isRenameOriginal, newOriginalTitle, newWidth) {
-        var fieldIndex;
-        for (var i = 0; i < ptTemplate.columns.length; i++) {
-            if (ptTemplate.columns[i].field == atrbToCopy) {
-                fieldIndex = i;
-                break;
-            }
-        }
-        var fieldColData = ptTemplate.columns[fieldIndex];
-        var fieldModel = angular.copy(ptTemplate.model.fields[atrbToCopy]);
-
-        // rename original field
-        if (isRenameOriginal && newOriginalTitle !== null) {
-            fieldColData.title = newOriginalTitle;
-        }
-        // make and set temp fields
-        var temp = angular.copy(fieldColData);
-        temp.field = newAtrbField;
-        temp.title = newAtrbTitle;
-        if (newWidth !== null) { temp.width = newWidth; }
-
-        fieldModel.field = newAtrbField;
-        fieldModel.label = newAtrbTitle;
-
-        // add temp fields to the templates
-        ptTemplate.columns.splice(fieldIndex + 1, 0, temp);
-        ptTemplate.model.fields[temp.field] = fieldModel;
-    }
-
-
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
         pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
 
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
-
-        // TODO: translate KIT ECAP into ECAP Price
-        // KIT temp attributes
-        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-            // KIT Rebate / Bundle Discount
-            createPtrOnlyAttribute("ECAP_PRICE", "TEMP_KIT_Rebate", "KIT Rebate / Bundle Discount", false, null, 120);
-            ptTemplate.model.fields["TEMP_KIT_Rebate"].editable = false;
-
-            // KIT ECAP
-            createPtrOnlyAttribute("ECAP_PRICE", "TEMP_KIT_ECAP", "KIT ECAP", true, "ECAP Standalone", null);
-
-            // Products
-            createPtrOnlyAttribute("ECAP_PRICE", "TEMP_USR_PRD", "Products", false, null, null);
-            ptTemplate.model.fields["TEMP_USR_PRD"].editable = false;
-            ptTemplate.model.fields["TEMP_USR_PRD"].format = "";
-            ptTemplate.model.fields["TEMP_USR_PRD"].type = "string";
-        }
 
         columns = vm.getColumns(ptTemplate);
 
@@ -764,6 +716,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
+        // KIT
+        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+            var dscntPerLnIndex = (root.colToLetter["DSCNT_PER_LN"].charCodeAt(0) - intA);
+            var qtyIndex = (root.colToLetter["QTY"].charCodeAt(0) - intA);
+
+            var isDscntPerLnColChanged = (range._ref.topLeft.col <= dscntPerLnIndex) && (range._ref.bottomRight.col >= dscntPerLnIndex);
+            var isQtyColChanged = (range._ref.topLeft.col <= qtyIndex) && (range._ref.bottomRight.col >= qtyIndex);
+
+            // Need to update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+            if (isQtyColChanged || isDscntPerLnColChanged) {
+
+                range.forEachCell(
+                    function (rowIndex, colIndex, value) {
+                        var myRow = data[(rowIndex - 1)];
+                        if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
+
+                            var numOfTiers = root.numOfPivot(myRow);
+
+                            //KITTODO: Update TEMP_TOTAL_DSCNT_PER_LN and TEMP_KIT_REBATE attributes with the following rules as detailed in US46816
+                            // --- TEMP_TOTAL_DSCNT_PER_LN ("Total Discount per line")
+                            // ---     |-> = DSCNT_PER_LN * QTY for that specific row/tier/product
+                            // --- TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount")
+                            // ---     |-> = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
+                        }
+                    }
+                );
+                //cleanupData(data);
+                //root.spreadDs.sync();
+            }
+        }
+
         var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
         var hasValueInAtLeastOneCell = false;
@@ -1218,9 +1201,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);
                         var letterBeforeTierCol = String.fromCharCode(tierColIndex - 1);
                         var spreadData = root.spreadDs.data();
-
-                        // Find Strt_vol col
-                        var startVolIndex = (root.colToLetter["STRT_VOL"]).charCodeAt(0);
 
                         // Enable cols except voltier
                         range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
@@ -2330,7 +2310,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }
-        root.spreadDs.sync();
+        root.spreadDs.sync();       //KITTODO and maybe VolTier: second point of sync failure data corruption - spreadDs still has the correct values, but this call also corrupts root.pricingTableData.PRC_TBL_ROW, need to go make sure spreadDs is correct as well as update the _gridutils update function
         if (isAllValidated) {
             root.child.setRowIdStyle(data);
             // If current row is undefined its clicked from top bar validate button
