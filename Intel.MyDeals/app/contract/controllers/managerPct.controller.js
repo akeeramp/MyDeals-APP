@@ -378,7 +378,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                 var row = $(e.currentTarget).closest("tr");
                                 var distance = $(row).position().top;
 
-                                $(e.currentTarget).parent().closest(".k-grid-content").animate({
+                                $(e.currentTarget).parent().closest(".k-grid-content-locked").animate({
                                     scrollTop: distance
                                 }, 400);
 
