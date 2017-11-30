@@ -35,6 +35,14 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiParentControlWrapper = function (passedData, field) {
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="test(dataItem)"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
+
 gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -350,6 +358,20 @@ gridUtils.msgIcon = function (dataItem) {
 gridUtils.dialogShow = function () {
     dialog.open();
 }
+
+gridUtils.stgOneChar = function (dataItem) {
+    if (dataItem.WF_STG_CD === "Draft") {
+        return dataItem.PS_WF_STG_CD === undefined ? "&nbsp;" : dataItem.PS_WF_STG_CD[0];
+    }
+    else {
+        return dataItem.WF_STG_CD === undefined ? "&nbsp;" : dataItem.WF_STG_CD[0];
+    }
+}
+
+gridUtils.stgFullTitleChar = function (dataItem) {
+    return dataItem.WF_STG_CD === "Draft" ? dataItem.PS_WF_STG_CD : dataItem.WF_STG_CD;
+}
+
 
 function gridTools(model, cols) {
     this.model = model;

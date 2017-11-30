@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 11/22/2017 3:39:01 PM
+File Updated: 11/29/2017 10:06:24 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1553,6 +1553,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3685
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string OBJ_PATH_HASH = "OBJ_PATH_HASH";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3002
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1693,6 +1702,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string PRD_COST = "PRD_COST";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3686
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRD_DRAWING_ORD = "PRD_DRAWING_ORD";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -2466,7 +2484,6 @@ namespace Intel.MyDeals.Entities {
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
-		public const string ENV = "ENV";
 		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
@@ -2482,6 +2499,7 @@ namespace Intel.MyDeals.Entities {
 		public const string SELECTION_LEVEL = "SELECTION_LEVEL";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string Test = "Test";
+		public const string TEST_MS = "TEST_MS";
 		public const string Test2 = "Test2";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";

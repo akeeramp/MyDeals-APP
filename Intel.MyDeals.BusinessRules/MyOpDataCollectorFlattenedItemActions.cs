@@ -83,6 +83,7 @@ namespace Intel.MyDeals.BusinessRules
             if (objsetActionItem.Settings[SecurityActns.C_APPROVE]) possibleActions.Add("Approve");
             if (objsetActionItem.Settings[SecurityActns.C_REVISE_DEAL]) possibleActions.Add("Revise");
             if (objsetActionItem.Settings[SecurityActns.C_CANCEL_DEAL]) possibleActions.Add("Cancel");
+            possibleActions.Add("Hold");
 
             foreach (string action in actions.Where(a => possibleActions.Contains(a)))
             {

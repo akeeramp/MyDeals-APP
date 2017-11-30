@@ -926,7 +926,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.WF_STG_CD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'WF_STG_CD')#",
+                Template = "#=gridUtils.uiParentControlWrapper(data, 'PS_WF_STG_CD')#",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 100

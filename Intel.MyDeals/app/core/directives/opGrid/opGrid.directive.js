@@ -1598,9 +1598,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.searchGrid();
             }
 
-            //Take first character of WF_STG_CD
-            $scope.stageOneChar = function (WF_STG_CD) {
-                return WF_STG_CD === undefined ? "&nbsp;" : WF_STG_CD[0];
+            $scope.test = function (dataItem) {
+                return gridUtils.stgFullTitleChar(dataItem);
             }
 
             // Go to Deal Details
