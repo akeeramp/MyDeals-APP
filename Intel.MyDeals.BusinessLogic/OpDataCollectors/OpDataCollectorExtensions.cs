@@ -150,8 +150,8 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataElement> deProds = dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER).ToList();
             if (deProds.Any())
             {
-                var prds = items.Where(p => p.Key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0).ToList();
-                foreach (KeyValuePair<string, object> kvp in prds)
+                var incomingPrds = items.Where(p => p.Key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0).ToList();
+                foreach (KeyValuePair<string, object> kvp in incomingPrds)
                 {
                     OpDataElement deProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbCd + d.DimKeyString.AtrbCdDimKeySafe() == kvp.Key);
                     if (deProd == null)
@@ -172,6 +172,14 @@ namespace Intel.MyDeals.BusinessLogic
                             }
                         }
                     }
+                }
+
+                // Delete existing products in DB that are not there in the incoming product list - VN
+                foreach(OpDataElement dePrd in deProds)
+                {
+                    bool exists = incomingPrds.Exists(prd => prd.Key == dePrd.AtrbCd + dePrd.DimKeyString.AtrbCdDimKeySafe());
+                    if (!exists)
+                        dePrd.AtrbValue = string.Empty;
                 }
             }
 
