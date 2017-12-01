@@ -2426,8 +2426,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
                                 }
                                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                                    var mergedRowsws = parseInt(r) + root.numOfPivot(data[r]);
-                                    for (var a = r; a < mergedRowsws ; a++) {
+                                    var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
+                                    for (var a = r; a < mergedRows ; a++) {
                                         data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                                         sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                                         data[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
@@ -2436,8 +2436,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                                 // For VOL_TIER update the merged cells
                                 if (root.isPivotable() && (products.contractProducts === "" || !products.contractProducts)) {
-                                    var mergedRowsws = parseInt(r) + root.numOfPivot(data[r]);
-                                    for (var a = r; a < mergedRowsws ; a++) {
+                                    var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
+                                    for (var a = r; a < mergedRows ; a++) {
                                         data[a].DC_ID = null;
                                         sourceData[a].DC_ID = null;
                                         data[a].PTR_USER_PRD = "";
