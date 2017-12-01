@@ -430,13 +430,6 @@ namespace Intel.MyDeals.BusinessRules
 				},
 				new MyOpRule
 				{
-					Title="Meet Comp Analysis - Price Performance is applicable only to Server (SvrWS) products",
-					ActionRule = MyDcActions.CheckMeetComp,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate}
-				},
-				new MyOpRule
-				{
 					Title="Adjusted ECAP Units must have a positive value",
 					ActionRule = MyDcActions.CheckEcapAdjUnit,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},

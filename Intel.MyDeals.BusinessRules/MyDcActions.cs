@@ -409,7 +409,6 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> mandatoryMeetCompFields = new List<string>
             {
-                //AttributeCodes.MEET_COMP_PRICE_QSTN,
                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
                 AttributeCodes.MEETCOMP_TEST_RESULT
@@ -517,7 +516,6 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.PAYOUT_BASED_ON,
 				AttributeCodes.PROGRAM_PAYMENT,
                 AttributeCodes.REBATE_TYPE,
-                //AttributeCodes.MEET_COMP_PRICE_QSTN,
 				AttributeCodes.PROD_INCLDS
 			};
 
@@ -1034,30 +1032,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-		public static void CheckMeetComp(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
-
-			IOpDataElement sysPrd = r.Dc.GetDataElement(AttributeCodes.PTR_SYS_PRD);
-			IOpDataElement usrPrd = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
-			IOpDataElement meetComp = r.Dc.GetDataElement(AttributeCodes.MEET_COMP_PRICE_QSTN);
-			if (meetComp == null || sysPrd == null) return;
-
-			Dictionary<string, List<ProdMapping>> prodDict = JsonConvert.DeserializeObject<Dictionary<string, List<ProdMapping>>>(sysPrd.AtrbValue.ToString());
-
-			if (prodDict == null)
-			{
-				return;
-			}
-			foreach (KeyValuePair<string, List<ProdMapping>> entry in prodDict)
-			{
-				if (!String.Equals(entry.Value[0].PRD_CAT_NM.ToString(), "SvrWS", StringComparison.OrdinalIgnoreCase) && String.Equals(meetComp.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase))
-				{
-					meetComp.AddMessage("Price Performance is applicable only to Server (SvrWS) products.");
-				}
-			}
-		}
 		public static void CheckEcapAdjUnit(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);

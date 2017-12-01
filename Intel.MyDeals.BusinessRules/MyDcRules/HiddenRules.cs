@@ -79,7 +79,6 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
                                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,
-                                //AttributeCodes.MEET_COMP_PRICE_QSTN,
                                 AttributeCodes.COST_TEST_FAIL_OVERRIDE,
                                 AttributeCodes.COST_TEST_FAIL_OVERRIDE_REASON,
                                 AttributeCodes.COST_TEST_OVERRIDE,
