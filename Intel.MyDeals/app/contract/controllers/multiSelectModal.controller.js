@@ -20,6 +20,13 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
     $ctrl.isCorp = (colName === CORP);
     $ctrl.isGeoBlend = isBlendedGeo;
 	
+    $ctrl.EnterPressed = function (event) {
+    //KeyCode 13 is 'Enter'
+        if (event.keyCode === 13) {
+            $ctrl.ok();
+        }
+    };
+
 	$ctrl.ok = function () {
 		var returnVal = "";
 		if ($ctrl.popupResult.MultiSelectSelections !== undefined) {

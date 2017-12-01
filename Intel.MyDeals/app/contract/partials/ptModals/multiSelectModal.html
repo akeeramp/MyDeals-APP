@@ -12,6 +12,7 @@
 
         <div op-control-flat
                 ng-model="$ctrl.popupResult"
+                ng-keypress="$ctrl.EnterPressed($event)"
                 op-cd="'MultiSelectSelections'"
                 op-type="$ctrl.multiSelectPopUpModal.uiType"
                 op-label="''"

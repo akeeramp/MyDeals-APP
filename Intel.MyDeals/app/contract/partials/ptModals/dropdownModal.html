@@ -9,6 +9,7 @@
 
 		<div op-control-flat
 			 ng-model="$ctrl.popupResult"
+             ng-keypress="$ctrl.EnterPressed($event)"
 			 op-cd="'DropdownSelections'"
 			 op-type="$ctrl.colData.uiType"
 			 op-label="''"

@@ -30,6 +30,14 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 		$uibModalInstance.dismiss();
 	};
 
+	$ctrl.EnterPressed = function (event) {
+        //KeyCode 13 is 'Enter'
+	    if (event.keyCode === 13 && $ctrl.isValidDate === true) {
+	     	    $ctrl.ok();   
+	    }
+	};
+
+
 
 	$ctrl.datepickerOptions = {
 		change: function () {

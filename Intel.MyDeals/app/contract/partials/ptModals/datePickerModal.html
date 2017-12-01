@@ -11,6 +11,7 @@
 				<input kendo-date-picker
 					   ng-class="{'isErrorWrapper': !$ctrl.isValidDate }"
 					   id="datePickerPopup"
+                       ng-keypress="$ctrl.EnterPressed($event)"
 					   ng-model="$ctrl.popupResult"
 					   k-placeholder="$ctrl.placeholderText"
 					   k-options="$ctrl.datepickerOptions"

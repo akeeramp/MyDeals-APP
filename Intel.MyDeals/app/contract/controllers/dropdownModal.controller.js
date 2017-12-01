@@ -13,6 +13,13 @@ function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, c
 	$ctrl.popupResult.DropdownSelections = (cellCurrValues === null) ? "" : cellCurrValues;
 	$ctrl.placeholderText = "Click to Select...";
 
+	$ctrl.EnterPressed = function (event) {
+	        //KeyCode 13 is 'Enter'
+	    if (event.keyCode === 13) {
+	        $ctrl.ok();
+	    }
+	};
+
 	$ctrl.ok = function () {
 		var returnVal = $ctrl.popupResult.DropdownSelections;
 		$uibModalInstance.close(returnVal);
