@@ -190,7 +190,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         return null;
     }
 
-    $scope.unLockedGrouData = {};
+    $scope.unLockedGroupData = {};
 
     $scope.togglePt = function (ps, pt) {
 
@@ -285,7 +285,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         }
 
                         gridPctUtils.columns[item.DEAL_ID] = tmplt + "<tbody><tr>" + trLocked + "</tr></tbody></table>";
-                        $scope.unLockedGrouData[item.DEAL_ID] = "<table><tbody><tr>" + trUnLocked + "</tr></tbody></table>";
+                        $scope.unLockedGroupData[item.DEAL_ID] = "<table><tbody><tr>" + trUnLocked + "</tr></tbody></table>";
                     }
                 }
 
@@ -308,8 +308,11 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
                         var grid = this;
                         this.lockedTable.find(".k-grouping-row").each(function (index) {
-                            var html = $scope.unLockedGrouData[grid.dataItem(this).DEAL_ID];
-                            grid.tbody.find(".k-grouping-row:eq(" + index + ") td").html(html);
+                            var html = $scope.unLockedGroupData[grid.dataItem(this).DEAL_ID];
+                            var template = angular.element(html);
+                            var linkFunction = $compile(template);
+                            linkFunction($scope);
+                            grid.tbody.find(".k-grouping-row:eq(" + index + ") td").html(template);
                         });
 
 
@@ -378,7 +381,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                 var row = $(e.currentTarget).closest("tr");
                                 var distance = $(row).position().top;
 
-                                $(e.currentTarget).parent().closest(".k-grid-content-locked").animate({
+                                $(e.currentTarget).parent().closest(".k-grid-content-locked").parent().find(".k-grid-content").animate({
                                     scrollTop: distance
                                 }, 400);
 
@@ -613,6 +616,12 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             template: "<div style='text-align: center;' ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#, dataItem)'>View</div></div>",
             parent: true
         },
+        "DEAL_GRP_CMNT": {
+            field: "DEAL_GRP_CMNT",
+            title: "Deal Group Comments",
+            width: "140px",
+            parent: false
+        },
         "LAST_COST_TEST_RUN": {
             field: "LAST_COST_TEST_RUN",
             title: "Time / Date Last Cost Ran",
@@ -620,7 +629,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             template: "<span ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'>#= kendo.toString(new Date(LAST_COST_TEST_RUN), 'M/d/yyyy HH:mm:ss') #</span>",
             parent: false
         },
-        "CNSMPTN_RSN": {
+            "CNSMPTN_RSN": {
             field: "CNSMPTN_RSN",
             title: "Consumption Reason",
             width: "140px",
@@ -657,6 +666,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     CNSMPTN_RSN: { type: "string" },
                     PROG_PMT: { type: "string" },
                     GRP_DEALS: { type: "string" },
+                    DEAL_GRP_CMNT: { type: "string" },
                     LAST_COST_TEST_RUN: { type: "string" }
                 }
             },
@@ -680,6 +690,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     CNSMPTN_RSN: { type: "string" },
                     PROG_PMT: { type: "string" },
                     GRP_DEALS: { type: "string" },
+                    DEAL_GRP_CMNT: { type: "string" },
                     LAST_COST_TEST_RUN: { type: "string" }
                 }
             },
@@ -703,6 +714,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     CNSMPTN_RSN: { type: "string" },
                     PROG_PMT: { type: "string" },
                     GRP_DEALS: { type: "string" },
+                    DEAL_GRP_CMNT: { type: "string" },
                     LAST_COST_TEST_RUN: { type: "string" }
                 }
             }
@@ -728,6 +740,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 $scope.cellColumns["CNSMPTN_RSN"],
                 $scope.cellColumns["PROG_PMT"],
                 $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["DEAL_GRP_CMNT"],
                 $scope.cellColumns["LAST_COST_TEST_RUN"]
             ],
             "VOL_TIER": [
@@ -748,6 +761,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 $scope.cellColumns["CNSMPTN_RSN"],
                 $scope.cellColumns["PROG_PMT"],
                 $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["DEAL_GRP_CMNT"],
                 $scope.cellColumns["LAST_COST_TEST_RUN"]
             ],
             "PROGRAM": [
@@ -768,6 +782,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 $scope.cellColumns["CNSMPTN_RSN"],
                 $scope.cellColumns["PROG_PMT"],
                 $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["DEAL_GRP_CMNT"],
                 $scope.cellColumns["LAST_COST_TEST_RUN"]
             ]
         }

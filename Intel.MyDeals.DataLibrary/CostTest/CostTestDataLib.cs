@@ -37,6 +37,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_COST_TEST_OVRRD_FLG = DB.GetReaderOrdinal(rdr, "COST_TEST_OVRRD_FLG");
                     int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
                     int IDX_DEAL_END_DT = DB.GetReaderOrdinal(rdr, "DEAL_END_DT");
+                    int IDX_DEAL_GRP_CMNT = DB.GetReaderOrdinal(rdr, "DEAL_GRP_CMNT");
                     int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
                     int IDX_DEAL_PRD_RNK = DB.GetReaderOrdinal(rdr, "DEAL_PRD_RNK");
                     int IDX_DEAL_STG_CD = DB.GetReaderOrdinal(rdr, "DEAL_STG_CD");
@@ -70,6 +71,7 @@ namespace Intel.MyDeals.DataLibrary
                             COST_TEST_OVRRD_FLG = (IDX_COST_TEST_OVRRD_FLG < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_FLG),
                             CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
                             DEAL_END_DT = (IDX_DEAL_END_DT < 0 || rdr.IsDBNull(IDX_DEAL_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_END_DT),
+                            DEAL_GRP_CMNT = (IDX_DEAL_GRP_CMNT < 0 || rdr.IsDBNull(IDX_DEAL_GRP_CMNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_GRP_CMNT),
                             DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
                             DEAL_PRD_RNK = (IDX_DEAL_PRD_RNK < 0 || rdr.IsDBNull(IDX_DEAL_PRD_RNK)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_DEAL_PRD_RNK),
                             DEAL_STG_CD = (IDX_DEAL_STG_CD < 0 || rdr.IsDBNull(IDX_DEAL_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STG_CD),

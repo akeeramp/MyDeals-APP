@@ -250,12 +250,12 @@ using System.Collections.Generic;
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//PR_MYDL_SRCH_OBJ
-	ds = dbobjects.ExecuteDataSet("exec [dbo].[PR_MYDL_SRCH_OBJ] @in_srch_txt = ''");
+	ds = dbobjects.ExecuteDataSet("exec [dbo].[PR_MYDL_SRCH_OBJ] @in_srch_txt = 'WILL NOT FIND THIS'");
 	ds.Tables[0].TableName = "SearchResults";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//PR_MYDL_ADV_SRCH_OBJ
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_ADV_SRCH_OBJ] @in_srch_txt = ''");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_ADV_SRCH_OBJ] @in_srch_txt = 'WILL NOT FIND THIS'");
 	ds.Tables[0].TableName = "AdvancedSearchResults";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
