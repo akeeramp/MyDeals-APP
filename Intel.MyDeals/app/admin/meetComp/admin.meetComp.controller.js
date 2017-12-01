@@ -235,7 +235,7 @@
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
-                                vm.selectedBrandName = '';
+                                vm.selectedBrandName = -1;
                                 comboBrndName.enable(true);
 
                                 var comboProdName = $("#comboProdName").data("kendoMultiSelect");
@@ -268,7 +268,7 @@
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
-                                vm.selectedBrandName = '';
+                                vm.selectedBrandName = -1;
                                 comboBrndName.enable(true);                                
                             }
                             e.success(brandName);
@@ -405,6 +405,8 @@
                     resetGrid();
                 }
                 else {
+                    $scope.loading = true;
+                    $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
                     var selectedProdNames = $("#comboProdName").data("kendoMultiSelect");
                     var value = selectedProdNames.value();
                     if (value.length == 0) {
@@ -432,13 +434,13 @@
                 var comboCatName = $("#comboCatName").data("kendoComboBox");
                 comboCatName.value([]);
                 comboCatName.text("");
-                vm.selectedProdCatName = '';
+                vm.selectedProdCatName = -1;
                 //comboCatName.selectedIndex = -1;
 
                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                 comboBrndName.value([]);
                 comboBrndName.text("");
-                vm.selectedBrandName = '';
+                vm.selectedBrandName = -1;
                 //comboBrndName.selectedIndex = -1;
 
                 var comboProdName = $("#comboProdName").data("kendoMultiSelect");
@@ -555,7 +557,11 @@
                             var CHG_DTM = moment(response.data[0].CHG_DTM).format("l"); 
                             dataItem.CHG_EMP_NM = usrName;
                             dataItem.CHG_DTM = CHG_DTM;
-                            $("#grid").find("tr[data-uid='" + dataItem.uid + "'] td:eq(11)").text(CHG_DTM);
+                            var grid = $('#grid').data('kendoGrid');
+                            var tempGroup = grid.dataSource.group();
+                            grid.dataSource.group([]);
+                            $("#grid").find("tr[data-uid='" + dataItem.uid + "'] td:eq(11)").text(CHG_DTM);                            
+                            grid.dataSource.group(tempGroup);
                             //vm.dataSource.read();
                             $scope.isBusy = false;
                         }
