@@ -84,7 +84,7 @@ namespace Intel.MyDeals.BusinessLogic
             throw new NotImplementedException();
             // Remove this pricing strategy redeal with a soft delete/rollback
             //return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, contractToken, _dataCollectorLib);
-            return null;
+            //return null;
         }
 
         public OpMsgQueue CancelPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies)

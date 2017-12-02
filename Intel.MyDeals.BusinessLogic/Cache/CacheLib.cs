@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.IBusinessLogic;
@@ -13,6 +14,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             _dataCollectionsDataLib = dataCollectionsDataLib;
         }
+        public CacheLib()
+        {
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
+
 
         /// <summary>
         /// Check the Cache Sotores for status

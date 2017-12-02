@@ -12,8 +12,7 @@ namespace Intel.MyDeals.Entities
 			: base(DATA_TABLE_NAME)
 		{ }
 
-		public t_secur_info(SerializationInfo info, StreamingContext context)
-			: base(DATA_TABLE_NAME, info, context) { }
+		public t_secur_info(SerializationInfo info, StreamingContext context) : base(DATA_TABLE_NAME, info, context) { }
 
 		protected override void Init()
 		{

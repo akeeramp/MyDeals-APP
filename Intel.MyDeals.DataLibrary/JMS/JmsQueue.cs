@@ -64,7 +64,7 @@ namespace Intel.MyDeals.DataLibrary.JMS
             try
             {
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -80,7 +80,7 @@ namespace Intel.MyDeals.DataLibrary.JMS
                 m_strQueueName = strQueueName;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

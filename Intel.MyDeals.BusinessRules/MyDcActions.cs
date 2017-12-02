@@ -196,7 +196,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 dePrdUsr.AddMessage("Unable to read the selected products.  Please use the Product Selector to fix the issue.");
                 return;
@@ -727,7 +727,7 @@ namespace Intel.MyDeals.BusinessRules
             // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
             // set WIP Stages to Draft for a redeal if they already aren't there
-            if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Draft) r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
+            if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft) r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
 
             if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
             {

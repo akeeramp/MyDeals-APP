@@ -558,96 +558,6 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static void InjectParentStages(this MyDealsData myDealsData, string sourceEvent = null)
-        {
-            return;
-            if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW)) return;
-
-            List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
-            if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
-            if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
-
-            // Since PRC_TBL_ROW do nor have a stage, they rely on the PRC_ST's WF_STG_CD
-            Dictionary<int, string> prcSt2StgMapping = new Dictionary<int, string>();
-            Dictionary<int, string> prcSt2PrcTblMapping = new Dictionary<int, string>();
-            Dictionary<int, int> prcTblRow2PrcTblMapping = new Dictionary<int, int>();
-
-            // Let's see if we already got the stages
-            var allDcs = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault();
-            if (allDcs?.GetDataElement(AttributeCodes.WF_STG_CD) != null) return;
-
-            List<int> ids = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(d => d.DcParentID).Distinct().ToList();
-            List<int> atrbs = new List<int>
-            {
-                Attributes.WF_STG_CD.ATRB_SID,
-                Attributes.OBJ_SET_TYPE_CD.ATRB_SID
-            };
-
-            MyDealsData temp = OpDataElementType.PRC_TBL.GetByIDs(ids, new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW }, atrbs);
-
-            if (temp.ContainsKey(OpDataElementType.PRC_ST))
-            {
-                foreach (var item in temp[OpDataElementType.PRC_ST].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.WF_STG_CD))
-                {
-                    prcSt2StgMapping[item.DcID] = item.AtrbValue.ToString();
-                }
-            }
-
-            if (temp.ContainsKey(OpDataElementType.PRC_TBL))
-            {
-                foreach (var item in temp[OpDataElementType.PRC_TBL].AllDataElements)
-                {
-                    if (prcSt2StgMapping.ContainsKey(item.DcParentID))
-                        prcSt2PrcTblMapping[item.DcID] = prcSt2StgMapping[item.DcParentID];
-                }
-            }
-
-            if (temp.ContainsKey(OpDataElementType.PRC_TBL_ROW))
-            {
-                foreach (var item in temp[OpDataElementType.PRC_TBL_ROW].AllDataElements)
-                {
-                    prcTblRow2PrcTblMapping[item.DcID] = item.DcParentID;
-                }
-            }
-
-            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
-            {
-                if (!myDealsData.ContainsKey(opDataElementType) || ignoreTypes.Contains(opDataElementType)) continue;
-                foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
-                {
-                    if (opDataElementType != OpDataElementType.PRC_TBL_ROW && opDataElementType != OpDataElementType.WIP_DEAL) continue;
-                    if (opDataElementType == OpDataElementType.PRC_TBL_ROW && prcSt2PrcTblMapping.ContainsKey(dc.DcParentID))
-                    {
-                        // We can add this because it is NOT part of the template.  It will naturally get stripped off on the save.  Until then, we will use this for security rules
-                        dc.DataElements.Add(new OpDataElement
-                        {
-                            AtrbCd = AttributeCodes.WF_STG_CD,
-                            AtrbValue = prcSt2PrcTblMapping[dc.DcParentID],
-                            AtrbID = 0,
-                            DcParentID = dc.DcParentID,
-                            DcID = dc.DcID
-                        });
-                    }
-                    if (opDataElementType == OpDataElementType.WIP_DEAL && prcTblRow2PrcTblMapping.ContainsKey(dc.DcParentID))
-                    {
-                        //!dc.DataElementDict.ContainsKey(AttributeCodes.WF_STG_CD + "_PRNT")
-                        if (dc.DataElements.All(d => d.AtrbCd != AttributeCodes.PS_WF_STG_CD))
-                        {
-                            // We can add this because it is NOT part of the template.  It will naturally get stripped off on the save.  Until then, we will use this for security rules
-                            dc.DataElements.Add(new OpDataElement
-                            {
-                                AtrbCd = AttributeCodes.WF_STG_CD + "_PRNT",
-                                AtrbValue = prcSt2PrcTblMapping[prcTblRow2PrcTblMapping[dc.DcParentID]],
-                                AtrbID = -1,
-                                DcParentID = dc.DcParentID,
-                                DcID = dc.DcID
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
         public static bool ValidationApplyRules(this MyDealsData myDealsData, SavePacket savePacket)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
@@ -833,7 +743,7 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         items = JsonConvert.DeserializeObject<ProdMappings>(ptrJson);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         opMsgQueue.Messages.Add(new OpMsg
                         {

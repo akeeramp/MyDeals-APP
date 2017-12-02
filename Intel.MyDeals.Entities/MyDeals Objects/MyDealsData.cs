@@ -6,6 +6,7 @@ using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Entities
 {
+    [SerializableAttribute]
     public class MyDealsData : Dictionary<OpDataElementType, OpDataPacket<OpDataElementType>>
     {
         public MyDealsData() { }

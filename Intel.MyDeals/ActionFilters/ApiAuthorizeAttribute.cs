@@ -19,7 +19,7 @@ namespace Intel.MyDeals.ActionFilters
         /// <summary>
         /// Op core
         /// </summary>
-        private OpCore op;
+        //private OpCore op;
 
         /// <summary>
         /// Allow for developers

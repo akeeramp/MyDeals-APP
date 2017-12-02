@@ -455,7 +455,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             MyDealsData retData = myDealsData.Save(contractToken);
 
-            int i = 0;
         }
 
     }

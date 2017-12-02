@@ -1,8 +1,6 @@
-﻿using System;
-using System.Configuration;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Intel.MyDeals.App;
-using Intel.MyDeals.DataLibrary;
+using Intel.MyDeals.BusinessLogic;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers
@@ -41,7 +39,9 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult ResetAVM()
         {
-            new DataCollectionsDataLib().ClearCache();
+
+            new CacheLib().ClearCache();
+            //new DataCollectionsDataLib().ClearCache();
 
             OpCore op=OpAppConfig.Init();
             OpUserToken user = AppLib.InitAvm(op, true);

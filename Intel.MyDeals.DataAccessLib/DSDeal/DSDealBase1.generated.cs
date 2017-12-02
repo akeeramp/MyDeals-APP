@@ -30,6 +30,7 @@ namespace Intel.MyDeals.DataAccessLib
     }
 
 
+    [SerializableAttribute]
     public partial class DTDeal : DataTable
     {
 

@@ -73,7 +73,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
 		{
             //INSERT
             string testString = "UNIT TEST - InsertSecurityActions";
-            string testStringShort = "TEST";
+            //string testStringShort = "TEST";
 
             SecurityActions action = new SecurityActions
             {

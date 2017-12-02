@@ -520,7 +520,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         var data = {};
         var dataItems = [];
 
-        if (!!approvePending && approvePending === true) {
+        if (!!approvePending && approvePending === true && $scope.canBypassEmptyActions) {
             var ps = root.contractData.PRC_ST;
             if (ps !== undefined) {
                 for (var p = 0; p < ps.length; p++) {

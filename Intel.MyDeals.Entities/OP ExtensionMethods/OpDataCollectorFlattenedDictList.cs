@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Intel.MyDeals.Entities
 {
+    [Serializable]
     public class OpDataCollectorFlattenedDictList : Dictionary<OpDataElementType, OpDataCollectorFlattenedList>
     {
         public OpDataCollectorFlattenedDictList()

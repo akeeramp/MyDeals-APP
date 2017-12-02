@@ -9,54 +9,54 @@ using Intel.Opaque.DBAccess;
 
 namespace Intel.MyDeals.Entities
 {
-    [DataContract]
-    public partial class PRD_LOOKUP_RESULTS_tempWithCAP : PRD_TRANSLATION_RESULTS
-    {
-        //[DataMember]
-        //public System.Int32 PRD_MBR_SID { get; set; }
-        //[DataMember]
-        //public System.DateTime DEAL_START_DATE { get; set; }
-        //[DataMember]
-        //public System.DateTime DEAL_END_DATE { get; set; }
+    //[DataContract]
+    //public partial class PRD_LOOKUP_RESULTS_tempWithCAP : PRD_TRANSLATION_RESULTS
+    //{
+    //    //[DataMember]
+    //    //public System.Int32 PRD_MBR_SID { get; set; }
+    //    //[DataMember]
+    //    //public System.DateTime DEAL_START_DATE { get; set; }
+    //    //[DataMember]
+    //    //public System.DateTime DEAL_END_DATE { get; set; }
 
-        [DataMember]
-        public System.Int32 CUST_MBR_SID { get; set; }
+    //    [DataMember]
+    //    public System.Int32 CUST_MBR_SID { get; set; }
 
-        //[DataMember]
-        //public System.Int32 RowNumber { set; get; }
-        //[DataMember]
-        //public System.Int32 PRD_MBR_SID { set; get; }
-        //[DataMember]
-        //public System.String HIER_VAL_NM { set; get; }
-        [DataMember]
-        public System.String GEO_MBR_SID { set; get; }
+    //    //[DataMember]
+    //    //public System.Int32 RowNumber { set; get; }
+    //    //[DataMember]
+    //    //public System.Int32 PRD_MBR_SID { set; get; }
+    //    //[DataMember]
+    //    //public System.String HIER_VAL_NM { set; get; }
+    //    [DataMember]
+    //    public System.String GEO_MBR_SID { set; get; }
 
-        //[DataMember]
-        //public System.Int32 CUST_MBR_SID { set; get; }
-        [DataMember]
-        public System.Decimal CAP { set; get; }
+    //    //[DataMember]
+    //    //public System.Int32 CUST_MBR_SID { set; get; }
+    //    [DataMember]
+    //    public System.Decimal CAP { set; get; }
 
-        [DataMember]
-        public System.DateTime CAP_START_DATE { set; get; }
+    //    [DataMember]
+    //    public System.DateTime CAP_START_DATE { set; get; }
 
-        [DataMember]
-        public System.DateTime CAP_END_DATE { set; get; }
+    //    [DataMember]
+    //    public System.DateTime CAP_END_DATE { set; get; }
 
-        [DataMember]
-        public System.String CAP_PRC_COND { set; get; }
+    //    [DataMember]
+    //    public System.String CAP_PRC_COND { set; get; }
 
-        [DataMember]
-        public System.String Flag_pick { set; get; }
+    //    [DataMember]
+    //    public System.String Flag_pick { set; get; }
 
-        [DataMember]
-        public System.Decimal YCS2 { set; get; }
+    //    [DataMember]
+    //    public System.Decimal YCS2 { set; get; }
 
-        [DataMember]
-        public System.DateTime YCS2_Start_Date { set; get; }
+    //    [DataMember]
+    //    public System.DateTime YCS2_Start_Date { set; get; }
 
-        [DataMember]
-        public System.DateTime YCS2_End_Date { set; get; }
-    }
+    //    [DataMember]
+    //    public System.DateTime YCS2_End_Date { set; get; }
+    //}
 
     [DataContract]
     public partial class EmployeeGeo
@@ -288,104 +288,104 @@ namespace Intel.MyDeals.Entities
         */
     } // End of class ApplicationRoleLookup
 
-    [DataContract]
-    public partial class CustomerItem
-    {
-        [DataMember]
-        public System.Int32 access_type { set; get; }
+    //[DataContract]
+    //public partial class CustomerItem
+    //{
+    //    [DataMember]
+    //    public System.Int32 access_type { set; get; }
 
-        [DataMember]
-        public System.Boolean actv_ind { set; get; }
+    //    [DataMember]
+    //    public System.Boolean actv_ind { set; get; }
 
-        [DataMember]
-        public System.Int32 cdms_cust_div_id { set; get; }
+    //    [DataMember]
+    //    public System.Int32 cdms_cust_div_id { set; get; }
 
-        [DataMember]
-        public System.Int32 cdms_cust_id { set; get; }
+    //    [DataMember]
+    //    public System.Int32 cdms_cust_id { set; get; }
 
-        [DataMember]
-        public System.String cust_chnl { set; get; }
+    //    [DataMember]
+    //    public System.String cust_chnl { set; get; }
 
-        [DataMember]
-        public System.String cust_div_nm { set; get; }
+    //    [DataMember]
+    //    public System.String cust_div_nm { set; get; }
 
-        [DataMember]
-        public System.Int32 cust_lvl_id { set; get; }
+    //    [DataMember]
+    //    public System.Int32 cust_lvl_id { set; get; }
 
-        [DataMember]
-        public System.String cust_nm { set; get; }
+    //    [DataMember]
+    //    public System.String cust_nm { set; get; }
 
-        [DataMember]
-        public System.String cust_type { set; get; }
+    //    [DataMember]
+    //    public System.String cust_type { set; get; }
 
-        [DataMember]
-        public System.String CustCategory { set; get; }
+    //    [DataMember]
+    //    public System.String CustCategory { set; get; }
 
-        [DataMember]
-        public System.Int32 DEAL_FLG { set; get; }
+    //    [DataMember]
+    //    public System.Int32 DEAL_FLG { set; get; }
 
-        [DataMember]
-        public System.String deal_type_cd { set; get; }
+    //    [DataMember]
+    //    public System.String deal_type_cd { set; get; }
 
-        [DataMember]
-        public System.String disp_nm { set; get; }
+    //    [DataMember]
+    //    public System.String disp_nm { set; get; }
 
-        [DataMember]
-        public System.String hosted_geo { set; get; }
+    //    [DataMember]
+    //    public System.String hosted_geo { set; get; }
 
-        [DataMember]
-        public System.Boolean IS_CORP_ACCNT { set; get; }
+    //    [DataMember]
+    //    public System.Boolean IS_CORP_ACCNT { set; get; }
 
-        [DataMember]
-        public System.Int32 mail_notification { set; get; }
+    //    [DataMember]
+    //    public System.Int32 mail_notification { set; get; }
 
-        /*
-        private static List<CustomerItem> CustomerItemFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
+    //    /*
+    //    private static List<CustomerItem> CustomerItemFromReader(SqlDataReader rdr){
+    //    // This helper method is template generated.
+    //    // Refer to that template for details to modify this code.
 
-        var ret = new List<CustomerItem>();
-        int IDX_access_type = DB.GetReaderOrdinal(rdr, "access_type");
-        int IDX_actv_ind = DB.GetReaderOrdinal(rdr, "actv_ind");
-        int IDX_cdms_cust_div_id = DB.GetReaderOrdinal(rdr, "cdms_cust_div_id");
-        int IDX_cdms_cust_id = DB.GetReaderOrdinal(rdr, "cdms_cust_id");
-        int IDX_cust_chnl = DB.GetReaderOrdinal(rdr, "cust_chnl");
-        int IDX_cust_div_nm = DB.GetReaderOrdinal(rdr, "cust_div_nm");
-        int IDX_cust_lvl_id = DB.GetReaderOrdinal(rdr, "cust_lvl_id");
-        int IDX_cust_nm = DB.GetReaderOrdinal(rdr, "cust_nm");
-        int IDX_cust_type = DB.GetReaderOrdinal(rdr, "cust_type");
-        int IDX_CustCategory = DB.GetReaderOrdinal(rdr, "CustCategory");
-        int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
-        int IDX_deal_type_cd = DB.GetReaderOrdinal(rdr, "deal_type_cd");
-        int IDX_disp_nm = DB.GetReaderOrdinal(rdr, "disp_nm");
-        int IDX_hosted_geo = DB.GetReaderOrdinal(rdr, "hosted_geo");
-        int IDX_IS_CORP_ACCNT = DB.GetReaderOrdinal(rdr, "IS_CORP_ACCNT");
-        int IDX_mail_notification = DB.GetReaderOrdinal(rdr, "mail_notification");
+    //    var ret = new List<CustomerItem>();
+    //    int IDX_access_type = DB.GetReaderOrdinal(rdr, "access_type");
+    //    int IDX_actv_ind = DB.GetReaderOrdinal(rdr, "actv_ind");
+    //    int IDX_cdms_cust_div_id = DB.GetReaderOrdinal(rdr, "cdms_cust_div_id");
+    //    int IDX_cdms_cust_id = DB.GetReaderOrdinal(rdr, "cdms_cust_id");
+    //    int IDX_cust_chnl = DB.GetReaderOrdinal(rdr, "cust_chnl");
+    //    int IDX_cust_div_nm = DB.GetReaderOrdinal(rdr, "cust_div_nm");
+    //    int IDX_cust_lvl_id = DB.GetReaderOrdinal(rdr, "cust_lvl_id");
+    //    int IDX_cust_nm = DB.GetReaderOrdinal(rdr, "cust_nm");
+    //    int IDX_cust_type = DB.GetReaderOrdinal(rdr, "cust_type");
+    //    int IDX_CustCategory = DB.GetReaderOrdinal(rdr, "CustCategory");
+    //    int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
+    //    int IDX_deal_type_cd = DB.GetReaderOrdinal(rdr, "deal_type_cd");
+    //    int IDX_disp_nm = DB.GetReaderOrdinal(rdr, "disp_nm");
+    //    int IDX_hosted_geo = DB.GetReaderOrdinal(rdr, "hosted_geo");
+    //    int IDX_IS_CORP_ACCNT = DB.GetReaderOrdinal(rdr, "IS_CORP_ACCNT");
+    //    int IDX_mail_notification = DB.GetReaderOrdinal(rdr, "mail_notification");
 
-        while (rdr.Read()){
-        ret.Add(new CustomerItem {
-        access_type = (IDX_access_type < 0 || rdr.IsDBNull(IDX_access_type)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_access_type),
-        actv_ind = (IDX_actv_ind < 0 || rdr.IsDBNull(IDX_actv_ind)) ? default(System.Boolean) : ((int)rdr[IDX_actv_ind] == 1),
-        cdms_cust_div_id = (IDX_cdms_cust_div_id < 0 || rdr.IsDBNull(IDX_cdms_cust_div_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_div_id),
-        cdms_cust_id = (IDX_cdms_cust_id < 0 || rdr.IsDBNull(IDX_cdms_cust_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_id),
-        cust_chnl = (IDX_cust_chnl < 0 || rdr.IsDBNull(IDX_cust_chnl)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_chnl),
-        cust_div_nm = (IDX_cust_div_nm < 0 || rdr.IsDBNull(IDX_cust_div_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_div_nm),
-        cust_lvl_id = (IDX_cust_lvl_id < 0 || rdr.IsDBNull(IDX_cust_lvl_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cust_lvl_id),
-        cust_nm = (IDX_cust_nm < 0 || rdr.IsDBNull(IDX_cust_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_nm),
-        cust_type = (IDX_cust_type < 0 || rdr.IsDBNull(IDX_cust_type)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_type),
-        CustCategory = (IDX_CustCategory < 0 || rdr.IsDBNull(IDX_CustCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CustCategory),
-        DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
-        deal_type_cd = (IDX_deal_type_cd < 0 || rdr.IsDBNull(IDX_deal_type_cd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_deal_type_cd),
-        disp_nm = (IDX_disp_nm < 0 || rdr.IsDBNull(IDX_disp_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_disp_nm),
-        hosted_geo = (IDX_hosted_geo < 0 || rdr.IsDBNull(IDX_hosted_geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_hosted_geo),
-        IS_CORP_ACCNT = (IDX_IS_CORP_ACCNT < 0 || rdr.IsDBNull(IDX_IS_CORP_ACCNT)) ? default(System.Boolean) : ((int)rdr[IDX_IS_CORP_ACCNT] == 1),
-        mail_notification = (IDX_mail_notification < 0 || rdr.IsDBNull(IDX_mail_notification)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_mail_notification)
-        });
-        } // while
-        return ret;
-        }
-        */
-    } // End of class CustomerItem
+    //    while (rdr.Read()){
+    //    ret.Add(new CustomerItem {
+    //    access_type = (IDX_access_type < 0 || rdr.IsDBNull(IDX_access_type)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_access_type),
+    //    actv_ind = (IDX_actv_ind < 0 || rdr.IsDBNull(IDX_actv_ind)) ? default(System.Boolean) : ((int)rdr[IDX_actv_ind] == 1),
+    //    cdms_cust_div_id = (IDX_cdms_cust_div_id < 0 || rdr.IsDBNull(IDX_cdms_cust_div_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_div_id),
+    //    cdms_cust_id = (IDX_cdms_cust_id < 0 || rdr.IsDBNull(IDX_cdms_cust_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_id),
+    //    cust_chnl = (IDX_cust_chnl < 0 || rdr.IsDBNull(IDX_cust_chnl)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_chnl),
+    //    cust_div_nm = (IDX_cust_div_nm < 0 || rdr.IsDBNull(IDX_cust_div_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_div_nm),
+    //    cust_lvl_id = (IDX_cust_lvl_id < 0 || rdr.IsDBNull(IDX_cust_lvl_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cust_lvl_id),
+    //    cust_nm = (IDX_cust_nm < 0 || rdr.IsDBNull(IDX_cust_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_nm),
+    //    cust_type = (IDX_cust_type < 0 || rdr.IsDBNull(IDX_cust_type)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_type),
+    //    CustCategory = (IDX_CustCategory < 0 || rdr.IsDBNull(IDX_CustCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CustCategory),
+    //    DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
+    //    deal_type_cd = (IDX_deal_type_cd < 0 || rdr.IsDBNull(IDX_deal_type_cd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_deal_type_cd),
+    //    disp_nm = (IDX_disp_nm < 0 || rdr.IsDBNull(IDX_disp_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_disp_nm),
+    //    hosted_geo = (IDX_hosted_geo < 0 || rdr.IsDBNull(IDX_hosted_geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_hosted_geo),
+    //    IS_CORP_ACCNT = (IDX_IS_CORP_ACCNT < 0 || rdr.IsDBNull(IDX_IS_CORP_ACCNT)) ? default(System.Boolean) : ((int)rdr[IDX_IS_CORP_ACCNT] == 1),
+    //    mail_notification = (IDX_mail_notification < 0 || rdr.IsDBNull(IDX_mail_notification)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_mail_notification)
+    //    });
+    //    } // while
+    //    return ret;
+    //    }
+    //    */
+    //} // End of class CustomerItem
 
     [DataContract]
     public partial class UserPreference
@@ -426,104 +426,104 @@ namespace Intel.MyDeals.Entities
         */
     } // End of class UserPreference
 
-    [DataContract]
-    public partial class AppRoleTier
-    {
-        [DataMember]
-        public System.Boolean ACTV_IND { set; get; }
+    //[DataContract]
+    //public partial class AppRoleTier
+    //{
+    //    [DataMember]
+    //    public System.Boolean ACTV_IND { set; get; }
 
-        [DataMember]
-        public System.Boolean APPL_ACTV_IND { set; get; }
+    //    [DataMember]
+    //    public System.Boolean APPL_ACTV_IND { set; get; }
 
-        [DataMember]
-        public System.String APPL_CD { set; get; }
+    //    [DataMember]
+    //    public System.String APPL_CD { set; get; }
 
-        [DataMember]
-        public System.String APPL_DESC { set; get; }
+    //    [DataMember]
+    //    public System.String APPL_DESC { set; get; }
 
-        [DataMember]
-        public System.Byte APPL_SID { set; get; }
+    //    [DataMember]
+    //    public System.Byte APPL_SID { set; get; }
 
-        [DataMember]
-        public System.String APPL_SUITE { set; get; }
+    //    [DataMember]
+    //    public System.String APPL_SUITE { set; get; }
 
-        [DataMember]
-        public System.DateTime CHG_DTM { set; get; }
+    //    [DataMember]
+    //    public System.DateTime CHG_DTM { set; get; }
 
-        [DataMember]
-        public System.Boolean IS_SINGLE_SELECT { set; get; }
+    //    [DataMember]
+    //    public System.Boolean IS_SINGLE_SELECT { set; get; }
 
-        [DataMember]
-        public System.Boolean ROLE_ACTV_IND { set; get; }
+    //    [DataMember]
+    //    public System.Boolean ROLE_ACTV_IND { set; get; }
 
-        [DataMember]
-        public System.String ROLE_TIER_CD { set; get; }
+    //    [DataMember]
+    //    public System.String ROLE_TIER_CD { set; get; }
 
-        [DataMember]
-        public System.Int32 ROLE_TIER_SID { set; get; }
+    //    [DataMember]
+    //    public System.Int32 ROLE_TIER_SID { set; get; }
 
-        [DataMember]
-        public System.Int32 ROLE_TIER_SRT_ORD { set; get; }
+    //    [DataMember]
+    //    public System.Int32 ROLE_TIER_SRT_ORD { set; get; }
 
-        [DataMember]
-        public System.String ROLE_TYPE_CD { set; get; }
+    //    [DataMember]
+    //    public System.String ROLE_TYPE_CD { set; get; }
 
-        [DataMember]
-        public System.String ROLE_TYPE_DESC { set; get; }
+    //    [DataMember]
+    //    public System.String ROLE_TYPE_DESC { set; get; }
 
-        [DataMember]
-        public System.String ROLE_TYPE_DSPLY_CD { set; get; }
+    //    [DataMember]
+    //    public System.String ROLE_TYPE_DSPLY_CD { set; get; }
 
-        [DataMember]
-        public System.Int32 ROLE_TYPE_SID { set; get; }
+    //    [DataMember]
+    //    public System.Int32 ROLE_TYPE_SID { set; get; }
 
-        /*
-        private static List<AppRoleTier> AppRoleTierFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
+    //    /*
+    //    private static List<AppRoleTier> AppRoleTierFromReader(SqlDataReader rdr){
+    //    // This helper method is template generated.
+    //    // Refer to that template for details to modify this code.
 
-        var ret = new List<AppRoleTier>();
-        int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-        int IDX_APPL_ACTV_IND = DB.GetReaderOrdinal(rdr, "APPL_ACTV_IND");
-        int IDX_APPL_CD = DB.GetReaderOrdinal(rdr, "APPL_CD");
-        int IDX_APPL_DESC = DB.GetReaderOrdinal(rdr, "APPL_DESC");
-        int IDX_APPL_SID = DB.GetReaderOrdinal(rdr, "APPL_SID");
-        int IDX_APPL_SUITE = DB.GetReaderOrdinal(rdr, "APPL_SUITE");
-        int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
-        int IDX_IS_SINGLE_SELECT = DB.GetReaderOrdinal(rdr, "IS_SINGLE_SELECT");
-        int IDX_ROLE_ACTV_IND = DB.GetReaderOrdinal(rdr, "ROLE_ACTV_IND");
-        int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
-        int IDX_ROLE_TIER_SID = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SID");
-        int IDX_ROLE_TIER_SRT_ORD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SRT_ORD");
-        int IDX_ROLE_TYPE_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_CD");
-        int IDX_ROLE_TYPE_DESC = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DESC");
-        int IDX_ROLE_TYPE_DSPLY_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DSPLY_CD");
-        int IDX_ROLE_TYPE_SID = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_SID");
+    //    var ret = new List<AppRoleTier>();
+    //    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+    //    int IDX_APPL_ACTV_IND = DB.GetReaderOrdinal(rdr, "APPL_ACTV_IND");
+    //    int IDX_APPL_CD = DB.GetReaderOrdinal(rdr, "APPL_CD");
+    //    int IDX_APPL_DESC = DB.GetReaderOrdinal(rdr, "APPL_DESC");
+    //    int IDX_APPL_SID = DB.GetReaderOrdinal(rdr, "APPL_SID");
+    //    int IDX_APPL_SUITE = DB.GetReaderOrdinal(rdr, "APPL_SUITE");
+    //    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+    //    int IDX_IS_SINGLE_SELECT = DB.GetReaderOrdinal(rdr, "IS_SINGLE_SELECT");
+    //    int IDX_ROLE_ACTV_IND = DB.GetReaderOrdinal(rdr, "ROLE_ACTV_IND");
+    //    int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+    //    int IDX_ROLE_TIER_SID = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SID");
+    //    int IDX_ROLE_TIER_SRT_ORD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SRT_ORD");
+    //    int IDX_ROLE_TYPE_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_CD");
+    //    int IDX_ROLE_TYPE_DESC = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DESC");
+    //    int IDX_ROLE_TYPE_DSPLY_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DSPLY_CD");
+    //    int IDX_ROLE_TYPE_SID = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_SID");
 
-        while (rdr.Read()){
-        ret.Add(new AppRoleTier {
-        ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
-        APPL_ACTV_IND = (IDX_APPL_ACTV_IND < 0 || rdr.IsDBNull(IDX_APPL_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_APPL_ACTV_IND] == 1),
-        APPL_CD = (IDX_APPL_CD < 0 || rdr.IsDBNull(IDX_APPL_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_CD),
-        APPL_DESC = (IDX_APPL_DESC < 0 || rdr.IsDBNull(IDX_APPL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_DESC),
-        APPL_SID = (IDX_APPL_SID < 0 || rdr.IsDBNull(IDX_APPL_SID)) ? default(System.Byte) : rdr.GetFieldValue<System.Byte>(IDX_APPL_SID),
-        APPL_SUITE = (IDX_APPL_SUITE < 0 || rdr.IsDBNull(IDX_APPL_SUITE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_SUITE),
-        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
-        IS_SINGLE_SELECT = (IDX_IS_SINGLE_SELECT < 0 || rdr.IsDBNull(IDX_IS_SINGLE_SELECT)) ? default(System.Boolean) : ((int)rdr[IDX_IS_SINGLE_SELECT] == 1),
-        ROLE_ACTV_IND = (IDX_ROLE_ACTV_IND < 0 || rdr.IsDBNull(IDX_ROLE_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ROLE_ACTV_IND] == 1),
-        ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
-        ROLE_TIER_SID = (IDX_ROLE_TIER_SID < 0 || rdr.IsDBNull(IDX_ROLE_TIER_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SID),
-        ROLE_TIER_SRT_ORD = (IDX_ROLE_TIER_SRT_ORD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_SRT_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SRT_ORD),
-        ROLE_TYPE_CD = (IDX_ROLE_TYPE_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_CD),
-        ROLE_TYPE_DESC = (IDX_ROLE_TYPE_DESC < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DESC),
-        ROLE_TYPE_DSPLY_CD = (IDX_ROLE_TYPE_DSPLY_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DSPLY_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DSPLY_CD),
-        ROLE_TYPE_SID = (IDX_ROLE_TYPE_SID < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TYPE_SID)
-        });
-        } // while
-        return ret;
-        }
-        */
-    } // End of class AppRoleTier
+    //    while (rdr.Read()){
+    //    ret.Add(new AppRoleTier {
+    //    ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
+    //    APPL_ACTV_IND = (IDX_APPL_ACTV_IND < 0 || rdr.IsDBNull(IDX_APPL_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_APPL_ACTV_IND] == 1),
+    //    APPL_CD = (IDX_APPL_CD < 0 || rdr.IsDBNull(IDX_APPL_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_CD),
+    //    APPL_DESC = (IDX_APPL_DESC < 0 || rdr.IsDBNull(IDX_APPL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_DESC),
+    //    APPL_SID = (IDX_APPL_SID < 0 || rdr.IsDBNull(IDX_APPL_SID)) ? default(System.Byte) : rdr.GetFieldValue<System.Byte>(IDX_APPL_SID),
+    //    APPL_SUITE = (IDX_APPL_SUITE < 0 || rdr.IsDBNull(IDX_APPL_SUITE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_SUITE),
+    //    CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+    //    IS_SINGLE_SELECT = (IDX_IS_SINGLE_SELECT < 0 || rdr.IsDBNull(IDX_IS_SINGLE_SELECT)) ? default(System.Boolean) : ((int)rdr[IDX_IS_SINGLE_SELECT] == 1),
+    //    ROLE_ACTV_IND = (IDX_ROLE_ACTV_IND < 0 || rdr.IsDBNull(IDX_ROLE_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ROLE_ACTV_IND] == 1),
+    //    ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+    //    ROLE_TIER_SID = (IDX_ROLE_TIER_SID < 0 || rdr.IsDBNull(IDX_ROLE_TIER_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SID),
+    //    ROLE_TIER_SRT_ORD = (IDX_ROLE_TIER_SRT_ORD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_SRT_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SRT_ORD),
+    //    ROLE_TYPE_CD = (IDX_ROLE_TYPE_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_CD),
+    //    ROLE_TYPE_DESC = (IDX_ROLE_TYPE_DESC < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DESC),
+    //    ROLE_TYPE_DSPLY_CD = (IDX_ROLE_TYPE_DSPLY_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DSPLY_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DSPLY_CD),
+    //    ROLE_TYPE_SID = (IDX_ROLE_TYPE_SID < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TYPE_SID)
+    //    });
+    //    } // while
+    //    return ret;
+    //    }
+    //    */
+    //} // End of class AppRoleTier
 
     // TODO create T4 template to generate these
     public enum ActionCodes
@@ -738,111 +738,111 @@ public partial class DealTemplateDataGram
     /// at 9/19/2016 4:27:47 PM
     ///</summary>
 
-    [DataContract]
-    public partial class DealType
-    {
-        [DataMember]
-        public System.String DEAL_TYPE_CD { set; get; }
+    //[DataContract]
+    //public partial class DealType
+    //{
+    //    [DataMember]
+    //    public System.String DEAL_TYPE_CD { set; get; }
 
-        [DataMember]
-        public System.String DEAL_TYPE_DESC { set; get; }
+    //    [DataMember]
+    //    public System.String DEAL_TYPE_DESC { set; get; }
 
-        [DataMember]
-        public System.Int32 DEAL_TYPE_SID { set; get; }
+    //    [DataMember]
+    //    public System.Int32 DEAL_TYPE_SID { set; get; }
 
-        [DataMember]
-        public System.Boolean PERFORM_CTST { set; get; }
+    //    [DataMember]
+    //    public System.Boolean PERFORM_CTST { set; get; }
 
-        [DataMember]
-        public System.Int32 TEMPLT_DEAL_NBR { set; get; }
+    //    [DataMember]
+    //    public System.Int32 TEMPLT_DEAL_NBR { set; get; }
 
-        [DataMember]
-        public System.Int32 TEMPLT_DEAL_SID { set; get; }
+    //    [DataMember]
+    //    public System.Int32 TEMPLT_DEAL_SID { set; get; }
 
-        [DataMember]
-        public System.String TRKR_NBR_DT_LTR { set; get; }
+    //    [DataMember]
+    //    public System.String TRKR_NBR_DT_LTR { set; get; }
 
-        /*
-        private static List<DealType> DealTypeFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
+    //    /*
+    //    private static List<DealType> DealTypeFromReader(SqlDataReader rdr){
+    //    // This helper method is template generated.
+    //    // Refer to that template for details to modify this code.
 
-        var ret = new List<DealType>();
-        int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-        int IDX_DEAL_TYPE_DESC = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_DESC");
-        int IDX_DEAL_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_SID");
-        int IDX_PERFORM_CTST = DB.GetReaderOrdinal(rdr, "PERFORM_CTST");
-        int IDX_TEMPLT_DEAL_NBR = DB.GetReaderOrdinal(rdr, "TEMPLT_DEAL_NBR");
-        int IDX_TEMPLT_DEAL_SID = DB.GetReaderOrdinal(rdr, "TEMPLT_DEAL_SID");
-        int IDX_TRKR_NBR_DT_LTR = DB.GetReaderOrdinal(rdr, "TRKR_NBR_DT_LTR");
+    //    var ret = new List<DealType>();
+    //    int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
+    //    int IDX_DEAL_TYPE_DESC = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_DESC");
+    //    int IDX_DEAL_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_SID");
+    //    int IDX_PERFORM_CTST = DB.GetReaderOrdinal(rdr, "PERFORM_CTST");
+    //    int IDX_TEMPLT_DEAL_NBR = DB.GetReaderOrdinal(rdr, "TEMPLT_DEAL_NBR");
+    //    int IDX_TEMPLT_DEAL_SID = DB.GetReaderOrdinal(rdr, "TEMPLT_DEAL_SID");
+    //    int IDX_TRKR_NBR_DT_LTR = DB.GetReaderOrdinal(rdr, "TRKR_NBR_DT_LTR");
 
-        while (rdr.Read()){
-        ret.Add(new DealType {
-        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-        DEAL_TYPE_DESC = (IDX_DEAL_TYPE_DESC < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_DESC),
-        DEAL_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
-        PERFORM_CTST = (IDX_PERFORM_CTST < 0 || rdr.IsDBNull(IDX_PERFORM_CTST)) ? default(System.Boolean) : ((int)rdr[IDX_PERFORM_CTST] == 1),
-        TEMPLT_DEAL_NBR = (IDX_TEMPLT_DEAL_NBR < 0 || rdr.IsDBNull(IDX_TEMPLT_DEAL_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TEMPLT_DEAL_NBR),
-        TEMPLT_DEAL_SID = (IDX_TEMPLT_DEAL_SID < 0 || rdr.IsDBNull(IDX_TEMPLT_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TEMPLT_DEAL_SID),
-        TRKR_NBR_DT_LTR = (IDX_TRKR_NBR_DT_LTR < 0 || rdr.IsDBNull(IDX_TRKR_NBR_DT_LTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR_DT_LTR)
-        });
-        } // while
-        return ret;
-        }
-        */
-    } // End of class DealType
+    //    while (rdr.Read()){
+    //    ret.Add(new DealType {
+    //    DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
+    //    DEAL_TYPE_DESC = (IDX_DEAL_TYPE_DESC < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_DESC),
+    //    DEAL_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
+    //    PERFORM_CTST = (IDX_PERFORM_CTST < 0 || rdr.IsDBNull(IDX_PERFORM_CTST)) ? default(System.Boolean) : ((int)rdr[IDX_PERFORM_CTST] == 1),
+    //    TEMPLT_DEAL_NBR = (IDX_TEMPLT_DEAL_NBR < 0 || rdr.IsDBNull(IDX_TEMPLT_DEAL_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TEMPLT_DEAL_NBR),
+    //    TEMPLT_DEAL_SID = (IDX_TEMPLT_DEAL_SID < 0 || rdr.IsDBNull(IDX_TEMPLT_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TEMPLT_DEAL_SID),
+    //    TRKR_NBR_DT_LTR = (IDX_TRKR_NBR_DT_LTR < 0 || rdr.IsDBNull(IDX_TRKR_NBR_DT_LTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR_DT_LTR)
+    //    });
+    //    } // while
+    //    return ret;
+    //    }
+    //    */
+    //} // End of class DealType
 
-    ///<summary>
-    /// Class created via template - Do Not Modify!
-    /// To modify this code, re-execute the template, or extend as partial.
-    /// on MHTIPPIN-MOBL3
-    /// by mhtippin
-    /// at 9/19/2016 4:27:47 PM
-    ///</summary>
+    /////<summary>
+    ///// Class created via template - Do Not Modify!
+    ///// To modify this code, re-execute the template, or extend as partial.
+    ///// on MHTIPPIN-MOBL3
+    ///// by mhtippin
+    ///// at 9/19/2016 4:27:47 PM
+    /////</summary>
 
-    [DataContract]
-    public partial class CustomerQuarter
-    {
-        [DataMember]
-        public Nullable<System.Int32> CUST_MBR_SID { set; get; }
+    //[DataContract]
+    //public partial class CustomerQuarter
+    //{
+    //    [DataMember]
+    //    public Nullable<System.Int32> CUST_MBR_SID { set; get; }
 
-        [DataMember]
-        public Nullable<System.DateTime> QTR_END { set; get; }
+    //    [DataMember]
+    //    public Nullable<System.DateTime> QTR_END { set; get; }
 
-        [DataMember]
-        public Nullable<System.Int16> QTR_NBR { set; get; }
+    //    [DataMember]
+    //    public Nullable<System.Int16> QTR_NBR { set; get; }
 
-        [DataMember]
-        public Nullable<System.DateTime> QTR_STRT { set; get; }
+    //    [DataMember]
+    //    public Nullable<System.DateTime> QTR_STRT { set; get; }
 
-        [DataMember]
-        public Nullable<System.Int16> YR_NBR { set; get; }
+    //    [DataMember]
+    //    public Nullable<System.Int16> YR_NBR { set; get; }
 
-        /*
-        private static List<CustomerQuarter> CustomerQuarterFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
+    //    /*
+    //    private static List<CustomerQuarter> CustomerQuarterFromReader(SqlDataReader rdr){
+    //    // This helper method is template generated.
+    //    // Refer to that template for details to modify this code.
 
-        var ret = new List<CustomerQuarter>();
-        int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
-        int IDX_QTR_END = DB.GetReaderOrdinal(rdr, "QTR_END");
-        int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
-        int IDX_QTR_STRT = DB.GetReaderOrdinal(rdr, "QTR_STRT");
-        int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
+    //    var ret = new List<CustomerQuarter>();
+    //    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+    //    int IDX_QTR_END = DB.GetReaderOrdinal(rdr, "QTR_END");
+    //    int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
+    //    int IDX_QTR_STRT = DB.GetReaderOrdinal(rdr, "QTR_STRT");
+    //    int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
 
-        while (rdr.Read()){
-        ret.Add(new CustomerQuarter {
-        CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_CUST_MBR_SID),
-        QTR_END = (IDX_QTR_END < 0 || rdr.IsDBNull(IDX_QTR_END)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_QTR_END),
-        QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(Nullable<System.Int16>) : rdr.GetFieldValue<Nullable<System.Int16>>(IDX_QTR_NBR),
-        QTR_STRT = (IDX_QTR_STRT < 0 || rdr.IsDBNull(IDX_QTR_STRT)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_QTR_STRT),
-        YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(Nullable<System.Int16>) : rdr.GetFieldValue<Nullable<System.Int16>>(IDX_YR_NBR)
-        });
-        } // while
-        return ret;
-        }
-        */
-    } // End of class CustomerQuarter
+    //    while (rdr.Read()){
+    //    ret.Add(new CustomerQuarter {
+    //    CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_CUST_MBR_SID),
+    //    QTR_END = (IDX_QTR_END < 0 || rdr.IsDBNull(IDX_QTR_END)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_QTR_END),
+    //    QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(Nullable<System.Int16>) : rdr.GetFieldValue<Nullable<System.Int16>>(IDX_QTR_NBR),
+    //    QTR_STRT = (IDX_QTR_STRT < 0 || rdr.IsDBNull(IDX_QTR_STRT)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_QTR_STRT),
+    //    YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(Nullable<System.Int16>) : rdr.GetFieldValue<Nullable<System.Int16>>(IDX_YR_NBR)
+    //    });
+    //    } // while
+    //    return ret;
+    //    }
+    //    */
+    //} // End of class CustomerQuarter
 
     ///<summary>
     /// Class created via template - Do Not Modify!
@@ -1348,49 +1348,49 @@ public partial class DealTemplateDataGram
     /// at 9/19/2016 4:28:02 PM
     ///</summary>
 
-    [DataContract]
-    public partial class GeoItem
-    {
-        [DataMember]
-        public System.Int32 atrb_srt_ord { set; get; }
+    //[DataContract]
+    //public partial class GeoItem
+    //{
+    //    [DataMember]
+    //    public System.Int32 atrb_srt_ord { set; get; }
 
-        [DataMember]
-        public System.String ctry_nm { set; get; }
+    //    [DataMember]
+    //    public System.String ctry_nm { set; get; }
 
-        [DataMember]
-        public System.Int32 geo_mbr_sid { set; get; }
+    //    [DataMember]
+    //    public System.Int32 geo_mbr_sid { set; get; }
 
-        [DataMember]
-        public System.String geo_nm { set; get; }
+    //    [DataMember]
+    //    public System.String geo_nm { set; get; }
 
-        [DataMember]
-        public System.String rgn_nm { set; get; }
+    //    [DataMember]
+    //    public System.String rgn_nm { set; get; }
 
-        /*
-        private static List<GeoItem> GeoItemFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
+    //    /*
+    //    private static List<GeoItem> GeoItemFromReader(SqlDataReader rdr){
+    //    // This helper method is template generated.
+    //    // Refer to that template for details to modify this code.
 
-        var ret = new List<GeoItem>();
-        int IDX_atrb_srt_ord = DB.GetReaderOrdinal(rdr, "atrb_srt_ord");
-        int IDX_ctry_nm = DB.GetReaderOrdinal(rdr, "ctry_nm");
-        int IDX_geo_mbr_sid = DB.GetReaderOrdinal(rdr, "geo_mbr_sid");
-        int IDX_geo_nm = DB.GetReaderOrdinal(rdr, "geo_nm");
-        int IDX_rgn_nm = DB.GetReaderOrdinal(rdr, "rgn_nm");
+    //    var ret = new List<GeoItem>();
+    //    int IDX_atrb_srt_ord = DB.GetReaderOrdinal(rdr, "atrb_srt_ord");
+    //    int IDX_ctry_nm = DB.GetReaderOrdinal(rdr, "ctry_nm");
+    //    int IDX_geo_mbr_sid = DB.GetReaderOrdinal(rdr, "geo_mbr_sid");
+    //    int IDX_geo_nm = DB.GetReaderOrdinal(rdr, "geo_nm");
+    //    int IDX_rgn_nm = DB.GetReaderOrdinal(rdr, "rgn_nm");
 
-        while (rdr.Read()){
-        ret.Add(new GeoItem {
-        atrb_srt_ord = (IDX_atrb_srt_ord < 0 || rdr.IsDBNull(IDX_atrb_srt_ord)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_atrb_srt_ord),
-        ctry_nm = (IDX_ctry_nm < 0 || rdr.IsDBNull(IDX_ctry_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ctry_nm),
-        geo_mbr_sid = (IDX_geo_mbr_sid < 0 || rdr.IsDBNull(IDX_geo_mbr_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_geo_mbr_sid),
-        geo_nm = (IDX_geo_nm < 0 || rdr.IsDBNull(IDX_geo_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_geo_nm),
-        rgn_nm = (IDX_rgn_nm < 0 || rdr.IsDBNull(IDX_rgn_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_rgn_nm)
-        });
-        } // while
-        return ret;
-        }
-        */
-    } // End of class GeoItem
+    //    while (rdr.Read()){
+    //    ret.Add(new GeoItem {
+    //    atrb_srt_ord = (IDX_atrb_srt_ord < 0 || rdr.IsDBNull(IDX_atrb_srt_ord)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_atrb_srt_ord),
+    //    ctry_nm = (IDX_ctry_nm < 0 || rdr.IsDBNull(IDX_ctry_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ctry_nm),
+    //    geo_mbr_sid = (IDX_geo_mbr_sid < 0 || rdr.IsDBNull(IDX_geo_mbr_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_geo_mbr_sid),
+    //    geo_nm = (IDX_geo_nm < 0 || rdr.IsDBNull(IDX_geo_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_geo_nm),
+    //    rgn_nm = (IDX_rgn_nm < 0 || rdr.IsDBNull(IDX_rgn_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_rgn_nm)
+    //    });
+    //    } // while
+    //    return ret;
+    //    }
+    //    */
+    //} // End of class GeoItem
 
     ///<summary>
     /// Class created via template - Do Not Modify!
