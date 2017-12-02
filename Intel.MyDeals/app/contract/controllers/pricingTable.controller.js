@@ -305,6 +305,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.wipData = root.pricingTableData.WIP_DEAL;
 
+        // If no data was returned, we should redirect back to PTR
+        if (root.wipData.length === 0) {
+            $state.go('contract.manager.strategy',
+                {
+                    cid: $scope.contractData.DC_ID,
+                    sid: $scope.curPricingStrategyId,
+                    pid: $scope.curPricingTableId
+                },
+                { reload: true });
+        }
+
         root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true);
     }
 
