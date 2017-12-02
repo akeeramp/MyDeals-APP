@@ -136,7 +136,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="dc">OpDataCollector</param>
         /// <param name="items">Flattened Items to merge into dictionary</param>
         /// <returns></returns>
-        public static OpMsgQueue MergeDictionary(this OpDataCollector dc, OpDataCollectorFlattenedItem items)
+        public static OpMsgQueue MergeDictionary(this OpDataCollector dc, OpDataCollectorFlattenedItem items, bool needToCheckForDelete)
         {
             // Save Data Cycle: Point 4
             // Save Data Cycle: Point 12
@@ -174,12 +174,15 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
 
-                // Delete existing products in DB that are not there in the incoming product list - VN
-                foreach(OpDataElement dePrd in deProds)
+                if (needToCheckForDelete) // If true - came from PTR, false is from deals tab
                 {
-                    bool exists = incomingPrds.Exists(prd => prd.Key == dePrd.AtrbCd + dePrd.DimKeyString.AtrbCdDimKeySafe());
-                    if (!exists)
-                        dePrd.AtrbValue = string.Empty;
+                    // Delete existing products in DB that are not there in the incoming product list - VN
+                    foreach (OpDataElement dePrd in deProds)
+                    {
+                        bool exists = incomingPrds.Exists(prd => prd.Key == dePrd.AtrbCd + dePrd.DimKeyString.AtrbCdDimKeySafe());
+                        if (!exists)
+                            dePrd.AtrbValue = string.Empty;
+                    }
                 }
             }
 

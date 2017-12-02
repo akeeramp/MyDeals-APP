@@ -185,7 +185,7 @@ namespace Intel.MyDeals.BusinessLogic
                 OpDataCollector dc = myDealsData.ToOpDataCollector(id, idtype, parentid, parentidtype, opType, opDataElementSetType);
 
                 // Layer the passed items on top of the newly filled MyDealsData
-                dpDeals.Messages = dc.MergeDictionary(items);
+                dpDeals.Messages = dc.MergeDictionary(items, needToCheckForDelete);
             }
 
             // if WIP, check for merge complete rules
