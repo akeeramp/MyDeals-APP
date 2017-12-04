@@ -3435,6 +3435,62 @@
             $scope.saveEntireContractBase($state.current.name, true, true, null, null, null, callback);
         }
 
+        $scope.editPricingStrategyName = function (ps) {
+            $scope.openRenameTitle(ps, "Pricing Strategy");
+        }
+
+        $scope.editPricingTableName = function (pt) {
+            $scope.openRenameTitle(pt, "Pricing Table");
+        }
+
+        $scope.openRenameTitle = function (dataItem, mode, defVal, errMsg) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'renameTitleModal',
+                controller: 'renameTitleModalCtrl',
+                controllerAs: '$ctrl',
+                size: 'md',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    },
+                    mode: function () {
+                        return mode;
+                    },
+                    defVal: function () {
+                        return defVal;
+                    },
+                    errMsg: function () {
+                        return errMsg;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (retOrigValue) {
+                if (retOrigValue === dataItem.TITLE) return;
+
+                $scope._dirty = true;
+                $scope._dirtyContractOnly = true;
+
+                if (!dataItem._behaviors) dataItem._behaviors = {};
+                if (!dataItem._behaviors.isDirty) dataItem._behaviors.isDirty = {};
+                dataItem._behaviors.isDirty["TITLE"] = true;
+
+                if (!$scope.validateTitles()) {
+                    $scope.openRenameTitle(dataItem, mode, dataItem.TITLE, dataItem._behaviors.validMsg["TITLE"]);
+                    dataItem.TITLE = retOrigValue;
+                    dataItem._behaviors.isDirty["TITLE"] = false;
+                } else {
+                    $scope.saveUpperContract();
+                }
+
+            }, function () { });
+        }
+
         $scope.toggleTerms = function () {
             var splitter = $("#k-splitter").data("kendoSplitter");
             if (splitter.options.panes[1].collapsed) {

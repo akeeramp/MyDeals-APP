@@ -1,5 +1,6 @@
 ﻿
 <loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType"></loading-panel>
+<div ng-include="'app/contract/partials/ptModals/renameTitleModal.html'"></div>
 
 <div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
     <div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
@@ -66,13 +67,17 @@
 
 
 <style>
+    .modal-content {
+        margin-top: 100px;
+    }
+
     .contractStratHeader .isReadOnly {
         background-color: #ffffff !important;
     }
 
-     .contractStratHeader {
-         float: none !important;
-     }
+    .contractStratHeader {
+        float: none !important;
+    }
 
     .contractStratHeader .opUiContainer input.k-textbox, .contractStratHeader .opUiContainer input.k-textbox:hover {
         border-color: transparent;

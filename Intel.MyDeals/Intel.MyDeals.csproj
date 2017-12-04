@@ -344,6 +344,7 @@
     <Content Include="app\contract\controllers\allDeals.controller.js" />
     <Content Include="app\contract\controllers\actionSummaryModal.controller.js" />
     <Content Include="app\contract\controllers\pctGroupModal.controller.js" />
+    <Content Include="app\contract\controllers\renameTitleModal.controller.js" />
     <Content Include="app\contract\controllers\pctOverrideReasonModal.controller.js" />
     <Content Include="app\contract\partials\contractCompliance.html" />
     <Content Include="app\contract\partials\contractComplianceHeader.html" />
@@ -375,6 +376,7 @@
     <Content Include="app\contract\partials\ptModals\ecapTrackerModal.html" />
     <Content Include="app\contract\partials\ptModals\actionSummaryModal.html" />
     <Content Include="app\contract\partials\ptModals\pctGroupModal.html" />
+    <Content Include="app\contract\partials\ptModals\renameTitleModal.html" />
     <Content Include="app\contract\partials\ptModals\pctOverrideReasonModal.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
