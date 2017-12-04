@@ -176,7 +176,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Don't check for ANY becuase we might have to delete the last item
-            if (pricingTableRows != null && (savePacket.MyContractToken.DelPtr || pricingTableRows.Any()))
+            if (pricingTableRows != null && (savePacket.MyContractToken.DeleteAllPTR)|| pricingTableRows.Any())
             {
                 data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
                 secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
@@ -225,6 +225,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             // if we are deleting a PTR... only the PTR is being passed.  We don't want to issue deleted for the rest of the PTRs not passed
             //if (contractToken.DelPtr) contractToken.NeedToCheckForDelete = false;
+
+            contractToken.DeleteAllPTR = (contractAndStrategy.PricingTableRow.Count == 0);
 
             if (forceValidation)
             {

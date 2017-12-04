@@ -103,7 +103,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 CustId = custId,
                 ContractId = contractId,
-                DelPtr = delPtr
+                DeleteAllPTR = delPtr
             });
             return SafeExecutor(() => _contractsLib.SaveFullContract(fullContracts, savePacket)
                 , "Unable to save the Contract"
@@ -119,7 +119,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 CustId = custId,
                 ContractId = contractId,
-                DelPtr = delPtr
+                DeleteAllPTR = delPtr
             }, contractAndPricingTable, false, false)
                 , "Unable to save the Contract"
             );
@@ -136,7 +136,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 CustId = custId,
                 ContractId = contractId,
-                DelPtr = delPtr
+                DeleteAllPTR = delPtr
             }, contractAndPricingTable, true, true)
                 , "Unable to save the Contract"
             );
