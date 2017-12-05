@@ -4,8 +4,14 @@
             <td style="width:48%; vertical-align:top" ng-if="rootScope.C_ADD_ATTACHMENTS">
                 <div class="panel panel-default ">
                     <div class="panel-heading">
-                        Add Attachments
-                        <span kendo-tooltip k-content="'Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps.'" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
+                        <div class="fl">
+                            Add Attachments
+                            <span kendo-tooltip k-content="'Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps.'" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
+                        </div>
+                        <div class="fr" ng-show="fileUploading">
+                            <span><img src="/Images/032.gif" /></span>
+                        </div>
+                        <div class="clearboth"></div>
                     </div>
                     <div class="panel-body">
                         <div>

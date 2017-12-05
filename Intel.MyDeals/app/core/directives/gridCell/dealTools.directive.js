@@ -24,6 +24,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             }
 
             if (!!$scope.isEditable) $scope.isEditable = false;
+            $scope.fileUploading = false;
 
             $scope.assignVal = function (field, defval) {
                 var item = $scope[field];
@@ -65,6 +66,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: false };
 
             $scope.filePostAddParams = function (e) {
+                $scope.fileUploading = true;
                 uploadSuccessCount = 0;
                 uploadErrorCount = 0;
                 e.data = {
@@ -85,15 +87,15 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             }
 
             $scope.onComplete = function (e) {
-                if (uploadSuccessCount > 0) {
-                    logger.success("Successfully uploaded " + uploadSuccessCount + " attachment(s).", null, "Upload successful");
-                }
+                $scope.fileUploading = false;
                 if (uploadErrorCount > 0) {
                     logger.error("Unable to upload " + uploadErrorCount + " attachment(s).", null, "Upload failed");
                 }
 
                 // Refresh the Existing Attachments grid to reflect the newly uploaded attachments(s).
                 if (uploadSuccessCount > 0) {
+                    logger.success("Successfully uploaded " + uploadSuccessCount + " attachment(s).", null, "Upload successful");
+
                     $scope.attachmentsDataSource.read();
                     //$scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
 
@@ -207,18 +209,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 var fVal = $scope.getFileValue(dataItem);
 
                 //Forces datasource web API call 
-                $scope.attachmentsDataSource.read().then(function () {
-                    var view = $scope.attachmentsDataSource.view();
-
-                    $scope.attachmentCount = (view === null || view === undefined) ? 0 : view.length;
-                    console.log($scope.attachmentCount);
-
-                    $scope.dataItem.HAS_ATTACHED_FILES = $scope.attachmentCount > 0 ? "1" : "0";
-                    rootScope.saveCell($scope.dataItem, "HAS_ATTACHED_FILES");
-
-                    $scope.initComplete = true;
-                    kendo.ui.progress($("#attachmentsGrid"), false);
-                });
+                $scope.attachmentsDataSource.read();
                 if (fVal === "HasFile" || fVal === "AddFile") $scope.openAttachments();
             }
 
@@ -275,6 +266,18 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 requestStart: function () {
                     kendo.ui.progress($("#attachmentsGrid"), true);
                 },               
+                requestEnd: function (e) {
+                    var view = e.response;
+
+                    $scope.attachmentCount = (view === null || view === undefined) ? 0 : view.length;
+                    console.log($scope.attachmentCount);
+
+                    $scope.dataItem.HAS_ATTACHED_FILES = $scope.attachmentCount > 0 ? "1" : "0";
+                    rootScope.saveCell($scope.dataItem, "HAS_ATTACHED_FILES");
+
+                    $scope.initComplete = true;
+                    kendo.ui.progress($("#attachmentsGrid"), false);
+                },
                 pageSize: 25,
                 schema: {
                     model: {
