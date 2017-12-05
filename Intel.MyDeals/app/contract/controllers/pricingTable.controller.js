@@ -395,12 +395,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Do Nothing on cancel
             });
     }
+    // Converts JSON sysproducts to array
+    function populateValidProducts(sysProducts) {
+        var addedProducts = [];
+        for (var key in sysProducts) {
+            if (sysProducts.hasOwnProperty(key)) {
+                angular.forEach(sysProducts[key], function (item) {
+                    addedProducts.push(item);
+                });
+            }
+        }
+        // Orders KIT prodcts
+        return $filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
+    }
 
     function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
         var validatedSelectedProducts = productSelectorOutput.validateSelectedProducts;
         if (!productSelectorOutput.splitProducts) {
             var usrInput = updateUserInput(validatedSelectedProducts);
             var contractProducts = usrInput.contractProducts;
+
+            // TODO: Should we update PTR_USER_PRD with output of this ? If yes make change wherever we update PTR_USER_PRD
+            var kitOrderProducts = populateValidProducts(validatedSelectedProducts);
+            console.log("KIT product orders " + kitOrderProducts);
+
             //PTR_SYS_PRD
             sheet.range(root.colToLetter["PTR_SYS_PRD"] + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;

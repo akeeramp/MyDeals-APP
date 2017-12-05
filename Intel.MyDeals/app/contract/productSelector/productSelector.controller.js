@@ -469,7 +469,7 @@
             if (item.parentSelected && vm.enableMultipleSelection) {
                 manageSelectedProducts('exclude', item);
             } else {
-                if (vm.dealType !== "ECAP" || vm.dealType !== "KIT") {
+                if (vm.dealType !== "ECAP" && vm.dealType !== "KIT") {
                     // Get unique product types
                     var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
                     existingProdTypes = existingProdTypes.map(function (elem) {
@@ -841,7 +841,7 @@
         }
 
         vm.save = function () {
-            if (vm.dealType !== "ECAP" || vm.dealType !== "KIT") {
+            if (vm.dealType !== "ECAP" && vm.dealType !== "KIT") {
                 // Get unique product types
                 var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
                 existingProdTypes = existingProdTypes.map(function (elem) {
@@ -888,6 +888,7 @@
                     EXCLUDE: false
                 }
             });
+
             var pricingTableSysProducts = {};
 
             angular.forEach(vm.addedProducts, function (item, key) {

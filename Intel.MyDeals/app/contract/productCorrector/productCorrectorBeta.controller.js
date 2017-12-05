@@ -615,7 +615,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function validCrossVerticals(item) {
-        if (vm.DEAL_TYPE === 'ECAP') return true;
+        if (vm.DEAL_TYPE === 'ECAP' || vm.DEAL_TYPE === 'KIT') return true;
         var existingProductTypes = [];
         for (var key in vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
             angular.forEach(vm.ProductCorrectorData.ValidProducts[vm.curRowId][key], function (product) {
@@ -1154,7 +1154,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function isValidCapDetails(productJson, showErrorMesssage) {
-        if (vm.DEAL_TYPE !== 'ECAP') {
+        if (vm.DEAL_TYPE !== 'ECAP' && vm.DEAL_TYPE !== 'KIT') {
             return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
         }
         var errorMessage = "";
