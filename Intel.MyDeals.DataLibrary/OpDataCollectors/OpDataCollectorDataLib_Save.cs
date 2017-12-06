@@ -175,10 +175,11 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            if (dtData.Rows.Count != 0 && dtAction.Rows.Count != 0) // If there is nothing to send to the DB, just pre-empt the whole process.
+            // If there is nothing to send to the DB, just pre-empt the whole process.  Just make sure that you also account for solo actions without save data (DE33251)
+            if (dtData.Rows.Count != 0 || dtAction.Rows.Count != 0)
             {
-                dsImport.Tables.Add(dtData); // Add the attributes table to the import data set
-                dsImport.Tables.Add(dtAction); // Add the actions table to the import data set
+                dsImport.Tables.Add(dtData); // Add the ATTRIBUTES table to the import data set
+                dsImport.Tables.Add(dtAction); // Add the ACTIONS table to the import data set
 
 #if DEBUG
                 OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Begin BulkImportDataSet.");
