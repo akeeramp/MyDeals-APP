@@ -11,7 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken);
         OpDataCollectorFlattenedDictList SaveFullPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedDictList fullpricingStrategies);
         OpMsg DeletePricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies);
-        OpMsg RollBackPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies);
+        OpMsg RollBackObject(OpDataElementType opDataElementType, ContractToken contractToken, int dcId);
         OpMsgQueue CancelPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies);
         OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs);
         OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id);

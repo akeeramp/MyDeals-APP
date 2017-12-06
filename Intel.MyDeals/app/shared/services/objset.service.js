@@ -96,8 +96,8 @@ function objsetService($http, dataService, logger, $q) {
     function deletePricingStrategy(custId, contractId, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + custId + '/' + contractId, [ps]);
     }
-    function rollBackPricingStrategy(custId, contractId, ps) {
-        return dataService.post(apiBasePricingStrategyUrl + 'RollBackPricingStrategy/' + custId + '/' + contractId, [ps]);
+    function rollBackPricingStrategy(custId, contractId, dcId) {
+        return dataService.get(apiBasePricingStrategyUrl + 'RollBackPricingStrategy/' + custId + '/' + contractId + '/' + dcId);
     }
     function cancelPricingStrategy(custId, contractId, contractCustAccpt, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'CancelPricingStrategy/' + custId + '/' + contractId + '/' + contractCustAccpt, [ps]);
@@ -117,8 +117,8 @@ function objsetService($http, dataService, logger, $q) {
     function deletePricingTable(custId, contractId, pt) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId + '/' + contractId, [pt]);
     }
-    function rollBackPricingTable(custId, contractId, pt) {
-        return dataService.post(apiBasePricingTableUrl + 'RollBackPricingTable/' + custId + '/' + contractId, [pt]);
+    function rollBackPricingTable(custId, contractId, dcId) {
+        return dataService.get(apiBasePricingTableUrl + 'RollBackPricingTable/' + custId + '/' + contractId + '/' + dcId);
     }
     function cancelPricingTable(custId, contractId, contractCustAccpt, pt) {
         return dataService.post(apiBasePricingTableUrl + 'CancelPricingTable/' + custId + '/' + contractId + '/' + contractCustAccpt, [pt]);
@@ -138,8 +138,8 @@ function objsetService($http, dataService, logger, $q) {
     function deletePricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
     }
-    function rollbackPricingTableRow(custId, contractId, ptrId) {
-        return dataService.get(apiBasePricingTableUrl + 'RollBackPricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
+    function rollbackPricingTableRow(custId, contractId, dcId) {
+        return dataService.get(apiBasePricingTableUrl + 'RollBackPricingTableRow/' + custId + '/' + contractId + '/' + dcId);
     }
     function unGroupPricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'UnGroupPricingTableRow/' + custId + '/' + contractId + '/' + ptrId);

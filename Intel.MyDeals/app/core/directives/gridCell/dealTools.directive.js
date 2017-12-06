@@ -414,9 +414,8 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             }
 
             $scope.openRollBackDialog = function () {
-                // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
                 kendo.confirm("<h4>Would you like to undo this deals current re-deal action?</h4><p>This will remove the deal edits from the Pricing Editor also.</p>").then(function () {
-                    rootScope.deletePricingTableRow($scope.dataItem);
+                    rootScope.rollbackPricingTableRow($scope.dataItem);
                 });
             }
 

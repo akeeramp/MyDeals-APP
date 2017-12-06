@@ -5,6 +5,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using System;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -114,11 +115,94 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            // TODO replace with Delete call
             return deleteIds.Any()
                 ? new OpMsg(OpMsg.MessageType.Warning, "Unable to delete Ids {0}.", string.Join(",", deleteIds))
                 : new OpMsg(OpMsg.MessageType.Info, "Deleted Ids {0}.", string.Join(",", deletedIds));
 
+        }
+
+        public static OpMsg RollbackOperations(this OpDataElementType opDataElementType, int dcId, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
+        {
+            List<int> deleteIds = new List<int>();
+            List<int> deletedIds = new List<int>();
+            List<int> rollbackIds = new List<int>();
+            List<int> rolledbackIds = new List<int>();
+
+            MyDealsData mydealsData = opDataElementType.GetByIDs(
+                new List<int> { dcId }, 
+                new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }, 
+                new List<int> { Attributes.WF_STG_CD.ATRB_SID,  Attributes.HAS_TRACKER.ATRB_SID });
+
+            if (opDataElementType == OpDataElementType.PRC_ST) // set the strategy stage back to approved
+            {
+                mydealsData[OpDataElementType.PRC_ST].AllDataCollectors.FirstOrDefault().SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Approved);
+
+                mydealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
+                mydealsData[OpDataElementType.PRC_ST].GroupID = -101; // Whatever the real ID of this object is
+                mydealsData[OpDataElementType.PRC_ST].AddSaveActions();
+            }
+
+            // For each WIP deal, if it has a tracker, add it to rollback list, if it is in play, add parent PTR to delete
+            rollbackIds = mydealsData[OpDataElementType.WIP_DEAL].AllDataCollectors
+                .Where(d => d.GetDataElementValue(AttributeCodes.HAS_TRACKER) == "1" 
+                    && d.GetDataElementValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Active 
+                    && d.GetDataElementValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Hold 
+                    && d.GetDataElementValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Cancelled).Select(d => d.DcID).ToList();
+
+            // Send up PTR parents for delete object calls - remove those lines that have never gone active before.
+            deleteIds = mydealsData[OpDataElementType.WIP_DEAL].AllDataCollectors
+                .Where(d => d.GetDataElementValue(AttributeCodes.HAS_TRACKER) != "1"
+                    && d.GetDataElementValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Active
+                    && d.GetDataElementValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Hold
+                    && d.GetDataElementValue(AttributeCodes.WF_STG_CD) != WorkFlowStages.Cancelled).Select(d => d.DcParentID).ToList();
+
+            mydealsData[OpDataElementType.PRC_TBL_ROW].BatchID = Guid.NewGuid();
+            mydealsData[OpDataElementType.PRC_TBL_ROW].GroupID = -101; // Whatever the real ID of this object is
+            mydealsData[OpDataElementType.PRC_TBL_ROW].AddDeleteActions(deleteIds);
+
+            mydealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+            mydealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
+            mydealsData[OpDataElementType.WIP_DEAL].AddRollbackActions(rollbackIds);
+
+            mydealsData.EnsureBatchIDs();
+            MyDealsData responseData = mydealsData.Save(contractToken);
+
+            // Strategy level is just a save, PT is not detectable save, the rest are combination of DELETED_OBJ IDs at PTR or rollback IDs at WIP.  
+            // Assume success unless things crashed, then outer messages will trigger instead.
+            string retMsg = "Rollback Successful";
+            foreach (OpDataAction action in mydealsData[OpDataElementType.WIP_DEAL].Actions)
+            {
+                if (action.Value == "DEAL_ROLLBACK_TO_ACTIVE")
+                {
+                    rolledbackIds = action.TargetDcIDs;
+                }
+            }
+            foreach (OpDataAction action in responseData[OpDataElementType.PRC_TBL_ROW].Actions)
+            {
+                if (action.Value == "OBJ_DELETED")
+                {
+                    deletedIds.Add(action.DcID ?? 0);
+                }
+            }
+            if (opDataElementType == OpDataElementType.PRC_ST)
+            {
+                retMsg += Environment.NewLine + "Strategy rolled back to last Approved state.";
+            }
+            else if (opDataElementType == OpDataElementType.PRC_TBL)
+            {
+                retMsg += Environment.NewLine + "Price Table was rolled back.  Strategy stays at current stage.";
+            }
+            if (deletedIds.Any())
+            {
+                retMsg += Environment.NewLine + "Table removed as part of rollback: " + string.Join(", ", deletedIds);
+            }
+            if (rollbackIds.Any())
+            {
+                retMsg += Environment.NewLine + "Deals returned to active as part of rollback: " + string.Join(", ", rolledbackIds);
+            }
+
+            return new OpMsg(OpMsg.MessageType.Info, retMsg);
+            //return new OpMsg(OpMsg.MessageType.Warning, "Unable to rollback Ids {0}.", string.Join(",", deleteIds));
         }
 
     }

@@ -86,17 +86,34 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("RollBackPricingTable/{custId}/{contractId}")]
-        [HttpPost]
-        public OpMsg RollBackPricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
+        [Route("RollBackPricingTable/{custId}/{contractId}/{dcId}")]
+        [HttpGet]
+        public OpMsg RollBackPricingTable(int custId, int contractId, int dcId)
         {
-            // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
-            return SafeExecutor(() => _pricingTablesLib.RollBackPricingTable(new ContractToken
-            {
-                CustId = custId,
-                ContractId = contractId
-            }, pricingTables)
+            return SafeExecutor(() => _pricingTablesLib.RollBackObject(OpDataElementType.PRC_TBL,
+                new ContractToken
+                {
+                    CustId = custId,
+                    ContractId = contractId
+                },
+                dcId)
                 , "Unable to rollback the Pricing Table {id}"
+            );
+        }
+
+        [Authorize]
+        [Route("RollBackPricingTableRow/{custId}/{contractId}/{dcId}")]
+        [HttpGet]
+        public OpMsg RollBackPricingTableRow(int custId, int contractId, int dcId)
+        {
+            return SafeExecutor(() => _pricingTablesLib.RollBackObject(OpDataElementType.PRC_TBL_ROW,
+                new ContractToken
+                {
+                    CustId = custId,
+                    ContractId = contractId
+                },
+                dcId)
+                , "Unable to rollback the Pricing Table Row {id}"
             );
         }
 

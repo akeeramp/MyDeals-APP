@@ -1582,7 +1582,6 @@
                 });
             });
         }
-        // ROLLBACK NEED TO VERIFY BELOW WITH PHIL
         $scope.rollBackPricingStrategy = function (ps) {
             kendo.confirm("Are you sure that you want to undo this pricing strategy re-deal?").then(function () {
                 $scope.$apply(function () {
@@ -1590,7 +1589,7 @@
                     $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
-                    objsetService.rollBackPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
+                    objsetService.rollBackPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps.DC_ID).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
                                 $scope.setBusy("RollBack Failed", "Unable to RollBack the Pricing Strategy re-deal", "Error");
@@ -1600,30 +1599,14 @@
                                 return;
                             }
 
-                            var deleteReload = false;
-                            if ($scope.curPricingTableId > 0) {
-                                deleteReload = true;
-                            }
-
-                            // might need to unmark the current selected item
-                            $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
-                            $scope.unmarkCurPricingTableIf(ps.DC_ID);
-
-                            // delete item
-                            $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
-
                             $scope.setBusy("RollBack Successful", "RollBack the Pricing Strategy re-deal", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
                             topbar.hide();
 
-                            // redirect if focused PT belongs to deleted PS
-                            if (deleteReload) {
-                                $state.go('contract.manager', {
-                                    cid: $scope.contractData.DC_ID
-                                }, { reload: true });
-                            }
+                            // You changed the list, just reload it.
+                            $scope.reloadPage();
                         },
                         function (result) {
                             logger.error("Could not RollBack the Pricing Strategy.", result, result.statusText, "Error");
@@ -1725,12 +1708,12 @@
         $scope.rollBackPricingTable = function (ps, pt) {
             kendo.confirm("Are you sure that you want to undo this pricing table re-deal?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Deleting...", "Deleting the Pricing Table");
+                    $scope.setBusy("Rollback...", "Rolling Back the Pricing Table");
                     $scope._dirty = false;
                     topbar.show();
 
                     // Remove from DB first... then remove from screen
-                    objsetService.rollBackPricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
+                    objsetService.rollBackPricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt.DC_ID).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
                                 $scope.setBusy("RollBack Failed", "Unable to RollBack the Pricing Table re-deal", "Error");
@@ -1740,29 +1723,14 @@
                                 return;
                             }
 
-                            var deleteReload = false;
-                            if ($scope.curPricingTableId === pt.DC_ID) {
-                                deleteReload = true;
-                            }
-
-                            // might need to unmark the current selected item
-                            $scope.unmarkCurPricingTableIf(ps.DC_ID);
-
-                            // delete item
-                            ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
-
                             $scope.setBusy("RollBack Successful", "RollBack the Pricing Table re-deal", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
                             topbar.hide();
 
-                            // redirect if deleted the currently focused PT
-                            if (deleteReload) {
-                                $state.go('contract.manager', {
-                                    cid: $scope.contractData.DC_ID
-                                }, { reload: true });
-                            }
+                            // You changed the list, just reload it.
+                            $scope.reloadPage();
                         },
                         function (response) {
                             logger.error("Could not RollBack the Pricing Table.", response, response.statusText, "Error");
@@ -1843,7 +1811,44 @@
                 );
             });
         }
+        $scope.rollbackPricingTableRow = function (wip) {
+            $scope.$apply(function () {
+                $scope.setBusy("Rolling Back...", "Rolling Back the Pricing Table Row and Deal");
+                $scope._dirty = false;
+                topbar.show();
 
+                // Remove from DB first... then remove from screen
+                objsetService.rollbackPricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
+                    function (data) {
+                        if (data.data.MsgType !== 1) {
+                            $scope.setBusy("Rollback Failed", "Unable to Rollback the Pricing Table", "Error");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        }
+
+                        $scope.setBusy("Rollback Successful", "Rollback of the Pricing Table Row and Deal", "Success");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+                        topbar.hide();
+
+                        // You changed the deals list, just reload it.
+                        $scope.reloadPage();
+                    },
+                    function (response) {
+                        logger.error("Could not Rollback the Pricing Table.", response, response.statusText);
+                        $scope.setBusy("", "");
+                        topbar.hide();
+                    }
+                );
+            });
+        }
+
+        $scope.reloadPage = function () {
+            $state.reload();
+        }
 
         // **** UNGROUP Methods ****
         //

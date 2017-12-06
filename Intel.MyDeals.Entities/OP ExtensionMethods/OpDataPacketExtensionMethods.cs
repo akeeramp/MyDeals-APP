@@ -83,6 +83,23 @@ namespace Intel.MyDeals.Entities
             }
         }
 
+        public static void AddRollbackActions(this OpDataPacket<OpDataElementType> packet, List<int> rollbackIds)
+        {
+            if (!rollbackIds.Any()) return;
+
+            // Ensure that the list of deal IDs is actually correct before adding it on
+            List<int> finalRollbackIds = new List<int>();
+            foreach (int rollbackId in rollbackIds)
+            {
+                if (rollbackId > 0) finalRollbackIds.Add(rollbackId);
+            }
+
+            if (finalRollbackIds.Any())
+            {
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.DEAL_ROLLBACK_TO_ACTIVE, finalRollbackIds, 99));
+            }
+        }
+
         public static void AddGoingActiveActions(this OpDataPacket<OpDataElementType> packet, List<int> dealIds)
         {
             if (!dealIds.Any()) return;

@@ -90,18 +90,18 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
         [Authorize]
-        [Route("RollBackPricingStrategy/{custId}/{contractId}")]
-        [HttpPost]
-        public OpMsg RollBackPricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
+        [Route("RollBackPricingStrategy/{custId}/{contractId}/{dcId}")]
+        [HttpGet]
+        public OpMsg RollBackPricingStrategy(int custId, int contractId, int dcId)
         {
-            // ROLLBACK FILL IN WITH PROPER ROLLBACK LOGIC
-            return SafeExecutor(() => _pricingStrategiesLib.RollBackPricingStrategy(new ContractToken
-            {
-                CustId = custId,
-                ContractId = contractId
-            }, pricingStrategies)
+            return SafeExecutor(() => _pricingStrategiesLib.RollBackObject(OpDataElementType.PRC_ST, 
+                new ContractToken
+                {
+                    CustId = custId,
+                    ContractId = contractId
+                }, 
+                dcId)
                 , "Unable to rollback the Pricing Strategy {id}"
             );
         }
