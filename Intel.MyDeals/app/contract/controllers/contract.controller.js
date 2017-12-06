@@ -196,7 +196,6 @@
         $scope.initialEndDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["END_DT"] && $scope.contractData._behaviors.isReadOnly["END_DT"];
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
 
-
         $scope.needMct = function () {
             if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false;
 
@@ -216,6 +215,13 @@
         }
         updateDisplayTitle();
 
+        $scope.OverrideDeleteContract = function () {
+            // can't delete contract if it has a tracker number
+            if ($scope.contractData.HAS_TRACKER === "1") {
+                $scope.C_DELETE_CONTRACT = false;
+            }
+        }
+
         $scope.refreshContractData = function (id, ptId) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
                 $scope.contractData = $scope.initContract(data);
@@ -228,6 +234,8 @@
                         $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, ptId);
                     }
                 }
+
+                $scope.OverrideDeleteContract();
 
                 $timeout(function () {
                     $scope.$apply();
@@ -586,6 +594,8 @@
                 objTypeSid: 1
             }
         };
+
+        $scope.OverrideDeleteContract();
 
         $scope.$on("kendoRendered",
             function (e) {
