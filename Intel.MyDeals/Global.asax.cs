@@ -9,6 +9,7 @@ using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Controllers;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
+using System.Web.Helpers;
 
 namespace Intel.MyDeals
 {
@@ -24,9 +25,15 @@ namespace Intel.MyDeals
             UnityConfig.RegisterComponents();
             AppHelper.SetupDataAccessLib();
 
-			// Init log writers
-			OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
+            AntiForgeryConfig.SuppressXFrameOptionsHeader = true;            
+            // Init log writers
+            OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
 		}
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            HttpContext.Current.Response.AddHeader("x-frame-options", "DENY");
+        }
 
         private void Application_Error(Object sender, EventArgs e)
         {
