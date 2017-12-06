@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('dealTools', dealTools);
 
-dealTools.$inject = ['$timeout', 'logger', 'dataService', '$rootScope', '$compile', '$templateRequest'];
+dealTools.$inject = ['$timeout', 'logger', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary'];
 
-function dealTools($timeout, logger, dataService, $rootScope, $compile, $templateRequest) {
+function dealTools($timeout, logger, dataService, $rootScope, $compile, $templateRequest, colorDictionary) {
     return {
         scope: {
             dataItem: '=ngModel',
@@ -429,6 +429,22 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 kendo.confirm("<h4>Would you like to take the deal off hold?</h4><p>This will enable the deal in the Pricing Table and will<br/>enable it to get approved.</p>").then(function () {
                     rootScope.actionWipDeal($scope.dataItem, 'Approve');
                 });
+            }
+
+            // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.
+            // Taken from Phil's absolutely awesome other color-coding areas in other JS files...  Had to hijack local function getStageBgColorStyle(stgFullTitleChar()) to get the right stage though.
+            $scope.getStageBgColorStyle = function (c) {
+                return { backgroundColor: $scope.getColorStage(c) };
+            }
+            $scope.getColor = function (k, c) {
+                if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                    return colorDictionary[k][c];
+                }
+                return "#aaaaaa";
+            }
+            $scope.getColorStage = function (d) {
+                if (!d) d = "Draft";
+                return $scope.getColor('stage', d);
             }
 
         }],
