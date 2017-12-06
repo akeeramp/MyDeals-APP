@@ -122,6 +122,9 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
 
     $scope.gotoContractEditor = function (ps, pt) {
+        root.isPtr = false;
+        root.isWip = false;
+
         if (!pt) {
             $state.go('contract.manager',
                 {

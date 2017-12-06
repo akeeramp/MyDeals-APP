@@ -284,6 +284,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $scope.gotoContractEditor = function (ps, pt) {
+        root.isPtr = false;
+        root.isWip = false;
+
         if (!pt) {
             $state.go('contract.manager',
             {
@@ -291,6 +294,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             });
         } else {
             if (ps.PASSED_VALIDATION === "Complete") {
+                root.isWip = true;
                 $state.go('contract.manager.strategy.wip',
                     {
                         cid: ps.DC_PARENT_ID,
@@ -298,6 +302,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                         pid: pt.DC_ID
                     });
             } else {
+                root.isPtr = true;
                 $state.go('contract.manager.strategy',
                     {
                         cid: ps.DC_PARENT_ID,
