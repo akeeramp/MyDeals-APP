@@ -24,6 +24,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             $scope.text = "";
             $scope.textMsg = "";
             $scope.needToRunPct = false;
+            $scope.runViaButton = false;
 
             if ($scope.btnType === "mct") {
                 $scope.text = "Meet Comp Test";
@@ -87,26 +88,35 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 }
             }, (3000));
 
+            $scope.executePctViaBtn = function () {
+                $scope.runViaButton = true;
+                $scope.executePct();
+            }
 
             $scope.executePct = function () {
                 $(".iconRunPct").addClass("fa-spin grn");
+                if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctRunning', {});
 
                 objsetService.runPctContract($scope.contractId).then(
                     function (e) {
-                        if (!!$scope.onComplete) $scope.onComplete(e);
+                        if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
+                        if (!!$scope.onComplete) $scope.onComplete(e, $scope.runViaButton);
 
                         $timeout(function () {
                             $scope.root.setBusy("", "");
                             $(".iconRunPct").removeClass("fa-spin grn");
                         }, 2000);
+                        $scope.runViaButton = false;
                     },
                     function (response) {
+                        if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
                         $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
                         logger.error("Could not run Cost Test.", response, response.statusText);
                         $timeout(function () {
                             $scope.root.setBusy("", "");
                             $(".iconRunPct").removeClass("fa-spin grn");
                         }, 2000);
+                        $scope.runViaButton = false;
                     }
                 );
             }

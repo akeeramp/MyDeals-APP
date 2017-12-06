@@ -159,7 +159,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
 
-    $scope.refreshContractDataIfNeeded = function () {
+    $scope.refreshContractDataIfNeeded = function (e, executedFromBtn) {
         objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
             var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
             var newContractData = $scope.root.initContract(data);
@@ -177,9 +177,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             var anyExpanded = $(".chevron.intelicon-down").length > 0;
 
             // only update the screen if atrbs changed AND user did not "touch" the screen layout
-            if (hasKeyDataChanged) {
+            if (executedFromBtn || hasKeyDataChanged) {
 
-                if (!anyChecked && !anyExpanded) {
+                if (executedFromBtn || (!anyChecked && !anyExpanded)) {
                     $scope.root.contractData = newContractData;
                     $scope.root.contractData.CUST_ACCNT_DIV_UI = "";
 

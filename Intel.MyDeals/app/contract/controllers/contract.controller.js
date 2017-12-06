@@ -3087,6 +3087,16 @@
             $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
         });
 
+        $scope.$on('btnPctMctRunning', function (event, args) {
+            $scope.setBusy("Running", "Price Cost Test and Meet Comp Test.");
+        });
+
+        $scope.$on('btnPctMctComplete', function (event, args) {
+            $scope.setBusy("Complete", "Reloading the page now.", "Success");
+            $timeout(function () {
+                $scope.setBusy("", "");
+            }, 2000);
+        });
 
         // **** NEW/EDIT PRICING TABLE Methods ****
         //
