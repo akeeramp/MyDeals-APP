@@ -32,7 +32,7 @@
             	checkboxAttr = "PRD_MBR_SID";
 			}
             var checkBoxtemplate = '';
-            if (scope.vm.dealType == 'VOL_TIER' || scope.checkboxIsGeneric) {
+            if (scope.vm.dealType == 'VOL_TIER' || scope.vm.dealType == 'PROGRAM' || scope.checkboxIsGeneric) {
             	checkBoxtemplate = '<div><input id="{{dataItem.' + checkboxAttr + '}}" ng-model="dataItem.selected" ng-click="vm.toggleSelect($event, dataItem)" class="checkbox-custom" type="checkbox">' +
                         '<label for="{{dataItem.' + checkboxAttr + '}}" class="checkbox-custom-label"></label></div>';
             } else {
