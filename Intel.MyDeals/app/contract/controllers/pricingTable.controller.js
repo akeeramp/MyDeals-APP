@@ -167,8 +167,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // populate DEAL_GRP_NM dictionary for KITS
         if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
             for (var i = 0; i < root.pricingTableData.PRC_TBL_ROW.length; i++) {
-                if (root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"] != "" && dealGrpNamesDict[root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"].toUpperCase()] === undefined) {
-                    dealGrpNamesDict[root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"].toUpperCase()] = i;
+            	if (root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"] != "" && dealGrpNameDict[formatStringAsDealGrpDictKey(root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"])]=== undefined) {
+                	addToDealGrpNameDict(root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"], i);
                 }
             }
         }
@@ -537,7 +537,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
-    var dealGrpNamesDict = {};
+    var dealGrpNameDict = {};
 
     // On Spreadsheet change
     function onChange(arg) {
@@ -588,88 +588,132 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 range.forEachCell(
 					function (rowIndex, colIndex, value) {
-					    var myRow = data[(rowIndex - 1)];
+						var myRowIndex = (rowIndex - 1);
+						var myRow = data[myRowIndex];
+					    var myColLetter = String.fromCharCode(intA + (colIndex));
+					    var colName = root.letterToCol[myColLetter];
+					    var prevValue = myRow[colName];
 
-					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null
-							&& value.value != null) {
+						if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
+							// Override of an existing deal grp name (new val != old val)
+							if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0) {
+								delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+							}
+						}
 
-
-					        // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
-					        var myColLetter = String.fromCharCode(intA + (colIndex));
-					        var colName = root.letterToCol[myColLetter];
-					        var prevValue = myRow[colName];
+					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
+							
+					        // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values due to the sync() at the end of this function
 					        myRow[colName] = value.value;
-					        sourceData[(rowIndex - 1)][colName] = value.value;
+					        //sourceData[(rowIndex - 1)][colName] = value.value;
+							
+					    	// Logic to apply to merge cells (multiple tiers)
+					    	if (skipUntilRow != null && rowIndex < skipUntilRow) { // Changed a cell in a merged cell
+					    		// Set the deal group val to be the same as the first one of the merged rows
+					    		if (colIndex == dealGrpColIndex) {
+					    			value.value = dealGrpSkipVal;
+					    			myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
+					    			//sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
+					    		}
+								// Skip the rest of the logic for this row
+								return;
+							}
+
+							// If it's a merged cell (multiple tiers) then find out how many rows to skip this deal grp validation for (skip is shown in the return above)
+							if (myRow["NUM_OF_TIERS"] > 1) { 
+								skipUntilRow = rowIndex + (myRow["NUM_OF_TIERS"]);
+								dealGrpSkipVal = value.value;
+							}
+
+							// DEAL_GRP functionality
+							if (colIndex == dealGrpColIndex) {
+								var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
+								
+								// Override of an existing deal grp name (new val != old val)
+								if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue) ) {
+									delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+								}
+
+								// Check if deal group name exists in dictionary
+								if (dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
+
+									var existingRowIndex = dealGrpNameDict[dealGrpKey]
+									var existingRow = data[existingRowIndex];
+
+									// Confirmation Dialog
+									var modalOptions = {
+										closeButtonText: 'Cancel',
+										actionButtonText: 'Merge rows',
+										hasActionButton: true,
+										headerText: 'Deal group merge confirmation',
+										bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
+									};
+									
+									// Check if the merge of the existing and new would be over the 10 max limit and don't let them merge, only rename
+									if (parseInt(myRow["NUM_OF_TIERS"]) + parseInt(existingRow["NUM_OF_TIERS"]) > 10) { // TODO: maybe have a maxLimit variable instead of a hard-coded 10, which needs to be in product's hard coded 10's also
+										modalOptions = {
+											closeButtonText: 'Okay',
+											hasActionButton: false,
+											headerText: 'Deal group merge warning',
+											bodyText: 'A deal group with this name already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the deal grp or remove products from this row and try again.'
+										};
+									}
+									
+									// Ask user if they want to merge
+									confirmationModal.showModal({}, modalOptions)
+										.then(function (result) { // Merge existing row with currently-changing row
+											
+											// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
+											// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
+											for (var i = 0; i < parseInt(existingRow["NUM_OF_TIERS"]) ; i++) {
+												// Append the currently-changing row to the existing row's product to "merge" them
+												data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
+											}
+
+											if (myRowIndex < existingRowIndex) {
+												// Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
+												dealGrpNameDict[dealGrpKey] = existingRowIndex - parseInt(myRow["NUM_OF_TIERS"]);
+											}
+											
+											// Remove all the currently-changing row's merged rows from our datasource
+											data.splice(myRowIndex, parseInt(myRow["NUM_OF_TIERS"]));
+
+											// sync
+											cleanupData(data);
+											root.spreadDs.sync();
+											$scope.applySpreadsheetMerge();
+											root.spreadDs.sync();
+											root.child.setRowIdStyle(data);											
 
 
-					        if (colIndex !== dealGrpColIndex) { return; }
+										}, function (response) { // Don't merge the currently changing with the existing.
 
+											// Revert back to old name (for all the rows in the possibly merged currently-editing row)
+											for (var i = 0; i < parseInt(myRow["NUM_OF_TIERS"]) ; i++) {
+												data[myRowIndex + i]["DEAL_GRP_NM"] = prevValue;
+											}
 
-					        if (skipUntilRow != null && rowIndex < skipUntilRow) {
-					            // Set the deal group val to be the same as the first one of the merged rows
-					            value.value = dealGrpSkipVal;
-					            myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
-					            sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
+											// TODO: Re-add the Deal Grp Name dict key that was deleted
+											addToDealGrpNameDict(prevValue, myRowIndex);
 
-					            // Skip deal group merge ui-validation for this row
-					            return;
-					        }
+											// sync
+											cleanupData(data);
+											root.spreadDs.sync();
+										}
+									);
 
-
-					        // If it's a merged cell (multiple tiers) then find out how many rows to skip this deal grp validation for
-					        if (myRow["NUM_OF_TIERS"] > 1) { // TODO: maybe rename to not use num of tiers?
-					            skipUntilRow = rowIndex + (myRow["NUM_OF_TIERS"]);
-					            dealGrpSkipVal = value.value;
-					        }
-
-					        // Override of an existing deal grp name (new val != old val)
-					        if (prevValue !== "" && value.value.toString().toUpperCase() !== prevValue.toString().toUpperCase()) {
-					            delete dealGrpNamesDict[prevValue.toString().toUpperCase()];
-					        }
-
-					        //	check if deal group name exists in dictionary
-					        if (dealGrpNamesDict[value.value.toString().toUpperCase()] !== undefined) {
-					            // Confirmation Dialog
-					            var modalOptions = {
-					                closeButtonText: 'Rename deal group',
-					                actionButtonText: 'Merge Deal Groups',
-					                hasActionButton: true,
-					                headerText: 'Deal Group Merge Confirmation',
-					                bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
-					            };
-
-					            // Ask user if they want to merge
-					            confirmationModal.showModal({}, modalOptions).then(function (result) {
-					                // TODO
-					                //				if they do, then ........merge :(
-					                //					MERGING brainstorm:
-					                //							we need to know where in the spreadsheet it is? and shift rows of the below rows to merge them? then we need to know how many deals we have in existing currerntly.
-					                //							or maybe we can delete the EXISTING one and the currently changing one, then remake them below? ...but no. then it might delete deals with ids
-					                //							or just flag them as would-merge on translate, then let translate do its thing. easiest probs
-					                console.log("ok TODOOOOO")
-					            }, function (response) {
-					                // TODO
-					                //				if no, then make them rename deal group name or add a number behind it to make it unique?
-					                console.log("not okay TODOOOOO")
-					            });
-
-					            return;
-					        }
-					        else { // Brand new Deal Group Name
-					            // add to dictionary: Deal group name (in all caps), firstRow Index it's found
-					            dealGrpNamesDict[value.value.toString().toUpperCase()] = (rowIndex - 1);
+									return;
+								}
+								else { // Brand new Deal Group Name
+									addToDealGrpNameDict(dealGrpKey, myRowIndex);
+								}
 					        }
 					    }
 					}
 				);
-                cleanupData(data);
-                root.spreadDs.sync();
             }
-
         }
-
-
-
+		
 
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
@@ -779,15 +823,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
         var hasValueInAtLeastOneCell = false;
-
-        var possibleDeletedDealGrpNms = {}; // used only if we delete a prd and kit to update the deal group nm dictionary
-
+		
         range.forEachCell(
             function (rowIndex, colIndex, value) {
                 if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
                     hasValueInAtLeastOneCell = true;
-                } else if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT" && data[(rowIndex - 1)] !== undefined && possibleDeletedDealGrpNms[data[(rowIndex - 1)]["DEAL_GRP_NM"].toString()] != "") {
-                    possibleDeletedDealGrpNms[data[(rowIndex - 1)]["DEAL_GRP_NM"].toString().toUpperCase()] = true;
                 }
             }
 		);
@@ -804,11 +844,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
                         .then(function () {
                             $timeout(function () {
-                                if (root.spreadDs !== undefined) {
-                                    // look for skipped lines
-                                    var numToDel = rowStop + 1 - rowStart;
+                            	if (root.spreadDs !== undefined) {
+                            		// look for skipped lines
+                            		var numToDel = rowStop + 1 - rowStart;
+									
                                     data.splice(rowStart, numToDel);
-
+									
                                     // now apply array to Datasource... one event triggered
                                     root.spreadDs.sync();
 
@@ -830,11 +871,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.delPtrs(delIds);
                                     //root.saveEntireContract(true, true, true);
 
-                                    // Get the delete of Deal group Name of the deleted and remove from dict
                                     if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-                                        for (var key in possibleDeletedDealGrpNms) {
-                                            delete dealGrpNamesDict[key];
-                                        }
+                                    	// Update Deal Group dictionary due to row offset created by deleting rows 
+                                    	dealGrpNameDict = {};  // reset deal group name dict
+                                    	for (var i = 0; i < data.length; i++){
+                                    		addToDealGrpNameDict(data[i]["DEAL_GRP_NM"], i);
+                                    	}
                                     }
                                 }
                             },
@@ -846,9 +888,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     cleanupData(data);
                     root.spreadDs.sync();
                     $timeout(function () {
-                        var cnt = 0;
+                    	var cnt = 0;						
+                    	dealGrpNameDict = {}; // reset deal group name dict
+
                         for (var c = 0; c < data.length; c++) {
-                            if (data[c].DC_ID !== null) cnt++;
+                        	if (data[c].DC_ID !== null) cnt++;
+							
+                        	if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                        		// Update Deal Group dictionary due to row offset created by deleting rows 
+                        		addToDealGrpNameDict(data[c]["DEAL_GRP_NM"], c);
+                        	}
                         }
                         var numToDel = rowStop + 1 - rowStart;
                         cnt = cnt + 2;
@@ -864,13 +913,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         clearUndoHistory();
 
                         $scope.applySpreadsheetMerge();
-
-                        // Get the delete of Deal group Name of the deleted and remove from dict
-                        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-                            for (var key in possibleDeletedDealGrpNms) {
-                                delete dealGrpNamesDict[key];
-                            }
-                        }
 
                     }, 10);
                 }
@@ -952,6 +994,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root._dirty = true;
         }
 
+    }
+
+	//// <summary>
+    //// Add a key and value to the dealGrpNameDict. 
+	//// Also does logic to check if the key can be added (not empty string) and formats the key to expected format.
+	//// </summary>
+    function addToDealGrpNameDict(dealGrpKey, myRowIndex) {
+    	// Don't let deal group names with just spaces or that's empty be saved
+    	if (dealGrpKey.replace(/\s/g, "").length === 0) { return; }
+
+    	// add to dictionary: Dictionary<Deal group name (in all caps), firstRow Index it's found in>
+    	dealGrpNameDict[formatStringAsDealGrpDictKey(dealGrpKey)] = myRowIndex;
+    }
+
+	//// <summary>
+	//// Formats a given sDealGrpDict key to expected format, whose format will help us ignore spaces and capitalization when comparing dealGrpNameDict keys.
+	//// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
+	//// </summary> 
+    function formatStringAsDealGrpDictKey(valueToFormat) {
+    	var result = "";
+    	if (valueToFormat != null) {
+    		result = valueToFormat.toString().toUpperCase().replace(/\s/g, "")
+    	}
+    	return result;
     }
 
     function pivotKITDeals(data, n, dcIdDict, dictId, masterData) {
