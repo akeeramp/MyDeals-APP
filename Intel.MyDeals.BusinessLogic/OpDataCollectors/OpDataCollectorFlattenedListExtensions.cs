@@ -90,6 +90,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList
             {
+                [OpDataElementType.CNTRCT] = opDataElementType == OpDataElementType.CNTRCT ? opFlatList : new OpDataCollectorFlattenedList(),
                 [OpDataElementType.PRC_ST] = opDataElementType == OpDataElementType.PRC_ST ? opFlatList : new OpDataCollectorFlattenedList(),
                 [OpDataElementType.PRC_TBL] = opDataElementType == OpDataElementType.PRC_TBL ? opFlatList : new OpDataCollectorFlattenedList(),
                 [OpDataElementType.PRC_TBL_ROW] = opDataElementType == OpDataElementType.PRC_TBL_ROW ? opFlatList : new OpDataCollectorFlattenedList(),

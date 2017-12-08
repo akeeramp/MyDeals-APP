@@ -214,10 +214,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         kendo.confirm("Are you sure that you want to delete this contract?").then(function () {
             $scope.$apply(function () {
 
-                kendo.alert("This is where we would delete the Contract");
-
-                return;
-
                 $scope.setBusy("Deleting...", "Deleting the Contract");
                 topbar.show();
                 // Remove from DB first... then remove from screen
@@ -239,10 +235,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                         topbar.hide();
 
                         // redirect if focused PT belongs to deleted PS
-                        debugger; // where do we redirect after a delete?
-                        $state.go('contract.manager', {
-                            cid: $scope.contractData.DC_ID
-                        }, { reload: true });
+                        document.location.href = "/Dashboard#/portal";
                     },
                     function (result) {
                         logger.error("Could not delete the Contract.", result, result.statusText);
