@@ -104,7 +104,23 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-
+                new MyOpRule
+                {
+                    Title="Readonly if not TENDER",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.AtrbValue != null && !String.Equals(de.AtrbValue.ToString(),"TENDER", StringComparison.OrdinalIgnoreCase)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] { AttributeCodes.QLTR_BID_GEO, AttributeCodes.QLTR_PROJECT, AttributeCodes.END_CUSTOMER_RETAIL }
+                        }
+                    }
+                },
                 new MyOpRule
                 {
                     Title="Server Deal Type Read Only if Product is not SvrWS",

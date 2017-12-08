@@ -50,6 +50,7 @@ namespace Intel.MyDeals.BusinessRules
             string payoutBasedOn = (item[AttributeCodes.PAYOUT_BASED_ON] != null) ? item[AttributeCodes.PAYOUT_BASED_ON].ToString() : "";
 			string mrktSegValue = (item[AttributeCodes.MRKT_SEG] != null) ? item[AttributeCodes.MRKT_SEG].ToString() : "";
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
+            string dcRebateType = (item[AttributeCodes.REBATE_TYPE] != null) ? item[AttributeCodes.REBATE_TYPE].ToString() : "";
 
             // Billing Dates
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
@@ -82,8 +83,8 @@ namespace Intel.MyDeals.BusinessRules
             // Additive
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE)))
             {
-                item[AttributeCodes.DEAL_COMB_TYPE] = "Non Additive";
-                //item[AttributeCodes.DEAL_COMB_TYPE] = payoutBasedOn == "Consumption" ? "Non Additive" : "Additive";
+                // If tender, make it exclusive, otherwise non additive
+                item[AttributeCodes.DEAL_COMB_TYPE] = dcRebateType == "TENDER"? "Mutually Exclusive" : "Non Additive";
             }
 
             // Check for backdate Reason
@@ -468,6 +469,22 @@ namespace Intel.MyDeals.BusinessRules
             {
                 IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
                 if (deServerDealType != null) deServerDealType.IsReadOnly = true;
+            }
+        }
+
+        public static void RequiredServerDealType(params object[] args)
+        {
+            // US53204 - TENDER: Tender deal item 2. Server deal type-drop down single select.Mandatory only for server products. Leave blank by default.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
+            string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+
+            if (deRebateTypeValue == "TENDER" && deProductCategoriesValue.Contains("SvrWS"))
+            {
+                IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
+                if (deServerDealType != null) deServerDealType.IsRequired = true;
             }
         }
 

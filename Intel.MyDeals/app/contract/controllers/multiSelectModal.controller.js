@@ -28,7 +28,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
     };
 
 	$ctrl.ok = function () {
-		var returnVal = "";
+	    var returnVal = "";
 		if ($ctrl.popupResult.MultiSelectSelections !== undefined) {
 			returnVal = $ctrl.popupResult.MultiSelectSelections;
 
@@ -75,7 +75,6 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	//watch for user changing global auto-fill default values
 	$scope.$watch('$ctrl.popupResult.MultiSelectSelections',
 		function (newValue, oldValue, el) {
-
 			if (oldValue === newValue) return;
 
 			if (oldValue === undefined || newValue === undefined) return;

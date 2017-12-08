@@ -1675,6 +1675,43 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3678,
+                AtrbCd = AttributeCodes.QLTR_BID_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 180,
+                UiType = "MULTISELECT",
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_BID_GEO')#",
+                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3568,
+                AtrbCd = AttributeCodes.QLTR_PROJECT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3348,
+                AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
@@ -1998,13 +2035,37 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 3678,
                 AtrbCd = AttributeCodes.QLTR_BID_GEO,
                 ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 180,
+                UiType = "EMBEDDEDMULTISELECT",
                 Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_BID_GEO')#",
+                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
                 IsFilterable = true,
-                IsSortable = true,
-                Width = 100
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3568,
+                AtrbCd = AttributeCodes.QLTR_PROJECT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3348,
+                AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#",
+                IsFilterable = true,
+                IsSortable = true
             });
             items.Add(new UiTemplateContainerItem
             {

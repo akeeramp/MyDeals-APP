@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/19/2017 3:01:28 PM
-On: PWECKENR-MOBL
+File Updated: 12/7/2017 10:00:14 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -25,6 +25,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute ACTV_REV = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ACTV_REV",
+			ATRB_DESC = "Active revision(s) of a deal tracker(s)",
+			ATRB_LBL = "Active Revisions",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3700,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "INVISIBLE"
 		};
 		public static MyDealsAttribute ADJ_ECAP_UNIT = new MyDealsAttribute()
 		{
@@ -2730,6 +2746,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute OBJ_PATH_HASH = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "OBJ_PATH_HASH",
+			ATRB_DESC = "Breadcrumb Trail for Object",
+			ATRB_LBL = "Breadcrumb Trail",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3685,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute OBJ_SET_TYPE_CD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "OBJ_SET_TYPE_CD",
@@ -2985,6 +3017,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute PRD_DRAWING_ORD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRD_DRAWING_ORD",
+			ATRB_DESC = "Product Drawing Order",
+			ATRB_LBL = "Product Drawing Order",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3686,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PRD_END_DTM = new MyDealsAttribute()
 		{
@@ -3256,7 +3304,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
+			UI_TYPE_CD = "MultiGeoSelector"
 		};
 		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
 		{

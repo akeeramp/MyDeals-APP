@@ -234,6 +234,15 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "QLTR_BID_GEO": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "QLTR_PROJECT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -748,6 +757,15 @@
                         "Groups": ["Deal Info"]
                     },
                     "TRGT_RGN": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "QLTR_BID_GEO": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "QLTR_PROJECT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
                     "PAYOUT_BASED_ON": {

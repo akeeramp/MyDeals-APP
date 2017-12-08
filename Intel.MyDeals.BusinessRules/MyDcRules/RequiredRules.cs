@@ -98,6 +98,12 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Server Deal Type Required if Product is SvrWS and Tender Deal",
+                    ActionRule = MyDcActions.RequiredServerDealType,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="MUST BE LAST RULE: Fix Required if readonly or hidden",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
