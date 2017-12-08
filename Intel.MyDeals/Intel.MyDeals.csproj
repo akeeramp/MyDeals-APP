@@ -463,6 +463,8 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
+    <Content Include="app\core\directives\meetComp\meetCompDealDetails.html" />
+    <Content Include="app\core\directives\meetComp\meetCompDealDetails.js" />
     <Content Include="app\core\directives\meetComp\meetComp.directive.html" />
     <Content Include="app\core\directives\meetComp\meetComp.directive.js" />
     <Content Include="app\core\directives\opGrid\opGrid.directive.js" />

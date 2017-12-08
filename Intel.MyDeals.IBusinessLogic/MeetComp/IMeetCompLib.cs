@@ -14,5 +14,10 @@ namespace Intel.MyDeals.IBusinessLogic
         List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE);
 
         List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu);
+
+        List<DealDeatils> GetDealDetails(int DEAL_OBJ_SID, int GRP_PRD_SID, string DEAL_PRD_TYPE);
+
+
+
     }
 }

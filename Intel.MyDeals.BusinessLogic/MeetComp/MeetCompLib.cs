@@ -82,5 +82,10 @@ namespace Intel.MyDeals.BusinessLogic
             return _meetCompCollectorLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, mcu);
         }
 
+        public List<DealDeatils> GetDealDetails(int DEAL_OBJ_SID, int GRP_PRD_SID, string DEAL_PRD_TYPE)
+        {
+            return _meetCompCollectorLib.GetDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE);
+        }
+
     }
 }

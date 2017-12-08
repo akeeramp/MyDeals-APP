@@ -1,46 +1,27 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"  msg-type="isBusyType" ng-show="isBusy"></loading-panel>
-<div ng-if="isDataAvaialable">
-    <div ng-if="!CAN_VIEW_MEET_COMP" class="col-md-12" style="padding-top: 10px;">
-        <div class="alert alert-danger">
-            {{validationMessage}}
-        </div>
+﻿<div class="product-selector modal-content" moveablemodal style="height:auto;width:100%;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;;">
+    <div class="prodSelector modal-header">
+        <div class="row">
+            <div class="col-md-10">
+                <p style="color:#ffffff; font-size:20px">Deal Group Details</p>
+            </div>
+            <span class="modalCloseIcon" style="float: right;margin-right: 10px;color: white;">
+                <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
+            </span>
+        </div>        
     </div>
-    <div id="meetCompOvrrd" class="col-md-12">
-        <div style="margin-bottom:4px">
-            <button class="btn btn-sm btn-skyblue-sm fl"
-                    ng-click="saveAndRunMeetComp()"
-                    title="Save and Validate Meet Comp" >
-                <i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i>
-            </button>
-            <div class="fl skyblue-text">Save &amp; Validate <br>Meet Comp</div>
-            <div class="clearboth"></div>
-        </div>
+    <div class="prodSelector modal-body">
+        <div id="dealdetailsGrid" kendo-grid="dealdetailsGrid" class="table table-bordered md table-striped table-intel" options="gridOptions">
 
-        <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
-            <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
-                <div class="myDealsGrid" kendo-grid k-scope-field={{dataItem.uniqueGridID}} k-options="detailGridOptions(dataItem)"></div>
-            </div>-->
         </div>
     </div>
+    
 </div>
 
-<script>
-    function openDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
-        var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
-        scope.$apply(function () {
-            scope.getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE);
-            });
-       
-    }
-    function gotoDealDetails(CNTRCT_OBJ_SID,PRC_ST_OBJ_SID, PRC_TBL_OBJ_SID ) {
-        var win = window.open("Contract#/manager/" + CNTRCT_OBJ_SID + "/" + PRC_ST_OBJ_SID + "/" + PRC_TBL_OBJ_SID + "/wip", '_blank');
-        win.focus();
-    }
-      
-</script>
-
 <style>
-    .btnPctMct {
+    
+    .modal-dialog{
+        width:70%;
+    } .btnPctMct {
         font-size: 14px;
         margin-top: 4px;
         line-height: 1.0em;

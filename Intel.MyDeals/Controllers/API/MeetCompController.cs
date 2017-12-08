@@ -92,7 +92,17 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        
+        [Authorize]
+        [Route("GetDealDetails/{DEAL_OBJ_SID}/{GRP_PRD_SID}/{DEAL_PRD_TYPE}")]
+        [HttpPost]
+        public List<DealDeatils> GetDealDetails(int DEAL_OBJ_SID, int GRP_PRD_SID, string DEAL_PRD_TYPE)
+        {
+            return SafeExecutor(() => _meetCompLib.GetDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE)
+                , $"Unable to {"update Meet Comp"}"
+            );
+        }
+
+
 
     }
 }
