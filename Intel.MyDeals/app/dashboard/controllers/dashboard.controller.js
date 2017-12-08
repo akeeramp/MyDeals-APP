@@ -6,13 +6,14 @@
     .controller('WidgetSettingsCtrl', WidgetSettingsCtrl)
     .filter('object2Array', object2Array);
 
-DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger'];
+DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
-function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger) {
+
+function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
@@ -289,6 +290,151 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
                 }
             }
         }, 600);
+    }
+
+    $scope.isCopyCntrctListLoaded = false;
+    $scope.copyCntrctSelectedItem = null;
+    $scope.getCopyCntrctDlgInfo = function () {
+        // TODO::TJE - for some reason, $scope.selectedCustomerId, $scope.startDate, and $scope.endDate
+        // don't always have the proper values.
+
+        // Set $scope.selectedCustomerName
+        $scope.selectedCustomerName = '<All>';
+        dataService.get("api/Customers/GetMyCustomerNames")
+            .then(function (response) {
+                for (var i = 0; i < response.data.length; i++) {
+                    if (response.data[i].CUST_SID == $scope.selectedCustomerId) {
+                        $scope.selectedCustomerName = response.data[i].CUST_NM;
+                        break;
+                    }
+                }
+            }, function (response) {
+                logger.error("Unable to GetMyCustomerNames.", response, response.statusText);
+            });
+
+        // Set $scope.copyCntrctList, then update the grid on the copy contract dialog.
+        var postData = {
+            "CustomerIds": [$scope.selectedCustomerId],
+            "StartDate": $scope.startDate,
+            "EndDate": $scope.endDate
+        };
+        dataService.post("/api/Dashboard/GetDashboardContractSummary", postData)
+            .then(function (response) {
+                $scope.copyCntrctList = response.data;
+                $scope.updateCopyCntrctGridDataSource($scope.copyCntrctList);
+                $scope.isCopyCntrctListLoaded = true;
+            }, function (response) {
+                logger.error("Unable to GetDashboardContractSummary.", response, response.statusText);
+                $scope.isCopyCntrctListLoaded = true;
+            });
+    }
+
+    $scope.updateCopyCntrctGridDataSource = function (contractList) {
+        var dataSource = new kendo.data.DataSource({
+            data: contractList
+        });
+
+        var scope = $scope;
+        $scope.copyCntrctGrid = $("#copyCntrctGrid");
+        $scope.copyCntrctGrid.data("kendoGrid").setDataSource(dataSource);
+
+        // Re-setting the datasource seems to clear any selection, so we set
+        // $scope.copyCntrctSelectedItem to null to indicate that there is no
+        // selected item.
+        $scope.copyCntrctSelectedItem = null;
+    }
+
+    $scope.onCopyCntrctSearchTextChanged = function () {
+        // Find contracts where the contract title matches the search text.
+        var matchArr = [];
+        var lowerSearchText = $scope.copyCntrctSearchText.toLowerCase()
+        for (var i = 0; i < $scope.copyCntrctList.length; i++) {
+            if ($scope.copyCntrctList[i].TITLE.toLowerCase().indexOf(lowerSearchText) != -1) {
+                matchArr.push($scope.copyCntrctList[i]);
+            }
+        }
+
+        $scope.updateCopyCntrctGridDataSource(matchArr);
+    }
+
+    $scope.openCopyCntrctDlg = function () {
+        $scope.getCopyCntrctDlgInfo();
+
+        var scope = $scope;
+        $scope.copyCntrctDlg = $("#copyCntrctDlg");
+
+        // Set the dlg properites.
+        $scope.copyCntrctDlg.kendoDialog({
+            width: "800px",
+            height: "600px",
+            title: "Select Contract to Create a Copy from",
+            closable: false,
+            modal: true
+        });
+
+        // Set the dlg content.
+        $templateRequest("/app/dashboard/views/copyCntrctDlg.html").then(function (html) {
+            var template = angular.element(html);
+            $compile(template)(scope);
+            $scope.copyCntrctDlg.data("kendoDialog").content(template);
+        });
+
+        // Set the grid options.
+        $scope.copyCntrctGridOptions = {
+            height: 350,
+            sortable: true,
+            filterable: false,
+            resizable: true,
+            scrollable: true,
+            selectable: "row",
+            columns: [
+                {
+                    field: "CNTRCT_OBJ_SID",
+                    title: "ID",
+                    width: "35px"
+                },
+                {
+                    field: "TITLE",
+                    title: "Contract Title",
+                    width: "140px"
+                },
+                {
+                    field: "STRT_DTM",
+                    title: "Start Date",
+                    width: "50px",
+                    template: "#= kendo.toString(new Date(STRT_DTM), 'M/d/yyyy') #",
+                },
+                {
+                    field: "END_DTM",
+                    title: "End Date",
+                    width: "50px",
+                    template: "#= kendo.toString(new Date(END_DTM), 'M/d/yyyy') #",
+                }
+            ],
+            change: function (e) {
+                var grid = $("#copyCntrctGrid").data("kendoGrid");
+                $scope.copyCntrctSelectedItem = grid.dataItem(grid.select());
+            }
+        };
+
+        // Open the dlg.
+        $scope.copyCntrctDlg.data("kendoDialog").open();
+    }
+
+    $scope.onCopyCntrctCancelClick = function () {
+        var dlg = $("#copyCntrctDlg").data("kendoDialog");
+        dlg.close();
+    }
+
+    $scope.onCopyCntrctCreateClick = function () {
+        // TODO::TJE
+        //    Need to finish implementing the copy contract story.
+        //    $scope.copyCntrctSelectedItem will contain the selected
+        //    contract to copy from.
+        alert('Feature under development.');
+
+        var dlg = $("#copyCntrctDlg").data("kendoDialog");
+        dlg.close();
     }
 }
 

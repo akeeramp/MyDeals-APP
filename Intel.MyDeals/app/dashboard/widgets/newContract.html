@@ -15,6 +15,23 @@
 
         <div class="clearboth"></div>
     </div>
+
+    <div style="padding: 25px 0 0 0;">
+        <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
+            <i class="intelicon-copy-solid text-warning"></i>
+        </div>
+
+        <div class="fl btn-mock" ng-click="openCopyCntrctDlg()" ng-if="C_CREATE_CONTRACT">
+            <div class="btn-ttl">Copy a MyDeals Contract</div>
+            <div class="btn-desc">Or, create a MyDeals contract from an existing one</div>
+        </div>
+        <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+            <div class="btn-ttl">Copy a MyDeals Contract</div>
+            <div class="btn-desc">You <b>do not</b> have access to Create Contracts</div>
+        </div>
+
+        <div class="clearboth"></div>
+    </div>
 </div>
 
 <script>

@@ -1,0 +1,67 @@
+﻿<div>
+    <loading-panel show="!isCopyCntrctListLoaded" header="'Loading contracts'" description="'Please wait while we load your contracts.'"></loading-panel>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <label>Customer: </label> {{selectedCustomerName}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Date Range: </label> {{startDate}} - {{endDate}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="inner-addon right-addon" style="width:375px; margin-top:20px">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input type="text" class="form-control" style="height:24px" maxlength="40" ng-change="onCopyCntrctSearchTextChanged()" ng-model="copyCntrctSearchText" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <div>
+        <kendo-grid id="copyCntrctGrid" options="copyCntrctGridOptions" />
+    </div>
+
+    <div align="right" style="margin-top:15px">
+        <button class="btn btn-secondary" type="button" style="min-width:110px" ng-click="onCopyCntrctCancelClick()">Cancel</button>
+        <button class="btn btn-primary" type="button" style="min-width:110px" ng-click="onCopyCntrctCreateClick()" ng-disabled="copyCntrctSelectedItem==null">Create</button>
+    </div>
+</div>
+
+<style type="text/css">
+    #copyCntrctGrid td {
+        cursor: pointer;
+    }
+
+    .k-grid td.k-state-selected, .k-grid tr.k-state-selected > td {
+        border:none;
+        background-color: #00AEEF !important;
+        color: white;
+    }
+
+    .k-grid  > td {
+        padding:0px;
+    }
+
+    /* enable absolute positioning */
+    .inner-addon {
+        position: relative;
+    }
+
+        /* style icon */
+        .inner-addon .glyphicon {
+            position: absolute;
+            padding: 10px;
+            pointer-events: none;
+        }
+
+    /* align icon */
+    .left-addon .glyphicon {
+        left: 0px;
+    }
+
+    .right-addon .glyphicon {
+        right: -15px;
+    }    
+</style>
