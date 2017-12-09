@@ -2049,7 +2049,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $timeout(function () {
                         util.console("syncAndValidateWipDeals");
                         util.console("contractDs.sync Started");
+
+                        // Change array to string to prevent [object object] issue
+                        var gData = $scope.contractDs.data();
+                        for (var i = 0; i < gData.length; i++) {
+                            if (gData[i].QLTR_BID_GEO !== undefined && Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
+                        }
+
                         $scope.contractDs.sync();
+
                         util.console("contractDs.sync Ended");
                         $scope.root.validateWipDeals(callback);
                     },
