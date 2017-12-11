@@ -578,28 +578,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     template: "<div title='#=MEET_COMP_FRMULA#' class='readOnlyCell'>#=MEET_COMP_ANALYSIS#</div>"
                                 },
                                 {
-                                    field: "CAP",
+                                    field: "",
                                     title: "CAP",
                                     width: 120,
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
-                                    template: "<div title='#=CAP#' class='readOnlyCell'>#=CAP#</div>"
+                                    template: ""
                                 },
                                 {
-                                    field: "ECAP_PRC",
+                                    field: "",
                                     title: "ECAP Price",
                                     width: 120,
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
-                                    template: "<div title='#=ECAP_PRC#' class='readOnlyCell'>#=ECAP_PRC#</div>"
+                                    template: ""
                                 },
                                 {
-                                    field: "YCS2",
+                                    field: "",
                                     title: "YCS2 Price",
                                     width: 120,
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
-                                    template: "<div title='#=YCS2#' class='readOnlyCell'>#=YCS2#</div>"
+                                    template: ""
                                 },
                                 {
                                     field: "MC_LAST_RUN",
