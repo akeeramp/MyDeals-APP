@@ -320,6 +320,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (opType == OpDataElementType.WIP_DEAL)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnValidate);
+                    dc.ApplyRules(MyRulesTrigger.OnPostValidate);
                     if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t Rules OnValidate [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
                 }
             }

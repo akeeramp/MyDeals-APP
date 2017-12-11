@@ -584,6 +584,8 @@ namespace Intel.MyDeals.BusinessLogic
                     if (savePacket.ValidateIds.Any())
                     {
                         dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
+                        dc.ApplyRules(MyRulesTrigger.OnPostValidate);
+
                     }
 
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())

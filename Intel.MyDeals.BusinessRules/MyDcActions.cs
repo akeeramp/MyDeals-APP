@@ -881,6 +881,18 @@ namespace Intel.MyDeals.BusinessRules
             return (attrb >= 0);
         }
 
+        public static void RollUpErrorMessage(params object[] args)
+        {
+            var r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            var dealLevelErrorMessages = r.Dc.GetDataElementsWhere(de => de.ValidationMessage != string.Empty); 
+            if (dealLevelErrorMessages.Any())
+            {
+                r.Dc.Message.WriteMessage(OpMsg.MessageType.Warning, "Validation Errors detected in deal");
+            }
+        }
+
         public static void CompareStartEndVol(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

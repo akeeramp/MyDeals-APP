@@ -17,7 +17,8 @@
         OnAutomatedTesting,
         OnMerge,
         OnMergeComplete,
-        OnLoadMeetComp
+        OnLoadMeetComp,
+        OnPostValidate,
     }
 
 }

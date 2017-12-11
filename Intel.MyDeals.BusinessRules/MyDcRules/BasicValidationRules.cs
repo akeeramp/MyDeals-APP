@@ -149,7 +149,14 @@ namespace Intel.MyDeals.BusinessRules
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
 				},
-				new MyOpRule
+                                new MyOpRule
+                {
+                    Title="Rollup Error Message",
+                    ActionRule = MyDcActions.RollUpErrorMessage,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnPostValidate},
+                },
+                new MyOpRule
 				{
 					Title="End Vol must be greater than start vol",
 					ActionRule = MyDcActions.CompareStartEndVol,
