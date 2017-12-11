@@ -35,7 +35,7 @@
         vm.hideSelection = false;
         vm.selectedItems = [];
         vm.prdSelLvlAtrbsForCategory = [];
-        vm.enableSplitProducts = enableSplitProducts;
+        vm.enableSplitProducts = enableSplitProducts && dealType !== 'KIT';
         vm.splitProducts = false;
         vm.openCAPBreakOut = openCAPBreakOut;
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;

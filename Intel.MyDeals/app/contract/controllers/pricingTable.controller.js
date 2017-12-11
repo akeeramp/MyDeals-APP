@@ -415,15 +415,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var usrInput = updateUserInput(validatedSelectedProducts);
             var contractProducts = usrInput.contractProducts;
 
-            // TODO: Should we update PTR_USER_PRD with output of this ? If yes make change wherever we update PTR_USER_PRD
-            var kitOrderProducts = populateValidProducts(validatedSelectedProducts);
-            console.log("KIT product orders " + kitOrderProducts);
-
             //PTR_SYS_PRD
             sheet.range(root.colToLetter["PTR_SYS_PRD"] + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
-
+            if (root.colToLetter["PRD_DRAWING_ORD"] != undefined) {
+                sheet.range(root.colToLetter['PRD_DRAWING_ORD'] + (rowStart)).value(populateValidProducts(validatedSelectedProducts));
+            }
             if (root.colToLetter["PRD_EXCLDS"] != undefined) {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
             }
@@ -433,6 +431,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var mergedRows = parseInt(rowStart) + sheet.range(root.colToLetter['NUM_OF_TIERS'] + (rowStart)).value();
                     for (var a = rowStart; a < mergedRows ; a++) {
                         sheet.range(root.colToLetter["PTR_SYS_PRD"] + (a)).value(JSON.stringify(validatedSelectedProducts));
+                        sheet.range(root.colToLetter['PRD_DRAWING_ORD'] + (rowStart)).value(populateValidProducts(validatedSelectedProducts));
                         systemModifiedProductInclude = true;
                         sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts);
                         systemModifiedProductInclude = false;
@@ -602,11 +601,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						}
 
 					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
-							
+
 					        // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values due to the sync() at the end of this function
 					        myRow[colName] = value.value;
 					        //sourceData[(rowIndex - 1)][colName] = value.value;
-							
+
 					    	// Logic to apply to merge cells (multiple tiers)
 					    	if (skipUntilRow != null && rowIndex < skipUntilRow) { // Changed a cell in a merged cell
 					    		// Set the deal group val to be the same as the first one of the merged rows
@@ -620,7 +619,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							}
 
 							// If it's a merged cell (multiple tiers) then find out how many rows to skip this deal grp validation for (skip is shown in the return above)
-							if (myRow["NUM_OF_TIERS"] > 1) { 
+							if (myRow["NUM_OF_TIERS"] > 1) {
 								skipUntilRow = rowIndex + (myRow["NUM_OF_TIERS"]);
 								dealGrpSkipVal = value.value;
 							}
@@ -628,7 +627,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							// DEAL_GRP functionality
 							if (colIndex == dealGrpColIndex) {
 								var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
-								
+
 								// Override of an existing deal grp name (new val != old val)
 								if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue) ) {
 									delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
@@ -648,7 +647,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 										headerText: 'Deal group merge confirmation',
 										bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
 									};
-									
+
 									// Check if the merge of the existing and new would be over the 10 max limit and don't let them merge, only rename
 									if (parseInt(myRow["NUM_OF_TIERS"]) + parseInt(existingRow["NUM_OF_TIERS"]) > 10) { // TODO: maybe have a maxLimit variable instead of a hard-coded 10, which needs to be in product's hard coded 10's also
 										modalOptions = {
@@ -658,11 +657,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 											bodyText: 'A deal group with this name already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the deal grp or remove products from this row and try again.'
 										};
 									}
-									
+
 									// Ask user if they want to merge
 									confirmationModal.showModal({}, modalOptions)
 										.then(function (result) { // Merge existing row with currently-changing row
-											
+
 											// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
 											// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
 											for (var i = 0; i < parseInt(existingRow["NUM_OF_TIERS"]) ; i++) {
@@ -674,7 +673,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 												// Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
 												dealGrpNameDict[dealGrpKey] = existingRowIndex - parseInt(myRow["NUM_OF_TIERS"]);
 											}
-											
+
 											// Remove all the currently-changing row's merged rows from our datasource
 											data.splice(myRowIndex, parseInt(myRow["NUM_OF_TIERS"]));
 
@@ -683,7 +682,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 											root.spreadDs.sync();
 											$scope.applySpreadsheetMerge();
 											root.spreadDs.sync();
-											root.child.setRowIdStyle(data);											
+											root.child.setRowIdStyle(data);
 
 
 										}, function (response) { // Don't merge the currently changing with the existing.
@@ -713,7 +712,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				);
             }
         }
-		
+
 
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
@@ -823,7 +822,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
         var hasValueInAtLeastOneCell = false;
-		
+
         range.forEachCell(
             function (rowIndex, colIndex, value) {
                 if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
@@ -847,9 +846,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             	if (root.spreadDs !== undefined) {
                             		// look for skipped lines
                             		var numToDel = rowStop + 1 - rowStart;
-									
+
                                     data.splice(rowStart, numToDel);
-									
+
                                     // now apply array to Datasource... one event triggered
                                     root.spreadDs.sync();
 
@@ -872,7 +871,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     //root.saveEntireContract(true, true, true);
 
                                     if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-                                    	// Update Deal Group dictionary due to row offset created by deleting rows 
+                                    	// Update Deal Group dictionary due to row offset created by deleting rows
                                     	dealGrpNameDict = {};  // reset deal group name dict
                                     	for (var i = 0; i < data.length; i++){
                                     		addToDealGrpNameDict(data[i]["DEAL_GRP_NM"], i);
@@ -888,14 +887,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     cleanupData(data);
                     root.spreadDs.sync();
                     $timeout(function () {
-                    	var cnt = 0;						
+                    	var cnt = 0;
                     	dealGrpNameDict = {}; // reset deal group name dict
 
                         for (var c = 0; c < data.length; c++) {
                         	if (data[c].DC_ID !== null) cnt++;
-							
+
                         	if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-                        		// Update Deal Group dictionary due to row offset created by deleting rows 
+                        		// Update Deal Group dictionary due to row offset created by deleting rows
                         		addToDealGrpNameDict(data[c]["DEAL_GRP_NM"], c);
                         	}
                         }
@@ -997,7 +996,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
 	//// <summary>
-    //// Add a key and value to the dealGrpNameDict. 
+    //// Add a key and value to the dealGrpNameDict.
 	//// Also does logic to check if the key can be added (not empty string) and formats the key to expected format.
 	//// </summary>
     function addToDealGrpNameDict(dealGrpKey, myRowIndex) {
@@ -1011,7 +1010,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	//// <summary>
 	//// Formats a given sDealGrpDict key to expected format, whose format will help us ignore spaces and capitalization when comparing dealGrpNameDict keys.
 	//// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
-	//// </summary> 
+	//// </summary>
     function formatStringAsDealGrpDictKey(valueToFormat) {
     	var result = "";
     	if (valueToFormat != null) {
@@ -2412,6 +2411,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 data[r].PTR_USER_PRD = contractProducts;
                 sourceData[r].PTR_USER_PRD = contractProducts;
 
+                // KIT update PRD_DRWAING_ORDER and merged rows
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                    data[r].PRD_DRAWING_ORD = populateValidProducts(transformResults.ValidProducts[key]);
+                    sourceData[r].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD
+                    var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
+                    for (var a = r; a < mergedRows ; a++) {
+                        data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
+                        sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
+                        data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
+                        sourceData[a].PRD_DRAWING_ORD = sourceData[r].PRD_DRAWING_ORD
+                        data[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                        sourceData[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                    }
+                }
+
                 // VOL_TIER update exclude products
                 if (root.colToLetter["PRD_EXCLDS"] != undefined) {
                     var excludeProducts = userInput.excludeProducts;
@@ -2520,11 +2534,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     data[r].PRD_EXCLDS = products.excludeProducts;
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
                                 }
+                                // KIT update PRD_DRAWING_ORD
                                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                                    data[r].PRD_DRAWING_ORD = populateValidProducts(transformResult.ValidProducts[key]);
+                                    sourceData[r].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
                                     var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
                                     for (var a = r; a < mergedRows ; a++) {
                                         data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                                         sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
+                                        data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
+                                        sourceData[a].PRD_DRAWING_ORD = sourceData[r].PRD_DRAWING_ORD
                                         data[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
                                         sourceData[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
                                     }

@@ -661,10 +661,24 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         return newArr.length > 0;
     }
 
+    function validateNoOfKITProducts() {
+        var validProducts = $linq.Enumerable().From(vm.curRowProds)
+            .Where(function (x) { return x.status === 'Good' }).ToArray().length;
+
+        var resolvedProducts = $linq.Enumerable().From(vm.curRowProds)
+            .Where(function (x) { return x.status === 'Issue' })
+            .Select(function (x) { return x.matchName.length })
+            .Sum();
+        if (resolvedProducts >= 9) {
+            logger.stickyError("You have too many products! You may have up to 10 products.");
+            return false;
+        }
+        return true;
+    }
+
     vm.clickProd = function (id, lookup, name, event) {
         var item = util.findInArrayWhere(vm.curRowProds, "name", lookup);
         if (!item) return;
-
         var allMatched = true;
         var isChecked = event.target.checked;
         if (isChecked) {
@@ -673,6 +687,11 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 event.target.checked = false;
                 return;
             }
+            if (vm.DEAL_TYPE=== "KIT" && !validateNoOfKITProducts()) {
+                event.target.checked = false;
+                return;
+            }
+
             //Item added from the selected List
             item.matchName.push(name);
 

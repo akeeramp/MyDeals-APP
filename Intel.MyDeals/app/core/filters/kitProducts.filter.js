@@ -39,7 +39,7 @@
 
             // TODO: modify output to get array of products or comma separated PRD_MBR_SID or HIER_VAL_NM
             filtered = filtered.map(function (p) {
-                return p.HIER_VAL_NM;
+                return p.PRD_MBR_SID;
             }).join(',');
 
             return filtered;

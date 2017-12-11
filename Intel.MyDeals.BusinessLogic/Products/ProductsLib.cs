@@ -247,7 +247,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             //  Check if any product has alias mapping, this will call cache
             var aliasMapping = GetProductsFromAlias();
-						
+
             foreach (var userProduct in prodNames)
             {
                 var products = TransformProducts(userProduct.USR_INPUT);
@@ -336,18 +336,18 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var records = new Dictionary<string, List<string>>();
                     records.Add("E", new List<string>());
-					records.Add("I", new List<string>());
-					productAliases.ToList().ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
-					productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
+                    records.Add("I", new List<string>());
+                    productAliases.ToList().ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
+                    productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
                 }
             }
 
             //  Product match master list
             var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, DEAL_TYPE);
-			
+
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
-						
+
             return productLookup;
         }
 
@@ -460,7 +460,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                where p.ROW_NM.ToString() == rowNumber.Key
                                                      && p.EXCLUDE == (typeOfProduct.Key == "E")
                                                select p).ToList();
-					
+
                     //Step 2.1: Checking for Conflict upto Family Name
                     var isConflict = (from p in productMatchResults
                                       join t in tranlatedProducts
@@ -569,7 +569,7 @@ namespace Intel.MyDeals.BusinessLogic
                         var records = new Dictionary<string, List<string>>();
                         records.Add("E", new List<string>());
                         records.Add("I", new List<string>());
-						records[typeOfProduct.Key].AddRange(invalidProducts);
+                        records[typeOfProduct.Key].AddRange(invalidProducts);
                         productLookup.InValidProducts[rowNumber.Key] = records;
                     }
                 }
@@ -710,10 +710,11 @@ namespace Intel.MyDeals.BusinessLogic
 
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
             userProd = Regex.Replace(userProd, @"\s+", " ");// Replace multiple spaces with single line
-            userProd = Regex.Replace(userProd, @"\s*([-])\s", "$1"); // Replace multiple space before and after - (Hyphen)
+            //userProd = Regex.Replace(userProd, @"\s*([-])\s", "$1"); // Replace multiple space before and after - (Hyphen)
 
             userProd = Regex.Replace(userProd, " OR ", @"~", RegexOptions.IgnoreCase); // Replace OR with ~
             userProd = userProd.Replace("&", "~"); // Replace & with ~
+            userProd = userProd.Replace("+", "~"); // Replace & with ~
 
             // Replace forward slash product separator
             var replaceSlashRegex = new Regex(@"\([^\)]*\)|(/)");
