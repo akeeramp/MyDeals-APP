@@ -121,6 +121,77 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
 
     return tmplt;
 }
+
+//this control wrapper to be used for dimentionalized attributes (0-based index, so not for VT attributes like numTiers)
+gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
+    var data = passedData[field];
+
+    var tmplt = '<table>';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+            tmplt += '<tr style="height: 25px;">';
+            tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+            tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '_' + dimkey + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + field + '_' + dimkey + '" style="" data-role="tooltip"></div>';
+            tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, "") + ')"></span>';
+            tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, format) + ')"></span>';
+            tmplt += '</td>';
+            tmplt += '</tr>';
+        }
+    }
+    tmplt += '</table>';
+
+    return tmplt;
+}
+
+//this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
+gridUtils.uiSysGeneratedDimControlWrapper = function (passedData, field, format) {
+    var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
+    var values = [];    //we will store the intended system-generated display values here to iterate through later
+
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+            if (field === "PRIMARY_OR_SECONDARY") {
+                //assumes that the first ___0 dim is the primary product of the kit deal
+                if (values.length === 0) {
+                    values.push("Primary");
+                } else {
+                    values.push("Secondary");
+                }
+            }
+
+            //Total Discount Per Line = dim's Quantity * Discount Per Line.
+            if (field === "TOTAL_DSCNT_PR_LN" || field === "KIT_REBATE_BUNDLE_DISCOUNT") {
+                var dim = dimkey[dimkey.length - 1];
+                values.push(passedData["QTY"]["20___" + dim] * passedData["DSCNT_PER_LN"]["20___" + dim]);
+            }
+
+            //Kit Rebate / Bundle Discount = the sum of total discounts per line, which we calculated in the previous if-condition and stored in values array
+            if (field === "KIT_REBATE_BUNDLE_DISCOUNT") {
+                //sum values and replace with single item
+                var sumValue = 0;
+                for (var i = 0; i < values.length; i++) {
+                    sumValue = sumValue + values[i];
+                }
+                values = [sumValue];
+            }
+        }
+    }
+
+    var tmplt = '<table>';
+    for (var i = 0; i < values.length; i++) {
+        tmplt += '<tr style="height: 25px;">';
+        tmplt += '<td style="text-align:left;"';
+        tmplt += ' ng-class="{isReadOnlyCell:true}">';
+        tmplt += '<span style="padding: 0 4px;" ng-bind="(\'' + values[i] + '\' ' + gridUtils.getFormat(field, format) + ')"></span>';
+        tmplt += '</td>';
+        tmplt += '</tr>';
+    }
+    tmplt += '</table>';
+
+    return tmplt;
+}
+
 gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt, dimKey) {
     var msg = "";
     var msgClass = "";

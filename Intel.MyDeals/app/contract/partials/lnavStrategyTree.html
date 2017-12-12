@@ -25,14 +25,14 @@
                     <!-- If you can add PS, give the button to do so -->
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
 
+                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="editPricingStrategyName(ps)"><i class="intelicon-edit"></i> Edit Pricing Strategy Name</a></li>
+
                     <!-- If PS has no trackers under it and you can add one, you can remove it -->
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER !== '1'"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
                     <!-- If PS has trackers under it and it is in play and you can add one, you can roll it back -->
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER === '1' && !(ps.WF_STG_CD === 'Cancelled' || ps.WF_STG_CD === 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingStrategy(ps)"><i class="fa fa-undo"></i> Undo Pricing Strategy Re-deal</a></li>
                     <!-- If PS is active and you are allowed to cancel -->
                     <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingStrategy(ps)"><i class="intelicon-no-access"></i> Cancel Entire Pricing Strategy</a></li>
-
-                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="editPricingStrategyName(ps)"><i class="intelicon-edit"></i> Edit Pricing Strategy Name</a></li>
 
                     <!-- TODO need to check for valid pricing strategy before actions -->                    
                     <!--<li role="presentation" ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">

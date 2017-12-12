@@ -681,13 +681,40 @@
                     "PTR_USER_PRD": {
                         "Groups": ["Deal Info"]
                     },
-                    "PRODUCT_CATEGORIES": {
-                        "Groups": ["Deal Info"]
-                    },
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
                     "TITLE": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRD_EXCLDS": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DEAL_GRP_NM": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRD_BCKT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRIMARY_OR_SECONDARY": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "ECAP_PRICE": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "KIT_ECAP": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "KIT_REBATE_BUNDLE_DISCOUNT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DSCNT_PER_LN": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "QTY": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "TOTAL_DSCNT_PR_LN": {
                         "Groups": ["Deal Info"]
                     },
                     "SERVER_DEAL_TYPE": {
@@ -705,36 +732,6 @@
                     "DEAL_DESC": {
                         "Groups": ["Deal Info"]
                     },
-                    "ECAP_PRICE": {
-                        "Groups": ["Deal Info", "CAP Info"]
-                    },
-                    "CAP_INFO": {
-                        "Groups": ["Deal Info", "CAP Info"]
-                    },
-                    "CAP": {
-                        "Groups": ["All", "CAP Info"]
-                    },
-                    "CAP_STRT_DT": {
-                        "Groups": ["All", "CAP Info"]
-                    },
-                    "CAP_END_DT": {
-                        "Groups": ["All", "CAP Info"]
-                    },
-                    "YCS2_INFO": {
-                        "Groups": ["Deal Info"]
-                    },
-                    "YCS2_PRC_IRBT": {
-                        "Groups": ["All"]
-                    },
-                    "YCS2_START_DT": {
-                        "Groups": ["All"]
-                    },
-                    "YCS2_END_DT": {
-                        "Groups": ["All"]
-                    },
-                    "YCS2_OVERLAP_OVERRIDE": {
-                        "Groups": ["All"]
-                    },
                     "VOLUME": {
                         "Groups": ["Deal Info"]
                     },
@@ -742,9 +739,6 @@
                         "Groups": ["Deal Info"]
                     },
                     "DEAL_SOLD_TO_ID": {
-                        "Groups": ["Deal Info"]
-                    },
-                    "EXPIRE_YCS2": {
                         "Groups": ["Deal Info"]
                     },
                     "REBATE_TYPE": {

@@ -978,6 +978,19 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150
             });
 
+            items.Add(new UiTemplateContainerItem  // WIP KIT
+            {
+                Id = 50,
+                AtrbCd = AttributeCodes.PRD_BCKT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'PRD_BCKT', 'string')#",
+                Width = 100,
+                Label = "Products",
+                IsDimKey = true,
+                IsReadOnly = true,
+                DataType = "string"
+            });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 33,
@@ -1054,7 +1067,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 21,
                 AtrbCd = AttributeCodes.TIER_NBR, //AtrbCd = AttributeCodes.TIER_NBR - Moved to a non-always-readonly field to allow for security to drive behaviors
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 Template = "#=gridUtils.uiControlScheduleWrapper(data)#",
                 Editor = "scheduleEditor",
                 DataType = "object",
@@ -1096,7 +1109,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 5,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
                 DataType = "object",
@@ -1106,21 +1119,63 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor"
             });
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 5,
-            //    AtrbCd = AttributeCodes.ECAP_PRICE,     //KIT TODO: special column for KIT ECAP price? or can it somehow be combined with the above's template as they use the same atrb? ask phil where we should put the separation template?
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-            //    Width = 130,
-            //    Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
-            //    DataType = "object",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Format = "{0:c}",
-            //    UiType = "NumericTextBox",
-            //    Editor = "multiDimEditor"
-            //});
+            items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
+            {
+                Id = 5,
+                AtrbCd = AttributeCodes.ECAP_PRICE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'ECAP_PRICE', 'currency')#",  //if the singleton case works all 3 should just use this control wrapper
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Format = "{0:c}",
+                UiType = "NumericTextBox",
+                Editor = "multiDimEditor"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP Kit types
+            {
+                Id = 5,
+                AtrbCd = "KIT_ECAP",
+                Label = "KIT ECAP",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20_____1', 'currency')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Format = "{0:c}",
+                UiType = "NumericTextBox",
+                Editor = "multiDimEditor"
+            });
+            items.Add(new UiTemplateContainerItem  // Fake Atrb, placeholder for dispaly purposes only
+            {
+                Id = 10005,
+                AtrbCd = "PRIMARY_OR_SECONDARY",        //KITTODO: i thought this was what PRD_BCKT attribute was supposed to be for, but mahesh is using it to store prod names - need to confirm
+                Label = "Primary or Secondary",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 100,
+                Template = "#=gridUtils.uiSysGeneratedDimControlWrapper(data, 'PRIMARY_OR_SECONDARY', null)#",    //KITTODO: how do we populate fake values for a column we don't save?  lots of ways to do it, but what is our convention - in fact this template wont even work because it is not a real attribute
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+            });
+            items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
+            {
+                Id = 10005,
+                AtrbCd = "KIT_REBATE_BUNDLE_DISCOUNT",
+                Label = "KIT Rebate /Bundle Discount",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiSysGeneratedDimControlWrapper(data, 'KIT_REBATE_BUNDLE_DISCOUNT', 'currency')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+            });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
                 Id = 3681,
@@ -1128,7 +1183,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
-                Template = "#=gridUtils.uiDimControlWrapper(data, 'DSCNT_PER_LN', '20___0', 'currency')#",
+                Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'DSCNT_PER_LN', 'currency')#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
@@ -1143,17 +1198,33 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 100,
+                DataType = "object",
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'QTY')#"
+                Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'QTY', 'number')#",
+                UiType = "NumericTextBox",
+                Editor = "multiDimEditor"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
-                Id = 10005,
+                Id = 29,
+                AtrbCd = "TOTAL_DSCNT_PR_LN",
+                Label = "Total Discount per line",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiSysGeneratedDimControlWrapper(data, 'TOTAL_DSCNT_PR_LN', 'currency')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+            });
+            items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
+            {
+                Id = 29,
                 AtrbCd = "CAP_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "<op-popover ng-click='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT', '20___0')#</op-popover>",
                 Label = "CAP Info",
@@ -1169,7 +1240,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 86,
                 AtrbCd = AttributeCodes.CAP,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP', '20___0', 'currency')#",
                 DataType = "object",
@@ -1182,7 +1253,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3665,
                 AtrbCd = AttributeCodes.CAP_STRT_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP_STRT_DT', '20___0', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
                 IsFilterable = true,
@@ -1195,7 +1266,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3666,
                 AtrbCd = AttributeCodes.CAP_END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP_END_DT', '20___0', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
                 IsFilterable = true,
@@ -1209,7 +1280,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 10006,
                 AtrbCd = "YCS2_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 130,
                 Label = "YCS2 Info",
                 IsFilterable = true,

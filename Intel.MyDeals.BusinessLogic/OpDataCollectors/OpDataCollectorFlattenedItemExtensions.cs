@@ -384,7 +384,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 }
                 else if (multiDimAtrbs.IndexOf(key) >= 0 || key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0 || key.IndexOf(AttributeCodes.ECAP_PRICE) == 0)
                 {
-                    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0)
+                    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0 && opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() != "KIT")  
                     {
                         newItem[key + baseEcapDimKey] = opFlatItem[key];
                     }
