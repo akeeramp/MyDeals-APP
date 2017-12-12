@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 12/12/2017 10:01:30 AM
+File Updated: 12/12/2017 10:28:17 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2632,6 +2632,7 @@ namespace Intel.MyDeals.Entities {
 		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
 		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
 		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
+		public const string C_BID_TENDERS = "C_BID_TENDERS";
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
 		public const string C_EDIT_PRODUCT = "C_EDIT_PRODUCT";
