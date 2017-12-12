@@ -889,6 +889,15 @@
                 }
             });
 
+            // For kit deals re arrange the products primary secondary
+            var prdDrawingOrd = "";
+            if (vm.dealType === "KIT") {
+                vm.addedProducts = $filter('kitProducts')(vm.addedProducts, 'DEAL_PRD_TYPE');
+                prdDrawingOrd = vm.addedProducts.map(function (p) {
+                    return p.PRD_MBR_SID;
+                }).join(',');
+            }
+
             var pricingTableSysProducts = {};
 
             angular.forEach(vm.addedProducts, function (item, key) {
@@ -906,7 +915,9 @@
                     pricingTableSysProducts[item.USR_INPUT].push(item);
                 }
             });
-            var productSelectorOutput = { 'splitProducts': vm.splitProducts, 'validateSelectedProducts': pricingTableSysProducts };
+
+            //Only for kit prdDrawingOrd will be populated
+            var productSelectorOutput = { 'splitProducts': vm.splitProducts, 'validateSelectedProducts': pricingTableSysProducts, 'prdDrawingOrd': prdDrawingOrd };
             $uibModalInstance.close(productSelectorOutput);
         }
 

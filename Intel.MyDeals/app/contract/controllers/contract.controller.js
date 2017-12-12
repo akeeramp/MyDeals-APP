@@ -31,7 +31,7 @@
         $scope.switchingTabs = false;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT"];
+        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -2301,11 +2301,11 @@
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         if (!!$scope.spreadDs) {
-                            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                                $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
-                            } else {
-                                $scope.spreadDs.read();
-                            }
+                            //if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                            //    $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
+                            //} else {
+                            $scope.spreadDs.read();
+                            //}
                             $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                         }
                     }
@@ -2669,7 +2669,9 @@
                         for (var i = 0; i < kitDimAtrbs.length; i++) {
                             var tieredItem = kitDimAtrbs[i];
                             lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
-
+                            if (tieredItem == "TIER_NBR") {
+                                lData[tieredItem] = t; // KIT add tier number
+                            }
                             //mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);  //KITTODO: KIT: throwing errors for tier warning, uncomment out and figure this out later
                         }
                     }
@@ -2713,6 +2715,10 @@
                         newData.push(lData);
                     }
                     d++;
+                    // Quick fix, even after data.length === d loop was running. Not sure why :|
+                    if (d === data.length) {
+                        break;
+                    }
                 }
             }
 
@@ -3558,7 +3564,7 @@
             }
 
             // fix merge issues
-            if (data.length > 0) {
+            if (data.length > 0 && ($scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "KIT")) {
                 var lastItem = data[data.length - 1];
                 var numTier = $scope.numOfPivot(lastItem);
                 var offset = data.length % numTier;
