@@ -2672,7 +2672,7 @@
                             if (tieredItem == "TIER_NBR") {
                                 lData[tieredItem] = t; // KIT add tier number
                             }
-                            //mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);  //KITTODO: KIT: throwing errors for tier warning, uncomment out and figure this out later
+                        	mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1)); 
                         }
                     }
                     newData.push(lData);

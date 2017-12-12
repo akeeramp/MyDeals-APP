@@ -67,6 +67,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.letterToCol = {};
     vm.readOnlyColLetters = [];
     vm.requiredStringColumns = {};
+    var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
+    var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
+    var dealGrpNameDict = {};
     //root.wipData;
     //root.wipOptions;
     var ssTools;
@@ -86,8 +89,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 // keep track of columns that are before the PTR_USR_PRD column that can be edited by users, to properly enable/disable them
         "CUST_ACCNT_DIV"
     ];
-    var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
-    var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
+
+	// Performance and UX... removed this.  We will need to handle these in the MT rules
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
+
 
     function init() {
         // force a resize event to format page
@@ -549,12 +555,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return cols;
     }
 
-    // Performance and UX... removed this.  We will need to handle these in the MT rules
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
-    var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
-
-    var dealGrpNameDict = {};
-
     // On Spreadsheet change
     function onChange(arg) {
         if (stealthOnChangeMode) {
@@ -592,15 +592,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
 
-        // Check for Deal Group Type merges and renames
+    	// KIT
         if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-
             var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
-            var isDealGrpColumnIncludedInChanges = (range._ref.topLeft.col <= dealGrpColIndex) && (range._ref.bottomRight.col >= dealGrpColIndex);
+        	var dscntPerLnIndex = (root.colToLetter["DSCNT_PER_LN"].charCodeAt(0) - intA);
+        	var qtyIndex = (root.colToLetter["QTY"].charCodeAt(0) - intA);
+        	var ecapPriceColIndex = (root.colToLetter["ECAP_PRICE"].charCodeAt(0) - intA);
 
-            if (isDealGrpColumnIncludedInChanges) {
-                var skipUntilRow = null; // HACK: used so we don't check deal group type of merged tiers
-                var dealGrpSkipVal = "";
+            var isDealGrpColumnIncludedInChanges = (range._ref.topLeft.col <= dealGrpColIndex) && (range._ref.bottomRight.col >= dealGrpColIndex);
+        	var isDscntPerLnColChanged = (range._ref.topLeft.col <= dscntPerLnIndex) && (range._ref.bottomRight.col >= dscntPerLnIndex);
+        	var isQtyColChanged = (range._ref.topLeft.col <= qtyIndex) && (range._ref.bottomRight.col >= qtyIndex);
+        	var isEcapPriceChanged = (range._ref.topLeft.col <= ecapPriceColIndex) && (range._ref.bottomRight.col >= ecapPriceColIndex);
+
+        	if (isDealGrpColumnIncludedInChanges || isQtyColChanged || isDscntPerLnColChanged || isEcapPriceChanged) {
+            	var skipUntilRow = null; // HACK: used so we don't check deal group type of merged tiers
+            	var dealGrpSkipVal = "";
 
                 range.forEachCell(
 					function (rowIndex, colIndex, value) {
@@ -608,7 +614,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					    var myRow = data[myRowIndex];
 					    var myColLetter = String.fromCharCode(intA + (colIndex));
 					    var colName = root.letterToCol[myColLetter];
-					    var prevValue = myRow[colName];
+					    var prevValue = angular.copy(myRow[colName]);
 
 					    if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
 					        // Override of an existing deal grp name (new val != old val)
@@ -618,115 +624,157 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					    }
 
 					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
-
-					        // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values due to the sync() at the end of this function
+                    		var numOfTiers = root.numOfPivot(myRow);
+							
+					    	// HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
+					        var myColLetter = String.fromCharCode(intA + (colIndex));
+					        var colName = root.letterToCol[myColLetter];
 					        myRow[colName] = value.value;
 					        //sourceData[(rowIndex - 1)][colName] = value.value;
 
-					        // Logic to apply to merge cells (multiple tiers)
-					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Changed a cell in a merged cell
-					            // Set the deal group val to be the same as the first one of the merged rows
-					            if (colIndex == dealGrpColIndex) {
-					                value.value = dealGrpSkipVal;
-					                myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
-					                //sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
-					            }
-					            // Skip the rest of the logic for this row
-					            return;
+
+					    	// Update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
+					        	// Transform negative numbers into positive
+					        	if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
+					        		myRow["QTY"] = Math.abs(value.value);
+					        	}
+					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = (parseFloat(myRow["DSCNT_PER_LN"]) * parseInt(myRow["QTY"]) || 0);
 					        }
 
-					        // If it's a merged cell (multiple tiers) then find out how many rows to skip this deal grp validation for (skip is shown in the return above)
-					        if (myRow["NUM_OF_TIERS"] > 1) {
-					            skipUntilRow = rowIndex + (myRow["NUM_OF_TIERS"]);
-					            dealGrpSkipVal = value.value;
+					    	// Logic to apply to merge cells (multiple tiers)
+					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
+					        	// Set the deal group val to be the same as the first one of the merged rows
+					        	if (colIndex == dealGrpColIndex) {
+					        		value.value = dealGrpSkipVal;
+					        		myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
+					        		//sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
+					        	}
 					        }
+					        else { // Either a cell that is not merged OR the first row of a merged cell
+					        	// If it's a merged cell (multiple tiers) then find out how many rows to skip for
+					        	if (numOfTiers > 1) {
+					        		skipUntilRow = rowIndex + numOfTiers;
+					        		dealGrpSkipVal = value.value;
+					        	}
 
-					        // DEAL_GRP functionality
-					        if (colIndex == dealGrpColIndex) {
-					            var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
+					        	var firstTierRow = myRow;
+					        	var firstTierRowIndex = myRowIndex;
 
-					            // Override of an existing deal grp name (new val != old val)
-					            if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
-					                delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
-					            }
+					        	var tierNbr = myRow["TIER_NBR"];
+					        	if (tierNbr !== 1) {
+					        		// Get the first tier row
+					        		firstTierRowIndex = (rowIndex - tierNbr);
+					        		firstTierRow = data[firstTierRowIndex];
+					        	}
+													        	
+					        	if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {		// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+					        		// Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
+					        		var kitRebateTotalVal = 0;
+					        		for (var i = 0; i < numOfTiers; i++) {
+					        			kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["TEMP_TOTAL_DSCNT_PER_LN"]) || 0);
+					        		}
+					        		// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+					        		firstTierRow["TEMP_KIT_REBATE"] = kitRebateTotalVal;									
+					        	}
+					        	else if (colIndex == ecapPriceColIndex) {
+					        		// System should populate KIT ECAP as sum of ECAP standalone, but user can edit.
+					        		var ecapSum = 0;
+									for (var i = 0; i < numOfTiers; i++) {
+										ecapSum += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
+									}
+					        		// TODO: NOTE: this only sets the correct ECAP_PRICE_____20_____1 value to the first row. If we need to set all the ECAP_PRICE_____20_____1 values of each row, then we should revisit this
+									firstTierRow["ECAP_PRICE_____20_____1"] = ecapSum;
+					        	}    
+					        	else if (colIndex == dealGrpColIndex)  {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
+					        		var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
 
-					            // Check if deal group name exists in dictionary
-					            if (dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
+					        		// Override of an existing deal grp name (new val != old val)
+					        		if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
+					        			delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+					        		}
 
-					                var existingRowIndex = dealGrpNameDict[dealGrpKey]
-					                var existingRow = data[existingRowIndex];
+					        		// Check if deal group name exists in dictionary
+					        		if (dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
 
-					                // Confirmation Dialog
-					                var modalOptions = {
-					                    closeButtonText: 'Cancel',
-					                    actionButtonText: 'Merge rows',
-					                    hasActionButton: true,
-					                    headerText: 'Deal group merge confirmation',
-					                    bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
-					                };
+					        			var existingRowIndex = dealGrpNameDict[dealGrpKey]
+					        			var existingRow = data[existingRowIndex];
 
-					                // Check if the merge of the existing and new would be over the 10 max limit and don't let them merge, only rename
-					                if (parseInt(myRow["NUM_OF_TIERS"]) + parseInt(existingRow["NUM_OF_TIERS"]) > 10) { // TODO: maybe have a maxLimit variable instead of a hard-coded 10, which needs to be in product's hard coded 10's also
-					                    modalOptions = {
-					                        closeButtonText: 'Okay',
-					                        hasActionButton: false,
-					                        headerText: 'Deal group merge warning',
-					                        bodyText: 'A deal group with this name already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the deal grp or remove products from this row and try again.'
-					                    };
-					                }
+					        			// Confirmation Dialog
+					        			var modalOptions = {
+					        				closeButtonText: 'Cancel',
+					        				actionButtonText: 'Merge rows',
+					        				hasActionButton: true,
+					        				headerText: 'Deal group merge confirmation',
+					        				bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
+					        			};
 
-					                // Ask user if they want to merge
-					                confirmationModal.showModal({}, modalOptions)
-										.then(function (result) { // Merge existing row with currently-changing row
+					        			// Check if the merge of the existing and new would be over the 10 max limit and don't let them merge, only rename
+					        			if (numOfTiers + root.numOfPivot(existingRow) > 10) { // TODO: maybe have a maxLimit variable instead of a hard-coded 10, which needs to be in product's hard coded 10's also
+					        				modalOptions = {
+					        					closeButtonText: 'Okay',
+					        					hasActionButton: false,
+					        					headerText: 'Deal group merge warning',
+					        					bodyText: 'A deal group with this name already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the deal grp or remove products from this row and try again.'
+					        				};
+					        			}
 
-										    // Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
-										    // NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
-										    for (var i = 0; i < parseInt(existingRow["NUM_OF_TIERS"]) ; i++) {
-										        // Append the currently-changing row to the existing row's product to "merge" them
-										        data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
-										    }
+					        			// Ask user if they want to merge
+					        			confirmationModal.showModal({}, modalOptions)
+											.then(function (result) { // Merge existing row with currently-changing row
 
-										    if (myRowIndex < existingRowIndex) {
-										        // Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
-										        dealGrpNameDict[dealGrpKey] = existingRowIndex - parseInt(myRow["NUM_OF_TIERS"]);
-										    }
+												// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
+												// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
+												for (var i = 0; i < numOfTiers; i++) {
+													// Append the currently-changing row to the existing row's product to "merge" them
+													data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
+												}
 
-										    // Remove all the currently-changing row's merged rows from our datasource
-										    data.splice(myRowIndex, parseInt(myRow["NUM_OF_TIERS"]));
+												if (myRowIndex < existingRowIndex) {
+													// Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
+													dealGrpNameDict[dealGrpKey] = existingRowIndex - numOfTiers;
+												}
 
-										    // sync
-										    cleanupData(data);
-										    root.spreadDs.sync();
-										    $scope.applySpreadsheetMerge();
-										    root.spreadDs.sync();
-										    root.child.setRowIdStyle(data);
+												// Remove all the currently-changing row's merged rows from our datasource
+												data.splice(myRowIndex, numOfTiers);
+
+												// sync
+												cleanupData(data);
+												root.spreadDs.sync();
+												$scope.applySpreadsheetMerge();
+												root.spreadDs.sync();
+												root.child.setRowIdStyle(data);
 
 
-										}, function (response) { // Don't merge the currently changing with the existing.
+											}, function (response) { // Don't merge the currently changing with the existing.
 
-										    // Revert back to old name (for all the rows in the possibly merged currently-editing row)
-										    for (var i = 0; i < parseInt(myRow["NUM_OF_TIERS"]) ; i++) {
-										        data[myRowIndex + i]["DEAL_GRP_NM"] = prevValue;
-										    }
+												// Revert back to old name (for all the rows in the possibly merged currently-editing row)
+												for (var i = 0; i < numOfTiers; i++) {
+													data[myRowIndex + i]["DEAL_GRP_NM"] = prevValue;
+												}
 
-										    // TODO: Re-add the Deal Grp Name dict key that was deleted
-										    addToDealGrpNameDict(prevValue, myRowIndex);
+												// TODO: Re-add the Deal Grp Name dict key that was deleted
+												addToDealGrpNameDict(prevValue, myRowIndex);
 
-										    // sync
-										    cleanupData(data);
-										    root.spreadDs.sync();
-										}
-									);
+												// sync
+												cleanupData(data);
+												root.spreadDs.sync();
+											}
+										);
 
-					                return;
-					            }
-					            else { // Brand new Deal Group Name
-					                addToDealGrpNameDict(dealGrpKey, myRowIndex);
-					            }
+					        			return;
+					        		}
+					        		else { // Brand new Deal Group Name
+					        			addToDealGrpNameDict(dealGrpKey, myRowIndex);
+					        		}
+					        	}
 					        }
 					    }
 					}
 				);
+            	// sync
+                //cleanupData(data);
+                root.spreadDs.sync();
             }
         }
 
@@ -805,36 +853,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
-        // KIT
-        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-            var dscntPerLnIndex = (root.colToLetter["DSCNT_PER_LN"].charCodeAt(0) - intA);
-            var qtyIndex = (root.colToLetter["QTY"].charCodeAt(0) - intA);
-
-            var isDscntPerLnColChanged = (range._ref.topLeft.col <= dscntPerLnIndex) && (range._ref.bottomRight.col >= dscntPerLnIndex);
-            var isQtyColChanged = (range._ref.topLeft.col <= qtyIndex) && (range._ref.bottomRight.col >= qtyIndex);
-
-            // Need to update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-            if (isQtyColChanged || isDscntPerLnColChanged) {
-
-                range.forEachCell(
-                    function (rowIndex, colIndex, value) {
-                        var myRow = data[(rowIndex - 1)];
-                        if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
-
-                            var numOfTiers = root.numOfPivot(myRow);
-
-                            //KITTODO: Update TEMP_TOTAL_DSCNT_PER_LN and TEMP_KIT_REBATE attributes with the following rules as detailed in US46816
-                            // --- TEMP_TOTAL_DSCNT_PER_LN ("Total Discount per line")
-                            // ---     |-> = DSCNT_PER_LN * QTY for that specific row/tier/product
-                            // --- TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount")
-                            // ---     |-> = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
-                        }
-                    }
-                );
-                //cleanupData(data);
-                //root.spreadDs.sync();
-            }
-        }
 
         var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
@@ -1105,7 +1123,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (buckProd.length === 0) {
             row.PRD_BCKT = productBcktName;
         } else {
-            row = buckProd[0]; //Select the first one even of there are duplicates
+        	row = buckProd[0]; //Select the first one even of there are duplicates
         }
         row["NUM_OF_TIERS"] = numTier;
         row["TIER_NBR"] = tierNumber + 1;
@@ -1218,7 +1236,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     // Defaulted row values for specific SET TYPEs
                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                        data[r]["QTY"] = 1;
+                    	data[r]["QTY"] = 1;
                     } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
                         // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
                         data[r]["ADJ_ECAP_UNIT"] = 0;
@@ -1230,32 +1248,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["TIER_NBR"] = pivotDim;
                             data[r]["NUM_OF_TIERS"] = numPivotRows;
 
-                            // Default to 0
-                            data[r]["RATE"] = 0;
+                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                            	// Default to 0
+                            	data[r]["RATE"] = 0;
 
-                            if (pivotDim === parseInt(numPivotRows)) {
-                                // default last end vol to "unlimited"
-                                data[r]["END_VOL"] = unlimitedVal;
-                            } else {
-                                // Default to 0
-                                data[r]["END_VOL"] = 0;
-                            }
-                            // disable non-first start vols
-                            if (pivotDim !== 1) {
-                                if (!data[r]._behaviors) {
-                                    data[r]._behaviors = {};
-                                }
-                                if (!data[r]._behaviors.isReadOnly) {
-                                    data[r]._behaviors.isReadOnly = {};
-                                }
-                                // Flag start vol cols to disable
-                                var rowInfo = data[r];
-                                data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
-                                // Default to 0
-                                data[r]["STRT_VOL"] = 0;
-                            } else {
-                                // 1st tier row
-                                data[r]["STRT_VOL"] = 1;
+                            	if (pivotDim === parseInt(numPivotRows)) {
+                            		// default last end vol to "unlimited"
+                            		data[r]["END_VOL"] = unlimitedVal;
+                            	} else {
+                            		// Default to 0
+                            		data[r]["END_VOL"] = 0;
+                            	}
+                            	// disable non-first start vols
+                            	if (pivotDim !== 1) {
+                            		if (!data[r]._behaviors) {
+                            			data[r]._behaviors = {};
+                            		}
+                            		if (!data[r]._behaviors.isReadOnly) {
+                            			data[r]._behaviors.isReadOnly = {};
+                            		}
+                            		// Flag start vol cols to disable
+                            		var rowInfo = data[r];
+                            		data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+                            		// Default to 0
+                            		data[r]["STRT_VOL"] = 0;
+                            	} else {
+                            		// 1st tier row
+                            		data[r]["STRT_VOL"] = 1;
+                            	}
                             }
                         }
                     }
@@ -1326,7 +1346,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     // Enable other cells
-                    if (!!ptTemplate.model.fields["TIER_NBR"]) {
+                    if (!!ptTemplate.model.fields["TIER_NBR"] && $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
                         // Find tier nbr col
                         var tierColIndex = (root.colToLetter["TIER_NBR"]).charCodeAt(0);
                         var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);

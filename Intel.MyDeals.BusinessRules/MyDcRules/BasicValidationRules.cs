@@ -158,6 +158,24 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
 				{
+					Title="Quantity must be greater than 0",
+					ActionRule = MyDcActions.ValidateTierQty,
+					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.QTY)
+				},
+				new MyOpRule
+				{
+					Title="Tiered ECAP value check",
+					ActionRule = MyDcActions.ValidateTierEcap,
+					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.ECAP_PRICE)
+				},
+				new MyOpRule
+				{
 					Title="End Vol must be greater than start vol",
 					ActionRule = MyDcActions.CompareStartEndVol,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
@@ -199,7 +217,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Validate ECAP Price",
                     ActionRule = MyDcActions.ValidateEcapPrice,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},
+					InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
                 new MyOpRule
@@ -441,7 +459,24 @@ namespace Intel.MyDeals.BusinessRules
 					ActionRule = MyDcActions.CheckEcapAdjUnit,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
-				}
+				},
+				//new MyOpRule
+				//{
+				//	Title="Qty cannot be negative",
+				//	ActionRule = MyDcActions.ExecuteActions,
+				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+				//	InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+				//	InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
+				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+				//	{
+				//		new OpRuleAction<IOpDataElement>
+				//		{
+				//			Action = MyDeActions.AddMessage,
+				//			Args = new object[] {"{0} must be positive or zero"},
+				//			Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.QTY }) && de.HasValue() && de.IsNegative()
+				//		}
+				//	}
+				//},
 			};
         }
     }

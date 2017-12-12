@@ -949,39 +949,68 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            ValidateTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
+            ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
         }
 
         public static void ValidateTierStartVol(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            ValidateTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
+            ValidateVolTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
         }
 
         public static void ValidateTierEndVol(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            ValidateTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
-        }
+            ValidateVolTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
+		}
+		public static void ValidateTierQty(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+			ValidateKitTieredAttribute(AttributeCodes.QTY.ToString(), "Quantity must have a positive value.", IsGreaterOrEqualToZero, r);
+		}
+		public static void ValidateTierEcap(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+			ValidateKitTieredAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP tier check.", IsGreaterThanZero, r);
+		}
 
-        public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+		public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+		{
+			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+			if (deNumTiers == null) return;
+
+			int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
+
+			ValidateTieredAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
+		}
+
+		public static void ValidateKitTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+		{
+			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+			if (deNumTiers == null) return;
+
+			// Get number of "tiers" from product, since we don't save NUM_OF_TIERS
+			// TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
+			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
+
+			ValidateTieredAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, isEndVol);
+		}
+
+		public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
         {
             IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
             IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            if (deNumTiers == null) return;
-
-            int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 
             // Validate and set validation message if applicable on each tier
             foreach (IOpDataElement atrb in atrbs)
             {
                 int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
-                if (tier <= numOfTiers)
+                if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
                 {
                     if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
                     {
