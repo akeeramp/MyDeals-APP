@@ -635,7 +635,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 120,
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
-                                    template: "<div title='#=CAP#' class='readOnlyCell'>#=CAP#</div>"
+                                    template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
                                 },
                                 {
                                     field: "",
@@ -693,7 +693,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
                                                             //Updating Product Line
-                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
                                                             }
 
@@ -775,7 +775,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
                                                             //Updating Product Line
-                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
                                                             }
 
@@ -872,7 +872,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             $scope.selectedCust = options.model.CUST_NM_SID;
                                             $scope.curentRow = options.model.RW_NM;
                                             if (selectedIndx == -1 && $scope.selectedCustomerText.trim().length > 0) {
-                                                $scope.addSKUForCustomer("0");
+                                                $scope.addSKUForCustomer("0", options.model.IS_SELECTED);
                                                 options.model.COMP_SKU = $scope.selectedCustomerText.trim();
                                             }
                                             else if (selectedIndx > -1 && $scope.selectedCustomerText.trim().length > 0) {
@@ -1648,21 +1648,24 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "CAP",
                                         width: 120,
                                         filterable: { multi: true, search: true },
-                                        template: "<div title='#=CAP#' class='readOnlyCell'>#=CAP#</div>"
+                                        format: "{0:c}",
+                                        template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
                                     },
                                     {
                                         field: "ECAP_PRC",
                                         title: "ECAP Price",
                                         width: 120,
+                                        format: "{0:c}",
                                         filterable: { multi: true, search: true },
-                                        template: "<div title='#=ECAP_PRC#' class='readOnlyCell'>#=ECAP_PRC#</div>"
+                                        template: "<div title='#=ECAP_PRC#' class='readOnlyCell'>#if(ECAP_PRC == 0){## ##} else {#$#:ECAP_PRC##}#</div>"
                                     },
                                     {
                                         field: "YCS2",
                                         title: "YCS2 Price",
                                         width: 120,
+                                        format: "{0:c}",
                                         filterable: { multi: true, search: true },
-                                        template: "<div title='#=YCS2#' class='readOnlyCell'>#=YCS2#</div>"
+                                        template: "<div title='#=YCS2#' class='readOnlyCell'>#if(YCS2 == 0){## ##} else {#$#:YCS2##}#</div>"
                                     },
                                     {
                                         field: "MC_LAST_RUN",

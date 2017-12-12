@@ -60,13 +60,19 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
             pageSizes: [10, 25, 50, 100],
             buttonCount: 5
         },        
-        columns: [  
+        columns: [
+            {
+                field: "DEAL_OBJ_SID",
+                title: "Deal ID",
+                width: 150,
+                template: "<div class='readOnlyCell' title='#=DEAL_OBJ_SID#'>#=DEAL_OBJ_SID#</div>"
+            },
             {
                 field: "OBJ_SET_TYPE",
-                title: "Object Set Type",
+                title: "Deal Type",
                 width: 150,                
                 template: "<div class='readOnlyCell' title='#=OBJ_SET_TYPE#'>#=OBJ_SET_TYPE#</div>"
-            },
+            },                        
             {
                 field: "CTRCT_NM",
                 title: "Contract Name",
@@ -101,7 +107,7 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
             },
             {
                 field: "DEAL_CMBN_TYPE",
-                title: "Deals",
+                title: "Additive",
                 template: "<div class='readOnlyCell' title='#=DEAL_CMBN_TYPE#'>#=DEAL_CMBN_TYPE#</div>",
                 width: 150
             },
