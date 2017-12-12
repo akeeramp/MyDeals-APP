@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 11/29/2017 10:06:24 PM
+File Updated: 12/12/2017 10:01:30 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -28,6 +28,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string ACTIVE = "ACTIVE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3700
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string ACTV_REV = "ACTV_REV";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -145,6 +154,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string BE_HARD_STOP = "BE_HARD_STOP";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3702
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string BID_STATUS = "BID_STATUS";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1090,6 +1108,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Boolean
 		///</summary>
 		public const string HAS_L2 = "HAS_L2";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3701
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string HAS_SUBKIT = "HAS_SUBKIT";
 
 		///<summary>
 		/// DIM_SID: 3

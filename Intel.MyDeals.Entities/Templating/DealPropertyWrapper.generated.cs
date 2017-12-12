@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 12/7/2017 10:00:14 AM
+File Updated: 12/12/2017 10:01:39 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -249,6 +249,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute BID_STATUS = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "BID_STATUS",
+			ATRB_DESC = "Tender Bid Status",
+			ATRB_LBL = "Tender Bid Status",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3702,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute BLENDED_GEO = new MyDealsAttribute()
 		{
@@ -1921,6 +1937,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Has L2 Product",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3670,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute HAS_SUBKIT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "HAS_SUBKIT",
+			ATRB_DESC = "Does the deal have a Sub-kit",
+			ATRB_LBL = "Sub Kit",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3701,
 			DATA_TYPE_CD = "BIT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
