@@ -145,48 +145,60 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
 }
 
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
-gridUtils.uiSysGeneratedDimControlWrapper = function (passedData, field, format) {
-    var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
-    var values = [];    //we will store the intended system-generated display values here to iterate through later
-
-    for (var dimkey in data) {
-        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
-            if (field === "PRIMARY_OR_SECONDARY") {
-                //assumes that the first ___0 dim is the primary product of the kit deal
-                if (values.length === 0) {
-                    values.push("Primary");
-                } else {
-                    values.push("Secondary");
-                }
-            }
-
-            //Total Discount Per Line = dim's Quantity * Discount Per Line.
-            if (field === "TOTAL_DSCNT_PR_LN" || field === "KIT_REBATE_BUNDLE_DISCOUNT") {
-                var dim = dimkey[dimkey.length - 1];
-                values.push(passedData["QTY"]["20___" + dim] * passedData["DSCNT_PER_LN"]["20___" + dim]);
-            }
-
-            //Kit Rebate / Bundle Discount = the sum of total discounts per line, which we calculated in the previous if-condition and stored in values array
-            if (field === "KIT_REBATE_BUNDLE_DISCOUNT") {
-                //sum values and replace with single item
-                var sumValue = 0;
-                for (var i = 0; i < values.length; i++) {
-                    sumValue = sumValue + values[i];
-                }
-                values = [sumValue];
-            }
-        }
-    }
+gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
+    var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers   
+    var setPrimary = true;
 
     var tmplt = '<table>';
-    for (var i = 0; i < values.length; i++) {
-        tmplt += '<tr style="height: 25px;">';
-        tmplt += '<td style="text-align:left;"';
-        tmplt += ' ng-class="{isReadOnlyCell:true}">';
-        tmplt += '<span style="padding: 0 4px;" ng-bind="(\'' + values[i] + '\' ' + gridUtils.getFormat(field, format) + ')"></span>';
-        tmplt += '</td>';
-        tmplt += '</tr>';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+            tmplt += '<tr style="height: 25px;">';
+            tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-class="{isReadOnlyCell:true}">';
+            if (setPrimary) {
+                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'Primary\'"></span>';
+                setPrimary = false;
+            } else {
+                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'Secondary\'"></span>';
+            }
+            tmplt += '</td>';
+            tmplt += '</tr>';
+        }
     }
+    tmplt += '</table>';
+
+    return tmplt;
+}
+
+//this control wrapper is only used to calculate KIT deal's TOTAL_DISCOUNT_PER_LINE
+gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
+    var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
+
+    var tmplt = '<table>';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+            tmplt += '<tr style="height: 25px;">';
+            tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-class="{isReadOnlyCell:true}">';
+            tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="((dataItem.QTY[\'' + dimkey + '\'] * dataItem.DSCNT_PER_LN[\'' + dimkey + '\']) ' + gridUtils.getFormat("", format) + ')"></span>';
+            tmplt += '</td>';
+            tmplt += '</tr>';
+        }
+    }
+    tmplt += '</table>';
+
+    return tmplt;
+}
+
+//this control wrapper is only used to calculate KIT deal's KIT_REBATE_BUNDLE_DISCOUNT
+gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
+    var tmplt = '<table>';
+    tmplt += '<tr style="height: 25px;">';
+    tmplt += '<td style="text-align:right;"';
+    tmplt += ' ng-class="{isReadOnlyCell:true}">';
+    tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="((dataItem | kitRebateBundleDiscount) ' + gridUtils.getFormat("", 'currency') + ')"></span>';
+    tmplt += '</td>';
+    tmplt += '</tr>';
     tmplt += '</table>';
 
     return tmplt;

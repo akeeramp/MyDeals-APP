@@ -99,6 +99,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/meetComp/meetComp.directive.js"
                 , "~/app/core/directives/meetComp/meetCompDealDetails.js"
                 , "~/app/core/filters/kitProducts.filter.js"
+                , "~/app/core/filters/kitRebateBundleDiscount.filter.js"
                 , "~/app/blocks/util.js"
                 ));
 

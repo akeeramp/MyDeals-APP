@@ -1153,25 +1153,25 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem  // Fake Atrb, placeholder for dispaly purposes only
             {
                 Id = 10005,
-                AtrbCd = "PRIMARY_OR_SECONDARY",        //KITTODO: i thought this was what PRD_BCKT attribute was supposed to be for, but mahesh is using it to store prod names - need to confirm
+                AtrbCd = "PRIMARY_OR_SECONDARY",
                 Label = "Primary or Secondary",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 100,
-                Template = "#=gridUtils.uiSysGeneratedDimControlWrapper(data, 'PRIMARY_OR_SECONDARY', null)#",    //KITTODO: how do we populate fake values for a column we don't save?  lots of ways to do it, but what is our convention - in fact this template wont even work because it is not a real attribute
+                Template = "#=gridUtils.uiPrimarySecondaryDimControlWrapper(data)#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
-                Id = 10005,
+                Id = 10006,
                 AtrbCd = "KIT_REBATE_BUNDLE_DISCOUNT",
                 Label = "KIT Rebate /Bundle Discount",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
-                Template = "#=gridUtils.uiSysGeneratedDimControlWrapper(data, 'KIT_REBATE_BUNDLE_DISCOUNT', 'currency')#",
+                Template = "#=gridUtils.uiKitRebateBundleDiscountControlWrapper(data)#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
@@ -1208,20 +1208,20 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
-                Id = 29,
+                Id = 10007,
                 AtrbCd = "TOTAL_DSCNT_PR_LN",
                 Label = "Total Discount per line",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
-                Template = "#=gridUtils.uiSysGeneratedDimControlWrapper(data, 'TOTAL_DSCNT_PR_LN', 'currency')#",
+                Template = "#=gridUtils.uiTotalDiscountPerLineControlWrapper(data, 'currency')#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
-                Id = 29,
+                Id = 10008,
                 AtrbCd = "CAP_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
@@ -1277,7 +1277,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
-                Id = 10006,
+                Id = 10009,
                 AtrbCd = "YCS2_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
