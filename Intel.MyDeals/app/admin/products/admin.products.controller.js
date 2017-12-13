@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('ProductController', ProductController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     ProductController.$inject = ['productService', '$scope', 'logger', 'gridConstants']
 

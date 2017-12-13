@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('actionSummaryModalCtrl', actionSummaryModalCtrl);
+    .controller('actionSummaryModalCtrl', actionSummaryModalCtrl)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 actionSummaryModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItems', 'showErrMsg'];
 

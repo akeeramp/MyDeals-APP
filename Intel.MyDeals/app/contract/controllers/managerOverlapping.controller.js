@@ -3,7 +3,11 @@
 
     angular
         .module('app.contract')
-        .controller('managerOverlappingController', managerOverlappingController);
+        .controller('managerOverlappingController', managerOverlappingController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     managerOverlappingController.$inject = ['$scope', '$timeout'];
 

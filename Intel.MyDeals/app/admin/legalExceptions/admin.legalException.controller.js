@@ -2,7 +2,7 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('legalExceptionsController', legalExceptionsController);
+        .controller('legalExceptionsController', legalExceptionsController)
 
     legalExceptionsController.$inject = ['legalExceptionService', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService'];
 

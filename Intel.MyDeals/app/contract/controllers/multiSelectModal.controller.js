@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('MultiSelectModalCtrl', MultiSelectModalCtrl);
+    .controller('MultiSelectModalCtrl', MultiSelectModalCtrl)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'items', 'cellCurrValues', 'colName', 'isBlendedGeo'];
 

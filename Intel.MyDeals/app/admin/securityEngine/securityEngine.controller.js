@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('securityEngineController', securityEngineController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     securityEngineController.$inject = ['$scope', 'logger', 'SecurityEngineService', 'lookupsService', 'confirmationModal', 'gridConstants', 'SecUtil','$filter', '$q']
 

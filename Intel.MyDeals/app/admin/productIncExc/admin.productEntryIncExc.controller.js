@@ -3,7 +3,10 @@
 
     angular
         .module('app.admin')
-        .controller('ProductEntryIncExcController', ProductEntryIncExcController);
+        .controller('ProductEntryIncExcController', ProductEntryIncExcController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     ProductEntryIncExcController.$inject = ['$scope', 'dataService', 'productEntryIncExcService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state'];
 

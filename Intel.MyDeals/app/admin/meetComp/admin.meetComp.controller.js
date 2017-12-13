@@ -4,9 +4,11 @@
 
     angular
         .module('app.admin')
-        .controller('meetCompController', meetCompController);
+        .controller('meetCompController', meetCompController)
+        .run(SetRequestVerificationToken);
 
-    meetCompController.$inject = ['$scope', 'dataService', 'meetCompService', 'logger', '$localStorage', 'confirmationModal', '$linq', 'gridConstants', '$timeout','$q'];
+    SetRequestVerificationToken.$inject = ['$http'];
+    meetCompController.$inject = ['$scope', 'dataService', 'meetCompService', 'logger', '$localStorage', 'confirmationModal', '$linq', 'gridConstants', '$timeout', '$q'];
 
     function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q) { 
         var vm = this;

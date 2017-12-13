@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Linq;
 using Intel.Opaque.Tools;
 using Intel.Opaque.Data;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -94,7 +95,8 @@ namespace Intel.MyDeals.Controllers.API
 		}
 		
 		[HttpPost]
-		[Route("SaveSecurityMapping")]
+        [AntiForgeryValidate]
+        [Route("SaveSecurityMapping")]
 		public bool SaveSecurityMappings(List<SecurityMapSave> saveMappings)
 		{
 			return _securityAttributesLib.SaveSecurityMappings(saveMappings);
@@ -111,6 +113,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("InsertAction")]
         public SecurityActions InsertAction(SecurityActions action)
         {
@@ -118,6 +121,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPut]
+        [AntiForgeryValidate]
         [Route("UpdateAction")]
         public SecurityActions UpdateAction(SecurityActions action)
         {
@@ -142,6 +146,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("InsertAdminApplication")]
         public AdminApplications InsertApplication(AdminApplications app)
         {
@@ -149,6 +154,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPut]
+        [AntiForgeryValidate]
         [Route("UpdateAdminApplication")]
         public AdminApplications UpdateAdminApplication(AdminApplications app)
         {
@@ -173,6 +179,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("InsertAdminDealType")]
         public AdminDealType InsertAdminDealType(AdminDealType dealType)
         {
@@ -180,6 +187,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPut]
+        [AntiForgeryValidate]
         [Route("UpdateAdminDealType")]
         public AdminDealType UpdateDealType(AdminDealType dealType)
         {
@@ -204,6 +212,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("InsertAdminRoleType")]
         public AdminRoleType InsertAdminRoleType(AdminRoleType RoleType)
         {
@@ -211,6 +220,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPut]
+        [AntiForgeryValidate]
         [Route("UpdateAdminRoleType")]
         public AdminRoleType UpdateAdminRoleType(AdminRoleType RoleType)
         {

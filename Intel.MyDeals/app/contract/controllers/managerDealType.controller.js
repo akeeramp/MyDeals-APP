@@ -3,7 +3,11 @@
 
 angular
     .module('app.contract')
-    .controller('managerDealTypeController', managerDealTypeController);
+        .controller('managerDealTypeController', managerDealTypeController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
 managerDealTypeController.$inject = ['$scope', '$timeout'];
 

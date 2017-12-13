@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.admin')
-    .controller('ProductCorrectorModalController', ProductCorrectorModalController);
+    .controller('ProductCorrectorModalController', ProductCorrectorModalController)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
 

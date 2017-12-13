@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net;
 using Intel.MyDeals.ActionFilters;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -102,6 +103,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("api/Cache/v1/ClearApiCache")]
         [HttpPost]
+        [AntiForgeryValidate]
         public bool ClearCache(CacheItem cacheItem)
         {
             var cache = Configuration.CacheOutputConfiguration().GetCacheOutputProvider(Request);

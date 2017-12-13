@@ -2,7 +2,11 @@
     'use strict';
     angular
         .module('app.advancedSearch')
-        .controller('AdvancedSearchController', AdvancedSearchController);
+        .controller('AdvancedSearchController', AdvancedSearchController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     AdvancedSearchController.$inject = ['dataService', '$scope', 'logger', 'gridConstants'];
 

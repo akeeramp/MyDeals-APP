@@ -3,7 +3,11 @@
 
     angular
         .module('app.contract')
-        .controller('managerTimelineController', managerTimelineController);
+        .controller('managerTimelineController', managerTimelineController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     managerTimelineController.$inject = ['$scope', '$timeout'];
 

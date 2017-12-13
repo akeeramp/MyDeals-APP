@@ -2,7 +2,11 @@
     'use strict';
 
     angular.module('app.testCases')
-        .controller('uiControlsController', uiControlsController);
+        .controller('uiControlsController', uiControlsController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     uiControlsController.$inject = ['$uibModal', '$scope'];
 

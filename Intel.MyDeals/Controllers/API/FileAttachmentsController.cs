@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
@@ -82,6 +83,7 @@ namespace Intel.MyDeals.Controllers.API
         /// Delete the specified file attachment
         /// </summary>
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("Delete/{custMbrSid}/{objTypeSid}/{objSid}/{fileDataSid}/{includeGroup}")]
         public void Delete(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup)
         {

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Intel.MyDeals.Helpers;
+
+<!DOCTYPE html>
 <html ng-app="app" ng-strict-di>
 
 <head>
@@ -15,7 +17,7 @@
     
 </head>
 
-<body>
+<body @Html.RequestVerificationToken()>
     @Html.Partial("_Header")
     <div id="modals"></div>
     <div id="bodyContent" style="position: absolute; top: 84px; bottom: 15px; left: 0; right: 0; overflow: hidden;">

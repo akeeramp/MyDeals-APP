@@ -4,7 +4,10 @@
 
     angular
         .module('app.admin')
-        .controller('WorkflowStageController', WorkflowStageController);
+        .controller('WorkflowStageController', WorkflowStageController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     WorkflowStageController.$inject = ['$scope', 'dataService', 'workflowStageService', 'logger', 'confirmationModal', 'gridConstants'];
 

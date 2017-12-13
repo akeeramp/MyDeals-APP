@@ -4,6 +4,7 @@ using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -46,6 +47,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SavePricingTable/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SavePricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
         {
             return SafeExecutor(() => _pricingTablesLib.SavePricingTable(pricingTables, new ContractToken
@@ -60,6 +62,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveFullPricingTable/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveFullPricingTable(int custId, int contractId, OpDataCollectorFlattenedDictList fullpricingTables)
         {
             return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, new ContractToken
@@ -74,6 +77,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("DeletePricingTable/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsg DeletePricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
         {
             return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(new ContractToken
@@ -120,6 +124,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("CancelPricingTable/{custId}/{contractId}/{contractCustAccpt}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsgQueue CancelPricingTable(int custId, int contractId, string contractCustAccpt, OpDataCollectorFlattenedList pricingTables)
         {
             return SafeExecutor(() => _pricingTablesLib.CancelPricingTable(new ContractToken
@@ -174,6 +179,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("ActionWipDeal/{custId}/{contractId}/{actn}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsgQueue ActionWipDeal(int custId, int contractId, string actn, OpDataCollectorFlattenedList wipDeals)
         {
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
@@ -193,6 +199,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("ActionWipDeals/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsgQueue ActionWipDeals(int custId, int contractId, Dictionary<string, List<WfActnItem>> actnPs)
         {
             return SafeExecutor(() => _pricingTablesLib.ActionWipDeals(new ContractToken
@@ -214,6 +221,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPost]
+        [AntiForgeryValidate]
         [Authorize]
         [Route("UpdateOverlappingDeals/{PRICING_TABLES_ID}/{YCS2_OVERLAP_OVERRIDE}")]
         public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)     //Get all Product with Alias from ProductAlias
@@ -224,6 +232,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPost]
+        [AntiForgeryValidate]
         [Authorize]
         [Route("SetPctOverride")]
         public PctOverrideReason SetPctOverride(PctOverrideReason data)

@@ -2,7 +2,10 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('ProductCategoryController', ProductCategoryController);
+        .controller('ProductCategoryController', ProductCategoryController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     ProductCategoryController.$inject = ['productCategoryService', '$scope', 'logger', 'confirmationModal', 'gridConstants'];
 

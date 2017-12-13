@@ -106,6 +106,7 @@ namespace Intel.MyDeals
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
                  "~/app/admin/admin.module.js"
                 , "~/app/admin/admin.route.js"
+                , "~/app/shared/_requestVerificationToken.js"
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/cache/cache.service.js"
                 , "~/app/admin/cache/cache.manager.resize.directive.js"
@@ -213,13 +214,13 @@ namespace Intel.MyDeals
                 , "~/app/testCases/suggestProduct/suggestProduct.service.js"
                 , "~/app/advancedSearch/advancedSearch.module.js"
                 , "~/app/advancedSearch/advancedSearch.route.js"
-                , "~/app/advancedSearch/advancedSearch.controller.js"
+                , "~/app/advancedSearch/advancedSearch.controller.js"                
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",
                 "~/js/_gridUtil.js",
-                "~/js/_dealUtil.js"
+                "~/js/_dealUtil.js"               
                 ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

@@ -2,7 +2,10 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('EmployeeController', EmployeeController);
+        .controller('EmployeeController', EmployeeController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     EmployeeController.$inject = ['employeeService', '$scope', 'logger'];
 

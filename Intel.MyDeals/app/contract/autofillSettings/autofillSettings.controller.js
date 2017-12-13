@@ -2,7 +2,11 @@
     'use strict';
     angular
        .module('app.admin')
-       .controller('AutofillSettingsController', AutofillSettingsController);
+        .controller('AutofillSettingsController', AutofillSettingsController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     AutofillSettingsController.$inject = ['$filter', '$scope', '$uibModalInstance', 'autofillData', 'dataService', 'logger'];
 

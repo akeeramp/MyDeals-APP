@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque.Tools;
 using System;
@@ -25,6 +26,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns>CustomerQuarterDetails</returns>
         [Route("GetCustomerQuarterDetails")]
         [HttpPost]
+        [AntiForgeryValidate]
         public CustomerQuarterDetails GetCustomerQuarterDetails([FromBody]dynamic input)
         {
             return this._customerCalendarLib.GetCustomerQuarterDetails((int?)input.CustomerMemberSid

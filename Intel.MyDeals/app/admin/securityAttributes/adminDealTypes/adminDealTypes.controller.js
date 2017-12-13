@@ -3,7 +3,10 @@
 
     angular
         .module('app.admin')
-        .controller('dealTypesController', dealTypesController);
+        .controller('dealTypesController', dealTypesController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger', 'gridConstants', 'confirmationModal']
 

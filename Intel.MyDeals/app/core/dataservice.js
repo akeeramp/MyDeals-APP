@@ -32,15 +32,29 @@
         }
 
         function put(apiUrl, dto, successCallback, errorCallback) {
-            return $http.put(apiUrl, dto).then(successCallback, errorCallback);
+            return $http.put(apiUrl, dto, {
+                headers: {
+                    '__RequestVerificationToken': $http.defaults.headers.common['ReqVerToken']
+                }
+            }).then(successCallback, errorCallback);
         }
 
         function post(apiUrl, dto, successCallback, errorCallback) {
-            return $http.post(apiUrl, dto).then(successCallback, errorCallback);
+            return $http.post(apiUrl, dto, {
+                headers: {
+                    '__RequestVerificationToken': $http.defaults.headers.common['ReqVerToken']
+                }
+            }).then(successCallback, errorCallback);
+
+            //return $http.post(apiUrl, dto).then(successCallback, errorCallback);
         }
 
         function Delete(apiUrl, successCallback, errorCallback) {
-            return $http.delete(apiUrl).then(successCallback, errorCallback);
+            return $http.delete(apiUrl, {
+                headers: {
+                    '__RequestVerificationToken': $http.defaults.headers.common['ReqVerToken']
+                }
+            }).then(successCallback, errorCallback);
         }
 
         return service;

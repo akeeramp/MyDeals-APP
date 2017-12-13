@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -107,6 +108,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpPut]
+        [AntiForgeryValidate]
         [Route("UpdateBasicDropdowns")]
         public BasicDropdown UpdateBasicDropdowns(BasicDropdown data)
         {
@@ -117,6 +119,7 @@ namespace Intel.MyDeals.Controllers.API
 
         //[Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("InsertBasicDropdowns")]
         public BasicDropdown InsertBasicDropdowns(BasicDropdown data)
         {
@@ -126,6 +129,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpDelete]
+        [AntiForgeryValidate]
         [Route("DeleteBasicDropdowns/{id}")]
         public bool DeleteBasicDropdowns(int id)
         {

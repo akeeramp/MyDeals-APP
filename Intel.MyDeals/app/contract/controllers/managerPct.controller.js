@@ -3,7 +3,11 @@
 
 angular
     .module('app.contract')
-    .controller('managerPctController', managerPctController);
+        .controller('managerPctController', managerPctController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
 managerPctController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq'];
 

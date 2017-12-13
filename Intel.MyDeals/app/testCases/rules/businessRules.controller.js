@@ -2,7 +2,11 @@
     'use strict';
 
     angular.module('app.testCases')
-        .controller('businessRulesController', businessRulesController);
+        .controller('businessRulesController', businessRulesController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     businessRulesController.$inject = ['$uibModal', '$scope', 'gridConstants'];
 

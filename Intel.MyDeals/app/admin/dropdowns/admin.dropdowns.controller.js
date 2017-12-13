@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('DropdownsController', DropdownsController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     DropdownsController.$inject = ['dropdownsService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
 

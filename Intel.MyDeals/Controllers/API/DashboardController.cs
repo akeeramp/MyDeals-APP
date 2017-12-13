@@ -5,6 +5,7 @@ using System.Web.Http;
 using Intel.MyDeals.App;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -22,6 +23,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("GetDashboardContractSummary")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<DashboardContractSummary> GetDashboardContractSummary([FromBody] DashboardFilter data)
         {
             if (data.CustomerIds == null || !data.CustomerIds.Any() || data.CustomerIds[0] == 0) data.CustomerIds = AppLib.GetMyCustomers(OpUserStack.MyOpUserToken).CustomerInfo.Select(c => c.CUST_SID).ToList();

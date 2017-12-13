@@ -2,7 +2,11 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('securityActionsController',securityActionsController)
+        .controller('securityActionsController', securityActionsController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
+
 
     securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger', 'gridConstants', 'confirmationModal']
 

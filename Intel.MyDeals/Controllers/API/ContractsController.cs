@@ -3,6 +3,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System.Collections.Generic;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -64,6 +65,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveContract/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveContract(int custId, int contractId, OpDataCollectorFlattenedList contracts)
         {
             SavePacket savePacket = new SavePacket(new ContractToken
@@ -80,6 +82,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("CopyContract/{custId}/{contractId}/{srcContractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList CopyContract(int custId, int contractId, int srcContractId, OpDataCollectorFlattenedList contracts)
         {
             SavePacket savePacket = new SavePacket(new ContractToken
@@ -97,6 +100,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveFullContract/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveFullContract(int custId, int contractId, bool delPtr, OpDataCollectorFlattenedDictList fullContracts)
         {
             SavePacket savePacket = new SavePacket(new ContractToken
@@ -113,6 +117,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
         {
             OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
@@ -130,6 +135,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveAndValidateContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
         {
             OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
@@ -147,6 +153,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveAndValidateAndPublishContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveAndValidateAndPublishContractAndPricingTable(int custId, int contractId, ContractTransferPacket contractAndPricingTable)
         {
             OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
@@ -187,6 +194,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("GetContractsStatus")]
         [HttpPost]
+        [AntiForgeryValidate] 
         public dynamic GetContractsStatus([FromBody] DashboardFilter data)
         {
             return SafeExecutor(() => _contractsLib.GetContractsStatus(data)

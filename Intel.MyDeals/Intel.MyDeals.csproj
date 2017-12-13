@@ -262,6 +262,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AntiForgeryExtension.cs" />
+    <Compile Include="Helpers\AntiforgeryValidate.cs" />
     <Compile Include="Helpers\ErrorHelper.cs" />
     <Compile Include="Helpers\GridHelpers.cs" />
     <Compile Include="OpAppConfig.cs" />
@@ -423,6 +425,7 @@
     <Content Include="app\admin\iCostProducts\admin.iCostProducts.controller.js" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
+    <Content Include="app\core\directives\csrfRequestVerificationToken.js" />
     <Content Include="app\core\directives\dirtyTracking.directive.js" />
     <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\blocks\uiControls\focusOnShow.directive.js" />
@@ -473,6 +476,7 @@
     <Content Include="app\core\filters\kitRebateBundleDiscount.filter.js" />
     <Content Include="app\core\filters\kitProducts.filter.js" />
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
+    <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />
     <Content Include="app\shared\services\userPreferences.service.js" />
     <Content Include="app\shared\services\security.service.js" />
@@ -1498,7 +1502,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />

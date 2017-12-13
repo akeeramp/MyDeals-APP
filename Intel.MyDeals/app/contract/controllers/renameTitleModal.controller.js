@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('renameTitleModalCtrl', renameTitleModalCtrl);
+    .controller('renameTitleModalCtrl', renameTitleModalCtrl)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 renameTitleModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'mode', 'defVal', 'errMsg', 'objsetService'];
 

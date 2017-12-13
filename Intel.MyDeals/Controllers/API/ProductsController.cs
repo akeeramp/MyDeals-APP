@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
@@ -286,6 +287,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("CreateProductAlias")]
         public IEnumerable<ProductAlias> CreateProductAlias(ProductAlias data)   // Insert the record in ProductAlias
         {
@@ -306,6 +308,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("UpdateProductAlias")]
         public IEnumerable<ProductAlias> UpdateProductAlias(ProductAlias data)  // Update the record from ProductAlias
         {
@@ -326,6 +329,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("DeleteProductAlias")]
         public IEnumerable<ProductAlias> DeleteProductAlias(ProductAlias data)  //Delete the record from ProductAlias
         {
@@ -336,6 +340,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, string DEAL_TYPE)
         {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, DEAL_TYPE)
@@ -351,6 +356,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("SearchProduct/{CUST_MBR_SID}/{dealType}/{getWithoutFilters}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, OpDataElementSetType dealType,
             bool getWithoutFilters)
         {
@@ -361,6 +367,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("SetIncludeAttibute")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.SetIncludeAttibute(userInput)
@@ -370,6 +377,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("SetExcludeAttibute")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductIncExcAttribute> SetExcludeAttibute(List<ProductIncExcAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.SetExcludeAttibute(userInput)
@@ -379,6 +387,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("FetchAttributeMaster")]
         [HttpPost]
+        [AntiForgeryValidate]
         public ProductIncExcAttributeSelector FetchAttributeMaster()
         {
             return SafeExecutor(() => _productsLib.GetProductIncludeExcludeAttribute()
@@ -408,6 +417,7 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("GetProductSelectorWrapper")]
         public ProductSelectorWrapper GetProductSelectorWrapper([FromBody]dynamic input)
         {
@@ -422,6 +432,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("GetProductSelectionResults")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductSelectionResults> GetProductSelectionResults([FromBody]dynamic input)
         {
             return SafeExecutor(() => _productsLib.GetProductSelectionResults((string)input.searchHash,
@@ -440,6 +451,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("GetProductCAPYCS2Data/{getAvailable}/{priceCondition?}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition = "")
         {
             return SafeExecutor(() => _productsLib.GetProductCAPYCS2Data(productCAPCalc, getAvailable, priceCondition)
@@ -449,6 +461,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetCAPForProduct")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductCAPYCS2> GetCAPForProduct([FromBody]dynamic product)
         {
             return SafeExecutor(() => _productsLib.GetCAPForProduct((int)product.productsid, (int)product.custSid, (string)product.geoSid, (DateTime)product.startDate, (DateTime)product.endDate)
@@ -463,6 +476,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("GetSearchString")]
         [HttpPost]
+        [AntiForgeryValidate]
         public IList<SearchString> GetSearchString([FromBody]dynamic input)
 
         {
@@ -480,6 +494,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("IsProductExistsInMydeals")]
         [HttpPost]
+        [AntiForgeryValidate]
         public bool IsProductExistsInMydeals([FromBody]dynamic input)
         {
             return SafeExecutor(() => _productsLib.IsProductExistsInMydeals((string)input.filter)
@@ -489,6 +504,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetSuggestions/{custId}/{dealType}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId, OpDataElementSetType dealType)
         {
             return SafeExecutor(() => _productsLib.GetSuggestions(userInput, custId, dealType)
@@ -498,6 +514,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetProductAttributes")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<PRD_LOOKUP_RESULTS> GetProductAttributes(List<PRD_LOOKUP_RESULTS> products)
         {
             return SafeExecutor(() => _productsLib.GetProductAttributes(products)
@@ -507,6 +524,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetLegalExceptionProducts")]
         [HttpPost]
+        [AntiForgeryValidate]
         public IList<SearchString> GetLegalExceptionProducts([FromBody]dynamic input)
         {
             return SafeExecutor(() => _productsLib.GetLegalExceptionProducts((string)input.filter)

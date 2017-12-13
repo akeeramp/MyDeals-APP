@@ -3,7 +3,11 @@
 
     angular
         .module('app.tenderManager')
-        .controller('TenderManagerController', TenderManagerController);
+        .controller('TenderManagerController', TenderManagerController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     TenderManagerController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger'];
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -17,7 +18,8 @@ namespace Intel.MyDeals.Controllers.API
 		}
 
 		[HttpPost]
-		[Route("GetEcapTrackerList")]
+        [AntiForgeryValidate]
+        [Route("GetEcapTrackerList")]
 		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
 		{
 			var result = SafeExecutor(() => _ecapTrackerLib.GetEcapTrackerList(filterData)

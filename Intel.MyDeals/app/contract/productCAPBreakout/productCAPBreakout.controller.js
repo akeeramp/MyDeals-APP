@@ -2,7 +2,11 @@
     'use strict';
     angular
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
-       .controller('ProductCAPBreakoutController', ProductCAPBreakoutController);
+        .controller('ProductCAPBreakoutController', ProductCAPBreakoutController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     ProductCAPBreakoutController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productData', 'dataService', 'logger'];
 

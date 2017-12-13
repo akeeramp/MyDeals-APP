@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('EcapTrackerModalCtrl', EcapTrackerModalCtrl);
+    .controller('EcapTrackerModalCtrl', EcapTrackerModalCtrl) 
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 EcapTrackerModalCtrl.$inject = ['$scope', 'logger', 'dataService', '$uibModalInstance', 'colData', 'cellCurrValues', 'colName', 'filterData'];
 

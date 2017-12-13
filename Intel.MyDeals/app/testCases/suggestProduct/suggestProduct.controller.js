@@ -2,7 +2,11 @@
     'use strict';
 
     angular.module('app.testCases')
-        .controller('suggestProductController', suggestProductController);
+        .controller('suggestProductController', suggestProductController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     suggestProductController.$inject = ['$scope', 'suggestProductService', 'logger'];
 

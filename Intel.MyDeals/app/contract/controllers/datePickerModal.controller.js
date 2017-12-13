@@ -3,7 +3,11 @@
 
     angular
         .module('app.contract')
-        .controller('DatePickerModalCtrl', DatePickerModalCtrl);
+        .controller('DatePickerModalCtrl', DatePickerModalCtrl)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
 DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate'];
 

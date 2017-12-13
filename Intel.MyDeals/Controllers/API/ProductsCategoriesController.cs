@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Net;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -48,7 +49,8 @@ namespace Intel.MyDeals.Controllers.API
 		
 		[Authorize]
 		[HttpPut]
-		[Route("UpdateProductCategory")]
+        [AntiForgeryValidate]
+        [Route("UpdateProductCategory")]
 		public ProductCategory UpdateProductCategory(ProductCategory category)
 		{
 			if (category.ACTV_IND && (String.IsNullOrEmpty(category.DEAL_PRD_TYPE) || String.IsNullOrEmpty(category.PRD_CAT_NM)))

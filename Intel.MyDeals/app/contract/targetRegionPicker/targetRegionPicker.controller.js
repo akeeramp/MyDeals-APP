@@ -2,7 +2,11 @@
     'use strict';
     angular
        .module('app.admin')
-       .controller('TargetRegionPickerController', TargetRegionPickerController);
+        .controller('TargetRegionPickerController', TargetRegionPickerController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     TargetRegionPickerController.$inject = ['$filter', '$scope', '$uibModalInstance', 'targetRegionData', 'dataService', 'logger'];
 

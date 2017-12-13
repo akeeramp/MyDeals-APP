@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('pctOverrideReasonModalCtrl', pctOverrideReasonModalCtrl);
+    .controller('pctOverrideReasonModalCtrl', pctOverrideReasonModalCtrl)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 pctOverrideReasonModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService'];
 

@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('DropdownModalCtrl', DropdownModalCtrl);
+    .controller('DropdownModalCtrl', DropdownModalCtrl)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 DropdownModalCtrl.$inject = ['$scope', '$uibModalInstance', 'colData', 'cellCurrValues', 'colName'];
 

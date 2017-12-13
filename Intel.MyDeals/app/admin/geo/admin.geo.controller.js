@@ -2,7 +2,10 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('GeoController', GeoController);
+        .controller('GeoController', GeoController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     GeoController.$inject = ['$uibModal', 'geoService', '$scope', 'logger', 'gridConstants'];
 

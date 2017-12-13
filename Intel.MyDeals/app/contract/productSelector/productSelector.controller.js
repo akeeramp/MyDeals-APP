@@ -2,7 +2,11 @@
     'use strict';
     angular
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
-       .controller('ProductSelectorModalController', ProductSelectorModalController);
+        .controller('ProductSelectorModalController', ProductSelectorModalController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'crossVertical'];
 

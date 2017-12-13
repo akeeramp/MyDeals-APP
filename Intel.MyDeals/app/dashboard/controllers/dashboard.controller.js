@@ -4,8 +4,11 @@
     .controller('AddWidgetCtrl', AddWidgetCtrl)
     .controller('CustomWidgetCtrl', CustomWidgetCtrl)
     .controller('WidgetSettingsCtrl', WidgetSettingsCtrl)
-    .filter('object2Array', object2Array);
+    .filter('object2Array', object2Array)
+    .run(SetRequestVerificationToken);
 
+   
+SetRequestVerificationToken.$inject = ['$http'];
 DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
@@ -16,7 +19,7 @@ object2Array.$inject = [];
 function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
-
+   
     $scope.$storage = $localStorage.$default({
         selectedDashboardId: '1',
         startDate: "1/1/2017",
@@ -519,3 +522,4 @@ function object2Array() {
         return out;
     }
 }
+

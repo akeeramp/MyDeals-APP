@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('CustomerController', CustomerController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     CustomerController.$inject = ['customerService', '$scope', 'logger', 'gridConstants']
 

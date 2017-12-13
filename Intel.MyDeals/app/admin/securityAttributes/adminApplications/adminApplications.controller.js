@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('applicationsController', applicationsController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope', 'logger', 'gridConstants', 'confirmationModal']
 

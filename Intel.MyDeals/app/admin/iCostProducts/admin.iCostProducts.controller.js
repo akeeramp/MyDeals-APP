@@ -2,7 +2,10 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('iCostProductsController', iCostProductsController);
+        .controller('iCostProductsController', iCostProductsController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope', 'gridConstants', '$state', '$linq', 'pctRulesDrpDownValues', 'confirmationModal', '$filter'];
 

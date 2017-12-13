@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('roleTypesController', roleTypesController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     roleTypesController.$inject = ['$uibModal', 'RoleTypesService', '$scope', 'logger','gridConstants', 'confirmationModal']
 

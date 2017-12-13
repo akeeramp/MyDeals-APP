@@ -4,6 +4,7 @@ using Intel.MyDeals.IBusinessLogic;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Http;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -62,6 +63,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("CreatePCTRule")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductCostTestRules> CreatePCTRule([FromBody]ProductCostTestRules input)
         {
             return SafeExecutor(() => _productCostTestLib.CreatePCTRule(input)
@@ -75,6 +77,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("UpdatePCTRule")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductCostTestRules> UpdatePCTRule([FromBody]ProductCostTestRules input)
         {
             return SafeExecutor(() => _productCostTestLib.UpdatePCTRule(input)
@@ -88,6 +91,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("DeletePCTRule")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<ProductCostTestRules> DeletePCTRule([FromBody]ProductCostTestRules input)
         {
             return SafeExecutor(() => _productCostTestLib.DeletePCTRule(input)
@@ -113,6 +117,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("CreateLegalException")]
         [HttpPost]
+        [AntiForgeryValidate]
         public PCTLegalException CreateLegalException([FromBody]PCTLegalException input)
         {
             return SafeExecutor(() => _productCostTestLib.CreateLegalException(input)
@@ -126,6 +131,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("UpdateLegalException")]
         [HttpPost]
+        [AntiForgeryValidate]
         public PCTLegalException UpdateLegalException([FromBody]PCTLegalException input)
         {
             return SafeExecutor(() => _productCostTestLib.UpdateLegalException(input)
@@ -139,6 +145,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Route("DeleteLegalException")]
         [HttpPost]
+        [AntiForgeryValidate]
         public PCTLegalException DeleteLegalException([FromBody]PCTLegalException input)
         {
             return SafeExecutor(() => _productCostTestLib.DeleteLegalException(input)

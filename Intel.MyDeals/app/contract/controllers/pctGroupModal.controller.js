@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('pctGroupModalCtrl', pctGroupModalCtrl);
+    .controller('pctGroupModalCtrl', pctGroupModalCtrl)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 pctGroupModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem'];
 

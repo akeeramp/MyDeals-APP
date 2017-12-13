@@ -4,6 +4,7 @@ using Intel.MyDeals.BusinessLogic;
 using System.Collections.Generic;
 using System.Web.Http;
 using Intel.Opaque;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -31,6 +32,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("Update/{category}/{subCategory}/{key}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<UserPreferences> Update(string category, string subCategory, string key, [FromBody]dynamic bodyParam)
         {
             return SafeExecutor(() => _userPreferencesLib.UpdateUserPreferences(category, subCategory, key, (string)bodyParam.value)
@@ -40,6 +42,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SetOpUserToken")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsg SetOpUserToken(OpUserTokenParameters data)
         {
             return SafeExecutor(() => new EmployeesLib().SetOpUserToken(data)

@@ -3,7 +3,10 @@
 
     angular
         .module('app.admin')
-        .controller('ConstantsController', ConstantsController);
+        .controller('ConstantsController', ConstantsController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', 'gridConstants', 'confirmationModal', '$rootScope'];
 

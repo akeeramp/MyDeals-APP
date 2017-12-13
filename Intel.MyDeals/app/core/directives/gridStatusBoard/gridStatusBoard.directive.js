@@ -26,6 +26,9 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         url: "/api/Dashboard/GetDashboardContractSummary",
                         type: "POST",
                         dataType: "json",
+                        headers: {
+                            '__RequestVerificationToken': $http.defaults.headers.common['ReqVerToken']
+                        },
                         data: function () {
                             return {
                                 "CustomerIds": [$scope.custId],

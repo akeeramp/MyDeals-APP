@@ -8,6 +8,7 @@ using Intel.Opaque;
 using Intel.Opaque.Data;
 using System.Net;
 using System.Text;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -31,6 +32,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("SetWorkFlowStages")]
         public IEnumerable<WorkFlowStg> SetWorkFlowStages(WorkFlowStg data)
         {
@@ -42,6 +44,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("UpdateWorkFlowStages")]
         public IEnumerable<WorkFlowStg> UpdateWorkFlowStages(WorkFlowStg data)
         {
@@ -53,6 +56,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [AntiForgeryValidate]
         [Route("DeleteWorkFlowStages")]
         public IEnumerable<WorkFlowStg> DeleteWorkFlowStages(WorkFlowStg data)
         {
@@ -92,6 +96,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SetWorkFlows")]
         [HttpPost]
+        [AntiForgeryValidate]
         public IEnumerable<WorkFlows> SetWorkFlows(WorkFlows data)
         {
             return SafeExecutor(() => _workFlowLib.SetWorkFlows(CrudModes.Insert, data)
@@ -101,6 +106,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("DeleteWorkflow")]
         [HttpPost]
+        [AntiForgeryValidate]
         public IEnumerable<WorkFlows> DeleteWorkflow(WorkFlows data)
         {
             return SafeExecutor(() => _workFlowLib.SetWorkFlows(CrudModes.Delete, data)
@@ -110,6 +116,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("UpdateWorkflow")]
         [HttpPost]
+        [AntiForgeryValidate]
         public IEnumerable<WorkFlows> UpdateWorkflow(WorkFlows data)
         {
             return SafeExecutor(() => _workFlowLib.SetWorkFlows(CrudModes.Update, data)

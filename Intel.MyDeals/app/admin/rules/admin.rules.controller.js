@@ -3,6 +3,9 @@
     angular
         .module('app.admin')
         .controller('RuleController', RuleController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     RuleController.$inject = ['$uibModal', 'ruleService', '$scope', 'logger']
 

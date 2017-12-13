@@ -2,7 +2,11 @@
     'use strict';
 
     angular.module('app.testCases')
-        .controller('opMessagesController', opMessagesController);
+        .controller('opMessagesController', opMessagesController)
+        .run(SetRequestVerificationToken);
+
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     opMessagesController.$inject = ['$compile', '$scope', '$timeout', 'templatesService', '$filter', 'confirmationModal', 'objsetService'];
 

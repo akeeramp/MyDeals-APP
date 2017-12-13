@@ -4,6 +4,7 @@ using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -49,6 +50,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SavePricingStrategy/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SavePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, new ContractToken
@@ -64,6 +66,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveFullPricingStrategy/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, int contractId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
             return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(new ContractToken
@@ -79,6 +82,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("DeletePricingStrategy/{custId}/{contractId}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsg DeletePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
             return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(new ContractToken
@@ -109,6 +113,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("CancelPricingStrategy/{custId}/{contractId}/{contractCustAccpt}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsgQueue CancelPricingStrategy(int custId, int contractId, string contractCustAccpt, OpDataCollectorFlattenedList pricingStrategies)
         {
             return SafeExecutor(() => _pricingStrategiesLib.CancelPricingStrategy(new ContractToken
@@ -125,6 +130,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("ActionPricingStrategy/{custId}/{contractId}/{contractCustAccpt}/{actn}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsgQueue ActionPricingStrategy(int custId, int contractId, string contractCustAccpt, string actn, OpDataCollectorFlattenedList pricingStrategies)
         {
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
@@ -144,6 +150,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("ActionPricingStrategies/{custId}/{contractId}/{contractCustAccpt}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public OpMsgQueue ActionPricingStrategies(int custId, int contractId, string contractCustAccpt, Dictionary<string, List<WfActnItem>> actnPs)
         {
             return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(new ContractToken

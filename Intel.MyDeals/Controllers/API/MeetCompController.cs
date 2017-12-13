@@ -9,6 +9,7 @@ using Intel.Opaque.Data;
 using System.Net;
 using System.Text;
 using System;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -56,6 +57,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("ActivateDeactivateMeetComp/{MEET_COMP_SID}/{ACTV_IND:bool?}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND)
         {
             return SafeExecutor(() => _meetCompLib.ActivateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND)
@@ -85,6 +87,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("UpdateMeetCompProductDetails/{CNTRCT_OBJ_SID}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu)
         {
             return SafeExecutor(() => _meetCompLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, mcu)
@@ -95,6 +98,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("GetDealDetails/{DEAL_OBJ_SID}/{GRP_PRD_SID}/{DEAL_PRD_TYPE}")]
         [HttpPost]
+        [AntiForgeryValidate]
         public List<DealDeatils> GetDealDetails(int DEAL_OBJ_SID, int GRP_PRD_SID, string DEAL_PRD_TYPE)
         {
             return SafeExecutor(() => _meetCompLib.GetDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE)

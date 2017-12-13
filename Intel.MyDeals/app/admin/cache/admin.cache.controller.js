@@ -3,7 +3,10 @@
 
     angular
         .module('app.admin')
-        .controller('CacheController', CacheController);
+        .controller('CacheController', CacheController)
+        .run(SetRequestVerificationToken);
+
+    SetRequestVerificationToken.$inject = ['$http'];
 
     // logger :Injected logger service to for logging to remote database or throwing error on the ui
     // dataService :Application level service, to be used for common api calls, eg: user token, department etc

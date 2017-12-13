@@ -1,6 +1,10 @@
 ﻿angular
     .module('app.contract')
-    .controller('PricingTableController', PricingTableController);
+    .controller('PricingTableController', PricingTableController)
+    .run(SetRequestVerificationToken);
+
+
+SetRequestVerificationToken.$inject = ['$http'];
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
