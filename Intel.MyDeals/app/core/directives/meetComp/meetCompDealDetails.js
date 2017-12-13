@@ -48,7 +48,7 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
         scrollable: true,
         sortable: true,
         navigatable: true,
-        resizable: false,
+        resizable: true,
         reorderable: true,
         columnMenu: false,
         groupable: false,
@@ -88,7 +88,7 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
             {
                 field: "STRT_DT",
                 title: "Start Date",
-                template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(STRT_DT) #'>#= gridUtils.convertPstToLocal(STRT_DT) #</div>",
+                template: "<div class='readOnlyCell' title='#= kendo.toString(new Date(STRT_DT), 'M/d/yyyy') #'>#= kendo.toString(new Date(STRT_DT), 'M/d/yyyy') #</div>",
                 width: 170,
                 filterable: {
                     extra: false,
@@ -98,7 +98,7 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
             {
                 field: "END_DT",
                 title: "End Date",
-                template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(END_DT) #'>#= gridUtils.convertPstToLocal(END_DT) #</div>",
+                template: "<div class='readOnlyCell' title='#= kendo.toString(new Date(END_DT), 'M/d/yyyy') #'>#= kendo.toString(new Date(END_DT), 'M/d/yyyy') #</div>",
                 width: 170,
                 filterable: {
                     extra: false,
@@ -113,7 +113,7 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
             },
             {
                 field: "CNSMPTN_RSN",
-                title: "CNSMPTN_RSN",
+                title: "Consumption Reason",
                 width: 150,
                 template: "<div class='readOnlyCell' title='#=CNSMPTN_RSN#'>#=CNSMPTN_RSN#</div>"
             }

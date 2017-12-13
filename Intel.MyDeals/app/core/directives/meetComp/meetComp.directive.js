@@ -94,7 +94,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                 dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
                     if (response.data.length > 0) {
-                        response.data.forEach(function (obj) { obj.IS_SELECTED = false; });
+                        response.data.forEach(function (obj) { obj.IS_SELECTED = false;});
                         $scope.meetCompMasterdata = response.data;
                         $scope.meetCompUnchangedData = angular.copy(response.data);
                         $scope.meetCompUpdatedList = [];
@@ -368,7 +368,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                         if (editedROW.GRP == "PRD") {
                                             var selData = [];
-                                            if (options.model.IS_SELECTED) {
+                                            if (editedROW.IS_SELECTED) {
                                                 selData = getProductLineData();
                                             }
                                             if (selData.length > 0) {
