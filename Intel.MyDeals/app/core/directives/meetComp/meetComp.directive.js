@@ -1169,8 +1169,19 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         }
 
                         function getProductLineData() {
+                            var filterData = [];
+                            var dataSource = $("#grid").data("kendoGrid").dataSource;
+                            var filters = dataSource.filter();
+                            if (filters) {
+                                var allData = dataSource.data();
+                                var query = new kendo.data.Query(allData);
+                                filterData = query.filter(filters).data;
+                            }
+                            else {
+                                filterData = $scope.meetCompMasterdata;
+                            }
                             //UPDATE Selected Product ROWS
-                            var selectedData = $linq.Enumerable().From($scope.meetCompMasterdata)
+                            var selectedData = $linq.Enumerable().From(filterData)
                                 .Where(function (x) {
                                     return (x.IS_SELECTED == true);
                                 })
