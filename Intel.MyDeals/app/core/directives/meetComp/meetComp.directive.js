@@ -69,8 +69,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 $scope.IsMeetCompRun = false;
                 if (!!LAST_MEET_COMP_RUN) {
 
+                    // Get local time in UTC
                     var localTime = moment.utc().format('YYYY-MM-DD HH:mm:ss');
-                    var serverUtcTime = moment(LAST_MEET_COMP_RUN).format('YYYY-MM-DD HH:mm:ss'); // Server date is already being returned in UTC
+
+                    // Get server time from a PST time string... manually convert it to UTC
+                    var serverUtcTime = moment(LAST_MEET_COMP_RUN).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
 
                     var timeDiff = moment.duration(moment(serverUtcTime).diff(moment(localTime)));
                     var hh = Math.abs(timeDiff.asHours());
