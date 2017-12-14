@@ -389,8 +389,12 @@ namespace Intel.MyDeals.BusinessLogic
             //if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
             //    prdMaps = dpObjSet.GetProductMapping();
 
-            // loop through deals and flatten each Data Collector
-            data.AddRange(dpObjSet.AllDataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
+            var dataCollectors = dpObjSet.AllDataCollectors;
+            if (opType == OpDataElementType.WIP_DEAL)
+                dataCollectors = dpObjSet.AllDataCollectors.OrderByDescending(i => i.Message.Count);
+
+                // loop through deals and flatten each Data Collector
+                data.AddRange( dataCollectors.Select( dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
 
             if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t ToOpDataCollectorFlattenedDictList [{1}]", stopwatch.Elapsed.TotalMilliseconds, opType, DateTime.Now);
 

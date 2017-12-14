@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -40,7 +41,10 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
-            MyDealsData myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
+            var myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
+            myDealsData.ApplyRules(MyRulesTrigger.OnValidate);
+            myDealsData.ApplyRules(MyRulesTrigger.OnPostValidate);
+
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
