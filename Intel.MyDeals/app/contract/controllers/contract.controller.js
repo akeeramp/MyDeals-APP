@@ -34,7 +34,7 @@
         $scope.switchingTabs = false;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR"];
+        $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -2649,6 +2649,7 @@
             var newData = [];
 
             for (var d = 0; d < data.length; d++) {
+				// Tiered data
                 var numTiers = $scope.numOfPivot(data[d]);
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
@@ -2668,21 +2669,36 @@
                             lData._behaviors.isReadOnly["STRT_VOL"] = true;
                         }
                     } else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                        // KIT specific cols with 'tiers'
-                        for (var i = 0; i < kitDimAtrbs.length; i++) {
-                            var tieredItem = kitDimAtrbs[i];
-                            lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
-                            if (tieredItem == "TIER_NBR") {
-                                lData[tieredItem] = t; // KIT add tier number
-                            }
-                        	mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1)); 
+                    	// KIT specific cols with 'tiers'
+                    	for (var i = 0; i < $scope.kitDimAtrbs.length; i++) {
+                    		var tieredItem = $scope.kitDimAtrbs[i];
+                    		lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
+                    		if (tieredItem == "TIER_NBR") {
+                    			lData[tieredItem] = t; // KIT add tier number
+                    		}
+                    		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1)); 
+                    	}
+							
+                        lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
+
+                    	// Kit Rebate
+                    	// Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
+                        var kitRebateTotalVal = 0;
+                        for (var i = 0; i < lData["NUM_OF_TIERS"]; i++) {
+                        	kitRebateTotalVal +=  $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (i)], lData["QTY_____20___" + (i)]);
                         }
+                    	lData["TEMP_KIT_REBATE"] = kitRebateTotalVal;	
                     }
                     newData.push(lData);
                 }
             }
             return newData;
         }
+
+        $scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
+        	return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
+        }
+		
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
             if (!$scope.isPivotable()) return data;
             var a;
@@ -2701,7 +2717,7 @@
             }
             else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                 dimKey = prodDimKey;
-                dimAtrbs = kitDimAtrbs;
+                dimAtrbs = $scope.kitDimAtrbs;
                 isKit = 1;
             }
 

@@ -643,7 +643,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        	if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
 					        		myRow["QTY"] = Math.abs(value.value);
 					        	}
-					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = (parseFloat(myRow["DSCNT_PER_LN"]) * parseInt(myRow["QTY"]) || 0);
+					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
 
 					    	// Logic to apply to merge cells (multiple tiers)
@@ -673,13 +673,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        	}
 													        	
 					        	if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {		// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-					        		// Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
-					        		var kitRebateTotalVal = 0;
-					        		for (var i = 0; i < numOfTiers; i++) {
-					        			kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["TEMP_TOTAL_DSCNT_PER_LN"]) || 0);
-					        		}
 					        		// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-					        		firstTierRow["TEMP_KIT_REBATE"] = kitRebateTotalVal;									
+					        		firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
 					        	}
 					        	else if (colIndex == ecapPriceColIndex) {
 					        		// System should populate KIT ECAP as sum of ECAP standalone, but user can edit.
@@ -726,14 +721,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        			// Ask user if they want to merge
 					        			confirmationModal.showModal({}, modalOptions)
 											.then(function (result) { // Merge existing row with currently-changing row
+												var existingNumTiers = root.numOfPivot(data[existingRowIndex]);
+												var prevValues = [];
 
-												// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
-												// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
+												// save row data to re-put into merged rows
 												for (var i = 0; i < numOfTiers; i++) {
-													// Append the currently-changing row to the existing row's product to "merge" them
-													data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
+													prevValues.push(data[myRowIndex + i]);
 												}
 
+												// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
+												//// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
+												for (var i = 0; i < existingNumTiers; i++) {
+													// Append the currently-changing row to the existing row's product to "merge" them
+													data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
+													data[existingRowIndex + i]["PTR_SYS_PRD"] = null; // force revalidation
+												}
+												
 												if (myRowIndex < existingRowIndex) {
 													// Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
 													dealGrpNameDict[dealGrpKey] = existingRowIndex - numOfTiers;
@@ -744,11 +747,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 												// sync
 												cleanupData(data);
+
+												// Re-put old merged dimensionalized values into the new merged rows
+												for (var i = 0; i < numOfTiers; i++) {
+													var newRowIndex = existingRowIndex + i + existingNumTiers; // + existingNumTiers to start at new numTiers index
+													for (var d = 0; d < root.kitDimAtrbs.length; d++) {
+														if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
+														data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
+													}
+												}
+												// Recalculate KIT Rebate
+												// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+												data[existingRowIndex]["TEMP_KIT_REBATE"] = calculateKITRebate(data, existingRowIndex, (numOfTiers + existingNumTiers));
+
 												root.spreadDs.sync();
 												$scope.applySpreadsheetMerge();
 												root.spreadDs.sync();
 												root.child.setRowIdStyle(data);
-
 
 											}, function (response) { // Don't merge the currently changing with the existing.
 
@@ -1032,6 +1047,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root._dirty = true;
         }
 
+    }
+
+
+	//// <summary>
+	//// Calculate Kit Rebates which is Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group
+    //// aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
+	//// </summary>
+    function calculateKITRebate(data, firstTierRowIndex, numOfTiers) {
+    	var kitRebateTotalVal = 0;
+    	for (var i = 0; i < numOfTiers; i++) {
+    		kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["TEMP_TOTAL_DSCNT_PER_LN"]) || 0);
+    	}
+    	return kitRebateTotalVal;
     }
 
     //// <summary>
