@@ -174,10 +174,10 @@ gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isReadOnlyCell:true}">';
             if (setPrimary) {
-                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'Primary\'"></span>';
+                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'P\'"></span>';
                 setPrimary = false;
             } else {
-                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'Secondary\'"></span>';
+                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'S\'"></span>';
             }
             tmplt += '</td>';
             tmplt += '</tr>';
