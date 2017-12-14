@@ -144,6 +144,24 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+//this control wrapper to be used for displaying which product is associated with each dimention
+gridUtils.uiProductDimControlWrapper = function (passedData) {
+    var data = passedData["TITLE"].split(',');    //KITTODO: Title vs PTR_USER_PRD - which should i be using if either?
+
+    var tmplt = '<table>';
+    for (var i = 0; i < data.length; i++) {
+        tmplt += '<tr style="height: 25px;">';
+        tmplt += '<td style="text-align:right;"';
+        tmplt += ' ng-class="{isReadOnlyCell:true}">';
+        tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'' + data[i] + '\'"></span>';
+        tmplt += '</td>';
+        tmplt += '</tr>';
+    }
+    tmplt += '</table>';
+
+    return tmplt;
+}
+
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
 gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
     var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers   
@@ -192,15 +210,10 @@ gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
 
 //this control wrapper is only used to calculate KIT deal's KIT_REBATE_BUNDLE_DISCOUNT
 gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
-    var tmplt = '<table>';
-    tmplt += '<tr style="height: 25px;">';
-    tmplt += '<td style="text-align:right;"';
-    tmplt += ' ng-class="{isReadOnlyCell:true}">';
-    tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="((dataItem | kitRebateBundleDiscount) ' + gridUtils.getFormat("", 'currency') + ')"></span>';
-    tmplt += '</td>';
-    tmplt += '</tr>';
-    tmplt += '</table>';
-
+    var tmplt = '';
+    tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount) ' + gridUtils.getFormat("", 'currency') + ')"></div>';
+    tmplt += '</div>';
     return tmplt;
 }
 

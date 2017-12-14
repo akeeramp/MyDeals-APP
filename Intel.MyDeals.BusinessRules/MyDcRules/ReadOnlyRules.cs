@@ -187,6 +187,7 @@ namespace Intel.MyDeals.BusinessRules
 								AttributeCodes.COST_TYPE_USED,
 								AttributeCodes.CUST_DIV_NM,
 								AttributeCodes.CREDIT_VOLUME,
+                                AttributeCodes.DEAL_GRP_NM,
 								AttributeCodes.DEBIT_VOLUME,
 								AttributeCodes.DC_ID,
 								AttributeCodes.DC_PARENT_ID,

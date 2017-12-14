@@ -833,6 +833,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
+                IsReadOnly = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_NM')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb since it is in all attribs headers, for cancel/delete checks
@@ -984,7 +985,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRD_BCKT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'PRD_BCKT', 'string')#",
+                Template = "#=gridUtils.uiProductDimControlWrapper(data)#",
                 Width = 100,
                 Label = "Products",
                 IsDimKey = true,
@@ -1162,6 +1163,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
+                IsReadOnly = true,
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
@@ -1175,6 +1177,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
+                IsReadOnly = true,
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
@@ -1218,6 +1221,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
+                IsReadOnly = true,
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {

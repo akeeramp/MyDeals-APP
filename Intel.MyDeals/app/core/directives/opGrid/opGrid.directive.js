@@ -1008,12 +1008,23 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
 
                 var el = "";
-                var model = options.model[options.field];
-                for (var key in model) {
-                    if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
-                        el += $scope.createEditEl(options.field, field.uiType, key, field.format);
+                if (options.field === "KIT_ECAP") { //Special condition for Kit Ecap which actually reads from Ecap Price -1 dim
+                    var model = {};
+                    model["20_____1"] = options.model["ECAP_PRICE"]["20_____1"];
+                    for (var key in model) {
+                        if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
+                            el += $scope.createEditEl("ECAP_PRICE", field.uiType, key, field.format);
+                        }
+                    }
+                } else {    //All other multi-dim editors
+                    var model = options.model[options.field];
+                    for (var key in model) {
+                        if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid" && key.indexOf("_____") < 0) {     //skio non-dim keys and also skip the negative (5-underscores) dim keys
+                            el += $scope.createEditEl(options.field, field.uiType, key, field.format);
+                        }
                     }
                 }
+                
 
                 $(el).appendTo(container);
             }
@@ -1044,13 +1055,34 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.translateDimKey = function (key) {
-                if (key === "20___0") return "Primary";
-                if (key === "20____1") return "Kit";
-                if (key === "20___1") return "Secondary 1";
-                if (key === "20___2") return "Secondary 2";
-                if (key === "20___3") return "Secondary 3";
-                if (key === "20___4") return "Secondary 4";
-                return "";
+                switch (key) {
+                    case "20_____1":
+                        return "Kit";
+                    case "20_____2":
+                        return "Sub-Kit";
+                    case "20___0":
+                        return "Primary";
+                    case "20___1":
+                        return "Secondary 1";
+                    case "20___2":
+                        return "Secondary 2";
+                    case "20___3":
+                        return "Secondary 3";
+                    case "20___4":
+                        return "Secondary 4";
+                    case "20___5":
+                        return "Secondary 5";
+                    case "20___6":
+                        return "Secondary 6";
+                    case "20___7":
+                        return "Secondary 7";
+                    case "20___8":
+                        return "Secondary 8";
+                    case "20___9":
+                        return "Secondary 19";
+                    default:
+                        return "";
+                }
             }
 
             $scope.showCols = function (grpName) {
