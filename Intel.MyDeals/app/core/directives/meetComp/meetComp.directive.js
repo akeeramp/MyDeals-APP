@@ -109,7 +109,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         if (usrRole == "GA") {
                             var isValid = isModelValid($scope.meetCompMasterdata);
                         }
-
                         $scope.selectProdIDS = function (selectedID, event, dataItem) {
                             //alert(selectedID + "  " + event.target.checked);
                             //TODO: check security rules if it will be implacable or not...
@@ -1203,48 +1202,48 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     isCompSkuZero = true;
                                 }
 
-                                if (isCompSkuZero && usrRole != "DA" && data[i].MEET_COMP_STS.toLowerCase() != "na") {
+                                if (isCompSkuZero && canUpdateMeetCompSKUPriceBench && data[i].MEET_COMP_STS.toLowerCase() != "na") {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
-                                if (data[i].COMP_SKU.trim().length == 0 && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].COMP_SKU.trim().length == 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_PRC checking.....
-                                if (data[i].COMP_PRC <= 0 && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].COMP_PRC <= 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                     errorObj.COMP_PRC = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_BNCH checking....
-                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole != "DA" && usrRole != "FSE") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                     errorObj.COMP_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //IA_BNCH checking....
-                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole != "DA" && usrRole != "FSE") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                     errorObj.IA_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_OVRRD_FLG checking....
-                                if (data[i].COMP_OVRRD_FLG <= 0 && usrRole == "DA") {
+                                if (data[i].COMP_OVRRD_FLG <= 0 && (usrRole == "DA" || isSuperSA)) {
                                     errorObj.COMP_OVRRD_FLG = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_OVRRD_RSN checking....
-                                if (data[i].COMP_OVRRD_RSN <= 0 && usrRole == "DA") {
+                                if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA" || isSuperSA)) {
                                     errorObj.COMP_OVRRD_RSN = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
