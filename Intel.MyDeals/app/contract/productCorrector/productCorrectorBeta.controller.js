@@ -673,7 +673,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             .Where(function (x) { return x.status === 'Issue' })
             .Select(function (x) { return x.matchName.length })
             .Sum();
-        if (parseInt(resolvedProducts) + parseInt(validProducts) >= 9) {
+        if (parseInt(resolvedProducts) + parseInt(validProducts) >= 10) {
             logger.stickyError("You have too many products! You may have up to 10 products.");
             return false;
         }

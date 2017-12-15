@@ -629,7 +629,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
                     		var numOfTiers = root.numOfPivot(myRow);
-							
+
 					    	// HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
 					        var myColLetter = String.fromCharCode(intA + (colIndex));
 					        var colName = root.letterToCol[myColLetter];
@@ -671,7 +671,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        		firstTierRowIndex = (rowIndex - tierNbr);
 					        		firstTierRow = data[firstTierRowIndex];
 					        	}
-													        	
+
 					        	if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {		// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
 					        		// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
 					        		firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
@@ -684,7 +684,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 									}
 					        		// TODO: NOTE: this only sets the correct ECAP_PRICE_____20_____1 value to the first row. If we need to set all the ECAP_PRICE_____20_____1 values of each row, then we should revisit this
 									firstTierRow["ECAP_PRICE_____20_____1"] = ecapSum;
-					        	}    
+					        	}
 					        	else if (colIndex == dealGrpColIndex)  {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
 					        		var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
 
@@ -736,7 +736,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 													data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
 													data[existingRowIndex + i]["PTR_SYS_PRD"] = null; // force revalidation
 												}
-												
+
 												if (myRowIndex < existingRowIndex) {
 													// Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
 													dealGrpNameDict[dealGrpKey] = existingRowIndex - numOfTiers;
@@ -2600,7 +2600,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             // Update user input if all the issues are done
                             if (allIssuesDone) {
                                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                                    var kitObject = populateValidProducts(transformResults.ValidProducts[key]);
+                                    var kitObject = populateValidProducts(transformResult.ValidProducts[key]);
                                     transformResult.ValidProducts[key] = kitObject.ReOrderedJSON;
                                 }
                                 var products = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key]);

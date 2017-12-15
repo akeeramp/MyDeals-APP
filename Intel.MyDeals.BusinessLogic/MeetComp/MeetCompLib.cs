@@ -25,15 +25,12 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // TODO :Later need to decide caching will be apply or not
             return _meetCompCollectorLib.GetMeetCompData(CUST_MBR_SID, PRD_CAT_NM, BRND_NM, HIER_VAL_NM);
-
-
         }
 
         public List<MEET_COMP_DIM> GetMeetCompDIMData(int CUST_MBR_SID, string MODE)
         {
             // TODO :Later need to decide caching will be apply or not
-            return _meetCompCollectorLib.GetMeetCompDIMData(CUST_MBR_SID, MODE);            
-
+            return _meetCompCollectorLib.GetMeetCompDIMData(CUST_MBR_SID, MODE);
         }
 
         /// <summary>
@@ -56,19 +53,11 @@ namespace Intel.MyDeals.BusinessLogic
         public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
         {
             // TODO :Later need to decide caching will be apply or not
-
             List<MeetCompResult> data = _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE);
-
-            // Apply rules
-            //
-            // Comment this section in if you want to use rules in the MT
-            //
-            //dynamic[] dynData = data.Cast<dynamic>().ToArray();
-            //MyRulesConfiguration.ApplyRules(dynData, MyRulesTrigger.OnLoadMeetComp);
-            //List<MeetCompResult> retData = dynData.Cast<MeetCompResult>().ToList();
-            //return retData;
-
-            return data;
+            dynamic[] dynData = data.Cast<dynamic>().ToArray();
+            MyRulesConfiguration.ApplyRules(dynData, MyRulesTrigger.OnLoadMeetComp);
+            List<MeetCompResult> retData = dynData.Cast<MeetCompResult>().ToList();
+            return retData;
         }
 
         /// <summary>
@@ -78,14 +67,18 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu)
         {
-            // TODO :Later need to decide caching will be apply or not
-            return _meetCompCollectorLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, mcu);
+            var data = _meetCompCollectorLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, mcu);
+
+            // Update also does a get operation, thus apply rules here
+            dynamic[] dynData = data.Cast<dynamic>().ToArray();
+            MyRulesConfiguration.ApplyRules(dynData, MyRulesTrigger.OnLoadMeetComp);
+            List<MeetCompResult> retData = dynData.Cast<MeetCompResult>().ToList();
+            return retData;
         }
 
         public List<DealDeatils> GetDealDetails(int DEAL_OBJ_SID, int GRP_PRD_SID, string DEAL_PRD_TYPE)
         {
             return _meetCompCollectorLib.GetDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE);
         }
-
     }
 }

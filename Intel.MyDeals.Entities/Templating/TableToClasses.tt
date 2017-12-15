@@ -310,7 +310,7 @@ using System.Collections.Generic;
 	ds.Tables[2].TableName = "CostTestGroupDealDetailItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 
-	ds = dbobjects.ExecuteDataSet("DECLARE @IDS [dbo].[type_int_list]; INSERT INTO @IDS(ITEM) VALUES (586); EXEC [DBO].[PR_MYDL_GET_MEET_COMP] @IDS , 10505693, 'GA', 'M', 1");
+	ds = dbobjects.ExecuteDataSet("EXEC [DBO].[PR_MYDL_GET_MEET_COMP] @USR_WWID = 10505693, @Role= 'GA', @MODE = 'M', @OBJ_TYPE_ID = 1");
 	ds.Tables[0].TableName = "PctMctResult";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -325,12 +325,12 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Meet Comp Override
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_MEET_COMP @USR_WWID=11637989, @Role = 'GA', @MODE = 'A'"); 
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_MEET_COMP @USR_WWID=11637989, @Role = 'GA', @MODE = 'A'");
 	ds.Tables[0].TableName = "MeetCompResult";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Get Deal Details
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEAL_GRP  @in_Deal_ID=1, @in_prd_mbr_sid=1, @in_DEAL_PRD_TYPE='CPU' "); 
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEAL_GRP  @in_Deal_ID=1, @in_prd_mbr_sid=1, @in_DEAL_PRD_TYPE='CPU' ");
 	ds.Tables[0].TableName = "DealDeatils";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
