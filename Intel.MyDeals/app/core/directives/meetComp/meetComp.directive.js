@@ -525,7 +525,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 },
                                 {
                                     field: "COMP_PRC",
-                                    title: "Comp Price",
+                                    title: "Meet Comp Price",
                                     width: 150,
                                     format: "{0:c}",
                                     template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
@@ -595,6 +595,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Group Deals",
                                     width: 150,
                                     filterable: { multi: true, search: true },
+                                    editable: function () { return false; },
                                     template: "<div class='readOnlyCell'></div>"
                                 },
                                 {
@@ -1613,6 +1614,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Brand Name",
                                         width: 120,
                                         filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
                                         template: "<div title='#=BRND_FMLY#' class='readOnlyCell'>#=BRND_FMLY#</div>"
                                     },
                                     {
@@ -1620,6 +1622,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Group Deals",
                                         width: 150,
                                         filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
                                         template: '<div class="readOnlyCell" title="#=DEAL_DESC#"><a onclick="openDealDetails(#=DEAL_OBJ_SID#, #=GRP_PRD_SID#, \'#=DEAL_PRD_TYPE#\')" style="cursor: pointer" title="Click to view Deal Details">View</a></div>'
                                     },
                                     {
@@ -1627,6 +1630,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Meet Comp Analysis",
                                         width: 150,
                                         filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
                                         template: "<div class='readOnlyCell'>#=MEET_COMP_ANALYSIS#</div>"
                                     },
                                     {
@@ -1634,6 +1638,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "CAP",
                                         width: 120,
                                         filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
                                         format: "{0:c}",
                                         template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
                                     },
@@ -1643,6 +1648,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         format: "{0:c}",
                                         filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
                                         template: "<div title='#=ECAP_PRC#' class='readOnlyCell'>#if(ECAP_PRC == 0){## ##} else {#$#:ECAP_PRC##}#</div>"
                                     },
                                     {
@@ -1651,6 +1657,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         format: "{0:c}",
                                         filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
                                         template: "<div title='#=YCS2#' class='readOnlyCell'>#if(YCS2 == 0){## ##} else {#$#:YCS2##}#</div>"
                                     },
                                     {
