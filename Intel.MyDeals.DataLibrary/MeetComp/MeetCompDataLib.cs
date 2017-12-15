@@ -301,6 +301,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_DESC = DB.GetReaderOrdinal(rdr, "DEAL_DESC");
                     int IDX_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "DEAL_OBJ_SID");
                     int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
+                    int IDX_DEAL_STATUS = DB.GetReaderOrdinal(rdr, "DEAL_STATUS");
                     int IDX_DEFAULT_FLAG = DB.GetReaderOrdinal(rdr, "DEFAULT_FLAG");
                     int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
                     int IDX_GRP = DB.GetReaderOrdinal(rdr, "GRP");
@@ -318,6 +319,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRC_ST_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_ST_OBJ_SID");
                     int IDX_PRC_TBL_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_TBL_OBJ_SID");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_PS_STATUS = DB.GetReaderOrdinal(rdr, "PS_STATUS");
                     int IDX_RW_NM = DB.GetReaderOrdinal(rdr, "RW_NM");
                     int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
                     int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
@@ -338,6 +340,7 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_DESC = (IDX_DEAL_DESC < 0 || rdr.IsDBNull(IDX_DEAL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_DESC),
                             DEAL_OBJ_SID = (IDX_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_DEAL_OBJ_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_OBJ_SID),
                             DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
+                            DEAL_STATUS = (IDX_DEAL_STATUS < 0 || rdr.IsDBNull(IDX_DEAL_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STATUS),
                             DEFAULT_FLAG = (IDX_DEFAULT_FLAG < 0 || rdr.IsDBNull(IDX_DEFAULT_FLAG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEFAULT_FLAG),
                             ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
                             GRP = (IDX_GRP < 0 || rdr.IsDBNull(IDX_GRP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP),
@@ -355,6 +358,7 @@ namespace Intel.MyDeals.DataLibrary
                             PRC_ST_OBJ_SID = (IDX_PRC_ST_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_ST_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_ST_OBJ_SID),
                             PRC_TBL_OBJ_SID = (IDX_PRC_TBL_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_TBL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_TBL_OBJ_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+                            PS_STATUS = (IDX_PS_STATUS < 0 || rdr.IsDBNull(IDX_PS_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PS_STATUS),
                             RW_NM = (IDX_RW_NM < 0 || rdr.IsDBNull(IDX_RW_NM)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_RW_NM),
                             WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
                             YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)

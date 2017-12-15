@@ -17,7 +17,7 @@ namespace Intel.MyDeals.BusinessRules
             foreach (dynamic item in r.Data)
             {
                 // FSE and GA can edit in Draft stage
-                string stg = item.PS_STATUS.ToString().ToUpper();
+                string stg = string.IsNullOrEmpty(item.PS_STATUS) ? "" : item.PS_STATUS.ToString().ToUpper();
                 if (stg == "DRAFT" && (role == "FSE" || role == "GA"))
                 {
                     item.MEET_COMP_UPD_FLG = "Y";
@@ -64,7 +64,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
 
                 // If deal status is Active or Hold Override all the previous condition and default it to "N"
-                string dealStg = item.DEAL_STATUS.ToString().ToUpper();
+                string dealStg = string.IsNullOrEmpty(item.DEAL_STATUS) ? "" : item.DEAL_STATUS.ToString().ToUpper();
                 if (dealStg == "HOLD" || dealStg == "ACTIVE")
                 {
                     item.MEET_COMP_UPD_FLG = "N";
