@@ -285,7 +285,9 @@
     </div>
 
     <div id="secFooter">
-        <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save Contract</button>
+        <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">
+            <span>{{isCopyContract ? 'Copy Contract' : 'Create Contract'}}</span>
+        </button>
     </div>
 </div>
 

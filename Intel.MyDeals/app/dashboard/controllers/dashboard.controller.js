@@ -430,14 +430,10 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
     }
 
     $scope.onCopyCntrctCreateClick = function () {
-        // TODO::TJE
-        //    Need to finish implementing the copy contract story.
-        //    $scope.copyCntrctSelectedItem will contain the selected
-        //    contract to copy from.
-        alert('Feature under development.');
-
         var dlg = $("#copyCntrctDlg").data("kendoDialog");
         dlg.close();
+
+        document.location.href = "/Contract#/manager/0/details?copycid=" + $scope.copyCntrctSelectedItem.CNTRCT_OBJ_SID;
     }
 }
 

@@ -33,6 +33,20 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
 
+        $scope.isCopyContract = false;
+        $scope.copyContractData = null;
+        if ($location.url().split('copycid=').length > 1) {
+            $scope.isCopyContract = true;
+
+            objsetService.readContract($location.url().split('copycid=')[1]).then(function (data) {
+                $scope.copyContractData = data;
+
+            	// We are copying a contract, so use the title and customer settings from that contract.
+                $scope.contractData.TITLE = $scope.copyContractData.data[0].TITLE + ' (copy)';
+                $scope.contractData.CUST_MBR_SID = $scope.copyContractData.data[0].CUST_MBR_SID;
+            });
+        }
+
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
@@ -517,6 +531,17 @@
                             : moment(response.data.QTR_STRT).format('l');
 
                         $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
+
+                        // If we are copying a contract, use the dates from that contract.
+                        if ($scope.isCopyContract && $scope.copyContractData != null) {
+                            $scope.contractData.START_DT = $scope.copyContractData.data[0].START_DT;
+                            $scope.contractData.START_QTR = $scope.copyContractData.data[0].START_QTR;
+                            $scope.contractData.START_YR = $scope.copyContractData.data[0].START_YR;
+                            $scope.contractData.END_DT = $scope.copyContractData.data[0].END_DT;
+                            $scope.contractData.END_QTR = $scope.copyContractData.data[0].END_QTR;
+                            $scope.contractData.END_YR = $scope.copyContractData.data[0].END_YR;
+                        }
+
                         $timeout(function () {
                             resetQtrYrDirty();
                         },
@@ -2916,6 +2941,54 @@
                 }
             );
         }
+
+        $scope.copyContract = function () {
+            topbar.show();
+            $scope.setBusy("Copy Contract", "Copying the Contract Information");
+
+            // Contract Data
+            var ct = $scope.contractData;
+
+            // check for NEW contract
+            if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
+
+            // Add to DB first... then add to screen
+            objsetService.copyContract($scope.getCustId(), $scope.contractData.DC_ID, $scope.copyContractData.data[0].DC_ID, ct).then(
+                function (data) {
+                    $scope.updateResults(data.data.CNTRCT, ct);
+
+                    //Check for errors
+                    if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                        topbar.hide();
+                        $scope.setBusy("Copy Unsuccessful", "Could not copy the contract", "Error");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+                        return;
+                    };
+
+                    $scope.setBusy("Copy Successful", "Copied the contract", "Success");
+                    topbar.hide();
+
+                    $timeout(function () {
+                        $scope._dirty = false; // don't want to kick of listeners
+                        $state.go('contract.manager',
+                            {
+                                cid: $scope.contractData.DC_ID
+                            },
+                            { reload: true });
+                    });
+ 
+                    $scope.setBusy("", "");
+                },
+                function (result) {
+                    logger.error("Could not create the contract.", result, result.statusText);
+                    $scope.setBusy("", "");
+                    topbar.hide();
+                }
+            );
+        }
+
         $scope.isValid = true;
         $scope.customContractValidate = function () {
             $scope.isValid = true;
@@ -2979,7 +3052,11 @@
             }
 
             if ($scope.isValid) {
-                $scope.saveContract();
+                if ($scope.isCopyContract) {
+                    $scope.copyContract();
+                } else {
+                    $scope.saveContract();
+                }
             } else {
                 $timeout(function () {
                     if (!!$("input.isError")[0]) $("input.isError")[0].focus();

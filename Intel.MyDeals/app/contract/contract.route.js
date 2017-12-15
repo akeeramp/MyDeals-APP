@@ -144,7 +144,7 @@
             }, {
                 state: 'contract.details',
                 config: {
-                    url: '/details',
+                    url: '/details?copycid',
                     views: {
                         'lnavView': {
                             templateUrl: '/app/contract/partials/lnav.html'
