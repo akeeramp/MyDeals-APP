@@ -564,7 +564,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
                                     template: "<div title='#=MEET_COMP_FRMULA#' class='readOnlyCell'>#=MC_AVG_RPU#</div>",
-                                    hidden: hideViewMeetCompResult
                                 },
                                 {
                                     field: "COMP_OVRRD_FLG",
