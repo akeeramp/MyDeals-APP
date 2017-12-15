@@ -1611,7 +1611,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     },
                                     {
                                         field: "BRND_FMLY",
-                                        title: "Brand Name",
+                                        title: "Brand / Family",
                                         width: 120,
                                         filterable: { multi: true, search: true },
                                         editable: function () { return false; },
