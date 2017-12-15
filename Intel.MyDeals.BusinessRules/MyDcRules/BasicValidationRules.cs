@@ -460,6 +460,14 @@ namespace Intel.MyDeals.BusinessRules
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
 				},
+				new MyOpRule
+				{
+					Title="KIT Product validations",
+					ActionRule = MyDcActions.ValidateKITProducts,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+				},
 				//new MyOpRule
 				//{
 				//	Title="Qty cannot be negative",

@@ -1108,5 +1108,64 @@ namespace Intel.MyDeals.BusinessRules
 				adjEcapUnit.AddMessage("Adjusted ECAP Units must have a positive value for ECAP Adj rebate types.");
 			}
 		}
+
+		public static void ValidateKITProducts(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+			
+			IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+			string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
+			string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
+			if (string.IsNullOrEmpty(prdJson)) return;
+
+			ProdMappings items = null;
+			int numOfL1s = 0;
+			int numOfL2s = 0;
+			
+			try
+			{
+				items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
+
+				// maximum 10 products allowed
+				if (items.Count > 10)
+				{
+					dePrdUsr.AddMessage("Too many products. Please remove products.");
+					return;
+				}
+				
+				foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
+				{
+					foreach (ProdMapping map in prdMapping.Value)
+					{
+						// Up the L1 and L2 counts
+						if (map.HAS_L1 == "1")
+						{
+							numOfL1s += 1;
+						}
+						else if (map.HAS_L2 == "1")
+						{
+							numOfL2s += 1;
+						}
+
+						// Do valiation: maximum 2L1 or if 1 L1 then maximum one L2 allowed
+						if (numOfL1s > 2)
+						{
+							dePrdUsr.AddMessage("You can only have up to two L1s.");
+						}
+						else if (numOfL1s == 1 && numOfL2s > 1)
+						{
+							dePrdUsr.AddMessage("You have one L1s, so you may only have up to one L2.");
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{
+				dePrdUsr.AddMessage("Unable to read the selected products.  Please use the Product Selector to fix the issue.");
+				return;
+			}
+
+		}
 	}
 }
