@@ -73,7 +73,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     vm.requiredStringColumns = {};
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
     var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
-    var dealGrpNameDict = {};
+    $scope.dealGrpNameDict = {};
     //root.wipData;
     //root.wipOptions;
     var ssTools;
@@ -177,7 +177,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // populate DEAL_GRP_NM dictionary for KITS
         if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
             for (var i = 0; i < root.pricingTableData.PRC_TBL_ROW.length; i++) {
-                if (root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"] != "" && dealGrpNameDict[formatStringAsDealGrpDictKey(root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"])] === undefined) {
+                if (root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"] != "" && $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"])] === undefined) {
                     addToDealGrpNameDict(root.pricingTableData.PRC_TBL_ROW[i]["DEAL_GRP_NM"], i);
                 }
             }
@@ -598,17 +598,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     	// KIT
         if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-            var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
+        	var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
         	var dscntPerLnIndex = (root.colToLetter["DSCNT_PER_LN"].charCodeAt(0) - intA);
         	var qtyIndex = (root.colToLetter["QTY"].charCodeAt(0) - intA);
-        	var ecapPriceColIndex = (root.colToLetter["ECAP_PRICE"].charCodeAt(0) - intA);
 
-            var isDealGrpColumnIncludedInChanges = (range._ref.topLeft.col <= dealGrpColIndex) && (range._ref.bottomRight.col >= dealGrpColIndex);
+        	var isDealGrpColumnIncludedInChanges = (range._ref.topLeft.col <= dealGrpColIndex) && (range._ref.bottomRight.col >= dealGrpColIndex);
         	var isDscntPerLnColChanged = (range._ref.topLeft.col <= dscntPerLnIndex) && (range._ref.bottomRight.col >= dscntPerLnIndex);
         	var isQtyColChanged = (range._ref.topLeft.col <= qtyIndex) && (range._ref.bottomRight.col >= qtyIndex);
-        	var isEcapPriceChanged = (range._ref.topLeft.col <= ecapPriceColIndex) && (range._ref.bottomRight.col >= ecapPriceColIndex);
 
-        	if (isDealGrpColumnIncludedInChanges || isQtyColChanged || isDscntPerLnColChanged || isEcapPriceChanged) {
+        	if (isDealGrpColumnIncludedInChanges || isQtyColChanged || isDscntPerLnColChanged) {
             	var skipUntilRow = null; // HACK: used so we don't check deal group type of merged tiers
             	var dealGrpSkipVal = "";
 
@@ -623,7 +621,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					    if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
 					        // Override of an existing deal grp name (new val != old val)
 					        if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0) {
-					            delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+					            delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
 					        }
 					    }
 
@@ -676,27 +674,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        		// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
 					        		firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
 					        	}
-					        	else if (colIndex == ecapPriceColIndex) {
-					        		// System should populate KIT ECAP as sum of ECAP standalone, but user can edit.
-					        		var ecapSum = 0;
-									for (var i = 0; i < numOfTiers; i++) {
-										ecapSum += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
-									}
-					        		// TODO: NOTE: this only sets the correct ECAP_PRICE_____20_____1 value to the first row. If we need to set all the ECAP_PRICE_____20_____1 values of each row, then we should revisit this
-									firstTierRow["ECAP_PRICE_____20_____1"] = ecapSum;
-					        	}
 					        	else if (colIndex == dealGrpColIndex)  {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
 					        		var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
 
 					        		// Override of an existing deal grp name (new val != old val)
 					        		if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
-					        			delete dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+					        			delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
 					        		}
 
 					        		// Check if deal group name exists in dictionary
-					        		if (dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
+					        		if ($scope.dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
 
-					        			var existingRowIndex = dealGrpNameDict[dealGrpKey]
+					        			var existingRowIndex = $scope.dealGrpNameDict[dealGrpKey]
 					        			var existingRow = data[existingRowIndex];
 
 					        			// Confirmation Dialog
@@ -705,7 +694,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        				actionButtonText: 'Merge rows',
 					        				hasActionButton: true,
 					        				headerText: 'Deal group merge confirmation',
-					        				bodyText: 'A deal group with this name already exists. Would you like to merge deal groups?'
+					        				bodyText: 'A deal group with this name already exists. Would you like to merge deal groups? Please note that any duplicate products will be removed upon merging.'
 					        			};
 
 					        			// Check if the merge of the existing and new would be over the 10 max limit and don't let them merge, only rename
@@ -723,30 +712,55 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 											.then(function (result) { // Merge existing row with currently-changing row
 												var existingNumTiers = root.numOfPivot(data[existingRowIndex]);
 												var prevValues = [];
+												var copyOfData = angular.copy(data);
+												var originalNumOfTiers = angular.copy(numOfTiers);
+
+												// Check for and remove duplicates
+												var toMergePrdArr = myRow["PTR_USER_PRD"].toString().split(",");
+												var existingPrdArr = data[existingRowIndex]["PTR_USER_PRD"].toString().split(",");
+												var duplicateCheckerDict = {};
+												for (var i = 0; i < existingPrdArr.length; i++) {
+													duplicateCheckerDict[existingPrdArr[i]] = true;
+												}
+												for (var i = toMergePrdArr.length - 1; i>=0; i--) {
+													if (duplicateCheckerDict.hasOwnProperty(toMergePrdArr[i])) {
+														// This is a duplicate, remove from dataset
+														// NOTE: this means we'll remove the 2nd occurance of the data AKA the merging-into row's instance. Not the existing instance.
+														copyOfData.splice((myRowIndex + i), 1);
+														toMergePrdArr.splice(i, 1);
+														numOfTiers -= 1;
+													} else {
+														duplicateCheckerDict[toMergePrdArr[i]] = true;
+													}
+												}																								
+												var prdsToMergeCSV = toMergePrdArr.join(",");
 
 												// save row data to re-put into merged rows
 												for (var i = 0; i < numOfTiers; i++) {
-													prevValues.push(data[myRowIndex + i]);
+													prevValues.push(copyOfData[myRowIndex + i]);
 												}
-
 												// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
 												//// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
-												for (var i = 0; i < existingNumTiers; i++) {
-													// Append the currently-changing row to the existing row's product to "merge" them
-													data[existingRowIndex + i]["PTR_USER_PRD"] += "," + myRow["PTR_USER_PRD"];
-													data[existingRowIndex + i]["PTR_SYS_PRD"] = null; // force revalidation
+												if (numOfTiers > 0) {
+													for (var i = 0; i < existingNumTiers; i++) {
+														// Append the currently-changing row to the existing row's product to "merge" them
+														data[existingRowIndex + i]["PTR_USER_PRD"] += "," + prdsToMergeCSV; // myRow["PTR_USER_PRD"];
+														data[existingRowIndex + i]["PTR_SYS_PRD"] = null; // force revalidation
+													}
 												}
 
 												if (myRowIndex < existingRowIndex) {
-													// Update dictionary's first row occurance because it changes if the currently-changing row was above it and now removed
-													dealGrpNameDict[dealGrpKey] = existingRowIndex - numOfTiers;
+													// Update existing row index because it changes if the currently-changing row was above it and now removed
+													existingRowIndex = existingRowIndex - originalNumOfTiers;
 												}
 
 												// Remove all the currently-changing row's merged rows from our datasource
-												data.splice(myRowIndex, numOfTiers);
-
+												data.splice(myRowIndex, originalNumOfTiers);
+												
 												// sync
 												cleanupData(data);
+
+												recreateDealGrpNameDict(data);
 
 												// Re-put old merged dimensionalized values into the new merged rows
 												for (var i = 0; i < numOfTiers; i++) {
@@ -926,10 +940,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
                                         // Update Deal Group dictionary due to row offset created by deleting rows
-                                        dealGrpNameDict = {};  // reset deal group name dict
-                                        for (var i = 0; i < data.length; i++) {
-                                            addToDealGrpNameDict(data[i]["DEAL_GRP_NM"], i);
-                                        }
+                                    	recreateDealGrpNameDict(data);
                                     }
                                 }
                             },
@@ -942,7 +953,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.spreadDs.sync();
                     $timeout(function () {
                         var cnt = 0;
-                        dealGrpNameDict = {}; // reset deal group name dict
+                        $scope.dealGrpNameDict = {}; // reset deal group name dict
 
                         for (var c = 0; c < data.length; c++) {
                             if (data[c].DC_ID !== null) cnt++;
@@ -1048,7 +1059,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
     }
-
+	
 
 	//// <summary>
 	//// Calculate Kit Rebates which is Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group
@@ -1062,6 +1073,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     	return kitRebateTotalVal;
     }
 
+	//// <summary>
+	//// Recreate the DealGrpNameDict given a dataset
+	//// </summary>
+    function recreateDealGrpNameDict(data) {
+    	// Update Deal Group dictionary due to row offset created by deleting rows
+    	$scope.dealGrpNameDict = {};  // reset deal group name dict
+    	for (var i = 0; i < data.length; i++) {
+    		if (!$scope.dealGrpNameDict.hasOwnProperty(formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]))) {
+    			addToDealGrpNameDict(data[i]["DEAL_GRP_NM"], i);
+    		}
+    	}
+    }
+
     //// <summary>
     //// Add a key and value to the dealGrpNameDict.
     //// Also does logic to check if the key can be added (not empty string) and formats the key to expected format.
@@ -1071,11 +1095,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (dealGrpKey.replace(/\s/g, "").length === 0) { return; }
 
         // add to dictionary: Dictionary<Deal group name (in all caps), firstRow Index it's found in>
-        dealGrpNameDict[formatStringAsDealGrpDictKey(dealGrpKey)] = myRowIndex;
+        $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(dealGrpKey)] = myRowIndex;
     }
 
     //// <summary>
-    //// Formats a given sDealGrpDict key to expected format, whose format will help us ignore spaces and capitalization when comparing dealGrpNameDict keys.
+    //// Formats a given sDealGrpDict key to expected format, whose format will help us ignore spaces and capitalization when comparing $scope.dealGrpNameDict keys.
     //// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
     //// </summary>
     function formatStringAsDealGrpDictKey(valueToFormat) {
@@ -1242,20 +1266,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         $timeout(function () {
             if (root.spreadDs !== undefined) {
-                var data = root.spreadDs.data();
+            	var data = root.spreadDs.data();
                 var newItems = 0;
                 var pivotDim = 1;
-
+				
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex - 2) ; k++) {
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
                 }
-
+							
+                // For KITs, remove duplicate products
+                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                	for (var r = 0; r < data.length; r++) {
+                		if (data[r]["PTR_USER_PRD"] === undefined || data[r]["PTR_USER_PRD"] === null) { continue; }
+                		var usrPrdArr = data[r]["PTR_USER_PRD"].split(",");
+                		var duplicateCheckerDict = {};
+                		for (var i = usrPrdArr.length - 1; i >= 0; i--) {
+                			if (duplicateCheckerDict.hasOwnProperty(usrPrdArr[i])) {
+                				// This is a duplicate, remove from list
+                				usrPrdArr.splice(i, 1);
+                			} else {
+                				duplicateCheckerDict[usrPrdArr[i]] = true;
+                			}
+                		}
+                		data[r]["PTR_USER_PRD"] = usrPrdArr.join(",");
+                	}
+                }
                 cleanupData(data);
 
                 for (var r = 0; r < data.length; r++) {
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) continue;
-
+						
                     newItems++;
                     var numPivotRows = root.numOfPivot(data[r]);
                     data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;

@@ -1118,6 +1118,10 @@ namespace Intel.MyDeals.BusinessRules
 			string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
 			string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
 			if (string.IsNullOrEmpty(prdJson)) return;
+			
+			int parsedQty = 0;
+			IOpDataElement deQty = r.Dc.GetDataElement(AttributeCodes.QTY);
+			Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
 
 			ProdMappings items = null;
 			int numOfL1s = 0;
@@ -1141,21 +1145,21 @@ namespace Intel.MyDeals.BusinessRules
 						// Up the L1 and L2 counts
 						if (map.HAS_L1 == "1")
 						{
-							numOfL1s += 1;
+							numOfL1s += parsedQty;
 						}
 						else if (map.HAS_L2 == "1")
 						{
-							numOfL2s += 1;
+							numOfL2s += parsedQty;
 						}
 
 						// Do valiation: maximum 2L1 or if 1 L1 then maximum one L2 allowed
 						if (numOfL1s > 2)
 						{
-							dePrdUsr.AddMessage("You can only have up to two L1s.");
+							dePrdUsr.AddMessage("You can only have up to two L1s. Please check that your products and their Qty meet this requirement.");
 						}
 						else if (numOfL1s == 1 && numOfL2s > 1)
 						{
-							dePrdUsr.AddMessage("You have one L1s, so you may only have up to one L2.");
+							dePrdUsr.AddMessage("You have one L1s, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.");
 						}
 					}
 				}
