@@ -1285,7 +1285,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get L1 and L2 CPU processors
             // Get L1 and L2 non CPU Level4's
-            var legalproducts = products.Where(p => (p.HAS_L1 == 1 || p.HAS_L2 == 1) &&
+            var legalproducts = products.Where(p => (p.HAS_L1 == true || p.HAS_L2 == true) &&
                                     ((p.DEAL_PRD_TYPE.ToUpper() == "CPU" && p.PRD_ATRB_SID == 7006) || (p.DEAL_PRD_TYPE != "CPU" && p.PRD_ATRB_SID == 7007)))
                                     .Select(x => new SearchString { Name = x.HIER_VAL_NM });
 
