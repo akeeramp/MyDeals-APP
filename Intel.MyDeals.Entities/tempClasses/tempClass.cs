@@ -2089,66 +2089,50 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String BRND_NM { set; get; }
 
-
         [DataMember]
         public System.String CAP { set; get; }
-
 
         [DataMember]
         public System.DateTime CAP_END { set; get; }
 
-
         [DataMember]
         public System.String CAP_PRC_COND { set; get; }
-
 
         [DataMember]
         public System.DateTime CAP_START { set; get; }
 
-
         [DataMember]
         public System.String CPU_CACHE { set; get; }
-
 
         [DataMember]
         public System.String CPU_PACKAGE { set; get; }
 
-
         [DataMember]
         public System.String CPU_PROCESSOR_NUMBER { set; get; }
-
 
         [DataMember]
         public System.String CPU_VOLTAGE_SEGMENT { set; get; }
 
-
         [DataMember]
         public System.String CPU_WATTAGE { set; get; }
-
 
         [DataMember]
         public System.DateTime DEAL_END_DT { set; get; }
 
-
         [DataMember]
         public System.String DEAL_PRD_NM { set; get; }
-
 
         [DataMember]
         public System.String DEAL_PRD_TYPE { set; get; }
 
-
         [DataMember]
         public System.DateTime DEAL_STRT_DT { set; get; }
-
 
         [DataMember]
         public System.String DERIVED_USR_INPUT { set; get; }
 
-
         [DataMember]
         public System.String EPM_NM { set; get; }
-
 
         [DataMember]
         public System.Boolean EXACT_MATCH { set; get; }
@@ -2159,110 +2143,83 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String FMLY_NM { set; get; }
 
-
         [DataMember]
         public System.String FMLY_NM_MM { set; get; }
-
 
         [DataMember]
         public System.String GDM_BRND_NM { set; get; }
 
-
         [DataMember]
         public System.String GDM_FMLY_NM { set; get; }
 
+        [DataMember]
+        public System.Boolean HAS_L1 { set; get; }
 
         [DataMember]
-        public System.Int32 HAS_L1 { set; get; }
-
-
-        [DataMember]
-        public System.Int32 HAS_L2 { set; get; }
-
+        public System.Boolean HAS_L2 { set; get; }
 
         [DataMember]
         public System.String HIER_NM_HASH { set; get; }
 
-
         [DataMember]
         public System.String HIER_VAL_NM { set; get; }
-
 
         [DataMember]
         public System.String MM_CUST_CUSTOMER { set; get; }
 
-
         [DataMember]
         public System.String MM_MEDIA_CD { set; get; }
-
 
         [DataMember]
         public System.String MTRL_ID { set; get; }
 
-
         [DataMember]
         public System.String NAND_Density { set; get; }
-
 
         [DataMember]
         public System.String NAND_FAMILY { set; get; }
 
-
         [DataMember]
         public System.String PCSR_NBR { set; get; }
-
 
         [DataMember]
         public System.Int32 PRD_ATRB_SID { set; get; }
 
-
         [DataMember]
         public System.String PRD_CAT_NM { set; get; }
-
 
         [DataMember]
         public System.DateTime PRD_END_DTM { set; get; }
 
-
         [DataMember]
         public System.Int32 PRD_MBR_SID { set; get; }
-
 
         [DataMember]
         public System.DateTime PRD_STRT_DTM { set; get; }
 
-
         [DataMember]
         public System.String PRICE_SEGMENT { set; get; }
-
 
         [DataMember]
         public System.String SBS_NM { set; get; }
 
-
         [DataMember]
         public System.String SKU_MARKET_SEGMENT { set; get; }
-
 
         [DataMember]
         public System.String SKU_NM { set; get; }
 
-
         [DataMember]
         public System.String USR_INPUT { set; get; }
-
 
         [DataMember]
         public System.Boolean WITHOUT_FILTER { set; get; }
 
-
         [DataMember]
         public System.String YCS2 { set; get; }
 
-
         [DataMember]
         public System.DateTime YCS2_END { set; get; }
-
 
         [DataMember]
         public System.DateTime YCS2_START { set; get; }

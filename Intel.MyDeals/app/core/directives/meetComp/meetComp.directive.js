@@ -1670,7 +1670,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             ui: "datepicker"
                                         },
                                         editable: function () { return false; },
-                                        hidden: hideViewMeetCompResult
                                     }
                                 ]
                             });
