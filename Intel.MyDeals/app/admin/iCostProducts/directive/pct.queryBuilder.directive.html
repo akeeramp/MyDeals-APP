@@ -30,7 +30,7 @@
                                     <span ng-switch-default="ng-switch-default">
                                         <ui-select name="value" ng-model="rule.data" ng-required="true" class="qb-field-core" theme="select2" title="Choose a value">
                                             <ui-select-match placeholder="Select a value">{{$select.selected.VALUE}}</ui-select-match>
-                                            <ui-select-choices limit="100" repeat="t.VALUE as t in leftValues | filter: rule.criteria | orderBy:'VALUE'| filter: $select.search">
+                                            <ui-select-choices repeat="t.VALUE as t in leftValues | filter: rule.criteria | orderBy:'VALUE'| filter: $select.search | limitTo:100">
                                                 <span ng-bind-html="t.VALUE | highlight: $select.search"></span>
                                             </ui-select-choices>
                                         </ui-select>
