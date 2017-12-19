@@ -1706,6 +1706,9 @@
     <None Include="Web.utt.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <None Include="Web.ciar.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DependencyResolver\Intel.MyDeals.DependencyResolver.csproj">
@@ -1822,6 +1825,8 @@
     <TransformXml Source="Web.config" Transform="Web.cons.config" Destination="$(WebProjectOutputDir)\EnvConfig\cons\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\perf\" />
     <TransformXml Source="Web.config" Transform="Web.perf.config" Destination="$(WebProjectOutputDir)\EnvConfig\perf\Web.config" />
+    <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\ciar\" />
+    <TransformXml Source="Web.config" Transform="Web.ciar.config" Destination="$(WebProjectOutputDir)\EnvConfig\ciar\Web.config" />
     <Delete Files="@(DeleteAfterBuild)" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
