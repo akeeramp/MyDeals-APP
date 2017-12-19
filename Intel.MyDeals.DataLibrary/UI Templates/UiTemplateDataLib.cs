@@ -428,7 +428,8 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.VOLUME,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				Label = "Ceiling Volume *",
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Width = 110,
                 IsRequired = true

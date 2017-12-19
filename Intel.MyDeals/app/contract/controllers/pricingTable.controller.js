@@ -1354,6 +1354,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
 
+                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                    	if (data[r].PROD_INCLDS === null && data[r].PROD_INCLDS !== ""
+							&& data[r].PTR_SYS_PRD !== null && data[r].PTR_SYS_PRD !== ""
+							&& data[r].PRD_BCKT !== null && data[r].PRD_BCKT !== ""
+							) {
+							// Default the Media code to the product selector's media code
+                    		data[r].PROD_INCLDS = JSON.parse(data[r].PTR_SYS_PRD)[data[r].PRD_BCKT][0].MM_MEDIA_CD;
+                    	}
+                    }
+
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key)) {
                             // Autofill default values from Contract level
@@ -1375,6 +1385,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 (root.colToLetter[key] != undefined) &&
                                 key !== "DC_ID"
                                 && !isAddedByTrackerNumber
+								&& (data[r][key] === null || data[r][key] === "") // don't override if there is an existing value
                             ) {
                                 if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
                                     // Dont override the row num tiers with pricing table numtiiers for kit deals
@@ -1384,7 +1395,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         }
                     }
-
                     // increment pivot dim (example tier 1 to tier 2)
                     pivotDim++;
                     if (pivotDim > numPivotRows) pivotDim = 1;

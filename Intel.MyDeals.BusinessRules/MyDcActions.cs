@@ -1193,7 +1193,6 @@ namespace Intel.MyDeals.BusinessRules
 			
 			IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
-			string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
 			if (string.IsNullOrEmpty(prdJson)) return;
 			
 			int parsedQty = 0;
