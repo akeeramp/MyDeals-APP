@@ -76,6 +76,7 @@
     <Compile Include="CacheItem.cs" />
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
+    <Compile Include="filterItem.cs" />
     <Compile Include="FuzzySearch.cs" />
     <Compile Include="Helpers\CompressHelpers.cs" />
     <Compile Include="Logging\EmailExLogPerf.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailPullData.cs" />
     <Compile Include="SavePacket.cs" />
+    <Compile Include="SearchParams.cs" />
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />

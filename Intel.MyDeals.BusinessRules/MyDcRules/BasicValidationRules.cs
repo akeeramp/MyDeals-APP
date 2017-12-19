@@ -502,7 +502,23 @@ namespace Intel.MyDeals.BusinessRules
 				//		}
 				//	}
 				//},
-			};
+                new MyOpRule
+                {
+                    Title="Translate PRODUCT_FILTER to English",
+                    ActionRule = MyOpDataCollectorFlattenedItemActions.TranslateProductFilter,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnTenderListLoad },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
+                },
+                new MyOpRule
+                {
+                    Title="Apply Tender Bid Actions ",
+                    ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyTenderActionsAndSettings,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnTenderListLoad },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
+                }
+            };
         }
     }
 }

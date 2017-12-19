@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -81,6 +83,60 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (flattenedDictList != null) myDealsData.Merge(flattenedDictList, needToCheckForDelete);
             return myDealsData;
+        }
+
+        public static MyDealsData UpdateAtrbValue(this OpDataElementType opDataElementType, ContractToken contractToken, List<int> ids, MyDealsAttribute atrb, object value, bool forceToGoActive = false)
+        {
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                opDataElementType
+            };
+
+            List<int> atrbs = new List<int>
+            {
+                atrb.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID
+            };
+
+            MyDealsData myDealsData = opDataElementType.GetByIDs(ids, opDataElementTypes, atrbs);
+
+            List<OpDataCollector> allDcs = myDealsData[opDataElementType].AllDataCollectors.ToList();
+
+            foreach (OpDataCollector dc in allDcs)
+            {
+                IOpDataElement de = dc.GetDataElement(atrb.ATRB_COL_NM);
+                IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+
+                if (de == null)
+                {
+                    dc.DataElements.Add(new OpDataElement
+                    {
+                        DcID = deCust.DcID,
+                        DcType = deCust.DcType,
+                        DcParentType = deCust.DcParentType,
+                        DcParentID = deCust.DcParentID,
+                        AtrbID = atrb.ATRB_SID,
+                        AtrbValue = value,
+                        AtrbCd = atrb.ATRB_COL_NM,
+                        State = OpDataElementState.Modified
+                    });
+                }
+                else
+                {
+                    de.SetAtrbValue(value);
+                    de.State = OpDataElementState.Modified;
+                }
+            }
+
+            myDealsData[opDataElementType].BatchID = Guid.NewGuid();
+            myDealsData[opDataElementType].GroupID = -101; // Whatever the real ID of this object is
+            myDealsData[opDataElementType].AddSaveActions();
+            if (forceToGoActive) myDealsData[opDataElementType].AddGoingActiveActions(ids);
+            myDealsData.EnsureBatchIDs();
+
+            return myDealsData.Save(contractToken);
+
         }
 
     }

@@ -89,6 +89,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 resizable: true,
+                filterable: true,
                 sortable: true,
                 pageable: true,
                 columns: [
@@ -96,38 +97,33 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         field: "WF_STG_CD",
                         title: "&nbsp;",
                         width: "20px",
+                        filterable: false,
                         template: '<div class="status #:WF_STG_CD#" title="#:WF_STG_CD[0]#">#:WF_STG_CD[0]#</div>'
-                    }, {
-                        title: "% Complete",
-                        field: "PERC_PRC_ST",
-                        width: "100px",
-                        template: '<div percent-bar data-perc="#:PERC_PRC_ST#"></div>'
                     }, {
                         title: "Contract Title",
                         field: "TITLE",
                         template: '<span><a href="/Contract\\#/manager/#:CNTRCT_OBJ_SID#' + $scope.jumptoSummary + '" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: \\#FFA300;">[#:CNTRCT_OBJ_SID#]</span> #:TITLE#</a></span>'
                     }, {
-                        title: "# Prc Tbls",
-                        field: "NUM_PRC_ST",
-                        width: "100px"
-                    }, {
                         title: "Customer",
                         field: "CUST_NM",
-                        width: "100px"
+                        width: "140px",
+                        filterable: { multi: true }
                     }, {
                         field: "STRT_DTM",
                         title: "Start Date",
                         format: "{0: MM/dd/yyyy}",
-                        width: "90px"
+                        width: "110px",
+                        filterable: { multi: true }
                     }, {
                         field: "END_DTM",
                         title: "End Date",
                         format: "{0: MM/dd/yyyy}",
-                        width: "90px"
+                        width: "110px",
+                        filterable: { multi: true }
                     }, {
                         title: "Notes",
                         field: "NOTES",
-                        width: "160px"
+                        width: "170px"
                     }
                 ]
             };

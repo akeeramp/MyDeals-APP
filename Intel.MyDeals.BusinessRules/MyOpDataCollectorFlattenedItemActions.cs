@@ -160,6 +160,99 @@ namespace Intel.MyDeals.BusinessRules
             objsetItem["_settings"] = objsetActionItem.Settings;
         }
 
+        public static void TranslateProductFilter(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.PRODUCT_FILTER))
+            {
+                int prodId =  int.Parse(de.AtrbValue.ToString());
+                Product prod = DataCollections.GetProductData().FirstOrDefault(p => p.PRD_MBR_SID == prodId);
+                if (prod != null) de.AtrbValue = prod.HIER_VAL_NM;
+            }
+        }
+
+        public static void ApplyTenderActionsAndSettings(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+
+            if (rebateType.ToUpper() != "TENDER") return;
+
+            string bidValue = r.Dc.GetDataElementValue(AttributeCodes.BID_STATUS);
+            string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            // TODO need a new security action for C_BID_TENDERS
+            if (bidValue == string.Empty)
+            {
+                bidValue = "Offer";
+                r.Dc.DataElements.Add(new OpDataElement
+                {
+                    DcID = r.Dc.DcID,
+                    AtrbID = 99999,
+                    AtrbCd = "BID_STATUS",
+                    DataType = "System.String",
+                    AtrbValue = bidValue
+                });
+            }
+
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
+            OpDataElementSetType opDataElementSetType = OpDataElementSetTypeConverter.FromString(r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
+
+            List<string> actions = new List<string>();
+            bool canBidTender = DataCollections.GetSecurityWrapper().ChkDealRules(opDataElementType, opDataElementSetType, stage, SecurityActns.C_BID_TENDERS);
+
+            if (canBidTender)
+            {
+                actions = GetTenderActionList(bidValue, stage);
+            }
+
+            IOpDataElement deBidActn = r.Dc.GetDataElement("BID_ACTNS");
+
+            if (deBidActn == null)
+            {
+                r.Dc.DataElements.Add(new OpDataElement
+                {
+                    DcID = r.Dc.DcID,
+                    AtrbID = 99999,
+                    AtrbCd = "BID_ACTNS",
+                    DataType = "System.Object",
+                    AtrbValue = actions
+                });
+            }
+            else
+            {
+                deBidActn.AtrbValue = actions;
+            }
+        }
+
+        public static List<string> GetTenderActionList(string bidValue, string stage)
+        {
+            List<string> actions = new List<string>();
+            if (stage != WorkFlowStages.Active) return actions;
+
+            switch (bidValue)
+            {
+                case "Offer":
+                    actions.Add("Offer");
+                    actions.Add("Won");
+                    actions.Add("Lost");
+                    break;
+
+                case "Won":
+                    actions.Add("Won");
+                    break;
+
+                case "Lost":
+                    actions.Add("Offer");
+                    actions.Add("Lost");
+                    break;
+            }
+            return actions;
+        }
 
         public static void ApplyCustomerDivision(params object[] args)
         {

@@ -19,6 +19,7 @@
         OnMergeComplete,
         OnLoadMeetComp,
         OnPostValidate,
+        OnTenderListLoad
     }
 
 }

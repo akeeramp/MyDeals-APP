@@ -180,7 +180,7 @@ namespace Intel.MyDeals.BusinessLogic
                     foreach (OpDataElement dePrd in deProds)
                     {
                         bool exists = incomingPrds.Exists(prd => prd.Key == dePrd.AtrbCd + dePrd.DimKeyString.AtrbCdDimKeySafe());
-                        if (!exists && dePrd.AtrbValue != string.Empty)
+                        if (!exists && dePrd.AtrbValue.ToString() != string.Empty)
                             dePrd.AtrbValue = string.Empty;
                     }
                 }

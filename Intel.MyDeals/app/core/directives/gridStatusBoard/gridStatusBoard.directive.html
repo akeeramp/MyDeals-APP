@@ -4,11 +4,12 @@
     <div class="horizontal-widget">
         <div class="left-pane-widget">
             <div class="inner">
-                <h6>Contract Status</h6>
+                <h6>Contracts</h6>
                 <div class="stgLnkBox">
                     <div class="stgLnk active" id="fltr_All" ng-click="clkFilter('fltr_All')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{stageCnt}}</span></div>
                     <div ng-repeat="item in stages" class="stgLnk" id="fltr_{{item.Stage}}" ng-click="clkFilter('fltr_' + item.Stage)"><i class="intelicon-workflow-process-outlined"></i> {{item.Stage}} <span class="badge">{{item.Cnt}}</span></div>
                 </div>
+                <h6 style="margin-top: 30px;"><a href="/TenderManager#/tender" style="color: #000000;" title="Click to view Tender Deals">Tenders</a></h6>
             </div>
         </div>
 
@@ -29,6 +30,7 @@
 <style>
     .dashboard-grid.k-grid .k-grid-content td {
         padding: 0;
+        height: 34px;
     }
 
     .dashboard-grid.k-grid .k-hierarchy-cell {
@@ -36,7 +38,7 @@
     }
 
     .dashboard-grid.k-grid .k-detail-row, .dashboard-grid.k-grid .k-detail-cell {
-        height: 220px;
+        height: 200px;
         background-color: #fafafa !important;
         padding: 0;
     }
@@ -146,6 +148,7 @@
         margin-top: 6px;
         margin-left: 6px;
         font-size: 16px;
+        font-weight: bold;
     }
 
     .center-pane-widget {

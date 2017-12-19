@@ -2,89 +2,68 @@
     .module('app.core')
     .directive('dealToolsTender', dealToolsTender);
 
-dealToolsTender.$inject = [];
+dealToolsTender.$inject = ['$timeout', 'logger', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary'];
 
-function dealToolsTender() {
+function dealToolsTender($timeout, logger, dataService, $rootScope, $compile, $templateRequest, colorDictionary) {
     return {
         scope: {
             dataItem: '=ngModel',
-            isEditable: '@isEditable'
+            isEditable: '@isEditable',
+            isCommentEnabled: '=?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealToolsTender.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
-            if ($scope.isEditable === "false" || $scope.isEditable === false) {
-                $scope.editable = (1 === 2);
-            }
-            else {
-                $scope.editable = (1 === 1);;
+            $scope.assignVal = function (field, defval) {
+                var item = $scope[field];
+                return (item === undefined || item === null) ? defval : item;
             }
 
-            if (!!$scope.isEditable) $scope.isEditable = false;
+            $scope.isCommentEnabled = $scope.assignVal("isCommentEnabled", true);
 
-            var opGridScope = $scope.$parent;
-            var rootScope = opGridScope;
-            if (!rootScope.saveCell) {
-                rootScope = $scope.$parent.$parent.$parent;
-            }
+            var rootScope = $scope.$parent;
+            //if (!$scope.$parent.contractData) {
+            //    rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+            //}
+            $scope.rootScope = rootScope;
 
             $scope.stgOneChar = function () {
-                return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
+                return gridUtils.stgOneChar($scope.dataItem);
             }
 
-            $scope.addDeal = function (dataItem, $event) {
-                var row = angular.element($event.currentTarget).closest("tr");
-                var newData = rootScope.addDeal(dataItem);
+            $scope.stgFullTitleChar = function () {
+                return gridUtils.stgFullTitleChar($scope.dataItem);
+            }
 
-                // row not expanded and need to get datasource
-                if (row.find("td .k-i-expand").length > 0) {
-                    rootScope.$parent.newDataItemToAddOnExpand = newData;
-                    opGridScope.grid.expandRow(row);
+            $scope.chkClick = function (dataItem) {
+                $timeout(function () {
+                    $scope.rootScope.chkClick(dataItem);
+                }, 50);
+            }
 
-                } else {
-                    var detailOpGridScope = row.siblings('.k-detail-row').find('.k-grid').scope();
-                    if (newData !== null) opGridScope.addRow(detailOpGridScope, newData);
+            // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.
+            // Taken from Phil's absolutely awesome other color-coding areas in other JS files...  Had to hijack local function getStageBgColorStyle(stgFullTitleChar()) to get the right stage though.
+            $scope.getStageBgColorStyle = function (c) {
+                return { backgroundColor: $scope.getColorStage(c) };
+            }
+            $scope.getColor = function (k, c) {
+                if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                    return colorDictionary[k][c];
                 }
+                return "#aaaaaa";
+            }
+            $scope.getColorStage = function (d) {
+                if (!d) d = "Draft";
+                return $scope.getColor('stage', d);
+            }
+            $scope.getStage = function (dataItem) {
+                return gridUtils.stgFullTitleChar(dataItem);
             }
 
-            $scope.copyDeal = function (dataItem) {
-                var newData = rootScope.copyDeal(dataItem);
-                opGridScope.addRow(opGridScope, newData);
-            }
-
-            $scope.notesActions = [
-                {
-                    text: 'OK',
-                    action: function () {
-                        if ($scope.dataItem._dirty) {
-                            $scope._dirty = true;
-                            rootScope.saveCell($scope.dataItem, "NOTES");
-                        }
-                    }
-                }
-            ];
-
-            $scope.deleteActions = [
-                {
-                    text: 'Cancel',
-                    action: function() {}
-                },
-                {
-                    text: 'Yes, Delete',
-                    primary: true,
-                    action: function () {
-                        rootScope.deletePricingTableRow($scope.dataItem);
-                    }
-                }
-            ];
-
-            $scope.dialogShow = function() {
-
-            }
-            
         }],
         link: function (scope, element, attr) {
+            scope.el = element;
         }
     };
 }

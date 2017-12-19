@@ -107,11 +107,12 @@
         padding-top: 35px;
     }
     .dashboard .gridster-item:hover .box {
-        border: 1px solid #eeeeee;
+        border: 1px solid #0071C5;
     }
 
     .dashboard .box-header {
         background-color: transparent;
+        color: #0071C5;
         padding: 0 42px 0 10px;
         border: 1px solid transparent;
         border-bottom: 1px solid #eeeeee;
@@ -123,8 +124,9 @@
         left: 0;
     }
     .dashboard .gridster-item:hover .box-header {
-        background-color: #fafafa;
-        border: 1px solid #eeeeee;
+        color: #ffffff;
+        background-color: #0071C5;
+        border: 1px solid #0071C5;
     }
 
     .dashboard .box-header h3 {
@@ -153,7 +155,7 @@
         margin-left: 6px;
     }
     .dashboard .gridster-item:hover .box-header-btns a {
-        color: #aaaaaa;
+        color: #ffffff;
     }
     .dashboard .gridster-item:hover .box-header-btns a:hover {
         color: #00AEEF;

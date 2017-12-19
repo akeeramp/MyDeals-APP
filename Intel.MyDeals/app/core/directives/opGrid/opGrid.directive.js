@@ -1630,9 +1630,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.searchGrid();
             }
 
-            $scope.test = function (dataItem) {
-                return gridUtils.stgFullTitleChar(dataItem);
-            }
 
             // Go to Deal Details
             $scope.gotoDealDetails = function (dataItem) {

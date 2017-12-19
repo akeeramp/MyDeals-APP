@@ -84,7 +84,10 @@ namespace Intel.MyDeals.DataLibrary
 
 
                 // POST SAVE AND ACTION Tasks
-                new CostTestDataLib().RollupResults(new List<int> {contractToken.ContractId});
+                if (contractToken.ContractId > 0)
+                {
+                    new CostTestDataLib().RollupResults(new List<int> {contractToken.ContractId});
+                }
                 // if (contractToken.ContractId > 0) new CostTestDataLib().RunPct(OpDataElementType.CNTRCT.ToId(), new List<int> {contractToken.ContractId});
 
                 return ret;

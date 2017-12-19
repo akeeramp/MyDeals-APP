@@ -145,12 +145,22 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 return $scope.holdItems[$scope.getHoldValue(dataItem)].icon;
             };
             $scope.getHoldTitle = function (dataItem) {
-                return $scope.holdItems[$scope.getHoldValue(dataItem)].title;
+                if (!$scope.rootScope.C_HOLD_DEALS) {
+                    return "";
+                } else {
+                    return $scope.holdItems[$scope.getHoldValue(dataItem)].title;
+                }
             };
             $scope.getHoldStyle = function (dataItem) {
-                return $scope.holdItems[$scope.getHoldValue(dataItem)].style;
+                if (!$scope.rootScope.C_HOLD_DEALS) {
+                    return { color: "#dddddd" };
+                } else {
+                    return $scope.holdItems[$scope.getHoldValue(dataItem)].style;
+                }
+
             };
             $scope.clkHoldIcon = function (dataItem) {
+                if (!$scope.rootScope.C_HOLD_DEALS) return;
                 var hVal = $scope.getHoldValue(dataItem);
                 if (hVal === "CanHold") $scope.openHoldDialog();
                 if (hVal === "TakeOffHold") $scope.openUnHoldDialog();

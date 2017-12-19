@@ -52,6 +52,8 @@ function objsetService($http, dataService, logger, $q) {
         actionPricingStrategies: actionPricingStrategies,
         actionWipDeal: actionWipDeal,
         actionWipDeals: actionWipDeals,
+        actionTenderDeal: actionTenderDeal,
+        actionTenderDeals: actionTenderDeals,
         getPctDetails: getPctDetails,
         setPctOverride: setPctOverride,
         runPctContract: runPctContract,
@@ -126,8 +128,8 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### PRICING TABLE CRUD ####
 
-    function readTender(id) {
-        return dataService.get(apiBaseTenderUrl + 'GetMaster/' + id);
+    function readTender() {
+        return dataService.get(apiBaseTenderUrl + 'GetTenderList');
     }
     function readTenderChildren(id) {
         return dataService.get(apiBaseTenderUrl + 'GetChildren/' + id);
@@ -183,6 +185,13 @@ function objsetService($http, dataService, logger, $q) {
     }
     function actionWipDeals(custId, contractId, data) {
         return dataService.post(apiBasePricingTableUrl + 'actionWipDeals/' + custId + '/' + contractId, data);
+    }
+
+    function actionTenderDeal(dcId, actn) {
+        return dataService.get(apiBaseTenderUrl + 'ActionTenders/' + dcId + '/' + actn);
+    }
+    function actionTenderDeals(dcIds, actn) {
+        return dataService.get(apiBaseTenderUrl + 'ActionTenders/' + dcIds + '/' + actn);
     }
 
 

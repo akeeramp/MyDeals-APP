@@ -1,58 +1,143 @@
 ﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType"></loading-panel>
-<div ng-include="'app/contract/partials/ptModals/multiSelectModal.html'"></div>
+<div ng-include="'/app/core/directives/gridCell/dealToolsHelper.html'"></div>
 
+<script type="text/x-kendo-template" id="toolbar-template">
+    <div class="tender-toolbar">
+        <span>Date Range:</span>
+        <input kendo-date-picker
+               ng-model="startDt"
+               k-ng-model="startDtObject"
+               style="width: 110px;" />
+        <span style="margin: 0 5px;">-</span>
+        <input kendo-date-picker
+               ng-model="endDt"
+               k-ng-model="endDtObject"
+               style="width: 110px;" />
 
-<div id="horizontal-tender">
-    <div ng-if="data.length == 0" style="padding: 6px 15px; font-size: 16px;">
-        Search for Tender deals or create a new one.
+        <span class="k-textbox" style="width: 300px; margin: 0 5px 0 15px;">
+            <input type="text" placeholder="enter search criteria" ng-model="searchText" />
+        </span>
+        <i class="k-icon intelicon-search tender-search" ng-click="loadData()" style="font-size: 26px !important;" title="Click to begin the Search"></i>
+
+        <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+            <button class="k-grid-excel btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid.">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Export to Excel<br>
+                                Current View
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+        
+        <div class="clearboth"></div>
     </div>
-    <div op-grid class="tender-grid" id="tenderOpGrid" op-data="data" op-options="options" ng-if="data.length > 0"></div>
-</div>
-
-<script type="text/x-kendo-template" id="detail-template">
-    <div class="tenderChildGrid"></div>
 </script>
 
-<div id="customToolbar">
-    <span class="k-textbox" style="width: 400px; margin-top: -4px;">
-        <input type="text" placeholder="enter search criteria" />
-    </span>
-    <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -8px; margin-right: 30px;"></i>
-
-    <button class="btn btn-sm btn-skyblue" type="button" ng-click="create('ECAP')" style="margin-top: -3px; margin-right: 10px;">
-        <i class="fa fa-plus" aria-hidden="true"></i> Create ECAP Tender
-    </button>
-    <button class="btn btn-sm btn-skyblue" type="button" ng-click="create('KIT')" style="margin-top: -3px; margin-right: 10px;">
-        <i class="fa fa-plus" aria-hidden="true"></i> Create KIT Tender
-    </button>
-    <button class="btn btn-sm btn-skyblue" type="button" ng-click="saveAndValidate()" ng-if="data.length > 0" style="margin-top: -3px; margin-right: 10px;">
-        <i class="fa fa-floppy-o" aria-hidden="true"></i> Save & Validate Deals
-    </button>
-    <button class="btn btn-sm btn-skyblue" type="button" ng-click="loadData()" ng-if="data.length <= 0" style="margin-top: -3px; margin-right: 10px;">
-        <i class="fa fa-plus" aria-hidden="true"></i> Load Data
-    </button>
+<div id="horizontal-tender">
+    <kendo-grid id="gridTender" class="opUiContainer md tender tender-grid" options="gridOptions"></kendo-grid>
 </div>
 
 
 
 <style>
-    #horizontal-tender {
-        margin-top: 8px;
-        border: 0 solid transparent;
-        height: 100%;
-        font-size: 12px;
-        margin-bottom: 8px;
+    .k-list-container.k-popup .k-list-scroller {
+        overflow-x: hidden;
     }
+
+    .noaccess {
+        background: #fafafa;
+        margin: -10px;
+        padding: 13px 10px 0 10px;
+        height: 33px;
+        text-align: center;
+        color: #aaaaaa;
+    }
+
+     #horizontal-tender {
+         border: 0 solid transparent;
+         height: 100%;
+         font-size: 12px;
+         margin-bottom: 8px;
+     }
+
+    .k-pager-wrap .k-dropdown {
+        width: 6.0em;
+    }
+    .tender-search { 
+        color: #00AEEF !important; 
+        border-radius: 4px;
+        padding: 4px;
+    }
+    .tender-search:hover { 
+        background-color: #dddddd;
+        cursor: pointer;
+    }
+
+    .tender-toolbar {
+        height: 30px;
+        color: #666666;
+        padding: 10px;
+    }
+
+    .tender-grid.k-grid .k-grid-content .k-icon.k-i-arrow-60-down {
+        color: #ffffff;
+    }
+    .tender-grid.k-grid .k-grid-content .k-dropdown-wrap {
+        background-color: #00AEEF;
+    }
+    .tender-grid.k-grid .k-grid-content .k-dropdown-wrap .k-input {
+        color: #ffffff !important;
+    }
+
+    .tender-grid .k-grid-toolbar {
+        background-color: #ffffff;
+    }
+    .tender-grid.k-grid .k-hierarchy-cell {
+        text-align: center;
+    }
+    .tender-grid.k-grid thead th {
+        white-space: normal;
+    }
+    .tender-grid.k-grid thead th .k-link {
+        font-size: 11px !important;
+        font-weight: 200;
+        line-height: 1.1em;
+        font-family: 'Intel Clear', 'Arial';
+    }
+    .tender-grid.k-grid td {
+        white-space: nowrap;
+    }
+    .tender-grid.k-grid tr.k-alt {
+        background-color: transparent;
+    }
+    .tender-grid.k-grid tr.k-alt:hover, .tender-grid.k-grid tr:hover {
+        background-color: rgba(0,174,239,0.05);
+    }
+
+    .opUiContainer.tender .k-grid-header, .opUiContainer.tender .k-grid-header .k-header,
+    .opUiContainer.tender .k-pager-wrap, .opUiContainer.tender .k-pager-numbers .k-state-selected,
+    .opUiContainer.tender .k-grid-footer, .opUiContainer.tender .k-grid-footer td,
+    .opUiContainer.tender .k-scheduler-header, .opUiContainer.tender .km-pane-wrapper .k-grid-header .k-header {
+        background-color: #fafafa;
+    }
+
+    .dimTenderTitle {
+        font-size: 10px;
+        color: #aaaaaa;
+        padding-right: 5px;
+    }
+
 
     .dealTag {
         display: none;
-    }
-
-    #customToolbar {
-        position: absolute;
-        top: 46px;
-        left: 0;
-        padding: 10px 10px;
     }
 
     #tabstrip ul li .k-link {
@@ -110,7 +195,4 @@
         font-size: 14px;
         margin-right: 6px;
     }
-    
-
-
-    </style>
+</style>

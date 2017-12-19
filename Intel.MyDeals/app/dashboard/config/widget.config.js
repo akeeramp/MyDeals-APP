@@ -45,7 +45,7 @@ widgetConfig.configWidgets = function () {
         id: '7',
         size: { x: 13, y: 8 },
         position: { row: 0, col: 0 },
-        name: "Contract Status",
+        name: "Deal Desk",
         desc: "Quick view of status board",
         icon: "intelicon-grid",
         type: 'contractStatusBoard',

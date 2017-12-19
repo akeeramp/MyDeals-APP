@@ -91,6 +91,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
             $scope.mainGridOptions = {
                 dataSource: $scope.gridDs,
                 sortable: true,
+                filterable: true,
                 columns: [{
                     field: "id",
                     title: "&nbsp;",
@@ -100,32 +101,20 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                     template: "<a href='\\#' ng-click='gotoContractManager(dataItem.id)' style='margin-left: 3px;' title='Click to open the Contract in the Contract Editor'><i class='intelicon-frame-template' style='font-size: 20px;'></i></a>"
                 }, {
                     field: "stage",
-                    title: "Stage",
+                    title: "Strategy Stage",
                     template: "<span><i class='intelicon-workflow-process-outlined' style='color: {{getColorStage(dataItem)}}; font-size: 20px;'></i> {{dataItem.stage}}</span>"
                 }, {
-                    field: "valid",
-                    title: "Valid",
-                    template: "<span><i class='intelicon-protection-solid' style='color: {{getColorValid(dataItem)}}; font-size: 20px;'></i> {{dataItem.valid}}</span>"
-                }, {
                     field: "name",
-                    title: "Name",
-                    template: "<span><a href='\\#' ng-click='zoomChart(dataItem)'>{{dataItem.name}}</a></span>"
-                }, {
-                    field: "obj",
-                    title: "Level",
-                    template: "<span>{{dataItem.obj}}</span>"
-                }, {
-                    field: "type",
-                    title: "Type",
-                    template: "<span><i class='intelicon-location' style='color: {{getColorType(dataItem)}}; font-size: 20px;'></i> {{dataItem.type}}</span>"
+                    title: "Strategy Name",
+                    template: "<a href='\\#' ng-click='gotoContractManager(dataItem.id)' style='margin-left: 3px;' title='Click to open the Contract in the Contract Editor'>{{dataItem.name}}</a>"
                 }, {
                     field: "pct",
-                    title: "Price Cost Test",
-                    template: "<span><i class='intelicon-bright-on' style='color: {{getColorPct(dataItem)}}; font-size: 20px;'></i> {{dataItem.pct}}</span>"
+                    title: "Price Cost Test Results",
+                    template: "<icon-mct-pct ng-model='dataItem.pct' icon-class=\"'medIcon'\"></icon-mct-pct>"
                 }, {
                     field: "mct",
-                    title: "Meet Comp Test",
-                    template: "<span><i class='intelicon-bright-on' style='color: {{getColorMct(dataItem)}}; font-size: 20px;'></i> {{dataItem.mct}}</span>"
+                    title: "Meet Comp Test Results",
+                    template: "<icon-mct-pct ng-model='dataItem.mct' icon-class=\"'medIcon'\"></icon-mct-pct>"
                 }]
             };
 
@@ -297,21 +286,21 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
             }
 
             $scope.gotoContractManager = function (id) {
-                var d = d3.selectAll("path").data().filter(function (d1) {
-                    return (d1.id === id);
-                })[0];
-                var sequenceArray = $scope.getAncestors(d);
+                //var d = d3.selectAll("path").data().filter(function (d1) {
+                //    return (d1.id === id);
+                //})[0];
+                //var sequenceArray = $scope.getAncestors(d);
 
                 var lnk = "/Contract#/manager/" + $scope.contractId;
 
                 if (window.usrRole === "DA") {
                     lnk = "/Contract#/manager/" + $scope.contractId + "/summary";
-                } else {
-                    if (sequenceArray.length >= 4) { // WIP
-                        lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id + "/wip";
-                    } else if (sequenceArray.length >= 2) { // Pricing Table
-                        lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id;
-                    }
+                //} else {
+                    //if (sequenceArray.length >= 4) { // WIP
+                    //    lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id + "/wip";
+                    ///} else if (sequenceArray.length >= 2) { // Pricing Table
+                    //    lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id;
+                    //}
                 }
                 window.open(lnk, '_blank');
             }

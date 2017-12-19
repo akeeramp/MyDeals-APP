@@ -14,7 +14,7 @@
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
         usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
     }
-    catch (Exception ex)
+    catch (Exception)
     {
         // do some error catching or 404 error redirect here...
     }
@@ -136,7 +136,7 @@
             however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
+                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#"><i class="intelicon-settings-solid"></i> Admin <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
                     @*<li><a href="/error/ResetAVM">Clear View Model</a></li>*@
@@ -208,13 +208,10 @@
             </li>
 
 
-            @*<li class="dropdown">
-                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><div style="cursor: pointer; padding: 2px 4px;" onClick="rs.viewJson()">View Json Data</div></li>
-                    <li><div style="cursor: pointer; padding: 2px 4px;" onClick="rs.viewLogs()">View Logs</div></li>
-                </ul>
-            </li>*@
+            <li>
+                <a href="/TenderManager#/tender" title="Tender"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender</span></a>
+            </li>
+
 
             @*<li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>

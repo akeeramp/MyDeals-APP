@@ -37,10 +37,11 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
 
 gridUtils.uiParentControlWrapper = function (passedData, field) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="test(dataItem)"></div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="gridUtils.getStage(dataItem)"></div>';
     tmplt += '</div>';
     return tmplt;
 }
+
 
 
 gridUtils.uiStartDateWrapper = function (passedData, field, format) {
@@ -441,6 +442,38 @@ gridUtils.lookupEditor = function (container, options) {
     }
 }
 
+gridUtils.tenderDim = function (dataItem, field, format) {
+    var rtn = [];
+    var rtnKit = [];
+    var ar = dataItem[field];
+    if (ar !== undefined && ar === "no access") {
+        return "<div class='noaccess'>no access</div>";
+    }
+    for (var key in ar) {
+        if (ar.hasOwnProperty(key) && key.indexOf("20___") >= 0) {
+            var dim = "";
+            if (key.indexOf("20___") >= 0) dim = "Secondary";
+            if (key.indexOf("20____2") >= 0) dim = "SubKit";
+            if (key.indexOf("20____1") >= 0) dim = "Kit";
+            if (key.indexOf("20___0") >= 0) dim = "Primary";
+
+            var val = ar[key];
+            if (format !== undefined) {
+                if (format === "c" && !isNaN(val)) {
+                    val = kendo.toString(parseFloat(val), format);
+                } else {
+                    val = kendo.toString(val, format);
+                }
+            }
+
+            rtn.push(val);
+            rtnKit.push("<span class='dimTenderTitle'>" + dim + ":</span>" + val);
+        }
+    }
+    
+    return (rtn.length <= 1) ? rtn.join("<br/>") : rtnKit.join("<br/>");
+}
+
 gridUtils.msgIcon = function (dataItem) {
     if (dataItem.MsgType === 1) {
         return "<i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i>";
@@ -464,8 +497,36 @@ gridUtils.stgOneChar = function (dataItem) {
     }
 }
 
+gridUtils.getBidActions = function (data) {
+    var bidActns = [];
+    if (data.BID_ACTNS === undefined) return "";
+    for (var i = 0; i < data.BID_ACTNS.length; i++) {
+        bidActns.push({
+            "BidActnName": data.BID_ACTNS[i],
+            "BidActnValue": data.BID_ACTNS[i]
+        });
+    }
+    data["orig_BID_STATUS"] = data.BID_STATUS;
+    data.BID_ACTNS = bidActns;
+
+    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; color: #aaaaaa;'><i>Not Actionable</i></div>";
+    if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.BID_STATUS}}</div>";
+
+    return '<select kendo-drop-down-list ng-model="(dataItem.BID_STATUS)" ' +
+        'k-data-text-field="\'BidActnName\'" ' +
+        'k-data-value-field="\'BidActnValue\'" ' +
+        'k-data-source="dataItem.BID_ACTNS" ' +
+        'k-change="changeBidAction" ' +
+        'style="width: 100%;"></select>';
+}
+
 gridUtils.stgFullTitleChar = function (dataItem) {
     return dataItem.WF_STG_CD === "Draft" ? dataItem.PS_WF_STG_CD : dataItem.WF_STG_CD;
+}
+
+gridUtils.getStage = function (dataItem) {
+    if (dataItem.WF_STG_CD === "Draft") dataItem.WF_STG_CD = dataItem.PS_WF_STG_CD;
+    return gridUtils.stgFullTitleChar(dataItem);
 }
 
 

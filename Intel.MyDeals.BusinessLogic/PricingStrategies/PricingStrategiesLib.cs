@@ -241,6 +241,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             List<int> dealIds = new List<int>();
+            List<int> tenderDealIds = new List<int>();
             if (psGoingActive.Any())
             {
                 List<OpDataElementType> opDataElementTypesActive = new List<OpDataElementType>
@@ -250,20 +251,48 @@ namespace Intel.MyDeals.BusinessLogic
 
                 List<int> atrbsActive = new List<int>
                 {
-                    Attributes.WF_STG_CD.ATRB_SID
+                    Attributes.WF_STG_CD.ATRB_SID,
+                    Attributes.BID_STATUS.ATRB_SID,
+                    Attributes.REBATE_TYPE.ATRB_SID
                 };
 
                 var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive, opDataElementTypesActive, atrbsActive);
 
                 myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
                 List<OpDataElement> deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+                dealIds = deals.Select(d => d.DcID).ToList();
+
+                List<OpDataElement> tenderDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
+                tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
 
                 foreach (OpDataElement de in deals)
                 {
                     de.SetAtrbValue(WorkFlowStages.Active);
+
+                    // If Tender... need to set the Bid Status
+                    if (!tenderDealIds.Contains(de.DcID)) continue;
+                    OpDataElement deBid = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.BID_STATUS).FirstOrDefault(d => d.DcID == de.DcID);
+                    if (deBid != null)
+                    {
+                        deBid.SetAtrbValue("Offer");
+                    }
+                    else
+                    {
+                        OpDataCollector dc = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == de.DcID);
+                        dc?.DataElements.Add(new OpDataElement
+                        {
+                            DcID = dc.DcID,
+                            DcType = de.DcType,
+                            DcParentID = de.DcParentID,
+                            DcParentType = de.DcParentType,
+                            AtrbID = Attributes.BID_STATUS.ATRB_SID,
+                            AtrbCd = Attributes.BID_STATUS.ATRB_COL_NM,
+                            DataType = "System.String",
+                            AtrbValue = "Offer"
+                        });
+                    }
                 }
 
-                dealIds = deals.Select(d => d.DcID).ToList();
             }
 
 
@@ -289,7 +318,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Tack on the save action call now
                 myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
-                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(dealIds); // not sure if we need it in both places or just the PS
+                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(dealIds.Where(d => !tenderDealIds.Contains(d)).ToList()); // not sure if we need it in both places or just the PS
             }
 
             myDealsData.EnsureBatchIDs();

@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.OData.Extensions;
 
 namespace Intel.MyDeals
 {
@@ -10,6 +11,9 @@ namespace Intel.MyDeals
             // Web API configuration and services
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+
+            // Enable Query Support for Web API globally
+            config.AddODataQueryFilter();
 
             // Use camel case for JSON data.
             //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
