@@ -2329,14 +2329,13 @@
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         if (!!$scope.spreadDs) {
-                            //if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                            //    $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
-                        	//} else {							
                         	if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                        		$scope.spreadDs.sync()
-                        	}
-                            $scope.spreadDs.read();
-                            //}
+								// NOTE: The below line is a workaround for a bug where after saving, all rows will revert back to their previous unsaved values due to an incorrect parentSource in gridUtils.js's read().
+                        		// TODO: Find out what is causing the syncing issues and remove this workaround once found
+                                $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     
+                        	} else {			
+								$scope.spreadDs.read();
+                            }
                             $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                         }
                     }
@@ -2614,6 +2613,14 @@
                 if (dataItem._behaviors.validMsg[atrbName] != null) {
                     // Parse the Dictionary json
                     var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                    	// KIT ECAP
+                    	if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
+                    		dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
+                    		dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                    	}
+                    }
 
                     if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
                         // Set the validation message

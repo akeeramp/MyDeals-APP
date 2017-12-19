@@ -1041,7 +1041,18 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			ValidateKitTieredDoubleAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0..", IsGreaterThanZero, r);
+
+			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+			if (deNumTiers == null) return;
+
+			// Get number of "tiers" from product, since we don't save NUM_OF_TIERS
+			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
+
+			// KIT ECAP specific changes (Note that KIT ECAP is ECAP of tier -1)
+			numOfTiers += 1;
+			int offset = 2; // Note that the offset is now 2 to account for KIT ECAPs at tier -1
+
+			ValidateTieredDoubleAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0.", IsGreaterThanZero, r, numOfTiers, offset, false);
 		}
 		
 		public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
@@ -1054,7 +1065,7 @@ namespace Intel.MyDeals.BusinessRules
 			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
 		}
 
-		public static void ValidateKitTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+		public static void ValidateKitTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r)
 		{
 			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			if (deNumTiers == null) return;
@@ -1063,7 +1074,7 @@ namespace Intel.MyDeals.BusinessRules
 			// TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
 			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
 
-			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, isEndVol);
+			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false);
 		}
 
 		public static void ValidateTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
