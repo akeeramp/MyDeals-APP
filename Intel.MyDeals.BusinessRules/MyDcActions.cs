@@ -523,39 +523,105 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckDropDownValues(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            List<string> eligableDropDowns = new List<string>
-            {
-                AttributeCodes.PAYOUT_BASED_ON,
+		public static void CheckDropDownValues(params object[] args)
+		{
+			List<string> eligibleDropDowns = new List<string>
+			{
+				AttributeCodes.PAYOUT_BASED_ON,
 				AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.REBATE_TYPE,
+				AttributeCodes.REBATE_TYPE,
+				AttributeCodes.PROD_INCLDS
+			};
+			CheckDropDownValues(eligibleDropDowns, args);
+		}
+
+		public static void CheckDropDownValuesKit(params object[] args)
+		{
+			List<string> eligibleDropDowns = new List<string>
+			{
+				AttributeCodes.PAYOUT_BASED_ON,
+				AttributeCodes.PROGRAM_PAYMENT,
+				AttributeCodes.REBATE_TYPE
+			};
+			CheckDropDownValues(eligibleDropDowns, args);
+		}
+
+		public static void CheckDropDownValues(List<string> eligibleDropDowns, params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+
+			foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns))
+			{
+				List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+				string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+				if (string.IsNullOrEmpty(matchedValue))
+				{
+					de.AddMessage("Please enter a valid value.");
+				}
+				else
+				{
+					if (matchedValue != de.AtrbValue.ToString())
+					{
+						// strings match but case is different
+						de.AtrbValue = matchedValue;
+					}
+				}
+			}
+		}
+
+		public static void CheckKitTieredDropDown(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+
+			List<string> eligibleAttrbs = new List<string>()
+			{
 				AttributeCodes.PROD_INCLDS
 			};
 
-            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligableDropDowns))
-            {
-                List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
-                string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
-                if (string.IsNullOrEmpty(matchedValue))
-                {
-                    de.AddMessage("Please enter a valid value.");
-                }
-                else
-                {
-                    if (matchedValue != de.AtrbValue.ToString())
-                    {
-                        // strings match but case is different
-                        de.AtrbValue = matchedValue;
-                    }
-                }
-            }
-        }
+			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+			if (deNumTiers == null) return;
 
-        public static void CheckBillingDates(params object[] args)
+			// Get number of "tiers" from product, since we don't save NUM_OF_TIERS
+			// TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
+			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
+
+			CheckTieredDropDown(eligibleAttrbs, numOfTiers, 1, r);
+		}
+
+		public static void CheckTieredDropDown(List<string> eligibleAttrbs, int numOfTiers, int tierOffset, MyOpRuleCore r)
+		{			
+			foreach (string myAtrbCd in eligibleAttrbs)
+			{
+				IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+				IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+
+				// Validate and set validation messag e if applicable on each tier
+				foreach (IOpDataElement atrb in atrbs)
+				{
+					if (atrb.DimKey.Count == 0) { continue; }
+					int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+					if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+					{
+						List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == myAtrbCd).Select(d => d.DROP_DOWN).ToList();
+						string matchedValue = dropDowns.Where(d => d.ToUpper() == atrb.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+
+						if (string.IsNullOrEmpty(matchedValue))
+						{
+							AddTierValidationMessage(atrbWithValidation, "Please enter a valid value.", tier);
+						}
+						else if (matchedValue != atrb.AtrbValue.ToString())
+						{
+							// strings match but case is different
+							atrb.AtrbValue = matchedValue;
+						}
+					}
+				}
+			}
+		}
+		
+		public static void CheckBillingDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -969,15 +1035,15 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			ValidateKitTieredAttribute(AttributeCodes.QTY.ToString(), "Quantity must have a positive value.", IsGreaterOrEqualToZero, r);
+			ValidateKitTieredDoubleAttribute(AttributeCodes.QTY.ToString(), "Quantity must have a positive value.", IsGreaterOrEqualToZero, r);
 		}
 		public static void ValidateTierEcap(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			ValidateKitTieredAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP tier check.", IsGreaterThanZero, r);
+			ValidateKitTieredDoubleAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0..", IsGreaterThanZero, r);
 		}
-
+		
 		public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
 		{
 			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
@@ -985,10 +1051,10 @@ namespace Intel.MyDeals.BusinessRules
 
 			int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 
-			ValidateTieredAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
+			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
 		}
 
-		public static void ValidateKitTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+		public static void ValidateKitTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
 		{
 			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			if (deNumTiers == null) return;
@@ -997,10 +1063,10 @@ namespace Intel.MyDeals.BusinessRules
 			// TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
 			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
 
-			ValidateTieredAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, isEndVol);
+			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, isEndVol);
 		}
 
-		public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
+		public static void ValidateTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
         {
             IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
             IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
@@ -1143,11 +1209,11 @@ namespace Intel.MyDeals.BusinessRules
 					foreach (ProdMapping map in prdMapping.Value)
 					{
 						// Up the L1 and L2 counts
-						if (map.HAS_L1 == "1")
+						if (map.HAS_L1 == "true")
 						{
 							numOfL1s += parsedQty;
 						}
-						else if (map.HAS_L2 == "1")
+						else if (map.HAS_L2 == "true")
 						{
 							numOfL2s += parsedQty;
 						}

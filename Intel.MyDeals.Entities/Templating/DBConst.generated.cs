@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 12/12/2017 10:28:17 AM
-On: MHTIPPIN-MOBL
+File Updated: 12/18/2017 11:36:47 AM
+On: JAJUANG-MOBL3
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -28,15 +28,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string ACTIVE = "ACTIVE";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 3700
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
-		///</summary>
-		public const string ACTV_REV = "ACTV_REV";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1261,6 +1252,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string IGNR_COST_TST = "IGNR_COST_TST";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3700
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string INACTV_REV = "INACTV_REV";
 
 		///<summary>
 		/// DIM_SID: 30

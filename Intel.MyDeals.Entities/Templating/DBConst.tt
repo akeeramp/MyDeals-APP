@@ -15,7 +15,7 @@
 <#@ import namespace="Intel.Opaque.Templating" #>
 <#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
 
-<#
+<# 
 
 	// DEVELOPER: Change this to be the namespace to create the SP classes in
 	const string outputNameSpace = "Intel.MyDeals.Entities";

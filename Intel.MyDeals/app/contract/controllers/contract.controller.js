@@ -48,7 +48,7 @@
         }
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-        $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
+        $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN", "PROD_INCLDS"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -2331,7 +2331,10 @@
                         if (!!$scope.spreadDs) {
                             //if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                             //    $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     //KITTODO: update _gridutils read function to account for multi-dim and prevent data corruption
-                            //} else {
+                        	//} else {							
+                        	if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                        		$scope.spreadDs.sync()
+                        	}
                             $scope.spreadDs.read();
                             //}
                             $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);

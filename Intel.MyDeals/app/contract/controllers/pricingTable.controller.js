@@ -1310,6 +1310,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     // Defaulted row values for specific SET TYPEs
                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     	data[r]["QTY"] = 1;
+                    	data[r]["ECAP_PRICE"] = 0;
                     } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
                         // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
                         data[r]["ADJ_ECAP_UNIT"] = 0;

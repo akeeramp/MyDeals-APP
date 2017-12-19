@@ -473,8 +473,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 100,
                 Label = "ECAP Standalone *",    //different name than ECAP deal type, we also move it down here because kit mockup has this attribute listed after st/end dts
-                IsDimKey = true,
-                IsRequired = true
+                IsDimKey = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -485,7 +484,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Label = "KIT ECAP *",
                 IsDimKey = false,
-                IsRequired = true,
                 DataType = "number",
                 Format = "{0:c}"
             });
@@ -639,17 +637,17 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.TIER_NBR,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsDimKey = true,
-                IsReadOnly = true,
-                Label = "Tier",
-            });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 36,
+				AtrbCd = AttributeCodes.TIER_NBR,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+				IsDimKey = true,
+				IsReadOnly = true,
+				Label = "Tier",
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
                 AtrbCd = AttributeCodes.STRT_VOL,
@@ -711,20 +709,36 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "dropdownName",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 41,
-                AtrbCd = AttributeCodes.PROD_INCLDS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "string",
-                Width = 100,
-                UiType = "DROPDOWN",
-                Label = "Media *",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 41,
+				AtrbCd = AttributeCodes.PROD_INCLDS,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.TENDER },
+				DataType = "string",
+				Width = 100,
+				UiType = "DROPDOWN",
+				Label = "Media *",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN"
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 41,
+				AtrbCd = AttributeCodes.PROD_INCLDS,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+				DataType = "string",
+				Width = 100,
+				UiType = "DROPDOWN",
+				Label = "Media *",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				IsDimKey = true
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 39,
                 AtrbCd = AttributeCodes.TERMS,
