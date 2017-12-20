@@ -89,6 +89,31 @@ namespace Intel.MyDeals.BusinessLogic
             return new CostTestLib().GetCostTestDetails(id);
         }
 
+        public string GetPath(int id, string opType)
+        {
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(opType);
+            MyDealsData myDealsData = opDataElementType.GetByIDs(
+                new List<int> { id },
+                new List<OpDataElementType>
+                {
+                    OpDataElementType.CNTRCT,
+                    OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_TBL
+                }, new List<int>
+                {
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                });
+
+            if (opDataElementType == OpDataElementType.PRC_TBL)
+            {
+                return $"{myDealsData[OpDataElementType.CNTRCT].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_ST].AllDataElements.First().DcID}";
+            }
+            else
+            {
+                return $"{myDealsData[OpDataElementType.CNTRCT].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_ST].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_TBL].AllDataElements.First().DcID}";
+            }
+        }
+
         public PctOverrideReason SetPctOverrideReason(PctOverrideReason data)
         {
             return new CostTestLib().SetPctOverrideReason(data);

@@ -129,7 +129,8 @@
                     field: "DC_ID",
                     filterable: false,
                     title: "Deal",
-                    width: 100
+                    width: 100,
+                    template: "<div ng-click='navToPath(dataItem)' class='tenderDealId'>#=data.DC_ID#</div>"
                 }, {
                     field: "PRODUCT_FILTER",
                     title: "Product",
@@ -233,6 +234,27 @@
         $($window).resize(function () {
             $(".tender-grid").data("kendoGrid").resize();
         });
+
+        $scope.navToPath = function(dataItem) {
+            $scope.setBusy("Looking for Contract", "Looking for the deal's contract");
+            objsetService.getPath(dataItem.DC_ID, "WIP_DEAL").then(
+                    function (data) {
+
+                        $scope.setBusy("Found Contract", "Redirecting you there now", "Success");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+                        topbar.hide();
+
+                        document.location.href = "/Contract#/manager/" + data.data;
+
+                    },
+                    function (response) {
+                        logger.error("Could not find the Deal's contract.", response, response.statusText);
+                        topbar.hide();
+                    }
+                );
+        }
 
         $scope.canShowCheckBox = function (dataItem) {
             if (dataItem.BID_ACTNS === undefined) return "";

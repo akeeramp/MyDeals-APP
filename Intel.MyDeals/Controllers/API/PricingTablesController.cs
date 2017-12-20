@@ -251,6 +251,15 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetPath/{id}/{opType}")]
+        public string GetPath(int id, string opType)
+        {
+            return SafeExecutor(() => _pricingTablesLib.GetPath(id, opType)
+                , $"Unable to get Path for {id}"
+            );
+        }
+
     }
 
 }

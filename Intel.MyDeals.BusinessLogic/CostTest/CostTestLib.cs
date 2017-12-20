@@ -31,7 +31,6 @@ namespace Intel.MyDeals.BusinessLogic
             return _costTestDataLib.GetCostTestDetails(prcTblId);
         }
 
-
         public PctOverrideReason SetPctOverrideReason(PctOverrideReason data)
         {
             return _costTestDataLib.SetPctOverrideReason(data);

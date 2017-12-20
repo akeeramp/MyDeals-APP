@@ -294,7 +294,7 @@ namespace Intel.MyDeals.BusinessRules
 						}
 					}
 				},
-				new MyOpRule
+                new MyOpRule
 				{
 					Title="Readonly if geo is WW",
 					ActionRule = MyDcActions.ExecuteActions,
