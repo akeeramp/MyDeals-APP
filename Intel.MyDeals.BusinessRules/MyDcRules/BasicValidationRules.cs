@@ -354,24 +354,7 @@ namespace Intel.MyDeals.BusinessRules
 					Title="DropDown Value Validations",
 					ActionRule = MyDcActions.CheckDropDownValues,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-					InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.TENDER.ToString()},
 					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate}
-				},
-                new MyOpRule
-                {
-                    Title="DropDown Value Validations for KIT",
-                    ActionRule = MyDcActions.CheckDropDownValuesKit,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate}
-                },
-				new MyOpRule
-				{
-					Title="Dimensionalized DropDown Value Validations for KIT (media)",
-					ActionRule = MyDcActions.CheckKitTieredDropDown,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate}
 				},
 				new MyOpRule
                 {
@@ -475,7 +458,7 @@ namespace Intel.MyDeals.BusinessRules
 					Title="Adjusted ECAP Units must have a positive value",
 					ActionRule = MyDcActions.CheckEcapAdjUnit,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate }
 				},
 				new MyOpRule
 				{
@@ -483,7 +466,7 @@ namespace Intel.MyDeals.BusinessRules
 					ActionRule = MyDcActions.ValidateKITProducts,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate }
 				},
 				//new MyOpRule
 				//{

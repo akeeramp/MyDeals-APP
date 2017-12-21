@@ -715,7 +715,6 @@ namespace Intel.MyDeals.DataLibrary
 				Id = 41,
 				AtrbCd = AttributeCodes.PROD_INCLDS,
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.TENDER },
 				DataType = "string",
 				Width = 100,
 				UiType = "DROPDOWN",
@@ -723,21 +722,6 @@ namespace Intel.MyDeals.DataLibrary
 				LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
 				LookupText = "DROP_DOWN",
 				LookupValue = "DROP_DOWN"
-			});
-			items.Add(new UiTemplateContainerItem
-			{
-				Id = 41,
-				AtrbCd = AttributeCodes.PROD_INCLDS,
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-				DataType = "string",
-				Width = 100,
-				UiType = "DROPDOWN",
-				Label = "Media *",
-				LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
-				LookupText = "DROP_DOWN",
-				LookupValue = "DROP_DOWN",
-				IsDimKey = true
 			});
 			items.Add(new UiTemplateContainerItem
             {

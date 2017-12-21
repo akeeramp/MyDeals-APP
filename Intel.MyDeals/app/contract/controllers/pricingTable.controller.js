@@ -1275,7 +1275,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
                 }
 							
-                // For KITs, remove duplicate products
+                // For KITs, remove duplicate products. Must be before cleanup()
                 if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
                 	for (var r = 0; r < data.length; r++) {
                 		if (data[r]["PTR_USER_PRD"] === undefined || data[r]["PTR_USER_PRD"] === null) { continue; }
@@ -1294,9 +1294,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
                 cleanupData(data);
 
+                var tierNbr = 0;
+
                 for (var r = 0; r < data.length; r++) {
-                    if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) continue;
-						
+                	if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k"))
+                	{
+                		// Calcuate the KIT Rebate in case the number of products/tiers changes
+                		if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                			tierNbr = data[r]["TIER_NBR"];
+                			if (tierNbr == 1) {
+                				data[r]["TEMP_KIT_REBATE"] = calculateKITRebate(data, r, data[r]["NUM_OF_TIERS"]);
+                			}
+                		}
+
+						// This is an existing row. Don't do anything else
+                		continue;
+					}
+
                     newItems++;
                     var numPivotRows = root.numOfPivot(data[r]);
                     data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
@@ -1354,15 +1368,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
 
-                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                    	if (data[r].PROD_INCLDS === null && data[r].PROD_INCLDS !== ""
-							&& data[r].PTR_SYS_PRD !== null && data[r].PTR_SYS_PRD !== ""
-							&& data[r].PRD_BCKT !== null && data[r].PRD_BCKT !== ""
-							) {
-							// Default the Media code to the product selector's media code
-                    		data[r].PROD_INCLDS = JSON.parse(data[r].PTR_SYS_PRD)[data[r].PRD_BCKT][0].MM_MEDIA_CD;
-                    	}
-                    }
 
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key)) {

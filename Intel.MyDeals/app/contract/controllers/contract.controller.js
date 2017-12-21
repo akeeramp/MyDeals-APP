@@ -48,7 +48,7 @@
         }
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-        $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN", "PROD_INCLDS"];
+        $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -3456,7 +3456,7 @@
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) {
                     	if ($scope.newPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                    		newValue["PROD_INCLDS"].value = "NA";
+                    		newValue["PROD_INCLDS"].value = "All";
                     	} else {
                     		newValue["PROD_INCLDS"].value = "Tray";
                     	}

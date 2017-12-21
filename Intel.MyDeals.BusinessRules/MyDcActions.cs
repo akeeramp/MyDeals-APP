@@ -534,18 +534,7 @@ namespace Intel.MyDeals.BusinessRules
 			};
 			CheckDropDownValues(eligibleDropDowns, args);
 		}
-
-		public static void CheckDropDownValuesKit(params object[] args)
-		{
-			List<string> eligibleDropDowns = new List<string>
-			{
-				AttributeCodes.PAYOUT_BASED_ON,
-				AttributeCodes.PROGRAM_PAYMENT,
-				AttributeCodes.REBATE_TYPE
-			};
-			CheckDropDownValues(eligibleDropDowns, args);
-		}
-
+		
 		public static void CheckDropDownValues(List<string> eligibleDropDowns, params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
@@ -569,57 +558,7 @@ namespace Intel.MyDeals.BusinessRules
 				}
 			}
 		}
-
-		public static void CheckKitTieredDropDown(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
-
-			List<string> eligibleAttrbs = new List<string>()
-			{
-				AttributeCodes.PROD_INCLDS
-			};
-
-			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
-			if (deNumTiers == null) return;
-
-			// Get number of "tiers" from product, since we don't save NUM_OF_TIERS
-			// TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
-			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
-
-			CheckTieredDropDown(eligibleAttrbs, numOfTiers, 1, r);
-		}
-
-		public static void CheckTieredDropDown(List<string> eligibleAttrbs, int numOfTiers, int tierOffset, MyOpRuleCore r)
-		{			
-			foreach (string myAtrbCd in eligibleAttrbs)
-			{
-				IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-				IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-
-				// Validate and set validation messag e if applicable on each tier
-				foreach (IOpDataElement atrb in atrbs)
-				{
-					if (atrb.DimKey.Count == 0) { continue; }
-					int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
-					if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
-					{
-						List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == myAtrbCd).Select(d => d.DROP_DOWN).ToList();
-						string matchedValue = dropDowns.Where(d => d.ToUpper() == atrb.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
-
-						if (string.IsNullOrEmpty(matchedValue))
-						{
-							AddTierValidationMessage(atrbWithValidation, "Please enter a valid value.", tier);
-						}
-						else if (matchedValue != atrb.AtrbValue.ToString())
-						{
-							// strings match but case is different
-							atrb.AtrbValue = matchedValue;
-						}
-					}
-				}
-			}
-		}
+		
 		
 		public static void CheckBillingDates(params object[] args)
         {
@@ -1190,7 +1129,7 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			
+
 			IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
 			if (string.IsNullOrEmpty(prdJson)) return;
@@ -1221,6 +1160,10 @@ namespace Intel.MyDeals.BusinessRules
 						// Up the L1 and L2 counts
 						if (map.HAS_L1 == "true")
 						{
+							if (parsedQty > 1)
+							{
+								deQty.AddMessage("L1 Products can only have a Qty of 1.");
+							}
 							numOfL1s += parsedQty;
 						}
 						else if (map.HAS_L2 == "true")
