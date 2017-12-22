@@ -1717,6 +1717,7 @@
     <Content Include="Views\TenderManager\Index.cshtml" />
     <Content Include="Views\AdvancedSearch\Index.cshtml" />
     <Content Include="Views\CodingPractices\CodeQuality.cshtml" />
+    <Content Include="Views\Dashboard\Snow.cshtml" />
     <None Include="Web.cons.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

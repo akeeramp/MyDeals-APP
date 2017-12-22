@@ -28,6 +28,53 @@
         $scope.endDt = "12/31/2017";
         $scope.searchText = "";
         $scope.curLinkedVal = "";
+        $scope.helpMsg = "<div style=\"margin-bottom: 5px; \"><b>Search Tip</b></div>Search for Deal #, End Customer, Project Name, Product or Tracker #<br/><div style=\"color: #666666; margin: 5px 0;\">Example: <i>i7-5*, Best Buy</i></div>";
+
+        $scope.moneyObjFilter = {
+            ui: function(element) {
+                element.kendoNumericTextBox({
+                    format: "d",
+                    decimals: 2
+                });
+            },
+            operators: {
+                object: {
+                    eq: "Is equal to",
+                    neq: "Is not equal to",
+                    gt: "Is greater than",
+                    gte: "Is greater than or equal to",
+                    lt: "Is less than",
+                    lte: "Is less than or equal to"
+                }
+            }
+        };
+
+        $scope.numObjFilter = {
+            ui: function (element) {
+                element.kendoNumericTextBox({
+                    format: "d",
+                    decimals: 0
+                });
+            },
+            operators: {
+                object: {
+                    eq: "Is equal to",
+                    neq: "Is not equal to",
+                    gt: "Is greater than",
+                    gte: "Is greater than or equal to",
+                    lt: "Is less than",
+                    lte: "Is less than or equal to"
+                }
+            }
+        };
+
+        $scope.objFilter = {
+            ui: function (element) {
+                element[0].className = "k-textbox";
+            }
+        },
+
+
 
         $scope.ds = new kendo.data.DataSource({
             type: 'odata',
@@ -93,7 +140,6 @@
             toolbar: kendo.template($("#toolbar-template").html()),
             autoBind: false,
             dataSource: $scope.ds,
-
             filterable: {
                 extra: false,
                 operators: {
@@ -105,6 +151,17 @@
                     }
                 }
             },
+            filterMenuInit: function (e) {
+                if (e.field === "BID_STATUS" || e.field === "OBJ_SET_TYPE_CD") {
+                    var firstValueDropDown = e.container.find("select:eq(0)").data("kendoDropDownList");
+                    var infoMsg = e.container.find(".k-filter-help-text");
+                    setTimeout(function () {
+                        infoMsg.hide();
+                        firstValueDropDown.wrapper.hide();
+                    });
+                }
+            },
+
             sortable: true,
             resizable: true,
             scrollable: true,            
@@ -124,80 +181,71 @@
                     field: "BID_STATUS",
                     title: "Bid Action",
                     template: "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
+                    filterable: {
+                        ui: function (element) {
+                            element.kendoDropDownList({
+                                dataSource: {
+                                    data: [
+                                        "Lost",
+                                        "Won",
+                                        "Offer"
+                                    ]
+                                },
+                                optionLabel: "--Select Value--"
+                            });
+                        },
+                        extra: false
+                    },
                     width: 110
                 }, {
                     field: "DC_ID",
-                    filterable: false,
                     title: "Deal",
                     width: 100,
+                    filterable: $scope.numObjFilter,
                     template: "<div ng-click='navToPath(dataItem)' class='tenderDealId'>#=data.DC_ID#</div>"
                 }, {
                     field: "PRODUCT_FILTER",
                     title: "Product",
                     width: 200,
-                    filterable: {
-                        ui: function (element) {
-                            element.kendoAutoComplete({
-                                dataSource: []
-                            });
-                        }
-                    },
+                    filterable: $scope.objFilter,
                     template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
                 }, {
                     field: "TRKR_NBR",
                     title: "Tracker #",
                     width: 180,
-                    filterable: {
-                        ui: function (element) {
-                            element.kendoAutoComplete({
-                                dataSource: []
-                            });
-                        }
-                    },
+                    filterable: $scope.objFilter,
                     template: "#= gridUtils.tenderDim(data, 'TRKR_NBR') #"
                 }, {
                     field: "ECAP_PRICE",
                     title: "ECAP Price",
                     width: 130,
                     format: "{0:c}",
-                    filterable: {
-                        ui: function (element) {
-                            element[0].className = "k-textbox";
-                        }
-                    },
+                    filterable: $scope.moneyObjFilter,
                     template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
                 }, {
                     field: "CAP",
                     title: "CAP",
                     width: 130,
                     format: "{0:c}",
-                    filterable: {
-                        ui: function (element) {
-                            element[0].className = "k-textbox";
-                        }
-                    },
+                    filterable: $scope.moneyObjFilter,
                     template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
                 }, {
                     field: "YCS2_PRC_IRBT",
                     title: "YCS2",
                     width: 130,
                     format: "{0:c}",
-                    filterable: {
-                        ui: function (element) {
-                            element[0].className = "k-textbox";
-                        }
-                    },
+                    filterable: $scope.moneyObjFilter,
                     template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
                 }, {
                     field: "START_DT",
                     title: "Start Date",
                     template: "#= moment(START_DT).format('MM/DD/YYYY') #",
-                    width: 110
+                    width: 130
                 }, {
                     field: "END_DT",
                     title: "End Date",
                     template: "#= moment(END_DT).format('MM/DD/YYYY') #",
-                    width: 110
+                    width: 130
                 }, {
                     field: "VOLUME",
                     title: "Ceiling Vol",
@@ -205,7 +253,21 @@
                 }, {
                     field: "OBJ_SET_TYPE_CD",
                     title: "Type",
-                    width: 100
+                    width: 100,
+                    filterable: {
+                        ui: function (element) {
+                            element.kendoDropDownList({
+                                dataSource: {
+                                    data: [
+                                        "ECAP",
+                                        "KIT"
+                                    ]
+                                },
+                                optionLabel: "--Select Value--"
+                            });
+                        },
+                        extra: false
+                    }
                 }, {
                     field: "END_CUSTOMER_RETAIL",
                     title: "End Customer",
@@ -352,6 +414,7 @@
                 StrSorts: $scope.searchText
             };
         }
+
         $scope.setBusy = function (msg, detail, msgType) {
             $timeout(function () {
                 var newState = msg != undefined && msg !== "";
@@ -379,6 +442,13 @@
             });
         }
 
+        $scope.EnterPressed = function (event) {
+            //KeyCode 13 is 'Enter'
+            if (event.keyCode === 13) {
+                $scope.loadData();
+            }
+        };
+
         $scope.loadData = function () {
             $scope.gridOptions.dataSource.read();
         }
@@ -387,69 +457,13 @@
             return dataItem.CUST_MBR_SID;
         }
 
-        function applyTempSecurities(data, mode) {
-            // TODO temp override security until it can be setup
-            for (var i = 0; i < data.length; i++) {
-                applyTempSecurity(data[i], mode);
-            }
+        $scope.clearSortingFiltering = function() {
+            var grid = $("#gridTender").data("kendoGrid");
+            if (grid.dataSource.filter() === undefined && grid.dataSource.sort() === undefined) return;
+
+            grid.dataSource.filter({});
+            grid.dataSource.sort({});
+            grid.dataSource.read();
         }
-        function applyTempSecurity(data, mode) {
-            // TODO temp override security until it can be setup
-
-            if (!data._behaviors) data._behaviors = {};
-            //if (!data._behaviors.isReadOnly)
-            data._behaviors.isReadOnly = {};
-            //if (!data._behaviors.isRequired)
-            data._behaviors.isRequired = {};
-            //if (!data._behaviors.isHidden)
-            data._behaviors.isHidden = {};
-
-            if (mode === "WIP_DEAL") {
-                data._behaviors.isReadOnly["WF_STG_CD"] = true;
-                data._behaviors.isReadOnly["CAP_INFO"] = true;
-                data._behaviors.isReadOnly["PTR_USER_PRD"] = true;
-                data._behaviors.isReadOnly["TITLE"] = true;
-                data._behaviors.isReadOnly["END_CUSTOMER_RETAIL"] = true;
-            } else if (mode === "MASTER") {
-                data._behaviors.isReadOnly["Customer"] = true;
-                data._behaviors.isReadOnly["CUST_MBR_SID"] = true;
-                data._behaviors.isReadOnly["WF_STG_CD"] = true;
-                data._behaviors.isReadOnly["CAP_INFO"] = true;
-                data._behaviors.isReadOnly["TITLE"] = true;
-            }
-
-        }
-
-        $scope.saveCell = function (dataItem, newField, scopeDirective, newValue) {
-            debugger;
-            $timeout(function () {
-                if (newField === "Customer") dataItem.CUST_MBR_SID = dataItem.Customer.CUST_SID;
-
-                if (dataItem._behaviors === undefined) dataItem._behaviors = {};
-                if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
-                dataItem._behaviors.isDirty[newField] = true;
-                dataItem._dirty = true;
-                $scope._dirty = true;
-
-                $timeout(function () {
-                    //scopeDirective.contractDs.sync();
-                }, 100);
-            }, 100);
-            
-        }
-
-        $scope.saveEntireContract = function () {
-            var data = $scope.data;
-            debugger;
-        }
-
-        $scope.saveAndValidate = function () {
-            debugger;
-            $scope.$broadcast('saveOpGridData');
-        }
-
-
-
-
     }
 })();

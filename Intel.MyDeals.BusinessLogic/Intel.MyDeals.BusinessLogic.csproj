@@ -113,6 +113,7 @@
     <Compile Include="Resolver.cs" />
     <Compile Include="Rule Engine\RuleEngineLib.cs" />
     <Compile Include="Search\SearchLib.cs" />
+    <Compile Include="Search\SearchTools.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
     <Compile Include="Tenders\TendersLib.cs" />
     <Compile Include="Timeline\TimelineLib.cs" />

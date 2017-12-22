@@ -48,25 +48,21 @@ namespace Intel.MyDeals.Controllers.API
             int maxLength = 1000;
             if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
 
-            int take = options.RawValues.Top == null ? maxLength : int.Parse(options.RawValues.Top);
-            int skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip);
-
-            //OpDataCollectorFlattenedList rtn = new OpDataCollectorFlattenedList();
-            OpDataCollectorFlattenedList rtn = _tenderLib.GetTenderList(new SearchParams
+            SearchResultPacket rtn = _tenderLib.GetTenderList(new SearchParams
             {
                 StrStart = st,
                 StrEnd = en,
-                StrSearch = searchText
+                StrSearch = searchText,
+                StrSorts = options.RawValues.OrderBy ?? "",
+                StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
+                Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
+                Take = options.RawValues.Top == null ? maxLength : int.Parse(options.RawValues.Top)
             });
 
-            var cnt = rtn.Count;
-
-            IEnumerable<OpDataCollectorFlattenedItem> rtnData = rtn.Skip(skip).Take(take);
-
             return new PageResult<OpDataCollectorFlattenedItem>(
-                rtnData, 
-                Request.ODataProperties().NextLink, 
-                cnt);
+                rtn.SearchResults, 
+                Request.ODataProperties().NextLink,
+                rtn.SearchCount);
         }
 
         [Authorize]

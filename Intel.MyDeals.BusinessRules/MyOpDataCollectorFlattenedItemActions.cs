@@ -163,13 +163,15 @@ namespace Intel.MyDeals.BusinessRules
         public static void TranslateProductFilter(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+            if (!r.IsValid || !r.HasExtraArgs) return;
+
+            List<ProductEngName> prods = r.ExtraArgs[0] as List<ProductEngName> ?? new List<ProductEngName>();
 
             foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.PRODUCT_FILTER))
             {
                 int prodId =  int.Parse(de.AtrbValue.ToString());
-                Product prod = DataCollections.GetProductData().FirstOrDefault(p => p.PRD_MBR_SID == prodId);
-                if (prod != null) de.AtrbValue = prod.HIER_VAL_NM;
+                ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
+                if (prod != null) de.AtrbValue = prod.PRODUCT_NAME;
             }
         }
 

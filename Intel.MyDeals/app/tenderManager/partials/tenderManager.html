@@ -13,9 +13,11 @@
                ng-model="endDt"
                k-ng-model="endDtObject"
                style="width: 110px;" />
-
-        <span class="k-textbox" style="width: 300px; margin: 0 5px 0 15px;">
-            <input type="text" placeholder="enter search criteria" ng-model="searchText" />
+        
+        <span class="t-tip" kendo-tooltip k-position="'top'" k-content="'{{helpMsg}}'">
+            <span class="k-textbox" style="width: 300px; margin: 0 5px 0 15px;">
+                <input type="text" placeholder="enter search criteria" ng-model="searchText" ng-keypress="EnterPressed($event)" />
+            </span>
         </span>
         <i class="k-icon intelicon-search tender-search" ng-click="loadData()" style="font-size: 26px !important;" title="Click to begin the Search"></i>
 
@@ -30,6 +32,24 @@
                             <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Export to Excel<br>
                                 Current View
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+
+        <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+            <button class="btn btn-sm ssToolbarBtn" ng-click="clearSortingFiltering()" title="Clear all sorting and filtering.">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-cancel-filter-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Clear All<br>
+                                Sorting/Filtering
                             </td>
                         </tr>
                     </tbody>
@@ -52,12 +72,27 @@
         overflow-x: hidden;
     }
 
+    .t-tip {
+        text-align: center;
+        width: 250px;
+        white-space: nowrap;
+        color: #666666 !important;
+        border-width: 1px;
+        border-style: solid;
+        padding: 1em 0;
+        border:0 solid transparent;
+    }
+
     .tenderDealId {
         cursor: pointer;
         color: #00AEEF;
     }
     .tenderDealId:hover {
         color: #003C71;
+    }
+
+    #gridTender.k-grid .k-state-active, #gridTender.k-grid .k-state-active:hover, #gridTender.k-grid .k-active-filter {
+        background-color: #eeeeee;
     }
 
     .noaccess {

@@ -27,11 +27,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetAdvancedSearchResults/{searchText}")]
-        public List<AdvancedSearchResults> GetAdvancedSearchResults(string searchText)
+        [Route("GetAdvancedSearchResults/{searchCondition}/{orderBy}/{searchObjTypes}")]
+        public SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes)
         {
-            return SafeExecutor(() => _searchLib.GetAdvancedSearchResults(searchText, AppLib.GetMyCustomersInfo().Select(c => c.CUST_SID).Distinct().ToList())
-                , $"Unable to get Search Results for {searchText}"
+            return SafeExecutor(() => _searchLib.GetAdvancedSearchResults(searchCondition, orderBy, searchObjTypes, 0, 1000)
+                , $"Unable to get Search Results"
             );
         }
     }

@@ -9,7 +9,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList GetChildren(int id);
 
-        OpDataCollectorFlattenedList GetTenderList(SearchParams data);
+        SearchResultPacket GetTenderList(SearchParams data);
 
         OpMsgQueue ActionTenders(string dcIds, string actn);
     }

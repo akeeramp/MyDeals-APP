@@ -6,8 +6,6 @@ using System.Linq;
 using Intel.MyDeals.IBusinessLogic;
 using System.Text.RegularExpressions;
 using System;
-using System.Data;
-using System.Text;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -1298,6 +1296,11 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return GetMatchingProduct(filter, _getSearchString);
+        }
+
+        public List<ProductEngName> GetEngProducts(List<int> prds)
+        {
+            return _productDataLib.GetEngProducts(prds);
         }
     }
 

@@ -26,9 +26,10 @@ namespace Intel.MyDeals.BusinessLogic
             _searchDataLib = searchDataLib;
         }
 
-        public List<AdvancedSearchResults> GetAdvancedSearchResults(string searchText, List<int> custIds)
+        public SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes, int skip, int take)
         {
-            return _searchDataLib.GetAdvancedSearchResults(searchText, custIds).OrderBy(sr => sr.CUST_NM).ToList();
+            //AppLib.GetMyCustomersInfo().Select(c => c.CUST_SID).Distinct().ToList()
+            return _searchDataLib.GetAdvancedSearchResults(searchCondition, orderBy, searchObjTypes, skip, take);
         }
 
         /// <summary>

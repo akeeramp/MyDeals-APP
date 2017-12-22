@@ -255,10 +255,14 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//PR_MYDL_ADV_SRCH_OBJ
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_ADV_SRCH_OBJ] @in_srch_txt = 'WILL NOT FIND THIS', @EMP_WWID=11637989");
+	ds = dbobjects.ExecuteDataSet("EXEC dbo.PR_MYDL_ADV_SRCH_OBJ 'CNTRCT_TITLE = ''TENDER''','', 'WIP_DEAL'");
 	ds.Tables[0].TableName = "AdvancedSearchResults";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//PR_MYDL_GET_PRD_HIER_NM
+	ds = dbobjects.ExecuteDataSet("DECLARE @PRD_SIDS [dbo].[type_int_list]; INSERT INTO @PRD_SIDS(ITEM) VALUES (2); EXEC dbo.PR_MYDL_GET_PRD_HIER_NM @PRD_SIDS");
+	ds.Tables[0].TableName = "ProductEngName";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CAP_YCS2_CALC] @PrcCond='YCS2', @FlagPick='N'");
 	ds.Tables[0].TableName = "ProductCAPYCS2";

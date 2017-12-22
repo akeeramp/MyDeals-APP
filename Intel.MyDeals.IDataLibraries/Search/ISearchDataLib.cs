@@ -7,7 +7,7 @@ namespace Intel.MyDeals.IDataLibrary
 	{
 		List<SearchResults> GetSearchResults(string searchText, List<int> custIds);
 
-        List<AdvancedSearchResults> GetAdvancedSearchResults(string searchText, List<int> custIds);
+        SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes, int skip, int take);
 
     }
 }

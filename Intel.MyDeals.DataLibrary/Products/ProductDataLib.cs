@@ -1048,5 +1048,39 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+
+        public List<ProductEngName> GetEngProducts(List<int> prds)
+        {
+            OpLog.Log("GetEngProducts");
+            var ret = new List<ProductEngName>();
+            try
+            {
+                Procs.dbo.PR_MYDL_GET_PRD_HIER_NM cmd = new Procs.dbo.PR_MYDL_GET_PRD_HIER_NM
+                {
+                    in_prd_mbr_sids = new type_int_list(prds.ToArray())
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                    int IDX_PRODUCT_NAME = DB.GetReaderOrdinal(rdr, "PRODUCT_NAME");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new ProductEngName
+                        {
+                            PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                            PRODUCT_NAME = (IDX_PRODUCT_NAME < 0 || rdr.IsDBNull(IDX_PRODUCT_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT_NAME)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
     }
 }
