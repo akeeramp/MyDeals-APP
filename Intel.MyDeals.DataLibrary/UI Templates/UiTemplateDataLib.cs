@@ -424,17 +424,17 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Forecast Volume *",
                 DataType = "number"
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.VOLUME,
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 29,
+				AtrbCd = AttributeCodes.VOLUME,
 				Label = "Ceiling Volume *",
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
-                Width = 110,
-                IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+				Width = 110,
+				IsRequired = true
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 30,
                 AtrbCd = AttributeCodes.START_DT,
@@ -715,6 +715,7 @@ namespace Intel.MyDeals.DataLibrary
 				Id = 41,
 				AtrbCd = AttributeCodes.PROD_INCLDS,
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.TENDER },
 				DataType = "string",
 				Width = 100,
 				UiType = "DROPDOWN",
@@ -722,6 +723,21 @@ namespace Intel.MyDeals.DataLibrary
 				LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
 				LookupText = "DROP_DOWN",
 				LookupValue = "DROP_DOWN"
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 41,
+				AtrbCd = AttributeCodes.PROD_INCLDS,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+				DataType = "string",
+				Width = 100,
+				UiType = "DROPDOWN",
+				Label = "Media *",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				IsHidden = true // The only difference between KIT and the other deal types
 			});
 			items.Add(new UiTemplateContainerItem
             {

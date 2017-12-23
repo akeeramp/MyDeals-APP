@@ -1146,7 +1146,7 @@ namespace Intel.MyDeals.BusinessRules
 			{
 				items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
 
-				// maximum 10 products allowed
+				// Rule: maximum 10 products allowed
 				if (items.Count > 10)
 				{
 					dePrdUsr.AddMessage("Too many products. Please remove products.");
@@ -1155,23 +1155,30 @@ namespace Intel.MyDeals.BusinessRules
 				
 				foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
 				{
-					foreach (ProdMapping map in prdMapping.Value)
+					foreach (ProdMapping prod in prdMapping.Value)
 					{
-						// Up the L1 and L2 counts
-						if (map.HAS_L1 == "true")
+						// Rule: CPU products must be Tray
+						if (prod.DEAL_PRD_TYPE.ToString().Equals("CPU", StringComparison.OrdinalIgnoreCase) && !prod.MM_MEDIA_CD.ToString().Equals("TRAY", StringComparison.OrdinalIgnoreCase))
 						{
+							dePrdUsr.AddMessage("CPU products must have a media of Tray. Please check Product Selector has your correct product.");
+						}
+
+						// Rule: Up the L1 and L2 counts
+						if (prod.HAS_L1 == "true")
+						{
+							// Rule: Each L1 can only have a Qty of 1
 							if (parsedQty > 1)
 							{
 								deQty.AddMessage("L1 Products can only have a Qty of 1.");
 							}
 							numOfL1s += parsedQty;
 						}
-						else if (map.HAS_L2 == "true")
+						else if (prod.HAS_L2 == "true")
 						{
 							numOfL2s += parsedQty;
 						}
 
-						// Do valiation: maximum 2L1 or if 1 L1 then maximum one L2 allowed
+						// Do valiation: maximum 2 L1s, or if 1 L1 then maximum one L2 allowed
 						if (numOfL1s > 2)
 						{
 							dePrdUsr.AddMessage("You can only have up to two L1s. Please check that your products and their Qty meet this requirement.");
