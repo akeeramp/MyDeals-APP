@@ -23,12 +23,24 @@
         $scope.isBusyMsgTitle = "";
         $scope.isBusyMsgDetail = "";
         $scope.isBusyType = "";
-        $scope.newDealId = -100;
-        $scope.startDt = "1/1/2017";
-        $scope.endDt = "12/31/2017";
         $scope.searchText = "";
         $scope.curLinkedVal = "";
-        $scope.helpMsg = "<div style=\"margin-bottom: 5px; \"><b>Search Tip</b></div>Search for Deal #, End Customer, Project Name, Product or Tracker #<br/><div style=\"color: #666666; margin: 5px 0;\">Example: <i>i7-5*, Best Buy</i></div>";
+        $scope.helpMsg = "<div style=\"margin-bottom: 5px; \"><b>Search Tip</b></div>Search by Deal #, End Customer, Project Name, Bid Status <span class=\"color: #666666; font-size: 10px;\">(Offer, Lost, Won)</span>, Product or Tracker #<br/><div style=\"color: #666666; margin: 5px 0;\">Example: <i>i7-5*, Offer</i></div>";
+        $scope.$storage = $localStorage;
+
+        $scope.$storage = $localStorage.$default({
+            startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
+            endDate: moment().add(6, 'months').format("MM/DD/YYYY")
+        });
+
+        // init dashboard
+        $scope.startDt = $scope.$storage.startDate;
+        $scope.endDt = $scope.$storage.endDate;
+
+        $scope.changeDt = function() {
+            $scope.$storage.startDate = $scope.startDt;
+            $scope.$storage.endDate = $scope.endDt;
+        }
 
         $scope.moneyObjFilter = {
             ui: function(element) {
@@ -389,12 +401,13 @@
 
                     if (foundIt) {
                         $scope.curLinkedVal = "";
-                        $scope.ds.read();
+                        $scope.ds.read();  // we rely on the DS post load to close down the busy indicator
+                    } else {
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 50);
                     }
 
-                    $timeout(function () {
-                        $scope.setBusy("", "");
-                    }, 50);
                 },
                 function (result) {
                     //debugger;

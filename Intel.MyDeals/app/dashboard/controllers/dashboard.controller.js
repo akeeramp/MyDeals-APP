@@ -22,8 +22,8 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
    
     $scope.$storage = $localStorage.$default({
         selectedDashboardId: '1',
-        startDate: "1/1/2017",
-        endDate: "12/31/2017",
+        startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
+        endDate: moment().add(6, 'months').format("MM/DD/YYYY"),
         selectedCustomerId: ''
     });
 

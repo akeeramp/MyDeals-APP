@@ -6,11 +6,13 @@
         <span>Date Range:</span>
         <input kendo-date-picker
                ng-model="startDt"
+               ng-change="changeDt()"
                k-ng-model="startDtObject"
                style="width: 110px;" />
         <span style="margin: 0 5px;">-</span>
         <input kendo-date-picker
                ng-model="endDt"
+               ng-change="changeDt()"
                k-ng-model="endDtObject"
                style="width: 110px;" />
         
@@ -74,13 +76,16 @@
 
     .t-tip {
         text-align: center;
-        width: 250px;
         white-space: nowrap;
-        color: #666666 !important;
         border-width: 1px;
         border-style: solid;
         padding: 1em 0;
         border:0 solid transparent;
+    }
+
+    .t-tip .k-tooltip-content {
+        width: 350px;
+color: yellow;        
     }
 
     .tenderDealId {

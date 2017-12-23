@@ -82,7 +82,8 @@ namespace Intel.MyDeals.BusinessLogic
                 AttributeCodes.END_CUSTOMER_RETAIL,
                 AttributeCodes.QLTR_PROJECT,
                 AttributeCodes.TRKR_NBR,
-                AttributeCodes.TITLE
+                AttributeCodes.TITLE,
+                AttributeCodes.BID_STATUS
             };
 
             // Tender Deals
@@ -140,6 +141,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Build Order By
             string orderBy = string.IsNullOrEmpty(data.StrSorts) ? "" : $"{OpDataElementType.WIP_DEAL}_{data.StrSorts}";
+            // Special case = DC_ID... need to replace
+            orderBy = orderBy.Replace("DC_ID", "OBJ_SID");
+            if (string.IsNullOrEmpty(orderBy)) orderBy = "WIP_DEAL_OBJ_SID desc";
 
             // Build Search Packet from DB... will return a list of dc_ids and count
             // This will take in consideration the Skip and Take for performance
