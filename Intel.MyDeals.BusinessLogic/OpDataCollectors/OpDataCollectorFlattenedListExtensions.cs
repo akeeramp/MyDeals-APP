@@ -168,6 +168,11 @@ namespace Intel.MyDeals.BusinessLogic
             mydealsData.EnsureBatchIDs();
             MyDealsData responseData = mydealsData.Save(contractToken);
 
+            if (!responseData.Keys.Any())
+            {
+                return new OpMsg(OpMsg.MessageType.Info, "No Items needed to be Rolled Back.");
+            }
+
             // Strategy level is just a save, PT is not detectable save, the rest are combination of DELETED_OBJ IDs at PTR or rollback IDs at WIP.  
             // Assume success unless things crashed, then outer messages will trigger instead.
             string retMsg = "Rollback Successful";
