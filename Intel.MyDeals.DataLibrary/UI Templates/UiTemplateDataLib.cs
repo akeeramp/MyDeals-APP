@@ -430,11 +430,11 @@ namespace Intel.MyDeals.DataLibrary
 				AtrbCd = AttributeCodes.VOLUME,
 				Label = "Ceiling Volume *",
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
-				Width = 110,
-				IsRequired = true
-			});
-			items.Add(new UiTemplateContainerItem
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 110,
+                IsRequired = false
+            });
+            items.Add(new UiTemplateContainerItem
             {
                 Id = 30,
                 AtrbCd = AttributeCodes.START_DT,
