@@ -98,6 +98,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.parentRoot = $scope.root;
             //$scope.parentRoot = !!$scope.opOptions.rootParentScope ? $scope.opOptions.rootParentScope : $scope.$parent.$parent.$parent.$parent.$parent;
 
+            $scope.showStage = function (dataItem) {
+                return gridUtils.stgFullTitleChar(dataItem);
+            }
+
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
 

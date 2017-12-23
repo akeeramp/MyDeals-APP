@@ -35,9 +35,9 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
-gridUtils.uiParentControlWrapper = function (passedData, field) {
+gridUtils.uiParentControlWrapper = function (dataItem) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="gridUtils.getStage(dataItem)"></div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="showStage(dataItem)"></div>';
     tmplt += '</div>';
     return tmplt;
 }
@@ -565,11 +565,6 @@ gridUtils.getBidActions = function (data) {
 
 gridUtils.stgFullTitleChar = function (dataItem) {
     return dataItem.WF_STG_CD === "Draft" ? dataItem.PS_WF_STG_CD : dataItem.WF_STG_CD;
-}
-
-gridUtils.getStage = function (dataItem) {
-    if (dataItem.WF_STG_CD === "Draft") dataItem.WF_STG_CD = dataItem.PS_WF_STG_CD;
-    return gridUtils.stgFullTitleChar(dataItem);
 }
 
 
