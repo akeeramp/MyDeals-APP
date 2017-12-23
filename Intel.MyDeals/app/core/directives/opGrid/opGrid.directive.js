@@ -1006,11 +1006,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 for (var c = 0; c < cols.length; c++) {
                     if (cols[c].field === options.field) col = cols[c];
                 }
-
+                var model = {};
                 var el = "";
                 if (options.field === "KIT_ECAP") { //Special condition for Kit Ecap which actually reads from Ecap Price -1 dim
-                    var model = {};
                     model["20_____1"] = options.model["ECAP_PRICE"]["20_____1"];
+                    for (var key in model) {
+                        if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
+                            el += $scope.createEditEl("ECAP_PRICE", field.uiType, key, field.format);
+                        }
+                    }
+                } else if (options.field === "SUBKIT_ECAP") {                  
+                    model["20_____2"] = options.model["ECAP_PRICE"]["20_____2"];
                     for (var key in model) {
                         if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
                             el += $scope.createEditEl("ECAP_PRICE", field.uiType, key, field.format);

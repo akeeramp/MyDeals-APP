@@ -319,6 +319,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             List<string> singleDimAtrbs, List<string> multiDimAtrbs, List<ProdMapping> pMaps, string geo)
         {
             string baseEcapDimKey = "_____20___0";
+            string baseKitDimKey = "_____20___";
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
             // make a copy so we don't cross-contaminate records
@@ -357,10 +358,24 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     List<string> pCat = new List<string>();
                     bool pHasL1 = false;
                     bool pHasL2 = false;
-
+                    var dim = 0;
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
-                        opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;
+                        if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+                        {
+                            opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___" + dim] = pMap.PRD_MBR_SID;  //copying the original code where it only has 4 leading underscores - why is that the case? seems intentional...
+                            opFlatItem[AttributeCodes.CAP + baseKitDimKey + dim] = pMap.CAP;
+                            opFlatItem[AttributeCodes.CAP_STRT_DT + baseKitDimKey + dim] = pMap.CAP == "No CAP" ? "" : pMap.CAP_START;
+                            opFlatItem[AttributeCodes.CAP_END_DT + baseKitDimKey + dim] = pMap.CAP == "No CAP" ? "" : pMap.CAP_END;
+                            opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + dim] = pMap.YCS2;
+                            opFlatItem[AttributeCodes.YCS2_START_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_START;
+                            opFlatItem[AttributeCodes.YCS2_END_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_END;
+                        } else
+                        {
+                            opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;  //why did this only have 4 underscores?
+                        }
+                        dim++;
+                            
                         pTitle.Add(pMap.HIER_VAL_NM);
                         pCat.Add(pMap.PRD_CAT_NM);
                         bool l1, l2;
@@ -371,7 +386,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     opFlatItem[AttributeCodes.HAS_L1] = pHasL1;
                     opFlatItem[AttributeCodes.HAS_L2] = pHasL2;
                     opFlatItem[AttributeCodes.TITLE] = string.Join(",", pTitle);
-                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat.Distinct());
+                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat.Distinct());  
 
                     break;
             }

@@ -142,12 +142,47 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
     }
     tmplt += '</table>';
 
+    if (tmplt == '<table></table>') {   //if table comes out empty, just set same behavior as single dim version, generally just a blank readonly div
+        tmplt = gridUtils.uiDimControlWrapper(passedData, field, '20___0', format);
+    }
+
     return tmplt;
+}
+
+gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
+    var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on? 
+
+    var YCS2modifier = "";
+    if (field === "YCS2") {
+        YCS2modifier = "_PRC_IRBT";
+    }
+
+    var tmplt = '<table>';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+            tmplt += '<tr style="height: 25px;">';
+            tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+            tmplt += "<op-popover ";
+            if (field === "CAP") {
+                tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\")'";
+            }
+            tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\")'>";
+            tmplt += gridUtils.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, field + '_STRT_DT', field + '_END_DT', dimkey);
+            tmplt += "</op-popover>";
+            tmplt += '</td>';
+            tmplt += '</tr>';
+        }
+    }
+    tmplt += '</table>';
+
+    return tmplt;
+    
 }
 
 //this control wrapper to be used for displaying which product is associated with each dimention
 gridUtils.uiProductDimControlWrapper = function (passedData) {
-    var data = passedData["TITLE"].split(',');    //KITTODO: Title vs PTR_USER_PRD - which should i be using if either?
+    var data = passedData["TITLE"].split(',');
 
     var tmplt = '<table>';
     for (var i = 0; i < data.length; i++) {
@@ -213,7 +248,15 @@ gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
 gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
     var tmplt = '';
     tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount) ' + gridUtils.getFormat("", 'currency') + ')"></div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'kit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+//this control wrapper is only used to calculate SKIT deal's SUBKIT_REBATE_BUNDLE_DISCOUNT
+gridUtils.uiSubKitRebateBundleDiscountControlWrapper = function (passedData) {
+    var tmplt = '';
+    tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'subkit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
     tmplt += '</div>';
     return tmplt;
 }

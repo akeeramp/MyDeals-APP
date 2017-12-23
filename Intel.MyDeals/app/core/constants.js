@@ -111,6 +111,7 @@
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
+                    { "name": "SubKit", "order": 3 },
                     { "name": "CAP Info", "order": 98 },
                     { "name": "All", "order": 99 }
                 ],
@@ -643,10 +644,10 @@
                 },
                 "KIT": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -681,6 +682,9 @@
                     "PTR_USER_PRD": {
                         "Groups": ["Deal Info"]
                     },
+                    "PRODUCT_CATEGORIES": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
@@ -691,30 +695,66 @@
                         "Groups": ["Deal Info"]
                     },
                     "DEAL_GRP_NM": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
                     },
                     "PRD_BCKT": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
                     },
                     "PRIMARY_OR_SECONDARY": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
                     },
                     "ECAP_PRICE": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
                     },
                     "KIT_ECAP": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
+                    },
+                    "SUBKIT_ECAP": {
+                        "Groups": ["SubKit"]
                     },
                     "KIT_REBATE_BUNDLE_DISCOUNT": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
+                    },
+                    "SUBKIT_REBATE_BUNDLE_DISCOUNT": {
+                        "Groups": ["SubKit"]
                     },
                     "DSCNT_PER_LN": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
                     },
                     "QTY": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "SubKit"]
                     },
                     "TOTAL_DSCNT_PR_LN": {
+                        "Groups": ["Deal Info", "SubKit"]
+                    },
+                    "CAP_INFO": {
+                        "Groups": ["Deal Info", "CAP Info"]
+                    },
+                    "CAP": {
+                        "Groups": ["All", "CAP Info"]
+                    },
+                    "CAP_STRT_DT": {
+                        "Groups": ["All", "CAP Info"]
+                    },
+                    "CAP_END_DT": {
+                        "Groups": ["All", "CAP Info"]
+                    },
+                    "YCS2_INFO": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "YCS2_PRC_IRBT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_START_DT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_END_DT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_OVERLAP_OVERRIDE": {
+                        "Groups": ["All"]
+                    },
+                    "EXPIRE_YCS2": {
                         "Groups": ["Deal Info"]
                     },
                     "SERVER_DEAL_TYPE": {

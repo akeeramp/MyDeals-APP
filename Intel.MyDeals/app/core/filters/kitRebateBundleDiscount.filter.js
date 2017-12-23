@@ -10,7 +10,8 @@
     // This filter function calculates the Kit Deal's Rebate Bundle Discount value (sum of each product's QTY * DISCOUNT PER LINE within that deal)
     function kitRebateBundleDiscount($filter) {
 
-        return function (items) {
+        return function (items, type) {
+            //TODO: use type to apply different filters for SUBKIT vs KIT
 
             var data = items["ECAP_PRICE"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - also are QTY and dscnt_per_line required columns? if not we are going to need to put in checks
             var total = 0;
