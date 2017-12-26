@@ -45,7 +45,7 @@
                     resolve: {
                         securityLoaded: ['securityService', function (securityService) {
                             return securityService.loadSecurityData();
-                        }],
+                        }]
                     }
                 }
             },
@@ -56,6 +56,22 @@
                     templateUrl: '/app/advancedSearch/advancedSearch.html',
                     url: 'search',
                     controller: 'AdvancedSearchController as vm'
+                }
+            },
+            {
+                state: 'advancedSearch.gotoPs',
+                config: {
+                    url: 'gotoPs/{dcid:int}',
+                    templateUrl: '/app/advancedSearch/psSearch.html',
+                    controller: 'PsSearchController'
+                }
+            },
+            {
+                state: 'advancedSearch.gotoDeal',
+                config: {
+                    url: 'gotoDeal/{dcid:int}',
+                    templateUrl: '/app/advancedSearch/dealSearch.html',
+                    controller: 'DealSearchController'
                 }
             }
         ];

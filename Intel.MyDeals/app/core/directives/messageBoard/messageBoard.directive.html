@@ -10,15 +10,55 @@
             <div ng-hide="infoCnt == 0" style="color: #C4D600; font-size: 18px;"><i class="intelicon-information-solid" style="font-size: 18px; color: #C4D600;"></i> {{infoMsg}}</div>
             <div ng-hide="warnCnt == 0" style="color: #FC4C02; font-size: 18px;"><i class="intelicon-alert-solid" style="font-size: 18px; color: #FC4C02;"></i> {{warnMsg}}</div>
             <div style="margin-top: 15px;">
-                <div style="font-size: 12px;"><a href="" ng-click="showDetails=true" ng-hide="showDetails">View details</a></div>
-                <div style="font-size: 12px;"><a href="" ng-click="showDetails=false" ng-show="showDetails">Hide details</a></div>
+                <button class="btn btn-secondary btn-sm" type="button" ng-click="showDetails=true" ng-hide="showDetails">
+                    <i class="intelicon-right-next" style="font-size: 20px;"></i> View details
+                </button>
+                <button class="btn btn-secondary btn-sm" type="button" ng-click="showDetails=false" ng-show="showDetails">
+                    <i class="intelicon-down" style="font-size: 20px;"></i> Hide details
+                </button>
+                <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 15px;" ng-click="openEmailMsg()">
+                    <i class="intelicon-email-message-outlined" style="font-size: 20px;"></i> Email details
+                </button>
+                <div class="clearboth"></div>
             </div>
         </div>
     </div>
+
 </div>
 
 
 <div id="msgGrid" class="msgGrid" ng-show="showDetails" style="margin-top: 20px;"></div>
+
+<!-- Don't use quotes -->
+<script id="emailItemTemplate" type="text/x-kendo-template">
+
+    <div style='font-family:sans-serif;'>
+        <p><span style='font-size:48px;'>My Deals</span></p>
+        <p><span style='font-size: 14px;'>Please review the following list of Pricing Strategies that have changed.  Click <strong>View Pricing Strategy</strong> to open My Deals and view the details of the Pricing Strategy.</span></p>
+        <p><span style='font-size:18px;'>Pricing Strategies</span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy \\#</strong></th>
+                    <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>New Stage</strong></th>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                # for (var i = 0; i < data.length; i++) { #
+                <tr>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data[i].url #'>#= data[i].DC_ID #</a></span> </td>
+                    <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data[i].TITLE #</span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#767171;'>Moved to the #= data[i].NEW_STG # </span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data[i].url #'>View Pricing Strategy</a></span> </td>
+                </tr>
+                # } #
+            </tbody>
+        </table>
+    </div>
+
+</script>
 
 <style>
     .k-window-actions .k-i-close {

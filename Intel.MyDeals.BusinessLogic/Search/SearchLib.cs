@@ -11,7 +11,7 @@ namespace Intel.MyDeals.BusinessLogic
     public class SearchLib : ISearchLib
     {
         private readonly ISearchDataLib _searchDataLib;
-        
+
         /// <summary>
         /// TODO: This parameterless constructor is left as a reminder,
         /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
@@ -26,7 +26,8 @@ namespace Intel.MyDeals.BusinessLogic
             _searchDataLib = searchDataLib;
         }
 
-        public SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes, int skip, int take)
+        public SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes,
+            int skip, int take)
         {
             //AppLib.GetMyCustomersInfo().Select(c => c.CUST_SID).Distinct().ToList()
             return _searchDataLib.GetAdvancedSearchResults(searchCondition, orderBy, searchObjTypes, skip, take);
@@ -39,6 +40,33 @@ namespace Intel.MyDeals.BusinessLogic
         public List<SearchResults> GetSearchResults(string searchText, List<int> custIds)
         {
             return _searchDataLib.GetSearchResults(searchText, custIds).OrderBy(sr => sr.CUSTOMER).ToList();
+        }
+
+        public DcPath GotoDcId(OpDataElementType opDataElementType, int dcId)
+        {
+            // Get DcPath
+            DcPath dcPath = opDataElementType.GetDcPath(dcId);
+
+            // Make sure the user has access to the Deal
+            if (dcPath.ContractId <= 0) {
+                return new DcPath
+                {
+                    Message = $"Could not find {opDataElementType.ToDesc()} {dcId}."
+                };
+            }
+
+            MyCustomersInformation cust = new CustomerLib().GetMyCustomersInfo(dcPath.CustMbrSid);
+            if (cust == null)
+            {
+                // No access to the Customer
+                return new DcPath
+                {
+                    Message = $"You do not have access to view {opDataElementType.ToDesc()} {dcId}."
+                };
+            }
+
+            return dcPath;
+
         }
     }
 }

@@ -13,6 +13,7 @@ function objsetService($http, dataService, logger, $q) {
     var apiBasePricingTableUrl = "/api/PricingTables/v1/";
     var apiBaseCostTestUrl = "/api/CostTest/v1/";
     var apiBaseTenderUrl = "/api/Tenders/v1/";
+    var apiBaseEmailUrl = "/api/Email/";
 
     var service = {
         createContract: createContract,
@@ -43,6 +44,7 @@ function objsetService($http, dataService, logger, $q) {
         rollbackPricingTableRow: rollbackPricingTableRow,
         unGroupPricingTableRow: unGroupPricingTableRow,
         getPath: getPath,
+        emailActions: emailActions,
 
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
@@ -149,6 +151,9 @@ function objsetService($http, dataService, logger, $q) {
     }
     function getPath(id, opType) {
         return dataService.get(apiBasePricingTableUrl + 'getPath/' + id + '/' + opType);
+    }
+    function emailActions(data) {
+        return dataService.post(apiBaseEmailUrl + 'ActionChanges', data);
     }
 
     // #### CONTRACT CRUD ####

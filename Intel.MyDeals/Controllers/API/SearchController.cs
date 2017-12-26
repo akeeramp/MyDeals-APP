@@ -27,10 +27,21 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetAdvancedSearchResults/{searchCondition}/{orderBy}/{searchObjTypes}")]
-        public SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes)
+        [HttpGet]
+        [Route("GotoDeal/{dcid}")]
+        public DcPath GotoDeal(int dcid)
         {
-            return SafeExecutor(() => _searchLib.GetAdvancedSearchResults(searchCondition, orderBy, searchObjTypes, 0, 1000)
+            return SafeExecutor(() => _searchLib.GotoDcId(OpDataElementType.WIP_DEAL, dcid)
+                , $"Unable to get Search Results"
+            );
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GotoPs/{dcid}")]
+        public DcPath GotoPs(int dcid)
+        {
+            return SafeExecutor(() => _searchLib.GotoDcId(OpDataElementType.PRC_ST, dcid)
                 , $"Unable to get Search Results"
             );
         }

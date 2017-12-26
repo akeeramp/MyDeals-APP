@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
+using System.Web;
 using System.Web.Mvc;
 using Intel.MyDeals.Entities;
 
@@ -16,19 +17,31 @@ namespace Intel.MyDeals.Controllers
             return View();
         }
 
-        //[ValidateInput(false)]
+        [ValidateInput(false)]
         //string body
-        public ActionResult SubmissionNotification()
+        [HttpPost]
+        public ActionResult SubmissionNotification(EmailMessage emailMessage)
         {
+            string from = string.IsNullOrEmpty(emailMessage.From)
+                ? OpUserStack.MyOpUserToken.Usr.Email
+                : emailMessage.From;
+
             var message = new MailMessage
             {
-                From = new MailAddress(OpUserStack.MyOpUserToken.Usr.Email),
-                Subject = "My Deals Submission Notification",
-                Body = "This is the <b>body</b>",
+                From = new MailAddress(from),
+                Subject = emailMessage.Subject,
+                Body = emailMessage.Body,
                 IsBodyHtml = true
             };
 
             message.To.Add(OpUserStack.MyOpUserToken.Usr.Email);
+
+
+            //StringWriter myWriter = new StringWriter();
+            //// Decode the encoded string.
+            //HttpUtility.HtmlDecode(emailMessage.Body, myWriter);
+            //Console.Write("Decoded string of the above encoded string is " +
+            //               myWriter.ToString());
 
             // mark as draft
             message.Headers.Add("X-Unsent", "1");

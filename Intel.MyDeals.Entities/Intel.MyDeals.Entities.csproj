@@ -69,6 +69,7 @@
     <Compile Include="ContractToken.cs" />
     <Compile Include="CostTestDetails.cs" />
     <Compile Include="DashboardFilter.cs" />
+    <Compile Include="DcPath.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
     <Compile Include="CrudModes.cs" />

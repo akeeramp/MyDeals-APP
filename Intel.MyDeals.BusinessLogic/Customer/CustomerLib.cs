@@ -139,6 +139,11 @@ namespace Intel.MyDeals.BusinessLogic
             return GetMyCustomers().CustomerInfo;
         }
 
+        public MyCustomersInformation GetMyCustomersInfo(int custId)
+        {
+            return GetMyCustomers().CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+        }
+
         ///// <summary>
         ///// Get Customer Sold To data that belongs to requesting user
         ///// </summary>

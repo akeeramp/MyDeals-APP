@@ -251,7 +251,6 @@
     <Compile Include="Controllers\API\DashboardController.cs" />
     <Compile Include="Controllers\API\EcapTrackerController.cs" />
     <Compile Include="Controllers\API\DropdownController.cs" />
-    <Compile Include="Controllers\API\EmailController.cs" />
     <Compile Include="Controllers\API\FileAttachmentsController.cs" />
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
@@ -352,10 +351,14 @@
     <Content Include="app\admin\workflow\admin.workflow.controller.js" />
     <Content Include="app\admin\workflow\workflow.html" />
     <Content Include="app\admin\workflow\workflow.service.js" />
+    <Content Include="app\advancedSearch\psSearch.html" />
+    <Content Include="app\advancedSearch\psSearch.controller.js" />
+    <Content Include="app\advancedSearch\dealSearch.controller.js" />
     <Content Include="app\advancedSearch\advancedSearch.controller.js" />
     <Content Include="app\advancedSearch\advancedSearch.html" />
     <Content Include="app\advancedSearch\advancedSearch.module.js" />
     <Content Include="app\advancedSearch\advancedSearch.route.js" />
+    <Content Include="app\advancedSearch\dealSearch.html" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\uiControls\partials\horizontalButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />

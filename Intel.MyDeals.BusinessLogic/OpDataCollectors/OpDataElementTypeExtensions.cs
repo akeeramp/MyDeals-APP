@@ -85,6 +85,67 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData;
         }
 
+        public static DcPath GetDcPath(this OpDataElementType opDataElementType, int dcId)
+        {
+            MyDealsData myDealsData = opDataElementType.GetByIDs(new List<int>
+            {
+                dcId
+            },
+            new List<OpDataElementType>
+            {
+                OpDataElementType.CNTRCT,
+                OpDataElementType.PRC_ST,
+                OpDataElementType.PRC_TBL,
+                OpDataElementType.PRC_TBL_ROW,
+                OpDataElementType.WIP_DEAL,
+            },
+            new List<int>
+            {
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID
+            });
+
+            DcPath dcPath = new DcPath();
+
+            if (!myDealsData.ContainsKey(opDataElementType) ||
+                !myDealsData[opDataElementType].AllDataCollectors.Any())
+            {
+                return dcPath;
+            }
+
+            dcPath.CustMbrSid = myDealsData[OpDataElementType.CNTRCT].AllDataElements
+                .Where(s => s.AtrbCd == AttributeCodes.CUST_MBR_SID)
+                .Select(s => int.Parse(s.AtrbValue.ToString())).FirstOrDefault();
+
+            while (opDataElementType != OpDataElementType.ALL_OBJ_TYPE)
+            {
+                switch (opDataElementType)
+                {
+                    case OpDataElementType.CNTRCT:
+                        dcPath.ContractId = dcId;
+                        break;
+                    case OpDataElementType.PRC_ST:
+                        dcPath.PricingStrategyId = dcId;
+                        break;
+                    case OpDataElementType.PRC_TBL:
+                        dcPath.PricingTableId = dcId;
+                        break;
+                    case OpDataElementType.PRC_TBL_ROW:
+                        dcPath.PricingTableRowId = dcId;
+                        break;
+                    case OpDataElementType.WIP_DEAL:
+                        dcPath.WipDealId = dcId;
+                        break;
+
+                }
+                dcId = myDealsData[opDataElementType].AllDataElements.Select(s => s.DcParentID).FirstOrDefault();
+
+                opDataElementType = opDataElementType.GetParent();
+            }
+
+            return dcPath;
+        }
+
         public static MyDealsData UpdateAtrbValue(this OpDataElementType opDataElementType, ContractToken contractToken, List<int> ids, MyDealsAttribute atrb, object value, bool forceToGoActive = false)
         {
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>

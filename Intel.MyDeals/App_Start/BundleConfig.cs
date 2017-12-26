@@ -214,7 +214,9 @@ namespace Intel.MyDeals
                 , "~/app/testCases/suggestProduct/suggestProduct.service.js"
                 , "~/app/advancedSearch/advancedSearch.module.js"
                 , "~/app/advancedSearch/advancedSearch.route.js"
-                , "~/app/advancedSearch/advancedSearch.controller.js"                
+                , "~/app/advancedSearch/advancedSearch.controller.js"
+                , "~/app/advancedSearch/dealSearch.controller.js"
+                , "~/app/advancedSearch/psSearch.controller.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(

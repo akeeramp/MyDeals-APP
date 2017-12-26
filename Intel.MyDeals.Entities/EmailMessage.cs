@@ -10,6 +10,7 @@ namespace Intel.MyDeals.Entities
     {
         public string Subject { get; set; }
         public string Body { get; set; }
+        public string From { get; set; }
 
     }
 }

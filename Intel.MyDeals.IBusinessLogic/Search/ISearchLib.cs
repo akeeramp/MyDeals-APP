@@ -8,5 +8,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<SearchResults> GetSearchResults(string searchText, List<int> custIds);
 
         SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes, int skip, int take);
+
+        DcPath GotoDcId(OpDataElementType opDataElementType, int dcid);
     }
 }

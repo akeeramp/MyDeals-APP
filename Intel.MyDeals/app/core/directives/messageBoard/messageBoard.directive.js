@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('messageBoard', messageBoard);
 
-messageBoard.$inject = ['$compile', '$timeout'];
+messageBoard.$inject = ['$compile', '$timeout', 'objsetService'];
 
-function messageBoard($compile, $timeout) {
+function messageBoard($compile, $timeout, objsetService) {
 
     return {
         scope: {
@@ -20,6 +20,47 @@ function messageBoard($compile, $timeout) {
             $scope.infoMsg = "";
             $scope.warnMsg = "";
             $scope.showDetails = false;
+
+            $scope.openEmailMsg = function () {
+
+                function lastWord(words) {
+                    var n = words.split(" ");
+                    return n[n.length - 1];
+                }
+
+                var msgMapping = {};
+                for (var m = 0; m < $scope.messages.length; m++) {
+                    msgMapping[$scope.messages[m].KeyIdentifiers[0]] = lastWord($scope.messages[m].Message);
+                }
+
+                var actns = ["Approve", "Revise", "Cancel", "Hold"];
+                var actnList = [];
+
+                var rootUrl = window.location.protocol + "//" + window.location.host;
+
+                var items = [];
+                for (var a = 0; a < actns.length; a++) {
+                    var item = $scope.$parent.emailData[actns[a]];
+                    if (!!item) {
+                        for (var i = 0; i < item.length; i++) {
+                            item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
+                            item[i].url = rootUrl + "/advancedSearch#/gotoPs/" + item[i].DC_ID;
+                            items.push(item[i]);
+                        }
+                    }
+                }
+                actnList.push(kendo.template($("#emailItemTemplate").html())(items));
+
+
+                var url = '/Email/SubmissionNotification';
+                var form = $('<form action="' + url + '" method="post">' +
+                  '<input type="text" name="Subject" value="My Deals Submission Notification" />' +
+                  '<input type="text" name="Body" value="' + actnList.join("\n\n") + '" />' +
+                  '<input type="text" name="From" value="" />' +
+                  '</form>');
+                $('body').append(form);
+                form.submit();
+            }
 
             $scope.$on('refresh', function (event, args) {
                 $timeout(function () {
