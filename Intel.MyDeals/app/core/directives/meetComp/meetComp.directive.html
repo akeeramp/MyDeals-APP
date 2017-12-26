@@ -8,14 +8,14 @@
                 <i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i>
             </button>
             <div class="fl skyblue-text">Save &amp; Validate <br>Meet Comp</div>
+            <div class="fr" style="padding: 0 5px; width: auto;">
+                <div class="btnLastRun" style="font-size: 15px;">{{displayMessage}}</div>
+            </div>
             <div class="clearboth"></div>
+            
         </div>
-
-        <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
-            <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
-                <div class="myDealsGrid" kendo-grid k-scope-field={{dataItem.uniqueGridID}} k-options="detailGridOptions(dataItem)"></div>
-            </div>-->
-        </div>
+        
+        <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions"></div>
     </div>
 </div>
 

@@ -64,25 +64,38 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
                 //WEB API call
                 var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
+                
                 $scope.runIfStaleByHours = 3;
                 $scope.MC_MODE = "D";
                 $scope.$parent.IsFirstLoad = true;
                 $scope.IsMeetCompRun = false;
-                if (!!LAST_MEET_COMP_RUN) {
+                if (!!LAST_MEET_COMP_RUN) {                    
+                    var localTime = gridUtils.convertLocalToPST(new Date());
+                    var lastruntime = moment(LAST_MEET_COMP_RUN);
 
-                    // Get local time in UTC
-                    var localTime = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+                    var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");0
 
-                    // Get server time from a PST time string... manually convert it to UTC
-                    var serverUtcTime = moment(LAST_MEET_COMP_RUN).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
-
-                    var timeDiff = moment.duration(moment(serverUtcTime).diff(moment(localTime)));
+                    var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                     var hh = Math.abs(timeDiff.asHours());
                     var mm = Math.abs(timeDiff.asMinutes());
                     var ss = Math.abs(timeDiff.asSeconds());
-
+                    
                     var dsplNum = hh;
                     var dsplMsg = " hours ago";
+                    $scope.needToRunPct = ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
+
+                    if (dsplNum < 1) {
+                        dsplNum = mm;
+                        dsplMsg = " mins ago";
+                        $scope.needToRunPct = false;
+                    }
+                    if (dsplNum < 1) {
+                        dsplNum = ss;
+                        dsplMsg = " secs ago";
+                        $scope.needToRunPct = false;
+                    }
+
+                    $scope.displayMessage =  "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
 
                     if ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) {
                         $scope.MC_MODE = "A";
@@ -98,7 +111,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                 dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
                     if (response.data.length > 0) {
-                        response.data.forEach(function (obj) { obj.IS_SELECTED = false; });
+                        response.data.forEach(function (obj) { obj.IS_SELECTED = false;});
                         $scope.meetCompMasterdata = response.data;
                         $scope.meetCompUnchangedData = angular.copy(response.data);
                         $scope.meetCompUpdatedList = [];
@@ -257,7 +270,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         .Where(function (x) {
                                             return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
                                         })
-                                        .OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());
+                                        .OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());                                    
                                 },
                                 create: function (e) {
                                 }

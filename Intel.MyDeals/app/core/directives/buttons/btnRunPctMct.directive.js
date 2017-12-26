@@ -43,12 +43,15 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 if (!!$scope.lastRun) {
 
                     // Get local time in UTC
-                    var localTime = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+                    var localTime = gridUtils.convertLocalToPST(new Date());
 
                     // Get server time from a PST time string... manually convert it to UTC
-                    var serverUtcTime = moment($scope.lastRun).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
+                    var lastruntime = moment($scope.lastRun);
 
-                    var timeDiff = moment.duration(moment(serverUtcTime).diff(moment(localTime)));
+                    var serverPstTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+                    //var serverPstTime = moment($scope.lastRun).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
+
+                    var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
                     var hh = Math.abs(timeDiff.asHours());
                     var mm = Math.abs(timeDiff.asMinutes());
                     var ss = Math.abs(timeDiff.asSeconds());

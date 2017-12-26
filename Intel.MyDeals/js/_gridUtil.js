@@ -393,6 +393,11 @@ gridUtils.convertPstToLocal = function (strDt) {
     return moment.tz(strDt, 'America/Los_Angeles').local().format('MM/DD/YYYY hh:mm:ss A');
 }
 
+gridUtils.convertLocalToPST = function (strDt) {
+    moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+    return moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");   
+}
+
 gridUtils.renderCustNm = function (data) {
     var custs = [];
     if (!!data.CustomerDivisions) {
