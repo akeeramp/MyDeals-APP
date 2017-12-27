@@ -97,7 +97,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                     $scope.displayMessage =  "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
 
-                    if ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) {
+                    if ($scope.needToRunPct) {
                         $scope.MC_MODE = "A";
                         $scope.IsMeetCompRun = true;
                     } else {
