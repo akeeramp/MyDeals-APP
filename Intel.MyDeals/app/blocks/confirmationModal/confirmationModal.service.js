@@ -20,7 +20,9 @@
             actionButtonText: 'OK',
             hasActionButton: true,
             headerText: 'Proceed?',
-            bodyText: 'Perform this action?'
+            bodyText: 'Perform this action?',
+            actionResults: null,
+        	closeResults: null
         };
 
         this.showModal = function (customModalDefaults, customModalOptions) {
@@ -52,7 +54,8 @@
                         $uibModalInstance.close(result);
                     };
                     $scope.modalOptions.close = function (result) {
-                        $uibModalInstance.dismiss('cancel');
+                    	if (result == null){ result = 'cancel' }
+                    	$uibModalInstance.dismiss(result);
                     };
                 };
             }

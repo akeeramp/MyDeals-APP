@@ -6,12 +6,12 @@
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn"
-			data-ng-click="modalOptions.close()">
+			data-ng-click="modalOptions.close(modalOptions.closeResults)">
 		{{modalOptions.closeButtonText}}
 	</button>
 	<button class="btn btn-primary"
 			ng-if="modalOptions.hasActionButton"
-			data-ng-click="modalOptions.ok();">
+			data-ng-click="modalOptions.ok(modalOptions.actionResults);">
 		{{modalOptions.actionButtonText}}
 	</button>
 </div>

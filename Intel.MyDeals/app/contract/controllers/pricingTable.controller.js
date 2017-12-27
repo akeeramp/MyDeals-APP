@@ -607,211 +607,225 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         	var isQtyColChanged = (range._ref.topLeft.col <= qtyIndex) && (range._ref.bottomRight.col >= qtyIndex);
 
         	if (isDealGrpColumnIncludedInChanges || isQtyColChanged || isDscntPerLnColChanged) {
-            	var skipUntilRow = null; // HACK: used so we don't check deal group type of merged tiers
-            	var dealGrpSkipVal = "";
+        		var skipUntilRow = null; // HACK: used so we don't check deal group type of merged tiers
+        		var dealGrpSkipVal = "";
+        		var confirmationModPerDealGrp = {};
 
-                range.forEachCell(
+        		range.forEachCell(
 					function (rowIndex, colIndex, value) {
-					    var myRowIndex = (rowIndex - 1);
-					    var myRow = data[myRowIndex];
-					    var myColLetter = String.fromCharCode(intA + (colIndex));
-					    var colName = root.letterToCol[myColLetter];
-					    var prevValue = angular.copy(myRow[colName]);
+						var myRowIndex = (rowIndex - 1);
+						var myRow = data[myRowIndex];
+						var myColLetter = String.fromCharCode(intA + (colIndex));
+						var colName = root.letterToCol[myColLetter];
 
-					    if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
-					        // Override of an existing deal grp name (new val != old val)
-					        if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0) {
-					            delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
-					        }
-					    }
+						if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
+							// Override of an existing deal grp name (new val != old val)
+							if (prevValue !== null && prevValue !== undefined && prevValue.replace(/\s/g, "").length !== 0) {
+								delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+							}
+						}
 
-					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
-                    		var numOfTiers = root.numOfPivot(myRow);
+						if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
+							var prevValue = angular.copy(myRow[colName]);
+							var numOfTiers = root.numOfPivot(myRow);
 
-					    	// HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
-					        var myColLetter = String.fromCharCode(intA + (colIndex));
-					        var colName = root.letterToCol[myColLetter];
-					        myRow[colName] = value.value;
-					        //sourceData[(rowIndex - 1)][colName] = value.value;
+							// HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
+							var myColLetter = String.fromCharCode(intA + (colIndex));
+							var colName = root.letterToCol[myColLetter];
+							myRow[colName] = value.value;
+							//sourceData[(rowIndex - 1)][colName] = value.value;
 
 
-					    	// Update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
-					        	// Transform negative numbers into positive
-					        	if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
-					        		myRow["QTY"] = Math.abs(value.value);
-					        	}
-					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
-					        }
+							// Update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+							if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
+								// Transform negative numbers into positive
+								if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
+									myRow["QTY"] = Math.abs(value.value);
+								}
+								myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
+							}
 
-					    	// Logic to apply to merge cells (multiple tiers)
-					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
-					        	// Set the deal group val to be the same as the first one of the merged rows
-					        	if (colIndex == dealGrpColIndex) {
-					        		value.value = dealGrpSkipVal;
-					        		myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
-					        		//sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
-					        	}
-					        }
-					        else { // Either a cell that is not merged OR the first row of a merged cell
-					        	// If it's a merged cell (multiple tiers) then find out how many rows to skip for
-					        	if (numOfTiers > 1) {
-					        		skipUntilRow = rowIndex + numOfTiers;
-					        		dealGrpSkipVal = value.value;
-					        	}
+							// Logic to apply to merge cells (multiple tiers)
+							if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
+								// Set the deal group val to be the same as the first one of the merged rows
+								if (colIndex == dealGrpColIndex) {
+									value.value = dealGrpSkipVal;
+									myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
+									//sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
+								}
+							}
+							else { // Either a cell that is not merged OR the first row of a merged cell
+								// If it's a merged cell (multiple tiers) then find out how many rows to skip for
+								if (numOfTiers > 1) {
+									skipUntilRow = rowIndex + numOfTiers;
+									dealGrpSkipVal = value.value;
+								}
 
-					        	var firstTierRow = myRow;
-					        	var firstTierRowIndex = myRowIndex;
+								var firstTierRow = myRow;
+								var firstTierRowIndex = myRowIndex;
 
-					        	var tierNbr = myRow["TIER_NBR"];
-					        	if (tierNbr !== 1) {
-					        		// Get the first tier row
-					        		firstTierRowIndex = (rowIndex - tierNbr);
-					        		firstTierRow = data[firstTierRowIndex];
-					        	}
+								var tierNbr = myRow["TIER_NBR"];
+								if (tierNbr !== 1) {
+									// Get the first tier row
+									firstTierRowIndex = (rowIndex - tierNbr);
+									firstTierRow = data[firstTierRowIndex];
+								}
 
-					        	if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {		// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-					        		// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-					        		firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
-					        	}
-					        	else if (colIndex == dealGrpColIndex)  {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
-					        		var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
+								if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {		// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+									// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+									firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
+								}
+								else if (colIndex == dealGrpColIndex)  {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
+									var dealGrpKey = formatStringAsDealGrpDictKey(value.value);
 
-					        		// Override of an existing deal grp name (new val != old val)
-					        		if (prevValue !== null && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
-					        			delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
-					        		}
+									// Override of an existing deal grp name (new val != old val)
+									if (prevValue !== null && prevValue !== undefined && prevValue.replace(/\s/g, "").length !== 0 && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
+										delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+									}
 
-					        		// Check if deal group name exists in dictionary
-					        		if ($scope.dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
+									// Check if deal group name exists in dictionary
+									if ($scope.dealGrpNameDict[dealGrpKey] !== undefined && dealGrpKey !== formatStringAsDealGrpDictKey(prevValue)) {
 
-					        			var existingRowIndex = $scope.dealGrpNameDict[dealGrpKey]
-					        			var existingRow = data[existingRowIndex];
-
-					        			// Confirmation Dialog
-					        			var modalOptions = {
-					        				closeButtonText: 'Cancel',
-					        				actionButtonText: 'Merge rows',
-					        				hasActionButton: true,
-					        				headerText: 'Deal group merge confirmation',
-					        				bodyText: 'A deal group with this name already exists. Would you like to merge deal groups? Please note that any duplicate products will be removed upon merging.'
-					        			};
-
-					        			// Check if the merge of the existing and new would be over the 10 max limit and don't let them merge, only rename
-					        			if (numOfTiers + root.numOfPivot(existingRow) > 10) { // TODO: maybe have a maxLimit variable instead of a hard-coded 10, which needs to be in product's hard coded 10's also
-					        				modalOptions = {
-					        					closeButtonText: 'Okay',
-					        					hasActionButton: false,
-					        					headerText: 'Deal group merge warning',
-					        					bodyText: 'A deal group with this name already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the deal grp or remove products from this row and try again.'
-					        				};
-					        			}
-
-					        			// Ask user if they want to merge
-					        			confirmationModal.showModal({}, modalOptions)
-											.then(function (result) { // Merge existing row with currently-changing row
-												var existingNumTiers = root.numOfPivot(data[existingRowIndex]);
-												var prevValues = [];
-												var copyOfData = angular.copy(data);
-												var originalNumOfTiers = angular.copy(numOfTiers);
-
-												// Check for and remove duplicates
-												var toMergePrdArr = myRow["PTR_USER_PRD"].toString().split(",");
-												var existingPrdArr = data[existingRowIndex]["PTR_USER_PRD"].toString().split(",");
-												var duplicateCheckerDict = {};
-												for (var i = 0; i < existingPrdArr.length; i++) {
-													duplicateCheckerDict[existingPrdArr[i]] = true;
-												}
-												for (var i = toMergePrdArr.length - 1; i>=0; i--) {
-													if (duplicateCheckerDict.hasOwnProperty(toMergePrdArr[i])) {
-														// This is a duplicate, remove from dataset
-														// NOTE: this means we'll remove the 2nd occurance of the data AKA the merging-into row's instance. Not the existing instance.
-														copyOfData.splice((myRowIndex + i), 1);
-														toMergePrdArr.splice(i, 1);
-														numOfTiers -= 1;
-													} else {
-														duplicateCheckerDict[toMergePrdArr[i]] = true;
-													}
-												}																								
-												var prdsToMergeCSV = toMergePrdArr.join(",");
-
-												// save row data to re-put into merged rows
-												for (var i = 0; i < numOfTiers; i++) {
-													prevValues.push(copyOfData[myRowIndex + i]);
-												}
-												// Update all the rows within the existing row's merged rows. This will prevent the pivotKITDeals from getting the wrong pivot offset.
-												//// NOTE: This prevents a bug where rows beneath the new merged row will be consumed.
-												if (numOfTiers > 0) {
-													for (var i = 0; i < existingNumTiers; i++) {
-														// Append the currently-changing row to the existing row's product to "merge" them
-														data[existingRowIndex + i]["PTR_USER_PRD"] += "," + prdsToMergeCSV; // myRow["PTR_USER_PRD"];
-														data[existingRowIndex + i]["PTR_SYS_PRD"] = null; // force revalidation
-													}
-												}
-
-												if (myRowIndex < existingRowIndex) {
-													// Update existing row index because it changes if the currently-changing row was above it and now removed
-													existingRowIndex = existingRowIndex - originalNumOfTiers;
-												}
-
-												// Remove all the currently-changing row's merged rows from our datasource
-												data.splice(myRowIndex, originalNumOfTiers);
-												
-												// sync
-												cleanupData(data);
-
-												recreateDealGrpNameDict(data);
-
-												// Re-put old merged dimensionalized values into the new merged rows
-												for (var i = 0; i < numOfTiers; i++) {
-													var newRowIndex = existingRowIndex + i + existingNumTiers; // + existingNumTiers to start at new numTiers index
-													for (var d = 0; d < root.kitDimAtrbs.length; d++) {
-														if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
-														data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
-													}
-												}
-												// Recalculate KIT Rebate
-												// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-												data[existingRowIndex]["TEMP_KIT_REBATE"] = calculateKITRebate(data, existingRowIndex, (numOfTiers + existingNumTiers));
-
-												root.spreadDs.sync();
-												$scope.applySpreadsheetMerge();
-												root.spreadDs.sync();
-												root.child.setRowIdStyle(data);
-
-											}, function (response) { // Don't merge the currently changing with the existing.
-
-												// Revert back to old name (for all the rows in the possibly merged currently-editing row)
-												for (var i = 0; i < numOfTiers; i++) {
-													data[myRowIndex + i]["DEAL_GRP_NM"] = prevValue;
-												}
-
-												// TODO: Re-add the Deal Grp Name dict key that was deleted
-												addToDealGrpNameDict(prevValue, myRowIndex);
-
-												// sync
-												cleanupData(data);
-												root.spreadDs.sync();
+										var existingRowIndex = $scope.dealGrpNameDict[dealGrpKey]
+										var existingRow = data[existingRowIndex];
+										
+										// Prepare deal groups for merging confirmation after the range.forEachCell() is done
+										var myKey = formatStringAsDealGrpDictKey(myRow["DEAL_GRP_NM"]);
+										if (!confirmationModPerDealGrp.hasOwnProperty(myKey)) {
+											confirmationModPerDealGrp[myKey] = {
+												"existingDcID": existingRow["DC_ID"],
+												"RowCount": parseInt(existingRow["NUM_OF_TIERS"]) + parseInt(myRow["NUM_OF_TIERS"])
 											}
-										);
-
-					        			return;
-					        		}
-					        		else { // Brand new Deal Group Name
-					        			addToDealGrpNameDict(dealGrpKey, myRowIndex);
-					        		}
-					        	}
-					        }
-					    }
+										} else {
+											// Add to count for validation purposes
+											confirmationModPerDealGrp[myKey].RowCount = confirmationModPerDealGrp[myKey].RowCount + parseInt(myRow["NUM_OF_TIERS"]);
+										}
+									}
+									else { // Brand new Deal Group Name
+										addToDealGrpNameDict(dealGrpKey, myRowIndex);
+									}
+								}
+							}
+						}
 					}
 				);
+
+        		var modalOptions = null;
+
+				// Deal Group Merging
+        		for (var key in confirmationModPerDealGrp) {
+        			if (confirmationModPerDealGrp.hasOwnProperty(key)) {
+        				if (confirmationModPerDealGrp[key].RowCount > 10) {
+							// Cannot merge
+        					modalOptions = {
+        						closeButtonText: "Okay",
+        						hasActionButton: false,
+        						headerText: "Deal group merge warning",
+        						bodyText: "A deal group with the name \"" + key + "\" already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the Deal Group Name or remove products from this row and try again.",
+        						closeResults: { "key": key }
+        					};
+        				} else {
+        					// Ask user if they want to merge
+        					modalOptions = {
+        						closeButtonText: "Cancel",
+        						actionButtonText: "Merge rows",
+        						hasActionButton: true,
+        						headerText: "Deal group merge confirmation",
+        						bodyText: "A deal group with the name \"" + key + "\" already exists. Would you like to merge rows containing this Deal Group Name? Please note that any duplicate products will automatically be removed upon merging. Your resulting merged rows will be located at the bottom row of this spreadsheet.",
+        						actionResults: { "key": key }, // HACK: without this, we won't get the correct key in the modal's .then()
+        						closeResults: { "key": key }
+							};
+        				}
+
+        				confirmationModal.showModal({}, modalOptions)
+							.then(function (result) { // Merge existing row with currently-changing row
+								var originalExistingCopy = null;
+								var prevValues = [];
+								var prdCsv = "";
+
+								var prevDC_ID = null;
+								// Find/get all occurances with deal-grp-nm
+								for (var i = data.length - 1; i >= 0 && prevValues.length <=10; i--){
+									if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+										prevValues.push(angular.copy(data[i]));
+										if (originalExistingCopy == null && data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+											// get the original existing copy to merge everything into
+											originalExistingCopy = angular.copy(data[i]);
+										} else {
+											prdCsv += data[i]["PTR_USER_PRD"] + ","; // This will trail a comma at the end we need to remove
+										}
+										prevDC_ID = data[i]["DC_ID"];
+
+										// "delete" the rows to merge 
+										data.splice(i, 1);
+									}
+								}
+
+								// Remove last comma
+								prdCsv = prdCsv.slice(0, -1);
+
+								// Check for and remove duplicates
+								var duplicateCheckerDict = {};
+								for (var i = prevValues.length - 1; i >= 0; i--) { 
+									if (duplicateCheckerDict.hasOwnProperty(prevValues[i]["PRD_BCKT"])) {
+										prevValues.splice(i, 1);
+									} else {
+										duplicateCheckerDict[prevValues[i]["PRD_BCKT"]] = true;
+									}
+								}
+								originalExistingCopy["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
+								originalExistingCopy["PTR_SYS_PRD"] = null; // force revalidation
+								originalExistingCopy["NUM_OF_TIERS"] = parseInt(prevValues.length);
+
+								// add a brand new row to bottom with all them merged
+								data.push(originalExistingCopy);
+								var newExistingStartIndex = data.length - 1;
+								// sync
+								cleanupData(data);
+
+								// Re-put old merged dimensionalized values into the new merged rows
+								for (var i = 0; i < parseInt(prevValues.length) ; i++) {
+									var newRowIndex = data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
+									for (var d = 0; d < root.kitDimAtrbs.length; d++) {
+										if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
+										data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
+									}
+								}
+								// Recalculate KIT Rebate
+								// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+								data[newExistingStartIndex]["TEMP_KIT_REBATE"] = calculateKITRebate(data, newExistingStartIndex, parseInt(originalExistingCopy["NUM_OF_TIERS"]));
+								
+								root.spreadDs.sync();
+								$scope.applySpreadsheetMerge();
+								root.spreadDs.sync();
+								root.child.setRowIdStyle(data);
+								recreateDealGrpNameDict(data);
+
+							}
+							, function (response) { // Cancel Merge
+								// Find all occurances with deal-grp-nm
+								for (var i = data.length - 1; i >= 0; i--) {
+									if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
+										// Don't clear the existing
+										if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
+											continue;
+										}
+										// Clear 
+										data[i]["DEAL_GRP_NM"] = "";
+									}
+								}
+								root.spreadDs.sync();
+							}
+						);
+        			}
+        		}
+        	
             	// sync
                 //cleanupData(data);
                 root.spreadDs.sync();
             }
         }
-
-
+		
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
         //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
