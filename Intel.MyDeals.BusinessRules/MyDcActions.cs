@@ -1169,7 +1169,9 @@ namespace Intel.MyDeals.BusinessRules
 							// Rule: Each L1 can only have a Qty of 1
 							if (parsedQty > 1)
 							{
-								deQty.AddMessage("L1 Products can only have a Qty of 1.");
+								dePrdUsr.AddMessage("L1 Products can only have a Qty of 1.");
+								//// TODO: this is a very minor priority, but maybe get the tier so we can do a more user-friendly tiered valiation message
+								// AddTierValidationMessage(deQty, "L1 Products can only have a Qty of 1.", tier);
 							}
 							numOfL1s += parsedQty;
 						}
