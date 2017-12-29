@@ -1995,13 +1995,10 @@
                     // sync all detail data sources into main grid datasource for a single save
                     var data = cleanupData($scope.spreadDs._data);
                     // TODO: Temp fix till sync function is updated
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                        $scope.pricingTableData.PRC_TBL_ROW = data;// Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
+
                         $scope.spreadDs.data(data);
-                    } else {
-                        // sync all detail data sources into main grid datasource for a single save
                         $scope.spreadDs.sync();
-                    }
+
                 }
 
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
@@ -2331,14 +2328,8 @@
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         if (!!$scope.spreadDs) {
-                        	if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-								// NOTE: The below line is a workaround for a bug where after saving, all rows will revert back to their previous unsaved values due to an incorrect parentSource in gridUtils.js's read().
-                        		// TODO: Find out what is causing the syncing issues and remove this workaround once found
-                                $scope.spreadDs.data($scope.pricingTableData.PRC_TBL_ROW);     
-                        	} else {			
-								$scope.spreadDs.read();
-                            }
-                            $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
+							$scope.spreadDs.read();
+							$scope.syncCellsOnAllRows(results.pricingTableData.PRC_TBL_ROW);
                         }
                     }
                     var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
@@ -2713,9 +2704,9 @@
                     		if (tieredItem == "TIER_NBR") {
                     			lData[tieredItem] = t; // KIT add tier number
                     		}
-                    		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1)); 
+                    		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1));
                     	}
-							
+
                         lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
 
                     	// Kit Rebate
@@ -2724,7 +2715,7 @@
                         for (var i = 0; i < lData["NUM_OF_TIERS"]; i++) {
                         	kitRebateTotalVal +=  $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (i)], lData["QTY_____20___" + (i)]);
                         }
-                    	lData["TEMP_KIT_REBATE"] = kitRebateTotalVal;	
+                    	lData["TEMP_KIT_REBATE"] = kitRebateTotalVal;
                     }
                     newData.push(lData);
                 }
@@ -2735,7 +2726,7 @@
         $scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
         	return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
         }
-		
+
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
             if (!$scope.isPivotable()) return data;
             var a;
@@ -2990,7 +2981,7 @@
                             },
                             { reload: true });
                     });
- 
+
                     $scope.setBusy("", "");
                 },
                 function (result) {
