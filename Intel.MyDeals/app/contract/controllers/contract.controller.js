@@ -2329,7 +2329,7 @@
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         if (!!$scope.spreadDs) {
 							$scope.spreadDs.read();
-							$scope.syncCellsOnAllRows(results.pricingTableData.PRC_TBL_ROW);
+							$scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                         }
                     }
                     var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js

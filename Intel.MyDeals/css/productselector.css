@@ -181,11 +181,12 @@ a.prdAnchor {
     background-color:#01AEEF;
 }
 
-.prodSelector .lnavFilter {
+.prodSelector .leftNavFilter {
     background-color: #e7e7e8;
-    height: 100%;
+    height: calc(85vh - 390px);
     padding: 4px;
     overflow: auto;
+    font-family:'Intel Clear', 'Arial';
 }
 
 .prodSelector .badge.upperBadge {
