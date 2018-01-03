@@ -22,6 +22,16 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
             var hideViewMeetCompOverride = !(window.usrRole === "DA" || isSuperSA || window.usrRole === "Legal"); //|| !$scope.root.CAN_VIEW_MEET_COMP;
             var canUpdateMeetCompSKUPriceBench = (usrRole === "FSE" || usrRole === "GA" || isSuperSA);
 
+            var columnIndex = {
+                COMP_SKU: 6,
+                COMP_PRC: 6,
+                IA_BNCH: 8,
+                COMP_BNCH: 8,
+                COMP_OVRRD_FLG: 11,
+                COMP_OVRRD_RSN: 12
+            };
+
+            $scope.isVisible = true;
             $scope.isDataAvaialable = false;
             $scope.errorList = [];
             $scope.validationMessage = "";
@@ -51,7 +61,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             $scope.isBusyMsgTitle = msg;
                             $scope.isBusyMsgDetail = !detail ? "" : detail;
                             $scope.isBusyType = msgType;
-                        }, 500);
+                        }, 100);
                     }
                 });
             }
@@ -122,9 +132,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         if (usrRole == "GA") {
                             var isValid = isModelValid($scope.meetCompMasterdata);
                         }
-                        $scope.selectProdIDS = function (selectedID, event, dataItem) {
-                            //alert(selectedID + "  " + event.target.checked);
-                            //TODO: check security rules if it will be implacable or not...
+                        $scope.selectProdIDS = function (selectedID, event, dataItem) {                           
                             var dataSource = $("#grid").data("kendoGrid").dataSource;
                             var filters = dataSource.filter();
 
@@ -171,19 +179,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             if (obj.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
                                                 obj.IS_SELECTED = false;
                                             }
-
                                         });
-                                    }
-
-                                    $scope.dataSourceParent.read();
+                                    }                                    
                                 }
                                 else {
                                     $scope.meetCompMasterdata[selectedID - 1].IS_SELECTED = event.target.checked;
                                 }
                             }
-
-                            $scope.dataSourceParent.read();
-
+                            //Holding expanded column
+                            expandSelected();
                         }
                         //Add New Customer
                         $scope.addSKUForCustomer = function (mode, isSelected) {
@@ -243,21 +247,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
                                         }
                                     }
-                                    $scope.dataSourceParent.read();
-
+                                    
                                     if (tempData.length > 0) {
-                                        var grid = $("#grid").data("kendoGrid");
-
-                                        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                            return $(row).data("uid");
-                                        });
-
-                                        grid.one("dataBound", function () {
-                                            grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                return $.inArray($(row).data("uid"), expanded) >= 0;
-                                            }));
-                                        });
-                                        grid.refresh();
+                                        expandSelected("COMP_SKU");
                                     }
                                 }
                             }
@@ -339,8 +331,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 var editedROW = e.model;
                                 var isEdited = true;
                                 if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && (editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden")) {
-                                    $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
-                                    //logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                    $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);                                    
                                 }
                                 else {
                                     input.keyup(function () {
@@ -404,24 +395,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
                                                     addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
                                                 }
-                                            }
-
-                                            $scope.dataSourceParent.read();
+                                            }                                            
 
                                             //Retaining the same expand
                                             if (tempData.length > 0) {
-                                                var grid = $("#grid").data("kendoGrid");
-                                                //grid.expandRow(0);
-                                                var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                                    return $(row).data("uid");
-                                                });
-
-                                                grid.one("dataBound", function () {
-                                                    grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                        return $.inArray($(row).data("uid"), expanded) >= 0;
-                                                    }));
-                                                });
-                                                grid.refresh();
+                                                expandSelected("COMP_OVRRD_RSN");
                                             }
                                         }
                                     });
@@ -712,23 +690,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
                                                         }
                                                     }
-
-                                                    $scope.dataSourceParent.read();
-
                                                     //Retaining the same expand
                                                     if (tempData.length > 0) {
-                                                        var grid = $("#grid").data("kendoGrid");
-                                                        //grid.expandRow(0);
-                                                        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                                            return $(row).data("uid");
-                                                        });
-
-                                                        grid.one("dataBound", function () {
-                                                            grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                                return $.inArray($(row).data("uid"), expanded) >= 0;
-                                                            }));
-                                                        });
-                                                        grid.refresh();
+                                                        expandSelected("IA_BNCH");
                                                     }
                                                 }
                                             }
@@ -794,23 +758,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
                                                         }
                                                     }
-
-                                                    $scope.dataSourceParent.read();
-
+                                                    
                                                     //Retaining the same expand
                                                     if (tempData.length > 0) {
-                                                        var grid = $("#grid").data("kendoGrid");
-                                                        //grid.expandRow(0);
-                                                        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                                            return $(row).data("uid");
-                                                        });
-
-                                                        grid.one("dataBound", function () {
-                                                            grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                                return $.inArray($(row).data("uid"), expanded) >= 0;
-                                                            }));
-                                                        });
-                                                        grid.refresh();
+                                                        expandSelected("COMP_BNCH");
                                                     }
 
                                                 }
@@ -911,32 +862,16 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             addToUpdateList($scope.meetCompMasterdata[tempprcData[i].RW_NM - 1], "COMP_PRC");
                                                         }
                                                     }
-
-
-
-
                                                 }
 
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU = this.text().trim();
                                                 // Setting COMP PRC based on Comp SKU if available
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_SKU");
-                                                $scope.dataSourceParent.read();
-
+                                                
                                                 //Retaining the same expand
                                                 if (tempData.length > 0) {
-                                                    var grid = $("#grid").data("kendoGrid");
-                                                    //grid.expandRow(0);
-                                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                                        return $(row).data("uid");
-                                                    });
-
-                                                    grid.one("dataBound", function () {
-                                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                            return $.inArray($(row).data("uid"), expanded) >= 0;
-                                                        }));
-                                                    });
-                                                    grid.refresh();
+                                                    expandSelected("COMP_SKU");
                                                 }
 
                                             }
@@ -1028,21 +963,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 }
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
                                                 addToUpdateList(options.model, "COMP_PRC");
-                                                $scope.dataSourceParent.read();
+                                                
                                                 //Retaining the same expand
                                                 if (tempData.length > 0) {
-                                                    var grid = $("#grid").data("kendoGrid");
-                                                    //grid.expandRow(0);
-                                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                                        return $(row).data("uid");
-                                                    });
-
-                                                    grid.one("dataBound", function () {
-                                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                            return $.inArray($(row).data("uid"), expanded) >= 0;
-                                                        }));
-                                                    });
-                                                    grid.refresh();
+                                                    expandSelected("COMP_PRC");
                                                 }
                                             }
                                             else {
@@ -1123,23 +1047,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     }
                                                 }
 
-
-
-                                                $scope.dataSourceParent.read();
                                                 //Retaining the same expand
                                                 if (tempData.length > 0) {
-                                                    var grid = $("#grid").data("kendoGrid");
-                                                    //grid.expandRow(0);
-                                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                                        return $(row).data("uid");
-                                                    });
-
-                                                    grid.one("dataBound", function () {
-                                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                                            return $.inArray($(row).data("uid"), expanded) >= 0;
-                                                        }));
-                                                    });
-                                                    grid.refresh();
+                                                    expandSelected("COMP_OVRRD_FLG");
                                                 }
                                             }
                                         }
@@ -1154,6 +1064,46 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 }
 
                             }
+                        }
+                        
+                        function expandSelected(colName) {
+                            $scope.isVisible = false;
+                            var grid = $("#grid").data("kendoGrid");
+                            var row_NO = [];
+                            var selectedUID = [];
+                            
+                            var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                return $(row).data("uid");
+                            });
+
+                            for (var t = 0; t < expanded.length; t++) { 
+                                $scope.dataSourceParent._view.forEach(function (o) {
+                                    if (o.uid == expanded[t])
+                                        row_NO.push(o.RW_NM);
+                                });
+                            }
+
+                            $scope.dataSourceParent.read();
+
+                            if (row_NO.length > 0) {
+                                for (var t = 0; t < row_NO.length; t++) {
+                                    $scope.dataSourceParent._view.forEach(function (o) {
+                                        if (o.RW_NM == row_NO[t])
+                                            selectedUID.push(o.uid);
+                                    });                                    
+                                }
+
+                                for (cnt = 0; cnt < selectedUID.length; cnt++) {
+                                    grid.expandRow("tr[data-uid='" + selectedUID[cnt] + "']");
+                                }
+
+                                if (colName) {
+                                    var row = $("#grid").find("tr[data-uid='" + selectedUID[0] + "']");
+                                    var cell = $(row).children().eq(columnIndex[colName]);
+                                    $('#grid').data('kendoGrid').editCell(cell);                                    
+                                }                                
+                            }
+                            $scope.isVisible = true;                                                    
                         }
 
                         function getProductLineData() {

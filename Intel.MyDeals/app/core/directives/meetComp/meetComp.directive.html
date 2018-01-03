@@ -1,10 +1,10 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"  msg-type="isBusyType" ng-show="isBusy"></loading-panel>
-<div ng-if="isDataAvaialable">
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy"></loading-panel>
+<div ng-if="isDataAvaialable" ng-show="isVisible" class="meetComp-show-hide">
     <div id="meetCompOvrrd" class="col-md-12">
         <div style="margin-bottom:4px">
             <button class="btn btn-sm btn-skyblue-sm fl"
                     ng-click="saveAndRunMeetComp()"
-                    title="Save and Validate Meet Comp" >
+                    title="Save and Validate Meet Comp">
                 <i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i>
             </button>
             <div class="fl skyblue-text">Save &amp; Validate <br>Meet Comp</div>
@@ -12,9 +12,9 @@
                 <div class="btnLastRun" style="font-size: 15px;">{{displayMessage}}</div>
             </div>
             <div class="clearboth"></div>
-            
+
         </div>
-        
+
         <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions"></div>
     </div>
 </div>
@@ -24,44 +24,55 @@
         var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
         scope.$apply(function () {
             scope.getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE);
-            });
-       
+        });
+
     }
-    function gotoDealDetails(CNTRCT_OBJ_SID,PRC_ST_OBJ_SID, PRC_TBL_OBJ_SID ) {
+    function gotoDealDetails(CNTRCT_OBJ_SID, PRC_ST_OBJ_SID, PRC_TBL_OBJ_SID) {
         var win = window.open("Contract#/manager/" + CNTRCT_OBJ_SID + "/" + PRC_ST_OBJ_SID + "/" + PRC_TBL_OBJ_SID + "/wip", '_blank');
         win.focus();
     }
-      
+
 </script>
 
 <style>
+    .meetComp-show-hide {
+        transition: all linear 0.5s;
+    }
+    .meetComp-show-hide.ng-hide {
+        opacity: 0;
+    }
     .btnPctMct {
         font-size: 14px;
         margin-top: 4px;
         line-height: 1.0em;
     }
+
     .btnLastRun {
         font-size: 9px;
         color: #00AEEF;
         line-height: 1.1em;
     }
+
     .btn-skyblue-sm {
         background-color: #00AEEF;
-        border: 1px solid  #00AEEF;
+        border: 1px solid #00AEEF;
         color: #ffffff;
         border-radius: 4px;
         padding: 2px !important;
     }
+
     .skyblue-text {
         color: #00AEEF;
         line-height: 1em;
         padding: 2px 6px !important;
     }
+
     .btn-skyblue-sm:hover {
         background-color: #0071C5;
-        border: 1px solid  #0071C5;
+        border: 1px solid #0071C5;
         color: #ffffff;
     }
+
     .btn-skyblue-sm i {
         font-size: 20px;
         margin: 0;
@@ -77,6 +88,7 @@
         padding-left: 5px;
         margin-left: -5px;
     }
+
     #tabstrip h2 {
         font-weight: lighter;
         font-size: 5em;
@@ -96,47 +108,57 @@
         margin: 0;
         padding: 0;
     }
-    
-    .textRunIcon{
-        width:100% !important;
-        text-align:center !important;
-    } .k-hierarchy-cell {
+
+    .textRunIcon {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .k-hierarchy-cell {
         border-right: none !important;
-    } .anchorSaveAndValidate {
+    }
+
+    .anchorSaveAndValidate {
         background: transparent !important;
         box-shadow: none !important;
         border: none !important;
         color: #ffffff !important;
     }
+
     .btnSaveAndValidate {
         color: #ffffff;
         font-size: 20px;
         margin-right: 5px;
     }
+
     .childGrid .k-grid-content {
-        overflow:hidden !important;
+        overflow: hidden !important;
     }
+
     .k-detail-row > .k-detail-cell > div:first-child {
         margin: 0px !important;
         margin-left: -6px !important;
         overflow: hidden !important;
     }
+
     .complete {
         font-size: 20px !important;
         color: #0071c5;
-
     }
+
     .completeGreen {
         font-size: 20px !important;
         color: #c4d600;
     }
+
     .inComplete, .incomplete {
         font-size: 20px !important;
         color: #F3D54E;
     }
+
     .errorListRow {
         /*background: rgba(255, 221, 221, 0.59) !important;*/
-        background: transparent !important;        
+        background: transparent !important;
     }
 
     .errorItemList {
@@ -147,16 +169,18 @@
     .errorIcon {
         font-size: 20px !important;
         color: rgb(255, 0, 0);
-        
     }
+
     .notRunYetIcon {
         font-size: 20px !important;
         color: #c7c7c7;
     }
+
     .notApplicableIcon {
         font-size: 20px !important;
         color: #c7c7c7;
     }
+
     .k-grid-content > table > tbody > tr > td {
         padding-left: 5px !important;
     }
@@ -288,6 +312,3 @@
             text-decoration: none;
         }
 </style>
-
-
-
