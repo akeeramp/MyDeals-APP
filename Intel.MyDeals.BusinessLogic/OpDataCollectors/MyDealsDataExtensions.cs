@@ -964,9 +964,9 @@ namespace Intel.MyDeals.BusinessLogic
             // Tack on the save action call now
             newPacket.AddSaveActions(myDealsData[opDataElementType]);
 
-            if (opDataElementType == OpDataElementType.CNTRCT && contractToken.CopyFromContractId > 0)
+            if (opDataElementType == contractToken.CopyFromObjType && contractToken.CopyFromId > 0)
             {
-                newPacket.AddCopyActions(contractToken.CopyFromContractId);
+                newPacket.AddCopyActions(contractToken);
             }
 
             myDealsData[opDataElementType] = newPacket;

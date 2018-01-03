@@ -89,7 +89,8 @@ namespace Intel.MyDeals.Controllers.API
             {
                 CustId = custId,
                 ContractId = contractId,
-                CopyFromContractId = srcContractId
+                CopyFromId = srcContractId,
+                CopyFromObjType = OpDataElementType.CNTRCT
             });
 
             return SafeExecutor(() => _contractsLib.SaveContract(contracts, savePacket)
