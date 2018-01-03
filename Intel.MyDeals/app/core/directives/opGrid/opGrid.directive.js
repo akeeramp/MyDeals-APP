@@ -1089,7 +1089,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     case "20___8":
                         return "Secondary 8";
                     case "20___9":
-                        return "Secondary 19";
+                        return "Secondary 9";
                     default:
                         return "";
                 }
@@ -2154,9 +2154,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.opOptions.columns = $scope.assignColSettings();
 
-            function getProductMbrSid(dimProduct) {
+            function getProductMbrSid(dimProduct, dimKey) {
                 var prd_mbr_sid = "";
-                var dimKey = "20___0";
+                if (!dimKey) {
+                    dimKey = "20___0";
+                }
                 for (var p in dimProduct) {
                     if (dimProduct.hasOwnProperty(p) && p.lastIndexOf(dimKey) > -1) {
                         prd_mbr_sid = dimProduct[p];
@@ -2167,10 +2169,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
 
-            function getPrductDetails(dataItem, priceCondition) {
+            function getPrductDetails(dataItem, priceCondition, dimkey) {
                 return [{
                     'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CUST_MBR_SID : $scope.$parent.$parent.getCustId(),
-                    'PRD_MBR_SID': getProductMbrSid(dataItem.PRODUCT_FILTER),
+                    'PRD_MBR_SID': getProductMbrSid(dataItem.PRODUCT_FILTER, dimkey),
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
                     'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
                     'DEAL_END_DT': moment(dataItem.END_DT).format("l"),
@@ -2179,10 +2181,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }];
             }
 
-            function openCAPBreakOut(dataItem, priceCondition) {
+            function openCAPBreakOut(dataItem, priceCondition, dimkey) {
                 var productData = {
                     'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CUST_MBR_SID : $scope.$parent.$parent.getCustId(),
-                    'PRD_MBR_SID': getProductMbrSid(dataItem.PRODUCT_FILTER),
+                    'PRD_MBR_SID': getProductMbrSid(dataItem.PRODUCT_FILTER, dimkey),
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
                     'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
                     'DEAL_END_DT': moment(dataItem.END_DT).format("l"),

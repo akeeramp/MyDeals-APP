@@ -165,9 +165,9 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
             tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
             tmplt += "<op-popover ";
             if (field === "CAP") {
-                tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\")'";
+                tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
             }
-            tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\")'>";
+            tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\", \"" + dimkey + "\")'>";
             tmplt += gridUtils.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, field + '_STRT_DT', field + '_END_DT', dimkey);
             tmplt += "</op-popover>";
             tmplt += '</td>';

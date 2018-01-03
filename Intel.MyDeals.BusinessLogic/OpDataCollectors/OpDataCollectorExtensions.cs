@@ -164,7 +164,7 @@ namespace Intel.MyDeals.BusinessLogic
                             {
                                 OpDataElement newDe = deBaseProd.Clone();
 
-                                newDe.SetDimKey("7:" + prdId + "/20:0");
+                                newDe.SetDimKey("7:" + prdId + "/20:" + kvp.Key.Substring(kvp.Key.Length - 1));
                                 newDe.AtrbKey = newDe.AtrbCd + "|" + newDe.DimKeyString;
                                 newDe.AtrbValue = prdId;
 
