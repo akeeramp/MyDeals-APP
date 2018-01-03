@@ -2749,26 +2749,9 @@
                 dimKey = prodDimKey;
                 dimAtrbs = $scope.kitDimAtrbs;
                 isKit = 1;
-
-            	// TODO: the below block of code fixes only the save portion of the KIT dynamic tiering / unordered datasource problem. // TODO a fix very soon
-                //		We still need to read back the correct order. Well either that or change the tiered newData push to be o(n2) by finding rows with IDs each time instead of assuming tiers are in order.
-                var newRows = [];
-                var existingRows = [];
-                for (var d = 0; d < data.length; d++) {
-                	if (data[d]["DC_ID"] >= 0) {
-                		existingRows.push(data[d]);
-                	} else {
-                		newRows.push(data[d]);
-                	}
-                }
-				// Order the data by DC_ID ascending, but negative DC_IDs are ordered asc and are after existing rows
-				// NOTE: we need to order the data since we have dynamic tiering in place, so the order of DC_IDs gets out of place and the code expects an tiers to be together in order
-                newRows = $filter('orderBy')(newRows, "DC_ID", true); // order desc
-                existingRows = $filter('orderBy')(existingRows, "DC_ID"); // order asc
-                data = existingRows.concat(newRows);
 			}
 
-            for (var d = 0; d < data.length; d++) {
+            for (var d = 0; d < data.length; d) {
                 var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
                 for (var t = 1 - isKit; t <= numTiers - isKit; t++) {
                     if (t === 1 - isKit) lData = data[d];
@@ -2779,6 +2762,11 @@
                             delete lData[dimAtrbs[a]];
                         }
                         newData.push(lData);
+                    }
+                    d++;
+                    // Quick fix, even after data.length === d loop was running. Not sure why :|
+                    if (d === data.length) {
+                        break;
                     }
                 }
             }
