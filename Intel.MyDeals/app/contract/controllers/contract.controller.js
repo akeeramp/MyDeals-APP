@@ -41,7 +41,7 @@
             objsetService.readContract($location.url().split('copycid=')[1]).then(function (data) {
                 $scope.copyContractData = data;
 
-            	// We are copying a contract, so use the title and customer settings from that contract.
+                // We are copying a contract, so use the title and customer settings from that contract.
                 $scope.contractData.TITLE = $scope.copyContractData.data[0].TITLE + ' (copy)';
                 $scope.contractData.CUST_MBR_SID = $scope.copyContractData.data[0].CUST_MBR_SID;
             });
@@ -1996,8 +1996,8 @@
                     var data = cleanupData($scope.spreadDs._data);
                     // TODO: Temp fix till sync function is updated
 
-                        $scope.spreadDs.data(data);
-                        $scope.spreadDs.sync();
+                    $scope.spreadDs.data(data);
+                    $scope.spreadDs.sync();
 
                 }
 
@@ -2326,7 +2326,7 @@
                             }
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
-						
+
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
 
                         if (!!$scope.spreadDs) {
@@ -2610,11 +2610,11 @@
                 	var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
 
                     if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                    	// KIT ECAP
-                    	if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
-                    		dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
-                    		dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
-                    	}
+                        // KIT ECAP
+                        if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
+                            dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
+                            dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                        }
                     }
 
                     if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
@@ -2648,6 +2648,13 @@
 
             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                 var pivotFieldName = "NUM_OF_TIERS";
+                // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
+                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
+                    if(dataItem["NUM_OF_TIERS"] !== undefined) return dataItem["NUM_OF_TIERS"];
+                    var pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
+                    dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
+                    return pivotVal;
+                }
 
                 if (!$scope.isPivotable()) return 1;
 
@@ -2657,17 +2664,10 @@
 
                 if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb
 
-                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                    //KIT, on load won't have a defined num of tiers
-                    if (!!dataItem["PTR_USER_PRD"]) {
-                        pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
-                        dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
-                    }
 
-                } else {
-                    //VT deal type
-                    var pivotVal = $scope.curPricingTable[pivotFieldName];
-                }
+                //VT deal type
+                var pivotVal = $scope.curPricingTable[pivotFieldName];
+
                 return pivotVal === undefined ? 1 : parseInt(pivotVal);
             }
 
@@ -2679,7 +2679,7 @@
             var newData = [];
 
             for (var d = 0; d < data.length; d++) {
-				// Tiered data
+                // Tiered data
                 var numTiers = $scope.numOfPivot(data[d]);
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
@@ -2699,25 +2699,25 @@
                             lData._behaviors.isReadOnly["STRT_VOL"] = true;
                         }
                     } else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                    	// KIT specific cols with 'tiers'
-                    	for (var i = 0; i < $scope.kitDimAtrbs.length; i++) {
-                    		var tieredItem = $scope.kitDimAtrbs[i];
-                    		lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
-                    		if (tieredItem == "TIER_NBR") {
-                    			lData[tieredItem] = t; // KIT add tier number
-                    		}
-                    		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1));
-                    	}
+                        // KIT specific cols with 'tiers'
+                        for (var i = 0; i < $scope.kitDimAtrbs.length; i++) {
+                            var tieredItem = $scope.kitDimAtrbs[i];
+                            lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
+                            if (tieredItem == "TIER_NBR") {
+                                lData[tieredItem] = t; // KIT add tier number
+                            }
+                            mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1));
+                        }
 
                         lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
 
-                    	// Kit Rebate
-                    	// Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
+                        // Kit Rebate
+                        // Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
                         var kitRebateTotalVal = 0;
                         for (var i = 0; i < lData["NUM_OF_TIERS"]; i++) {
-                        	kitRebateTotalVal +=  $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (i)], lData["QTY_____20___" + (i)]);
+                            kitRebateTotalVal += $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (i)], lData["QTY_____20___" + (i)]);
                         }
-                    	lData["TEMP_KIT_REBATE"] = kitRebateTotalVal;
+                        lData["TEMP_KIT_REBATE"] = kitRebateTotalVal;
                     }
                     newData.push(lData);
                 }
@@ -2726,7 +2726,7 @@
         }
 
         $scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
-        	return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
+            return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
         }
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
@@ -2750,7 +2750,7 @@
                 dimAtrbs = $scope.kitDimAtrbs;
                 isKit = 1;
 
-            	// TODO: the below block of code fixes only the save portion of the KIT dynamic tiering / unordered datasource problem. // TODO a fix very soon 
+            	// TODO: the below block of code fixes only the save portion of the KIT dynamic tiering / unordered datasource problem. // TODO a fix very soon
                 //		We still need to read back the correct order. Well either that or change the tiered newData push to be o(n2) by finding rows with IDs each time instead of assuming tiers are in order.
                 var newRows = [];
                 var existingRows = [];
@@ -2764,7 +2764,7 @@
 				// Order the data by DC_ID ascending, but negative DC_IDs are ordered asc and are after existing rows
 				// NOTE: we need to order the data since we have dynamic tiering in place, so the order of DC_IDs gets out of place and the code expects an tiers to be together in order
                 newRows = $filter('orderBy')(newRows, "DC_ID", true); // order desc
-                existingRows = $filter('orderBy')(existingRows, "DC_ID"); // order asc	
+                existingRows = $filter('orderBy')(existingRows, "DC_ID"); // order asc
                 data = existingRows.concat(newRows);
 			}
 
@@ -3461,11 +3461,11 @@
                     if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption"; //TODO: typo- need to correct to "Billing" in db
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) {
-                    	if ($scope.newPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                    		newValue["PROD_INCLDS"].value = "All";
-                    	} else {
-                    		newValue["PROD_INCLDS"].value = "Tray";
-                    	}
+                        if ($scope.newPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                            newValue["PROD_INCLDS"].value = "All";
+                        } else {
+                            newValue["PROD_INCLDS"].value = "Tray";
+                        }
                     }
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1";
                 } else {
@@ -3693,12 +3693,7 @@
                     }
                 }
             }
-            // data contains other properties like _events, parent which makes Array.isArray(data) false..
-            var newData = [];
-            for (var a = 0; a < data.length; a++) {
-                newData.push(data[a]);
-            }
-            return newData;
+            return data;
         }
     }
 })();

@@ -829,7 +829,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
 
                 // sync
-                //cleanupData(data);
                 root.spreadDs.sync();
             }
         }
@@ -2574,7 +2573,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]['dirty'] = true;
                     sourceData[r]['dirty'] = true;
                     var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
-                    for (var a = r; a < mergedRows ; a++) {
+                    var modifiedNumTiers = data[r].PTR_USER_PRD.split(',').length;
+                    for (var a = mergedRows - 1; a >= r ; a--) {
                         data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                         sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                         data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
@@ -2583,6 +2583,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         sourceData[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
                         data[a]['dirty'] = true;
                         sourceData[a]['dirty'] = true;
+                        sourceData[a]['TIER_NBR'] = modifiedNumTiers;
+                        modifiedNumTiers--;
                     }
                 }
 
@@ -2707,7 +2709,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     data[r]['dirty'] = true;
                                     sourceData[r]['dirty'] = true;
                                     var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
-                                    for (var a = r; a < mergedRows ; a++) {
+                                    var modifiedNumTiers = data[r].PTR_USER_PRD.split(',').length;
+                                    for (var a = mergedRows - 1; a >= r ; a--) {
                                         data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                                         sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                                         data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
@@ -2716,6 +2719,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         sourceData[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
                                         data[a]['dirty'] = true;
                                         sourceData[a]['dirty'] = true;
+                                        sourceData[a]['TIER_NBR'] = modifiedNumTiers;
+                                        modifiedNumTiers--;
                                     }
                                 }
                                 // For VOL_TIER update the merged cells

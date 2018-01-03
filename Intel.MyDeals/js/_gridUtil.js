@@ -28,8 +28,8 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-//    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-//    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+    //    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+    //    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
     tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
     tmplt += '</div>';
     return tmplt;
@@ -65,7 +65,7 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
 
     return tmplt;
 }
-gridUtils.uiCustomerControlWrapper = function(passedData, field, altField) {
+gridUtils.uiCustomerControlWrapper = function (passedData, field, altField) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv isReadOnlyCell">';
     tmplt += '     <div class="ng-binding vert-center" ng-if="dataItem.CUST_ACCNT_DIV === \'\'" ng-bind="dataItem.Customer.CUST_NM"></div>';
@@ -106,18 +106,18 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
             numTiers++;
             var dim = "10___" + numTiers;
             tmplt += '<tr style="height: 25px;">';
-            for (var f = 0; f < fields.length; f++) { 
+            for (var f = 0; f < fields.length; f++) {
                 tmplt += '<td style="text-align: ' + fields[f].align + ';"';
                 tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
                 tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
                 tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
                 tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
-            	tmplt += '</td>';
+                tmplt += '</td>';
             }
             tmplt += '</tr>';
         }
     }
-    
+
     tmplt += '</table>';
 
     return tmplt;
@@ -129,7 +129,7 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
 
     var tmplt = '<table>';
     for (var dimkey in data) {
-        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
@@ -150,7 +150,7 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
 }
 
 gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
-    var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on? 
+    var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
 
     var YCS2modifier = "";
     if (field === "YCS2") {
@@ -159,7 +159,7 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
 
     var tmplt = '<table>';
     for (var dimkey in data) {
-        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
@@ -177,7 +177,7 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
     tmplt += '</table>';
 
     return tmplt;
-    
+
 }
 
 //this control wrapper to be used for displaying which product is associated with each dimention
@@ -200,12 +200,12 @@ gridUtils.uiProductDimControlWrapper = function (passedData) {
 
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
 gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
-    var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers   
+    var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
     var setPrimary = true;
 
     var tmplt = '<table>';
     for (var dimkey in data) {
-        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isReadOnlyCell:true}">';
@@ -230,7 +230,7 @@ gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
 
     var tmplt = '<table>';
     for (var dimkey in data) {
-        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events       
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isReadOnlyCell:true}">';
@@ -395,7 +395,7 @@ gridUtils.convertPstToLocal = function (strDt) {
 
 gridUtils.convertLocalToPST = function (strDt) {
     moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
-    return moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");   
+    return moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
 }
 
 gridUtils.renderCustNm = function (data) {
@@ -407,7 +407,7 @@ gridUtils.renderCustNm = function (data) {
     }
     return custs.join(',');
 }
-gridUtils.renderMasterChild = function(data) {
+gridUtils.renderMasterChild = function (data) {
     if (data.dc_type === 'PRC_TBL_ROW' || data.dc_type === 'MASTER') return '<b>Master</b>';
     if (data.dc_type === 'WIP_DEAL') return 'Child';
     return '';
@@ -518,7 +518,7 @@ gridUtils.tenderDim = function (dataItem, field, format) {
             rtnKit.push("<span class='dimTenderTitle'>" + dim + ":</span>" + val);
         }
     }
-    
+
     return (rtn.length <= 1) ? rtn.join("<br/>") : rtnKit.join("<br/>");
 }
 
@@ -707,6 +707,17 @@ gridTools.prototype.getIndexByDcId = function (id, source) {
     return null;
 }
 
+gridTools.prototype.getLastIndexByDcId = function (id, source) {
+    var l = source.length;
+
+    for (var j = l - 1; j >= 0; j--) {
+        if (source[j].DC_ID === id) {
+            return j;
+        }
+    }
+    return null;
+}
+
 gridTools.prototype.stripBlanks = function (data) {
     return data.filter(function (el) {
         return el.value !== "";
@@ -748,11 +759,17 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 var source = parentSource;
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
-
-                    // assign an ID to the new item
-                    //item.DC_ID = gTools.nextId--;
-                    // save data item to the original datasource
-                    source.push(item);
+                    if (!!item["PRD_BCKT"]) {
+                        // User can insert row in between for KIT deals
+                        var indx = gTools.getLastIndexByDcId(item.DC_ID, source);
+                        indx = indx == null ? source.length : indx;
+                        source.splice(indx, 0, item);
+                    } else {
+                        // assign an ID to the new item
+                        //item.DC_ID = gTools.nextId--;
+                        // save data item to the original datasource
+                        source.push(item);
+                    }
                 }
                 // on success
                 e.success();

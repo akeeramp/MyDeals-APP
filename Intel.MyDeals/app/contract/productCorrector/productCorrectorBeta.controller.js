@@ -708,6 +708,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
             foundItem.HIER_VAL_NM = getFullNameOfProduct(foundItem);
+            foundItem.DERIVED_USR_INPUT = getFullNameOfProduct(foundItem);
+            foundItem.USR_INPUT = foundItem.DERIVED_USR_INPUT;
             vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
 
             vm.curRowData.forEach(function (item) {
