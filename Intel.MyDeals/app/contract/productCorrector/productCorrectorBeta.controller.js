@@ -741,8 +741,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
 
             vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].filter(function (obj) {
-                return obj.USR_INPUT != lookup;
+                return obj.PRD_MBR_SID != foundItem.PRD_MBR_SID;
             });
+
+            if (vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].length === 0) delete vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name];
 
             vm.curRowData.forEach(function (item) {
                 if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {

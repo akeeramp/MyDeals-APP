@@ -454,13 +454,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                 var numTiers = sheet.range(root.colToLetter['NUM_OF_TIERS'] + (rowStart)).value();
+                var modifiedNumTiers = contractProducts.split(',').length;
                 if (root.isPivotable() && numTiers !== null) {
                     var mergedRows = parseInt(rowStart) + sheet.range(root.colToLetter['NUM_OF_TIERS'] + (rowStart)).value();
                     for (var a = mergedRows - 1; a >= rowStart ; a--) {
                         sheet.range(root.colToLetter["PTR_SYS_PRD"] + (a)).value(JSON.stringify(validatedSelectedProducts));
                         sheet.range(root.colToLetter['PRD_DRAWING_ORD'] + (a)).value(productSelectorOutput.prdDrawingOrd);
-                        sheet.range(root.colToLetter['TIER_NBR'] + (a)).value(numTiers);
-                        numTiers--;
+                        sheet.range(root.colToLetter['TIER_NBR'] + (a)).value(modifiedNumTiers);
+                        modifiedNumTiers--;
                         systemModifiedProductInclude = true;
                         sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts);
                         systemModifiedProductInclude = false;
