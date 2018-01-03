@@ -1158,9 +1158,9 @@ namespace Intel.MyDeals.BusinessRules
 					foreach (ProdMapping prod in prdMapping.Value)
 					{
 						// Rule: CPU products must be Tray
-						if (prod.DEAL_PRD_TYPE.ToString().Equals("CPU", StringComparison.OrdinalIgnoreCase) && !prod.MM_MEDIA_CD.ToString().Equals("TRAY", StringComparison.OrdinalIgnoreCase))
+						if (prod.DEAL_PRD_TYPE.ToString().Equals("CPU", StringComparison.OrdinalIgnoreCase) && prod.MM_MEDIA_CD.ToString().Equals("BOX", StringComparison.OrdinalIgnoreCase))
 						{
-							dePrdUsr.AddMessage("CPU products must have a media of Tray. Please check Product Selector has your correct product.");
+							dePrdUsr.AddMessage("CPU products cannot have a media of Box. Please check Product Selector has your correct product.");
 						}
 
 						// Rule: Up the L1 and L2 counts
@@ -1169,7 +1169,7 @@ namespace Intel.MyDeals.BusinessRules
 							// Rule: Each L1 can only have a Qty of 1
 							if (parsedQty > 1)
 							{
-								dePrdUsr.AddMessage("L1 Products can only have a Qty of 1.");
+								dePrdUsr.AddMessage("Each L1 Product may only have a Qty of 1.");
 								//// TODO: this is a very minor priority, but maybe get the tier so we can do a more user-friendly tiered valiation message
 								// AddTierValidationMessage(deQty, "L1 Products can only have a Qty of 1.", tier);
 							}

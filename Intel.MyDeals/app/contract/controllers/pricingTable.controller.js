@@ -739,30 +739,28 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         confirmationModal.showModal({}, modalOptions)
 							.then(function (result) { // Merge existing row with currently-changing row
-							    var originalExistingCopy = null;
+								var originalExistingCopy = null;
+								var originalExistingIndex = null;
 							    var prevValues = [];
-							    var prdCsv = "";
+							    var root = $scope.$parent.$parent;	// Access to parent scope
+							    var sourceData = root.pricingTableData.PRC_TBL_ROW;
+							    var data = root.spreadDs.data();
 
-							    var prevDC_ID = null;
 							    // Find/get all occurances with deal-grp-nm
 							    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
 							        if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
 							            prevValues.push(angular.copy(data[i]));
-							            if (originalExistingCopy == null && data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							                // get the original existing copy to merge everything into
-							                originalExistingCopy = angular.copy(data[i]);
+							            if (originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) == 1 && data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+							            	// get the original existing copy to merge everything into
+											// HACK: Note that we cannot splice the existing row that we'd later to merge into, or else sourceData will remove the existing too. Another sync problem.
+							            	originalExistingCopy = angular.copy(data[i]);
+							            	originalExistingIndex = i;
 							            } else {
-							                prdCsv += data[i]["PTR_USER_PRD"] + ","; // This will trail a comma at the end we need to remove
+							            	// "delete" the rows to merge
+							            	data.splice(i, 1);
 							            }
-							            prevDC_ID = data[i]["DC_ID"];
-
-							            // "delete" the rows to merge
-							            data.splice(i, 1);
 							        }
 							    }
-
-							    // Remove last comma
-							    prdCsv = prdCsv.slice(0, -1);
 
 							    // Check for and remove duplicates
 							    var duplicateCheckerDict = {};
@@ -773,29 +771,39 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							            duplicateCheckerDict[prevValues[i]["PRD_BCKT"]] = true;
 							        }
 							    }
-							    originalExistingCopy["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
-							    originalExistingCopy["PTR_SYS_PRD"] = null; // force revalidation
-							    originalExistingCopy["NUM_OF_TIERS"] = parseInt(prevValues.length);
-
 							    // add a brand new row to bottom with all them merged
-							    data.push(originalExistingCopy);
-							    var newExistingStartIndex = data.length - 1;
+							    data[originalExistingIndex] = originalExistingCopy;
+							    data[originalExistingIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
+							    data[originalExistingIndex]["PTR_SYS_PRD"] = null; // force revalidation
+								data[originalExistingIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
+								
+								data[originalExistingIndex]['dirty'] = true;
+								sourceData[originalExistingIndex]['dirty'] = true;
+
 							    // sync
 							    cleanupData(data);
+							    root.spreadDs.sync();
 
 							    // Re-put old merged dimensionalized values into the new merged rows
 							    for (var i = 0; i < parseInt(prevValues.length) ; i++) {
 							        var newRowIndex = data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
 							        for (var d = 0; d < root.kitDimAtrbs.length; d++) {
-							            if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
-							            data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
+							        	if (root.kitDimAtrbs[d] == "TIER_NBR") {											
+							        		sourceData[newRowIndex]["TIER_NBR"] = data[newRowIndex]["TIER_NBR"] // HACK: for sourceData not syncing tier numbers correctly 
+							        		continue;
+							        	}
+							        	data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
+							        	sourceData[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]]; // HACK: This is unfortunately needed because of sync issues
 							        }
 							    }
 							    // Recalculate KIT Rebate
 							    // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-							    data[newExistingStartIndex]["TEMP_KIT_REBATE"] = calculateKITRebate(data, newExistingStartIndex, parseInt(originalExistingCopy["NUM_OF_TIERS"]));
+							    data[originalExistingIndex]["TEMP_KIT_REBATE"] = calculateKITRebate(data, originalExistingIndex, parseInt(originalExistingCopy["NUM_OF_TIERS"]));
 
-							    root.spreadDs.sync();
+							    data[originalExistingIndex]['dirty'] = true;
+							    sourceData[originalExistingIndex]['dirty'] = true;
+
+								//sync
 							    $scope.applySpreadsheetMerge();
 							    root.spreadDs.sync();
 							    root.child.setRowIdStyle(data);
@@ -1230,6 +1238,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
+		// NOTE: this fixes sourceData out of sync bug for KIT's dynmic tiers
+    	// root.pricingTableData.PRC_TBL_ROW = util.deepClone(data);
         return data;
     }
 
@@ -1336,9 +1346,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     // Defaulted row values for specific SET TYPEs
                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                        data[r]["DSCNT_PER_LN"] = 0;
-                        data[r]["QTY"] = 1;
-                        data[r]["ECAP_PRICE"] = 0;
+                    	data[r]["DSCNT_PER_LN"] = 0;
+                    	data[r]["QTY"] = 1;
+                    	data[r]["ECAP_PRICE"] = 0;
+                    	data[r]["ECAP_PRICE_____20_____1"] = 0; // KIT ECAP
                     } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
                         // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
                         data[r]["ADJ_ECAP_UNIT"] = 0;
