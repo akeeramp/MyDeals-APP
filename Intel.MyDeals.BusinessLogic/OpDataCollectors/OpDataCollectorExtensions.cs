@@ -192,9 +192,8 @@ namespace Intel.MyDeals.BusinessLogic
 
                 string dimKey = de.DimKeyString;
                 string uniqDimKey = dimKey.AtrbCdDimKeySafe();
-                string uniqDimBaseKey = uniqDimKey.Replace("_____", "");
+                string uniqDimBaseKey = dimKey.DimKeySafe();
 
-                //dimKey = "";
                 if (string.IsNullOrEmpty(dimKey))
                 {
                     if (!items.ContainsKey(de.AtrbCd)) continue;
