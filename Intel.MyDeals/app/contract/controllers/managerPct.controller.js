@@ -259,6 +259,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         var tmplt = "<table style='float: left; margin-top: -20px;'>"; // <colgroup><col style='width: 30px;'>
                         var trLocked = "<td style='width: 30px;'></td>";
                         var trUnLocked = "";
+
                         for (var c = 0; c < cols.length; c++) {
                             var val = item[cols[c].field];
                             if (!!cols[c].format) {
@@ -397,7 +398,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         }, 100);
 
                     }
-
                 }
 
             },
@@ -676,6 +676,32 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     LAST_COST_TEST_RUN: { type: "string" }
                 }
             },
+            "KIT": {
+                id: "DEAL_ID",
+                fields: {
+                    PRC_CST_TST_STS: { type: "string" },
+                    DEAL_ID: { type: "number" },
+                    PRODUCT: { type: "string" },
+                    DEAL_STRT_DT: { type: "string" },
+                    CAP: { type: "number" },
+                    ECAP_PRC: { type: "number" },
+                    ECAP_FLR: { type: "number" },
+                    LOW_NET_PRC: { type: "number" },
+                    PRD_COST: { type: "number" },
+                    COST_TEST_OVRRD_FLG: { type: "string" },
+                    COST_TEST_OVRRD_CMT: { type: "string" },
+                    RTL_CYC_NM: { type: "string" },
+                    RTL_PULL_DLR: { type: "number" },
+                    MKT_SEG: { type: "string" },
+                    GEO: { type: "string" },
+                    PYOUT_BASE_ON: { type: "string" },
+                    CNSMPTN_RSN: { type: "string" },
+                    PROG_PMT: { type: "string" },
+                    GRP_DEALS: { type: "string" },
+                    DEAL_GRP_CMNT: { type: "string" },
+                    LAST_COST_TEST_RUN: { type: "string" }
+                }
+            },
             "VOL_TIER": {
                 id: "DEAL_ID",
                 fields: {
@@ -727,6 +753,29 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         },
         "columns": {
             "ECAP": [
+                $scope.cellColumns["PRC_CST_TST_STS"],
+                $scope.cellColumns["DEAL_ID"],
+                $scope.cellColumns["PRODUCT"],
+                $scope.cellColumns["DEAL_STRT_DT"],
+                $scope.cellColumns["CAP"],
+                $scope.cellColumns["ECAP_PRC"],
+                $scope.cellColumns["ECAP_FLR"],
+                $scope.cellColumns["LOW_NET_PRC"],
+                $scope.cellColumns["PRD_COST"],
+                $scope.cellColumns["COST_TEST_OVRRD_FLG"],
+                $scope.cellColumns["COST_TEST_OVRRD_CMT"],
+                $scope.cellColumns["RTL_CYC_NM"],
+                $scope.cellColumns["RTL_PULL_DLR"],
+                $scope.cellColumns["MKT_SEG"],
+                $scope.cellColumns["GEO"],
+                $scope.cellColumns["PYOUT_BASE_ON"],
+                $scope.cellColumns["CNSMPTN_RSN"],
+                $scope.cellColumns["PROG_PMT"],
+                $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["DEAL_GRP_CMNT"],
+                $scope.cellColumns["LAST_COST_TEST_RUN"]
+            ],
+            "KIT": [
                 $scope.cellColumns["PRC_CST_TST_STS"],
                 $scope.cellColumns["DEAL_ID"],
                 $scope.cellColumns["PRODUCT"],

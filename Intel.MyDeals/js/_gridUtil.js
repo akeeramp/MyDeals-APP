@@ -500,10 +500,20 @@ gridUtils.tenderDim = function (dataItem, field, format) {
     for (var key in ar) {
         if (ar.hasOwnProperty(key) && key.indexOf("20___") >= 0) {
             var dim = "";
-            if (key.indexOf("20___") >= 0) dim = "Secondary";
             if (key.indexOf("20____2") >= 0) dim = "SubKit";
+            if (key.indexOf("20_____2") >= 0) dim = "SubKit";
             if (key.indexOf("20____1") >= 0) dim = "Kit";
+            if (key.indexOf("20_____1") >= 0) dim = "Kit";
             if (key.indexOf("20___0") >= 0) dim = "Primary";
+            if (key.indexOf("20___1") >= 0) dim = "Secondary";
+            if (key.indexOf("20___2") >= 0) dim = "Secondary";
+            if (key.indexOf("20___3") >= 0) dim = "Secondary";
+            if (key.indexOf("20___4") >= 0) dim = "Secondary";
+            if (key.indexOf("20___5") >= 0) dim = "Secondary";
+            if (key.indexOf("20___6") >= 0) dim = "Secondary";
+            if (key.indexOf("20___7") >= 0) dim = "Secondary";
+            if (key.indexOf("20___8") >= 0) dim = "Secondary";
+            if (key.indexOf("20___9") >= 0) dim = "Secondary";
 
             var val = ar[key];
             if (format !== undefined) {
@@ -515,11 +525,11 @@ gridUtils.tenderDim = function (dataItem, field, format) {
             }
 
             rtn.push(val);
-            rtnKit.push("<span class='dimTenderTitle'>" + dim + ":</span>" + val);
+            rtnKit.push("<div class='fl dimTenderTitle'>" + dim + ":</div> <div class='fl dimTenderValue'>" + val + "</div> ");
         }
     }
 
-    return (rtn.length <= 1) ? rtn.join("<br/>") : rtnKit.join("<br/>");
+    return (rtn.length <= 1) ? rtn.join("<div class='clearboth'></div>") : rtnKit.join("<div class='clearboth'></div>");
 }
 
 gridUtils.msgIcon = function (dataItem) {

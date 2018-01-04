@@ -180,7 +180,6 @@
             pageable: {
                 pageSizes: [25, 100, 250, "all"]
             },
-
             columns: [
                 {
                     field: "DC_ID",
@@ -301,8 +300,54 @@
                     title: "Geo",
                     width: 100
                 }
-            ]
+            ],
+            excel: {
+                allPages: true
+            },
+            excelExport: function (e) {
+                var i;
+                var dataSource = e.sender.dataSource;
+                var gridColumns = e.sender.columns;
+                var sheet = e.workbook.sheets[0];
+                var columnTemplates = [];
 
+                // Create element to generate templates in.
+                var elem = document.createElement('div');
+
+                // Create a collection of the column templates, together with the current column index
+                for (i = 0; i < gridColumns.length; i++) {
+                    if (gridColumns[i].template) {
+                        columnTemplates.push({ cellIndex: i, template: kendo.template(gridColumns[i].template) });
+                    }
+                }
+
+                // clear out first cell title
+                sheet.rows[0].cells[0] = '';
+
+                // Traverse all exported rows.
+                for (i = 1; i < sheet.rows.length; i++) {
+                    var row = sheet.rows[i];
+                    // Traverse the column templates and apply them for each row at the stored column position.
+
+                    // Get the data item corresponding to the current row.
+                    var dataItem = dataSource.at(i - 1);
+                    for (var j = 0; j < columnTemplates.length; j++) {
+                        var columnTemplate = columnTemplates[j];
+                        // Generate the template content for the current cell.
+                        var newHtmlVal = columnTemplate.template(dataItem).replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                        elem.innerHTML = newHtmlVal;
+                        if (j === 0) elem.innerHTML = "";
+                        if (j === 1) elem.innerHTML = dataItem.BID_STATUS;
+                        if (row.cells[columnTemplate.cellIndex] != undefined) {
+                            // Output the text content of the templated cell into the exported cell.
+                            var newVal = elem.textContent || elem.innerText || "";
+                            newVal = newVal.replace(/null/g, '').replace(/undefined/g, '').replace(/LINEBREAKTOKEN/g, '\n');
+                            row.cells[columnTemplate.cellIndex].value = newVal;
+                            row.cells[columnTemplate.cellIndex].wrap = true;
+                        }
+                    }
+                }
+            }
         }
 
         $($window).resize(function () {
