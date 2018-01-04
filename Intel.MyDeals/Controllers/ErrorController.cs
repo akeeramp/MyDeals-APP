@@ -16,7 +16,7 @@ namespace Intel.MyDeals.Controllers
         public ActionResult Access()
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
-            return View(AppLib.AVM);
+            return View();
         }
 
         public ActionResult Timeout()
@@ -39,15 +39,13 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult ResetAVM()
         {
-
             new CacheLib().ClearCache();
             //new DataCollectionsDataLib().ClearCache();
 
-            OpCore op=OpAppConfig.Init();
+            OpCore op = OpAppConfig.Init();
             OpUserToken user = AppLib.InitAvm(op, true);
 
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

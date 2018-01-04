@@ -141,7 +141,9 @@ namespace Intel.MyDeals.App
 
         public static void PopulateUserSettings(OpUserToken opUserToken)
         {
-            if (UserSettings.ContainsKey(opUserToken.Usr.Idsid.ToUpper()) && UserSettings[opUserToken.Usr.Idsid.ToUpper()] != null) return;
+            // If user WWID is "0", get user details from database
+            if (UserSettings.ContainsKey(opUserToken.Usr.Idsid.ToUpper()) &&
+                UserSettings[opUserToken.Usr.Idsid.ToUpper()] != null && opUserToken.Usr.WWID != 0) return;
 
             UserSetting settings = new EmployeesLib().GetUserSettings(opUserToken);
 
