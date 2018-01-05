@@ -27,7 +27,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 COMP_PRC: 6,
                 IA_BNCH: 8,
                 COMP_BNCH: 8,
-                COMP_OVRRD_FLG: 11,
+                COMP_OVRRD_FLG: 12,
                 COMP_OVRRD_RSN: 12
             };
 
@@ -249,7 +249,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     }
                                     
                                     if (tempData.length > 0) {
-                                        expandSelected("COMP_SKU");
+                                        expandSelected("COMP_SKU", $scope.curentRow);
                                     }
                                 }
                             }
@@ -692,7 +692,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     }
                                                     //Retaining the same expand
                                                     if (tempData.length > 0) {
-                                                        expandSelected("IA_BNCH");
+                                                        expandSelected("IA_BNCH", options.model.RW_NM);
                                                     }
                                                 }
                                             }
@@ -761,7 +761,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     
                                                     //Retaining the same expand
                                                     if (tempData.length > 0) {
-                                                        expandSelected("COMP_BNCH");
+                                                        expandSelected("COMP_BNCH", options.model.RW_NM);
                                                     }
 
                                                 }
@@ -871,7 +871,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 
                                                 //Retaining the same expand
                                                 if (tempData.length > 0) {
-                                                    expandSelected("COMP_SKU");
+                                                    expandSelected("COMP_SKU", options.model.RW_NM);
                                                 }
 
                                             }
@@ -966,7 +966,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 
                                                 //Retaining the same expand
                                                 if (tempData.length > 0) {
-                                                    expandSelected("COMP_PRC");
+                                                    expandSelected("COMP_PRC", options.model.RW_NM);
                                                 }
                                             }
                                             else {
@@ -1049,7 +1049,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                                 //Retaining the same expand
                                                 if (tempData.length > 0) {
-                                                    expandSelected("COMP_OVRRD_FLG");
+                                                    expandSelected("COMP_OVRRD_FLG", options.model.RW_NM);
                                                 }
                                             }
                                         }
@@ -1100,7 +1100,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 if (colName) {
                                     var selUID = '';
                                     if (rowNumber) {
-                                        selUID = $scope.dataSourceParent._view[rowNumber].uid;
+                                        $scope.dataSourceParent._view.forEach(function (o) {
+                                            if (o.RW_NM == rowNumber)
+                                                selUID = o.uid
+                                        });
+                                        
                                     }
                                     else {
                                         selUID = selectedUID[0];
