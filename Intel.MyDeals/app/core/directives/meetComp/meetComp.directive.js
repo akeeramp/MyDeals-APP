@@ -1109,14 +1109,26 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     else {
                                         selUID = selectedUID[0];
                                     }
-                                    var row = $("#grid").find("tr[data-uid='" + selUID + "']");
-                                    var cell = $(row).children().eq(columnIndex[colName]);
-                                    $('#grid').data('kendoGrid').editCell(cell);                                     
+                                    setFocusToCell(colName,selUID);                                                                 
                                 }                                
+                            }
+                            else {
+                                var selUID = '';
+                                if (rowNumber) {
+                                    $scope.dataSourceParent._view.forEach(function (o) {
+                                        if (o.RW_NM == rowNumber)
+                                            selUID = o.uid
+                                    });
+                                    setFocusToCell(colName,selUID);             
+                                }
                             }
                             $scope.isVisible = true;                                                    
                         }
-
+                        function setFocusToCell(colName, selUID) {
+                            var row = $("#grid").find("tr[data-uid='" + selUID + "']");
+                            var cell = $(row).children().eq(columnIndex[colName]);
+                            $('#grid').data('kendoGrid').editCell(cell);    
+                        }
                         function getProductLineData() {
                             var filterData = [];
                             var dataSource = $("#grid").data("kendoGrid").dataSource;
