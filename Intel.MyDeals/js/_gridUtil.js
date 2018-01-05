@@ -772,7 +772,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                     if (!!item["PRD_BCKT"]) {
                         // User can insert row in between for KIT deals
                         var indx = gTools.getLastIndexByDcId(item.DC_ID, source);
-                        indx = indx == null ? source.length : indx;
+                        indx = indx == null ? source.length : indx + 1;
                         source.splice(indx, 0, item);
                     } else {
                         // assign an ID to the new item
@@ -817,7 +817,12 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 // locate item in original datasource and remove it
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
-                    source.splice(gTools.getIndexByDcId(item.DC_ID, source), 1);
+                    // Remove the last matching row from the source data
+                    if (!!item["PRD_BCKT"]) {
+                        source.splice(gTools.getLastIndexByDcId(item.DC_ID, source), 1);
+                    } else {
+                        source.splice(gTools.getIndexByDcId(item.DC_ID, source), 1);
+                    }
                 }
                 // on success
                 e.success();

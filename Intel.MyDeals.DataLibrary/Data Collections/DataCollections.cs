@@ -137,24 +137,25 @@ namespace Intel.MyDeals.DataLibrary
 
         #endregion Cache Functions
 
-		public static int GetSessionComparisonHash()
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				if (_getSessionComparisonHash == 0)
-				{
-					_getSessionComparisonHash = Guid.NewGuid().GetHashCode();
-					return _getSessionComparisonHash;
-				}
-				else
-				{
-					return _getSessionComparisonHash;
-				}
-			}
-		}
-		private static int _getSessionComparisonHash;
+        public static int GetSessionComparisonHash()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getSessionComparisonHash == 0)
+                {
+                    _getSessionComparisonHash = Guid.NewGuid().GetHashCode();
+                    return _getSessionComparisonHash;
+                }
+                else
+                {
+                    return _getSessionComparisonHash;
+                }
+            }
+        }
 
-		public static List<AdminConstant> GetToolConstants()
+        private static int _getSessionComparisonHash;
+
+        public static List<AdminConstant> GetToolConstants()
         {
             lock (LOCK_OBJECT ?? new object())
             {
@@ -245,7 +246,6 @@ namespace Intel.MyDeals.DataLibrary
 
         private static UiTemplates _getUiTemplates;
 
-
         public static List<AdminConstant> GetAdminConstants()
         {
             lock (LOCK_OBJECT ?? new object())
@@ -256,17 +256,17 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<AdminConstant> _getAdminConstants;
 
-
         public static List<GeoDimension> GetGeoData()
         {
             lock (LOCK_OBJECT ?? new object())
-			{
-				return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
-			}
-		}
-		private static List<GeoDimension> _getGeoData;
-				
-		public static List<LookupItem> GetLookupData()
+            {
+                return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
+            }
+        }
+
+        private static List<GeoDimension> _getGeoData;
+
+        public static List<LookupItem> GetLookupData()
         {
             lock (LOCK_OBJECT ?? new object())
             {
@@ -498,14 +498,17 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     _getMyCustomers = new Dictionary<string, MyCustomerDetailsWrapper>();
                 }
-                string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\","");
-                if (!_getMyCustomers.ContainsKey(authenticatedName))
+                string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\", "");
+                // Check customer count, this will fix when user has access to mydeals but unable to see any customers in dropdown
+                if (!_getMyCustomers.ContainsKey(authenticatedName) ||
+                        (_getMyCustomers.ContainsKey(authenticatedName) && !_getMyCustomers[authenticatedName].CustomerInfo.Any()))
                 {
                     _getMyCustomers[authenticatedName] = new CustomerDataLib().GetMyCustomers();
                 }
                 return _getMyCustomers[authenticatedName];
             }
         }
+
         private static Dictionary<string, MyCustomerDetailsWrapper> _getMyCustomers;
 
         public static List<Product> GetProductData()
@@ -591,91 +594,90 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<Dropdown> _getDropdowns;
 
-		/// <summary>
-		///	Returns the values from GetDropdowns, but in Dictionary form for more efficent lookup
-		/// </summary>
-		/// <returns>
-		///	Dictionary with (Key: Atrb Cd | Value: Another Dictionary with (Key: Uppercased name | Value: Name with capitalization as appears in db))
-		/// </returns>
-		public static Dictionary<string, string> GetDropdownDict(string lookupText)
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				if (_dropdownDict == null)
-				{
-					_dropdownDict = new Dictionary<string, Dictionary<string, string>>();
-				}
+        /// <summary>
+        ///	Returns the values from GetDropdowns, but in Dictionary form for more efficent lookup
+        /// </summary>
+        /// <returns>
+        ///	Dictionary with (Key: Atrb Cd | Value: Another Dictionary with (Key: Uppercased name | Value: Name with capitalization as appears in db))
+        /// </returns>
+        public static Dictionary<string, string> GetDropdownDict(string lookupText)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_dropdownDict == null)
+                {
+                    _dropdownDict = new Dictionary<string, Dictionary<string, string>>();
+                }
 
-				if (!_dropdownDict.ContainsKey(lookupText))
-				{
-					List<Dropdown> dropdownList = GetDropdowns().Where(dd => dd.dropdownCategory == lookupText && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
-					Dictionary<string, string> temp = new Dictionary<string, string>();
+                if (!_dropdownDict.ContainsKey(lookupText))
+                {
+                    List<Dropdown> dropdownList = GetDropdowns().Where(dd => dd.dropdownCategory == lookupText && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
 
-					for (int i = 0; i < dropdownList.Count; i++)
-					{
-						if (!temp.ContainsKey(dropdownList[i].dropdownName.ToUpper()))
-						{
-							temp[dropdownList[i].dropdownName.ToUpper()] = dropdownList[i].dropdownName;
-						}
-					}
-					_dropdownDict[lookupText] = temp;
+                    for (int i = 0; i < dropdownList.Count; i++)
+                    {
+                        if (!temp.ContainsKey(dropdownList[i].dropdownName.ToUpper()))
+                        {
+                            temp[dropdownList[i].dropdownName.ToUpper()] = dropdownList[i].dropdownName;
+                        }
+                    }
+                    _dropdownDict[lookupText] = temp;
+                }
+                return _dropdownDict[lookupText];
+            }
+        }
 
-				}
-				return _dropdownDict[lookupText];
-			}
-		}
-		public static Dictionary<string, Dictionary<string, string>> _dropdownDict;
+        public static Dictionary<string, Dictionary<string, string>> _dropdownDict;
 
-		/// <summary>
-		///	Returns the values from GetBasicDropdowns, but in Dictionary form for more efficent lookup
-		/// </summary>
-		/// <returns>
-		///	Dictionary with (Key: Atrb Cd | Value: Another Dictionary with (Key: Uppercased name | Value: Name with capitalization as appears in db))
-		/// </returns>
-		public static Dictionary<string, string> GetBasicDropdownDict(string atrbCd)
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				if (_basicDropdownDict == null)
-				{
-					_basicDropdownDict = new Dictionary<string, Dictionary<string,string>>();
-				}
+        /// <summary>
+        ///	Returns the values from GetBasicDropdowns, but in Dictionary form for more efficent lookup
+        /// </summary>
+        /// <returns>
+        ///	Dictionary with (Key: Atrb Cd | Value: Another Dictionary with (Key: Uppercased name | Value: Name with capitalization as appears in db))
+        /// </returns>
+        public static Dictionary<string, string> GetBasicDropdownDict(string atrbCd)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_basicDropdownDict == null)
+                {
+                    _basicDropdownDict = new Dictionary<string, Dictionary<string, string>>();
+                }
 
-				if (!_basicDropdownDict.ContainsKey(atrbCd))
-				{
-					List<BasicDropdown> dropdownList = GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).ToList<BasicDropdown>();
-					Dictionary<string, string> temp = new Dictionary<string, string>();
+                if (!_basicDropdownDict.ContainsKey(atrbCd))
+                {
+                    List<BasicDropdown> dropdownList = GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).ToList<BasicDropdown>();
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
 
-					for (int i = 0; i < dropdownList.Count; i++)
-					{
-						if (!temp.ContainsKey(dropdownList[i].DROP_DOWN.ToUpper()))
-						{
-							temp[dropdownList[i].DROP_DOWN.ToUpper()] = dropdownList[i].DROP_DOWN;
-						}
-					}
-					_basicDropdownDict[atrbCd] = temp;
+                    for (int i = 0; i < dropdownList.Count; i++)
+                    {
+                        if (!temp.ContainsKey(dropdownList[i].DROP_DOWN.ToUpper()))
+                        {
+                            temp[dropdownList[i].DROP_DOWN.ToUpper()] = dropdownList[i].DROP_DOWN;
+                        }
+                    }
+                    _basicDropdownDict[atrbCd] = temp;
+                }
+                return _basicDropdownDict[atrbCd];
+            }
+        }
 
-				}
-				return _basicDropdownDict[atrbCd];
-			}
-		}
-		public static Dictionary<string, Dictionary<string, string>> _basicDropdownDict;
-		
+        public static Dictionary<string, Dictionary<string, string>> _basicDropdownDict;
 
-		#endregion Dropdowns
+        #endregion Dropdowns
 
-		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-		//public static List<RetailPull> GetRetailPullList()
-		//{
-		//	lock (LOCK_OBJECT ?? new object())
-		//	{
-		//		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
-		//	}
-		//}
+        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+        //public static List<RetailPull> GetRetailPullList()
+        //{
+        //	lock (LOCK_OBJECT ?? new object())
+        //	{
+        //		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
+        //	}
+        //}
 
-		//private static List<RetailPull> _getRetailPullList;
+        //private static List<RetailPull> _getRetailPullList;
 
-		public static List<SoldToIds> GetSoldToIdList()
+        public static List<SoldToIds> GetSoldToIdList()
         {
             lock (LOCK_OBJECT ?? new object())
             {

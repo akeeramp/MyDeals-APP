@@ -149,8 +149,11 @@ namespace Intel.MyDeals.App
 
             UserSettings[opUserToken.Usr.Idsid.ToUpper()] = settings;
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserToken = opUserToken;
-            UserSettings[opUserToken.Usr.Idsid.ToUpper()].AllMyCustomers = GetMyCustomers(opUserToken);
-            UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserPreferences = GetUserPreferences(opUserToken);
+            if (opUserToken.Usr.WWID == 0)// No need to look for customer and user preferences values as user doesn't exist in Mydeals
+            {
+                UserSettings[opUserToken.Usr.Idsid.ToUpper()].AllMyCustomers = GetMyCustomers(opUserToken);
+                UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserPreferences = GetUserPreferences(opUserToken);
+            }
         }
 
         // Added Get_My_Cust returns ehre to over-ride CustomerLib.cs calls
