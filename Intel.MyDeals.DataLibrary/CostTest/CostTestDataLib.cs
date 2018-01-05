@@ -40,7 +40,6 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_GRP_CMNT = DB.GetReaderOrdinal(rdr, "DEAL_GRP_CMNT");
                     int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
                     int IDX_DEAL_PRD_RNK = DB.GetReaderOrdinal(rdr, "DEAL_PRD_RNK");
-                    int IDX_DEAL_STG_CD = DB.GetReaderOrdinal(rdr, "DEAL_STG_CD");
                     int IDX_DEAL_STRT_DT = DB.GetReaderOrdinal(rdr, "DEAL_STRT_DT");
                     int IDX_ECAP_FLR = DB.GetReaderOrdinal(rdr, "ECAP_FLR");
                     int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
@@ -59,6 +58,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PYOUT_BASE_ON = DB.GetReaderOrdinal(rdr, "PYOUT_BASE_ON");
                     int IDX_RTL_CYC_NM = DB.GetReaderOrdinal(rdr, "RTL_CYC_NM");
                     int IDX_RTL_PULL_DLR = DB.GetReaderOrdinal(rdr, "RTL_PULL_DLR");
+                    int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
 
                     while (rdr.Read())
                     {
@@ -74,7 +74,6 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_GRP_CMNT = (IDX_DEAL_GRP_CMNT < 0 || rdr.IsDBNull(IDX_DEAL_GRP_CMNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_GRP_CMNT),
                             DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
                             DEAL_PRD_RNK = (IDX_DEAL_PRD_RNK < 0 || rdr.IsDBNull(IDX_DEAL_PRD_RNK)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_DEAL_PRD_RNK),
-                            DEAL_STG_CD = (IDX_DEAL_STG_CD < 0 || rdr.IsDBNull(IDX_DEAL_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STG_CD),
                             DEAL_STRT_DT = (IDX_DEAL_STRT_DT < 0 || rdr.IsDBNull(IDX_DEAL_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_STRT_DT),
                             ECAP_FLR = (IDX_ECAP_FLR < 0 || rdr.IsDBNull(IDX_ECAP_FLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_FLR),
                             ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
@@ -92,7 +91,8 @@ namespace Intel.MyDeals.DataLibrary
                             PROG_PMT = (IDX_PROG_PMT < 0 || rdr.IsDBNull(IDX_PROG_PMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROG_PMT),
                             PYOUT_BASE_ON = (IDX_PYOUT_BASE_ON < 0 || rdr.IsDBNull(IDX_PYOUT_BASE_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PYOUT_BASE_ON),
                             RTL_CYC_NM = (IDX_RTL_CYC_NM < 0 || rdr.IsDBNull(IDX_RTL_CYC_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RTL_CYC_NM),
-                            RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR)
+                            RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
+                            WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD)
                         });
                     }
 

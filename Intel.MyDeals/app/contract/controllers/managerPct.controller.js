@@ -513,8 +513,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             template: "#= kendo.toString(new Date(DEAL_STRT_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(DEAL_END_DT), 'M/d/yyyy') #",
             parent: true
         },
-        "DEAL_STG_CD": {
-            field: "DEAL_STG_CD",
+        "WF_STG_CD": {
+            field: "WF_STG_CD",
             title: "Deal Stage",
             width: "80px",
             parent: false

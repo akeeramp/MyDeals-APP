@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessRules
             if (dc == null || ar == null) return false;
             OpRoleType opRoleType = OpUserStack.MyOpUserToken.Role;
 
-            string stage = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
+            string stage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
 
             // Tracker if enabled
             if (ar.WithTracker != null)

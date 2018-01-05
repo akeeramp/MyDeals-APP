@@ -502,7 +502,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (deFrontendValue == "Backend" || !r.Dc.HasTracker()) return;
 
-            foreach (OpDataElement de in r.Dc.DataElements.Where(d => d.AtrbCd != AttributeCodes.NOTES && d.AtrbCd != AttributeCodes.COMMENTS))
+            foreach (OpDataElement de in r.Dc.DataElements.Where(d => d.AtrbCd != AttributeCodes.NOTES))
             {
                 de.SetReadOnly();
             }

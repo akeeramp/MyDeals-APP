@@ -1175,7 +1175,6 @@
     <Content Include="js\jsoneditor.js" />
     <Content Include="js\sampleSPA.js" />
     <Content Include="js\_cache.js" />
-    <Content Include="js\_dealUtil.js" />
     <Content Include="js\_gridUtil.js" />
     <Content Include="js\_linkUtil.js" />
     <Content Include="js\_search.js" />

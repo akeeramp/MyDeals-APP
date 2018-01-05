@@ -1604,187 +1604,187 @@ namespace Intel.MyDeals.Entities
         ///<summary>
         /// ATRB_SID: 99009
         ///</summary>
-        public static class ATRB_SCTN_LKUP_VAL
-        {
-            ///<summary>
-            /// ID: 50
-            ///</summary>
-            public const string C2A_DATA = @"C2A Data";
-            ///<summary>
-            /// ID: 40
-            ///</summary>
-            public const string COMMENTS = @"COMMENTS";
-            ///<summary>
-            /// ID: 41
-            ///</summary>
-            public const string FILE_ATTCH = @"FILE_ATTCH";
-            ///<summary>
-            /// ID: 51
-            ///</summary>
-            public const string INVISIBLE = @"INVISIBLE";
-            ///<summary>
-            /// ID: 30
-            ///</summary>
-            public const string LEGAL_FOLDER = @"LEGAL_FOLDER";
-            ///<summary>
-            /// ID: 31
-            ///</summary>
-            public const string LINE_ITM = @"LINE_ITM";
-            ///<summary>
-            /// ID: 32
-            ///</summary>
-            public const string OVERLAPPING_DEALS = @"OVERLAPPING_DEALS";
-            ///<summary>
-            /// ID: 42
-            ///</summary>
-            public const string QUESTION = @"QUESTION";
-            ///<summary>
-            /// ID: 33
-            ///</summary>
-            public const string REB_BMT_APPROVED = @"REB_BMT_APPROVED";
-            ///<summary>
-            /// ID: 34
-            ///</summary>
-            public const string REB_COMMENTS_ATTACHMENTS = @"REB_COMMENTS_ATTACHMENTS";
-            ///<summary>
-            /// ID: 35
-            ///</summary>
-            public const string REB_COMPETITIVE = @"REB_COMPETITIVE";
-            ///<summary>
-            /// ID: 36
-            ///</summary>
-            public const string REB_GEN = @"REB_GEN";
-            ///<summary>
-            /// ID: 37
-            ///</summary>
-            public const string REB_MMBP_APPROVED = @"REB_MMBP_APPROVED";
-            ///<summary>
-            /// ID: 43
-            ///</summary>
-            public const string REB_PAYMENTS = @"REB_PAYMENTS";
-            ///<summary>
-            /// ID: 44
-            ///</summary>
-            public const string REB_PNL_SPLIT = @"REB_PNL_SPLIT";
-            ///<summary>
-            /// ID: 38
-            ///</summary>
-            public const string REB_TRGT_REG = @"REB_TRGT_REG";
-            ///<summary>
-            /// ID: 39
-            ///</summary>
-            public const string SCHD = @"SCHD";
+        //public static class ATRB_SCTN_LKUP_VAL
+        //{
+        //    ///<summary>
+        //    /// ID: 50
+        //    ///</summary>
+        //    public const string C2A_DATA = @"C2A Data";
+        //    ///<summary>
+        //    /// ID: 40
+        //    ///</summary>
+        //    public const string COMMENTS = @"COMMENTS";
+        //    ///<summary>
+        //    /// ID: 41
+        //    ///</summary>
+        //    public const string FILE_ATTCH = @"FILE_ATTCH";
+        //    ///<summary>
+        //    /// ID: 51
+        //    ///</summary>
+        //    public const string INVISIBLE = @"INVISIBLE";
+        //    ///<summary>
+        //    /// ID: 30
+        //    ///</summary>
+        //    public const string LEGAL_FOLDER = @"LEGAL_FOLDER";
+        //    ///<summary>
+        //    /// ID: 31
+        //    ///</summary>
+        //    public const string LINE_ITM = @"LINE_ITM";
+        //    ///<summary>
+        //    /// ID: 32
+        //    ///</summary>
+        //    public const string OVERLAPPING_DEALS = @"OVERLAPPING_DEALS";
+        //    ///<summary>
+        //    /// ID: 42
+        //    ///</summary>
+        //    public const string QUESTION = @"QUESTION";
+        //    ///<summary>
+        //    /// ID: 33
+        //    ///</summary>
+        //    public const string REB_BMT_APPROVED = @"REB_BMT_APPROVED";
+        //    ///<summary>
+        //    /// ID: 34
+        //    ///</summary>
+        //    public const string REB_COMMENTS_ATTACHMENTS = @"REB_COMMENTS_ATTACHMENTS";
+        //    ///<summary>
+        //    /// ID: 35
+        //    ///</summary>
+        //    public const string REB_COMPETITIVE = @"REB_COMPETITIVE";
+        //    ///<summary>
+        //    /// ID: 36
+        //    ///</summary>
+        //    public const string REB_GEN = @"REB_GEN";
+        //    ///<summary>
+        //    /// ID: 37
+        //    ///</summary>
+        //    public const string REB_MMBP_APPROVED = @"REB_MMBP_APPROVED";
+        //    ///<summary>
+        //    /// ID: 43
+        //    ///</summary>
+        //    public const string REB_PAYMENTS = @"REB_PAYMENTS";
+        //    ///<summary>
+        //    /// ID: 44
+        //    ///</summary>
+        //    public const string REB_PNL_SPLIT = @"REB_PNL_SPLIT";
+        //    ///<summary>
+        //    /// ID: 38
+        //    ///</summary>
+        //    public const string REB_TRGT_REG = @"REB_TRGT_REG";
+        //    ///<summary>
+        //    /// ID: 39
+        //    ///</summary>
+        //    public const string SCHD = @"SCHD";
 
-            ///<summary>
-            /// All values associated with this lookup
-            ///</summary>
-            public static readonly string[] Values = { @"C2A Data", @"COMMENTS", @"FILE_ATTCH", @"INVISIBLE", @"LEGAL_FOLDER", @"LINE_ITM", @"OVERLAPPING_DEALS", @"QUESTION", @"REB_BMT_APPROVED", @"REB_COMMENTS_ATTACHMENTS", @"REB_COMPETITIVE", @"REB_GEN", @"REB_MMBP_APPROVED", @"REB_PAYMENTS", @"REB_PNL_SPLIT", @"REB_TRGT_REG", @"SCHD" };
+        //    ///<summary>
+        //    /// All values associated with this lookup
+        //    ///</summary>
+        //    public static readonly string[] Values = { @"C2A Data", @"COMMENTS", @"FILE_ATTCH", @"INVISIBLE", @"LEGAL_FOLDER", @"LINE_ITM", @"OVERLAPPING_DEALS", @"QUESTION", @"REB_BMT_APPROVED", @"REB_COMMENTS_ATTACHMENTS", @"REB_COMPETITIVE", @"REB_GEN", @"REB_MMBP_APPROVED", @"REB_PAYMENTS", @"REB_PNL_SPLIT", @"REB_TRGT_REG", @"SCHD" };
 
-            ///<summary>
-            /// Keyed values associated with the lookup
-            ///</summary>
-            public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
-                {50, @"C2A Data"},
-                {40, @"COMMENTS"},
-                {41, @"FILE_ATTCH"},
-                {51, @"INVISIBLE"},
-                {30, @"LEGAL_FOLDER"},
-                {31, @"LINE_ITM"},
-                {32, @"OVERLAPPING_DEALS"},
-                {42, @"QUESTION"},
-                {33, @"REB_BMT_APPROVED"},
-                {34, @"REB_COMMENTS_ATTACHMENTS"},
-                {35, @"REB_COMPETITIVE"},
-                {36, @"REB_GEN"},
-                {37, @"REB_MMBP_APPROVED"},
-                {43, @"REB_PAYMENTS"},
-                {44, @"REB_PNL_SPLIT"},
-                {38, @"REB_TRGT_REG"},
-                {39, @"SCHD"}
-            };
+        //    ///<summary>
+        //    /// Keyed values associated with the lookup
+        //    ///</summary>
+        //    public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
+        //        {50, @"C2A Data"},
+        //        {40, @"COMMENTS"},
+        //        {41, @"FILE_ATTCH"},
+        //        {51, @"INVISIBLE"},
+        //        {30, @"LEGAL_FOLDER"},
+        //        {31, @"LINE_ITM"},
+        //        {32, @"OVERLAPPING_DEALS"},
+        //        {42, @"QUESTION"},
+        //        {33, @"REB_BMT_APPROVED"},
+        //        {34, @"REB_COMMENTS_ATTACHMENTS"},
+        //        {35, @"REB_COMPETITIVE"},
+        //        {36, @"REB_GEN"},
+        //        {37, @"REB_MMBP_APPROVED"},
+        //        {43, @"REB_PAYMENTS"},
+        //        {44, @"REB_PNL_SPLIT"},
+        //        {38, @"REB_TRGT_REG"},
+        //        {39, @"SCHD"}
+        //    };
 
-            ///<summary>
-            /// Try to get named value from an ID, or String.Empty on error
-            ///</summary>
-            public static string TryGetValue(int id)
-            {
-                string ret;
-                if (Dict.TryGetValue(id, out ret))
-                {
-                    return ret;
-                }
-                return String.Empty;
-            }
+        //    ///<summary>
+        //    /// Try to get named value from an ID, or String.Empty on error
+        //    ///</summary>
+        //    public static string TryGetValue(int id)
+        //    {
+        //        string ret;
+        //        if (Dict.TryGetValue(id, out ret))
+        //        {
+        //            return ret;
+        //        }
+        //        return String.Empty;
+        //    }
 
-            ///<summary>
-            /// Try to get and ID from a name (case insensitive), or null on error.
-            ///</summary>
-            public static int? TryGetId(string value)
-            {
-                var v = value.Trim().ToLower();
-                foreach (var kvp in Dict.Where(itm => itm.Value.Trim().ToLower() == v))
-                {
-                    return kvp.Key;
-                }
-                return null;
-            }
+        //    ///<summary>
+        //    /// Try to get and ID from a name (case insensitive), or null on error.
+        //    ///</summary>
+        //    public static int? TryGetId(string value)
+        //    {
+        //        var v = value.Trim().ToLower();
+        //        foreach (var kvp in Dict.Where(itm => itm.Value.Trim().ToLower() == v))
+        //        {
+        //            return kvp.Key;
+        //        }
+        //        return null;
+        //    }
 
-        }
+        //}
 
         ///<summary>
         /// ATRB_SID: 99013
         ///</summary>
-        public static class NAND_SSD_QSTN_VAL
-        {
-            ///<summary>
-            /// ID: 86
-            ///</summary>
-            public const string CLIENT = @"Client";
-            ///<summary>
-            /// ID: 87
-            ///</summary>
-            public const string DATA_CENTER = @"Data Center";
+        //public static class NAND_SSD_QSTN_VAL
+        //{
+        //    ///<summary>
+        //    /// ID: 86
+        //    ///</summary>
+        //    public const string CLIENT = @"Client";
+        //    ///<summary>
+        //    /// ID: 87
+        //    ///</summary>
+        //    public const string DATA_CENTER = @"Data Center";
 
-            ///<summary>
-            /// All values associated with this lookup
-            ///</summary>
-            public static readonly string[] Values = { @"Client", @"Data Center" };
+        //    ///<summary>
+        //    /// All values associated with this lookup
+        //    ///</summary>
+        //    public static readonly string[] Values = { @"Client", @"Data Center" };
 
-            ///<summary>
-            /// Keyed values associated with the lookup
-            ///</summary>
-            public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
-                {86, @"Client"},
-                {87, @"Data Center"}
-            };
+        //    ///<summary>
+        //    /// Keyed values associated with the lookup
+        //    ///</summary>
+        //    public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
+        //        {86, @"Client"},
+        //        {87, @"Data Center"}
+        //    };
 
-            ///<summary>
-            /// Try to get named value from an ID, or String.Empty on error
-            ///</summary>
-            public static string TryGetValue(int id)
-            {
-                string ret;
-                if (Dict.TryGetValue(id, out ret))
-                {
-                    return ret;
-                }
-                return String.Empty;
-            }
+        //    ///<summary>
+        //    /// Try to get named value from an ID, or String.Empty on error
+        //    ///</summary>
+        //    public static string TryGetValue(int id)
+        //    {
+        //        string ret;
+        //        if (Dict.TryGetValue(id, out ret))
+        //        {
+        //            return ret;
+        //        }
+        //        return String.Empty;
+        //    }
 
-            ///<summary>
-            /// Try to get and ID from a name (case insensitive), or null on error.
-            ///</summary>
-            public static int? TryGetId(string value)
-            {
-                var v = value.Trim().ToLower();
-                foreach (var kvp in Dict.Where(itm => itm.Value.Trim().ToLower() == v))
-                {
-                    return kvp.Key;
-                }
-                return null;
-            }
+        //    ///<summary>
+        //    /// Try to get and ID from a name (case insensitive), or null on error.
+        //    ///</summary>
+        //    public static int? TryGetId(string value)
+        //    {
+        //        var v = value.Trim().ToLower();
+        //        foreach (var kvp in Dict.Where(itm => itm.Value.Trim().ToLower() == v))
+        //        {
+        //            return kvp.Key;
+        //        }
+        //        return null;
+        //    }
 
-        }
+        //}
 
         ///<summary>
         /// ATRB_SID: 99014

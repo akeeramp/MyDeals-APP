@@ -17,7 +17,6 @@
 
         $scope.contractData = {
             "TITLE": "",
-            "CONTRACT_STATUS": "",
             "OBJ_SET_TYPE_CD": "ALL_TYPES",
             "CUST_MBR_SID": "",
             "START_DT": "",

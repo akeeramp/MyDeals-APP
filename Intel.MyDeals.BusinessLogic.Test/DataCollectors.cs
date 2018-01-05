@@ -39,7 +39,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any());
             Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD) == null);
-            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElementValue(AttributeCodes.DEAL_STG_CD) == StageCodes.Requested.ToString());
+            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElementValue(AttributeCodes.WF_STG_CD) == StageCodes.Requested.ToString());
             //Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue("START_DT") == "6/6/2016 12:00:00 AM");
         }
 
@@ -50,11 +50,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
-            Assert.IsTrue(data[OpDataElementType.CNTRCT][0][AttributeCodes.DEAL_STG_CD].ToString() == "Requested");
+            Assert.IsTrue(data[OpDataElementType.CNTRCT][0][AttributeCodes.WF_STG_CD].ToString() == "Requested");
 
-            data[OpDataElementType.CNTRCT][0][AttributeCodes.DEAL_STG_CD] = StageCodes.Submitted.ToString();
+            data[OpDataElementType.CNTRCT][0][AttributeCodes.WF_STG_CD] = StageCodes.Submitted.ToString();
 
-            Assert.IsTrue(data[OpDataElementType.CNTRCT][0]["DEAL_STG_CD"].ToString() == "Submitted");
+            Assert.IsTrue(data[OpDataElementType.CNTRCT][0]["WF_STG_CD"].ToString() == "Submitted");
         }
 
         [TestCase]
