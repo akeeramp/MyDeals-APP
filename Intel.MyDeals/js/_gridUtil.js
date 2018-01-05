@@ -505,15 +505,15 @@ gridUtils.tenderDim = function (dataItem, field, format) {
             if (key.indexOf("20____1") >= 0) dim = "Kit";
             if (key.indexOf("20_____1") >= 0) dim = "Kit";
             if (key.indexOf("20___0") >= 0) dim = "Primary";
-            if (key.indexOf("20___1") >= 0) dim = "Secondary";
-            if (key.indexOf("20___2") >= 0) dim = "Secondary";
-            if (key.indexOf("20___3") >= 0) dim = "Secondary";
-            if (key.indexOf("20___4") >= 0) dim = "Secondary";
-            if (key.indexOf("20___5") >= 0) dim = "Secondary";
-            if (key.indexOf("20___6") >= 0) dim = "Secondary";
-            if (key.indexOf("20___7") >= 0) dim = "Secondary";
-            if (key.indexOf("20___8") >= 0) dim = "Secondary";
-            if (key.indexOf("20___9") >= 0) dim = "Secondary";
+            if (key.indexOf("20___1") >= 0) dim = "Secondary 1";
+            if (key.indexOf("20___2") >= 0) dim = "Secondary 2";
+            if (key.indexOf("20___3") >= 0) dim = "Secondary 3";
+            if (key.indexOf("20___4") >= 0) dim = "Secondary 4";
+            if (key.indexOf("20___5") >= 0) dim = "Secondary 5";
+            if (key.indexOf("20___6") >= 0) dim = "Secondary 6";
+            if (key.indexOf("20___7") >= 0) dim = "Secondary 7";
+            if (key.indexOf("20___8") >= 0) dim = "Secondary 8";
+            if (key.indexOf("20___9") >= 0) dim = "Secondary 9";
 
             var val = ar[key];
             if (format !== undefined) {

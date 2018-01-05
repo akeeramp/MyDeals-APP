@@ -81,10 +81,15 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Additive
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE)))
+            string dealCompType = r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE);
+            if (string.IsNullOrEmpty(dealCompType))
             {
                 // If tender, make it exclusive, otherwise non additive
                 item[AttributeCodes.DEAL_COMB_TYPE] = dcRebateType == "TENDER"? "Mutually Exclusive" : "Non Additive";
+            }
+            else if (dcRebateType == "TENDER" && r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE).ToString() != dcRebateType)
+            {
+                item[AttributeCodes.DEAL_COMB_TYPE] = "Mutually Exclusive";
             }
 
             // Check for backdate Reason

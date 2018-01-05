@@ -114,7 +114,7 @@
                     { "name": "SubKit", "order": 3 },
                     { "name": "CAP Info", "order": 98 },
                     { "name": "All", "order": 99 }
-                ],
+                ]
             },
             "templates": {
                 "ECAP": {
@@ -241,6 +241,9 @@
                     "QLTR_PROJECT": {
                         "Groups": ["Deal Info"]
                     },
+                    "BID_STATUS": {
+                        "Groups": ["Deal Info"]
+                    },
                     "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
@@ -265,66 +268,6 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
-                    //"COST_TEST_RESULT": {
-                    //    "Groups": ["Cost Test"]
-                    //},
-                    //"PRD_COST": {
-                    //    "Groups": ["Cost Test"]
-                    //},
-                    //"COST_TYPE_USED": {
-                    //    "Groups": ["Cost Test"]
-                    //},
-                    //"COST_TEST_FAIL_OVERRIDE": {
-                    //    "Groups": ["Cost Test"]
-                    //},
-                    //"COST_TEST_FAIL_OVERRIDE_REASON": {
-                    //    "Groups": ["Cost Test"]
-                    //},
-                    //"MEET_COMP_PRICE_QSTN": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"COMP_SKU": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"COMP_SKU_OTHR": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"COMPETITIVE_PRICE": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"COMP_BENCH": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"IA_BENCH": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"COMP_TARGET_SYSTEM_PRICE": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"MEETCOMP_TEST_RESULT": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"MEETCOMP_TEST_FAIL_OVERRIDE": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
-                    //    "Groups": ["Meet Comp"]
-                    //},
-                    //"RETAIL_CYCLE": {
-                    //    "Groups": ["Retail Cycle"]
-                    //},
-                    //"RETAIL_PULL": {
-                    //    "Groups": ["Retail Cycle"]
-                    //},
-                    //"RETAIL_PULL_USR_DEF": {
-                    //    "Groups": ["Retail Cycle"]
-                    //},
-                    //"RETAIL_PULL_USR_DEF_CMNT": {
-                    //    "Groups": ["Retail Cycle"]
-                    //},
-                    //"ECAP_FLR": {
-                    //    "Groups": ["Retail Cycle"]
-                    //},
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     }
@@ -797,6 +740,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "QLTR_PROJECT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "BID_STATUS": {
                         "Groups": ["Deal Info"]
                     },
                     "END_CUSTOMER_RETAIL": {

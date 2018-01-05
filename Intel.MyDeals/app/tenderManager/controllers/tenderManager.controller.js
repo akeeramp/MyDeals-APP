@@ -173,7 +173,6 @@
                     });
                 }
             },
-
             sortable: true,
             resizable: true,
             scrollable: true,            
@@ -217,33 +216,33 @@
                 }, {
                     field: "PRODUCT_FILTER",
                     title: "Product",
-                    width: 200,
+                    width: 220,
                     filterable: $scope.objFilter,
                     template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
                 }, {
                     field: "TRKR_NBR",
                     title: "Tracker #",
-                    width: 180,
+                    width: 200,
                     filterable: $scope.objFilter,
                     template: "#= gridUtils.tenderDim(data, 'TRKR_NBR') #"
                 }, {
                     field: "ECAP_PRICE",
                     title: "ECAP Price",
-                    width: 130,
+                    width: 140,
                     format: "{0:c}",
                     filterable: $scope.moneyObjFilter,
                     template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
                 }, {
                     field: "CAP",
                     title: "CAP",
-                    width: 130,
+                    width: 140,
                     format: "{0:c}",
                     filterable: $scope.moneyObjFilter,
                     template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
                 }, {
                     field: "YCS2_PRC_IRBT",
                     title: "YCS2",
-                    width: 130,
+                    width: 140,
                     format: "{0:c}",
                     filterable: $scope.moneyObjFilter,
                     template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
@@ -523,5 +522,10 @@
             grid.dataSource.sort({});
             grid.dataSource.read();
         }
+
+        // initially load data
+        $timeout(function () {
+            $scope.loadData();
+        }, 2000);
     }
 })();

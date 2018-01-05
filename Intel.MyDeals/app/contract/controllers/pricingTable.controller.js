@@ -1635,10 +1635,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             if (errors && Object.keys(errors).length !== 0) {
                                 sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
                                 var myVal = "";
-                                for (var myKey in data[key]._behaviors.validMsg) {
-                                    myVal += ptTemplate.model.fields[myKey].label + ": " + data[key]._behaviors.validMsg[myKey];
+                                var validMsg = data[key]._behaviors.validMsg;
+                                for (var myKey in validMsg) {
+                                    if (validMsg.hasOwnProperty(myKey) && ptTemplate.model.fields[myKey] !== undefined) {
+                                        myVal += ptTemplate.model.fields[myKey].label + ": " + validMsg[myKey];
+                                    }
                                 }
-                                data[key]._behaviors.validMsg["DC_ID"] = myVal;
+                                validMsg["DC_ID"] = myVal;
                                 var isError = myVal !== "";
                                 data[key]._behaviors.isError["DC_ID"] = isError;
                                 sheet.range("A" + row + ":A" + row).validation(root.myDealsValidation(isError, myVal, false));
