@@ -298,16 +298,17 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
     $scope.isCopyCntrctListLoaded = false;
     $scope.copyCntrctSelectedItem = null;
     $scope.getCopyCntrctDlgInfo = function () {
-        // TODO::TJE - for some reason, $scope.selectedCustomerId, $scope.startDate, and $scope.endDate
-        // don't always have the proper values.
+        // Set $scope.copyCntrctStartDate and $scope.copyCntrctEndDate
+        $scope.copyCntrctStartDate = $scope.$storage.startDate;
+        $scope.copyCntrctEndDate = $scope.$storage.endDate;
 
-        // Set $scope.selectedCustomerName
-        $scope.selectedCustomerName = '<All>';
+        // Set $scope.copyCntrctCustomerName
+        $scope.copyCntrctCustomerName = '<All>';
         dataService.get("api/Customers/GetMyCustomerNames")
             .then(function (response) {
                 for (var i = 0; i < response.data.length; i++) {
-                    if (response.data[i].CUST_SID == $scope.selectedCustomerId) {
-                        $scope.selectedCustomerName = response.data[i].CUST_NM;
+                    if (response.data[i].CUST_SID == $scope.$storage.selectedCustomerId) {
+                        $scope.copyCntrctCustomerName = response.data[i].CUST_NM;
                         break;
                     }
                 }
@@ -317,9 +318,9 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
 
         // Set $scope.copyCntrctList, then update the grid on the copy contract dialog.
         var postData = {
-            "CustomerIds": [$scope.selectedCustomerId],
-            "StartDate": $scope.startDate,
-            "EndDate": $scope.endDate
+            "CustomerIds": [$scope.$storage.selectedCustomerId],
+            "StartDate": $scope.$storage.startDate,
+            "EndDate": $scope.$storage.endDate
         };
         dataService.post("/api/Dashboard/GetDashboardContractSummary", postData)
             .then(function (response) {
