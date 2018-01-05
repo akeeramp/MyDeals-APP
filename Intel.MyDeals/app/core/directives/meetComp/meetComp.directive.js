@@ -399,7 +399,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                             //Retaining the same expand
                                             if (tempData.length > 0) {
-                                                expandSelected("COMP_OVRRD_RSN");
+                                                expandSelected("COMP_OVRRD_RSN", editedROW.RW_NM);
                                             }
                                         }
                                     });
@@ -1066,7 +1066,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                         }
                         
-                        function expandSelected(colName) {
+                        function expandSelected(colName, rowNumber) {
                             $scope.isVisible = false;
                             var grid = $("#grid").data("kendoGrid");
                             var row_NO = [];
@@ -1098,9 +1098,16 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 }
 
                                 if (colName) {
-                                    var row = $("#grid").find("tr[data-uid='" + selectedUID[0] + "']");
+                                    var selUID = '';
+                                    if (rowNumber) {
+                                        selUID = $scope.dataSourceParent._view[rowNumber].uid;
+                                    }
+                                    else {
+                                        selUID = selectedUID[0];
+                                    }
+                                    var row = $("#grid").find("tr[data-uid='" + selUID + "']");
                                     var cell = $(row).children().eq(columnIndex[colName]);
-                                    $('#grid').data('kendoGrid').editCell(cell);                                    
+                                    $('#grid').data('kendoGrid').editCell(cell);                                     
                                 }                                
                             }
                             $scope.isVisible = true;                                                    
