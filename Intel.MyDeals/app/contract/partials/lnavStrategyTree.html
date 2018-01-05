@@ -21,8 +21,11 @@
             <div class="fr" ng-if="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE">
                 <span class="hasMenuPs{{ ps.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                 <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.DC_ID }}'" k-show-on="'click'">
-                    <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
+
                     <!-- If you can add PS, give the button to do so -->
+                    <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
+                    <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="copyPricingStrategy(contractData, ps)"><i class="intelicon-copy-outlined"></i> Copy Pricing Strategy</a></li>
+
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
 
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="editPricingStrategyName(ps)"><i class="intelicon-edit"></i> Edit Pricing Strategy Name</a></li>
@@ -77,12 +80,16 @@
                         <span class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                         <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.DC_ID }}'" k-show-on="'click'">
                             <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
-                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
+
                             <!-- If you can add PT, give the button to do so -->
+                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
+                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="copyPricingTable(ps,pt);"><i class="intelicon-copy-outlined"></i> Copy Pricing Table</a></li>
+
 
                             <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="editPricingTableName(pt)"><i class="intelicon-edit"></i> Edit Pricing Table Name</a></li>
 
                             <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showEditPricingTableDefaults(pt)"><i class="intelicon-edit"></i> Edit Autofill Defaults</a></li>
+
 
                             <!-- If PT has no trackers under it and you can add one, you can remove it -->
                             <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && ps.HAS_TRACKER !== '1'"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>

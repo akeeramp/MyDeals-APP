@@ -40,9 +40,8 @@ namespace Intel.MyDeals.BusinessLogic
             return GetPricingStrategy(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, ContractToken contractToken)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
-            SavePacket savePacket = new SavePacket(contractToken);
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PRC_ST] = data

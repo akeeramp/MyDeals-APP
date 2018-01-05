@@ -146,7 +146,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, ContractToken contractToken)
+        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             OpDataCollectorFlattenedDictList dataDictList = new OpDataCollectorFlattenedDictList
             {
@@ -191,7 +191,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
             //if (data["DC_ID"])
-            return _dataCollectorLib.SavePackets(dataDictList, new SavePacket(contractToken)).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            return _dataCollectorLib.SavePackets(dataDictList, savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken)

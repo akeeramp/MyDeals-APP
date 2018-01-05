@@ -15,7 +15,7 @@ namespace Intel.MyDeals.IBusinessLogic
         string GetPath(int id, string opType);
         PctOverrideReason SetPctOverrideReason(PctOverrideReason data);
 
-        OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, ContractToken contractToken);
+        OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, SavePacket savePacket);
         OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken);
         OpDataCollectorFlattenedDictList SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, ContractToken contractToken);
         OpMsg DeletePricingTable(ContractToken contractToken, OpDataCollectorFlattenedList pricingTables);

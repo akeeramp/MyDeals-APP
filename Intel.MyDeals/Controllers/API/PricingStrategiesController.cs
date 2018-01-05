@@ -53,11 +53,13 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SavePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken
             {
                 CustId = custId,
                 ContractId = contractId
-            }), 
+            });
+
+            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, savePacket), 
                 "Unable to save the Pricing Strategy"
             );
         }
@@ -163,5 +165,23 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("CopyPricingStrategy/{custId}/{contractId}/{srcId}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedDictList CopyPricingStrategy(int custId, int contractId, int srcId, OpDataCollectorFlattenedList data)
+        {
+            SavePacket savePacket = new SavePacket(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId,
+                CopyFromId = srcId,
+                CopyFromObjType = OpDataElementType.PRC_ST
+            });
+
+            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(data, savePacket)
+                , "Unable to copy the Pricing Strategy"
+            );
+        }
     }
 }

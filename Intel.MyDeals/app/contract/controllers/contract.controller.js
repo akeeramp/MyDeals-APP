@@ -8,9 +8,9 @@
 
 
     SetRequestVerificationToken.$inject = ['$http'];
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    function ContractController($scope, $state, $filter, $localStorage, $linq, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
         //
         $scope.templates = $scope.templates || templateData.data;
@@ -1664,7 +1664,6 @@
                     topbar.show();
                     objsetService.cancelPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps).then(
                         function (data) {
-                            debugger;
                             if (data.data.Messages[0].MsgType !== 1) {
                                 $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Strategy", "Error");
                                 $timeout(function () {
@@ -1808,7 +1807,6 @@
                             }, { reload: true });
                         },
                         function (result) {
-                            debugger;
                             logger.error("Could not Cancel the Pricing Table.", result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
@@ -1888,6 +1886,69 @@
 
         $scope.reloadPage = function () {
             $state.reload();
+        }
+
+        // **** COPY Methods ****
+        //
+        $scope.copyPricingStrategy = function (c, ps) {
+            $scope.copyObj("Pricing Strategy", c.PRC_ST, ps.DC_ID, objsetService.copyPricingStrategy);
+        }
+        $scope.copyPricingTable = function (ps, pt) {
+            $scope.copyObj("Pricing Table", ps.PRC_TBL, pt.DC_ID, objsetService.copyPricingTable);
+        }
+        $scope.copyObj = function (objType, objTypes, id, invokFunc) {
+            $scope.setBusy("Copying", "Copying the " + objType);
+            $scope._dirty = false;
+            topbar.show();
+
+            // Clone selected obj based on id
+            var selectedItems = $linq.Enumerable().From(objTypes).Where(
+                function (x) {
+                    return (x.DC_ID === id);
+                }).ToArray();
+
+            var titles = $linq.Enumerable().From(objTypes).Select(
+                function (x) {
+                    return x.TITLE;
+                }).ToArray();
+
+            if (selectedItems.length === 0) {
+                kendo.alert("Unable to locate the " + objType);
+                topbar.hide();
+                $scope.setBusy("", "");
+                return;
+            }
+
+            var item = util.clone(selectedItems[0]);
+            if (!item) {
+                kendo.alert("Unable to copy the " + objType);
+                topbar.hide();
+                $scope.setBusy("", "");
+                return;
+            }
+
+            item.DC_ID = $scope.uid--;
+
+            // define new TITLE
+            while (titles.indexOf(item.TITLE) >= 0) {
+                item.TITLE += " (copy)";
+            }
+
+            // Add to DB first... then add to screen
+            invokFunc($scope.getCustId(), $scope.contractData.DC_ID, id, item).then(
+                function (data) {
+                    // reload the left nav to show the new details
+                    logger.success("Copied the " + objType + ".", data, "Copy Successful");
+                    $scope.refreshContractData();
+                    topbar.hide();
+                    $scope.setBusy("", "");
+                },
+                function (response) {
+                    logger.error("Could not copy the " + objType + ".", response, response.statusText);
+                    topbar.hide();
+                    $scope.setBusy("", "");
+                }
+            );
         }
 
         // **** UNGROUP Methods ****
@@ -2081,7 +2142,6 @@
                                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                             sData[s]._behaviors.isError['END_DT'] = true;
-                                            debugger;
                                             sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                             errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
@@ -2606,25 +2666,29 @@
             // NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
             if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
                 if (dataItem._behaviors.validMsg[atrbName] != null) {
-                    // Parse the Dictionary json
-                	var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+                    try {
+                        // Parse the Dictionary json
+                        var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
 
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                        // KIT ECAP
-                        if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
-                            dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
-                            dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                            // KIT ECAP
+                            if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
+                                dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
+                                dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                            }
                         }
-                    }
 
-                    if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
-                        // Set the validation message
-                        dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-                        dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
-                    } else {
-                        // Delete the tier-specific validation if it doesn't tie to this specific tier
-                        delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
-                        delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                        if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
+                            // Set the validation message
+                            dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                            dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                        } else {
+                            // Delete the tier-specific validation if it doesn't tie to this specific tier
+                            delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                            delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                        }
+                    } catch (e) {
+                        // not Valid Json String
                     }
                 }
             }

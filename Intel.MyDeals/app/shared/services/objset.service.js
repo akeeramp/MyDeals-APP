@@ -24,6 +24,7 @@ function objsetService($http, dataService, logger, $q) {
         isDuplicateContractTitle: isDuplicateContractTitle,
 
         createPricingStrategy: createPricingStrategy,
+        copyPricingStrategy: copyPricingStrategy,
         readPricingStrategy: readPricingStrategy,
         updatePricingStrategy: updatePricingStrategy,
         deletePricingStrategy: deletePricingStrategy,
@@ -31,6 +32,7 @@ function objsetService($http, dataService, logger, $q) {
         cancelPricingStrategy: cancelPricingStrategy,
 
         createPricingTable: createPricingTable,
+        copyPricingTable: copyPricingTable,
         readPricingTable: readPricingTable,
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
@@ -92,6 +94,9 @@ function objsetService($http, dataService, logger, $q) {
     function createPricingStrategy(custId, contractId, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'SavePricingStrategy/' + custId + '/' + contractId, [ps]);
     }
+    function copyPricingStrategy(custId, contractId, srcId, ps) {
+        return dataService.post(apiBasePricingStrategyUrl + 'CopyPricingStrategy/' + custId + '/' + contractId + '/' + srcId, [ps]);
+    }
     function readPricingStrategy(id) {
         return dataService.get(apiBasePricingStrategyUrl + 'GetPricingStrategy/' + id);
     }
@@ -112,6 +117,9 @@ function objsetService($http, dataService, logger, $q) {
 
     function createPricingTable(custId, contractId, pt) {
         return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId + '/' + contractId, [pt]);
+    }
+    function copyPricingTable(custId, contractId, srcId, pt) {
+        return dataService.post(apiBasePricingTableUrl + 'CopyPricingTable/' + custId + '/' + contractId + '/' + srcId, [pt]);
     }
     function readPricingTable(id) {
         return dataService.get(apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id);

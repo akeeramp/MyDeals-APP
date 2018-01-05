@@ -7,7 +7,7 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IPricingStrategiesLib
     {
         MyDealsData GetPricingStrategy(int id, bool inclusive = false);
-        OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, ContractToken contractToken);
+        OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, SavePacket savePacket);
         OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken);
         OpDataCollectorFlattenedDictList SaveFullPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedDictList fullpricingStrategies);
         OpMsg DeletePricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies);
