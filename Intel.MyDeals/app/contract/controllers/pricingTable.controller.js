@@ -1138,26 +1138,29 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // if row deleted count > 0  no need to add rows
             rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
-            for (var a = numTier - 1; a >= 0; a--) {
-                if (numTier == pivottedRows.length) {
-                    // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
-                    continue;
-                }
-                if (a == numTier - 1) {
-                    data[n - rowDeleted] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
-                } else {
-                    if (rowDeleted == 0 && offSetRows > 0) {
-                        var copy = angular.copy(data[n - rowDeleted]);
-                        copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a);
-                        data.splice(n, 0, copy);
-                        data[n].id = null;
-                        offSetRows--;
-                    } else {
-                        data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
+
+            for (var a = 0; a < numTier; a++) {
+            	if (numTier == pivottedRows.length) {
+            		// If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
+            		data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
+            		continue;
+            	}
+            	if (a == 0) { // the 1st existing row
+            		data[n - rowDeleted] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
+            	} else {
+            		if (rowDeleted == 0 && offSetRows > 0) {
+            			// adding products / new rows
+            			var copy = angular.copy(data[n - rowDeleted]);
+            			copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a);
+            			data.splice(n + a, 0, copy); // add rows below the existing row in order
+            			data[n + a].id = null;
+            			offSetRows--;
+            		} else {
+            			// removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
+            			data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
                             updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
-                    }
-                }
+            		}
+            	}
             }
         }
     }
