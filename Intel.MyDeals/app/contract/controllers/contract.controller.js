@@ -1927,7 +1927,11 @@
                 return;
             }
 
+            // clear values
             item.DC_ID = $scope.uid--;
+            item.HAS_TRACKER = "0"; 
+            item.COST_TEST_RESULT = "Not Run Yet";
+            item.MEETCOMP_TEST_RESULT = "Not Run Yet";
 
             // define new TITLE
             while (titles.indexOf(item.TITLE) >= 0) {
@@ -2015,6 +2019,7 @@
             var source = "";
             var modCt = [];
             var modPs = [];
+            var modPt = [];
             var sData = [];
             var gData = [];
             var errs = {};
@@ -2041,6 +2046,19 @@
                             if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
                         }, item[p]);
                         modPs.push(mPs);
+
+                        if (!item[p]["PRC_TBL"]) item[p]["PRC_TBL"] = [];
+                        var ptItem = item[p]["PRC_TBL"];
+                        for (var t = 0; t < ptItem.length; t++) {
+                            var mPt = {};
+                            Object.keys(ptItem[t]).forEach(function (key, index) {
+                                if (key[0] !== '_') mPt[key] = this[key];
+                            }, ptItem[t]);
+                            if (mPt.dirty !== undefined && mPt.dirty === true) {
+                                modPt.push(mPt);
+                                mPt.dirty = false;
+                            }
+                        }
                     }
                 }
             }
@@ -2229,6 +2247,19 @@
                         }
 
                     }
+                }
+            }
+
+            // see if we are only saving upper contract PT items
+            if (modPt.length > 0) {
+                return {
+                    "Contract": modCt,
+                    "PricingStrategy": modPs,
+                    "PricingTable": modPt,
+                    "PricingTableRow": [],
+                    "WipDeals": [],
+                    "EventSource": source,
+                    "Errors": errs
                 }
             }
 
@@ -3682,10 +3713,12 @@
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isDirty) dataItem._behaviors.isDirty = {};
                 dataItem._behaviors.isDirty["TITLE"] = true;
+                dataItem.dirty = true;
 
                 if (!$scope.validateTitles()) {
                     $scope.openRenameTitle(dataItem, mode, dataItem.TITLE, dataItem._behaviors.validMsg["TITLE"]);
                     dataItem.TITLE = retOrigValue;
+                    dataItem.dirty = false;
                     dataItem._behaviors.isDirty["TITLE"] = false;
                 } else {
                     $scope.saveUpperContract();
