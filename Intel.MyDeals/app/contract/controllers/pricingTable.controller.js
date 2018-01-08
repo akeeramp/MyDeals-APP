@@ -627,14 +627,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        var myColLetter = String.fromCharCode(intA + (colIndex));
 					        var colName = root.letterToCol[myColLetter];
 					        myRow[colName] = value.value;
-					        //sourceData[(rowIndex - 1)][colName] = value.value;
-
+					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
+					        sourceData[(rowIndex - 1)]["dirty"] = true;
 
 					        // Update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
 					            // Transform negative numbers into positive
 					            if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
-					                myRow["QTY"] = Math.abs(value.value);
+					            	myRow["QTY"] = Math.abs(value.value);
 					            }
 					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
@@ -645,7 +645,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            if (colIndex == dealGrpColIndex) {
 					                value.value = dealGrpSkipVal;
 					                myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
-					                //sourceData[(rowIndex - 1)]["DEAL_GRP_NM"] = dealGrpSkipVal;
 					            }
 					        }
 					        else { // Either a cell that is not merged OR the first row of a merged cell
@@ -670,8 +669,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
 					            }
 					            else if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
-
-
+									
 					                var dealGrpKeyFirstIndex = myRowIndex;
 					                data = root.spreadDs.data();
 
