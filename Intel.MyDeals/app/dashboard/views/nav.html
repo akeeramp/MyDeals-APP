@@ -6,39 +6,39 @@
         </a>
         Dashboard Settings
     </div>
-    <div id="lnavLghtContainer" bind-to-height="[33, '#lnavMenuContainer', 'padding-top','#lnavContainerWrapper', 'margin-top','#lnavHeader']">
-        
-        <div class="config-container">
-            <div>
-                I am thinking this would beto manage layout settings... maybe the default view to load???
-            </div>
-        </div>
+        <div id="lnavLghtContainer">
 
-        <div class="config-container">
-            <h5>Date Range</h5>
-            <div>
-                <input kendo-date-picker ng-model="startDate" style="width: 130px;" /> - <input kendo-date-picker ng-model="endDate" style="width: 130px;" />
+            <div class="config-container">
+                <div>
+                    I am thinking this would beto manage layout settings... maybe the default view to load???
+                </div>
             </div>
-        </div>
 
-        <div class="config-container">
-            <div class="fr"><i class="intelicon-select-all" title="Select All" ng-click="allCust(selectedCustomerIds, selectCustomerOptions.dataSource)"></i></div>
-            <div class="fr"><i class="intelicon-select-area" title="Select None" ng-click="noCust(selectedCustomerIds)"></i></div>
-            <h5>Customers</h5>
-            <div>
-                <select kendo-multi-select k-options="selectCustomerOptions" k-ng-model="selectedCustomerIds"></select>
-                <p><i>Not selecting will result in all customers.</i></p>
+            <div class="config-container">
+                <h5>Date Range</h5>
+                <div>
+                    <input kendo-date-picker ng-model="startDate" style="width: 130px;" /> - <input kendo-date-picker ng-model="endDate" style="width: 130px;" />
+                </div>
             </div>
-        </div>
-        
-        <a class="btn btn-primary btn-sm" ng-click="addWidget()">
-            <i class="intelicon-plus-max"></i> Add Widget
-        </a>
-        <a class="btn btn-warning btn-sm" ng-click="clear()">
-            <i class="intelicon-close-solid"></i> Clear
-        </a>
 
-    </div>
+            <div class="config-container">
+                <div class="fr"><i class="intelicon-select-all" title="Select All" ng-click="allCust(selectedCustomerIds, selectCustomerOptions.dataSource)"></i></div>
+                <div class="fr"><i class="intelicon-select-area" title="Select None" ng-click="noCust(selectedCustomerIds)"></i></div>
+                <h5>Customers</h5>
+                <div>
+                    <select kendo-multi-select k-options="selectCustomerOptions" k-ng-model="selectedCustomerIds"></select>
+                    <p><i>Not selecting will result in all customers.</i></p>
+                </div>
+            </div>
+
+            <a class="btn btn-primary btn-sm" ng-click="addWidget()">
+                <i class="intelicon-plus-max"></i> Add Widget
+            </a>
+            <a class="btn btn-warning btn-sm" ng-click="clear()">
+                <i class="intelicon-close-solid"></i> Clear
+            </a>
+
+        </div>
 </div>
 
 
