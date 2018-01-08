@@ -81,12 +81,10 @@
         };
 
         $scope.objFilter = {
-            ui: function (element) {
+            ui: function(element) {
                 element[0].className = "k-textbox";
             }
-        },
-
-
+        };
 
         $scope.ds = new kendo.data.DataSource({
             type: 'odata',
@@ -301,7 +299,7 @@
                 }
             ],
             excel: {
-                allPages: true
+                allPages: false
             },
             excelExport: function (e) {
                 var i;
@@ -323,6 +321,9 @@
                 // clear out first cell title
                 sheet.rows[0].cells[0] = '';
 
+                // truncate the rows to match the datasource
+                sheet.rows = sheet.rows.slice(0, dataSource.data().length + 1);
+
                 // Traverse all exported rows.
                 for (i = 1; i < sheet.rows.length; i++) {
                     var row = sheet.rows[i];
@@ -330,22 +331,32 @@
 
                     // Get the data item corresponding to the current row.
                     var dataItem = dataSource.at(i - 1);
-                    for (var j = 0; j < columnTemplates.length; j++) {
-                        var columnTemplate = columnTemplates[j];
-                        // Generate the template content for the current cell.
-                        var newHtmlVal = columnTemplate.template(dataItem).replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
-                        elem.innerHTML = newHtmlVal;
-                        if (j === 0) elem.innerHTML = "";
-                        if (j === 1) elem.innerHTML = dataItem.BID_STATUS;
-                        if (row.cells[columnTemplate.cellIndex] != undefined) {
-                            // Output the text content of the templated cell into the exported cell.
-                            var newVal = elem.textContent || elem.innerText || "";
-                            newVal = newVal.replace(/null/g, '').replace(/undefined/g, '').replace(/LINEBREAKTOKEN/g, '\n');
-                            row.cells[columnTemplate.cellIndex].value = newVal;
-                            row.cells[columnTemplate.cellIndex].wrap = true;
+                    if (dataItem !== undefined && dataItem !== null) {
+                        for (var j = 0; j < columnTemplates.length; j++) {
+                            var columnTemplate = columnTemplates[j];
+                            // Generate the template content for the current cell.
+                            var newHtmlVal = columnTemplate.template(dataItem);
+                            newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                            elem.innerHTML = newHtmlVal;
+                            if (j === 0) elem.innerHTML = "";
+                            if (j === 1) elem.innerHTML = dataItem.BID_STATUS;
+                            if (row.cells[columnTemplate.cellIndex] != undefined) {
+                                // Output the text content of the templated cell into the exported cell.
+                                var newVal = elem.textContent || elem.innerText || "";
+                                newVal = newVal.replace(/null/g, '').replace(/undefined/g, '').replace(/LINEBREAKTOKEN/g, '\n');
+                                row.cells[columnTemplate.cellIndex].value = newVal;
+                                row.cells[columnTemplate.cellIndex].wrap = true;
+                            }
                         }
                     }
                 }
+
+                // after Excel export, the Action Bid Statuc dropdowns loose correct binding and bind against object
+                // for now... fire off the search again after export is complete...
+                // very lame wat to handle this, but running out of energy researching this.  Maybe come back to this later
+                $timeout(function () {
+                    $scope.loadData(); 
+                }, 1000);
             }
         }
 
@@ -515,11 +526,17 @@
         }
 
         $scope.clearSortingFiltering = function() {
-            var grid = $("#gridTender").data("kendoGrid");
-            if (grid.dataSource.filter() === undefined && grid.dataSource.sort() === undefined) return;
+            $scope.searchText = "";
 
-            grid.dataSource.filter({});
-            grid.dataSource.sort({});
+            var grid = $("#gridTender").data("kendoGrid");
+
+            if (grid.dataSource.filter() !== undefined) {
+                grid.dataSource.filter({});
+            }
+            if (grid.dataSource.sort() !== undefined) {
+                grid.dataSource.sort({});
+            }
+
             grid.dataSource.read();
         }
 
