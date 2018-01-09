@@ -639,7 +639,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            }
 					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
-							
+
 					        // Logic to apply to merge cells (multiple tiers)
 					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
 					            // Set the deal group val to be the same as the first one of the merged rows
@@ -656,7 +656,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            }
 
 								if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
-									
+
 					                var dealGrpKeyFirstIndex = myRowIndex;
 					                data = root.spreadDs.data();
 
@@ -1105,6 +1105,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function pivotKITDeals(data, n, dcIdDict, dictId, masterData) {
+        if ((data[n]["PTR_USER_PRD"] === "" || data[n]["PTR_USER_PRD"] === null) && data[n]["DC_ID"] === null) {
+            return;
+        }
         if (data[n]["PTR_USER_PRD"] !== null) {
             var products = data[n]["PTR_USER_PRD"].split(",");
             var numTier = products.length;
@@ -2718,7 +2721,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
                                     for (var a = r; a < mergedRows ; a++) {
                                         data[a].DC_ID = null;
-                                        sourceData[a].DC_ID = null;
+                                        //sourceData[a].DC_ID = null;
                                         data[a].PTR_USER_PRD = "";
                                         sourceData[a].PTR_USER_PRD = "";
                                     }
