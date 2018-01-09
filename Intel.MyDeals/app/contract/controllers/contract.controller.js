@@ -2848,24 +2848,38 @@
 
             for (var d = 0; d < data.length; d) {
                 var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
-                for (var t = 1 - isKit; t <= numTiers - isKit; t++) {
-                    if (t === 1 - isKit) lData = data[d];
-                    for (a = 0; a < dimAtrbs.length; a++)
-                        lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
-                    if (t === numTiers - isKit) {
-                        for (a = 0; a < dimAtrbs.length; a++) {
-                            delete lData[dimAtrbs[a]];
-                        }
-                        newData.push(lData);
-                    }
-                    d++;
-                    // Quick fix, even after data.length === d loop was running. Not sure why :|
-                    if (d === data.length) {
-                        break;
-                    }
-                }
-            }
+				
+                for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
+                	if (t === 1 - isKit) { lData = data[d]; }
+                	for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
+                		lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
 
+                		if (t === numTiers - isKit) { // last tier
+                			delete lData[dimAtrbs[a]];
+
+                			if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                				// Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering, 
+                				//		which might leave those dimensions with data, and save stray attributes with no product association in our db.
+                				for (var i =0 ; i < 10; i++) { // KITTODO: Replace "10" with a constant max Products value instead
+                					var tierToDel = (t + 1 + i);
+                					lData[dimAtrbs[a] + dimKey + tierToDel] = "";
+                				}
+                			}
+                		}
+                	}
+                	// NOTE: the length of the data is the number of rows. But we need to iterate by the number of
+                	//		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT. 
+                	//		Hence why we increment d and break on d === data.length manually.
+                	//		Basically, what this d-incrementing code is mimicing a skip of rows in "data" that are not of tier_nbr 1.
+                	//		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier. 
+                	d++;
+                	if (d === data.length) {
+                		break;
+                	}
+                }
+				newData.push(lData);
+            }
+            
             return newData;
         }
 
