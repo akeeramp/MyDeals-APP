@@ -349,6 +349,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.configureSortableTab();
                     $scope.selectFirstTab();
                     $scope.reorderGridColumns($scope.defaultColumnOrderArr);
+                    $scope.grid.dataSource.pageSize(25);  // 25 is the default page size.
                 }, 10);
             }
 
@@ -386,6 +387,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
                             }                            
 
+                            // 'PageSize'
+                            var pageSize = 25;
+                            var pageSizeArr = response.data.filter(function (obj) {
+                                return obj.PRFR_KEY == "PageSize";
+                            });
+                            if (pageSizeArr && pageSizeArr.length > 0) {
+                                pageSize = Number(pageSizeArr[0].PRFR_VAL);
+                            }
+                            
                             // Apply the settings.
                             $timeout(function () {
                                 $scope.cloneWithOrder("custom");
@@ -394,6 +404,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.configureSortableTab();
                                 $scope.selectFirstTab();
                                 $scope.reorderGridColumns(customColumnOrderArr);
+                                $scope.grid.dataSource.pageSize(pageSize);
                             }, 10);
                         } else {
                             if (reportError) {
@@ -457,6 +468,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "ColumnOrder", // ID
                     JSON.stringify($scope.getColumnOrder($scope.grid))) // VALUE
+                    .then(function (response) {
+                    }, function (response) {
+                        logger.error("Unable to save Custom Layout.", response, response.statusText);
+                    });
+
+                // Persist the page size.
+                userPreferencesService.updateAction(
+                    "DealEditor", // CATEGORY
+                    "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
+                    "PageSize", // ID
+                    JSON.stringify($scope.grid.dataSource.pageSize())) // VALUE
                     .then(function (response) {
                     }, function (response) {
                         logger.error("Unable to save Custom Layout.", response, response.statusText);
