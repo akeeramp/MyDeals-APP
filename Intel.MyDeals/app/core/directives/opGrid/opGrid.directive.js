@@ -1023,7 +1023,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     model["20_____2"] = options.model["ECAP_PRICE"]["20_____2"];
                     for (var key in model) {
                         if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
-                            el += $scope.createEditEl("ECAP_PRICE", field.uiType, key, field.format);
+                            if (options.model["HAS_SUBKIT"] == "False") {
+                                return; //no editor because ineligible for subkit
+                            } else {
+                                el += $scope.createEditEl("ECAP_PRICE", field.uiType, key, field.format);
+                            }
                         }
                     }
                 } else {    //All other multi-dim editors

@@ -55,14 +55,19 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
     return tmplt;
 }
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
-    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    tmplt += '<div class="uiControlDiv"';
-    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    //tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-    //tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
-    tmplt += '</div>';
-
+    var tmplt = '';
+    if (dim == "20_____2" && passedData.HAS_SUBKIT == "False") {
+        //no subkit allowed case
+        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+        tmplt += '<div class="vert-center">No Sub KIT</div>';
+        tmplt += '</div>';
+    } else {
+        tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv"';
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
+        tmplt += '</div>';
+    }
     return tmplt;
 }
 gridUtils.uiCustomerControlWrapper = function (passedData, field, altField) {
@@ -255,9 +260,16 @@ gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
 //this control wrapper is only used to calculate SKIT deal's SUBKIT_REBATE_BUNDLE_DISCOUNT
 gridUtils.uiSubKitRebateBundleDiscountControlWrapper = function (passedData) {
     var tmplt = '';
-    tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'subkit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
-    tmplt += '</div>';
+    if (passedData.HAS_SUBKIT == "False") {
+        //no subkit allowed case
+        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+        tmplt += '<div class="vert-center">No Sub KIT</div>';
+        tmplt += '</div>';
+    } else {
+        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'subkit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
+        tmplt += '</div>';
+    }
     return tmplt;
 }
 

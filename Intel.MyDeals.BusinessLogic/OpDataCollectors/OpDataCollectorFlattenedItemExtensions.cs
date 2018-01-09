@@ -320,6 +320,16 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             string baseEcapDimKey = "_____20___0";
             string baseKitDimKey = "_____20___";
+
+            //L1 / L2 counters used to determine if kit deal eligible for subkit
+            int numL1 = 0;
+            int numL2 = 0;
+
+            ////below used for calculating NORTHBRIDGE_SPLIT in KIT deals
+            //string CHIPSET = "CS";
+            //List<string> chipsetEcapDims = new List<string>();
+            //double northbridgeSum = 0.00;     
+
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
             // make a copy so we don't cross-contaminate records
@@ -359,6 +369,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     bool pHasL1 = false;
                     bool pHasL2 = false;
                     var dim = 0;
+
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
                         if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
@@ -370,6 +381,12 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                             opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + dim] = pMap.YCS2;
                             opFlatItem[AttributeCodes.YCS2_START_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_START;
                             opFlatItem[AttributeCodes.YCS2_END_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_END;
+
+                            //if (pMap.PRD_CAT_NM == CHIPSET)
+                            //{
+                            //    chipsetEcapDims.Add("ECAP_PRICE" + baseKitDimKey + dim);
+                            //}
+                            
                         } else
                         {
                             opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;  //why did this only have 4 underscores?
@@ -379,8 +396,33 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         pTitle.Add(pMap.HIER_VAL_NM);
                         pCat.Add(pMap.PRD_CAT_NM);
                         bool l1, l2;
-                        if (bool.TryParse(pMap.HAS_L1, out l1)) pHasL1 = true;
-                        if (bool.TryParse(pMap.HAS_L2, out l2)) pHasL2 = true;
+                        bool.TryParse(pMap.HAS_L1, out l1);
+                        bool.TryParse(pMap.HAS_L2, out l2);
+
+                        if (l1)
+                        {
+                            pHasL1 = true;
+                            numL1++;
+                        }
+                        if (l2)
+                        {
+                            pHasL2 = true;
+                            numL2++;
+                        }
+                    }
+
+                    //check if eligible to create subkits
+                    if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+                    {
+                        opFlatItem[AttributeCodes.HAS_SUBKIT] = false;  //default to false
+                        if (pMaps.Count() > 2)
+                        {
+                            //"If a kit having more than two products, having two L1 or one L1 and one L2,then can create subkit"
+                            if ((numL1 == 2 && numL2 == 0) || (numL1 == 1 && numL2 == 1))
+                            {
+                                opFlatItem[AttributeCodes.HAS_SUBKIT] = true;
+                            }
+                        }
                     }
 
                     opFlatItem[AttributeCodes.HAS_L1] = pHasL1;
@@ -406,6 +448,16 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     else
                     {
                         newItem[key] = opFlatItem[key];
+
+                        ////for kit deals, need to sum chipset ecap $s as NORTHBOUND_SPLIT
+                        //if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+                        //{
+                        //    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0 && chipsetEcapDims.Contains(key))
+                        //    {
+                        //        var temp = opFlatItem[key];
+                        //        northbridgeSum += double.Parse(opFlatItem[key].ToString());
+                        //    }
+                        //}
                     }
                 }
                 else
@@ -429,6 +481,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             newItem[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
             newItem[AttributeCodes.OBJ_SET_TYPE_CD] = elMapping.ChildOpDataElementSetType;
 
+            ////used to initialize NB_SPLIT value
+            //if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+            //{
+            //    newItem["TEMP_NB_SUM"] = northbridgeSum;
+            //}
             // Get the exclude Ids from the Product JSON
             // Remove PRD_EXCLDS_IDS from PTR UI Template from Database
             if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)

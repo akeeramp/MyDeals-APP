@@ -1127,7 +1127,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Width = 150
             });
-            items.Add(new UiTemplateContainerItem  // WIP ECAP types
+            items.Add(new UiTemplateContainerItem  // WIP ECAP, KIT types
             {
                 Id = 3562,
                 AtrbCd = AttributeCodes.EXPIRE_YCS2,
@@ -1140,6 +1140,60 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/EXPIRE_YCS2",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
+            });
+
+            //items.Add(new UiTemplateContainerItem  // WIP KIT types
+            //{
+            //    Id = 3486, //TODO: check id
+            //    AtrbCd = AttributeCodes.NORTHBRIDGE_SPLIT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'NORTHBRIDGE_SPLIT')#",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Width = 115,
+            //    Format = "{0:c}",
+            //    Label = "Northbridge Split / PCH"
+            //});
+
+            //items.Add(new UiTemplateContainerItem  // WIP KIT types
+            //{
+            //    Id = 3487, //TODO: check id
+            //    AtrbCd = AttributeCodes.SOUTHBRIDGE_SPLIT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'SOUTHBRIDGE_SPLIT')#",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Width = 115,
+            //    Format = "{0:c}",
+            //    Label = "Southbridge Split"
+            //});
+
+            items.Add(new UiTemplateContainerItem  // WIP KIT types
+            {
+                Id = 3462,
+                AtrbCd = AttributeCodes.CS_SHIP_AHEAD_STRT_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Template = "#=gridUtils.uiControlWrapper(data, 'CS_SHIP_AHEAD_STRT_DT')#",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 115,
+                Format = "{0:d}"
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP KIT types
+            {
+                Id = 3463,
+                AtrbCd = AttributeCodes.CS_SHIP_AHEAD_END_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Template = "#=gridUtils.uiControlWrapper(data, 'CS_SHIP_AHEAD_END_DT')#",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 115,
+                Format = "{0:d}"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit, Tender types + Dimension by Prod Bucket

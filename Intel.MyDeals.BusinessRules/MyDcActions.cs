@@ -80,6 +80,28 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.CONSUMPTION_REASON] = "None";
             }
 
+            //CS Ship ahead start date / end date
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CS_SHIP_AHEAD_STRT_DT)))
+            {
+                item[AttributeCodes.CS_SHIP_AHEAD_STRT_DT] = 0;
+            }
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CS_SHIP_AHEAD_END_DT)))
+            {
+                item[AttributeCodes.CS_SHIP_AHEAD_END_DT] = 0;
+            }
+
+            //NB / SB Split     //NOTE: this section of code will not work if uncommented, need to account for non-kit deals and for saving in WIP grid when TEMP_NB_SUM will not have been set...
+            //TODO: check if already set condition, test with non kit deal types and moving back and forth between wip/spreadsh
+            //if (r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Contains("CS"))
+            //{
+            //    item[AttributeCodes.NORTHBRIDGE_SPLIT] = item["TEMP_NB_SUM"];
+            //    item[AttributeCodes.SOUTHBRIDGE_SPLIT] = 0;
+            //} else
+            //{
+            //    item[AttributeCodes.NORTHBRIDGE_SPLIT] = null;
+            //    item[AttributeCodes.SOUTHBRIDGE_SPLIT] = null;
+            //}
+
             // Additive
             string dealCompType = r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE);
             if (string.IsNullOrEmpty(dealCompType))
@@ -125,6 +147,15 @@ namespace Intel.MyDeals.BusinessRules
 			if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON)) && item[AttributeCodes.PROGRAM_PAYMENT].ToString() != "Backend")
             {
                 item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
+            }
+
+            // Clear out subkit attributes if user changes products to make it ineligible for subkits
+            if (item.ContainsKey(AttributeCodes.HAS_SUBKIT))
+            {
+                if (item[AttributeCodes.HAS_SUBKIT].ToString() == "False")
+                {
+                    item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = null;
+                }
             }
 
             // Clear out consumption if the user sets payout based on = billings.  DE30320
