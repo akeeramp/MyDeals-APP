@@ -418,6 +418,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             change: function (e) {
                 var grid = $("#copyCntrctGrid").data("kendoGrid");
                 $scope.copyCntrctSelectedItem = grid.dataItem(grid.select());
+                $scope.$apply();
             }
         };
 
