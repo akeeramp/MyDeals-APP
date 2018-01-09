@@ -3553,9 +3553,9 @@
                 //initialize, hard coded for now, build into an admin page in future.
                 if ($scope.currentPricingTable == null) {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = "MCP";
-                    if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All"];
+                    if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All Direct Market Segments"];
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
-                    if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption"; //TODO: typo- need to correct to "Billing" in db
+                    if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) {
                         if ($scope.newPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {

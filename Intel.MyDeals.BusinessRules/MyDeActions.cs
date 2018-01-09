@@ -209,10 +209,10 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-            //"ALL" check
-            if (userMrktSegs.Count > 1 && userMrktSegs.Contains("All"))
+            //"All Direct Market Segments" check
+            if (userMrktSegs.Count > 1 && userMrktSegs.Contains("All Direct Market Segments"))
             {
-                de.AddMessage("Market Segment ALL cannot be blended with any other Market Segment");
+                de.AddMessage("Market Segment 'All Direct Market Segments' cannot be blended with any other Market Segment");
             }
 
             //"Embedded" check

@@ -49,7 +49,7 @@ namespace Intel.MyDeals.BusinessRules
 				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnHidden},
 				//	InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
 				//	// TODO: These hard-coded AtrbValue should be replaced with nicer non-harded values :<
-				//	AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && !(de.AtrbValue.ToString() == "All" || de.AtrbValue.ToString().Contains("Consumer Retail Pull"))).Any(),
+				//	AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && !(de.AtrbValue.ToString() == "All Direct Market Segments" || de.AtrbValue.ToString().Contains("Consumer Retail Pull"))).Any(),
 				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
 				//	{
 				//		new OpRuleAction<IOpDataElement>

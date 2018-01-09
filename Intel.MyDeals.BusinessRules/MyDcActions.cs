@@ -68,7 +68,7 @@ namespace Intel.MyDeals.BusinessRules
                 //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
                 // UPDATE!!! Per Trang... we can default this to the start date (10/20/2017)
 
-                if (mrktSegValue.IndexOf("Consumer Retail Pull") >= 0 || mrktSegValue == "All")
+                if (mrktSegValue.IndexOf("Consumer Retail Pull") >= 0 || mrktSegValue == "All Direct Market Segments")
                 {
                     item[AttributeCodes.ON_ADD_DT] = item[AttributeCodes.START_DT];
                 }
@@ -485,7 +485,7 @@ namespace Intel.MyDeals.BusinessRules
             //if (!r.HasExtraArgs) return;
             //int custId = (int)r.ExtraArgs[0];
 
-            //if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All") && deOnAdDate.AtrbValue.ToString() == "")
+            //if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All Direct Market Segments") && deOnAdDate.AtrbValue.ToString() == "")
             //{
             //    var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
             //    deOnAdDate.AtrbValue = customerQuarterDetails.QTR_STRT.Date;

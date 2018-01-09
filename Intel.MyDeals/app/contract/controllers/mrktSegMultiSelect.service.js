@@ -14,7 +14,7 @@
 	    var MRKT_SEG = "MRKT_SEG";
 		//these strings will need to be updated if they ever change it in the db or admin screen... TODO: tap into default values bool in basic dropdowns table once those db changes are made
 		var WW = "Worldwide";
-		var ALL = "All";
+		var ALL = "All Direct Market Segments";
 	    var NONCORP = "NON Corp";
 
 		var uncheckAllNC = true;
@@ -180,7 +180,7 @@
 				if (treeView != null) {
 
 					if (newValue.length > 0) {
-						//Logic for "ALL"
+					    //Logic for "All Direct Market Segments"
 						if (newValue.indexOf(ALL) > -1 && !(oldValue.indexOf(ALL) > -1)) {
 							//if user has another mrkt seg selected and then selects ALL, need to deselect all other MRKT SEGs
 							newValue = [ALL];

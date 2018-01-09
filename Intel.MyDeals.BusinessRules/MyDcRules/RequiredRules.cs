@@ -40,7 +40,7 @@ namespace Intel.MyDeals.BusinessRules
                 //    ActionRule = MyDcActions.ExecuteActions,
                 //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                 //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && (de.AtrbValue.ToString().ToUpper().Contains("ALL") || de.AtrbValue.ToString().ToUpper().Contains("RETAIL"))).Any(),
+                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && (de.AtrbValue.ToString().ToUpper().Contains("All Direct Market Segments") || de.AtrbValue.ToString().ToUpper().Contains("RETAIL"))).Any(),
                 //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                 //    {
                 //        new OpRuleAction<IOpDataElement>
