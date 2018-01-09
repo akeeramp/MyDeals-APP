@@ -121,7 +121,25 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                 dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
                     if (response.data.length > 0) {
-                        response.data.forEach(function (obj) { obj.IS_SELECTED = false;});
+                        response.data.forEach(function (obj) {
+                            obj.IS_SELECTED = false;
+
+                            //Setting COMP_PRC to null. Its nullable Int
+                            if (obj.COMP_PRC == 0) {
+                                obj.COMP_PRC = null;
+                            }
+
+                            //Setting IA_BNCH to null. Its nullable Int
+                            if (obj.IA_BNCH == 0) {
+                                obj.IA_BNCH = null;
+                            }
+
+                            //Setting COMP_BNCH to null. Its nullable Int
+                            if (obj.COMP_BNCH == 0) {
+                                obj.COMP_BNCH = null;
+                            }
+
+                        });
                         $scope.meetCompMasterdata = response.data;
                         $scope.meetCompUnchangedData = angular.copy(response.data);
                         $scope.meetCompUpdatedList = [];
@@ -132,6 +150,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         if (usrRole == "GA") {
                             var isValid = isModelValid($scope.meetCompMasterdata);
                         }
+
                         $scope.selectProdIDS = function (selectedID, event, dataItem) {                           
                             var dataSource = $("#grid").data("kendoGrid").dataSource;
                             var filters = dataSource.filter();
@@ -519,7 +538,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Meet Comp Price",
                                     width: 150,
                                     format: "{0:c}",
-                                    template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
+                                    template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: meetCompPriceEditor
                                 },
@@ -527,7 +546,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "IA_BNCH",
                                     title: "IA Bench",
                                     width: 120,
-                                    template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                    template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0 || IA_BNCH == null ){## ##} else {##:IA_BNCH##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: editorIABench
                                 },
@@ -535,7 +554,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "COMP_BNCH",
                                     title: "Comp Bench",
                                     width: 120,
-                                    template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                    template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0 || COMP_BNCH == null ){## ##} else {##:COMP_BNCH##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: editorCOMPBench
                                 },
@@ -1279,6 +1298,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid, $scope.tempUpdatedList).then(function (response) {
                                         $scope.meetCompMasterdata = response.data;
                                         $scope.meetCompUnchangedData = angular.copy(response.data);
+                                        if (usrRole == "GA") {
+                                            var isValid = isModelValid($scope.meetCompMasterdata);
+                                        }
                                         $scope.dataSourceParent.read();
                                         $scope.isBusy = false;
                                         $scope.tempUpdatedList = [];
@@ -1541,7 +1563,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Meet Comp Price",
                                         width: 150,
                                         format: "{0:c}",
-                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
+                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompPriceEditor
                                     },
@@ -1549,7 +1571,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "IA_BNCH",
                                         title: "IA Bench",
                                         width: 120,
-                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0 || IA_BNCH == null){## ##} else {##:IA_BNCH##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: editorIABench
                                     },
@@ -1557,7 +1579,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "COMP_BNCH",
                                         title: "Comp Bench",
                                         width: 120,
-                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0 || COMP_BNCH == null){## ##} else {##:COMP_BNCH##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: editorCOMPBench
                                     },
