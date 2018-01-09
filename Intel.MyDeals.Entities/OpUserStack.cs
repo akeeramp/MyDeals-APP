@@ -10,6 +10,7 @@ namespace Intel.MyDeals.Entities
     public static class OpUserStack
     {
         public static Dictionary<string, UserSetting> UserSettings = new Dictionary<string, UserSetting>();
+        public static bool IsTestMode = false;
 
         /// <summary>
         /// Get the authenticated user's Key into the User Stack
@@ -17,7 +18,7 @@ namespace Intel.MyDeals.Entities
         /// <returns>User's key</returns>
         public static string GetMyKey()
         {
-            string key = Utils.ThreadUser;
+            string key = IsTestMode ? "SJPATIL" : Utils.ThreadUser;
             if (key.Contains("/"))
             {
                 key = key.Split('/').Last();
@@ -93,6 +94,42 @@ namespace Intel.MyDeals.Entities
             };
         }
 
+        public static OpUserToken EmulateTestHarnessUser()
+        {
+
+            OpUserStack.IsTestMode = true;
+            string idsid = GetMyKey();
+
+            IList<Claim> claimCollection = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, idsid)
+            };
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimCollection, "MyDeals Test Harness"));
+
+            if (UserSettings.ContainsKey(idsid)) return UserSettings[idsid].UserToken;
+
+            UserSettings[idsid] = new UserSetting
+            {
+                UserToken = new OpUserToken
+                {
+                    Role = new OpRoleType
+                    {
+                        RoleTypeCd = "SA"
+                    },
+                    Usr = new OpUser
+                    {
+                        FirstName = "Test",
+                        LastName = "Harness",
+                        WWID = 88888888,
+                        Idsid = idsid
+                    }
+                }
+            };
+
+            MySettings.UserToken = UserSettings[idsid].UserToken;
+            return MyOpUserToken;
+        }
+
         /// <summary>
         /// Ensures the OpUserToken contains values.
         /// </summary>
@@ -102,7 +139,7 @@ namespace Intel.MyDeals.Entities
         {
             if (opUserToken == null) opUserToken = new OpUserToken();
 
-            if (opUserToken.Usr == null)
+            if (opUserToken.Usr?.Idsid == null)
             {
                 opUserToken.Usr = new OpUser
                 {

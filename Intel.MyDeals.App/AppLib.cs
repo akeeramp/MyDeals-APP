@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Authentication;
+using System.Web;
 using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -45,7 +46,9 @@ namespace Intel.MyDeals.App
             OpUserToken user = null;
             try
             {
-                user = op.Authenticate("MyDeals", GetEnvironment());
+                string env = GetEnvironment();
+                bool isTesting = env == "Perf" && string.IsNullOrEmpty(op.Authentication.ContextUserName);
+                user = isTesting ? OpUserStack.EmulateTestHarnessUser(): op.Authenticate("MyDeals", env);
             }
             catch (Exception ex)
             {
@@ -160,7 +163,9 @@ namespace Intel.MyDeals.App
         public static List<MyCustomersInformation> GetMyCustomerNames()
         {
             //return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2002).ToList();
-            var fullList = UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
+            //var fullList = UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
+            var fullList = UserSettings[OpUserStack.GetMyKey().ToUpper()].AllMyCustomers.CustomerInfo;
+
             //var cdmsCustIds = fullList.Select(c => c.cdms_cust_id).Distinct();
 
             List<MyCustomersInformation> customersOnly = (from cust in fullList
