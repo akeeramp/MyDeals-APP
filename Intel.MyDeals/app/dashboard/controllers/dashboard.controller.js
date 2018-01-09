@@ -353,7 +353,8 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         var matchArr = [];
         var lowerSearchText = $scope.copyCntrctSearchText.toLowerCase()
         for (var i = 0; i < $scope.copyCntrctList.length; i++) {
-            if ($scope.copyCntrctList[i].TITLE.toLowerCase().indexOf(lowerSearchText) != -1) {
+            if ($scope.copyCntrctList[i].CNTRCT_OBJ_SID.toString().indexOf(lowerSearchText) != -1 ||
+                $scope.copyCntrctList[i].TITLE.toLowerCase().indexOf(lowerSearchText) != -1) {
                 matchArr.push($scope.copyCntrctList[i]);
             }
         }
@@ -394,7 +395,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             columns: [
                 {
                     field: "CNTRCT_OBJ_SID",
-                    title: "ID",
+                    title: "Contract ID",
                     width: "35px"
                 },
                 {
