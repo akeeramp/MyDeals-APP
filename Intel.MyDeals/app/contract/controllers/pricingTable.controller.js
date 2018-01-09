@@ -626,6 +626,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
 					        var myColLetter = String.fromCharCode(intA + (colIndex));
 					        var colName = root.letterToCol[myColLetter];
+					        var tierNbr = myRow["TIER_NBR"];
 					        myRow[colName] = value.value;
 					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
 					        sourceData[(rowIndex - 1)]["dirty"] = true;
@@ -638,37 +639,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            }
 					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
-
+							
 					        // Logic to apply to merge cells (multiple tiers)
 					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
 					            // Set the deal group val to be the same as the first one of the merged rows
 					            if (colIndex == dealGrpColIndex) {
 					                value.value = dealGrpSkipVal;
 					                myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
-					            }
-					        }
+								}
+							}
 					        else { // Either a cell that is not merged OR the first row of a merged cell
-					            // If it's a merged cell (multiple tiers) then find out how many rows to skip for
+					        	// If it's a merged cell (multiple tiers) then find out how many rows to skip for
 					            if (numOfTiers > 1) {
 					                skipUntilRow = rowIndex + numOfTiers;
 					                dealGrpSkipVal = value.value;
 					            }
 
-					            var firstTierRow = myRow;
-					            var firstTierRowIndex = myRowIndex;
-
-					            var tierNbr = myRow["TIER_NBR"];
-					            if (tierNbr !== 1) {
-					                // Get the first tier row
-					                firstTierRowIndex = (rowIndex - tierNbr);
-					                firstTierRow = data[firstTierRowIndex];
-					            }
-
-					            if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {		// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-					                // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-					                firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
-					            }
-					            else if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
+								if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
 									
 					                var dealGrpKeyFirstIndex = myRowIndex;
 					                data = root.spreadDs.data();
@@ -698,8 +685,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                        confirmationModPerDealGrp[myKey].RowCount = confirmationModPerDealGrp[myKey].RowCount + parseInt(myRow["NUM_OF_TIERS"]);
 					                    }
 					                }
-					            }
+								}
 					        }
+
+					    	// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
+					        	// Get the first tier row
+					        	var firstTierRowIndex = (rowIndex - tierNbr);
+					        	var firstTierRow = data[firstTierRowIndex];
+
+								// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+								firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
+							}
 					    }
 					}
 				);
