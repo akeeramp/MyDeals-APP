@@ -48,7 +48,7 @@ namespace Intel.MyDeals.App
             {
                 string env = GetEnvironment();
                 bool isTesting = env == "Perf" && string.IsNullOrEmpty(op.Authentication.ContextUserName);
-                user = isTesting ? OpUserStack.EmulateTestHarnessUser(): op.Authenticate("MyDeals", env);
+                user = isTesting ? OpUserStack.EmulateTestHarnessUser() : op.Authenticate("MyDeals", env);
             }
             catch (Exception ex)
             {
@@ -152,7 +152,7 @@ namespace Intel.MyDeals.App
 
             UserSettings[opUserToken.Usr.Idsid.ToUpper()] = settings;
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserToken = opUserToken;
-            if (opUserToken.Usr.WWID == 0)// No need to look for customer and user preferences values as user doesn't exist in Mydeals
+            if (opUserToken.Usr.WWID != 0)// No need to look for customer and user preferences values as user doesn't exist in Mydeals
             {
                 UserSettings[opUserToken.Usr.Idsid.ToUpper()].AllMyCustomers = GetMyCustomers(opUserToken);
                 UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserPreferences = GetUserPreferences(opUserToken);
