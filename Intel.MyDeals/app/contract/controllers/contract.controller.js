@@ -33,18 +33,10 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
 
-        $scope.isCopyContract = false;
         $scope.copyContractData = null;
+        $scope.isCopyContract = false;
         if ($location.url().split('copycid=').length > 1) {
             $scope.isCopyContract = true;
-
-            objsetService.readContract($location.url().split('copycid=')[1]).then(function (data) {
-                $scope.copyContractData = data;
-
-                // We are copying a contract, so use the title and customer settings from that contract.
-                $scope.contractData.TITLE = $scope.copyContractData.data[0].TITLE + ' (copy)';
-                $scope.contractData.CUST_MBR_SID = $scope.copyContractData.data[0].CUST_MBR_SID;
-            });
         }
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
@@ -533,14 +525,21 @@
 
                         $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
 
-                        // If we are copying a contract, use the dates from that contract.
-                        if ($scope.isCopyContract && $scope.copyContractData != null) {
-                            $scope.contractData.START_DT = $scope.copyContractData.data[0].START_DT;
-                            $scope.contractData.START_QTR = $scope.copyContractData.data[0].START_QTR;
-                            $scope.contractData.START_YR = $scope.copyContractData.data[0].START_YR;
-                            $scope.contractData.END_DT = $scope.copyContractData.data[0].END_DT;
-                            $scope.contractData.END_QTR = $scope.copyContractData.data[0].END_QTR;
-                            $scope.contractData.END_YR = $scope.copyContractData.data[0].END_YR;
+                        // If we are copying a contract, default the appopriate fields.
+                        if ($scope.isCopyContract) {
+                            objsetService.readContract($location.url().split('copycid=')[1]).then(function (data) {
+                                $scope.copyContractData = data;
+
+                                // We are copying a contract, so use the title and customer settings from that contract.
+                                $scope.contractData.TITLE = $scope.copyContractData.data[0].TITLE + ' (copy)';
+                                $scope.contractData.CUST_MBR_SID = $scope.copyContractData.data[0].CUST_MBR_SID;
+                                $scope.contractData.START_DT = $scope.copyContractData.data[0].START_DT;
+                                $scope.contractData.START_QTR = $scope.copyContractData.data[0].START_QTR;
+                                $scope.contractData.START_YR = $scope.copyContractData.data[0].START_YR;
+                                $scope.contractData.END_DT = $scope.copyContractData.data[0].END_DT;
+                                $scope.contractData.END_QTR = $scope.copyContractData.data[0].END_QTR;
+                                $scope.contractData.END_YR = $scope.copyContractData.data[0].END_YR;
+                            });
                         }
 
                         $timeout(function () {
