@@ -235,6 +235,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             //Updating Product Line
                                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
+                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_SKU");
                                             }
 
                                             //Updating Deal line
@@ -266,8 +267,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
                                         }
                                     }
-                                    
-                                    if (tempData.length > 0) {
+
+                                    if (tempData.length > 0 || selData.length > 0) {
                                         expandSelected("COMP_SKU", $scope.curentRow);
                                     }
                                 }
@@ -378,6 +379,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     //Updating Product Line
                                                     if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                                                         $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
+                                                        addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_OVRRD_RSN");
                                                     }
 
                                                     //Updating Deal line
@@ -417,7 +419,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             }                                            
 
                                             //Retaining the same expand
-                                            if (tempData.length > 0) {
+                                            if (tempData.length > 0 || selData.length > 0) {
                                                 expandSelected("COMP_OVRRD_RSN", editedROW.RW_NM);
                                             }
                                         }
@@ -682,6 +684,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             //Updating Product Line
                                                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "IA_BNCH");
                                                             }
 
                                                             //Updating Deal line
@@ -710,7 +713,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                         }
                                                     }
                                                     //Retaining the same expand
-                                                    if (tempData.length > 0) {
+                                                    if (tempData.length > 0 || selData.length > 0) {
                                                         expandSelected("IA_BNCH", options.model.RW_NM);
                                                     }
                                                 }
@@ -750,6 +753,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             //Updating Product Line
                                                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_BNCH");
                                                             }
 
                                                             //Updating Deal line
@@ -779,7 +783,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     }
                                                     
                                                     //Retaining the same expand
-                                                    if (tempData.length > 0) {
+                                                    if (tempData.length > 0 || selData.length > 0) {
                                                         expandSelected("COMP_BNCH", options.model.RW_NM);
                                                     }
 
@@ -854,6 +858,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             //Updating Product Line
                                                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_PRC");
                                                             }
 
                                                             //Updating Deal line
@@ -864,7 +869,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                                 .ToArray();
 
                                                             for (var i = 0; i < tempprcData.length; i++) {
-                                                                $scope.meetCompMasterdata[tempprcData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                if (options.model.COMP_PRC) {
+                                                                    $scope.meetCompMasterdata[tempprcData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;                                                                    
+                                                                }    
                                                                 addToUpdateList($scope.meetCompMasterdata[tempprcData[i].RW_NM - 1], "COMP_PRC");
                                                             }
                                                         }
@@ -877,7 +884,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             .ToArray();
 
                                                         for (var i = 0; i < tempprcData.length; i++) {
-                                                            $scope.meetCompMasterdata[tempprcData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                            if (options.model.COMP_PRC) {
+                                                                $scope.meetCompMasterdata[tempprcData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;                                                                
+                                                            }
                                                             addToUpdateList($scope.meetCompMasterdata[tempprcData[i].RW_NM - 1], "COMP_PRC");
                                                         }
                                                     }
@@ -889,7 +898,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_SKU");
                                                 
                                                 //Retaining the same expand
-                                                if (tempData.length > 0) {
+                                                if (tempData.length > 0 || selData.length > 0) {
                                                     expandSelected("COMP_SKU", options.model.RW_NM);
                                                 }
 
@@ -906,7 +915,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                 var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                     .Where(function (x) {
-                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID);
+                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.COMP_PRC != null);
                                     })
                                     .GroupBy(function (x) {
                                         return (x.COMP_PRC);
@@ -932,7 +941,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         },
                                         change: function (e) {
                                             if (isNaN(options.model.COMP_PRC) || options.model.COMP_PRC == null) {
-                                                options.model.COMP_PRC = 0;
+                                                options.model.COMP_PRC = null;
                                             }
                                             if (options.model.COMP_PRC > 0) {
                                                 var tempData = [];
@@ -948,6 +957,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             //Updating Product Line
                                                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_PRC");
                                                             }
 
                                                             //Updating Deal line
@@ -975,16 +985,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
                                                         }
                                                     }
-
-
-
-
                                                 }
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
                                                 addToUpdateList(options.model, "COMP_PRC");
                                                 
                                                 //Retaining the same expand
-                                                if (tempData.length > 0) {
+                                                if (tempData.length > 0 || selData.length > 0) {
                                                     expandSelected("COMP_PRC", options.model.RW_NM);
                                                 }
                                             }
@@ -1037,6 +1043,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                         //Updating Product Line
                                                         if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                                                             $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
+                                                            addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_OVRRD_FLG");
                                                         }
 
                                                         //Updating Deal line
@@ -1067,7 +1074,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 }
 
                                                 //Retaining the same expand
-                                                if (tempData.length > 0) {
+                                                if (tempData.length > 0 || selData.length > 0) {
                                                     expandSelected("COMP_OVRRD_FLG", options.model.RW_NM);
                                                 }
                                             }
