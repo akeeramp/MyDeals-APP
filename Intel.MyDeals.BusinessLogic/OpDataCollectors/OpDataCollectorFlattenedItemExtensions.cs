@@ -414,13 +414,13 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     //check if eligible to create subkits
                     if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
                     {
-                        opFlatItem[AttributeCodes.HAS_SUBKIT] = false;  //default to false
+                        opFlatItem[AttributeCodes.HAS_SUBKIT] = 0;  //default to 0=false
                         if (pMaps.Count() > 2)
                         {
                             //"If a kit having more than two products, having two L1 or one L1 and one L2,then can create subkit"
                             if ((numL1 == 2 && numL2 == 0) || (numL1 == 1 && numL2 == 1))
                             {
-                                opFlatItem[AttributeCodes.HAS_SUBKIT] = true;
+                                opFlatItem[AttributeCodes.HAS_SUBKIT] = 1;
                             }
                         }
                     }

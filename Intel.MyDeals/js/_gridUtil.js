@@ -56,7 +56,7 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 }
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     var tmplt = '';
-    if (dim == "20_____2" && passedData.HAS_SUBKIT == "False") {
+    if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
         //no subkit allowed case
         tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
         tmplt += '<div class="vert-center">No Sub KIT</div>';
@@ -260,7 +260,7 @@ gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
 //this control wrapper is only used to calculate SKIT deal's SUBKIT_REBATE_BUNDLE_DISCOUNT
 gridUtils.uiSubKitRebateBundleDiscountControlWrapper = function (passedData) {
     var tmplt = '';
-    if (passedData.HAS_SUBKIT == "False") {
+    if (passedData.HAS_SUBKIT == "0") {
         //no subkit allowed case
         tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
         tmplt += '<div class="vert-center">No Sub KIT</div>';

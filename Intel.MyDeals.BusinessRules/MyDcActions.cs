@@ -152,7 +152,7 @@ namespace Intel.MyDeals.BusinessRules
             // Clear out subkit attributes if user changes products to make it ineligible for subkits
             if (item.ContainsKey(AttributeCodes.HAS_SUBKIT))
             {
-                if (item[AttributeCodes.HAS_SUBKIT].ToString() == "False")
+                if (item[AttributeCodes.HAS_SUBKIT].ToString() == "0")
                 {
                     item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = null;
                 }
