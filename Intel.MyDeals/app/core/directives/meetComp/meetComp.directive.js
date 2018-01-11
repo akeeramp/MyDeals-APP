@@ -221,7 +221,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 }
 
                                 addToUpdateList($scope.meetCompMasterdata[$scope.curentRow - 1], "COMP_SKU");
-
+                                var isUpdated = false;
                                 //Update child
                                 if ($scope.meetCompMasterdata[$scope.curentRow - 1].GRP == "PRD") {
                                     var selData = [];
@@ -229,6 +229,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         selData = getProductLineData();
                                     }
                                     if (selData.length > 0) {
+                                        isUpdated = true;
                                         for (var cntData = 0; selData.length > cntData; cntData++) {
                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -249,7 +250,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
                                                 addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
                                             }
-                                        }
+                                        }                                        
                                     }
                                     else {
                                         var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
@@ -266,9 +267,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
                                         }
+                                        if (tempData.length > 0) {
+                                            isUpdated = true;
+                                        }
                                     }
 
-                                    if (tempData.length > 0 || selData.length > 0) {
+                                    if (isUpdated) {
                                         expandSelected("COMP_SKU", $scope.curentRow);
                                     }
                                 }
@@ -366,13 +370,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value.trim();
                                         editedROW.COMP_OVRRD_RSN = value.trim();
                                         addToUpdateList(editedROW, "COMP_OVRRD_RSN");
-
+                                        var isUpdated = false;
                                         if (editedROW.GRP == "PRD") {
                                             var selData = [];
                                             if (editedROW.IS_SELECTED) {
                                                 selData = getProductLineData();
                                             }
                                             if (selData.length > 0) {
+                                                isUpdated = true;
                                                 for (var cntData = 0; selData.length > cntData; cntData++) {
                                                     var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -416,12 +421,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
                                                     addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
                                                 }
+                                                if (tempData.length > 0) {
+                                                    isUpdated = true;
+                                                }
                                             }                                            
 
                                             //Retaining the same expand
-                                            if (tempData.length > 0 || selData.length > 0) {
+                                            if (isUpdated) {
                                                 expandSelected("COMP_OVRRD_RSN", editedROW.RW_NM);
-                                            }
+                                            }                                            
                                         }
                                     });
                                 }
@@ -671,13 +679,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             if (options.model.IA_BNCH > 0) {
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "IA_BNCH");
-
+                                                var isUpdated = false;
                                                 if (options.model.GRP == "PRD") {
                                                     var selData = [];
                                                     if (options.model.IS_SELECTED) {
                                                         selData = getProductLineData();
                                                     }
                                                     if (selData.length > 0) {
+                                                        isUpdated = true;
                                                         for (var cntData = 0; selData.length > cntData; cntData++) {
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -711,11 +720,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             $scope.meetCompMasterdata[tempData[i].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
                                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
                                                         }
+
+                                                        if (tempData.length > 0) {
+                                                            isUpdated = true;
+                                                        }
                                                     }
                                                     //Retaining the same expand
-                                                    if (tempData.length > 0 || selData.length > 0) {
+                                                    if (isUpdated) {
                                                         expandSelected("IA_BNCH", options.model.RW_NM);
-                                                    }
+                                                    }                                                    
                                                 }
                                             }
                                             else {
@@ -740,6 +753,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             if (options.model.COMP_BNCH > 0) {
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_BNCH");
+                                                var isUpdated = false;
 
                                                 if (options.model.GRP == "PRD") {
                                                     var selData = [];
@@ -747,6 +761,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                         selData = getProductLineData();
                                                     }
                                                     if (selData.length > 0) {
+                                                        isUpdated = true;
                                                         for (var cntData = 0; selData.length > cntData; cntData++) {
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -780,10 +795,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
                                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
                                                         }
+
+                                                        if (tempData.length > 0) {
+                                                            isUpdated = true;
+                                                        }
                                                     }
                                                     
                                                     //Retaining the same expand
-                                                    if (tempData.length > 0 || selData.length > 0) {
+                                                    if (isUpdated) {
                                                         expandSelected("COMP_BNCH", options.model.RW_NM);
                                                     }
 
@@ -844,6 +863,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                                 var tempprcData = [];
                                                 options.model.COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
+                                                var isUpdated = false;
+
                                                 if (options.model.GRP == "PRD") {
                                                     var selData = [];
                                                     if (options.model.IS_SELECTED) {
@@ -852,6 +873,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                                     $scope.addSKUForCustomer("0", options.model.IS_SELECTED);
                                                     if (selData.length > 0) {
+                                                        isUpdated = true;
                                                         for (var cntData = 0; selData.length > cntData; cntData++) {
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -889,6 +911,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             }
                                                             addToUpdateList($scope.meetCompMasterdata[tempprcData[i].RW_NM - 1], "COMP_PRC");
                                                         }
+
+                                                        if (tempprcData.length > 0) {
+                                                            isUpdated = true;
+                                                        }
                                                     }
                                                 }
 
@@ -898,7 +924,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_SKU");
                                                 
                                                 //Retaining the same expand
-                                                if (tempData.length > 0 || selData.length > 0) {
+                                                if (isUpdated) {
                                                     expandSelected("COMP_SKU", options.model.RW_NM);
                                                 }
 
@@ -945,12 +971,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             }
                                             if (options.model.COMP_PRC > 0) {
                                                 var tempData = [];
+                                                var isUpdated = false;
                                                 if (options.model.GRP == "PRD") {
                                                     var selData = [];
                                                     if (options.model.IS_SELECTED) {
                                                         selData = getProductLineData();
                                                     }
                                                     if (selData.length > 0) {
+                                                        isUpdated = true;
                                                         for (var cntData = 0; selData.length > cntData; cntData++) {
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -984,13 +1012,17 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                             $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
                                                             addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
                                                         }
+
+                                                        if (tempData.length > 0) {
+                                                            isUpdated = true;
+                                                        }
                                                     }
                                                 }
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
                                                 addToUpdateList(options.model, "COMP_PRC");
                                                 
                                                 //Retaining the same expand
-                                                if (tempData.length > 0 || selData.length > 0) {
+                                                if (isUpdated) {
                                                     expandSelected("COMP_PRC", options.model.RW_NM);
                                                 }
                                             }
@@ -1030,13 +1062,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         change: function (e) {
                                             $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_FLG = this.text().trim();
                                             addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_OVRRD_FLG");
-
+                                            var isUpdated = false;
                                             if (options.model.GRP == "PRD") {
                                                 var selData = [];
                                                 if (options.model.IS_SELECTED) {
                                                     selData = getProductLineData();
                                                 }
                                                 if (selData.length > 0) {
+                                                    isUpdated = true;
                                                     for (var cntData = 0; selData.length > cntData; cntData++) {
                                                         var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
@@ -1071,10 +1104,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                         $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
                                                         addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
                                                     }
+
+                                                    if (tempData.length > 0) {
+                                                        isUpdated = true;
+                                                    }
                                                 }
 
                                                 //Retaining the same expand
-                                                if (tempData.length > 0 || selData.length > 0) {
+                                                if (isUpdated) {
                                                     expandSelected("COMP_OVRRD_FLG", options.model.RW_NM);
                                                 }
                                             }
