@@ -9,7 +9,7 @@ namespace Intel.MyDeals.Controllers
         // GET: Dashboard
         public ActionResult Index()
         {
-            if (Request.UrlReferrer == null &&  DateTime.Now > DateTime.Parse("12/15/2017") && DateTime.Now < DateTime.Parse("1/15/2018"))
+            if (Request.UrlReferrer == null &&  DateTime.Now > DateTime.Parse("12/15/2017") && DateTime.Now < DateTime.Parse("1/10/2018"))
             {
                 return RedirectToAction("Snow", "Dashboard");
             }
