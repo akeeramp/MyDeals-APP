@@ -285,6 +285,10 @@
                     title: "OEM",
                     width: 140
                 }, {
+                    field: "CUST_ACCNT_DIV",
+                    title: "Cust Division",
+                    width: 140
+                }, {
                     field: "QLTR_PROJECT",
                     title: "Project Name",
                     width: 140

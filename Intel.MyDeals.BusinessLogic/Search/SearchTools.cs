@@ -94,7 +94,12 @@ namespace Intel.MyDeals.BusinessLogic
             List<string> arFilters = filters.Split(new[] { " and " }, StringSplitOptions.None).ToList();
             List<string> arFilterClauses = arFilters.Select(f => ParseFilter(f, opDataElementType)).ToList();
 
-            return string.Join(" and ", arFilterClauses);
+            string rtn = string.Join(" and ", arFilterClauses);
+
+            // Special columns... When we make the advanced search, need a better way than hard coding this
+            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_DIV_NM", "CUST_NM");
+
+            return rtn;
         }
     }
 }
