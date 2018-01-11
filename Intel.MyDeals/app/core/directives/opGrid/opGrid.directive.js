@@ -889,9 +889,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 } else if (col.uiType.toUpperCase() === "MULTISELECT") {
 
+                    var lookupText = field.opLookupText;
                     var id = "";
                     if (col.field === "DEAL_SOLD_TO_ID") {
-                        id = options.model["CUST_MBR_SID"]   // TODO:change to dynamic
+                        // TODO:change to dynamic
+                        id = options.model["CUST_MBR_SID"];
+                        id += "/" + options.model["GEO_COMBINED"].replace(/\//g, ',');
+                        id += "/" + options.model["CUST_ACCNT_DIV"].replace(/\//g, ',');
+
+                        lookupText = "subAtrbCd";
                     }
 
                     ////Note: this was first approach, had issues with reading back in string format and getting linked rows to sync
@@ -915,20 +921,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //	});
 
                     ////Note: this was second approach - this appending apprach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
-                    var multiCompiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + field.opLookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                    var multiCompiled = $compile('<div class="myDealsControl" style="margin: 0;" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + lookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     $(container).append(multiCompiled);
 
                 } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
 
                     //note: as this is a reusable directive we probably shouldnt put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
-                        openTargetRegionModal(container, col)
+                        openTargetRegionModal(container, col);
                     }
                     else if (options.field.toUpperCase() === "MRKT_SEG") {
-                        openMarketSegmentModal(container, col)
+                        openMarketSegmentModal(container, col);
                     }
                     else if (options.field.toUpperCase() === "DEAL_GRP_EXCLDS") {
-                    	openDealGroupModal(container, col)
+                        openDealGroupModal(container, col);
                     }
 
                 } else {

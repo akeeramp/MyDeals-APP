@@ -36,7 +36,7 @@ namespace Intel.MyDeals.IBusinessLogic
 		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
 		//List<Dropdown> GetRetailPullSDMDropdown(RetailPullParams filterData);
 
-		List<Dropdown> GetSoldToIdDropdown(int custId);
+		List<Dropdown> GetSoldToIdDropdown(int custId, IEnumerable<string> geos, IEnumerable<string> custDivs);
 
 		List<OverlappingDeal> GetDealGroupDropdown(int dealId);
 

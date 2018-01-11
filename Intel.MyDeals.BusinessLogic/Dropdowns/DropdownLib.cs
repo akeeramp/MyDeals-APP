@@ -274,19 +274,26 @@ namespace Intel.MyDeals.BusinessLogic
 		//	return myList;
 		//}
 
-		public List<Dropdown> GetSoldToIdDropdown(int custId)
+		public List<Dropdown> GetSoldToIdDropdown(int custId, IEnumerable<string> geos, IEnumerable<string> custDivs)
 		{
-			List<Dropdown> result = new List<Dropdown>();
 			List<SoldToIds> soldToIdList = _dataCollectionsDataLib.GetSoldToIdList();
 
-			List<Dropdown> myList = soldToIdList.Where(r =>
-				r.CUST_NM_SID == custId
-				&& r.ACTV_IND
-			)
-			.OrderBy(dd => dd.SOLD_TO_ID)
-			.Select(x => new Dropdown { dropdownName = x.SOLD_TO_ID }).ToList<Dropdown>();
+		    List<Dropdown> myList = soldToIdList
+		        .Where(r =>
+		            r.CUST_NM_SID == custId
+		            && (geos == null || geos.Contains("Worldwide") || geos.Contains(r.GEO_NM))
+		            && (custDivs == null || custDivs.Contains(r.CUST_DIV_NM))
+		            && r.ACTV_IND
+		        )
+		        .OrderBy(dd => dd.SOLD_TO_ID)
+		        .Select(x => new Dropdown
+		        {
+		            dropdownName = x.SOLD_TO_ID,
+		            subAtrbCd = x.GEO_CD == "" ? x.SOLD_TO_ID : x.SOLD_TO_ID + " - " + x.GEO_CD
+		        }).ToList();
 
-			return myList;
+
+            return myList;
 		}
 
 		/// <summary>

@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
-using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-using System.Linq;
-using System.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -33,8 +30,10 @@ namespace Intel.MyDeals.DataLibrary
 				int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
 				int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
 				int IDX_SOLD_TO_ID_SID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID_SID");
+                int IDX_GEO_CD = DB.GetReaderOrdinal(rdr, "GEO_CD");
+                int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
 
-				while (rdr.Read())
+                while (rdr.Read())
 				{
 					ret.Add(new SoldToIds
 					{
@@ -44,8 +43,10 @@ namespace Intel.MyDeals.DataLibrary
 						CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
 						CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
 						SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID),
-						SOLD_TO_ID_SID = (IDX_SOLD_TO_ID_SID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SOLD_TO_ID_SID)
-					});
+						SOLD_TO_ID_SID = (IDX_SOLD_TO_ID_SID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SOLD_TO_ID_SID),
+                        GEO_CD = (IDX_GEO_CD < 0 || rdr.IsDBNull(IDX_GEO_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_CD),
+                        GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM)
+                    });
 				} // while
 			}
 			return ret;

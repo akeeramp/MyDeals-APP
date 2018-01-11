@@ -153,18 +153,26 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetSoldToIds/{custId}")]
 		public List<Dropdown> GetSoldToIds(int custId)
 		{
-			return SafeExecutor(() => _dropdownLib.GetSoldToIdDropdown(custId)
+			return SafeExecutor(() => _dropdownLib.GetSoldToIdDropdown(custId, new List<string>(), new List<string>())
 				, $"Unable to get Sold To Ids for the contract's customer"
 			);
 		}
 
+        [Authorize]
+        [Route("GetSoldToIds/{custId}/{geos}/{custDiv}")]
+        public List<Dropdown> GetSoldToIds(int custId, string geos, string custDiv)
+        {
+            return SafeExecutor(() => _dropdownLib.GetSoldToIdDropdown(custId, geos.Split(','), custDiv.Split(','))
+                , $"Unable to get Sold To Ids for the contract's customer"
+            );
+        }
 
-		/// <summary>
-		/// Gets a list of deal groups given a dealId
-		/// </summary>
-		/// <param name="id">A dealId</param>
-		/// <returns>a list of deal groups</returns>
-		[Authorize]
+        /// <summary>
+        /// Gets a list of deal groups given a dealId
+        /// </summary>
+        /// <param name="id">A dealId</param>
+        /// <returns>a list of deal groups</returns>
+        [Authorize]
 		[Route("GetDealGroupDropdown/{dealId}")]
 		public List<OverlappingDeal> GetDealGroupDropdown(int dealId)
 		{
