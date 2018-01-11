@@ -1,5 +1,5 @@
 ﻿<div class="container-fluid widget-container" style="overflow: auto; height: 100%;">
-	<loading-panel show="!isLoaded" header="'Loading contracts'" description="'Please wait while we load your contracts.'"></loading-panel>
+    <loading-panel show="!isLoaded" header="'Loading contracts'" description="'Please wait while we load your contracts.'"></loading-panel>
 
     <div class="horizontal-widget">
         <div class="left-pane-widget">
@@ -8,6 +8,7 @@
                 <div class="stgLnkBox">
                     <div class="stgLnk active" id="fltr_All" ng-click="clkFilter('fltr_All')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{stageCnt}}</span></div>
                     <div ng-repeat="item in stages" class="stgLnk" id="fltr_{{item.Stage}}" ng-click="clkFilter('fltr_' + item.Stage)"><i class="intelicon-workflow-process-outlined"></i> {{item.Stage}} <span class="badge">{{item.Cnt}}</span></div>
+                    <div id="fltr_Favorites" class="stgLnk" ng-click="clkFilter('fltr_Favorites')"><i class="intelicon-favorite-rating-solid"></i> Favorites<span class="badge">{{favCount}}</span></div>
                 </div>
                 <h6 style="margin-top: 30px;"><a href="/TenderManager#/tender" style="color: #000000;" title="Click to view Tender Deals">Tenders</a></h6>
             </div>
@@ -106,43 +107,43 @@
         padding: 5px 0 3px 0;
     }
 
-    .left-pane-widget .inner {
-        height: 100%;
-        border-top: 1px solid #e6e6e6;
-        border-left: 1px solid #e6e6e6;
-        border-bottom: 1px solid #e6e6e6;
-        padding: 5px 0;
-    }
+        .left-pane-widget .inner {
+            height: 100%;
+            border-top: 1px solid #e6e6e6;
+            border-left: 1px solid #e6e6e6;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 5px 0;
+        }
 
-    .left-pane-widget .stgLnk {
-        font-size: 16px;
-        margin: 0;
-        padding: 8px 0;
-        background-color: #ffffff;
-        padding-left: 8px;
-        cursor: pointer;
-    }
+        .left-pane-widget .stgLnk {
+            font-size: 16px;
+            margin: 0;
+            padding: 8px 0;
+            background-color: #ffffff;
+            padding-left: 8px;
+            cursor: pointer;
+        }
 
-    .left-pane-widget .stgLnk i {
-        color: #aaaaaa;
-    }
+            .left-pane-widget .stgLnk i {
+                color: #aaaaaa;
+            }
 
-    .left-pane-widget .stgLnk:hover {
-        background-color: #f5f5f5;
-    }
+            .left-pane-widget .stgLnk:hover {
+                background-color: #f5f5f5;
+            }
 
-    .left-pane-widget .stgLnk.active {
-        background-color: #00AEEF;
-        color: #ffffff;
-    }
+            .left-pane-widget .stgLnk.active {
+                background-color: #00AEEF;
+                color: #ffffff;
+            }
 
-    .left-pane-widget .stgLnk.active i {
-        color: #ffffff;
-    }
+                .left-pane-widget .stgLnk.active i {
+                    color: #ffffff;
+                }
 
-    .left-pane-widget .stgLnkBox {
-        margin-top: 15px;
-    }
+        .left-pane-widget .stgLnkBox {
+            margin-top: 15px;
+        }
 
     .inner h6 {
         margin-top: 6px;
@@ -158,10 +159,10 @@
     }
 
 
-    .center-pane-widget .inner {
-        height: 100%;
-        padding: 5px 0;
-    }
+        .center-pane-widget .inner {
+            height: 100%;
+            padding: 5px 0;
+        }
 
     .opUiContainer.dashboard .k-grid-header, .opUiContainer.dashboard .k-grid-header .k-header,
     .opUiContainer.dashboard .k-pager-wrap, .opUiContainer.dashboard .k-pager-numbers .k-state-selected,
@@ -171,14 +172,32 @@
     }
 
     .stgLnkBox .badge {
-        font-size: 10px; 
-        margin-left: 5px; 
+        font-size: 10px;
+        margin-left: 5px;
         background-color: #0071C5;
         margin-bottom: 4px;
     }
+
     .stgLnk.active .badge {
         color: #0071C5;
         background-color: #ffffff;
     }
 
+    .stgLnkBox .intelicon-favorite-rating-solid {
+        color: #0071C5 !important;
+    }
+
+    .stgLnk.active .intelicon-favorite-rating-solid {
+        color: #ffffff !important;
+    }
+
+    .k-grid .intelicon-favorite-rating-solid {
+        font-size: 22px;
+        color: #ddd;
+    }
+
+    .k-grid .intelicon-favorite-rating-solid.active {
+        font-size: 22px;
+        color: #0071C5;
+    }
 </style>

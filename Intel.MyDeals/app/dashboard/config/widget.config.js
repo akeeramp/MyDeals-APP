@@ -30,6 +30,7 @@ widgetConfig.configWidgets = function () {
         canRefresh: false,
         canAdd: true,
         template: 'app/dashboard/widgets/newContract.html',
+        subConfig: {},
         widgetConfig: {
             options: {},
             data: [],
@@ -54,6 +55,9 @@ widgetConfig.configWidgets = function () {
         canAdd: true,
         template: 'app/dashboard/widgets/contractStatusBoard.html',
         widgetConfig: {},
+        subConfig: {
+            favContractIds: ""
+        },
         resizeEvent: function (widget) {
             var grid = $("#gridContractStatus");
             grid.data("kendoGrid").resize();
@@ -76,6 +80,7 @@ widgetConfig.configWidgets = function () {
         canRefresh: false,
         canAdd: true,
         template: 'app/dashboard/widgets/searchContract.html',
+        subConfig: {},
         widgetConfig: {
             options: {},
             data: [],
@@ -99,6 +104,7 @@ widgetConfig.configWidgets = function () {
         canRefresh: false,
         canAdd: true,
         template: 'app/dashboard/widgets/openContract.html',
+        subConfig: {},
         widgetConfig: {
             options: {},
             data: [],

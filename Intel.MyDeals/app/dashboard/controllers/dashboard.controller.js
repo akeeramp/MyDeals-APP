@@ -7,7 +7,7 @@
     .filter('object2Array', object2Array)
     .run(SetRequestVerificationToken);
 
-   
+
 SetRequestVerificationToken.$inject = ['$http'];
 DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
@@ -19,7 +19,7 @@ object2Array.$inject = [];
 function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
-   
+
     $scope.$storage = $localStorage.$default({
         selectedDashboardId: '1',
         startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
@@ -32,6 +32,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
     $scope.startDate = $scope.$storage.startDate;
     $scope.endDate = $scope.$storage.endDate;
     $scope.selectedCustomerId = $scope.$storage.selectedCustomerId;
+    $scope.favContractIds = "";
 
     $scope.C_CREATE_CONTRACT = securityService.chkDealRules('C_CREATE_CONTRACT', window.usrRole, null, null, null);
 
@@ -53,17 +54,6 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         autoClose: false,
         dataSource: $scope.custDs
     };
-    //$scope.allCust = function (selectedCustomerIds, ds) {
-    //    var data = ds.data();
-    //    selectedCustomerIds.length = 0;
-    //    for (var i = 0; i < data.length; i++) {
-    //        selectedCustomerIds.push(data[i].CUST_SID);
-    //    }
-    //}
-    //$scope.noCust = function (selectedCustomerIds) {
-    //    selectedCustomerIds.length = 0;
-    //}
-
 
     // **** LEFT NAVIGATION Methods ****
     //
@@ -196,6 +186,16 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             widget.refreshEvent();
     }
 
+    // When Deals desk widget sends out a fav contract change event call SaveLayout
+    $scope.$on('favContractChanged', function (event, args) {
+        for (var i = 0; i < $scope.dashboardData.currentWidgets.length; i++) {
+            if (!!$scope.dashboardData.currentWidgets[i].subConfig && $scope.dashboardData.currentWidgets[i].subConfig.favContractIds !== undefined) {
+                $scope.dashboardData.currentWidgets[i].subConfig.favContractIds = args["favContractIds"];
+            }
+        }
+        $scope.saveLayout();
+    });
+
     $scope.refreshAllWidgets = function () {
         if (!this.$angular_scope)
             this.broadcastRefresh(this);
@@ -226,7 +226,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         $scope.addWidgetByKey(scope, key, true);
     }
 
-    $scope.getSavedWidgetSettings = function (scope, key) {
+    $scope.getSavedWidgetSettings = function (scope, key, useSavedWidgetSettings) {
         $scope.savedWidgetSettings = null;
 
         userPreferencesService.getActions("Dashboard", "Widgets")
@@ -240,8 +240,11 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
                     if (savedWidgetSettingsForSpecifiedRole && savedWidgetSettingsForSpecifiedRole.length > 0) {
                         $scope.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole[0].PRFR_VAL);
                     }
+
+                    initDashboard(scope, key, useSavedWidgetSettings);
                 }
             }, function (response) {
+                initDashboard(scope, key, useSavedWidgetSettings);
                 logger.error("Unable to get User Preferences.", response, response.statusText);
             });
     }
@@ -250,49 +253,54 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         $scope.clear();
 
         // Get any widget settings that were previously saved to the database for the specified key (user role).
-        $scope.getSavedWidgetSettings(scope, key);
+        $scope.getSavedWidgetSettings(scope, key, useSavedWidgetSettings);
+    }
 
-        $timeout(function () {
-            if (useSavedWidgetSettings && $scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
-                // There are saved widget settings, so use them.
+    function initDashboard(scope, key, useSavedWidgetSettings) {
+        if (useSavedWidgetSettings && $scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
+            // There are saved widget settings, so use them.
 
-                var widgetArr = $scope.dashboardData.allWidgets;
+            var widgetArr = $scope.dashboardData.allWidgets;
 
-                Object.keys(widgetArr).forEach(function (key) {
-                    var widgetToAdd = util.clone(widgetArr[key]);
+            Object.keys(widgetArr).forEach(function (key) {
+                var widgetToAdd = util.clone(widgetArr[key]);
 
-                    // Get the saved settings for the current widget.
-                    var currentWidgetSavedSetting = $scope.savedWidgetSettings.filter(function (obj) {
-                        return obj.id == widgetToAdd.id;
-                    });
-
-                    // If there is a saved settings for the current widget, use it to set the size and position of the widget.  If there isn't any
-                    // saved settings for the current widget, it means that the widget should stay hidden by default.
-                    if (currentWidgetSavedSetting && currentWidgetSavedSetting.length > 0) {
-                        widgetToAdd.size = currentWidgetSavedSetting[0].size;
-                        widgetToAdd.position = currentWidgetSavedSetting[0].position;
-                        widgetToAdd.name = currentWidgetSavedSetting[0].name;
-
-                        $scope.dashboardData.currentWidgets.push(widgetToAdd);
-                    }
+                // Get the saved settings for the current widget.
+                var currentWidgetSavedSetting = $scope.savedWidgetSettings.filter(function (obj) {
+                    return obj.id == widgetToAdd.id;
                 });
-            } else {
-                // There are no saved widget settings, so use the layout (default) widget settings.
 
-                var widgetLayoutArr = $scope.dashboards[key].widgets;
-
-                for (var i = 0; i < widgetLayoutArr.length; i++) {
-                    var widgetLayout = util.clone(widgetLayoutArr[i]);
-                    var widgetToAdd = util.clone($scope.dashboardData.allWidgets[widgetLayout.id]);
-
-                    if (widgetLayout.defaultSize !== undefined) widgetToAdd.size = widgetLayout.defaultSize;
-                    if (widgetLayout.defaultPosition !== undefined) widgetToAdd.position = widgetLayout.defaultPosition;
-                    if (widgetLayout.name !== undefined) widgetToAdd.name = widgetLayout.name;
-
+                // If there is a saved settings for the current widget, use it to set the size and position of the widget.  If there isn't any
+                // saved settings for the current widget, it means that the widget should stay hidden by default.
+                if (currentWidgetSavedSetting && currentWidgetSavedSetting.length > 0) {
+                    widgetToAdd.size = currentWidgetSavedSetting[0].size;
+                    widgetToAdd.position = currentWidgetSavedSetting[0].position;
+                    widgetToAdd.name = currentWidgetSavedSetting[0].name;
+                    if (!!currentWidgetSavedSetting[0].subConfig && currentWidgetSavedSetting[0].subConfig.favContractIds !== undefined) {
+                        $scope.favContractIds = currentWidgetSavedSetting[0].subConfig.favContractIds;
+                        widgetToAdd.subConfig.favContractIds = $scope.favContractIds;
+                    }
                     $scope.dashboardData.currentWidgets.push(widgetToAdd);
                 }
+            });
+        } else {
+            // There are no saved widget settings, so use the layout (default) widget settings.
+
+            var widgetLayoutArr = $scope.dashboards[key].widgets;
+
+            for (var i = 0; i < widgetLayoutArr.length; i++) {
+                var widgetLayout = util.clone(widgetLayoutArr[i]);
+                var widgetToAdd = util.clone($scope.dashboardData.allWidgets[widgetLayout.id]);
+
+                if (widgetLayout.defaultSize !== undefined) widgetToAdd.size = widgetLayout.defaultSize;
+                if (widgetLayout.defaultPosition !== undefined) widgetToAdd.position = widgetLayout.defaultPosition;
+                if (widgetLayout.name !== undefined) widgetToAdd.name = widgetLayout.name;
+                if (!!widgetLayout.subConfig && !!widgetLayout.subConfig.favContractIds) {
+                    $scope.favContractIds = widgetLayout.subConfig.favContractIds;
+                }
+                $scope.dashboardData.currentWidgets.push(widgetToAdd);
             }
-        }, 600);
+        }
     }
 
     $scope.isCopyCntrctListLoaded = false;

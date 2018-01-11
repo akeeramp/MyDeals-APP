@@ -371,7 +371,6 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
                 throw;
             }
-            var test = ret.Where(x => x.GRP_PRD_SID == 57316);
             return ret;
         }
 

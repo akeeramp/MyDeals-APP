@@ -85,7 +85,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PTR_USER_PRD.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.WF_STG_CD.ATRB_SID,
-                Attributes.PASSED_VALIDATION.ATRB_SID
+                Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.COST_TEST_RESULT.ATRB_SID,
+                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID
             };
 
             return GetContract(id, new List<OpDataElementType>
@@ -176,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Don't check for ANY becuase we might have to delete the last item
-            if (pricingTableRows != null && (savePacket.MyContractToken.DeleteAllPTR)|| pricingTableRows.Any())
+            if (pricingTableRows != null && (savePacket.MyContractToken.DeleteAllPTR) || pricingTableRows.Any())
             {
                 data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
                 secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
@@ -249,8 +251,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else if (isWipDealSource)
                 {
-					OpDataCollectorFlattenedItem pt = (contractAndStrategy.PricingTable != null && contractAndStrategy.PricingTable.Count > 0) ? contractAndStrategy.PricingTable[0] : new OpDataCollectorFlattenedItem();
-					translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl(pt);
+                    OpDataCollectorFlattenedItem pt = (contractAndStrategy.PricingTable != null && contractAndStrategy.PricingTable.Count > 0) ? contractAndStrategy.PricingTable[0] : new OpDataCollectorFlattenedItem();
+                    translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl(pt);
                 }
             }
 
@@ -261,7 +263,6 @@ namespace Intel.MyDeals.BusinessLogic
                 ForcePublish = forcePublish,
                 SourceEvent = contractAndStrategy.EventSource,
                 ResetValidationChild = resetValidationChild
-
             };
 
             MyDealsData myDealsData = SaveContract(
@@ -275,13 +276,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
-			foreach (OpDataElementType opDataElementType in myDealsData.Keys)
-			{
-				data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
-					opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
-			}
+            foreach (OpDataElementType opDataElementType in myDealsData.Keys)
+            {
+                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
+                    opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
+            }
 
-			return data;
+            return data;
             // == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested
         }
 
@@ -405,7 +406,5 @@ namespace Intel.MyDeals.BusinessLogic
 
             return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
-
-
     }
 }
