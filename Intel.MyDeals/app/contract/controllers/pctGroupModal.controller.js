@@ -11,6 +11,8 @@ pctGroupModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem'];
 function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
 
     $scope.curData = dataItems;
+    $scope.disabled = "disabled";
+    //$scope.disabled = window.usrRole === "DA" ? "disabled" : "";
 
     for (var d = 0; d < $scope.curData.length; d++) {
         $scope.curData[d].EXCLD_DEAL_FLAG = ($scope.curData[d].EXCLD_DEAL_FLAG === 1 || $scope.curData[d].EXCLD_DEAL_FLAG === true);
@@ -30,7 +32,7 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
                 field: "EXCLD_DEAL_FLAG",
                 title: "&nbsp;",
                 filterable: false,
-                template: "<div style='padding-left: 6px;'><input type='checkbox' ng-model='dataItem.EXCLD_DEAL_FLAG' id='chkId_#=OVLP_DEAL_ID#' class='with-font'/><label for='chkId_#=OVLP_DEAL_ID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
+                template: "<div style='padding-left: 6px;'><input type='checkbox' " + $scope.disabled + " ng-model='dataItem.EXCLD_DEAL_FLAG' id='chkId_#=OVLP_DEAL_ID#' class='with-font'/><label for='chkId_#=OVLP_DEAL_ID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
                 width: "60px"
             },
             {
