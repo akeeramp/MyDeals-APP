@@ -240,9 +240,8 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
                     if (savedWidgetSettingsForSpecifiedRole && savedWidgetSettingsForSpecifiedRole.length > 0) {
                         $scope.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole[0].PRFR_VAL);
                     }
-
-                    initDashboard(scope, key, useSavedWidgetSettings);
                 }
+                initDashboard(scope, key, useSavedWidgetSettings);
             }, function (response) {
                 initDashboard(scope, key, useSavedWidgetSettings);
                 logger.error("Unable to get User Preferences.", response, response.statusText);
