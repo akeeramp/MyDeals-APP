@@ -25,9 +25,11 @@ function gridStatusBoard($compile, objsetService, $timeout) {
 
             // Construct the fav contract id map
             var favContractsMap = {};
-            $scope.favContractIds.split(",").forEach(function (favContract) {
-                favContractsMap[favContract] = favContract;
-            });
+            if (!!$scope.favContractIds) {
+                $scope.favContractIds.split(",").forEach(function (favContract) {
+                    favContractsMap[favContract] = favContract;
+                });
+            }
 
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
