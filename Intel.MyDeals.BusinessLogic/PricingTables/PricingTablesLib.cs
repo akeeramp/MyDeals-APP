@@ -104,14 +104,10 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID
                 });
 
-            if (opDataElementType == OpDataElementType.PRC_TBL)
-            {
-                return $"{myDealsData[OpDataElementType.CNTRCT].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_ST].AllDataElements.First().DcID}";
-            }
-            else
-            {
-                return $"{myDealsData[OpDataElementType.CNTRCT].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_ST].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_TBL].AllDataElements.First().DcID}";
-            }
+            string basePath = $"{myDealsData[OpDataElementType.CNTRCT].AllDataElements.First().DcID}/{myDealsData[OpDataElementType.PRC_ST].AllDataElements.First().DcID}";
+            return opDataElementType == OpDataElementType.PRC_TBL 
+                ? basePath : 
+                $"{basePath}/{myDealsData[OpDataElementType.PRC_TBL].AllDataElements.First().DcID}/wip";
         }
 
         public PctOverrideReason SetPctOverrideReason(PctOverrideReason data)
