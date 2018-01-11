@@ -711,8 +711,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             modalOptions = {
                                 closeButtonText: "Okay",
                                 hasActionButton: false,
-                                headerText: "Deal group merge warning",
-                                bodyText: "A deal group with the name \"" + key + "\" already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have. Please rename the Deal Group Name or remove products from this row and try again.",
+                                headerText: "cannot merge Deal groups",
+                                bodyText: "A deal group with the name \"" + key + "\" already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10). Please rename the Deal Group Name or remove products from this row and try again.",
                                 closeResults: { "key": key }
                             };
                         } else {
@@ -722,7 +722,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 actionButtonText: "Merge rows",
                                 hasActionButton: true,
                                 headerText: "Deal group merge confirmation",
-                                bodyText: "A deal group with the name \"" + key + "\" already exists. Would you like to merge rows containing this Deal Group Name? Please note that any duplicate products will automatically be removed upon merging. Your resulting merged rows will be located at the bottom row of this spreadsheet.",
+                                bodyText: "A deal group with the name \"" + key + "\" already exists. Would you like to merge rows containing this Deal Group Name? Please note that any duplicate products will automatically be removed upon merging.",
                                 actionResults: { "key": key }, // HACK: without this, we won't get the correct key in the modal's .then()
                                 closeResults: { "key": key }
                             };
@@ -730,79 +730,87 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         confirmationModal.showModal({}, modalOptions)
 							.then(function (result) { // Merge existing row with currently-changing row
-							    var originalExistingCopy = null;
-							    var originalExistingIndex = null;
-							    var prevValues = [];
-							    var root = $scope.$parent.$parent;	// Access to parent scope
-							    var sourceData = root.pricingTableData.PRC_TBL_ROW;
-							    var data = root.spreadDs.data();
-							    var numOfExistingTiers = 0;
+								var originalExistingCopy = null;
+								var originalExistingIndex = null;
+								var prevValues = [];
+								var root = $scope.$parent.$parent;	// Access to parent scope
+								var sourceData = root.pricingTableData.PRC_TBL_ROW;
+								var data = root.spreadDs.data();
+								var numOfExistingTiers = 0;
 
-							    // Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
-							    for (var i = 0; i < data.length; i++) {
-							        if (originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) == 1 && data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							            // get the original existing copy to merge everything into
-							            originalExistingCopy = angular.copy(data[i]);
-							            originalExistingIndex = i;
-							            break;
-							        }
-							    }
-							    // Find/get all occurances with deal-grp-nm
-							    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-							        if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
-							            prevValues.push(angular.copy(data[i]));
+								// Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
+								for (var i = 0; i < data.length; i++) {
+									if (originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) == 1 && data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+										// get the original existing copy to merge everything into
+										originalExistingCopy = angular.copy(data[i]);
+										originalExistingIndex = i;
+										break;
+									}
+								}
+								// Find/get all occurances with deal-grp-nm
+								for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
+									if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+										prevValues.push(angular.copy(data[i]));
 
-							            if (data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							                // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
-							                //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
+										if (data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+											// HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
+											//		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
 
-							                numOfExistingTiers++;
+											numOfExistingTiers++;
 
-							                if (parseInt(data[i]["TIER_NBR"]) == 1) {
-							                    continue;
-							                }
-							            }
-							            else {
-							                if (i < originalExistingIndex) {
-							                    // the original index will change if the row is above the original and gets spliced
-							                    originalExistingIndex -= 1;
-							                }
-							                // "delete" the rows to merge
-							                data.splice(i, 1);
-							            }
-							        }
-							    }
+											if (parseInt(data[i]["TIER_NBR"]) == 1) {
+												continue;
+											}
+										}
+										else {
+											if (i < originalExistingIndex) {
+												// the original index will change if the row is above the original and gets spliced
+												originalExistingIndex -= 1;
+											}
+											// "delete" the rows to merge
+											data.splice(i, 1);
+										}
+									}
+								}
+								var numOfDuplicates = 0;
+								// Check for and remove duplicates
+								var duplicateCheckerDict = {};
+								for (var i = prevValues.length - 1; i >= 0; i--) {
+									if (duplicateCheckerDict.hasOwnProperty(prevValues[i]["PRD_BCKT"])) {
+										prevValues.splice(i, 1);
+										numOfDuplicates++;
+									} else {
+										duplicateCheckerDict[prevValues[i]["PRD_BCKT"]] = true;
+									}
+								}
+								// Update the row to have merged deal grp names
+								for (var i = 0; i < numOfExistingTiers; i++) {
+									var updateIndex = originalExistingIndex + i;
+									data[updateIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
+									data[updateIndex]["PTR_SYS_PRD"] = null; // force revalidation
+									data[updateIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
+									data[updateIndex]['dirty'] = true;
+								}
 
-							    // Check for and remove duplicates
-							    var duplicateCheckerDict = {};
-							    for (var i = prevValues.length - 1; i >= 0; i--) {
-							        if (duplicateCheckerDict.hasOwnProperty(prevValues[i]["PRD_BCKT"])) {
-							            prevValues.splice(i, 1);
-							        } else {
-							            duplicateCheckerDict[prevValues[i]["PRD_BCKT"]] = true;
-							        }
-							    }
-							    // add a brand new row to bottom with all them merged
-							    for (var i = 0; i < numOfExistingTiers; i++) {
-							        var updateIndex = originalExistingIndex + i;
-							        data[updateIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
-							        data[updateIndex]["PTR_SYS_PRD"] = null; // force revalidation
-							        data[updateIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
-							        data[updateIndex]['dirty'] = true;
-							    }
+								cleanupData(data); // Cleanup to get KIT re-tiering
+								sheet.batch(function (e) {
+									// TODO: disable numOfDuplicates below data
+									// Disable user editable columns
+									disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
 
-							    cleanupData(data); // Cleanup to get KIT re-tiering
-
+									// Re-enable Product column
+									var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + (data.length + 2 + numOfDuplicates));
+									prdRange.enable(true);
+									prdRange.background(null);
+								});
 							    // Re-put old merged dimensionalized values into the new merged rows
 							    for (var i = 0; i < parseInt(prevValues.length) ; i++) {
 							        var newRowIndex = originalExistingIndex + i; // data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
 							        for (var d = 0; d < root.kitDimAtrbs.length; d++) {
 							            if (root.kitDimAtrbs[d] == "TIER_NBR") {
-							                //sourceData[newRowIndex]["TIER_NBR"] = data[newRowIndex]["TIER_NBR"] // HACK: for sourceData not syncing tier numbers correctly
 							                continue;
 							            }
 							            data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
-							            //sourceData[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]]; // HACK: This is unfortunately needed because of sync issues
 							        }
 							    }
 							    // Recalculate KIT Rebate
@@ -1086,10 +1094,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     //// </summary>
     function calculateKITRebate(data, firstTierRowIndex, numOfTiers) {
         var kitRebateTotalVal = 0;
-        for (var i = 0; i < numOfTiers; i++) {
+        for (var i = 0; i < numOfTiers && i < data.length; i++) {
             kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["TEMP_TOTAL_DSCNT_PER_LN"]) || 0);
         }
-        return kitRebateTotalVal;
+        return "$" + kitRebateTotalVal;
     }
 
     //// <summary>
@@ -1105,11 +1113,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function pivotKITDeals(data, n, dcIdDict, dictId, masterData) {
+		// NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards
+
         if ((data[n]["PTR_USER_PRD"] === "" || data[n]["PTR_USER_PRD"] === null) && data[n]["DC_ID"] === null) {
             return;
         }
         if (data[n]["PTR_USER_PRD"] !== null) {
-            var products = data[n]["PTR_USER_PRD"].split(",");
+        	var products = data[n]["PTR_USER_PRD"].split(",");
+        	if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && Number.isInteger(parseInt(masterData[n].DC_ID))) {
+        		// Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell. 
+        		// Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
+        		var firstTierProds = $filter('where')(masterData, { 'DC_ID': data[n].DC_ID, 'TIER_NBR': 1 });
+        		if (firstTierProds.length > 0) {
+        			products = firstTierProds[0]["PTR_USER_PRD"].split(",");
+        		}
+        	}
+
+        	// Update number of tiers
             var numTier = products.length;
             data[n]["NUM_OF_TIERS"] = numTier > 10 ? 10 : numTier;
         }
@@ -1282,22 +1302,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
                 }
 
-                // For KITs, remove duplicate products. Must be before cleanup()
+            	// For KITs, remove duplicate products. Must be before cleanup()
                 if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
-                    for (var r = 0; r < data.length; r++) {
-                        if (data[r]["PTR_USER_PRD"] === undefined || data[r]["PTR_USER_PRD"] === null) { continue; }
-                        var usrPrdArr = data[r]["PTR_USER_PRD"].split(",");
-                        var duplicateCheckerDict = {};
-                        for (var i = usrPrdArr.length - 1; i >= 0; i--) {
-                            if (duplicateCheckerDict.hasOwnProperty(usrPrdArr[i])) {
-                                // This is a duplicate, remove from list
-                                usrPrdArr.splice(i, 1);
-                            } else {
-                                duplicateCheckerDict[usrPrdArr[i]] = true;
-                            }
-                        }
-                        data[r]["PTR_USER_PRD"] = usrPrdArr.join(",");
-                    }
+                	for (var r = 0; r < data.length; r++) {
+                		if (data[r]["PTR_USER_PRD"] === undefined || data[r]["PTR_USER_PRD"] === null) { continue; }
+                		var usrPrdArr = data[r]["PTR_USER_PRD"].split(",");
+                		var duplicateCheckerDict = {};
+                		for (var i = usrPrdArr.length - 1; i >= 0; i--) {
+                			if (duplicateCheckerDict.hasOwnProperty(usrPrdArr[i])) {
+                				// This is a duplicate, remove from list
+                				usrPrdArr.splice(i, 1);
+                			} else {
+                				duplicateCheckerDict[usrPrdArr[i]] = true;
+                			}
+                		}
+                		data[r]["PTR_USER_PRD"] = usrPrdArr.join(",");
+                	}
                 }
                 cleanupData(data);
 
@@ -2396,7 +2416,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (hasProductDependencyErr) {
             // Sync to show errors
-            root.syncCellsOnAllRows(currentPricingTableRowData);
+        	root.syncCellValidationsOnAllRows(currentPricingTableRowData);
 
             // Tell user to fix errors
             root.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error");

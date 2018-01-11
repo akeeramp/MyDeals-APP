@@ -2870,7 +2870,7 @@
                 	// NOTE: the length of the data is the number of rows. But we need to iterate by the number of
                 	//		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT. 
                 	//		Hence why we increment d and break on d === data.length manually.
-                	//		Basically, what this d-incrementing code is mimicing a skip of rows in "data" that are not of tier_nbr 1.
+                	//		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
                 	//		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier. 
                 	d++;
                 	if (d === data.length) {
