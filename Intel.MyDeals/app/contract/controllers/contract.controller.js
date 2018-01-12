@@ -519,23 +519,24 @@
                             $scope.contractData._behaviors.validMsg['END_DT'] = "";
 
                         // By default we dont want a contract to be backdated
-                        $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today)
-                            ? today
-                            : moment(response.data.QTR_STRT).format('l');
+                        if (! $scope.isCopyContract) {
+                            $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today)
+                                ? today
+                                : moment(response.data.QTR_STRT).format('l');
 
-                        $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
-
-                        // If we are copying a contract, default the relevant fields.
-                        if ($scope.isCopyContract) {
+                            $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
+                        }
+                        else {
+                            // If we are copying a contract, default the relevant fields.
                             objsetService.readContract($location.url().split('copycid=')[1]).then(function (data) {
                                 $scope.copyContractData = data;
 
                                 $scope.contractData.TITLE = $scope.copyContractData.data[0].TITLE + ' (copy)';
                                 $scope.contractData.CUST_MBR_SID = $scope.copyContractData.data[0].CUST_MBR_SID;
-                                $scope.contractData.START_DT = $scope.copyContractData.data[0].START_DT;
+                                $scope.contractData.START_DT = moment($scope.copyContractData.data[0].START_DT).format('l');
                                 $scope.contractData.START_QTR = $scope.copyContractData.data[0].START_QTR;
                                 $scope.contractData.START_YR = $scope.copyContractData.data[0].START_YR;
-                                $scope.contractData.END_DT = $scope.copyContractData.data[0].END_DT;
+                                $scope.contractData.END_DT = moment($scope.copyContractData.data[0].END_DT).format('l');
                                 $scope.contractData.END_QTR = $scope.copyContractData.data[0].END_QTR;
                                 $scope.contractData.END_YR = $scope.copyContractData.data[0].END_YR;
                                 $scope.contractData.CUST_ACCNT_DIV = $scope.copyContractData.data[0].CUST_ACCNT_DIV;
