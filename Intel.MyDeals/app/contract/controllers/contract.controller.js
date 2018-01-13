@@ -2399,7 +2399,7 @@
             }
 
             util.console("updateContractAndCurPricingTable Started");
-            var isDelPtr = !!delPtr && delPtr.length > 0;
+            var isDelPtr = !!delPtr && delPtr.length > 0; 
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
                     util.console("updateContractAndCurPricingTable Returned");
@@ -2423,7 +2423,7 @@
 
                         if (!!$scope.spreadDs) {
 							$scope.spreadDs.read();
-							$scope.syncCellValidationsOnAllRows(results.data.PRC_TBL_ROW);
+							$scope.syncCellValidationsOnAllRows($scope.pricingTableData.PRC_TBL_ROW);
                         }
                     }
                     var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
@@ -2543,7 +2543,7 @@
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
 
-
+ 
                 // Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
                 for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
                     if (!!data[i] && !!data[i]._actions) {
@@ -2964,7 +2964,7 @@
         }
 
         $scope.delPtrs = function (delIds) {
-            $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);
+            $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);  
         }
 
         $scope.saveEntireContract = function (deletePtr, forceValidation, forcePublish) {
