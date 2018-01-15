@@ -21,6 +21,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             $scope.initDsLoaded = false;
             $scope.stageCnt = 0;
             $scope.favCount = 0;
+            $scope.alertCount = 0;
             var activeFilter = 'All'
 
             // Construct the fav contract id map
@@ -29,6 +30,29 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 $scope.favContractIds.split(",").forEach(function (favContract) {
                     favContractsMap[favContract] = favContract;
                 });
+            }
+
+            $scope.toolTipOptions = {
+                filter: "td:nth-child(4)",
+                position: "top",
+                content: function (e) {
+                    var grid = e.target.closest(".k-grid").getKendoGrid();
+                    var dataItem = grid.dataItem(e.target.closest("tr"));
+                    if (dataItem.CRE_EMP_NM === undefined || dataItem.CRE_EMP_NM === "") {
+                        return "";
+                    }
+                    return "Created By : " + dataItem.CRE_EMP_NM;
+
+                },
+                show: function (e) {
+                    if (this.content.text().length > 0) {
+                        this.content.parent().css("min-width", "200px");
+                        this.content.parent().css("visibility", "visible");
+                    }
+                },
+                hide: function (e) {
+                    this.content.parent().css("visibility", "hidden");
+                }
             }
 
             $scope.contractDs = new kendo.data.DataSource({
@@ -57,6 +81,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         fields: {
                             WF_STG_CD: { type: "string" },
                             IS_FAVORITE: { type: "boolean" },
+                            HAS_ALERT: { type: "boolean" },
                             TITLE: { type: "string" },
                             CUST_NM: { type: "string" },
                             STRT_DTM: { type: "date" },
@@ -72,9 +97,16 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     var tmp = [];
                     $scope.stageCnt = e.response.length;
                     $scope.favCount = 0;
+                    $scope.alertCount = 0;
                     for (var i = 0; i < e.response.length; i++) {
                         if (rtn[e.response[i].WF_STG_CD] === undefined) rtn[e.response[i].WF_STG_CD] = 0;
                         rtn[e.response[i].WF_STG_CD]++;
+
+                        if (e.response[i].HAS_ALERT && e.response[i].WF_STG_CD !== "Complete") {
+                            $scope.alertCount++;
+                        } else {
+                            e.response[i].HAS_ALERT = false;
+                        }
 
                         // Set the IS_FAVORITE if contract id exists in user favorite contract id map.
                         e.response[i]["IS_FAVORITE"] = false;
@@ -114,7 +146,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     }, {
                         field: "IS_FAVORITE",
                         title: "&nbsp;",
-                        width: "27px",
+                        width: "29px",
                         filterable: false,
                         template: "<div role='button' ng-class='{\"active\":dataItem.IS_FAVORITE === true}' title='Click to add/remove as favorite' class='intelicon-favorite-rating-solid' ng-click='onFavChange(dataItem, $event)'>"
                     }, {
@@ -173,13 +205,23 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 $(".stgLnk").removeClass('active');
                 $("#" + el).addClass('active');
                 activeFilter = el.replace('fltr_', '');
-                if (activeFilter === "All") {
-                    $scope.contractDs.filter({});
+                switch (activeFilter) {
+                    case "All": $scope.contractDs.filter({});
+                        break;
+                    case "Favorites": $scope.contractDs.filter({ field: "IS_FAVORITE", operator: "eq", value: true });
+                        break;
+                    case "HasAlert": $scope.contractDs.filter({ field: "HAS_ALERT", operator: "eq", value: true });
+                        break;
+                    default:
+                        $scope.contractDs.filter({ field: "WF_STG_CD", operator: "eq", value: activeFilter });
                 }
-                else if (activeFilter === "Favorites") {
-                    $scope.contractDs.filter({ field: "IS_FAVORITE", operator: "eq", value: true });
-                }
-                else $scope.contractDs.filter({ field: "WF_STG_CD", operator: "eq", value: activeFilter });
+                //if (activeFilter === "All") {
+                //    $scope.contractDs.filter({});
+                //}
+                //else if (activeFilter === "Favorites") {
+                //    $scope.contractDs.filter({ field: "IS_FAVORITE", operator: "eq", value: true });
+                //}
+                //else $scope.contractDs.filter({ field: "WF_STG_CD", operator: "eq", value: activeFilter });
             }
 
             $scope.$on('refresh', function (event, args) {

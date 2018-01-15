@@ -9,13 +9,14 @@
                     <div class="stgLnk active" id="fltr_All" ng-click="clkFilter('fltr_All')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{stageCnt}}</span></div>
                     <div ng-repeat="item in stages" class="stgLnk" id="fltr_{{item.Stage}}" ng-click="clkFilter('fltr_' + item.Stage)"><i class="intelicon-workflow-process-outlined"></i> {{item.Stage}} <span class="badge">{{item.Cnt}}</span></div>
                     <div id="fltr_Favorites" class="stgLnk" ng-click="clkFilter('fltr_Favorites')"><i class="intelicon-favorite-rating-solid"></i> Favorites<span class="badge">{{favCount}}</span></div>
+                    <div ng-if="alertCount > 0" title="Has deals about to start in next 48 hours, need approval" id="fltr_HasAlert" class="stgLnk" ng-click="clkFilter('fltr_HasAlert')"><i class="intelicon-alert-outlined"></i> Alerts<span class="badge">{{alertCount}}</span></div>
                 </div>
                 <h6 style="margin-top: 30px;"><a href="/TenderManager#/tender" style="color: #000000;" title="Click to view Tender Deals">Tenders</a></h6>
             </div>
         </div>
 
         <div class="center-pane-widget">
-            <div class="inner">
+            <div class="inner" kendo-tooltip k-options="toolTipOptions">
                 <kendo-grid options="ds" class="opUiContainer dashboard dashboard-grid" style="height: 100%;" id="gridContractStatus">
                     <div k-detail-template style="margin: 0; padding: 0;">
                         <div contract-status-board ng-model="dataItem.CNTRCT_OBJ_SID"></div>
@@ -196,8 +197,8 @@
         color: #ddd;
     }
 
-    .k-grid .intelicon-favorite-rating-solid.active {
-        font-size: 22px;
-        color: #0071C5;
-    }
+        .k-grid .intelicon-favorite-rating-solid.active {
+            font-size: 22px;
+            color: #0071C5;
+        }
 </style>
