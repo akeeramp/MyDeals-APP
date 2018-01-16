@@ -1930,7 +1930,7 @@
 
             // clear values
             item.DC_ID = $scope.uid--;
-            item.HAS_TRACKER = "0"; 
+            item.HAS_TRACKER = "0";
             item.COST_TEST_RESULT = "Not Run Yet";
             item.MEETCOMP_TEST_RESULT = "Not Run Yet";
 
@@ -2399,7 +2399,7 @@
             }
 
             util.console("updateContractAndCurPricingTable Started");
-            var isDelPtr = !!delPtr && delPtr.length > 0; 
+            var isDelPtr = !!delPtr && delPtr.length > 0;
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
                     util.console("updateContractAndCurPricingTable Returned");
@@ -2543,7 +2543,7 @@
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
 
- 
+
                 // Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
                 for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
                     if (!!data[i] && !!data[i]._actions) {
@@ -2849,7 +2849,7 @@
 
             for (var d = 0; d < data.length; d) {
                 var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
-				
+
                 for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
                 	if (t === 1 - isKit) { lData = data[d]; }
                 	for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
@@ -2859,7 +2859,7 @@
                 			delete lData[dimAtrbs[a]];
 
                 			if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                				// Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering, 
+                				// Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
                 				//		which might leave those dimensions with data, and save stray attributes with no product association in our db.
                 				for (var i =0 ; i < 10; i++) { // KITTODO: Replace "10" with a constant max Products value instead
                 					var tierToDel = (t + 1 + i);
@@ -2869,10 +2869,10 @@
                 		}
                 	}
                 	// NOTE: the length of the data is the number of rows. But we need to iterate by the number of
-                	//		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT. 
+                	//		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT.
                 	//		Hence why we increment d and break on d === data.length manually.
                 	//		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
-                	//		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier. 
+                	//		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier.
                 	d++;
                 	if (d === data.length) {
                 		break;
@@ -2880,7 +2880,7 @@
                 }
 				newData.push(lData);
             }
-            
+
             return newData;
         }
 
@@ -2964,7 +2964,7 @@
         }
 
         $scope.delPtrs = function (delIds) {
-            $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);  
+            $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);
         }
 
         $scope.saveEntireContract = function (deletePtr, forceValidation, forcePublish) {
@@ -3607,9 +3607,9 @@
         $scope.validatePricingTable = function (forceRun) {
 
             if (forceRun === undefined || !forceRun) {
-                $scope.saveEntireContractBase($state.current.name, true, true);
+                $scope.saveEntireContractBase($state.current.name, true, false);
             } else {
-                $scope.saveEntireContractRoot($state.current.name, true, false);
+                $scope.saveEntireContractRoot($state.current.name, true, forceRun);
             }
         }
 

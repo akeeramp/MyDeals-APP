@@ -126,7 +126,7 @@ namespace Intel.MyDeals.Controllers.API
                 CustId = custId,
                 ContractId = contractId,
                 DeleteAllPTR = delPtr
-            }, contractAndPricingTable, false, false)
+            }, contractAndPricingTable, forceValidation: false, forcePublish: false)
                 , "Unable to save the Contract"
             );
 
@@ -144,7 +144,7 @@ namespace Intel.MyDeals.Controllers.API
                 CustId = custId,
                 ContractId = contractId,
                 DeleteAllPTR = delPtr
-            }, contractAndPricingTable, true, true)
+            }, contractAndPricingTable, forceValidation: true, forcePublish: false)
                 , "Unable to save the Contract"
             );
 
@@ -161,7 +161,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 CustId = custId,
                 ContractId = contractId
-            }, contractAndPricingTable, true, true)
+            }, contractAndPricingTable, forceValidation: true, forcePublish: true)
                 , "Unable to save the Contract"
             );
 
@@ -195,7 +195,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("GetContractsStatus")]
         [HttpPost]
-        [AntiForgeryValidate] 
+        [AntiForgeryValidate]
         public dynamic GetContractsStatus([FromBody] DashboardFilter data)
         {
             return SafeExecutor(() => _contractsLib.GetContractsStatus(data)
