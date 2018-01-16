@@ -204,6 +204,11 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsgQueue ActionWipDeals(int custId, int contractId, Dictionary<string, List<WfActnItem>> actnPs)
         {
+            //_pricingTablesLib.ActionWipDeals(new ContractToken
+            //{
+            //    CustId = custId,
+            //    ContractId = contractId
+            //}, actnPs);
             return SafeExecutor(() => _pricingTablesLib.ActionWipDeals(new ContractToken
             {
                 CustId = custId,

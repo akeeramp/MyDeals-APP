@@ -1537,7 +1537,12 @@
                             wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
                             wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
                         }
+
                         wip.WF_STG_CD = $scope.messages[0].ShortMessage;
+                        if ($scope.messages.length > 1)
+                        {
+                            wip.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
+                        }
                         $scope.$broadcast('refresh');
                         $scope.$broadcast('refreshStage', wip);
                         $("#wincontractMessages").data("kendoWindow").open();

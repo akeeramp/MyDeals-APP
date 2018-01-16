@@ -407,7 +407,23 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             myDealsData.EnsureBatchIDs();
-            myDealsData.Save(contractToken);
+            MyDealsData retData = myDealsData.Save(contractToken);
+
+            if (retData.ContainsKey(OpDataElementType.PRC_ST))
+            {
+                foreach (OpDataCollector dc in retData[OpDataElementType.PRC_ST].AllDataCollectors)
+                {
+                    var targetStage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"PS moved to {targetStage}.",
+                        ShortMessage = targetStage,
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+                }
+            }
 
             return opMsgQueue;
         }

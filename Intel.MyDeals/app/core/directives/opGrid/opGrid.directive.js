@@ -1257,6 +1257,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (!!args) {
                     var dataItem = $scope.findDataItemById(args["DC_ID"]);
                     dataItem["WF_STG_CD"] = args["WF_STG_CD"];
+                    dataItem["PS_WF_STG_CD"] = args["PS_WF_STG_CD"];
                 }
             });
 
