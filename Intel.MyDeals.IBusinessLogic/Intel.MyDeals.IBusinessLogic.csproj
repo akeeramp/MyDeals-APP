@@ -60,6 +60,7 @@
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
+    <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
     <Compile Include="Tenders\ITendersLib.cs" />
     <Compile Include="Search\ISearchLib.cs" />
     <Compile Include="Files\IFilesLib.cs" />

@@ -254,6 +254,7 @@
     <Compile Include="Controllers\API\FileAttachmentsController.cs" />
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
+    <Compile Include="Controllers\API\QuoteLetterController.cs" />
     <Compile Include="Controllers\API\RulesController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\GeosController.cs" />
@@ -325,6 +326,9 @@
     <Content Include="app\admin\legalExceptions\admin.legalException.controller.js" />
     <Content Include="app\admin\legalExceptions\legalExceptions.html" />
     <Content Include="app\admin\legalExceptions\legalExceptions.service.js" />
+    <Content Include="app\admin\quoteLetter\admin.quoteLetter.controller.js" />
+    <Content Include="app\admin\quoteLetter\quoteLetter.html" />
+    <Content Include="app\admin\quoteLetter\quoteLetter.service.js" />
     <Content Include="app\admin\productAlias\admin.productAlias.controller.js" />
     <Content Include="app\admin\productAlias\productAlias.html" />
     <Content Include="app\admin\productAlias\productAlias.service.js" />

@@ -134,6 +134,15 @@
                 }
             },
             {
+                state: 'admin.quoteLetter',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/quoteLetter/quoteLetter.html',
+                    url: 'quoteLetter',
+                    controller: 'QuoteLetterController as vm',
+                }
+            },
+            {
                 state: 'admin.productCategories',
                 abstract: false,
                 config: {

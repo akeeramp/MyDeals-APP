@@ -104,6 +104,7 @@
     <Compile Include="JMS\JmsLib.cs" />
     <Compile Include="Logging\LoggingLib.cs" />
     <Compile Include="DevTest\DevTestsLib.cs" />
+    <Compile Include="QuoteLetter\QuoteLetterLib.cs" />
     <Compile Include="ProductCostTest\ProductCostTestLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
     <Compile Include="PricingTables\PricingTablesLib.cs" />

@@ -81,6 +81,7 @@
     <Compile Include="Dashboard\DashboardDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
+    <Compile Include="QuoteLetter\QuoteLetterDataLib.cs" />
     <Compile Include="UserPreferences\UserPreferencesDataLib.cs" />
     <Compile Include="RetailPull\RetailPullDataLib.cs" />
     <Compile Include="Files\FilesDataLib.cs" />
@@ -105,7 +106,6 @@
     <Compile Include="Logging\LoggingDataLib.cs" />
     <Compile Include="DevTest\DevTestDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quote Letter\QuoteDataLib.cs" />
     <Compile Include="Search\SearchDataLib.cs" />
     <Compile Include="Security Attributes\OpSecurity.cs" />
     <Compile Include="Security Attributes\SecurityAttributesDataLib.cs" />
