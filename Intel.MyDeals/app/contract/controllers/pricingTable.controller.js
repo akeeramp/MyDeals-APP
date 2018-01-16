@@ -1729,28 +1729,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
     $scope.$on('saveWithWarnings',
         function (event, args) {
-        	$scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+            if (!!$scope.root.spreadDs) {
+                $scope.setRowIdStyle($scope.root.spreadDs._data);
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                    // apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
+                    //		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
+                    $scope.applySpreadsheetMerge();
+                }
+            } else {
+                $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+            }
         	$scope.root.switchingTabs = false;
-
-        	if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-        		// apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
-        		//		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
-        		$scope.applySpreadsheetMerge();
-        	}
         });
     $scope.$on('saveComplete',
         function (event, args) {
         	if ($scope.root.isWip && $scope.root.switchingTabs) {
         		$scope.root.gotoToPricingTable();
         	}
-        	$scope.setRowIdStyle(args.data.PRC_TBL_ROW); //args.data.PRC_TBL_ROW); //root.spreadDs._data
-        	$scope.root.switchingTabs = false;
-
-        	if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-        		// apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
-        		//		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
-        		$scope.applySpreadsheetMerge();
+        	if (!!$scope.root.spreadDs) {
+        	    $scope.setRowIdStyle($scope.root.spreadDs._data);
+        	    if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+        	        // apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
+        	        //		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
+        	        $scope.applySpreadsheetMerge();
+        	    }
+        	} else {
+        	    $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
         	}
+        	$scope.root.switchingTabs = false;
         });
     $scope.$on('addRowByTrackerNumber',
         function (event, args) {
