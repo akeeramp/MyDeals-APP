@@ -982,7 +982,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             },
                           10);
                         },
-                        function () { });
+                        function () {
+                            $(".k-button[title=Undo]").click();
+                            syncUndoRedoCounters();
+                        });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
                     cleanupData(data);
