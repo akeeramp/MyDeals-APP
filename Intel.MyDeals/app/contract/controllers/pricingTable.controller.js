@@ -1743,7 +1743,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         	if ($scope.root.isWip && $scope.root.switchingTabs) {
         		$scope.root.gotoToPricingTable();
         	}
-        	$scope.setRowIdStyle(root.spreadDs._data); //args.data.PRC_TBL_ROW);
+        	$scope.setRowIdStyle(args.data.PRC_TBL_ROW); //args.data.PRC_TBL_ROW); //root.spreadDs._data
         	$scope.root.switchingTabs = false;
 
         	if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
