@@ -372,6 +372,55 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = AttributeCodes.DEAL_DESC,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 200,
+                Label = "Deal Description",
+                DataType = "string"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.TIER_NBR,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                IsReadOnly = true,
+                Label = "Tier",
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.STRT_VOL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                Width = 100,
+                Label = "Start Vol *"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.END_VOL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                Width = 100,
+                Label = "End Vol *"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.RATE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                Width = 100,
+                Label = "Rate *"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
@@ -525,6 +574,21 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 39,
+                AtrbCd = AttributeCodes.GEO_COMBINED,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                IsDefaultable = true,
+                Label = "Geo *",
+                Width = 120,
+                DataType = "string",
+                UiType = "MULTISELECT",
+                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 29,
                 AtrbCd = "TEMP_TOTAL_DSCNT_PER_LN",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -535,15 +599,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 DataType = "number",
                 Format = "{0:c}"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.DEAL_DESC,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 200,
-                Label = "Deal Description",
-                DataType = "string"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -643,51 +698,11 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 36,
                 AtrbCd = AttributeCodes.TIER_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsDimKey = true,
-                IsReadOnly = true,
-                Label = "Tier",
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.TIER_NBR,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 IsDimKey = true,
                 IsReadOnly = false,
                 Label = "Tier",
                 IsHidden = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.STRT_VOL,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsDimKey = true,
-                Width = 100,
-                Label = "Start Vol *"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.END_VOL,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsDimKey = true,
-                Width = 100,
-                Label = "End Vol *"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.RATE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsDimKey = true,
-                Width = 100,
-                Label = "Rate *"
             });
 
             items.Add(new UiTemplateContainerItem
@@ -704,21 +719,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, &SMB",
-                IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 39,
-                AtrbCd = AttributeCodes.GEO_COMBINED,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                IsDefaultable = true,
-                Label = "Geo *",
-                Width = 120,
-                DataType = "string",
-                UiType = "MULTISELECT",
-                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
-                LookupText = "dropdownName",
-                LookupValue = "dropdownName",
                 IsRequired = true
             });
             items.Add(new UiTemplateContainerItem
