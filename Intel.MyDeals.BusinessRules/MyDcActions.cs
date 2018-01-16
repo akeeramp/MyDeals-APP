@@ -149,12 +149,19 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
             }
 
-            // Clear out subkit attributes if user changes products to make it ineligible for subkits
             if (item.ContainsKey(AttributeCodes.HAS_SUBKIT))
             {
                 if (item[AttributeCodes.HAS_SUBKIT].ToString() == "0")
                 {
+                    // Clear out subkit attributes if user changes products to make it ineligible for subkits
                     item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = null;
+                } else
+                {
+                    // If has subkit, then default Subkit ECAP to sum of first two items (the two L1s or L1+L2)
+                    if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE + "_____20_____2")))
+                    {
+                        item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]);
+                    }
                 }
             }
 
