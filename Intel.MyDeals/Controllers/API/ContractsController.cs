@@ -144,7 +144,7 @@ namespace Intel.MyDeals.Controllers.API
                 CustId = custId,
                 ContractId = contractId,
                 DeleteAllPTR = delPtr
-            }, contractAndPricingTable, forceValidation: true, forcePublish: false)
+            }, contractAndPricingTable, forceValidation: true, forcePublish: true)
                 , "Unable to save the Contract"
             );
 

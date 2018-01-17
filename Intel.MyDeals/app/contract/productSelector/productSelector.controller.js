@@ -885,7 +885,7 @@
                     PRD_END_DTM: x.PRD_END_DTM,
                     PRD_MBR_SID: x.PRD_MBR_SID,
                     PRD_STRT_DTM: x.PRD_STRT_DTM,
-                    USR_INPUT: x.USR_INPUT,
+                    USR_INPUT: x.DERIVED_USR_INPUT, // When products are validated from corrector user opens and closes Selector update derived user input
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
                     YCS2_START: x.YCS2_START,

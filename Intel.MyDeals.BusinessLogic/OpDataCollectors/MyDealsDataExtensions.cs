@@ -393,8 +393,8 @@ namespace Intel.MyDeals.BusinessLogic
             if (opType == OpDataElementType.WIP_DEAL)
                 dataCollectors = dpObjSet.AllDataCollectors.OrderByDescending(i => i.Message.Count);
 
-                // loop through deals and flatten each Data Collector
-                data.AddRange( dataCollectors.Select( dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
+            // loop through deals and flatten each Data Collector
+            data.AddRange(dataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
 
             if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t ToOpDataCollectorFlattenedDictList [{1}]", stopwatch.Elapsed.TotalMilliseconds, opType, DateTime.Now);
 
@@ -579,6 +579,13 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> dirtyPtrs = new List<int>();
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
+                // If Pricing table row has errors, do not save WIP_DEALS, even if we do save, it will be corrupted data.
+                if (dataHasValidationErrors && myDealsData.ContainsKey(opDataElementType) &&
+                    opDataElementType == OpDataElementType.WIP_DEAL && myDealsData[OpDataElementType.PRC_TBL_ROW].Messages.Messages.Any())
+                {
+                    myDealsData.Remove(opDataElementType);
+                }
+
                 if (!myDealsData.ContainsKey(opDataElementType)) continue;
                 foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
                 {
@@ -589,7 +596,6 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
                         dc.ApplyRules(MyRulesTrigger.OnPostValidate);
-
                     }
 
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
@@ -623,7 +629,7 @@ namespace Intel.MyDeals.BusinessLogic
                         PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL
                             ? PassedValidation.Complete
                             : savePacket.ForcePublish
-                                ? PassedValidation.Finalizing 
+                                ? PassedValidation.Finalizing
                                 : PassedValidation.Valid;
 
                         // Check overlapping
@@ -631,7 +637,6 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             passedValidation = PassedValidation.Dirty;
                         }
-
 
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
                         {
@@ -926,7 +931,6 @@ namespace Intel.MyDeals.BusinessLogic
             Dictionary<string, List<WfActnItem>> actnWIP = new Dictionary<string, List<WfActnItem>>
             {
                 [setStage] = new List<WfActnItem>()
-
             };
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
             {

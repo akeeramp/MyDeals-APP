@@ -3612,7 +3612,7 @@
         $scope.validatePricingTable = function (forceRun) {
 
             if (forceRun === undefined || !forceRun) {
-                $scope.saveEntireContractBase($state.current.name, true, false);
+                $scope.saveEntireContractBase($state.current.name, true, true);
             } else {
                 $scope.saveEntireContractRoot($state.current.name, true, forceRun);
             }

@@ -410,11 +410,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // Orders KIT products
         addedProducts = $filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
         var pricingTableSysProducts = {};
+        // Construct the new reordered JSON for KIT, if user input is Ci3, derived user input will be selected products
         angular.forEach(addedProducts, function (item, key) {
-            if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
-                pricingTableSysProducts[item.USR_INPUT] = [item];
+            if (!pricingTableSysProducts.hasOwnProperty(item.DERIVED_USR_INPUT)) {
+                pricingTableSysProducts[item.DERIVED_USR_INPUT] = [item];
             } else {
-                pricingTableSysProducts[item.USR_INPUT].push(item);
+                pricingTableSysProducts[item.DERIVED_USR_INPUT].push(item);
             }
         });
 
@@ -1104,7 +1105,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         for (var i = 0; i < numOfTiers && i < data.length; i++) {
             kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
         }
-        
+
         var rebateVal = (kitRebateTotalVal - parseInt(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"]))
         return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
     }
@@ -1130,7 +1131,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (data[n]["PTR_USER_PRD"] !== null) {
         	var products = data[n]["PTR_USER_PRD"].split(",");
         	if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && Number.isInteger(parseInt(masterData[n].DC_ID))) {
-        		// Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell. 
+        		// Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
         		// Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
         		var firstTierProds = $filter('where')(masterData, { 'DC_ID': data[n].DC_ID, 'TIER_NBR': 1 });
         		if (firstTierProds.length > 0) {
@@ -2771,13 +2772,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     var mergedRows = parseInt(r) + root.numOfPivot(data[r]);
                                     for (var a = r; a < mergedRows ; a++) {
                                         data[a].DC_ID = null;
-                                        //sourceData[a].DC_ID = null;
                                         data[a].PTR_USER_PRD = "";
                                         sourceData[a].PTR_USER_PRD = "";
                                     }
                                 } else {
                                     data[r].DC_ID = (products.contractProducts === "" || !products.contractProducts) ? null : data[r].DC_ID;
-                                    sourceData[r].DC_ID = (products.contractProducts === "" || !products.contractProducts) ? null : sourceData[r].DC_ID;
                                 }
                             }
                         }
