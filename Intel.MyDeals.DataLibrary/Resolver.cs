@@ -33,6 +33,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ITimelineDataLib, TimelineDataLib>();
             registerService.RegisterType<IMeetCompDataLib, MeetCompDataLib>();
             registerService.RegisterType<IUserPreferencesDataLib, UserPreferencesDataLib>();
+            registerService.RegisterType<IQuoteLetterDataLib, QuoteLetterDataLib>();
         }
     }
 }

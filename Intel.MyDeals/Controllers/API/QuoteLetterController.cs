@@ -1,4 +1,6 @@
-﻿using Intel.MyDeals.IBusinessLogic;
+﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
@@ -12,6 +14,17 @@ namespace Intel.MyDeals.Controllers.API
         public QuoteLetterController(IQuoteLetterLib quoteLetterLib)
         {
             this._quoteLetterLib = quoteLetterLib;
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetQuoteLetterTemplates")]
+        public IEnumerable<QuoteLetter> GetQuoteLetterTemplates()
+        {
+            return SafeExecutor(() => _quoteLetterLib
+                .GetQuoteLetterTemplates()
+                , $"Unable to get Quote Letter Templates"
+            );
         }
 
     }

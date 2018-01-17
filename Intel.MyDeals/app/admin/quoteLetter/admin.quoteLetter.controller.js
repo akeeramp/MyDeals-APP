@@ -30,6 +30,14 @@
         vm.upperContent = "asdf";
         vm.lowerContent = "fdsa";
 
+        quoteLetterService.getQuoteLetterTemplates()
+        .then(function (response) {
+            alert(response.data);
+        }, function (response) {
+            logger.error("Unable to get Quote Letter Templates.", response, response.statusText);
+        });
+
+
         //vm.validationMessage = "";
 
         //vm.dataSource = new kendo.data.DataSource({

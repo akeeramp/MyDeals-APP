@@ -18,8 +18,17 @@ namespace Intel.MyDeals.DataLibrary
         public List<QuoteLetter> GetQuoteLetterTemplates()
         {
             var ret = new List<QuoteLetter>();
-            Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES cmd = new Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES();
-
+            Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES cmd = new Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES()
+            {
+                intWWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                mode = "Select",
+                objSetTypeSid = 3,
+                programPaymentType = "FRONTEND",
+                headerInfo = null,
+                bodyInfo = null,
+                debug = false
+            };
+            
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
