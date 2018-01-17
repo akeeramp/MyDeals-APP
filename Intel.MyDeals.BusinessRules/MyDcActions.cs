@@ -158,7 +158,7 @@ namespace Intel.MyDeals.BusinessRules
                 } else
                 {
                     // If has subkit, then default Subkit ECAP to sum of first two items (the two L1s or L1+L2)
-                    if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE + "_____20_____2")))
+                    if (item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2") && string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE + "_____20_____2")))
                     {
                         item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]);
                     }
