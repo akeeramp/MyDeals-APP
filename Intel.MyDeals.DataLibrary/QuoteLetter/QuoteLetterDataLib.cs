@@ -5,7 +5,11 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Telerik.Reporting.Processing;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -15,9 +19,9 @@ namespace Intel.MyDeals.DataLibrary
         {
         }
 
-        public List<QuoteLetter> GetQuoteLetterTemplates()
+        public List<QuoteLetter_Tory> GetQuoteLetterTemplates()
         {
-            var ret = new List<QuoteLetter>();
+            var ret = new List<QuoteLetter_Tory>();
             Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES cmd = new Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES()
             {
                 intWWID = OpUserStack.MyOpUserToken.Usr.WWID,
@@ -41,7 +45,7 @@ namespace Intel.MyDeals.DataLibrary
 
                     while (rdr.Read())
                     {
-                        ret.Add(new QuoteLetter
+                        ret.Add(new QuoteLetter_Tory
                         {
                             BODY_INFO = (IDX_BODY_INFO < 0 || rdr.IsDBNull(IDX_BODY_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BODY_INFO),
                             HDR_INFO = (IDX_HDR_INFO < 0 || rdr.IsDBNull(IDX_HDR_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HDR_INFO),
@@ -58,6 +62,270 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return ret;
+        }
+
+        public QuoteLetterFile GetDealQuoteLetter(string dealId)
+        {
+            var quoteLetterData = GetDealQuoteLetterData(dealId, 2); // callMode  = 2
+            var quoteLetterPdfBytes = GenerateQuoteLetterPDF(dealId, quoteLetterData, "DEV");  // TBD - VN
+
+            return quoteLetterPdfBytes;
+        }
+
+        /// <summary>
+        /// Get quote letter body based on deal id list
+        /// </summary>
+        /// <returns>QuoteLetterData with Content and Template data</returns>
+        public QuoteLetterData GetDealQuoteLetterData(string dealId, int callMode)
+        {
+            var quoteLetterData = new QuoteLetterData();
+            var quoteLetterContentData = new QuoteLetterContentInfo();
+            var quoteLetterTemplateData = new QuoteLetterTemplateInfo();
+
+            Procs.dbo.PR_MYDL_GET_QUOTE_INFO cmd = new Procs.dbo.PR_MYDL_GET_QUOTE_INFO()
+            {
+                @ObjSidLst = dealId, //String.Join(",", dealIds), // TBD - VN - type_int_list
+                @callMode = callMode
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Table 1
+                    int IDX_EMAIL = DB.GetReaderOrdinal(rdr, "EMAIL");
+                    int IDX_PDF_FILE = DB.GetReaderOrdinal(rdr, "PDF_FILE");
+                    int IDX_QUOTE_LETTER = DB.GetReaderOrdinal(rdr, "QUOTE_LETTER");
+                    int IDX_TRKR_NBR = DB.GetReaderOrdinal(rdr, "TRKR_NBR");
+
+                    while (rdr.Read())
+                    {
+                        quoteLetterContentData = (new QuoteLetterContentInfo
+                        {
+                            EMAIL = (IDX_EMAIL < 0 || rdr.IsDBNull(IDX_EMAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL),
+                            PDF_FILE = (IDX_PDF_FILE < 0 || rdr.IsDBNull(IDX_PDF_FILE)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_PDF_FILE),
+                            QUOTE_LETTER = (IDX_QUOTE_LETTER < 0 || rdr.IsDBNull(IDX_QUOTE_LETTER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_QUOTE_LETTER),
+                            TRKR_NBR = (IDX_TRKR_NBR < 0 || rdr.IsDBNull(IDX_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR)
+                        });
+                    } // while
+
+                    rdr.NextResult();
+
+                    //Table 2
+
+                    int IDX_BODY_INFO = DB.GetReaderOrdinal(rdr, "BODY_INFO");
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                    int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                    int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                    int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                    int IDX_HDR_INFO = DB.GetReaderOrdinal(rdr, "HDR_INFO");
+                    int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
+                    int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
+                    int IDX_RLSE_ID = DB.GetReaderOrdinal(rdr, "RLSE_ID");
+                    int IDX_TMPLT_SID = DB.GetReaderOrdinal(rdr, "TMPLT_SID");
+
+                    while (rdr.Read())
+                    {
+                        quoteLetterTemplateData = (new QuoteLetterTemplateInfo
+                        {
+                            BODY_INFO = (IDX_BODY_INFO < 0 || rdr.IsDBNull(IDX_BODY_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BODY_INFO),
+                            CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                            CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                            CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                            CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                            HDR_INFO = (IDX_HDR_INFO < 0 || rdr.IsDBNull(IDX_HDR_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HDR_INFO),
+                            OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_SID),
+                            PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
+                            RLSE_ID = (IDX_RLSE_ID < 0 || rdr.IsDBNull(IDX_RLSE_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RLSE_ID),
+                            TMPLT_SID = (IDX_TMPLT_SID < 0 || rdr.IsDBNull(IDX_TMPLT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TMPLT_SID)
+                        });
+                    } // while
+                }
+
+                quoteLetterData.ContentInfo = quoteLetterContentData;
+                quoteLetterData.TemplateInfo = quoteLetterTemplateData;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return quoteLetterData;
+        }
+
+        public QuoteLetterFile GenerateQuoteLetterPDF(string dealId, QuoteLetterData quoteLetterData, string env)
+        {
+            // This is the Normal Quote Letter generation engine.  There is an administrative shorthand version of this down below that takes inputs for PDF body from
+            // a UI source instead of DB.
+
+            // Env = which environment the request came from
+            // Mode 1 - read deals list - NOT USED HERE
+            // Mode 2 - get existing deal XML and Mailing list - USED
+            // Mode 3 - get adhoc deal XML and return to client - USED
+            // Mode 4 - clean-up operation for batch mailing list - NOT USED HERE
+
+            byte[] quoteLetterBytes;
+            string fileName = string.Empty;
+
+            if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
+            {
+                // If there is an existing PDF file exists in DB, use the existing one
+                if (quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
+                {
+                    quoteLetterBytes = quoteLetterData.ContentInfo.PDF_FILE;
+                }
+                else
+                {
+
+                    // Generate new quote Letter PDf and Save to DB/Display to user
+                    Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO);
+                    ReportProcessor reportProcessor = new ReportProcessor();
+                    Telerik.Reporting.InstanceReportSource instanceReportSource = new Telerik.Reporting.InstanceReportSource { ReportDocument = reportToExport };
+                    RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
+
+                    fileName = result.DocumentName + ".pdf";
+                    var ms = new MemoryStream(result.DocumentBytes) { Position = 0 };
+                    quoteLetterBytes = ms.ToArray();
+
+                    // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
+                    if (!(string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR)) && !(quoteLetterData.ContentInfo.TRKR_NBR.Contains("*")))
+                        SaveQuotePDF(dealId, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
+                }
+            }
+            else
+            {
+                string failedMessage = "XML data was empty: aborting send and removing" + dealId + " from list.";
+                quoteLetterBytes = Encoding.ASCII.GetBytes(failedMessage);
+            }
+
+            var quoteLetterFile = new QuoteLetterFile();
+            quoteLetterFile.Content = quoteLetterBytes;
+            quoteLetterFile.Name = fileName;
+
+            return quoteLetterFile;
+
+
+            //var cmd = new PR_IDMS_GET_QUOTE_INFO
+            //{
+            //    dealID = dealID.ToString(),
+            //    callMode = runMode
+            //};
+
+            //var returnedDS = DataAccess.ExecuteSpDataSetProc(ConnectionString, 0, cmd);  //Get XML data for thie specified deal
+
+            //DataTable dealDataTable = returnedDS.Tables[0];
+            //DataTable quoteTemplateTable = returnedDS.Tables[1];
+
+            //DataRow row = dealDataTable.Rows[0];
+            //var inputXML = row["QUOTE_LETTER"];
+            //var mailToList = row["EMAIL"].ToString();
+            //byte[] pdfFile = row["PDF_FILE"] as byte[]; // Read in the previously generated PDF file if one exists - short out generation if so.
+            //string trkrNbr = row["TRKR_NBR"].ToString();
+
+            //DataRow rowContent = quoteTemplateTable.Rows[0];
+            //var content0 = rowContent["CONTENT0"];
+            //var content1 = rowContent["CONTENT1"];
+
+
+            //if (runMode == 2) // Automated mailing batch
+            //{
+            //    var myMail = new MailMessage();
+
+            //    char[] splitter = { ';' };
+            //    string strReturnMessage;
+
+            //    if (env != "Production" || mailToList == string.Empty)
+            //    // This should never be empty, but you kow those whacky assumptions...
+            //    {
+            //        myMail.Subject = "[" + env + "] Quote Letter for Deal ID " + dealID;
+            //        myMail.Body = "See Attachment for Quote Letter<br>In production, this would be mailed to: " +
+            //                      mailToList;
+            //        mailToList = WebConfigurationManager.AppSettings["SupportDevelopers"];
+            //        if (env == "Test" || env == "CONS")
+            //        // OverrideMode mailing list if needed for non-prod envs or prod no mail list header
+            //        {
+            //            mailToList = WebConfigurationManager.AppSettings["QuoteTestingEMail"];
+            //        }
+            //        if (env == "Production")
+            //        {
+            //            myMail.Subject = "[Empty Production Mailing List] Quote Letter for Deal ID " + dealID;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        myMail.Subject = "Quote Letter for Deal ID " + dealID;
+            //        myMail.Body = "See Attachment for Quote Letter";
+            //    }
+
+            //    myMail.From = new MailAddress(WebConfigurationManager.AppSettings["SupportEMail"]);
+
+            //    var arMailToList = mailToList.Split(splitter);
+            //    foreach (var t in arMailToList.Where(t => t.Length > 0))
+            //    {
+            //        myMail.To.Add(new MailAddress(t));
+            //    }
+
+            //    myMail.IsBodyHtml = true;
+
+            //    var attachment = new Attachment(ms, fileName);
+            //    myMail.Attachments.Add(attachment);
+
+            //    // Save to DB since this was just generated for the first time (Mode 2)
+            //    if (!(string.IsNullOrEmpty(trkrNbr)) && !(trkrNbr.Contains("*"))) SaveQuotePDF(dealID, trkrNbr, ms.ToArray());
+
+            //    var client = new SmtpClient();
+            //    try
+            //    {
+            //        client.Send(myMail);
+            //        strReturnMessage = "Message sent:" + dealID;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        strReturnMessage = "Message send Failed: Deal ID = " + dealID + ", Message = " + ex.Message;
+            //    }
+
+            //    returnResults = Encoding.ASCII.GetBytes(strReturnMessage);
+            //}
+            //else
+            //{
+            //    byte[] response = ms.ToArray();
+
+            //    // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
+            //    if (!(string.IsNullOrEmpty(trkrNbr)) && !(trkrNbr.Contains("*"))) SaveQuotePDF(dealID, trkrNbr, response);
+
+            //    returnResults = response;
+            //}
+
+
+            //return returnResults;
+        }
+
+        private void SaveQuotePDF(string dealId, string trkrNumber, byte[] quoteLetterPdf)
+        {
+            var timer = DateTime.Now;
+
+            //TBD - VN
+            //var cmd = new PR_SAVE_QUOTE_LTTR_DATA
+            //{
+            //    DEAL_MBR_SID = dealId,
+            //    TRKR_NBR = trkr,
+            //    FILE_DATA = pdfBody
+            //};
+
+            //try
+            //{
+            //    StartCmdLogMessage(null, "SaveQuotePDF", cmd, timer);
+
+            //    //string stringXML = DataAccess.ExecuteSpScalarProc(ConnectionString, LogLevel, cmd) as String;
+            //    DataAccess.ExecuteSpNonQuery(cmd);
+
+            //    EndCmdLogMessage(null, "SaveQuotePDF", cmd, "Returned Void", timer);
+            //}
+            //catch (Exception ex)
+            //{
+            //    //WriteToEventViewer("SaveQuotePDF", ex.Message, "IDMS", EventLogEntryType.Error, "CDMS");
+            //    //EndCmdLogMessage(null, "SaveQuotePDF", cmd, "SaveQuotePDF Failure : (" + ex.Message + ")", timer);
+            //    //throw MsgQueue.CreateFault(ex);
+            //}
         }
     }
 }

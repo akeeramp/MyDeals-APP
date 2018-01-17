@@ -5,6 +5,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IQuoteLetterLib
     {
-        List<QuoteLetter> GetQuoteLetterTemplates();
+        List<QuoteLetter_Tory> GetQuoteLetterTemplates();
+        QuoteLetterFile GetDealQuoteLetter(string dealId);
     }
 }

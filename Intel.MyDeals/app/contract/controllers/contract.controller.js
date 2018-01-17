@@ -3773,6 +3773,26 @@
             $state.go(state, { cid: $scope.contractData.DC_ID });
         }
 
+        $scope.downloadQuoteLetter = function (dealdId) {
+
+            //document.location.href = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId ;
+            var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId ;
+            window.open(downloadPath, '_blank', '');
+                //$scope.attachmentCount = response.data.length;
+                //$scope.initComplete = true;
+                //hasFiles = response.data.length > 0;
+                //setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
+                //},
+                //,function (response){
+                //    logger.error("Unable to download quote letter pdf.", response, response.statusText);
+                //    //$scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                //    //$scope.initComplete = true;
+                //    //hasFiles = false;
+                //});
+
+            //return deferred.promise;
+        }
+
         topbar.hide();
 
         function cleanupData(data) {

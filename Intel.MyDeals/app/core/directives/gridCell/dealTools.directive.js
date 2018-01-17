@@ -457,6 +457,10 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 return $scope.getColor('stage', d);
             }
 
+            $scope.downloadQuoteLetter = function () {
+                rootScope.downloadQuoteLetter($scope.dataItem.DC_ID);
+            }
+
         }],
         link: function (scope, element, attr) {
             scope.el = element;

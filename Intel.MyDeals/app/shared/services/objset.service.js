@@ -11,6 +11,7 @@ function objsetService($http, dataService, logger, $q) {
     var apiBaseContractUrl = "/api/Contracts/v1/";
     var apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     var apiBasePricingTableUrl = "/api/PricingTables/v1/";
+    var apiBaseQuoteLetterUrl = "/api/QuoteLetter/";
     var apiBaseCostTestUrl = "/api/CostTest/v1/";
     var apiBaseTenderUrl = "/api/Tenders/v1/";
     var apiBaseEmailUrl = "/api/Email/";
@@ -64,6 +65,7 @@ function objsetService($http, dataService, logger, $q) {
         runPctContract: runPctContract,
         getOverlappingDeals: getOverlappingDeals,
         updateOverlappingDeals: updateOverlappingDeals
+        //getDealQuoteLetter: getDealQuoteLetter,
     }
 
     return service;
@@ -229,6 +231,11 @@ function objsetService($http, dataService, logger, $q) {
 
     function updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE) {
         return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + PRICING_TABLES_ID + "/" + YCS2_OVERLAP_OVERRIDE);
+    }
+
+    // #### Quote Letter
+    function getDealQuoteLetter(dealId) {
+        return dataService.get(apiBaseQuoteLetterUrl + 'GetDealQuoteLetter/' + dealId);
     }
 
 }

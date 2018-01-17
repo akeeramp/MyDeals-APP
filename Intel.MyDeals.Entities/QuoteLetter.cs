@@ -2,7 +2,7 @@
 
 namespace Intel.MyDeals.Entities
 {
-    public class QuoteLetter
+    public class QuoteLetter_Tory
     {
         public string BODY_INFO { get; set; }
         public string HDR_INFO { get; set; }

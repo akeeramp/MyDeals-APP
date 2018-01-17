@@ -343,6 +343,14 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "AdminQuoteLetter";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Get Quote Letter Body
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_QUOTE_INFO @objsidlst = '502124', @callMode =2");
+	ds.Tables[0].TableName = "QuoteLetterContentInfo";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds.Tables[1].TableName = "QuoteLetterTemplateInfo";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

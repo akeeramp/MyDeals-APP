@@ -828,7 +828,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 DataType = "object",
                 Label = "Deal Tools",
-                Width = 180,
+                Width = 200,
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,

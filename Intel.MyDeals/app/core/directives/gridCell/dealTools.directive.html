@@ -26,6 +26,11 @@
         <i ng-class="getFileIcon(dataItem)" ng-style="getFileStyle(dataItem)" ng-attr-title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkFileIcon(dataItem)"></i>
     </div>
 
+    <!-- Quote Letter icon -->
+    <div class='fl md-icon' ng-if="(editable === true)">
+        <i class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+    </div>
+
     <!-- Delete icon -->
     <div class='fl md-icon' ng-if="editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
         <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"

@@ -78,6 +78,8 @@
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="QuoteLetter.cs" />
+    <Compile Include="QuoteLetterFile.cs" />
+    <Compile Include="QuoteLetterData.cs" />
     <Compile Include="filterItem.cs" />
     <Compile Include="FuzzySearch.cs" />
     <Compile Include="Helpers\CompressHelpers.cs" />
