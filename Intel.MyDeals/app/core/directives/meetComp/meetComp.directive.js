@@ -140,6 +140,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
 
                         });
+
                         $scope.meetCompMasterdata = response.data;
                         $scope.meetCompUnchangedData = angular.copy(response.data);
                         $scope.meetCompUpdatedList = [];
@@ -1244,7 +1245,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     'COMP_OVRRD_RSN': false,
                                     'RW_NM': ""
                                 };
-
+                                
                                 //COMP_SKU Checking.....
                                 var isCompSkuZero = false;
                                 if (!isNaN(Math.abs(data[i].COMP_SKU))) {
@@ -1257,28 +1258,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     isError = true;
                                 }
 
-                                if (data[i].COMP_SKU.trim().length == 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].COMP_SKU.trim().length == 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_PRC checking.....
-                                if (data[i].COMP_PRC <= 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].COMP_PRC <= 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
                                     errorObj.COMP_PRC = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_BNCH checking....
-                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
                                     errorObj.COMP_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //IA_BNCH checking....
-                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
                                     errorObj.IA_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
