@@ -1,6 +1,8 @@
 using Intel.MyDeals.DataLibrary;
+using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
+using System.Collections.Generic;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -20,6 +22,11 @@ namespace Intel.MyDeals.BusinessLogic
         public QuoteLetterLib(IQuoteLetterDataLib quoteLetterDataLib)
         {
             _quoteLetterDataLib = quoteLetterDataLib;
+        }
+
+        public List<QuoteLetter> GetQuoteLetterTemplates()
+        {
+            return _quoteLetterDataLib.GetQuoteLetterTemplates();
         }
 
     }
