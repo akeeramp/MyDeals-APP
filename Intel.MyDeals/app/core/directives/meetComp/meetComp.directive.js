@@ -1616,7 +1616,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "IA_BNCH",
                                         title: "IA Bench",
                                         width: 120,
-                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0 || IA_BNCH == null){## ##} else {##:IA_BNCH##}#</div>",
+                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (PS_STATUS.toLowerCase() != 'draft' && PS_STATUS.toLowerCase() != 'requested')) ){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0 || IA_BNCH == null){## ##} else {##:IA_BNCH##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: editorIABench
                                     },
@@ -1624,7 +1624,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "COMP_BNCH",
                                         title: "Comp Bench",
                                         width: 120,
-                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0 || COMP_BNCH == null){## ##} else {##:COMP_BNCH##}#</div>",
+                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (PS_STATUS.toLowerCase() != 'draft' && PS_STATUS.toLowerCase() != 'requested')) ){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0 || COMP_BNCH == null){## ##} else {##:COMP_BNCH##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: editorCOMPBench
                                     },
