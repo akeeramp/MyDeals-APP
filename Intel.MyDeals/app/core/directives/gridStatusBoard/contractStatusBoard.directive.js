@@ -4,7 +4,7 @@
 
 contractStatusBoard.$inject = ['$compile', 'objsetService', 'colorDictionary'];
 
-function contractStatusBoard($compile, objsetService,colorDictionary) {
+function contractStatusBoard($compile, objsetService, colorDictionary) {
     return {
         scope: {
             contractId: '=ngModel'
@@ -56,6 +56,11 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 }]
             };
 
+            $scope.gotoContractManager = function (id) {
+                var lnk = "/Contract#/manager/" + $scope.contractId + "/summary";
+                window.open(lnk, '_blank');
+            }
+
             $scope.recurCalcData = function (data, defStage) {
 
                 var ret = [];
@@ -86,7 +91,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 return ret;
             }
 
-            $scope.getObjType = function(obj) {
+            $scope.getObjType = function (obj) {
                 if (obj === "CNTRCT") return "Contract";
                 if (obj === "PRC_ST") return "Pricing Strategy";
                 if (obj === "PRC_TBL") return "Pricing Table";
@@ -108,7 +113,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 }
             }
 
-            $scope.refreshGrid = function(d) {
+            $scope.refreshGrid = function (d) {
                 var d1 = [];
                 if (d.children !== undefined) {
                     for (var i = 0; i < d.children.length; i++) {
