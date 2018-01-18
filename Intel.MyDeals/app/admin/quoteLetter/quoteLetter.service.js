@@ -12,13 +12,18 @@
         var apiBaseUrl = "api/QuoteLetter/";
 
         var service = {
-            getQuoteLetterTemplates: getQuoteLetterTemplates
+            adminGetTemplates: adminGetTemplates,
+            adminSaveTemplate: adminSaveTemplate
         }
 
         return service;
 
-        function getQuoteLetterTemplates() {
-            return dataService.get(apiBaseUrl + 'GetQuoteLetterTemplates');
+        function adminGetTemplates() {
+            return dataService.get(apiBaseUrl + 'AdminGetTemplates');
+        }
+
+        function adminSaveTemplate(template) {
+            return dataService.put(apiBaseUrl + 'AdminSaveTemplate', template);
         }
     }
 })();

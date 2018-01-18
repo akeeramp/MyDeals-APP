@@ -5,6 +5,7 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using Telerik.Reporting.Processing;
@@ -19,37 +20,36 @@ namespace Intel.MyDeals.DataLibrary
         {
         }
 
-        public List<QuoteLetter_Tory> GetQuoteLetterTemplates()
+        public List<AdminQuoteLetter> AdminGetTemplates()
         {
-            var ret = new List<QuoteLetter_Tory>();
+            var ret = new List<AdminQuoteLetter>();
             Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES cmd = new Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES()
             {
                 intWWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                mode = "Select",
-                objSetTypeSid = 3,
-                programPaymentType = "FRONTEND",
-                headerInfo = null,
-                bodyInfo = null,
+                mode = "Get",
+                tmpltSid = 0, // Not used for get operations.
+                headerInfo = null, // Not used for get operations.
+                bodyInfo = null, // Not used for get operations.
                 debug = false
             };
-            
+
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_BODY_INFO = DB.GetReaderOrdinal(rdr, "BODY_INFO");
                     int IDX_HDR_INFO = DB.GetReaderOrdinal(rdr, "HDR_INFO");
-                    int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
+                    int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
                     int IDX_TMPLT_SID = DB.GetReaderOrdinal(rdr, "TMPLT_SID");
 
                     while (rdr.Read())
                     {
-                        ret.Add(new QuoteLetter_Tory
+                        ret.Add(new AdminQuoteLetter
                         {
                             BODY_INFO = (IDX_BODY_INFO < 0 || rdr.IsDBNull(IDX_BODY_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BODY_INFO),
                             HDR_INFO = (IDX_HDR_INFO < 0 || rdr.IsDBNull(IDX_HDR_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HDR_INFO),
-                            OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_SID),
+                            OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
                             TMPLT_SID = (IDX_TMPLT_SID < 0 || rdr.IsDBNull(IDX_TMPLT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TMPLT_SID)
                         });
@@ -62,6 +62,33 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return ret;
+        }
+
+        public AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template)
+        {
+            Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES cmd = new Procs.dbo.PR_MANAGE_QUOTE_LETTER_TEMPLATES
+            {
+                intWWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                mode = "Update",
+                tmpltSid = template.TMPLT_SID,
+                bodyInfo = template.BODY_INFO,
+                headerInfo = template.HDR_INFO,
+                debug = false
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteDataSet(cmd))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return template;
         }
 
         public QuoteLetterFile GetDealQuoteLetter(string dealId)

@@ -5,7 +5,9 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface IQuoteLetterDataLib
     {
-        List<QuoteLetter_Tory> GetQuoteLetterTemplates();
+        List<AdminQuoteLetter> AdminGetTemplates();
+        AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template);
+
         QuoteLetterFile GetDealQuoteLetter(string dealId);
     }
 }

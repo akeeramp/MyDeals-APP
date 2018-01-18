@@ -62,12 +62,23 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpGet]
-        [Route("GetQuoteLetterTemplates")]
-        public IEnumerable<QuoteLetter_Tory> GetQuoteLetterTemplates()
+        [Route("AdminGetTemplates")]
+        public IEnumerable<AdminQuoteLetter> AdminGetTemplates()
         {
             return SafeExecutor(() => _quoteLetterLib
-                .GetQuoteLetterTemplates()
-                , $"Unable to get Quote Letter Templates"
+                .AdminGetTemplates()
+                , $"AdminGetTemplates failed"
+            );
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("AdminSaveTemplate")]
+        public AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template)
+        {
+            return SafeExecutor(() => _quoteLetterLib
+                .AdminSaveTemplate(template)
+                , $"AdminSaveTemplate failed"
             );
         }
     }

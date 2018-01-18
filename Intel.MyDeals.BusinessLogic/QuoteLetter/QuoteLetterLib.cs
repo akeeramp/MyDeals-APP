@@ -24,9 +24,14 @@ namespace Intel.MyDeals.BusinessLogic
             _quoteLetterDataLib = quoteLetterDataLib;
         }
 
-        public List<QuoteLetter_Tory> GetQuoteLetterTemplates()
+        public List<AdminQuoteLetter> AdminGetTemplates()
         {
-            return _quoteLetterDataLib.GetQuoteLetterTemplates();
+            return _quoteLetterDataLib.AdminGetTemplates();
+        }
+
+        public AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template)
+        {
+            return _quoteLetterDataLib.AdminSaveTemplate(template);
         }
 
         /// <summary>

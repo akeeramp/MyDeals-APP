@@ -339,7 +339,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Get Deal Details
-	ds = dbobjects.ExecuteDataSet("exec PR_MANAGE_QUOTE_LETTER_TEMPLATES @intWWID=10548414, @mode='Select', @objSetTypeSid=3, @programPaymentType='FRONTEND' ");
+	ds = dbobjects.ExecuteDataSet("exec PR_MANAGE_QUOTE_LETTER_TEMPLATES @intWWID=10548414, @mode='Get' ");
 	ds.Tables[0].TableName = "AdminQuoteLetter";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
