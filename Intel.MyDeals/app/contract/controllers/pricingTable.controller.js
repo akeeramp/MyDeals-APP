@@ -700,7 +700,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        	var firstTierRow = data[firstTierRowIndex];
 
 								// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-								firstTierRow["TEMP_KIT_REBATE"] = calculateKITRebate(data, firstTierRowIndex, numOfTiers); //kitRebateTotalVal;
+								firstTierRow["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, firstTierRowIndex, numOfTiers, false); //kitRebateTotalVal;
 							}
 					    }
 					}
@@ -820,7 +820,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    }
 							    // Recalculate KIT Rebate
 							    // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-							    data[originalExistingIndex]["TEMP_KIT_REBATE"] = calculateKITRebate(data, originalExistingIndex, parseInt(originalExistingCopy["NUM_OF_TIERS"]));
+							    data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(originalExistingCopy["NUM_OF_TIERS"]), false);
 
 							    data[originalExistingIndex]['dirty'] = true;
 							    sourceData[originalExistingIndex]['dirty'] = true;
@@ -1096,19 +1096,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
 
-    //// <summary>
-    //// Calculate Kit Rebates which is sum of all ECAP_PRICE - KIT_ECAP for all products in deal group
-    //// aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
-    //// </summary>
-    function calculateKITRebate(data, firstTierRowIndex, numOfTiers) {
-        var kitRebateTotalVal = 0;
-        for (var i = 0; i < numOfTiers && i < data.length; i++) {
-            kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
-        }
 
-        var rebateVal = (kitRebateTotalVal - parseInt(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"]))
-        return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
-    }
 
     //// <summary>
     //// Formats a given sDealGrpDict key to expected format, whose format will help us ignore spaces and capitalization when comparing $scope.dealGrpNameDict keys.
@@ -1339,7 +1327,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
                             tierNbr = data[r]["TIER_NBR"];
                             if (tierNbr == 1) {
-                                data[r]["TEMP_KIT_REBATE"] = calculateKITRebate(data, r, data[r]["NUM_OF_TIERS"]);
+                                data[r]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, r, data[r]["NUM_OF_TIERS"], false);
                             }
                         }
 

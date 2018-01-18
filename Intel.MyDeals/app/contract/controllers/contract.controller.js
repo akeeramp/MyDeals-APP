@@ -2811,14 +2811,7 @@
                         }
 
                         lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
-
-                        // Kit Rebate
-                        // Calculate TEMP_KIT_REBATE ("Kit Rebate / Bundle Discount") = Sum(DSCNT_PER_LN * QTY) for all products in deal group, aka sum of every TEMP_TOTAL_DSCNT_PER_LN for that group
-                        var kitRebateTotalVal = 0;
-                        for (var i = 0; i < lData["NUM_OF_TIERS"]; i++) {
-                            kitRebateTotalVal += $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (i)], lData["QTY_____20___" + (i)]);
-                        }
-                        lData["TEMP_KIT_REBATE"] = kitRebateTotalVal;
+                    	lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true); 
                     }
                     newData.push(lData);
                 }
@@ -2827,7 +2820,22 @@
         }
 
         $scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
-            return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
+        	return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
+        }
+
+        $scope.calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
+        	var kitRebateTotalVal = 0;
+        	for (var i = 0; i < numOfTiers; i++) {
+        		if (isDataPivoted) {
+        			kitRebateTotalVal += (parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
+        		} else {
+        			if (i < data.length) {
+        				kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
+        			}
+        		}
+        	}
+        	var rebateVal = (kitRebateTotalVal - parseInt(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
+        	return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
         }
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
