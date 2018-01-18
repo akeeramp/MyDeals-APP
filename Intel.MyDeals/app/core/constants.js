@@ -629,13 +629,13 @@
                         "Groups": ["Deal Info"]
                     },
                     "PROD_INCLDS": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["All"]
                     },
                     "TITLE": {
                         "Groups": ["Deal Info"]
                     },
                     "PRD_EXCLDS": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["All"]
                     },
                     "DEAL_GRP_NM": {
                         "Groups": ["Deal Info", "SubKit"]

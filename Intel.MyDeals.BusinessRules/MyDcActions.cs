@@ -917,7 +917,7 @@ namespace Intel.MyDeals.BusinessRules
 			deTrkr.IsRequired = true;
 		}
 
-		#region Voltier Validations
+        #region Tiered Validations
 
 		private static bool IsGreaterThanZero(double attrb)
 		{
@@ -1120,7 +1120,7 @@ namespace Intel.MyDeals.BusinessRules
 
 		#endregion Voltier Validations
 
-		public static void ValidateKitEcap(params object[] args)
+		public static void ValidateKitRebateBundleDiscount(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
@@ -1253,14 +1253,15 @@ namespace Intel.MyDeals.BusinessRules
 			if (string.IsNullOrEmpty(prdJson)) return;
 
 			int parsedQty = 0;
-			IOpDataElement deQty = r.Dc.GetDataElement(AttributeCodes.QTY);
-			Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
+            IOpDataElement deQty = null;
 
 			ProdMappings items = null;
 			int numOfL1s = 0;
 			int numOfL2s = 0;
 
-			try
+            int prdMapIndex = 0;
+
+            try
 			{
 				items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
 
@@ -1273,7 +1274,10 @@ namespace Intel.MyDeals.BusinessRules
 
 				foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
 				{
-					foreach (ProdMapping prod in prdMapping.Value)
+                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == prdMapIndex).FirstOrDefault();
+                    Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
+
+                    foreach (ProdMapping prod in prdMapping.Value)
 					{
 						// Rule: CPU products must be Tray
 						if (prod.DEAL_PRD_TYPE.ToString().Equals("CPU", StringComparison.OrdinalIgnoreCase) && prod.MM_MEDIA_CD.ToString().Equals("BOX", StringComparison.OrdinalIgnoreCase))
@@ -1287,9 +1291,7 @@ namespace Intel.MyDeals.BusinessRules
 							// Rule: Each L1 can only have a Qty of 1
 							if (parsedQty > 1)
 							{
-								dePrdUsr.AddMessage("L1 Products may only have a Qty of 1.");
-								//// TODO: this is a very minor priority, but maybe get the tier so we can do a more user-friendly tiered valiation message
-								// AddTierValidationMessage(deQty, "L1 Products can only have a Qty of 1.", tier);
+								AddTierValidationMessage(deQty, "L1 Products can only have a Qty of 1.", prdMapIndex);
 							}
 							numOfL1s += parsedQty;
 						}
@@ -1302,13 +1304,19 @@ namespace Intel.MyDeals.BusinessRules
 						if (numOfL1s > 2)
 						{
 							dePrdUsr.AddMessage("You can only have up to two L1s. Please check that your products and their Qty meet this requirement.");
-						}
+                        }
 						else if (numOfL1s == 1 && numOfL2s > 1)
 						{
-							dePrdUsr.AddMessage("You have one L1s, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.");
+							dePrdUsr.AddMessage("You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.");
 						}
-					}
-				}
+                        else if (numOfL1s == 2 && numOfL2s >= 1)
+                        {
+                            dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty and their Qty meet this requirement.");
+                        }
+
+                        prdMapIndex++;
+                    }
+                }
 			}
 			catch (Exception)
 			{

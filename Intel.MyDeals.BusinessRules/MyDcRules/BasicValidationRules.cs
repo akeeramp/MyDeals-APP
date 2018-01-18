@@ -504,7 +504,7 @@ namespace Intel.MyDeals.BusinessRules
 				new MyOpRule
 				{
 					Title="KIT ECAP equal to total discounts per line check",
-					ActionRule = MyDcActions.ValidateKitEcap,
+					ActionRule = MyDcActions.ValidateKitRebateBundleDiscount,
 					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
