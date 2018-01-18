@@ -2592,6 +2592,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 data[r].PTR_USER_PRD = contractProducts;
                 sourceData[r].PTR_USER_PRD = contractProducts;
 
+                data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+                sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+
                 // KIT update PRD_DRWAING_ORDER and merged rows
                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     data[r].PRD_DRAWING_ORD = kitObject.PRD_DRAWING_ORD;
@@ -2723,6 +2726,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                                 data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
                                 sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+
                                 var products = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key]);
                                 data[r].PTR_USER_PRD = products.contractProducts;
                                 sourceData[r].PTR_USER_PRD = products.contractProducts;
