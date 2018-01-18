@@ -46,8 +46,7 @@
                 });
         }
 
-
-        $scope.onSaveChangesClick = function (index) {
+        $scope.onSaveChangesClick = function () {
             quoteLetterService.adminSaveTemplate(vm.selectedTemplate)
                 .then(function (response) {
                     // Sync vm.menuItems w/ the changes that were just saved, then rebind the templates combobox.
@@ -66,6 +65,10 @@
                     logger.error("Unable to save changes.", response, response.statusText);
                 });
         };
+
+        $scope.onGeneratePreviewClick = function () {
+            alert('Feature not yet implemented.');
+        };        
 
         $scope.init();
     }

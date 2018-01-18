@@ -16,7 +16,7 @@
     </div>
 
     <div class="pull-right section">
-        <button class="btn btn-default btn-lg" ng-disabled="vm.selectedTemplate == null">Generate Preview</button>
+        <button class="btn btn-default btn-lg" ng-disabled="vm.selectedTemplate == null" ng-click="onGeneratePreviewClick()">Generate Preview</button>
         <button class="btn btn-primary btn-lg" ng-disabled="vm.selectedTemplate == null" ng-click="onSaveChangesClick()" style="margin-left:5px">Save Changes</button>
     </div>
 </div>
