@@ -44,7 +44,7 @@ widgetConfig.configWidgets = function () {
 
     widgetConfig.widgets["7"] = {
         id: '7',
-        size: { x: 13, y: 8 },
+        size: { x: 13, y: 7 },
         position: { row: 0, col: 0 },
         name: "Deal Desk",
         desc: "Quick view of status board",
@@ -58,7 +58,7 @@ widgetConfig.configWidgets = function () {
         subConfig: {
             favContractIds: ""
         },
-        resizeEvent: function (widget) {
+        resizeEvent: function () {
             var grid = $("#gridContractStatus");
             grid.data("kendoGrid").resize();
         },
@@ -141,7 +141,7 @@ widgetConfig.configLayouts = function () {
                 defaultPosition: { row: 0, col: 0 }
             }, {
                 id: 7,
-                defaultSize: { x: 13, y: 8 },
+                defaultSize: { x: 13, y: 7 },
                 defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,
@@ -157,7 +157,7 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 7,
-                defaultSize: { x: 13, y: 8 },
+                defaultSize: { x: 13, y: 7 },
                 defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,
@@ -173,7 +173,7 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 7,
-                defaultSize: { x: 13, y: 8 },
+                defaultSize: { x: 13, y: 7 },
                 defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,

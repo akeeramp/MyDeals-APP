@@ -92,7 +92,9 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             handle: 'h3',
             // callback fired when item is finished dragging
             stop: function (event, $element, widget) {
-                $scope.saveLayout(); // Persist the current grid settings to the DB.
+                $timeout(function () {
+                    $scope.saveLayout(); // Persist the current grid settings to the DB.
+                }, 800);
             }
         },
         resizable: {
@@ -104,15 +106,14 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
 
             // callback fired when item is resized,
             resize: function (event, $element, widget) {
-                if (widget.resizeEvent !== undefined) widget.resizeEvent(widget);
             },
 
             // callback fired when item is finished resizing
             stop: function (event, $element, widget) {
                 $timeout(function () {
-                    if (widget.resizeEvent !== undefined) widget.resizeEvent(widget);
-                }, 400);
-                $scope.saveLayout(); // Persist the current grid settings to the DB.
+                    $scope.dashboardData.allWidgets[widget.id].resizeEvent();
+                    $scope.saveLayout(); // Persist the current grid settings to the DB.
+                }, 800);
             }
         }
     };

@@ -1,7 +1,7 @@
 ﻿<div class="dashboard" ng-if="dashboardData.currentWidgets.length > 0">
     <div gridster="gridsterOptions">
         <ul>
-            <li gridster-item row="widget.position.row" col="widget.position.col" size-x="widget.size.x" size-y="widget.size.y" ng-repeat="widget in dashboardData.currentWidgets">
+            <li gridster-item row="widget.position.row" col="widget.position.col" id="{{widget.id}}" size-x="widget.size.x" size-y="widget.size.y" ng-repeat="widget in dashboardData.currentWidgets">
                 <div class="box" ng-controller="CustomWidgetCtrl">
                     <div class="box-header">
                         <h3>{{ widget.name }}</h3>
