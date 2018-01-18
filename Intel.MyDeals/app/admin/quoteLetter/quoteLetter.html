@@ -2,28 +2,31 @@
 
     <div class="section">
         <label>Template: </label>
-        <select style="width: 200px; margin-left:6px" kendo-drop-down-list k-options="vm.dropDownOptions" k-ng-model="vm.selectedTemplate" k-ng-delay="vm.isDropdownsLoaded"></select>
+        <select style="width: 210px; margin-left:6px" kendo-drop-down-list k-options="vm.dropDownOptions" k-ng-model="vm.selectedTemplate" k-ng-delay="vm.isDropdownsLoaded"></select>
     </div>
 
-
-    <div class="section">
+    <div class="section" ng-class="{'textarea-disabled': vm.selectedTemplate == null}">
         <label>Upper Content Block</label>
         <textarea kendo-editor k-ng-model="vm.selectedTemplate.HDR_INFO"></textarea>
     </div>
 
-    <div class="section">
+    <div class="section" ng-class="{'textarea-disabled': vm.selectedTemplate == null}">
         <label>Lower Content Block</label>
         <textarea kendo-editor k-ng-model="vm.selectedTemplate.BODY_INFO"></textarea>
     </div>
 
     <div class="pull-right section">
         <button class="btn btn-default btn-lg" ng-disabled="vm.selectedTemplate == null">Generate Preview</button>
-        <button class="btn btn-primary btn-lg" ng-disabled="vm.selectedTemplate == null" ng-click="onSaveChangesClick()">Save Changes</button>
+        <button class="btn btn-primary btn-lg" ng-disabled="vm.selectedTemplate == null" ng-click="onSaveChangesClick()" style="margin-left:5px">Save Changes</button>
     </div>
 </div>
 
 <style>
     .section {
         margin-top: 18px;
+    }
+
+    .textarea-disabled {
+        opacity: .25;
     }
 </style>
