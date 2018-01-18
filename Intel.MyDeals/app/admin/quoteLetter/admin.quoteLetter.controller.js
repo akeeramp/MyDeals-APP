@@ -15,21 +15,6 @@
         vm.isDropdownsLoaded = false;
         vm.selectedTemplate = null;
 
-        function init() {
-            quoteLetterService.adminGetTemplates()
-                .then(function (response) {
-                    vm.menuItems = response.data;
-
-                    for (var i = 0; i < vm.menuItems.length; i++) {
-                        vm.menuItems[i].MenuText = vm.menuItems[i].OBJ_SET_TYPE_CD + "-" + vm.menuItems[i].PROGRAM_PAYMENT;
-                    }
-
-                    vm.isDropdownsLoaded = true;
-                }, function (response) {
-                    logger.error("Unable to get template menu items.", response, response.statusText);
-                });
-        }
-
         vm.dropDownOptions = {
             placeholder: "select...",
             autoBind: false,
@@ -45,14 +30,43 @@
             }
         };
 
+        $scope.init = function () {
+            quoteLetterService.adminGetTemplates()
+                .then(function (response) {
+                    vm.menuItems = response.data;
+
+                    // For all menu items, set MenuText by concat OBJ_SET_TYPE_CD and PROGRAM_PAYMEN .
+                    for (var i = 0; i < vm.menuItems.length; i++) {
+                        vm.menuItems[i].MenuText = vm.menuItems[i].OBJ_SET_TYPE_CD + "-" + vm.menuItems[i].PROGRAM_PAYMENT;
+                    }
+
+                    vm.isDropdownsLoaded = true;
+                }, function (response) {
+                    logger.error("Unable to get template data.", response, response.statusText);
+                });
+        }
+
+
         $scope.onSaveChangesClick = function (index) {
             quoteLetterService.adminSaveTemplate(vm.selectedTemplate)
                 .then(function (response) {
+                    // Sync vm.menuItems w/ the changes that were just saved, then rebind the templates combobox.
+                    for (var i = 0; i < vm.menuItems.length; i++) {
+                        if (vm.menuItems[i].TMPLT_SID == vm.selectedTemplate.TMPLT_SID) {
+                            vm.menuItems[i] = vm.selectedTemplate;
+                        }
+                    }
+                    var combo = $("#templatesCombo").data("kendoDropDownList");
+                    var selectedIndex = combo.select();
+                    combo.dataSource.read();
+                    combo.select(selectedIndex);
+
+                    logger.success("Saved " + vm.menuItems[selectedIndex].MenuText + " content.");
                 }, function (response) {
                     logger.error("Unable to save changes.", response, response.statusText);
                 });
         };
 
-        init();
+        $scope.init();
     }
 })();

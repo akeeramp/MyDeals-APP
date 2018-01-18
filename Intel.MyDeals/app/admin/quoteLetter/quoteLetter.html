@@ -2,7 +2,7 @@
 
     <div class="section">
         <label>Template: </label>
-        <select style="width: 210px; margin-left:6px" kendo-drop-down-list k-options="vm.dropDownOptions" k-ng-model="vm.selectedTemplate" k-ng-delay="vm.isDropdownsLoaded"></select>
+        <select id="templatesCombo" style="width: 210px; margin-left:6px" kendo-drop-down-list k-options="vm.dropDownOptions" k-ng-model="vm.selectedTemplate" k-ng-delay="vm.isDropdownsLoaded"></select>
     </div>
 
     <div class="section" ng-class="{'textarea-disabled': vm.selectedTemplate == null}">
@@ -28,5 +28,9 @@
 
     .textarea-disabled {
         opacity: .25;
+    }
+
+    .btn-lg {
+        min-width: 190px;
     }
 </style>
