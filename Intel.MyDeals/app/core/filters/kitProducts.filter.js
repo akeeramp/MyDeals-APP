@@ -13,7 +13,7 @@
         function customOrder(item) {
             switch (item) {
                 case 'CPU':
-                    return 1; // CPU overrides everything, its goes first irrespective of CAP and L1 and L2. CPU is the boss..
+                    return 1; // CPU is priority without additional properties
                 case 'CS':
                     return 2; // CS is priority if CPU is not around.
                 default:
@@ -28,19 +28,15 @@
         };
 
         return function (items, field) {
-            // Order by L1, L2 then by CAP
-            var items = $filter('orderBy')(items, ['-HAS_L1', '-HAS_L2', parseFloat]);
-            var filtered = items;
-
-            // Special condition: if CPU or CS present it will override all the previous rules.
-            filtered.sort(function (a, b) {
+            // If CPU or CS present it will take least precedence. If CPU has less CAP and CS has highest CAP, CS will be primary.
+            var items = items.sort(function (a, b) {
                 return (customOrder(a[field]) > customOrder(b[field]) ? 1 : -1);
             });
 
-            // TODO: modify output to get array of products or comma separated PRD_MBR_SID or HIER_VAL_NM
-            //filtered = filtered.map(function (p) {
-            //    return p.PRD_MBR_SID;
-            //}).join(',');
+            var filtered = items;
+
+            // L1 products will be primary irrespective of CAP and CPU/CS. Within L1 products with highest CAP will be primary. This applies to L2 as well.
+            filtered = $filter('orderBy')(filtered, ['-HAS_L1', '-HAS_L2', parseFloat]);
 
             return filtered;
         };
