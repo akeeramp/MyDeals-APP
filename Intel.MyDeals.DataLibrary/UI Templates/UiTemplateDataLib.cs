@@ -1117,7 +1117,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3540,
                 AtrbCd = AttributeCodes.DEAL_SOLD_TO_ID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 UiType = "MULTISELECT",
                 Template = "#=gridUtils.uiMultiselectArrayControlWrapper(data, 'DEAL_SOLD_TO_ID')#",
                 LookupUrl = "/api/Dropdown/GetSoldToIds", // TODO

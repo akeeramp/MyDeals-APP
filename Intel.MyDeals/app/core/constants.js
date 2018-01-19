@@ -733,9 +733,9 @@
                     "ON_ADD_DT": {
                         "Groups": ["Deal Info"]
                     },
-                    "DEAL_SOLD_TO_ID": {
-                        "Groups": ["Deal Info"]
-                    },
+                    //"DEAL_SOLD_TO_ID": {
+                    //    "Groups": ["Deal Info"]
+                    //},
                     "REBATE_TYPE": {
                         "Groups": ["Deal Info"]
                     },
