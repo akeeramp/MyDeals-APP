@@ -697,9 +697,9 @@
                     "YCS2_OVERLAP_OVERRIDE": {
                         "Groups": ["All"]
                     },
-                    "EXPIRE_YCS2": {
-                        "Groups": ["Deal Info"]
-                    },
+                    //"EXPIRE_YCS2": {
+                    //    "Groups": ["Deal Info"]
+                    //},
                     //"NORTHBRIDGE_SPLIT": {
                     //    "Groups": ["All"]
                     //},

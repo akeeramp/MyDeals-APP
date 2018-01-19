@@ -1132,7 +1132,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3562,
                 AtrbCd = AttributeCodes.EXPIRE_YCS2,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP},
                 Template = "#=gridUtils.uiControlWrapper(data, 'EXPIRE_YCS2')#",
                 IsFilterable = true,
                 IsSortable = true,
