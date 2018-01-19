@@ -187,7 +187,7 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
 
 //this control wrapper to be used for displaying which product is associated with each dimention
 gridUtils.uiProductDimControlWrapper = function (passedData) {
-    var data = passedData["TITLE"].split(',');
+    var data = passedData["PTR_USER_PRD"].split(',');   //note: PTR_USER_PRD vs TITLE?  for WIP_DEALs this should be the same (?)
 
     var tmplt = '<table>';
     for (var i = 0; i < data.length; i++) {

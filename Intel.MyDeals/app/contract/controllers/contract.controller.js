@@ -2431,12 +2431,7 @@
 							$scope.syncCellValidationsOnAllRows($scope.pricingTableData.PRC_TBL_ROW);
                         }
                     }
-                    var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
-                    var isKit = 0;
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                        dimStr = "_20___"
-                        isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
-                    }
+
                     if (!!results.data.WIP_DEAL) {
                         if (!$scope.switchingTabs) {
                             for (i = 0; i < results.data.WIP_DEAL.length; i++) {
@@ -2444,10 +2439,21 @@
                                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
 
                                 if (anyWarnings) {
+                                    var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
+                                    var isKit = 0;
+                                    var relevantAtrbs = tierAtrbs;
+                                    var tierCount = dataItem.NUM_OF_TIERS;
+
+                                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                                        dimStr = "_20___"
+                                        isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
+                                        relevantAtrbs = $scope.kitDimAtrbs;
+                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
+                                    }
                                     // map tiered warnings
-                                    for (var t = 1 - isKit; t <= dataItem.NUM_OF_TIERS - isKit; t++) {
-                                        for (var a = 0; a < tierAtrbs.length; a++) {
-                                            mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + dimStr + t), t);
+                                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                                        for (var a = 0; a < relevantAtrbs.length; a++) {
+                                            mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);    //TODO: what happens in negative dim cases? this doesnt cover does it?
                                         }
                                     }
                                 }

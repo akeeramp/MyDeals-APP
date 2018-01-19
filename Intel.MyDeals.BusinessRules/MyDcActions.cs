@@ -1243,14 +1243,14 @@ namespace Intel.MyDeals.BusinessRules
 			}
 		}
 
-		public static void ValidateKITProducts(params object[] args)
+		public static void ValidateKITSpreadsheetProducts(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
 
 			IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
-			if (string.IsNullOrEmpty(prdJson)) return;
+			if (string.IsNullOrEmpty(prdJson)) return;  //this rule will not work at the wip grid level because it does not have access to product json
 
 			int parsedQty = 0;
             IOpDataElement deQty = null;
@@ -1329,5 +1329,51 @@ namespace Intel.MyDeals.BusinessRules
 				return;
 			}
 		}
-	}
+
+        public static void ValidateKITGridProducts(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string hasL1 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1);
+            string hasL2 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L2);
+
+            //We assume that all kit deals are properly enforced to have at least a primary and one secondary - it doesn't make sense to have a single item kit after all.
+            int qtyPrimary;
+            int qtySecondary1;
+
+            IOpDataElement deQty1 = null;
+            IOpDataElement deQty2 = null;
+
+            deQty1 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 0).FirstOrDefault();
+            deQty2 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 1).FirstOrDefault();
+
+            Int32.TryParse(deQty1.AtrbValue.ToString(), out qtyPrimary);
+            Int32.TryParse(deQty2.AtrbValue.ToString(), out qtySecondary1);
+
+            if (hasL1 == "True" && hasL2 == "True")
+            {
+                if (qtyPrimary != 1)
+                {
+                    AddTierValidationMessage(deQty1, "L1 Products can only have a Qty of 1.", 0);
+                }
+                if (qtySecondary1 != 1)
+                {
+                    AddTierValidationMessage(deQty2, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.", 1);
+                }
+            }
+
+            if (hasL1 == "True" && hasL2 == "False")
+            {
+                if (qtyPrimary != 1)
+                {
+                    AddTierValidationMessage(deQty1, "L1 Products can only have a Qty of 1.", 0);
+                }
+                //if (qtySecondary1 != 1 && ????????)     //how do we check if second item is L1?  only want to run this if second product is also L1
+                //{
+                //    AddTierValidationMessage(deQty2, "L1 Products can only have a Qty of 1.", 1);
+                //}
+            }
+        }
+    }
 }

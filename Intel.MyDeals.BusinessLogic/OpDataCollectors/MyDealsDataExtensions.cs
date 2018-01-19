@@ -580,7 +580,7 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 // If Pricing table row has errors, do not save WIP_DEALS, even if we do save, it will be corrupted data.
-                if (dataHasValidationErrors && myDealsData.ContainsKey(opDataElementType) &&
+                if (dataHasValidationErrors && myDealsData.ContainsKey(opDataElementType) && savePacket.SourceEvent != "WIP_DEAL" &&
                     opDataElementType == OpDataElementType.WIP_DEAL && myDealsData[OpDataElementType.PRC_TBL_ROW].Messages.Messages.Any())
                 {
                     myDealsData.Remove(opDataElementType);
