@@ -1183,6 +1183,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
                         // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
                         data[n + a - (offset - 1)].id = null;
+                    	// Clear out any tiered values because this is a new row
+                        data[n + a - (offset - 1)]["CAP_PRICE"] = 0;
+                        data[n + a - (offset - 1)]["DSCNT_PER_LN"] = 0;
+                        data[n + a - (offset - 1)]["QTY"] = 1;
+                        data[n + a - (offset - 1)]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
+
                         offSetRows--;
                     } else {
                         // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
@@ -1965,13 +1971,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 for (var j = 0; j < x.props[i].length; j++) { // each row
 
                     // HACK: this is to prevent dragged cells that have numbers in them from incrementing on drag.
-                    if (srcRange._ref.bottomRight.row !== srcRange._ref.topLeft.row) {
-                        // The user highighted 2 or more cells before dragging, so just go with the pattern
-                        newVal = x.props[i][j].value;
-                    } else {
-                        // User only highlighted one cell, so use the first cell to set all the other cell's values
-                        newVal = this.value();
-                    }
+                	newVal = this.value();
+
                     // Make a new object with only the value - no validation or editor properties
                     x.props[i][j] = {
                         value: newVal

@@ -1189,7 +1189,7 @@ namespace Intel.MyDeals.BusinessRules
 					int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
 					if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
 					{
-						AddTierValidationMessage(atrbWithValidation, "KIT ECAP must be equal to total discount per line.", tier);
+						AddTierValidationMessage(atrbWithValidation, "KIT Rebate must be equal to sum of total discount per line.", tier);
 					}
 				}
 			}
@@ -1271,6 +1271,11 @@ namespace Intel.MyDeals.BusinessRules
 					dePrdUsr.AddMessage("Too many products. Please remove products.");
 					return;
 				}
+				else if (items.Count == 1)
+				{
+					dePrdUsr.AddMessage("KIT deals must contain at least 2 products.");
+					return;
+				}
 
 				foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
 				{
@@ -1323,7 +1328,6 @@ namespace Intel.MyDeals.BusinessRules
 				dePrdUsr.AddMessage("Unable to read the selected products.  Please use the Product Selector to fix the issue.");
 				return;
 			}
-
 		}
 	}
 }
