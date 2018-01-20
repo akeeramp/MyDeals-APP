@@ -191,11 +191,11 @@
                     <td style="width: 30px;">&nbsp;</td>
                     <td style="width: 60px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Approve</td>
                     <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Revise</td>
-                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Cancel</td>
+                    <!--<td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Cancel</td>-->
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td>Pricing Strategy Name | Table Name</td>
-                    <td style="width: 100px; text-align: center;"># of Tables</td>
+                    <!--<td style="width: 100px; text-align: center;"># of Tables</td>-->
                     <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                         <btn-run-pct-mct ng-model="root"
                                          contract-id="root.contractData.DC_ID"
@@ -247,7 +247,7 @@
                                            ng-click="clkRow($event)" /><label for="rad_revise_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
-                            <td style="width: 50px; text-align: center;" ng-show="canEdit">
+                            <!--<td style="width: 50px; text-align: center;" ng-show="canEdit">
                                 <div ng-if="canAction('Cancel', ps, true)" ng-attr-title="{{actionReason('Cancel', ps)}}">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': !canAction('Cancel', ps, false)}"
@@ -255,7 +255,7 @@
                                            class="with-font psCheck psCheck-Cancel" id="rad_cancel_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_cancel_{{ps.DC_ID}}"></label>
                                 </div>
-                            </td>
+                            </td>-->
                             <td style="width: 100px; text-align: center;">
                                 <div class="stage">
                                     <div ng-bind="ps.WF_STG_CD || 'no stage'" ng-style="getStageBgColorStyle(ps.WF_STG_CD)"></div>
@@ -271,9 +271,9 @@
                             <td>
                                 <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
                             </td>
-                            <td style="width: 100px; text-align: center;">
+                            <!--<td style="width: 100px; text-align: center;">
                                 <div ng-bind="ps.PRC_TBL.length" class="bolder"></div>
-                            </td>
+                            </td>-->
                             <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                 <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
                                     <icon-mct-pct ng-model="ps.COST_TEST_RESULT" icon-class="'bigIcon'"></icon-mct-pct>

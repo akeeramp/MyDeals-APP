@@ -346,70 +346,220 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         if (pt.isLoading === undefined || pt.isLoading === true) {
 
-            $scope.sumGridOptions = {
-                dataSource: {
-                    type: "json",
-                    transport: {
-                        read: {
-                            url: "/api/Dashboard/GetWipSummary/" + pt.DC_ID,
-                            type: "GET",
-                            dataType: "json"
-                        }
-                    },
-                    schema: {
-                        model: {
-                            id: "DC_ID",
-                            fields: {
-                                DC_ID: { type: "number" },
-                                OBJ_SET_TYPE_CD: { type: "string" },
-                                PASSED_VALIDATION: { type: "string" },
-                                WF_STG_CD: { type: "string" },
-                                START_DT: { type: "date" },
-                                END_DT: { type: "date" },
-                                NOTES: { type: "string" },
-                                TRKR_NBR: { type: "object" },
-                                TITLE: { type: "string" }
-                            }
-                        }
-                    }
-                },
-                sortable: true,
-                height: 250,
-                columns: [
-                    {
-                        field: "NOTES",
-                        title: "Tools",
-                        width: "90px",
-                        locked: true,
-                        template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>"
-                    }, {
-                        field: "DC_ID",
-                        title: "Deal Id",
-                        width: "90px",
-                        locked: true,
-                        template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\" || dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>"
-                    }, {
-                        field: "TRKR_NBR",
-                        title: "Tracker Number",
-                        width: "150px",
-                        locked: true,
-                        template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#"
-                    }, {
-                        field: "OBJ_SET_TYPE_CD",
-                        title: "Type",
-                        width: "100px"
-                    }, {
-                        field: "START_DT",
-                        title: "Deal Start/End",
-                        width: "170px",
-                        template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #"
-                    }, {
-                        field: "TITLE",
-                        title: "Product"
-                    }
-                ]
-
-            }
+        	if (pt.OBJ_SET_TYPE_CD == "ECAP") { // ECAP pt grid
+        		$scope.sumGridOptions = {
+        			filterable: true,
+        			resizable: true,
+        			dataSource: {
+        				type: "json",
+        				transport: {
+        					read: {
+        						url: "/api/Dashboard/GetWipSummary/" + pt.DC_ID,
+        						type: "GET",
+        						dataType: "json"
+        					}
+        				},
+        				schema: {
+        					model: {
+        						id: "DC_ID",
+        						fields: {
+        							DC_ID: { type: "number" },
+        							OBJ_SET_TYPE_CD: { type: "string" },
+        							PASSED_VALIDATION: { type: "string" },
+        							WF_STG_CD: { type: "string" },
+        							START_DT: { type: "date" },
+        							END_DT: { type: "date" },
+        							NOTES: { type: "string" },
+        							TRKR_NBR: { type: "object" },
+        							TITLE: { type: "string" },
+        							REBATE_TYPE: { type: "string" },
+        							VOLUME: { type: "string" },
+        							END_CUSTOMER_RETAIL: { type: "string" },
+        							DEAL_DESC: { type: "string" },
+        							WF_STG_CD: { type: "string" },
+        							EXPIRE_FLG: { type: "string" }
+        						}
+        					}
+        				}
+        			},
+        			sortable: true,
+        			height: 250,
+        			columns: [
+						{
+							field: "NOTES",
+							title: "Tools",
+							width: "90px",
+							locked: true,
+							template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>",
+							filterable: false
+						}, {
+							field: "DC_ID",
+							title: "Deal Id",
+							width: "90px",
+							locked: true,
+							template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\" || dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
+							filterable: { multi: true, search: true }
+        				}, {
+							field: "TRKR_NBR",
+							title: "Tracker Number",
+							width: "150px",
+							locked: true,
+							template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "OBJ_SET_TYPE_CD",
+							title: "Type",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "START_DT",
+							title: "Deal Start/End",
+							width: "170px",
+							template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "TITLE",
+							title: "Product",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "CAP",
+							title: "CAP",
+							template: "#= kendo.toString(data.CAP['20___0'], 'c') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "YCS2_PRC_IRBT",
+							title: "YCS2",
+							template: "#= kendo.toString(data.YCS2_PRC_IRBT['20___0'], 'c') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "REBATE_TYPE",
+							title: "Rebate Type",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "VOLUME",
+							title: "Ceiling Volume",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "END_CUSTOMER_RETAIL",
+							title: "End Customer",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "DEAL_DESC",
+							title: "Deal Description",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "WF_STG_CD",
+							title: "Stage",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "EXPIRE_FLG",
+							title: "Expired",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}
+        			]
+        		}
+        	}
+        	else { // Non-ECAP pt grids
+        		$scope.sumGridOptions = {
+        			filterable: true,
+        			resizable: true,
+        			dataSource: {
+        				type: "json",
+        				transport: {
+        					read: {
+        						url: "/api/Dashboard/GetWipSummary/" + pt.DC_ID,
+        						type: "GET",
+        						dataType: "json"
+        					}
+        				},
+        				schema: {
+        					model: {
+        						id: "DC_ID",
+        						fields: {
+        							DC_ID: { type: "number" },
+        							OBJ_SET_TYPE_CD: { type: "string" },
+        							PASSED_VALIDATION: { type: "string" },
+        							WF_STG_CD: { type: "string" },
+        							START_DT: { type: "date" },
+        							END_DT: { type: "date" },
+        							NOTES: { type: "string" },
+        							TRKR_NBR: { type: "object" },
+        							TITLE: { type: "string" },
+        							DEAL_DESC: { type: "string" },
+        							MAX_RPU: { type: "string" },
+        							WF_STG_CD: { type: "string" }
+        						}
+        					}
+        				}
+        			},
+        			sortable: true,
+        			height: 250,
+        			columns: [
+						{
+							field: "NOTES",
+							title: "Tools",
+							width: "90px",
+							locked: true,
+							template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>",
+							filterable: false,
+						}, {
+							field: "DC_ID",
+							title: "Deal Id",
+							width: "90px",
+							locked: true,
+							template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\" || dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "TRKR_NBR",
+							title: "Tracker Number",
+							width: "150px",
+							locked: true,
+							template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "OBJ_SET_TYPE_CD",
+							title: "Type",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "START_DT",
+							title: "Deal Start/End",
+							width: "170px",
+							template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "TITLE",
+							title: "Product",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "MAX_RPU",
+							title: "Max RPU",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "DEAL_DESC",
+							title: "Deal Description",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}, {
+							field: "WF_STG_CD",
+							title: "Stage",
+							width: "100px",
+							filterable: { multi: true, search: true }
+						}
+        			]
+        		}
+        	}
 
             if ($("#detailGrid_" + pt.DC_ID).length === 0) {
                 var html = "<kendo-grid options='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
