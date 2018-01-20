@@ -9,6 +9,7 @@ using System.Net;
 using System.IO;
 using System.Net.Http.Headers;
 using System;
+using System.Web.Script.Serialization;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -30,11 +31,51 @@ namespace Intel.MyDeals.Controllers.API
             byte[] quoteLetterFinalBytes = null;
             var result = new HttpResponseMessage(HttpStatusCode.OK);
 
-            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(dealId)
+            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(dealId, string.Empty, string.Empty)
                 , $"Unable to download quote letter for {dealId}"
             );
             quoteLetterFinalBytes = quoteLetterFile.Content;
             
+            if (quoteLetterFinalBytes != null)
+            {
+                Stream stream = new MemoryStream(quoteLetterFinalBytes);
+                result.Content = new StreamContent(stream);
+            }
+
+            string fName = quoteLetterFile.Name;
+
+            if (!string.IsNullOrEmpty(fName))
+            {
+                string[] swapString = { "(", ")", "-", "&", "'", "*", "^", " " };
+                foreach (string s in swapString)
+                {
+                    fName = fName.Replace(s, "_");
+                }
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+                result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fName));
+            }
+            else
+                result = Request.CreateResponse(HttpStatusCode.NotFound);
+
+            return result;
+        }
+
+        [HttpPost]
+        [Route("GetDealQuoteLetterPreview")]
+        public HttpResponseMessage GetDealQuoteLetterPreview(AdminQuoteLetter template)
+        {
+            //AdminQuoteLetter template = new JavaScriptSerializer().Deserialize<AdminQuoteLetter>(quoteLetterPreviewdata);
+
+            byte[] quoteLetterFinalBytes = null;
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+
+            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(string.Empty, template.HDR_INFO, template.BODY_INFO)
+            //var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter("502124", string.Empty, string.Empty)
+                , $"Unable to download preview quote letter"
+            );
+            quoteLetterFinalBytes = quoteLetterFile.Content;
+
             if (quoteLetterFinalBytes != null)
             {
                 Stream stream = new MemoryStream(quoteLetterFinalBytes);

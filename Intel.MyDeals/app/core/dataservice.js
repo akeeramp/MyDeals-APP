@@ -15,6 +15,7 @@
             get: get,
             put: put,
             post: post,
+            postArrayBufferResponseType: postArrayBufferResponseType,
             Delete: Delete // 'delete' is a javascript keyword hence using 'Delete'
         };
 
@@ -43,7 +44,19 @@
             return $http.post(apiUrl, dto, {
                 headers: {
                     '__RequestVerificationToken': $http.defaults.headers.common['ReqVerToken']
+                    }                                    
+            }).then(successCallback, errorCallback);
+
+            //return $http.post(apiUrl, dto).then(successCallback, errorCallback);
+        }
+
+        function postArrayBufferResponseType(apiUrl, dto, successCallback, errorCallback) {
+            return $http.post(apiUrl, dto, {
+                headers: {
+                    '__RequestVerificationToken': $http.defaults.headers.common['ReqVerToken']
                 }
+
+                , responseType: 'arraybuffer'
             }).then(successCallback, errorCallback);
 
             //return $http.post(apiUrl, dto).then(successCallback, errorCallback);

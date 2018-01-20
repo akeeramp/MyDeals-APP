@@ -13,7 +13,8 @@
 
         var service = {
             adminGetTemplates: adminGetTemplates,
-            adminSaveTemplate: adminSaveTemplate
+            adminSaveTemplate: adminSaveTemplate,
+            adminPreviewQuoteLetterTemplate: adminPreviewQuoteLetterTemplate
         }
 
         return service;
@@ -24,6 +25,10 @@
 
         function adminSaveTemplate(template) {
             return dataService.put(apiBaseUrl + 'AdminSaveTemplate', template);
+        }
+
+        function adminPreviewQuoteLetterTemplate(template) {
+            return dataService.postArrayBufferResponseType(apiBaseUrl + 'GetDealQuoteLetterPreview', template);
         }
     }
 })();

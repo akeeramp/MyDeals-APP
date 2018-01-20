@@ -91,12 +91,52 @@ namespace Intel.MyDeals.DataLibrary
             return template;
         }
 
-        public QuoteLetterFile GetDealQuoteLetter(string dealId)
+        public QuoteLetterFile GetDealQuoteLetter(string dealId, string headerInfo, string bodyInfo)
         {
-            var quoteLetterData = GetDealQuoteLetterData(dealId, 2); // callMode  = 2
+            QuoteLetterData quoteLetterData;
+
+            //preview quote letter data
+            if (!string.IsNullOrEmpty(headerInfo) && !string.IsNullOrEmpty(bodyInfo))
+                quoteLetterData = SetDealQuoteLetterPreviewData(headerInfo, bodyInfo);
+            else
+                quoteLetterData = GetDealQuoteLetterData(dealId, 2); // callMode  = 3
+
             var quoteLetterPdfBytes = GenerateQuoteLetterPDF(dealId, quoteLetterData, "DEV");  // TBD - VN
 
             return quoteLetterPdfBytes;
+        }
+
+        private QuoteLetterData SetDealQuoteLetterPreviewData(string headerInfo, string bodyInfo)
+        {
+            var quoteLetterData = new QuoteLetterData();
+            var quoteLetterContentData = new QuoteLetterContentInfo();        
+            var quoteLetterTemplateData = new QuoteLetterTemplateInfo();
+
+            quoteLetterContentData.QUOTE_LETTER = @"<PARAMETERS>
+                                                      <Customer>XXX</Customer>
+                                                      <EndCustomer />
+                                                      <StartDate>01/08/2018</StartDate>
+                                                      <EndDate>3/31/2018 </EndDate>
+                                                      <OnAdDate>1/8/2018 </OnAdDate>
+                                                      <Quantity>999999999</Quantity>
+                                                      <ProdSegment>DT</ProdSegment>
+                                                      <ECAPType>Kitted / MCP</ECAPType>
+                                                      <ProdDesc>i7-xxxx</ProdDesc>
+                                                      <ECAPPrice>$2 - 502124 (2018-01-08 - 2018-03-31)</ECAPPrice>
+                                                      <Commit>i7-xxxx</Commit>
+                                                      <CPUECAPPrice>$3 - 502124 (2018-01-08 - 2018-03-31)</CPUECAPPrice>
+                                                      <CPU>i7-xxxx</CPU>
+                                                      <CSECAPPrice>$4 - 502124 (2018-01-08 - 2018-03-31)</CSECAPPrice>
+                                                      <CS>i7-xxxx</CS>
+                                                      <KitCheck>Y</KitCheck>
+                                                    </PARAMETERS>";
+            quoteLetterTemplateData.BODY_INFO = bodyInfo;
+            quoteLetterTemplateData.HDR_INFO = headerInfo;
+
+            quoteLetterData.ContentInfo = quoteLetterContentData;
+            quoteLetterData.TemplateInfo = quoteLetterTemplateData;
+
+            return quoteLetterData;
         }
 
         /// <summary>
@@ -333,7 +373,11 @@ namespace Intel.MyDeals.DataLibrary
             //TBD - VN
             //var cmd = new PR_SAVE_QUOTE_LTTR_DATA
             //{
-            //    DEAL_MBR_SID = dealId,
+            //        (@CUST_MBR_SID INT,
+            //@OBJ_TYPE_SID INT,
+            //@OBJ_SID INT,
+
+                  //DEAL_MBR_SID = dealId,
             //    TRKR_NBR = trkr,
             //    FILE_DATA = pdfBody
             //};

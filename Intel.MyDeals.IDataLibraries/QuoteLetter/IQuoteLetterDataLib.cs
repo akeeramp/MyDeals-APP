@@ -8,6 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
         List<AdminQuoteLetter> AdminGetTemplates();
         AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template);
 
-        QuoteLetterFile GetDealQuoteLetter(string dealId);
+        QuoteLetterFile GetDealQuoteLetter(string dealId, string headerInfo, string bodyInfo);
     }
 }

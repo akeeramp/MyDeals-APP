@@ -67,7 +67,15 @@
         };
 
         $scope.onGeneratePreviewClick = function () {
-            alert('Feature not yet implemented.');
+            quoteLetterService.adminPreviewQuoteLetterTemplate(vm.selectedTemplate)
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    window.open(fileURL, "Quote Letter Preview");
+                    logger.success("Successfully generated quote letter preview.");
+                }, function (response) {
+                    logger.error("Unable to generate quote letter preview.", response, response.statusText);
+                });
         };        
 
         $scope.init();
