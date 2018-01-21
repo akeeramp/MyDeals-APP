@@ -497,7 +497,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Translate PRODUCT_FILTER to English",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.TranslateProductFilter,
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnTenderListLoad },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnDealListLoad },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
                 },
@@ -505,7 +505,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Apply Tender Bid Actions ",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyTenderActionsAndSettings,
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnTenderListLoad },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnDealListLoad },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
 				},

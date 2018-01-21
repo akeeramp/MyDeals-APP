@@ -1,0 +1,114 @@
+﻿
+<script type="text/x-kendo-template" id="custom-toolbar">
+    <div class="search-toolbar">
+        <span>Date Range:</span>
+        <input kendo-date-picker
+               ng-model="startDate"
+               ng-change="root.changeDt(startDate,endDate)"
+               k-ng-model="startDtObject"
+               style="width: 110px;" />
+        <span style="margin: 0 5px;">-</span>
+        <input kendo-date-picker
+               ng-model="endDate"
+               ng-change="root.changeDt(startDate,endDate)"
+               k-ng-model="endDtObject"
+               style="width: 110px;" />
+
+        <span class="t-tip" kendo-tooltip k-position="'top'" k-content="'{{opOptions.messages.help}}'">
+            <span class="k-textbox" style="width: 300px; margin: 0 5px 0 15px;">
+                <input type="text" placeholder="enter search criteria" ng-model="searchText" ng-keypress="EnterPressed($event)" />
+            </span>
+        </span>
+        <i class="k-icon intelicon-search search-search" ng-click="loadData()" style="font-size: 26px !important;" title="Click to begin the Search"></i>
+
+        <div class="fr">
+            <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="saveToExcel()">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Export to Excel<br>
+                                All Columns, All Data
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+
+        <div class="fr">
+            <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="saveCurrentToExcel()">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Export to Excel<br>
+                                Current View
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+
+        <div class="fr">
+            <button class="btn btn-sm ssToolbarBtn" ng-click="clearSortingFiltering()" title="Clear all sorting and filtering." style="margin-top: -5px;">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-cancel-filter-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Clear All<br>
+                                Sorting/Filtering
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+
+        <div class="clearboth"></div>
+    </div>
+</script>
+
+<div id="horizontal-search">
+    <div attribute-search-grid
+         id="attributeGrid"
+         style="height: 500px;"
+         op-options="options"
+         start-date="startDt"
+         end-date="endDt"
+         operator-settings="operatorSettings"
+         attribute-settings="attributeSettings"></div>
+</div>
+
+
+
+<style>
+
+    #horizontal-search {
+        border: 0 solid transparent;
+        height: 100%;
+        font-size: 12px;
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    .tenderDealId {
+        cursor: pointer;
+        color: #00AEEF;
+    }
+
+    .tenderDealId:hover {
+        color: #003C71;
+    }
+
+</style>

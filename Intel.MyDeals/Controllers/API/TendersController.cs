@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.OData;
 using System.Web.Http.OData.Extensions;
 using System.Web.Http.OData.Query;
 using Intel.MyDeals.Entities;
-using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 

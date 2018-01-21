@@ -502,46 +502,74 @@ gridUtils.lookupEditor = function (container, options) {
     }
 }
 
+gridUtils.getDimLabel = function(key) {
+    var dim = "";
+    if (key.indexOf("20____2") >= 0) dim = "SubKit";
+    if (key.indexOf("20_____2") >= 0) dim = "SubKit";
+    if (key.indexOf("20____1") >= 0) dim = "Kit";
+    if (key.indexOf("20_____1") >= 0) dim = "Kit";
+    if (key.indexOf("20___0") >= 0) dim = "Primary";
+    if (key.indexOf("20___1") >= 0) dim = "Secondary 1";
+    if (key.indexOf("20___2") >= 0) dim = "Secondary 2";
+    if (key.indexOf("20___3") >= 0) dim = "Secondary 3";
+    if (key.indexOf("20___4") >= 0) dim = "Secondary 4";
+    if (key.indexOf("20___5") >= 0) dim = "Secondary 5";
+    if (key.indexOf("20___6") >= 0) dim = "Secondary 6";
+    if (key.indexOf("20___7") >= 0) dim = "Secondary 7";
+    if (key.indexOf("20___8") >= 0) dim = "Secondary 8";
+    if (key.indexOf("20___9") >= 0) dim = "Secondary 9";
+
+    return dim;
+}
+
 gridUtils.tenderDim = function (dataItem, field, format) {
     var rtn = [];
     var rtnKit = [];
+    var key,dim,val;
     var ar = dataItem[field];
     if (ar !== undefined && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
-    for (var key in ar) {
-        if (ar.hasOwnProperty(key) && key.indexOf("20___") >= 0) {
-            var dim = "";
-            if (key.indexOf("20____2") >= 0) dim = "SubKit";
-            if (key.indexOf("20_____2") >= 0) dim = "SubKit";
-            if (key.indexOf("20____1") >= 0) dim = "Kit";
-            if (key.indexOf("20_____1") >= 0) dim = "Kit";
-            if (key.indexOf("20___0") >= 0) dim = "Primary";
-            if (key.indexOf("20___1") >= 0) dim = "Secondary 1";
-            if (key.indexOf("20___2") >= 0) dim = "Secondary 2";
-            if (key.indexOf("20___3") >= 0) dim = "Secondary 3";
-            if (key.indexOf("20___4") >= 0) dim = "Secondary 4";
-            if (key.indexOf("20___5") >= 0) dim = "Secondary 5";
-            if (key.indexOf("20___6") >= 0) dim = "Secondary 6";
-            if (key.indexOf("20___7") >= 0) dim = "Secondary 7";
-            if (key.indexOf("20___8") >= 0) dim = "Secondary 8";
-            if (key.indexOf("20___9") >= 0) dim = "Secondary 9";
 
-            var val = ar[key];
-            if (format !== undefined) {
-                if (format === "c" && !isNaN(val)) {
-                    val = kendo.toString(parseFloat(val), format);
-                } else {
-                    val = kendo.toString(val, format);
+    if (dataItem.OBJ_SET_TYPE_CD.toUpperCase() === "ECAP" || dataItem.OBJ_SET_TYPE_CD.toUpperCase() === "KIT") {
+        for (key in ar) {
+            if (ar.hasOwnProperty(key) && key.indexOf("20___") >= 0) {
+                dim = gridUtils.getDimLabel(key);
+
+                val = ar[key];
+                if (format !== undefined) {
+                    if (format === "c" && !isNaN(val)) {
+                        val = kendo.toString(parseFloat(val), format);
+                    } else {
+                        val = kendo.toString(val, format);
+                    }
                 }
-            }
 
-            rtn.push(val);
-            rtnKit.push("<div class='fl dimTenderTitle'>" + dim + ":</div> <div class='fl dimTenderValue'>" + val + "</div> ");
+                rtn.push(val);
+                rtnKit.push("<div class='fl dimTitle'>" + dim + ":</div> <div class='fl dimValue'>" + val + "</div> ");
+            }
         }
+
+        return (rtn.length <= 1) ? rtn.join("<div class='clearboth'></div>") : rtnKit.join("<div class='clearboth'></div>");
+    } else {
+        for (key in ar) {
+            if (ar.hasOwnProperty(key) && key.indexOf("20___") >= 0) {
+                val = ar[key];
+                if (format !== undefined) {
+                    if (format === "c" && !isNaN(val)) {
+                        val = kendo.toString(parseFloat(val), format);
+                    } else {
+                        val = kendo.toString(val, format);
+                    }
+                }
+
+                rtn.push(val);
+            }
+        }
+
+        return rtn.join(", ");
     }
 
-    return (rtn.length <= 1) ? rtn.join("<div class='clearboth'></div>") : rtnKit.join("<div class='clearboth'></div>");
 }
 
 gridUtils.msgIcon = function (dataItem) {
@@ -558,6 +586,94 @@ gridUtils.dialogShow = function () {
     dialog.open();
 }
 
+gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
+    var rows = [{ cells: [] }];
+    var gridColumns = grid.columns;
+    var colWidths = [];
+    var colHidden = false;
+    if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
+
+    // Create element to generate templates in.
+    var elem = document.createElement('div');
+
+    for (var i = 0; i < gridColumns.length; i++) {
+        colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
+        if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
+            rows[0].cells.push({
+                value: gridColumns[i].title,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff"
+            });
+            if (gridColumns[i].width !== undefined) {
+                colWidths.push({ width: gridColumns[i].width });
+            } else {
+                colWidths.push({ autoWidth: true });
+            }
+        }
+    }
+
+    var data = ds.data();
+    for (var i = 0; i < data.length; i++) {
+        //push single row for every record
+
+        var dataItem = data[i];
+        if (dataItem !== undefined && dataItem !== null) {
+            var cells = [];
+            for (var c = 0; c < gridColumns.length; c++) {
+                colHidden = onlyVisible && gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
+                if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
+                    // get default value
+                    var val = dataItem[gridColumns[c].field];
+
+                    // now look for templates
+                    if (gridColumns[c].template || gridColumns[c].excelTemplate) {
+                        var columnTemplate = kendo.template(gridColumns[c].excelTemplate !== undefined
+                            ? gridColumns[c].excelTemplate
+                            : gridColumns[c].template);
+
+                        // Generate the template content for the current cell.
+                        var newHtmlVal = columnTemplate(dataItem);
+                        newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                        elem.innerHTML = newHtmlVal;
+
+                        // Output the text content of the templated cell into the exported cell.
+                        val = (elem.textContent || elem.innerText || "").replace(/null/g, '').replace(/undefined/g, '')
+                            .replace(/LINEBREAKTOKEN/g, '\n');
+                    }
+
+                    cells.push({
+                        value: val,
+                        wrap: true
+                    });
+
+                }
+            }
+
+
+            rows.push({
+                cells: cells
+            });
+        }
+
+
+    }
+    var workbook = new kendo.ooxml.Workbook({
+        sheets: [
+          {
+              columns: colWidths,
+              title: title,
+              frozenRows: 1,
+              rows: rows
+          }
+        ]
+    });
+
+    //save the file as Excel file with extension xlsx
+    kendo.saveAs({ dataURI: workbook.toDataURL(), fileName: "MyDealsSearchResults.xlsx" });
+
+}
+
 gridUtils.stgOneChar = function (dataItem) {
     if (dataItem.WF_STG_CD === "Draft") {
         return dataItem.PS_WF_STG_CD === undefined ? "&nbsp;" : dataItem.PS_WF_STG_CD[0];
@@ -567,15 +683,27 @@ gridUtils.stgOneChar = function (dataItem) {
     }
 }
 
-gridUtils.getBidActions = function (data) {
+gridUtils.getBidActionsLabel = function (data) {
+    var bidActns = gridUtils.getBidActionsList(data);
+    if (bidActns.length === 0) return "Not Actionable";
+    return data.BID_STATUS;
+}
+
+gridUtils.getBidActionsList = function (data) {
     var bidActns = [];
-    if (data.BID_ACTNS === undefined) return "";
     for (var i = 0; i < data.BID_ACTNS.length; i++) {
         bidActns.push({
             "BidActnName": data.BID_ACTNS[i],
             "BidActnValue": data.BID_ACTNS[i]
         });
     }
+    return bidActns;
+}
+
+gridUtils.getBidActions = function (data) {
+    if (data.BID_ACTNS === undefined) return "";
+
+    var bidActns = gridUtils.getBidActionsList(data);
     data["orig_BID_STATUS"] = data.BID_STATUS;
     data.BID_ACTNS = bidActns;
 

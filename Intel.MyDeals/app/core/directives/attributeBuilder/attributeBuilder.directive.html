@@ -1,0 +1,147 @@
+﻿<button class="fr btn btn-sm btn-skyblue btn-primary" type="button" ng-click="runRule()">Run Rule(s)</button>
+
+<div class="fr btn-group" ng-hide="data[0].value === ''">
+    <button class="btn btn-sm btn-default" type="button" ng-click="saveRule()" ng-hide="currentRule === ''">Save Rule(s)</button>
+    <button class="btn btn-sm btn-default" type="button" ng-click="saveAsRule()" ng-show="currentRule === ''">Save Rule(s) As...</button>
+    <button class="btn btn-sm btn-default dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu menu-container" role="menu" style="font-size: 13px;">
+        <li ng-click="saveRule()"><a>Save Rule(s)</a></li>
+        <li ng-click="saveAsRule()"><a>Save Rule(s) As...</a></li>
+        <li ng-click="clearRule()"><a>Clear Rule(s)</a></li>
+    </ul>
+</div>
+
+<h5>Search Options<span class="h5-small">To start a search select your search options</span></h5>
+<div style="margin-left: 70px; font-size: 14px;" ng-show="currentRule === ''">Create new custom search</div>
+<div style="margin-left: 70px; font-size: 14px;" ng-hide="currentRule === ''">
+    Current Rule: <span class="curRule">{{currentRule}}</span> 
+    <i class="icnSky intelicon-trash-outlined" ng-click="deleteRule()" title="Click to delete this rule"></i>
+</div>
+
+
+<div class="filterContainer">
+    <div ng-repeat="dataItem in data" class="filterRow">
+
+        <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
+
+        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)"><i class="intelicon-minus-max"></i></span>
+
+        <span class="fl ">
+            <select kendo-drop-down-list
+                    k-placeholder="'Select field'"
+                    k-data-text-field="'title'"
+                    k-data-value-field="'field'"
+                    k-ng-model="dataItem.field"
+                    k-value-primitive="true"
+                    k-change="changeField"
+                    k-close="closeField"
+                    k-filter="'contains'"
+                    k-auto-bind="true"
+                    k-min-length="3"
+                    k-data-source="attributeDataSource"
+                    class="opUiContainer sm abField"
+                    style="width: 200px;"></select>
+        </span>
+
+        <span class="fl abOperator" ng-hide="dataItem.field === ''">
+            <select kendo-drop-down-list
+                    k-data-text-field="'label'"
+                    k-data-value-field="'operator'"
+                    k-ng-model="dataItem.operator"
+                    k-value-primitive="true"
+                    k-change="changeOper"
+                    k-auto-bind="true"
+                    k-data-source="dataItem.operatorDataSource"
+                    class="opUiContainer sm"
+                    style="width: 150px; margin: 0 15px;"></select>
+        </span>
+
+        <span class="fl abValue" ng-hide="dataItem.operator === ''"></span>
+        
+        <div class="clearboth"></div>
+    </div>
+
+</div>
+
+
+<style>
+    .filterContainer {
+        height: 120px;
+        overflow: auto;
+    }
+     .filterRow {
+         margin-bottom: 7px;
+     }
+    .filterRow .k-dropdown {
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+    }
+
+    .icnBtn {
+        border-radius: 4px;
+        width: 24px;
+        padding: 2px 5px;
+        margin: 2px 12px 2px 0;
+        cursor: pointer;
+    }
+    .icnBtn i {
+        color: #ffffff;
+    }
+    .icnSkyBtn {
+        background-color: #00AEEF;
+    }
+    .icnSkyBtn:hover {
+        background-color: #0071C5;
+    }
+    .icnGryBtn {
+        background-color: #bbbbbb;
+    }
+    .icnGryBtn:hover {
+        background-color: #cccccc;
+    }
+
+    .k-window-titlebar.k-dialog-titlebar.k-header {
+        display: none;
+    }
+
+    .btn-def {
+        margin: 0 0 0 15px;
+    }
+
+    .h5-small {
+        font-size: 12px;
+        color: #444444;
+        font-weight: 200;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .curRule {
+        color: #0071C5;
+        margin-left: 10px;
+    }
+
+    .icnSky {
+        cursor: pointer;
+        color: #00AEEF;
+        margin-left: 8px;
+    }
+
+    .menu-container li a {
+        cursor: pointer;
+    }
+
+    .sm-help {
+        font-size: 11px;
+        color: #666666;
+        line-height: 1.1em;
+    }
+
+    .sm-help I {
+        color: #FFA300;
+    }
+
+</style>

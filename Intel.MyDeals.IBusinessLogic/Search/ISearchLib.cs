@@ -10,5 +10,10 @@ namespace Intel.MyDeals.IBusinessLogic
         SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes, int skip, int take);
 
         DcPath GotoDcId(OpDataElementType opDataElementType, int dcid);
+
+        SearchResultPacket GetNonTenderDealList(SearchParams data);
+
+        SearchResultPacket GetTenderDealList(SearchParams data);
+
     }
 }

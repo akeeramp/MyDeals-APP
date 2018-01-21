@@ -1,0 +1,150 @@
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType"></loading-panel>
+<div ng-include="'/app/core/directives/gridCell/dealToolsHelper.html'"></div>
+
+<div id="horizontal-search">
+    <kendo-grid class="opUiContainer md tender search-grid" options="gridOptions"></kendo-grid>
+</div>
+
+
+
+<style>
+    .k-list-container.k-popup .k-list-scroller {
+        overflow-x: hidden;
+    }
+
+    .t-tip {
+        text-align: center;
+        white-space: nowrap;
+        border-width: 1px;
+        border-style: solid;
+        padding: 1em 0;
+        border: 0 solid transparent;
+    }
+
+    .t-tip .k-tooltip-content {
+        width: 350px;
+    }
+
+    .search-grid.k-grid .k-state-active, .search-grid.k-grid .k-state-active:hover, .search-grid.k-grid .k-active-filter {
+        background-color: #eeeeee;
+    }
+
+    .noaccess {
+        background: #fafafa;
+        margin: -10px;
+        padding: 13px 10px 0 10px;
+        height: 33px;
+        text-align: center;
+        color: #aaaaaa;
+    }
+
+    .k-pager-wrap .k-dropdown {
+        width: 6.0em;
+    }
+
+    .search-search {
+        color: #00AEEF !important;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .search-search:hover {
+        background-color: #dddddd;
+        cursor: pointer;
+    }
+
+    .search-toolbar {
+        height: 30px;
+        color: #666666;
+        padding: 10px;
+    }
+
+    .search-grid.k-grid .k-grid-toolbar {
+        background-color: #ffffff;
+    }
+
+    .search-grid.k-grid .k-grid-content .k-icon.k-i-arrow-60-down {
+        color: #ffffff;
+    }
+
+    .search-grid.k-grid .k-grid-content .k-dropdown-wrap {
+        background-color: #00AEEF;
+    }
+
+    .search-grid.k-grid .k-grid-content .k-dropdown-wrap .k-input {
+        color: #ffffff !important;
+    }
+
+    .search-search .k-grid-toolbar {
+        background-color: #ffffff;
+    }
+
+    .search-grid.k-grid .k-hierarchy-cell {
+        text-align: center;
+    }
+
+    .search-grid.k-grid thead th {
+        white-space: normal;
+    }
+
+    .search-grid.k-grid thead th .k-link {
+        font-size: 11px !important;
+        font-weight: 200;
+        line-height: 1.1em;
+        font-family: 'Intel Clear', 'Arial';
+    }
+
+    .search-grid.k-grid td {
+        white-space: nowrap;
+    }
+
+    .search-grid.k-grid tr.k-alt {
+        background-color: transparent;
+    }
+
+    .search-grid.k-grid tr.k-alt:hover, .search-grid.k-grid tr:hover {
+        background-color: rgba(0,174,239,0.05);
+    }
+
+    .opUiContainer.search-grid .k-grid-header, .opUiContainer.search-grid .k-grid-header .k-header,
+    .opUiContainer.search-grid .k-pager-wrap, .opUiContainer.search-grid .k-pager-numbers .k-state-selected,
+    .opUiContainer.search-grid .k-grid-footer, .opUiContainer.search-grid .k-grid-footer td,
+    .opUiContainer.search-grid .k-scheduler-header, .opUiContainer.search-grid .km-pane-wrapper .k-grid-header .k-header {
+        background-color: #fafafa;
+    }
+
+    .dimTitle {
+        font-size: 11px;
+        color: #aaaaaa;
+        padding-right: 5px;
+        display: inline-block;
+        width: 70px;
+        line-height: 1.3em;
+    }
+
+    .dimValue {
+        font-size: 11px;
+        line-height: 1.3em;
+    }
+
+    .search-grid {
+        height: 100%;
+    }
+
+    .search-grid .op-grid-container {
+        padding: 0;
+    }
+
+    .search-grid .k-detail-row > .k-detail-cell > div:first-child {
+        margin: 0;
+    }
+
+    .search-grid .k-i-collapse, .search-grid .k-i-expand {
+        color: #0071C5;
+        font-size: 20px !important;
+    }
+
+    .ssToolbarBtn {
+        padding: 3px 1px;
+    }
+</style>

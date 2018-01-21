@@ -1,0 +1,263 @@
+﻿
+<script type="text/x-kendo-template" id="custom-toolbar">
+    <div class="search-toolbar">
+
+        <h5>Search Results<span class="h5-small">Filter your search options in the grid for further detail</span></h5>
+
+        <div class="fl">
+            <select kendo-combo-box
+                    k-placeholder="'Select saved rules'"
+                    k-data-text-field="'title'"
+                    k-data-value-field="'title'"
+                    k-filter="'contains'"
+                    k-auto-bind="false"
+                    k-ng-model="ruleToRun"
+                    k-data-source="rulesDataSource"
+                    style="width: 250px;"></select>
+        </div>
+
+        <div class="fr">
+            <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="saveToExcel()">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Export to Excel<br>
+                                All Columns, All Data
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+        
+        <div class="fr">
+            <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="saveCurrentToExcel()">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Export to Excel<br>
+                                Current View
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+
+        <div class="fr">
+            <button class="btn btn-sm ssToolbarBtn" ng-click="clearSortingFiltering()" title="Clear all sorting and filtering." style="margin-top: -5px;">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="border: 0px solid transparent;">
+                                <i class="intelicon-cancel-filter-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                            </td>
+                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                Clear Grid's<br>
+                                Sorting/Filtering
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </button>
+        </div>
+        
+        <div class="fr attrbMenu" style="margin-left: 4px;">
+            <ul kendo-menu k-options="columnMenu">
+                <li>
+                    <i class="fl intelicon-view-by-columns skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
+                    <span class="fl skyBlue" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                    <i style="font-size: 40px !important; width: 1px !important; color: \\#00AEEF;"></i>
+                    <ul>
+                        <li>
+                            <div style="padding: 0 10px;">
+                                <div>
+                                    <span class="k-textbox k-space-left" style="width: 100%; margin-bottom: 10px;">
+                                        <input type="search" ng-model="columnSearchFilter" />
+                                        <a class="k-icon intelicon-search"></a>
+                                    </span>
+                                </div>
+                                <div style="max-height: 200px; overflow: auto;">
+                                    <div ng-repeat="item in gridOptions.columns | filter:{title: columnSearchFilter} | orderBy: 'title'" class="chkColItem">
+                                        <input type='checkbox' checked='checked' class='sub-menu-checkbox check' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}' />
+                                        <label for="colChk{{item.field}}">
+                                            <span ng-bind-html="item.title"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="clearboth"></div>
+    </div>
+</script>
+
+<div class="show-hide-options">
+    <span ng-show="showSearchFilters" ng-click="toggleFilters()">
+        <i class="intelicon-up"></i> Hide Search Options
+    </span>
+    <span ng-show="!showSearchFilters" ng-click="toggleFilters()">
+        <i class="intelicon-down"></i> Show Search Options
+    </span>
+</div>
+
+<div id="horizontal-search">
+    <div id="search-info-container" ng-show="showSearchFilters">
+        
+        <div class="left-container">
+            <div class="left-inner-container">
+                <h5>Search</h5>
+                <p>
+                    <i>Default filter is auto populated from the dashboard but you may overwrite at anytime. This will not change your dashboard filters.</i>
+                </p>
+
+                <div style="margin-bottom: 20px;">
+                    <label title="{{showCustomers()}}">Customer:</label>
+                    <select kendo-multi-select
+                            k-data-text-field="'CUST_NM'"
+                            k-data-value-field="'CUST_SID'"
+                            k-filter="'contains'"
+                            k-auto-bind="true"
+                            k-tag-mode="'single'"
+                            k-value-primitive="false"
+                            k-ng-model="customers"
+                            k-auto-close="false"
+                            k-data-source="customersDataSource"
+                            style="width: 258px; margin-right: 7px;" class="fr"></select>
+                </div>
+
+                <div>
+                    <label>Date Range:</label>
+                    <input kendo-date-picker
+                           ng-model="startDt"
+                           ng-change="changeDt(startDate,endDate)"
+                           k-ng-model="startDtObject"
+                           style="width: 110px;"/>
+                    <span style="margin: 0 10px;">to</span>
+                    <input kendo-date-picker
+                           ng-model="endDt"
+                           ng-change="changeDt(startDate,endDate)"
+                           k-ng-model="endDtObject"
+                           style="width: 110px;"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-container">
+            <div class="right-inner-container">
+                <div attribute-builder 
+                     grid-id="'attributeGrid'"
+                     operator-settings="operatorSettings"
+                     attribute-settings="attributeSettings"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div attribute-search-grid 
+         id="attributeGrid" 
+         style="height: 500px;" 
+         op-options="options" 
+         start-date="startDt" 
+         end-date="endDt" 
+         customers="customers" 
+         custom-filter="ruleData"
+         operator-settings="operatorSettings"
+         attribute-settings="attributeSettings"></div>
+</div>
+
+
+
+<style>
+
+    #horizontal-search {
+        border: 0 solid transparent;
+        height: 100%;
+        font-size: 12px;
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    #search-info-container {
+        width: 100%;
+        margin: auto;
+    }
+
+    .search-toolbar {
+        padding: 0 15px;
+    }
+
+    .search-toolbar h5, #search-info-container h5 {
+        margin-top: 0;
+        color: #003C71;
+        font-weight: 600;
+    }
+    #search-info-container label {
+        font-weight: normal;
+        font-size: 16px;
+        margin-right: 10px;
+        width: 90px;
+    }
+
+    #search-info-container .left-container {
+        width: 400px;
+        float: left;
+    }
+    #search-info-container .left-inner-container {
+        border: 1px solid transparent;
+        border-radius: 6px;
+        padding: 20px 10px 20px 20px;
+    }
+
+    #search-info-container .right-container {
+        padding: 20px 10px 20px 900px;
+        margin-left: -480px;
+    }
+    #search-info-container .right-inner-container {
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        padding: 10px;
+        height: 190px;
+    }
+
+    .btn-skyblue {
+        background-color: #00AEEF;
+        border-color: #00AEEF;
+        margin: 0 0 0 15px;
+    }
+    .btn-skyblue:hover {
+        background-color: #0071C5;
+    }
+
+    .show-hide-options {
+        color: #00AEEF;
+        cursor: pointer;
+        position: absolute; 
+        top: 1px; 
+        right: 20px; 
+        z-index: 2000;
+        font-size: 12px;
+    }
+    .show-hide-options:hover {
+        color: #0071C5;
+    }
+
+    .attrbMenu .k-link {
+        padding: 3px 20px !important;
+    }
+    .attrbMenu .k-state-hover .k-link {
+        background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
+    }
+</style>

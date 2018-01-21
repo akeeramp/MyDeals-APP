@@ -7,7 +7,7 @@
     userPreferencesService.$inject = ['$cacheFactory', '$q', '$http', 'dataService'];
 
     function userPreferencesService($cacheFactory, $q, $http, dataService) {
-        var URL = '/api/UserPreferences/'
+        var URL = '/api/UserPreferences/';
 
         return {
             getActions: getActions

@@ -193,7 +193,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Apply Tender Rules
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
             {
-                dc.ApplyRules(MyRulesTrigger.OnTenderListLoad, null, prods);
+                dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, prods);
             }
 
             // Convert data to Client-Ready format

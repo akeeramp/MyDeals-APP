@@ -17,8 +17,11 @@
 .ss-loading-panel {
 	background-color: #ffffff;
 	margin-top: 200px;
-	margin-left: 30%;
-	min-height: 100px;
+    margin-left: 40%;
+    /*margin-left: -webkit-calc(50% - 150px);
+    margin-left: -moz-calc(50% - 150px);
+    margin-left: calc(50% - 150px);*/
+    min-height: 100px;
 	width: 300px;
 	border-radius: 5px;
 	padding: 10px;

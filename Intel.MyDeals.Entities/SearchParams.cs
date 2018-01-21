@@ -1,13 +1,20 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 namespace Intel.MyDeals.Entities
 {
     public class SearchParams
     {
+        public SearchParams()
+        {
+            Customers = new List<int>();
+        }
+
         public string StrWhere { get; set; }
         public DateTime StrStart { get; set; }
         public DateTime StrEnd { get; set; }
+        public List<int> Customers { get; set; }
         public string StrSearch { get; set; }
         public string StrFilters { get; set; }
         public string StrSorts { get; set; }

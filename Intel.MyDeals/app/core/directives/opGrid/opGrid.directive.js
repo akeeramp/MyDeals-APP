@@ -650,9 +650,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //scrollable: {
                 //    virtual: true // <--- Test to improve performance, loads slightly faster but messes up scrolling quickly through large data, virtualization can't keep up with out large set
                 //},
-                excel: {
-                    allPages: true
-                },
+                //excel: {
+                //    allPages: true
+                //},
                 sortable: true,
                 editable: $scope.isEditable,
                 navigatable: true,
@@ -737,10 +737,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.exportToExcelCustomColumns = function () {
+                // this doens't work becuase the template comiled is not binging to Angular... would need to bind each cell one by one and thoat would be expensive
+                //gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", true);
                 $scope.grid.saveAsExcel();
             }
 
             $scope.exportToExcel = function () {
+                //gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", false);
+                //return;
 
                 var excludeFields = $scope.exportableExcludeFields;
 

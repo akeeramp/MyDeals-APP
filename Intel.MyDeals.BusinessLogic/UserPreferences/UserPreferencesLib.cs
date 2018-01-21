@@ -31,6 +31,15 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Get user preference by key for the current user
+        /// </summary>
+        /// <returns>Instance of UserPreferences</returns>
+        public UserPreferences GetUserPreference(string category, string subCategory, string key)
+        {
+            return _userPreferencesDataLib.GetUserPreferences(category, subCategory).FirstOrDefault(k => k.PRFR_KEY == key);
+        }
+
+        /// <summary>
         /// Add/Update a single user preference (key-value pair) for the current user
         /// </summary>
         /// <returns>list of UserPreferences</returns>

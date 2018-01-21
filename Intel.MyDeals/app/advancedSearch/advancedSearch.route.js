@@ -59,6 +59,24 @@
                 }
             },
             {
+                state: 'advancedSearch.attributeSearch',
+                abstract: false,
+                config: {
+                    templateUrl: '/app/advancedSearch/attributeSearch.html',
+                    url: 'attributeSearch',
+                    controller: 'attributeSearchController'
+                }
+            },
+            {
+                state: 'advancedSearch.tenderSearch',
+                abstract: false,
+                config: {
+                    templateUrl: '/app/advancedSearch/tenderSearch.html',
+                    url: 'tenderSearch',
+                    controller: 'tenderSearchController'
+                }
+            },
+            {
                 state: 'advancedSearch.gotoPs',
                 config: {
                     url: 'gotoPs/{dcid:int}',

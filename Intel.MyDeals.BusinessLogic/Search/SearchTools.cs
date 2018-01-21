@@ -76,6 +76,9 @@ namespace Intel.MyDeals.BusinessLogic
                     if (fieldInfo != null)
                     {
                         tick = stringDataTypes.Contains(((MyDealsAttribute)fieldInfo.GetValue(null)).DATA_TYPE_CD) ? "'" : "";
+                    } else if (atrb == "Customer/CUST_DIV_NM")
+                    {
+                        tick = "'";
                     }
                 }
                 string passedAtrb = atrb == "DC_ID" ? "OBJ_SID" : atrb;

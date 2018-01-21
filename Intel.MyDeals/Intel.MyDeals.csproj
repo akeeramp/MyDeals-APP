@@ -223,7 +223,6 @@
     <Folder Include="app\dealManager\" />
     <Folder Include="app\errorHandling\" />
     <Folder Include="app\reporting\" />
-    <Folder Include="app\shared\directives\" />
     <Folder Include="App_Data\" />
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
@@ -356,6 +355,10 @@
     <Content Include="app\admin\workflow\admin.workflow.controller.js" />
     <Content Include="app\admin\workflow\workflow.html" />
     <Content Include="app\admin\workflow\workflow.service.js" />
+    <Content Include="app\advancedSearch\tenderSearch.html" />
+    <Content Include="app\advancedSearch\tenderSearch.controller.js" />
+    <Content Include="app\advancedSearch\attributeSearch.html" />
+    <Content Include="app\advancedSearch\attributeSearch.controller.js" />
     <Content Include="app\advancedSearch\psSearch.html" />
     <Content Include="app\advancedSearch\psSearch.controller.js" />
     <Content Include="app\advancedSearch\dealSearch.controller.js" />
@@ -459,6 +462,10 @@
     <Content Include="app\contract\partials\wipDeals.html" />
     <Content Include="app\admin\iCostProducts\admin.iCostProduct.service.js" />
     <Content Include="app\admin\iCostProducts\admin.iCostProducts.controller.js" />
+    <Content Include="app\core\directives\attributeBuilder\attributeBuilder.directive.html" />
+    <Content Include="app\core\directives\attributeBuilder\attributeBuilder.directive.js" />
+    <Content Include="app\core\directives\attributeSearch\attributeSearchGrid.directive.html" />
+    <Content Include="app\core\directives\attributeSearch\attributeSearchGrid.directive.js" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
     <Content Include="app\core\directives\csrfRequestVerificationToken.js" />
