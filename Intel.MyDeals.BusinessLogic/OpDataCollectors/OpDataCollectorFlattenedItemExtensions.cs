@@ -192,6 +192,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             // Get Product string already approved by Product Entry.  We should be able to trust these values
             string products = opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString();
+            var productDrawingOrder = new List<string>();
+            if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+            {
+                productDrawingOrder = opFlatItem[AttributeCodes.PRD_DRAWING_ORD].ToString().Split(',').ToList();
+            }
 
             try
             {
@@ -227,6 +232,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
                     {
                         pMaps.AddRange((List<ProdMapping>)kvp.Value);
+                    }
+                    if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+                    {
+                        pMaps = pMaps.OrderBy(p => productDrawingOrder.IndexOf(p.PRD_MBR_SID)).ToList();
                     }
                     foreach (string g in geos)
                     {
@@ -328,7 +337,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             ////below used for calculating NORTHBRIDGE_SPLIT in KIT deals
             //string CHIPSET = "CS";
             //List<string> chipsetEcapDims = new List<string>();
-            //double northbridgeSum = 0.00;     
+            //double northbridgeSum = 0.00;
 
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
@@ -386,13 +395,13 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                             //{
                             //    chipsetEcapDims.Add("ECAP_PRICE" + baseKitDimKey + dim);
                             //}
-                            
-                        } else
+                        }
+                        else
                         {
                             opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;  //why did this only have 4 underscores?
                         }
                         dim++;
-                            
+
                         pTitle.Add(pMap.HIER_VAL_NM);
                         pCat.Add(pMap.PRD_CAT_NM);
                         bool l1, l2;
@@ -428,7 +437,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     opFlatItem[AttributeCodes.HAS_L1] = pHasL1;
                     opFlatItem[AttributeCodes.HAS_L2] = pHasL2;
                     opFlatItem[AttributeCodes.TITLE] = string.Join(",", pTitle);
-                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat.Distinct());  
+                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat.Distinct());
 
                     break;
             }
@@ -441,7 +450,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 }
                 else if (multiDimAtrbs.IndexOf(key) >= 0 || key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0 || key.IndexOf(AttributeCodes.ECAP_PRICE) == 0)
                 {
-                    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0 && opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() != "KIT")  
+                    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0 && opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() != "KIT")
                     {
                         newItem[key + baseEcapDimKey] = opFlatItem[key];
                     }

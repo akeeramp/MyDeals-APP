@@ -424,13 +424,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return p.PRD_MBR_SID;
         }).join(',');
 
+        kitReOrderObject.contractProducts = addedProducts.map(function (p) {
+            return p.DERIVED_USR_INPUT;
+        }).join(',');
+
         return kitReOrderObject;
     }
 
     function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
         var validatedSelectedProducts = productSelectorOutput.validateSelectedProducts;
         if (!productSelectorOutput.splitProducts) {
-            var usrInput = updateUserInput(validatedSelectedProducts);
+            var usrInput = updateUserInput(validatedSelectedProducts, productSelectorOutput.contractProduct);
             var contractProducts = usrInput.contractProducts;
 
             //PTR_SYS_PRD
@@ -2587,8 +2591,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     var kitObject = populateValidProducts(transformResults.ValidProducts[key]);
                     transformResults.ValidProducts[key] = kitObject.ReOrderedJSON;
+                    var userInput = updateUserInput(transformResults.ValidProducts[key], kitObject.contractProducts);
+                } else {
+                    var userInput = updateUserInput(transformResults.ValidProducts[key]);
                 }
-                var userInput = updateUserInput(transformResults.ValidProducts[key]);
                 var contractProducts = userInput.contractProducts;
                 data[r].PTR_USER_PRD = contractProducts;
                 sourceData[r].PTR_USER_PRD = contractProducts;
@@ -2724,13 +2730,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                                     var kitObject = populateValidProducts(transformResult.ValidProducts[key]);
                                     transformResult.ValidProducts[key] = kitObject.ReOrderedJSON;
+                                    var products = updateUserInputFromCorrector(transformResult.ValidProducts[key],
+                                                        transformResult.AutoValidatedProducts[key], kitObject.contractProducts);
+                                } else {
+                                    var products = updateUserInputFromCorrector(transformResult.ValidProducts[key],
+                                                        transformResult.AutoValidatedProducts[key]);
                                 }
-                                data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
-                                sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
 
-                                var products = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key]);
                                 data[r].PTR_USER_PRD = products.contractProducts;
                                 sourceData[r].PTR_USER_PRD = products.contractProducts;
+
+                                data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
+                                sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
 
                                 // VOL_TIER update exclude products
                                 if (root.colToLetter["PRD_EXCLDS"] != undefined) {
@@ -2867,12 +2878,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-    function updateUserInput(validProducts) {
-
+    function updateUserInput(validProducts, kiProducts) {
         if (!validProducts) {
             return "";
         }
         var input = { 'contractProducts': '', 'excludeProducts': '' };
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+            input.contractProducts = kiProducts;
+            return input;
+        }
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
                 var contractProducts = "";
@@ -2914,11 +2928,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return input;
     }
 
-    function updateUserInputFromCorrector(validProducts, autoValidatedProducts) {
+    function updateUserInputFromCorrector(validProducts, autoValidatedProducts, kiProducts) {
         if (!validProducts) {
             return "";
         }
         var products = { 'contractProducts': '', 'excludeProducts': '' };
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+            products.contractProducts = kiProducts;
+            return products;
+        }
         for (var prd in validProducts) {
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
                 var autoTranslated = {};

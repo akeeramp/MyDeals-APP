@@ -895,10 +895,15 @@
 
             // For kit deals re arrange the products primary secondary
             var prdDrawingOrd = "";
+            var contractProduct = "";
             if (vm.dealType === "KIT") {
                 vm.addedProducts = $filter('kitProducts')(vm.addedProducts, 'DEAL_PRD_TYPE');
                 prdDrawingOrd = vm.addedProducts.map(function (p) {
                     return p.PRD_MBR_SID;
+                }).join(',');
+
+                contractProduct = vm.addedProducts.map(function (p) {
+                    return p.DERIVED_USR_INPUT;
                 }).join(',');
             }
 
@@ -921,7 +926,10 @@
             });
 
             //Only for kit prdDrawingOrd will be populated
-            var productSelectorOutput = { 'splitProducts': vm.splitProducts, 'validateSelectedProducts': pricingTableSysProducts, 'prdDrawingOrd': prdDrawingOrd };
+            var productSelectorOutput = {
+                'splitProducts': vm.splitProducts, 'validateSelectedProducts': pricingTableSysProducts,
+                    'prdDrawingOrd': prdDrawingOrd, 'contractProduct': contractProduct
+            };
             $uibModalInstance.close(productSelectorOutput);
         }
 
