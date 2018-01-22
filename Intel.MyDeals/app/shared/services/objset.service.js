@@ -3,9 +3,9 @@
     .factory('objsetService', objsetService);
 
 // Minification safe dependency injection
-objsetService.$inject = ['$http', 'dataService', 'logger', '$q'];
+objsetService.$inject = ['$http', 'dataService', 'logger', '$q', '$location'];
 
-function objsetService($http, dataService, logger, $q) {
+function objsetService($http, dataService, logger, $q, $location) {
     // defining the base url on top, subsequent calls in the service
     // will be action methods under this controller
     var apiBaseContractUrl = "/api/Contracts/v1/";
@@ -20,6 +20,7 @@ function objsetService($http, dataService, logger, $q) {
         createContract: createContract,
         copyContract: copyContract,
         readContract: readContract,
+        readCopyContract:readCopyContract,
         updateContract: updateContract,
         deleteContract: deleteContract,
         isDuplicateContractTitle: isDuplicateContractTitle,
@@ -79,7 +80,15 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.post(apiBaseContractUrl + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId, [ct]);
     }
     function readContract(id) {
-    	// NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
+        // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
+        return dataService.get(apiBaseContractUrl + 'GetUpperContract/' + id);
+    }
+    function readCopyContract() {
+        var queryParameters = $location.search();
+        var id = queryParameters["copycid"]; // Property is case sensitive
+        if (id === undefined) {
+            return;
+        }
         return dataService.get(apiBaseContractUrl + 'GetUpperContract/' + id);
     }
     function updateContract(custId, contractId, ct) {
@@ -148,8 +157,8 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.get(apiBaseTenderUrl + 'GetChildren/' + id);
     }
 
-    
-	// #### PRICING TABLE ROW ####
+
+    // #### PRICING TABLE ROW ####
     function deletePricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
     }
@@ -174,7 +183,7 @@ function objsetService($http, dataService, logger, $q) {
         if (forceValidation && forcePublish) {
             return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } else if (forceValidation) {
-        	return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
+            return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } else {
             // Make sure we alsways validate and translate...
             //return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);

@@ -8,11 +8,10 @@
 
 
     SetRequestVerificationToken.$inject = ['$http'];
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, $localStorage, $linq, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    function ContractController($scope, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
-        //
         $scope.templates = $scope.templates || templateData.data;
         $scope.constants = contractManagerConstants;
         $scope.isContractDetailsPage = $state.current.name === $scope.constants.ContractDetails;
@@ -32,12 +31,6 @@
         $scope.isAutoSaving = false;
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
-
-        $scope.copyContractData = null;
-        $scope.isCopyContract = false;
-        if ($location.url().split('copycid=').length > 1) {
-            $scope.isCopyContract = true;
-        }
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -501,11 +494,7 @@
             }
 
             var getCurrentQuarterDetails = function () {
-                var customerMemberSid = $scope.contractData
-                    .CUST_MBR_SID ==
-                    ""
-                    ? null
-                    : $scope.contractData.CUST_MBR_SID;
+                var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
                 var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, new Date, null, null)
                     .then(function (response) {
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
@@ -519,43 +508,23 @@
                             $scope.contractData._behaviors.validMsg['END_DT'] = "";
 
                         // By default we dont want a contract to be backdated
-                        if (! $scope.isCopyContract) {
-                            $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today)
-                                ? today
-                                : moment(response.data.QTR_STRT).format('l');
+                        $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today)
+                            ? today
+                            : moment(response.data.QTR_STRT).format('l');
 
-                            $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
-                        }
-                        else {
-                            // If we are copying a contract, default the relevant fields.
-                            objsetService.readContract($location.url().split('copycid=')[1]).then(function (data) {
-                                $scope.copyContractData = data;
+                        $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
 
-                                $scope.contractData.TITLE = $scope.copyContractData.data[0].TITLE + ' (copy)';
-                                $scope.contractData.CUST_MBR_SID = $scope.copyContractData.data[0].CUST_MBR_SID;
-                                $scope.contractData.START_DT = moment($scope.copyContractData.data[0].START_DT).format('l');
-                                $scope.contractData.START_QTR = $scope.copyContractData.data[0].START_QTR;
-                                $scope.contractData.START_YR = $scope.copyContractData.data[0].START_YR;
-                                $scope.contractData.END_DT = moment($scope.copyContractData.data[0].END_DT).format('l');
-                                $scope.contractData.END_QTR = $scope.copyContractData.data[0].END_QTR;
-                                $scope.contractData.END_YR = $scope.copyContractData.data[0].END_YR;
-                                $scope.contractData.CUST_ACCNT_DIV = $scope.copyContractData.data[0].CUST_ACCNT_DIV;
-                                $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split('/');
-                            });
-                        }
 
                         $timeout(function () {
                             resetQtrYrDirty();
-                        },
-                            500);
+                        }, 500);
 
                         // Unwatch all the dates, quarter and year, else they will go crazy
                         unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = true;
 
                         $timeout(function () {
                             unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
-                        },
-                            500);
+                        }, 500);
                     },
                     function (response) {
                         errInGettingDates(response);
@@ -594,7 +563,26 @@
                 }
             }
 
-            if ($scope.contractData.DC_ID <= 0) {
+            $scope.isCopyContract = false;
+            $scope.copyContractData = null;
+            if ($location.url().split('copycid=').length > 1) {
+                $scope.isCopyContract = true;
+
+                // Copy contract properties from source contract
+                $scope.copyContractData = copyContractData.data[0];
+                $scope.contractData.TITLE = $scope.copyContractData.TITLE + ' (copy)';
+                $scope.contractData.CUST_MBR_SID = $scope.copyContractData.CUST_MBR_SID;
+                $scope.contractData.START_DT = moment($scope.copyContractData.START_DT).format('l');
+                $scope.contractData.START_QTR = $scope.copyContractData.START_QTR;
+                $scope.contractData.START_YR = $scope.copyContractData.START_YR;
+                $scope.contractData.END_DT = moment($scope.copyContractData.END_DT).format('l');
+                $scope.contractData.END_QTR = $scope.copyContractData.END_QTR;
+                $scope.contractData.END_YR = $scope.copyContractData.END_YR;
+                $scope.contractData.CUST_ACCNT_DIV = $scope.copyContractData.CUST_ACCNT_DIV;
+                $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split('/');
+            }
+
+            if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) {
                 getCurrentQuarterDetails();
             } else {
                 updateQuarterByDates('START_DT', $scope.contractData.START_DT);
@@ -605,8 +593,7 @@
                 !$scope.isNewContract
                     ? $scope.status = { 'isOpen': true }
                     : setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
-            },
-                300);
+            }, 300);
         }
 
         // File save methods and variable
@@ -1539,8 +1526,7 @@
                         }
 
                         wip.WF_STG_CD = $scope.messages[0].ShortMessage;
-                        if ($scope.messages.length > 1)
-                        {
+                        if ($scope.messages.length > 1) {
                             wip.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
                         }
                         $scope.$broadcast('refresh');
@@ -2427,8 +2413,8 @@
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
 
                         if (!!$scope.spreadDs) {
-							$scope.spreadDs.read();
-							$scope.syncCellValidationsOnAllRows($scope.pricingTableData.PRC_TBL_ROW);
+                            $scope.spreadDs.read();
+                            $scope.syncCellValidationsOnAllRows($scope.pricingTableData.PRC_TBL_ROW);
                         }
                     }
 
@@ -2757,7 +2743,7 @@
                 var pivotFieldName = "NUM_OF_TIERS";
                 // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
                 if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
-                    if(dataItem["NUM_OF_TIERS"] !== undefined) return dataItem["NUM_OF_TIERS"];
+                    if (dataItem["NUM_OF_TIERS"] !== undefined) return dataItem["NUM_OF_TIERS"];
                     var pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
                     dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
                     return pivotVal;
@@ -2817,7 +2803,7 @@
                         }
 
                         lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
-                    	lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true); 
+                        lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true);
                     }
                     newData.push(lData);
                 }
@@ -2826,22 +2812,22 @@
         }
 
         $scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
-        	return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
+            return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
         }
 
         $scope.calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
-        	var kitRebateTotalVal = 0;
-        	for (var i = 0; i < numOfTiers; i++) {
-        		if (isDataPivoted) {
-        			kitRebateTotalVal += (parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
-        		} else {
-        			if (i < data.length) {
-        				kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
-        			}
-        		}
-        	}
-        	var rebateVal = (kitRebateTotalVal - parseInt(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
-        	return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
+            var kitRebateTotalVal = 0;
+            for (var i = 0; i < numOfTiers; i++) {
+                if (isDataPivoted) {
+                    kitRebateTotalVal += (parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
+                } else {
+                    if (i < data.length) {
+                        kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
+                    }
+                }
+            }
+            var rebateVal = (kitRebateTotalVal - parseInt(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
+            return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
         }
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
@@ -2864,40 +2850,40 @@
                 dimKey = prodDimKey;
                 dimAtrbs = $scope.kitDimAtrbs;
                 isKit = 1;
-			}
+            }
 
             for (var d = 0; d < data.length; d) {
                 var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
 
                 for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
-                	if (t === 1 - isKit) { lData = data[d]; }
-                	for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
-                		lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
+                    if (t === 1 - isKit) { lData = data[d]; }
+                    for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
+                        lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
 
-                		if (t === numTiers - isKit) { // last tier
-                			delete lData[dimAtrbs[a]];
+                        if (t === numTiers - isKit) { // last tier
+                            delete lData[dimAtrbs[a]];
 
-                			if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                				// Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
-                				//		which might leave those dimensions with data, and save stray attributes with no product association in our db.
-                				for (var i =0 ; i < 10; i++) { // KITTODO: Replace "10" with a constant max Products value instead
-                					var tierToDel = (t + 1 + i);
-                					lData[dimAtrbs[a] + dimKey + tierToDel] = "";
-                				}
-                			}
-                		}
-                	}
-                	// NOTE: the length of the data is the number of rows. But we need to iterate by the number of
-                	//		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT.
-                	//		Hence why we increment d and break on d === data.length manually.
-                	//		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
-                	//		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier.
-                	d++;
-                	if (d === data.length) {
-                		break;
-                	}
+                            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                                // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
+                                //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
+                                for (var i = 0 ; i < 10; i++) { // KITTODO: Replace "10" with a constant max Products value instead
+                                    var tierToDel = (t + 1 + i);
+                                    lData[dimAtrbs[a] + dimKey + tierToDel] = "";
+                                }
+                            }
+                        }
+                    }
+                    // NOTE: the length of the data is the number of rows. But we need to iterate by the number of
+                    //		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT.
+                    //		Hence why we increment d and break on d === data.length manually.
+                    //		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
+                    //		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier.
+                    d++;
+                    if (d === data.length) {
+                        break;
+                    }
                 }
-				newData.push(lData);
+                newData.push(lData);
             }
 
             return newData;
@@ -3087,7 +3073,7 @@
             if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
 
             // Add to DB first... then add to screen
-            objsetService.copyContract($scope.getCustId(), $scope.contractData.DC_ID, $scope.copyContractData.data[0].DC_ID, ct).then(
+            objsetService.copyContract($scope.getCustId(), $scope.contractData.DC_ID, $scope.copyContractData.DC_ID, ct).then(
                 function (data) {
                     $scope.updateResults(data.data.CNTRCT, ct);
 
@@ -3790,19 +3776,19 @@
         $scope.downloadQuoteLetter = function (dealdId) {
 
             //document.location.href = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId ;
-            var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId ;
+            var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId;
             window.open(downloadPath, '_blank', '');
-                //$scope.attachmentCount = response.data.length;
-                //$scope.initComplete = true;
-                //hasFiles = response.data.length > 0;
-                //setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
-                //},
-                //,function (response){
-                //    logger.error("Unable to download quote letter pdf.", response, response.statusText);
-                //    //$scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                //    //$scope.initComplete = true;
-                //    //hasFiles = false;
-                //});
+            //$scope.attachmentCount = response.data.length;
+            //$scope.initComplete = true;
+            //hasFiles = response.data.length > 0;
+            //setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
+            //},
+            //,function (response){
+            //    logger.error("Unable to download quote letter pdf.", response, response.statusText);
+            //    //$scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+            //    //$scope.initComplete = true;
+            //    //hasFiles = false;
+            //});
 
             //return deferred.promise;
         }

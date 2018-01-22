@@ -35,6 +35,9 @@
                                 securityLoaded: ['securityService', function (securityService) {
                                     return securityService.loadSecurityData();
                                 }],
+                                copyContractData: ['objsetService', function (objsetService) {
+                                    return objsetService.readCopyContract();
+                                }]
                             }
                         }
                     }
