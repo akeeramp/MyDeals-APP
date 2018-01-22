@@ -276,6 +276,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
+            myDealsData.FillInHolesFromAtrbTemplate();
+
             foreach (OpDataElementType opDataElementType in myDealsData.Keys)
             {
                 data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,

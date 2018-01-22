@@ -16,7 +16,7 @@
 
         <span class="t-tip" kendo-tooltip k-position="'top'" k-content="'{{opOptions.messages.help}}'">
             <span class="k-textbox" style="width: 300px; margin: 0 5px 0 15px;">
-                <input type="text" placeholder="enter search criteria" ng-model="searchText" ng-keypress="EnterPressed($event)" />
+                <input type="text" placeholder="enter search criteria" ng-model="root.searchText" ng-keypress="EnterPressed($event)" />
             </span>
         </span>
         <i class="k-icon intelicon-search search-search" ng-click="loadData()" style="font-size: 26px !important;" title="Click to begin the Search"></i>

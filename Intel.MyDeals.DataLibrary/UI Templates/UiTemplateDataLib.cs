@@ -1104,7 +1104,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.BID_STATUS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
-                Template = "#=gridUtils.uiControlWrapper(data, 'BID_STATUS')#",
+                Template = "#=gridUtils.showBidStatusWip(data)#",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 90

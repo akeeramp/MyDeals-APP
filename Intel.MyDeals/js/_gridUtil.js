@@ -818,6 +818,11 @@ gridUtils.getBidActions = function (data) {
         'style="width: 100%;"></select>';
 }
 
+gridUtils.showBidStatusWip = function(data) {
+    if (data.WF_STG_CD === "Draft") return "<i>Not Actionable</i>";
+    return data.BID_STATUS;
+}
+
 gridUtils.stgFullTitleChar = function (dataItem) {
     return dataItem.WF_STG_CD === "Draft" ? dataItem.PS_WF_STG_CD : dataItem.WF_STG_CD;
 }
