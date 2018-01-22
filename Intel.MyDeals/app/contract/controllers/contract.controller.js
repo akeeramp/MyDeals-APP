@@ -580,6 +580,7 @@
                 $scope.contractData.END_YR = $scope.copyContractData.END_YR;
                 $scope.contractData.CUST_ACCNT_DIV = $scope.copyContractData.CUST_ACCNT_DIV;
                 $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split('/');
+                $scope.updateCorpDivision($scope.copyContractData.CUST_MBR_SID);
             }
 
             if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) {
