@@ -116,6 +116,12 @@ namespace Intel.MyDeals.DataLibrary
         public FileAttachmentData GetFileAttachmentData(int fileId)
         {
             OpLog.Log("GetFileAttachmentData");
+
+            // get current user details
+            var opUserToken = OpUserStack.MyOpUserToken.EnsurePopulated();
+            if (opUserToken.Role?.RoleTypeCd == null) //sequential check to be safe. Then check to see if they have a role
+                return null;                          //No role = deny file access
+
             var ret = new List<FileAttachmentData>();
             try
             {
