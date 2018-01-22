@@ -15,6 +15,15 @@ namespace Intel.MyDeals.Entities
         public string template { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string excelTemplate { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string excelHeaderLabel { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool bypassExport { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool hidden { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

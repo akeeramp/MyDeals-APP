@@ -738,13 +738,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.exportToExcelCustomColumns = function () {
                 // this doens't work becuase the template comiled is not binging to Angular... would need to bind each cell one by one and thoat would be expensive
-                //gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", true);
-                $scope.grid.saveAsExcel();
+                gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", true);
+                //$scope.grid.saveAsExcel();
             }
 
             $scope.exportToExcel = function () {
-                //gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", false);
-                //return;
+                gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", false);
+                return;
 
                 var excludeFields = $scope.exportableExcludeFields;
 

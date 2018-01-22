@@ -806,7 +806,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#"
+                Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#",
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -819,7 +820,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "<deal-detail ng-model='dataItem'></deal-detail>"
+                Template = "<deal-detail ng-model='dataItem'></deal-detail>",
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -835,7 +837,8 @@ namespace Intel.MyDeals.DataLibrary
                 Locked = true,
                 Lockable = false,
                 Template = "<deal-tools ng-model='dataItem' is-editable='true'></deal-tools>",
-                HeaderTemplate = "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>"
+                HeaderTemplate = "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>",
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -848,7 +851,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
                 IsReadOnly = true,
                 DataType = "string",
-                Template = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}'></i></div></div>"
+                Template = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}'></i></div></div>",
+                ExcelTemplate = "#=PASSED_VALIDATION#",
+                ExcelHeaderLabel = "Validation Status"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit only
             {
@@ -883,7 +888,8 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Customer",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 100
+                Width = 100,
+                ExcelTemplate = "#=Customer.CUST_NM#"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP All types + Dimensioned by Prod Bucket
@@ -895,10 +901,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'TRKR_NBR', '20___0')#",
                 DataType = "object",
                 IsFilterable = true,
-                IsSortable = true
-                //Format = "{0:c}",
-                //UiType = "NumericTextBox",
-                //Editor = "multiDimEditor"
+                IsSortable = true,
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'TRKR_NBR', '20___0')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -910,7 +914,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 100,
-                IsRequired = true
+                IsRequired = true,
+                ExcelTemplate = "#=gridUtils.formatDate(START_DT)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -922,7 +927,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 100,
-                IsRequired = true
+                IsRequired = true,
+                ExcelTemplate = "#=gridUtils.formatDate(END_DT)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -952,7 +958,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiParentControlWrapper(data, 'PS_WF_STG_CD')#",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 100
+                Width = 100,
+                ExcelTemplate = "#=gridUtils.stgFullTitleChar(data)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1016,7 +1023,8 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Products",
                 IsDimKey = true,
                 IsReadOnly = true,
-                DataType = "string"
+                DataType = "string",
+                ExcelTemplate = "#=PTR_USER_PRD#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1087,7 +1095,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'ON_ADD_DT', \"date:'MM/dd/yyyy'\")#",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 110
+                Width = 110,
+                ExcelTemplate = "#=gridUtils.formatDate(ON_ADD_DT)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit types
             {
@@ -1110,7 +1119,8 @@ namespace Intel.MyDeals.DataLibrary
                 Editor = "scheduleEditor",
                 DataType = "object",
                 Label = "Rate Breakout",
-                Width = 300
+                Width = 300,
+                ExcelTemplate = "#=gridUtils.exportControlScheduleWrapper(data)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP types
             {
@@ -1125,7 +1135,8 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "dropdownName",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 150
+                Width = 150,
+                ExcelTemplate = "#=DEAL_SOLD_TO_ID#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP, KIT types
             {
@@ -1209,7 +1220,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
@@ -1224,7 +1236,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'ECAP_PRICE', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types
             {
@@ -1240,7 +1253,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types
             {
@@ -1256,7 +1270,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'SUBKIT_ECAP', '20___0', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake Atrb, placeholder for dispaly purposes only
             {
@@ -1271,6 +1286,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
@@ -1285,6 +1301,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
@@ -1299,6 +1316,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
@@ -1313,7 +1331,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'DSCNT_PER_LN', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
@@ -1328,7 +1347,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'QTY', 'number')#",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'QTY', 'number')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -1343,6 +1363,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -1358,7 +1379,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor"
+                Editor = "multiDimEditor",
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit, Tender types
             {
@@ -1371,7 +1393,8 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
-                Format = "{0:c}"
+                Format = "{0:c}",
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit types
             {
@@ -1384,7 +1407,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsHidden = true,
-                Width = 100
+                Width = 100,
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP_STRT_DT', 'date')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit types
             {
@@ -1397,7 +1421,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsHidden = true,
-                Width = 100
+                Width = 100,
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP_END_DT', 'date')#"
             });
 
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
@@ -1412,6 +1437,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 IsReadOnly = true,
                 Template = "#=gridUtils.uiDimInfoControlWrapper(data, 'YCS2')#",
+                BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP types + Dimension by Prod Bucket
             {
@@ -1425,7 +1451,8 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
-                Format = "{0:c}"
+                Format = "{0:c}",
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_PRC_IRBT', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP types + Dimension by Prod Bucket
             {
@@ -1438,7 +1465,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsHidden = true,
-                Width = 100
+                Width = 100,
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_START_DT', 'date')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP types + Dimension by Prod Bucket
             {
@@ -1451,7 +1479,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsHidden = true,
-                Width = 100
+                Width = 100,
+                ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_END_DT', 'date')#"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP ECAP types + Dimension by Prod Bucket
@@ -1489,7 +1518,8 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_BILLING_START', \"date:'MM/dd/yyyy'\")#"
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_BILLING_START', \"date:'MM/dd/yyyy'\")#",
+                ExcelTemplate = "#=gridUtils.formatDate(REBATE_BILLING_START)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1499,7 +1529,8 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_BILLING_END', \"date:'MM/dd/yyyy'\")#"
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_BILLING_END', \"date:'MM/dd/yyyy'\")#",
+                ExcelTemplate = "#=gridUtils.formatDate(REBATE_BILLING_END)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1524,250 +1555,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
             });
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.PRD_COST,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 100,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'PRD_COST', 'currency')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COST_TYPE_USED,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 150,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TYPE_USED')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COST_TEST_RESULT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 100,
-            //    Label = "Cost Test Result",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_RESULT')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COST_TEST_FAIL_OVERRIDE,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 180,
-            //    Label = "Price Cost Test Analysis Override Comments",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_FAIL_OVERRIDE')#",
-            //    LookupUrl = "/api/Dropdown/GetDropdowns/COST_TEST_OVERRIDE",
-            //    LookupText = "DROP_DOWN",
-            //    LookupValue = "DROP_DOWN"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COST_TEST_FAIL_OVERRIDE_REASON,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 180,
-            //    Label = "Price Cost Test Analysis Override",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_FAIL_OVERRIDE_REASON')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 140,
-            //    Label = "Meet Comp Analysis",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEET_COMP_PRICE_QSTN')#",
-            //    LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
-            //    LookupText = "DROP_DOWN",
-            //    LookupValue = "DROP_DOWN"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COMP_SKU,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 110,
-            //    Label = "Comp Sku",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_SKU')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COMP_SKU_OTHR,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 100,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_SKU_OTHR')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COMPETITIVE_PRICE,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 110,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Label = "Comp Price",
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMPETITIVE_PRICE', 'currency')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COMP_BENCH,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 120,
-            //    Label = "Comp Bench",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_BENCH')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.IA_BENCH,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 100,
-            //    Label = "IA Bench",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'IA_BENCH')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 140,
-            //    Label = "Comp Target System Price",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_TARGET_SYSTEM_PRICE', 'currency')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.MEETCOMP_TEST_RESULT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 120,
-            //    Label = "Meet Comp Test Results",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_RESULT')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 160,
-            //    Label = "Meet Comp Analysis Override",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 180,
-            //    Label = "Meet Comp Analysis Override Comments",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE_REASON')#"
-            //});
-
-            //         items.Add(new UiTemplateContainerItem
-            //         {
-            //             Id = 29,
-            //             AtrbCd = AttributeCodes.RETAIL_CYCLE,
-            //             ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //             Width = 140,
-            //             IsFilterable = true,
-            //             IsSortable = true,
-            //	UiType = "ComboBox",
-            //	Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
-            //             LookupUrl = "api/Dropdown/GetRetailPull", // TODO: uncomment the GetRetailPull function in the API or remove it
-            //	LookupText = "dropdownName",
-            //	LookupValue = "dropdownName",
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.RETAIL_PULL,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 120,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL', 'currency')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.RETAIL_PULL_USR_DEF,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 120,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF', 'currency')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 160,
-            //    Label = "Retail Pull$ User Defined Comments",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF_CMNT')#"
-            //});
-
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.ECAP_FLR,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 110,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'ECAP_FLR')#"
-            //});
-
+            
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3596,

@@ -39,6 +39,9 @@ namespace Intel.MyDeals.Entities
         public string LookupUrl { get; set; }
         public string LookupText { get; set; }
         public string LookupValue { get; set; }
+        public string ExcelTemplate { get; set; }
+        public string ExcelHeaderLabel { get; set; }
+        public bool BypassExport { get; set; }
         public string HeaderTemplate { get; set; }
         public string Template { get; set; }
         public string Editor { get; set; }

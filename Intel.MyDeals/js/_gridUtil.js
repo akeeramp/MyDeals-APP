@@ -42,8 +42,6 @@ gridUtils.uiParentControlWrapper = function (dataItem) {
     return tmplt;
 }
 
-
-
 gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -54,6 +52,7 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
     tmplt += '</div>';
     return tmplt;
 }
+
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     var tmplt = '';
     if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
@@ -70,6 +69,39 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     }
     return tmplt;
 }
+gridUtils.exportDimControlWrapper = function (passedData, field, dim, format) {
+    var tmplt = '';
+    if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
+        //no subkit allowed case
+        tmplt += 'No Sub KIT';
+    } else {
+        if (passedData[field] !== undefined) {
+            var val = passedData[field][dim];
+            val = gridUtils.formatValue(val, format);
+            tmplt += val;
+        }
+    }
+    return tmplt;
+}
+
+gridUtils.formatValue = function (val, format) {
+    if (val === undefined) {
+        val = "";
+    }
+    else if (format !== undefined) {
+        if (format === "currency") {
+            if (!isNaN(val))
+                val = kendo.toString(parseFloat(val), "c");
+        } else if (format === "number") {
+            if (!isNaN(val))
+                val = kendo.toString(parseFloat(val), "n");
+        } else if (format === "date") {
+            val = moment(val).format("MM/DD/YYYY");
+        }
+    }
+    return val;
+}
+
 gridUtils.uiCustomerControlWrapper = function (passedData, field, altField) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv isReadOnlyCell">';
@@ -78,6 +110,7 @@ gridUtils.uiCustomerControlWrapper = function (passedData, field, altField) {
     tmplt += '</div>';
     return tmplt;
 }
+
 gridUtils.uiControlEndDateWrapper = function (passedData, field, format) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
@@ -88,6 +121,7 @@ gridUtils.uiControlEndDateWrapper = function (passedData, field, format) {
     tmplt += '</div>';
     return tmplt;
 }
+
 gridUtils.uiControlScheduleWrapper = function (passedData) {
     var tmplt = '<table>';
     var fields = [
@@ -127,6 +161,35 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
 
     return tmplt;
 }
+gridUtils.exportControlScheduleWrapper = function (passedData) {
+    var tmplt = 'Tier, Start Vol, End Vol, Rate\n';
+    var fields = [
+        { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Start Vol", "field": "STRT_VOL", "format": "number", "align": "right" },
+        { "title": "End Vol", "field": "END_VOL", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
+        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+    ];
+
+    var numTiers = 0;
+    var tiers = passedData.TIER_NBR;
+    for (var key in tiers) {
+        if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+            numTiers++;
+            var dim = "10___" + numTiers;
+            var vals = [];
+            for (var f = 0; f < fields.length; f++) {
+                var val = passedData[fields[f].field][dim];
+                if (val !== "Unlimited") {
+                    val = gridUtils.formatValue(val, fields[f].format);
+                }
+                vals.push(val);
+            }
+            tmplt += vals.join(", ").replace(/null/g, '').replace(/undefined/g, '') + '\n';
+        }
+    }
+
+    return tmplt;
+}
 
 //this control wrapper to be used for dimentionalized attributes (0-based index, so not for VT attributes like numTiers)
 gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
@@ -149,6 +212,22 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
 
     if (tmplt == '<table></table>') {   //if table comes out empty, just set same behavior as single dim version, generally just a blank readonly div
         tmplt = gridUtils.uiDimControlWrapper(passedData, field, '20___0', format);
+    }
+
+    return tmplt;
+}
+gridUtils.exportPositiveDimControlWrapper = function (passedData, field, format) {
+    var data = passedData[field];
+
+    var tmplt = '';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+            var val = passedData[field][dimkey];
+            if (val !== "Unlimited") {
+                val = gridUtils.formatValue(val, format);
+            }
+            tmplt += val + '\n';
+        }
     }
 
     return tmplt;
@@ -257,6 +336,7 @@ gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
     tmplt += '</div>';
     return tmplt;
 }
+
 //this control wrapper is only used to calculate SKIT deal's SUBKIT_REBATE_BUNDLE_DISCOUNT
 gridUtils.uiSubKitRebateBundleDiscountControlWrapper = function (passedData) {
     var tmplt = '';
@@ -346,6 +426,7 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
 
     return tmplt;
 }
+
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
         ? passedData[field].join()
@@ -372,12 +453,14 @@ gridUtils.uiMasterChildWrapper = function (passedData, field) {
     tmplt += '</div>';
     return tmplt;
 }
+
 gridUtils.uiIconWrapper = function (passedData, field, format) {
     var tmplt = '<div class="isDirtyIconGridContainer">';
     tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.' + field + '}"></i>';
     tmplt += '</div>';
     return tmplt;
 }
+
 gridUtils.concatDimElements = function (passedData, field) {
 
     var data = [];
@@ -419,6 +502,7 @@ gridUtils.renderCustNm = function (data) {
     }
     return custs.join(',');
 }
+
 gridUtils.renderMasterChild = function (data) {
     if (data.dc_type === 'PRC_TBL_ROW' || data.dc_type === 'MASTER') return '<b>Master</b>';
     if (data.dc_type === 'WIP_DEAL') return 'Child';
@@ -427,6 +511,10 @@ gridUtils.renderMasterChild = function (data) {
 
 gridUtils.onDataValueChange = function (e) {
     return null;
+}
+
+gridUtils.formatDate = function (data) {
+    return moment(data).format("MM/DD/YYYY");
 }
 
 gridUtils.cancelChanges = function (e) {
@@ -599,12 +687,18 @@ gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
     for (var i = 0; i < gridColumns.length; i++) {
         colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
         if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
+            var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
+                ? gridColumns[i].excelHeaderLabel
+                : gridColumns[i].title;
+
             rows[0].cells.push({
-                value: gridColumns[i].title,
+                value: colTitle,
                 textAlign: "center",
                 background: "#0071C5",
-                color: "#ffffff"
+                color: "#ffffff",
+                wrap: true
             });
+
             if (gridColumns[i].width !== undefined) {
                 colWidths.push({ width: gridColumns[i].width });
             } else {
@@ -628,9 +722,15 @@ gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
 
                     // now look for templates
                     if (gridColumns[c].template || gridColumns[c].excelTemplate) {
-                        var columnTemplate = kendo.template(gridColumns[c].excelTemplate !== undefined
+                        var templateHtml = gridColumns[c].excelTemplate !== undefined
                             ? gridColumns[c].excelTemplate
-                            : gridColumns[c].template);
+                            : gridColumns[c].template;
+
+                        if (templateHtml.indexOf("gridUtils.uiControlWrapper") >= 0) {
+                            templateHtml = "#=" + gridColumns[c].field + "#";
+                        }
+
+                        var columnTemplate = kendo.template(templateHtml);
 
                         // Generate the template content for the current cell.
                         var newHtmlVal = columnTemplate(dataItem);
