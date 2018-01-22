@@ -5,16 +5,19 @@
 <div style="font-size: 14px; line-height: 1.1em; text-align: center; position: absolute; top: 5px; right: 18px;"
      title="click to change Contract Acceptance Criteria">
     <span style="color: #0071C5;">Customer Acceptance</span>
-    <toggle class="toggle-accept"
-            ng-change="pendingChange()"
-            ng-model="isPending"
-            on="Pending"
-            off="Accepted"
-            ng-if="root.contractData.CUST_ACCPT !== 'Acceptance Not Required'"
-            ng-disabled="root.contractData._behaviors.isReadOnly.CUST_ACCPT === true"
-            onstyle="btn-success"
-            size="btn-xs"
-            style="width: 140px !important"></toggle>
+    <span ng-click="test()">{{isPending}}</span>
+    <span id="toggle-container">
+        <toggle class="toggle-accept"
+                ng-change="pendingChange()"
+                ng-model="isPending"
+                on="Pending"
+                off="Accepted"
+                ng-if="root.contractData.CUST_ACCPT !== 'Acceptance Not Required'"
+                ng-disabled="root.contractData._behaviors.isReadOnly.CUST_ACCPT === true"
+                onstyle="btn-success"
+                size="btn-xs"
+                style="width: 140px !important"></toggle>
+    </span>
     <!--ng-disabled="hideIfNotPending"-->
     <toggle class="toggle-accept"
             ng-model="isPending"

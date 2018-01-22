@@ -22,6 +22,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.canFilterDealTypes = false;
     $scope.$parent.isSummaryHidden = false;
     $scope.hideIfNotPending = root.contractData.CUST_ACCPT !== "Pending";
+    $scope.isPending = root.contractData.CUST_ACCPT === "Pending";
     $scope.pendingWarningActions = [];
     $scope.showPendingInfo = true;
     $scope.showPendingFile = false;
@@ -199,8 +200,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         });
     }
 
-    $scope.isPending = root.contractData.CUST_ACCPT === "Pending";
     $scope.pendingChange = function (e) {
+        $scope.togglePending();
+    }
+    $scope.togglePending = function() {
         if (!$scope.isPending) {
             $scope.isPending = true;
             root.contractData.CUST_ACCPT = "Pending";
@@ -643,19 +646,22 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     };
 
 
-
+    $scope.test = function() {
+        $scope.togglePending();
+    }
 
     $scope.closeDialog = function () {
-        $timeout(function () {
-            if ($scope.isPending) {
-                $scope.isPending = false;
-                $scope.root.contractData.CUST_ACCPT = "Accepted";
-            } else {
-                $scope.isPending = true;
-                $scope.root.contractData.CUST_ACCPT = "Pending";
-            }
-            $scope.$apply();
-        }, 500);
+        $scope.togglePending();
+
+        // This is pretty bad... please don't tell anyone I did this :)
+        // The toggle is setup like Angular but really only one way binding.
+        // Some... I redraw and rebind to scope to toggle it back.
+        var html = $("#toggle-container").html();
+        var template = angular.element(html);
+        var linkFunction = $compile(template);
+        linkFunction($scope);
+        $("#toggle-container").html(template);
+
         $scope.dialogPendingWarning.close();
     }
     $scope.continueAction = function (fromToggle, checkForRequirements) {
