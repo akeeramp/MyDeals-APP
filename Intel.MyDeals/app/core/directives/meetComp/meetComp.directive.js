@@ -1404,7 +1404,7 @@
                                             });
                                     }
                                     else {
-                                        logger.warning('No Deal Details found in the system');
+                                        logger.warning('No overlapping deals found');
                                     }
 
 
