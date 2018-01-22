@@ -33,6 +33,7 @@ namespace Intel.MyDeals.BusinessRules
             string passedValidation = r.Dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION);
             string pct = r.Dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
             string mct = r.Dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
+            bool mctMissing = r.Dc.GetDataElementValue(AttributeCodes.COMP_MISSING_FLG) == "1";
             string role = opUserToken.Role.RoleTypeCd;
             bool pctFailed = pct != "Pass" && pct != "NA";
             bool mctFailed = mct != "Pass" && mct != "NA";
@@ -97,6 +98,11 @@ namespace Intel.MyDeals.BusinessRules
                     objsetActionItem.ActionReasons[action] = "Pricing Strategy did not pass validation.";
                 }
 
+                if (action == "Approve" && mctMissing)
+                {
+                    objsetActionItem.Actions[action] = false;
+                    objsetActionItem.ActionReasons[action] = "Meet Comp Data is missing.  Please go to the Meet Comp Screen to populate missing data.";
+                }
 
                 // TODO when PCT and MCT is ready... remove the following lines
                 //pctFailed = false;
