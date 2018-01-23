@@ -307,7 +307,7 @@
                                             COMP_OVRRD_FLG: { validation: { required: true } },
                                             GRP: { validation: { required: true } },
                                             COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
-                                            CUST_NM_SID: { editable: false, validation: { required: true } },
+                                            CUST_NM_SID: { editable: false, validation: { required: true } },                                            
                                             DEAL_OBJ_TYPE_SID: { editable: false, validation: { required: true } },
                                             GRP_PRD_NM: { editable: false, validation: { required: true } },
                                             GRP_PRD_SID: { editable: false, validation: { required: true } },
@@ -538,9 +538,9 @@
                                     },
                                     {
                                         field: "COMP_SKU",
-                                        title: "Meet Comp SKU",
-                                        template: "<div class='#if(canUpdateMeetCompSKUPriceBench === false){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
+                                        title: "Meet Comp SKU",                                       
                                         width: 170,
+                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompSKUEditor
                                     },
@@ -549,7 +549,7 @@
                                         title: "Meet Comp Price",
                                         width: 150,
                                         format: "{0:c}",
-                                        template: "<div class='#if(canUpdateMeetCompSKUPriceBench === false){#readOnlyCell#}){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
+                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompPriceEditor
                                     },
@@ -592,14 +592,14 @@
                                         width: 150,
                                         editor: meetCompResultStatusEditor,
                                         template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_FLG#</div>",
-                                        filterable: { multi: true, search: true },
+                                        filterable: { multi: true, search: true},
                                         hidden: hideViewMeetCompOverride
                                     },
                                     {
                                         field: "COMP_OVRRD_RSN",
                                         title: "Analysis Override Comments",
                                         width: 220,
-                                        filterable: { multi: true, search: true },
+                                        filterable: { multi: true, search: true},
                                         template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_RSN#</div>",
                                         hidden: hideViewMeetCompOverride
                                     },
@@ -668,7 +668,7 @@
                             function editorIABench(container, options) {
                                 // Remove the role conditions once security configured
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG === "Y"
-                                        && options.model.COMP_SKU.length !== 0 && options.model.PRD_CAT_NM.toLowerCase() === "svrws")) {
+                                    && options.model.COMP_SKU.length !== 0 && options.model.PRD_CAT_NM.toLowerCase() === "svrws")) {
                                 }
                                 else {
                                     $('<input id="IA_BNCH' + options.field + '" data-bind="value:' + options.field + '"/>')
@@ -742,7 +742,7 @@
 
                             function editorCOMPBench(container, options) {
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG === "Y"
-                                        && options.model.COMP_SKU.length !== 0 && options.model.PRD_CAT_NM.toLowerCase() === "svrws")) {
+                                    && options.model.COMP_SKU.length !== 0 && options.model.PRD_CAT_NM.toLowerCase() === "svrws")) {
                                 }
                                 else {
                                     $('<input id="COMP_BNCH' + options.field + '"  data-bind="value:' + options.field + '"/>')
@@ -1442,7 +1442,7 @@
                                                     COMP_OVRRD_FLG: { validation: { required: true } },
                                                     GRP: { validation: { required: true } },
                                                     COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
-                                                    CUST_NM_SID: { editable: false, validation: { required: true } },
+                                                    CUST_NM_SID: { editable: false, validation: { required: true } },                                                    
                                                     DEAL_DESC: { editable: false, validation: { required: true } },
                                                     DEAL_OBJ_TYPE_SID: { editable: false, validation: { required: true } },
                                                     DEAL_PRD_TYPE: { editable: false, validation: { required: true } },
@@ -1598,7 +1598,7 @@
                                             field: "COMP_SKU",
                                             title: "Meet Comp SKU",
                                             width: 170,
-                                            template: "<div class='#if(canUpdateMeetCompSKUPriceBench === false){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
+                                            template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                             filterable: { multi: true, search: true },
                                             editor: meetCompSKUEditor
                                         },
@@ -1607,7 +1607,7 @@
                                             title: "Meet Comp Price",
                                             width: 150,
                                             format: "{0:c}",
-                                            template: "<div class='#if(canUpdateMeetCompSKUPriceBench === false){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
+                                            template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
                                             filterable: { multi: true, search: true },
                                             editor: meetCompPriceEditor
                                         },
