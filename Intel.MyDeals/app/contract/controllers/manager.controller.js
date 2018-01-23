@@ -497,8 +497,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         							TRKR_NBR: { type: "object" },
         							TITLE: { type: "string" },
         							DEAL_DESC: { type: "string" },
-        							MAX_RPU: { type: "string" },
-        							WF_STG_CD: { type: "string" }
+        							MAX_RPU: { type: "string" }
         						}
         					}
         				}

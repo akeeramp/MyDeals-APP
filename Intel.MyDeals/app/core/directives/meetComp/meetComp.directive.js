@@ -150,6 +150,7 @@
                             $scope.isBusy = false;
                             $scope.selectedIDS = [];
 
+                            var isValid = false;
                             if (usrRole == "GA") {
                                 var isValid = isModelValid($scope.meetCompMasterdata);
                             }
@@ -307,7 +308,7 @@
                                             COMP_OVRRD_FLG: { validation: { required: true } },
                                             GRP: { validation: { required: true } },
                                             COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
-                                            CUST_NM_SID: { editable: false, validation: { required: true } },                                            
+                                            CUST_NM_SID: { editable: false, validation: { required: true } },
                                             DEAL_OBJ_TYPE_SID: { editable: false, validation: { required: true } },
                                             GRP_PRD_NM: { editable: false, validation: { required: true } },
                                             GRP_PRD_SID: { editable: false, validation: { required: true } },
@@ -538,7 +539,7 @@
                                     },
                                     {
                                         field: "COMP_SKU",
-                                        title: "Meet Comp SKU",                                       
+                                        title: "Meet Comp SKU",
                                         width: 170,
                                         template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                         filterable: { multi: true, search: true },
@@ -1442,7 +1443,7 @@
                                                     COMP_OVRRD_FLG: { validation: { required: true } },
                                                     GRP: { validation: { required: true } },
                                                     COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
-                                                    CUST_NM_SID: { editable: false, validation: { required: true } },                                                    
+                                                    CUST_NM_SID: { editable: false, validation: { required: true } },
                                                     DEAL_DESC: { editable: false, validation: { required: true } },
                                                     DEAL_OBJ_TYPE_SID: { editable: false, validation: { required: true } },
                                                     DEAL_PRD_TYPE: { editable: false, validation: { required: true } },
