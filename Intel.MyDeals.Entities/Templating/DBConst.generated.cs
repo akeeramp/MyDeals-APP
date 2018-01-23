@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/5/2018 4:53:03 PM
+File Updated: 1/23/2018 4:06:28 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1051,7 +1051,7 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3669
 		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
+		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string HAS_L1 = "HAS_L1";
 
@@ -1060,7 +1060,7 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3670
 		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
+		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string HAS_L2 = "HAS_L2";
 

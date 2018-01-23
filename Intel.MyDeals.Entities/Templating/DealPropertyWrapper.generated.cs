@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/5/2018 4:53:24 PM
+File Updated: 1/23/2018 4:06:52 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1841,14 +1841,14 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Has L1 Product",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3669,
-			DATA_TYPE_CD = "BIT",
+			DATA_TYPE_CD = "INT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Boolean",
-			FRMT_MSK = "{0}",
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "CheckBox"
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute HAS_L2 = new MyDealsAttribute()
 		{
@@ -1857,14 +1857,14 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Has L2 Product",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3670,
-			DATA_TYPE_CD = "BIT",
+			DATA_TYPE_CD = "INT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Boolean",
-			FRMT_MSK = "{0}",
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "CheckBox"
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute HAS_SUBKIT = new MyDealsAttribute()
 		{
