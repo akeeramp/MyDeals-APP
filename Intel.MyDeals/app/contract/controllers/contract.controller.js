@@ -2827,7 +2827,7 @@
                     }
                 }
             }
-            var rebateVal = (kitRebateTotalVal - parseInt(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
+            var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
             return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
         }
 
@@ -3668,8 +3668,8 @@
                 },
                 { reload: true });
         }
-        $scope.backToPricingTable = function () {
-            if ($scope.isPtr) return;
+        $scope.backToPricingTable = function () {    
+        	if ($scope.isPtr) return;
 
             if (!$scope._dirty) {
                 $scope.switchingTabs = true;

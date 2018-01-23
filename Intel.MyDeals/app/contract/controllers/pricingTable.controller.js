@@ -247,7 +247,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // TODO maybe we need to clean up items past data length to merge = 1
             //debugger;
-            sheet.range("A" + (rowOffset - numDeleted) + ":ZZ" + root.ptRowCount).unmerge();
+            sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge();
 
         });
 
@@ -305,8 +305,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.wipData = root.pricingTableData.WIP_DEAL;
 
-        // If no data was returned, we should redirect back to PTR
-        if (root.wipData.length === 0) {
+    	// If no data was returned, we should redirect back to PTR
+        if (root.wipData.length === 0 || $scope.curPricingTable.PASSED_VALIDATION == "Dirty") { // Make PT dirty
             $state.go('contract.manager.strategy',
                 {
                     cid: $scope.contractData.DC_ID,
@@ -640,7 +640,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
 					        sourceData[(rowIndex - 1)]["dirty"] = true;
 
-					        // Update Total Discount per line and Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
+					        // Update Total Discount per line if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
 					            // Transform negative numbers into positive
 					            if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
@@ -1188,7 +1188,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
                         data[n + a - (offset - 1)].id = null;
                     	// Clear out any tiered values because this is a new row
-                        data[n + a - (offset - 1)]["CAP_PRICE"] = 0;
+                        data[n + a - (offset - 1)]["ECAP_PRICE"] = 0;
                         data[n + a - (offset - 1)]["DSCNT_PER_LN"] = 0;
                         data[n + a - (offset - 1)]["QTY"] = 1;
                         data[n + a - (offset - 1)]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
