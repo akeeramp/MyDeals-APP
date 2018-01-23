@@ -89,6 +89,7 @@ gridUtils.uiDimTrkrControlWrapper = function (passedData) {
     var dim = "";
     var field = "TRKR_NBR";
     var data = passedData[field];
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
@@ -104,9 +105,10 @@ gridUtils.uiDimTrkrControlWrapper = function (passedData) {
         tmplt += '    <div class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] )"></div>';
     }
 
-    for (var dimkey in data) { //only looking for positive dim keys
-        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-            tmplt += '    <div class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] )"></div>';
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dim = sortedKeys[index];
+        if (data.hasOwnProperty(dim) && dim.indexOf("___") >= 0 && dim.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+            tmplt += '    <div class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] )"></div>';
         }
     }
 
@@ -119,6 +121,7 @@ gridUtils.exportDimTrkrControlWrapper = function (passedData) {
     var dim = "";
     var field = "TRKR_NBR";
     var data = passedData[field];
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '';
     if (passedData[field] !== undefined) {
@@ -133,9 +136,10 @@ gridUtils.exportDimTrkrControlWrapper = function (passedData) {
             tmplt += ", ";
         }
 
-        for (var dimkey in data) { //only looking for positive dim keys
-            if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-                tmplt += passedData[field][dimkey];
+        for (var index in sortedKeys) { //only looking for positive dim keys
+            dim = sortedKeys[index];
+            if (data.hasOwnProperty(dim) && dim.indexOf("___") >= 0 && dim.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+                tmplt += passedData[field][dim];
                 tmplt += ", ";
             }
         }
@@ -258,9 +262,11 @@ gridUtils.exportControlScheduleWrapper = function (passedData) {
 //this control wrapper to be used for dimentionalized attributes (0-based index, so not for VT attributes like numTiers)
 gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
     var data = passedData[field];
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '<table>';
-    for (var dimkey in data) {
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dimkey = sortedKeys[index];
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
@@ -282,9 +288,11 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
 }
 gridUtils.exportPositiveDimControlWrapper = function (passedData, field, format) {
     var data = passedData[field];
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '';
-    for (var dimkey in data) {
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dimkey = sortedKeys[index];
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             var val = passedData[field][dimkey];
             if (val !== "Unlimited") {
@@ -299,6 +307,7 @@ gridUtils.exportPositiveDimControlWrapper = function (passedData, field, format)
 
 gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
     var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var YCS2modifier = "";
     if (field === "YCS2") {
@@ -306,7 +315,8 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
     }
 
     var tmplt = '<table>';
-    for (var dimkey in data) {
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dimkey = sortedKeys[index];
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
@@ -349,10 +359,12 @@ gridUtils.uiProductDimControlWrapper = function (passedData) {
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
 gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
     var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
     var setPrimary = true;
 
     var tmplt = '<table>';
-    for (var dimkey in data) {
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dimkey = sortedKeys[index];
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
@@ -375,9 +387,11 @@ gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
 //this control wrapper is only used to calculate KIT deal's TOTAL_DISCOUNT_PER_LINE
 gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
     var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '<table>';
-    for (var dimkey in data) {
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dimkey = sortedKeys[index];
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
