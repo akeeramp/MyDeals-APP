@@ -217,7 +217,7 @@ namespace Intel.MyDeals.BusinessLogic
                             {
                                 string atrbdate = string.IsNullOrEmpty(de.AtrbValue.ToString()) ? "" : DateTime.Parse(de.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                                 if (atrbdate != date.ToString("MM/dd/yyyy"))
-                                    de.AtrbValue = items[de.AtrbCd];
+                                    de.AtrbValue = DateTime.Parse(items[de.AtrbCd].ToString()).ToString("MM/dd/yyyy");
                             }
                         }
                     }
@@ -239,7 +239,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             if (de.DataType == "System.DateTime" &&
                                 !String.IsNullOrEmpty(dictValues[uniqDimBaseKey].ToString().Replace("Invalid date", "")))
-                                dictValues[uniqDimBaseKey] = Convert.ToDateTime(dictValues[uniqDimBaseKey]);
+                                dictValues[uniqDimBaseKey] = DateTime.Parse(dictValues[uniqDimBaseKey].ToString()).ToString("MM/dd/yyyy");
                             de.AtrbValue = dictValues[uniqDimBaseKey];
                         }
                     }

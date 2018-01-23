@@ -756,6 +756,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 200,
+                IsDimKey = false,
                 Label = "Additional Discounts",
                 DataType = "string",
                 IsRequired = false
@@ -1143,7 +1144,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3562,
                 AtrbCd = AttributeCodes.EXPIRE_YCS2,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP},
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Template = "#=gridUtils.uiControlWrapper(data, 'EXPIRE_YCS2')#",
                 IsFilterable = true,
                 IsSortable = true,
@@ -1487,7 +1488,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 3542,
                 AtrbCd = AttributeCodes.YCS2_OVERLAP_OVERRIDE,
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 110,
                 IsFilterable = true,

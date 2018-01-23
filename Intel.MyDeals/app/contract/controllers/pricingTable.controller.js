@@ -142,11 +142,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.pricingTableData.WIP_DEAL = [];
         }
 
-        if (root.isPtr)
+        if (root.isPtr) {
+            FixEcapKitField();
             generateKendoSpreadSheetOptions();
+        }
         else {
             generateKendoGridOptions();
             root.pageTitle = "Deal Editor";
+        }
+    }
+
+    function FixEcapKitField() {
+        // Implement a rule to set KIT_ECAP column read only property = source column read only setting
+        for (var i = 0; i < root.pricingTableData.PRC_TBL_ROW.length; i++)
+        {
+            var item = root.pricingTableData.PRC_TBL_ROW[i];
+            if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] === true)
+            {
+                item._behaviors.isReadOnly["ECAP_PRICE_____20_____1"] = true;
+            }
         }
     }
 
@@ -232,7 +246,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     for (c = 0; c < ptTemplate.columns.length; c++) {
                         letter = String.fromCharCode(intA + c);
                         // If there are more than 25 columns, 26th column letter name should be "AA", This will break again if we ahve more than 50 columns
-                        var letter = (c >= 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 25) : String.fromCharCode(intA + c);
+                        var letter = (c > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 26) : String.fromCharCode(intA + c);
                         if (!ptTemplate.columns[c].isDimKey) {
                             sheet.range(letter + rowOffset + ":" + letter + (rowOffset + numTiers - 1)).merge();
                         } else {
@@ -545,7 +559,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 c += 1;
                 // Create column to letter mapping
-                var letter = (c >= 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 25) : String.fromCharCode(intA + c);
+                var letter = (c > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 26) : String.fromCharCode(intA + c);
                 root.colToLetter[value.field] = letter;
                 root.letterToCol[letter] = value.field;
             });

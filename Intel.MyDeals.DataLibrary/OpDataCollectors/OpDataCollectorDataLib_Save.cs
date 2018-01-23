@@ -191,7 +191,7 @@ namespace Intel.MyDeals.DataLibrary
 #endif
 
                 // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
-                new DSOpDataPacketsToDatabase(DataAccess.ConnectionString).BulkImportDataSet(dsImport);
+                    new DSOpDataPacketsToDatabase(DataAccess.ConnectionString).BulkImportDataSet(dsImport);
 
                 OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_MYDL_TMP_TO_WIP_ATRB.");
 
