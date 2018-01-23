@@ -902,7 +902,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
-                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'TRKR_NBR', '20___0')#"
+                ExcelTemplate = "#=gridUtils.exportDimTrkrControlWrapper(data)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {

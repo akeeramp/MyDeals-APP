@@ -114,6 +114,39 @@ gridUtils.uiDimTrkrControlWrapper = function (passedData) {
 
     return tmplt;
 }
+gridUtils.exportDimTrkrControlWrapper = function (passedData) {
+    var tmplt = '';
+    var dim = "";
+    var field = "TRKR_NBR";
+    var data = passedData[field];
+
+    var tmplt = '';
+    if (passedData[field] !== undefined) {
+        dim = "20_____2"
+        if (passedData[field][dim] != null) {
+            tmplt += passedData[field][dim];
+            tmplt += ", ";
+        }
+        dim = "20_____1"
+        if (passedData[field][dim] != null) {
+            tmplt += passedData[field][dim];
+            tmplt += ", ";
+        }
+
+        for (var dimkey in data) { //only looking for positive dim keys
+            if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+                tmplt += passedData[field][dimkey];
+                tmplt += ", ";
+            }
+        }
+    }
+    if (tmplt != '') {
+        //shave off the last ", " in the return string
+        tmplt = tmplt.slice(0, -2);
+    }
+
+    return tmplt;
+}
 
 gridUtils.formatValue = function (val, format) {
     if (val === undefined) {
