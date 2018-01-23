@@ -807,7 +807,7 @@ namespace Intel.MyDeals.DataLibrary
                 Locked = true,
                 Lockable = false,
                 Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#",
-                BypassExport = true
+                ExcelTemplate = "#=DC_ID#",
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -1254,7 +1254,7 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
-                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#"
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'ECAP_PRICE', '20_____1', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types
             {
@@ -1271,7 +1271,7 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
-                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'SUBKIT_ECAP', '20___0', 'currency')#"
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'ECAP_PRICE', '20_____2', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake Atrb, placeholder for dispaly purposes only
             {
@@ -1286,7 +1286,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
-                BypassExport = true
+                ExcelTemplate = "#=gridUtils.exportPrimarySecondaryDimControlWrapper(data)#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
@@ -1301,7 +1301,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
-                BypassExport = true
+                ExcelTemplate = "#=gridUtils.exportKitRebateBundleDiscountControlWrapper(data)#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
@@ -1316,7 +1316,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
-                BypassExport = true
+                ExcelTemplate = "#=gridUtils.exportSubKitRebateBundleDiscountControlWrapper(data)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
@@ -1363,7 +1363,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
-                BypassExport = true
+                ExcelTemplate = "#=gridUtils.exportTotalDiscountPerLineControlWrapper(data, 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {

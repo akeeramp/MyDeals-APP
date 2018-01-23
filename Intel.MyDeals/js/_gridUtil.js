@@ -1,13 +1,13 @@
 ﻿// Independant static style functions
 function gridUtils() { }
-gridUtils.formatValue = function (dataValue, dataFormat) {
-    if (dataFormat !== undefined && dataFormat !== "") {
-        kendo.culture("en-US");
-        dataValue = kendo.toString(dataValue, dataFormat);
-    }
-    return dataValue;
-}
 
+//gridUtils.formatValue = function (dataValue, dataFormat) {
+//    if (dataFormat !== undefined && dataFormat !== "") {
+//        kendo.culture("en-US");
+//        dataValue = kendo.toString(dataValue, dataFormat);
+//    }
+//    return dataValue;
+//}
 
 gridUtils.uiControlWrapper = function (passedData, field, format) {
     // This is nicer, but slower... rendering template on large data is slower
@@ -157,6 +157,7 @@ gridUtils.formatValue = function (val, format) {
         val = "";
     }
     else if (format !== undefined) {
+        kendo.culture("en-US");
         if (format === "currency") {
             if (!isNaN(val))
                 val = kendo.toString(parseFloat(val), "c");
@@ -383,6 +384,25 @@ gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
 
     return tmplt;
 }
+gridUtils.exportPrimarySecondaryDimControlWrapper = function (passedData) {
+    var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
+    var setPrimary = true;
+
+    var tmplt = '';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+            if (setPrimary) {
+                tmplt += 'Primary';
+                setPrimary = false;
+            } else {
+                tmplt += 'Secondary';
+            }
+            tmplt += '\n';
+        }
+    }
+
+    return tmplt;
+}
 
 //this control wrapper is only used to calculate KIT deal's TOTAL_DISCOUNT_PER_LINE
 gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
@@ -405,6 +425,18 @@ gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
 
     return tmplt;
 }
+gridUtils.exportTotalDiscountPerLineControlWrapper = function (passedData, format) {
+    var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
+
+    var tmplt = '';
+    for (var dimkey in data) {
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+            tmplt += gridUtils.formatValue(passedData.QTY[dimkey] * passedData.DSCNT_PER_LN[dimkey], "currency") + "\n";
+        }
+    }
+
+    return tmplt;
+}
 
 //this control wrapper is only used to calculate KIT deal's KIT_REBATE_BUNDLE_DISCOUNT
 gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
@@ -413,6 +445,10 @@ gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
     tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'kit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
     tmplt += '</div>';
     return tmplt;
+}
+gridUtils.exportKitRebateBundleDiscountControlWrapper = function (passedData) {
+    var val = gridUtils.kitRebateBundleDiscount(passedData, "kit");
+    return gridUtils.formatValue(val, "currency");
 }
 
 //this control wrapper is only used to calculate SKIT deal's SUBKIT_REBATE_BUNDLE_DISCOUNT
@@ -427,6 +463,17 @@ gridUtils.uiSubKitRebateBundleDiscountControlWrapper = function (passedData) {
         tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
         tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'subkit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
         tmplt += '</div>';
+    }
+    return tmplt;
+}
+gridUtils.exportSubKitRebateBundleDiscountControlWrapper = function (passedData) {
+    var tmplt = '';
+    if (passedData.HAS_SUBKIT == "0") {
+        //no subkit allowed case
+        tmplt += 'No Sub KIT';
+    } else {
+        var val = gridUtils.kitRebateBundleDiscount(passedData, "subkit");
+        tmplt += gridUtils.formatValue(val, "currency");
     }
     return tmplt;
 }
@@ -590,6 +637,35 @@ gridUtils.renderMasterChild = function (data) {
 gridUtils.onDataValueChange = function (e) {
     return null;
 }
+
+gridUtils.kitRebateBundleDiscount = function (items, type) {
+
+    var data = items["ECAP_PRICE"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - also are QTY and dscnt_per_line required columns? if not we are going to need to put in checks
+    var total = 0.00;
+    var subkitSumCounter = 2;   //subkits are always going to be the primary and first secondary item, so only sum those two dims in that case
+
+    var tmplt = '<table>';
+    for (var dimkey in data) {
+        if (subkitSumCounter == 0) {
+            break;
+        }
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {
+            if (type == "subkit") {
+                subkitSumCounter--;
+            }
+            //total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];    //this should be made to validate against the value below, should be equal
+            total += parseFloat(items["ECAP_PRICE"][dimkey]);
+        }
+    }
+
+    if (type == "subkit") {
+        total = total - items["ECAP_PRICE"]["20_____2"];
+    } else {
+        total = total - items["ECAP_PRICE"]["20_____1"];
+    }
+
+    return total;
+};
 
 gridUtils.formatDate = function (data) {
     return moment(data).format("MM/DD/YYYY");
