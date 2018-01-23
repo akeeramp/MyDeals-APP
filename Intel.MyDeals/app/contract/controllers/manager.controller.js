@@ -259,7 +259,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.summaryFilter = function (ps) {
         return (
             ($scope.dealTypeFilter === undefined || $scope.dealTypeFilter === '' || ps.dealType === undefined || ps.dealType.indexOf($scope.dealTypeFilter) >= 0) &&
-            ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0 || $scope.titleInPt(ps)) && 
+            ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0 || $scope.titleInPt(ps)) &&
             $scope.stageInPs(ps)
             );
     }
@@ -369,7 +369,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         							DC_ID: { type: "number" },
         							OBJ_SET_TYPE_CD: { type: "string" },
         							PASSED_VALIDATION: { type: "string" },
-        							WF_STG_CD: { type: "string" },
         							START_DT: { type: "date" },
         							END_DT: { type: "date" },
         							NOTES: { type: "string" },
