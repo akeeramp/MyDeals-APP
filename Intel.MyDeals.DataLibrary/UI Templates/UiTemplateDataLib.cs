@@ -898,7 +898,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.TRKR_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 130,
-                Template = "#=gridUtils.uiDimControlWrapper(data, 'TRKR_NBR', '20___0')#",
+                Template = "#=gridUtils.uiDimTrkrControlWrapper(data)#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,

@@ -84,6 +84,37 @@ gridUtils.exportDimControlWrapper = function (passedData, field, dim, format) {
     return tmplt;
 }
 
+gridUtils.uiDimTrkrControlWrapper = function (passedData) {
+    var tmplt = '';
+    var dim = "";
+    var field = "TRKR_NBR";
+    var data = passedData[field];
+
+    tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    tmplt += '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+    tmplt += '<div class="vert-center">';
+
+    dim = "20_____2"
+    if (passedData[field][dim] != null) {
+        tmplt += '    <div class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] )"></div>';
+    }
+    dim = "20_____1"
+    if (passedData[field][dim] != null) {
+        tmplt += '    <div class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] )"></div>';
+    }
+
+    for (var dimkey in data) { //only looking for positive dim keys
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+            tmplt += '    <div class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] )"></div>';
+        }
+    }
+
+    tmplt += '</div></div>';
+
+    return tmplt;
+}
+
 gridUtils.formatValue = function (val, format) {
     if (val === undefined) {
         val = "";
