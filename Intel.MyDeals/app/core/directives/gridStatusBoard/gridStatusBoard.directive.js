@@ -37,11 +37,13 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 position: "top",
                 content: function (e) {
                     var grid = e.target.closest(".k-grid").getKendoGrid();
-                    var dataItem = grid.dataItem(e.target.closest("tr"));
-                    if (dataItem.CRE_EMP_NM === undefined || dataItem.CRE_EMP_NM === "") {
-                        return "";
+                    if (!!grid) {
+                        var dataItem = grid.dataItem(e.target.closest("tr"));
+                        if (dataItem.CRE_EMP_NM === undefined || dataItem.CRE_EMP_NM === "") {
+                            return "";
+                        }
+                        return "Created By : " + dataItem.CRE_EMP_NM;
                     }
-                    return "Created By : " + dataItem.CRE_EMP_NM;
 
                 },
                 show: function (e) {
@@ -215,13 +217,6 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     default:
                         $scope.contractDs.filter({ field: "WF_STG_CD", operator: "eq", value: activeFilter });
                 }
-                //if (activeFilter === "All") {
-                //    $scope.contractDs.filter({});
-                //}
-                //else if (activeFilter === "Favorites") {
-                //    $scope.contractDs.filter({ field: "IS_FAVORITE", operator: "eq", value: true });
-                //}
-                //else $scope.contractDs.filter({ field: "WF_STG_CD", operator: "eq", value: activeFilter });
             }
 
             $scope.$on('refresh', function (event, args) {
@@ -230,6 +225,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 scope.startDt = args.startDate;
                 scope.endDt = args.endDate;
                 scope.initDsLoaded = false;
+                $scope.isLoaded = false;
                 scope.clkFilter('fltr_All');
 
                 $timeout(function () {

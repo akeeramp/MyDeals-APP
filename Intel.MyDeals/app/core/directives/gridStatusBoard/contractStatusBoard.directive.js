@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('contractStatusBoard', contractStatusBoard);
 
-contractStatusBoard.$inject = ['$compile', 'objsetService', 'colorDictionary'];
+contractStatusBoard.$inject = ['$compile', 'objsetService', 'colorDictionary', 'securityService'];
 
-function contractStatusBoard($compile, objsetService, colorDictionary) {
+function contractStatusBoard($compile, objsetService, colorDictionary, securityService) {
     return {
         scope: {
             contractId: '=ngModel'
@@ -19,6 +19,9 @@ function contractStatusBoard($compile, objsetService, colorDictionary) {
                 $scope.init(response.data);
                 $scope.isLoaded = true;
             });
+
+            $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
+            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null) && (window.usrRole !== "FSE"); // Can view meetcomp pass fail
 
             $scope.sbData = {};
 
@@ -48,16 +51,21 @@ function contractStatusBoard($compile, objsetService, colorDictionary) {
                 }, {
                     field: "pct",
                     title: "Price Cost Test Results",
-                    template: "<icon-mct-pct ng-model='dataItem.pct' icon-class=\"'medIcon'\"></icon-mct-pct>"
+                    template: "<icon-mct-pct ng-model='dataItem.pct' icon-class=\"'medIcon'\"></icon-mct-pct>",
+                    hidden: !$scope.CAN_VIEW_COST_TEST
                 }, {
                     field: "mct",
                     title: "Meet Comp Test Results",
-                    template: "<icon-mct-pct ng-model='dataItem.mct' icon-class=\"'medIcon'\"></icon-mct-pct>"
+                    template: "<icon-mct-pct ng-model='dataItem.mct' icon-class=\"'medIcon'\"></icon-mct-pct>",
+                    hidden: !$scope.CAN_VIEW_MEET_COMP
                 }]
             };
 
             $scope.gotoContractManager = function (id) {
-                var lnk = "/Contract#/manager/" + $scope.contractId + "/summary";
+                var lnk = "/Contract#/manager/" + $scope.contractId;
+                if (window.usrRole === "DA") {
+                    lnk = "/Contract#/manager/" + $scope.contractId + "/summary";
+                }
                 window.open(lnk, '_blank');
             }
 
