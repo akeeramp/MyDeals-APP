@@ -7,6 +7,7 @@ using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Helpers;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
@@ -752,6 +753,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     try
                     {
+                        ptrJson = FixesHelpers.FixStructure(ptrJson);
                         items = JsonConvert.DeserializeObject<ProdMappings>(ptrJson);
                     }
                     catch (Exception)

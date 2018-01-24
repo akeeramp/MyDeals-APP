@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
@@ -200,7 +201,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             try
             {
-                //items = JsonConvert.DeserializeObject<ProdMappings>(LZString.decompressFromBase64(products));
+                products = FixesHelpers.FixStructure(products);
                 items = JsonConvert.DeserializeObject<ProdMappings>(products);
             }
             catch (Exception ex)

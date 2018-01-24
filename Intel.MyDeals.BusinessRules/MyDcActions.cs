@@ -238,7 +238,8 @@ namespace Intel.MyDeals.BusinessRules
 			ProdMappings items = null;
 			try
 			{
-				items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
+                prdJson = FixesHelpers.FixStructure(prdJson);
+                items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
 			}
 			catch (Exception)
 			{
@@ -1264,7 +1265,8 @@ namespace Intel.MyDeals.BusinessRules
 
             try
 			{
-				items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
+                prdJson = FixesHelpers.FixStructure(prdJson);
+                items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
 
 				// Rule: maximum 10 products allowed
 				if (items.Count > 10)

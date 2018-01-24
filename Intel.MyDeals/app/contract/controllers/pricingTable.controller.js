@@ -8,9 +8,9 @@ SetRequestVerificationToken.$inject = ['$http'];
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', '$linq', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, $linq, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal) {
     var vm = this;
 
     // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
@@ -319,8 +319,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.wipData = root.pricingTableData.WIP_DEAL;
 
-    	// If no data was returned, we should redirect back to PTR
-        if (root.wipData.length === 0 || $scope.curPricingTable.PASSED_VALIDATION == "Dirty") { // Make PT dirty
+        // If no data was returned, we should redirect back to PTR
+        if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
             $state.go('contract.manager.strategy',
                 {
                     cid: $scope.contractData.DC_ID,
@@ -333,8 +333,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true);
     }
 
-    function getPtrPassedValidation() {
-        return $scope.pricingTableData.PRC_TBL_ROW[0].PASSED_VALIDATION;
+    function anyPtrDirtyValidation() {
+        var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+                function (x) {
+                    return x.PASSED_VALIDATION === "Dirty";
+                }).ToArray();
+
+        return dirtyItems.length > 0;
     }
 
     function getFormatedGeos(geos) {
