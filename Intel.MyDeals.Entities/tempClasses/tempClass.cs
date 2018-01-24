@@ -2153,10 +2153,10 @@ public partial class DealTemplateDataGram
         public System.String GDM_FMLY_NM { set; get; }
 
         [DataMember]
-        public System.Boolean HAS_L1 { set; get; }
+        public System.Int32 HAS_L1 { set; get; }
 
         [DataMember]
-        public System.Boolean HAS_L2 { set; get; }
+        public System.Int32 HAS_L2 { set; get; }
 
         [DataMember]
         public System.String HIER_NM_HASH { set; get; }

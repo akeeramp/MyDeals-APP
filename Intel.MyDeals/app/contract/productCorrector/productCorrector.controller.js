@@ -1225,8 +1225,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 selectedObject["DEAL_PRD_TYPE"] = item.DEAL_PRD_TYPE;
                 selectedObject["EXACT_MATCH"] = false;
                 selectedObject["FMLY_NM"] = item.FMLY_NM;
-                selectedObject["HAS_L1"] = false;
-                selectedObject["HAS_L2"] = false;
+                selectedObject["HAS_L1"] = 0;
+                selectedObject["HAS_L2"] = 0;
                 selectedObject["HIER_NM_HASH"] = item.HIER_NM_HASH;
                 selectedObject["HIER_VAL_NM"] = item.HIER_VAL_NM;
                 selectedObject["MTRL_ID"] = item.MTRL_ID;

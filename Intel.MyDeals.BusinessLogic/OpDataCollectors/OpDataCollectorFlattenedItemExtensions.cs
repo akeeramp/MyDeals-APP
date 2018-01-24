@@ -375,8 +375,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                     List<string> pTitle = new List<string>();
                     List<string> pCat = new List<string>();
-                    bool pHasL1 = false;
-                    bool pHasL2 = false;
                     var dim = 0;
 
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
@@ -404,18 +402,16 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                         pTitle.Add(pMap.HIER_VAL_NM);
                         pCat.Add(pMap.PRD_CAT_NM);
-                        bool l1, l2;
-                        bool.TryParse(pMap.HAS_L1, out l1);
-                        bool.TryParse(pMap.HAS_L2, out l2);
+                        int l1, l2;
+                        l1 = pMap.HAS_L1;
+                        l2 = pMap.HAS_L2;
 
-                        if (l1)
+                        if (l1 >= 1)
                         {
-                            pHasL1 = true;
                             numL1++;
                         }
-                        if (l2)
+                        if (l2 >= 1)
                         {
-                            pHasL2 = true;
                             numL2++;
                         }
                     }
@@ -434,8 +430,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         }
                     }
 
-                    opFlatItem[AttributeCodes.HAS_L1] = pHasL1;
-                    opFlatItem[AttributeCodes.HAS_L2] = pHasL2;
+                    opFlatItem[AttributeCodes.HAS_L1] = numL1;
+                    opFlatItem[AttributeCodes.HAS_L2] = numL2;
                     opFlatItem[AttributeCodes.TITLE] = string.Join(",", pTitle);
                     opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat.Distinct());
 

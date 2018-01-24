@@ -14,8 +14,8 @@
         public double PRD_COST { get; set; }
         public string PRD_STRT_DTM { get; set; }
         public string PRD_END_DTM { get; set; }
-        public string HAS_L1 { get; set; }
-        public string HAS_L2 { get; set; }
+        public int HAS_L1 { get; set; }
+        public int HAS_L2 { get; set; }
         public string PRD_CAT_NM { get; set; }
 		public string DEAL_PRD_TYPE { get; set; }
 		public string MM_MEDIA_CD { get; set; }

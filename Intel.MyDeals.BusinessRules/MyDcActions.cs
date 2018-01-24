@@ -449,7 +449,7 @@ namespace Intel.MyDeals.BusinessRules
 			string deEcapTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
 			string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
 			string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
-			bool IsL1Product = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1) == "1" ? true : false;
+			bool IsL1Product = Int32.Parse(r.Dc.GetDataElementValue(AttributeCodes.HAS_L1)) > 0 ? true : false;
 
 			List<string> mandatoryMeetCompFields = new List<string>
 			{
@@ -1291,7 +1291,7 @@ namespace Intel.MyDeals.BusinessRules
 						}
 
 						// Rule: Up the L1 and L2 counts
-						if (prod.HAS_L1 == "true")
+						if (prod.HAS_L1 >= 1)
 						{
 							// Rule: Each L1 can only have a Qty of 1
 							if (parsedQty > 1)
@@ -1300,7 +1300,7 @@ namespace Intel.MyDeals.BusinessRules
 							}
 							numOfL1s += parsedQty;
 						}
-						else if (prod.HAS_L2 == "true")
+						else if (prod.HAS_L2 >= 1)
 						{
 							numOfL2s += parsedQty;
 						}
@@ -1335,8 +1335,8 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string hasL1 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1);
-            string hasL2 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L2);
+            int hasL1 = Int32.Parse(r.Dc.GetDataElementValue(AttributeCodes.HAS_L1));
+            int hasL2 = Int32.Parse(r.Dc.GetDataElementValue(AttributeCodes.HAS_L2));
 
             //We assume that all kit deals are properly enforced to have at least a primary and one secondary - it doesn't make sense to have a single item kit after all.
             int qtyPrimary;
@@ -1351,7 +1351,7 @@ namespace Intel.MyDeals.BusinessRules
             Int32.TryParse(deQty1.AtrbValue.ToString(), out qtyPrimary);
             Int32.TryParse(deQty2.AtrbValue.ToString(), out qtySecondary1);
 
-            if (hasL1 == "True" && hasL2 == "True")
+            if (hasL1 >= 1 && hasL2 >= 1)
             {
                 if (qtyPrimary != 1)
                 {
@@ -1363,16 +1363,16 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-            if (hasL1 == "True" && hasL2 == "False")
+            if (hasL1 >= 1 && hasL2 == 0)
             {
                 if (qtyPrimary != 1)
                 {
                     AddTierValidationMessage(deQty1, "L1 Products can only have a Qty of 1.", 0);
                 }
-                //if (qtySecondary1 != 1 && ????????)     //how do we check if second item is L1?  only want to run this if second product is also L1
-                //{
-                //    AddTierValidationMessage(deQty2, "L1 Products can only have a Qty of 1.", 1);
-                //}
+                if (qtySecondary1 != 1 && hasL1 > 1)     //how do we check if second item is L1?  only want to run this if second product is also L1
+                {
+                    AddTierValidationMessage(deQty2, "L1 Products can only have a Qty of 1.", 1);
+                }
             }
         }
     }
