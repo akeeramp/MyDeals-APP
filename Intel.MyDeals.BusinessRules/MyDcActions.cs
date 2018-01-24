@@ -449,9 +449,10 @@ namespace Intel.MyDeals.BusinessRules
 			string deEcapTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
 			string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
 			string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
-			bool IsL1Product = Int32.Parse(r.Dc.GetDataElementValue(AttributeCodes.HAS_L1)) > 0 ? true : false;
 
-			List<string> mandatoryMeetCompFields = new List<string>
+            int IsL1Product = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L1, "0"));
+
+            List<string> mandatoryMeetCompFields = new List<string>
 			{
 				AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
 				AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
@@ -471,7 +472,7 @@ namespace Intel.MyDeals.BusinessRules
 
 			// US52971 - if it is not MCP nor pull in MCP and if product is L1, then system would not ask as mandatory for FSE, But GA has to fill it as mandatory.If not filled.give a message' Meetcomp info is required '.If meetcomp fails then GA can not submit the deal.
 			if ((deEcapTypeValue != "MCP" || deEcapTypeValue != "PULL-IN MCP")
-				&& IsL1Product
+				&& IsL1Product > 0
 				&& role == RoleTypes.GA)
 			{
 				foreach (IOpDataElement de in r.Dc.GetDataElementsIn(mandatoryMeetCompFields))
@@ -1335,8 +1336,8 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            int hasL1 = Int32.Parse(r.Dc.GetDataElementValue(AttributeCodes.HAS_L1));
-            int hasL2 = Int32.Parse(r.Dc.GetDataElementValue(AttributeCodes.HAS_L2));
+            int hasL1 = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L1, "0"));
+            int hasL2 = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L2, "0"));
 
             //We assume that all kit deals are properly enforced to have at least a primary and one secondary - it doesn't make sense to have a single item kit after all.
             int qtyPrimary;
@@ -1348,8 +1349,8 @@ namespace Intel.MyDeals.BusinessRules
             deQty1 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 0).FirstOrDefault();
             deQty2 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 1).FirstOrDefault();
 
-            Int32.TryParse(deQty1.AtrbValue.ToString(), out qtyPrimary);
-            Int32.TryParse(deQty2.AtrbValue.ToString(), out qtySecondary1);
+            if (deQty1 != null) Int32.TryParse(deQty1.AtrbValue.ToString(), out qtyPrimary); else qtyPrimary = 0;
+            if (deQty2 != null) Int32.TryParse(deQty2.AtrbValue.ToString(), out qtySecondary1); else qtySecondary1 = 0;
 
             if (hasL1 >= 1 && hasL2 >= 1)
             {
