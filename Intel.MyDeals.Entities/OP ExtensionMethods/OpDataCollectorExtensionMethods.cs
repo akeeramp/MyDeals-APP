@@ -9,7 +9,7 @@ namespace Intel.MyDeals.Entities
 {
     public static class OpDataCollectorExtensionMethods
     {
-       
+
         ///// <summary>
         ///// Add a simple data element.
         ///// Uses default service client to get attribute master data.
@@ -22,6 +22,13 @@ namespace Intel.MyDeals.Entities
         //{
         //    return AddDataElement(wb, atrb_cd, atrbVal, DataCollections.GetAttributeData());
         //}
+
+        public static string GetDataElementValueNull(this IOpDataCollector dc, string name, string ifNull)
+        {
+            if (dc == null) throw new ArgumentNullException("dc");
+            IOpDataElement de = dc.GetDataElement(name);
+            return de?.AtrbValue.ToString() ?? ifNull;
+        }
 
         /// <summary>
         /// Add a simple data element.
