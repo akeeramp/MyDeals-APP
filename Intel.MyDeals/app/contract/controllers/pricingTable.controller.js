@@ -320,7 +320,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.wipData = root.pricingTableData.WIP_DEAL;
 
     	// If no data was returned, we should redirect back to PTR
-        if (root.wipData.length === 0 || $scope.curPricingTable.PASSED_VALIDATION == "Dirty") { // Make PT dirty
+        if (root.wipData.length === 0
+			|| ($scope.pricingTableData.PRC_TBL !== undefined && $scope.pricingTableData.PRC_TBL.length > 0 && $scope.pricingTableData.PRC_TBL[0].PASSED_VALIDATION !== "Complete") // user goes to "/wip" url of an incomplete ptr
+		) {
             $state.go('contract.manager.strategy',
                 {
                     cid: $scope.contractData.DC_ID,
