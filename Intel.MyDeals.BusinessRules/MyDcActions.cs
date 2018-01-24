@@ -1182,7 +1182,7 @@ namespace Intel.MyDeals.BusinessRules
 				}
 			}
 			// KIT ECAP must = (sum of total dicount per line * Qty ) BUT ONLY if the later is > 0
-			if (totalDiscountsSum > 0 && (kitRebate - kitEcap) != totalDiscountsSum)
+			if (totalDiscountsSum > 0 && (Math.Round(kitRebate,2) - Math.Round(kitEcap,2)) != Math.Round(totalDiscountsSum,2))
 			{
 				foreach (IOpDataElement tieredObj in tieredObjs)
 				{
