@@ -125,7 +125,7 @@
                         if (response.data.length > 0) {
                             response.data.forEach(function (obj) {
                                 obj.IS_SELECTED = false;
-
+                                
                                 //Setting COMP_PRC to null. Its nullable Int
                                 if (obj.COMP_PRC == 0) {
                                     obj.COMP_PRC = null;
@@ -150,9 +150,173 @@
                             $scope.isBusy = false;
                             $scope.selectedIDS = [];
 
+                            var setFocusToCell = function (colName, selUID) {
+                                var row = $("#grid").find("tr[data-uid='" + selUID + "']");
+                                var cell = $(row).children().eq(columnIndex[colName]);
+                                $('#grid').data('kendoGrid').editCell(cell);
+                            }
+
+                            var getProductLineData = function () {
+                                var filterData = [];
+                                var dataSource = $("#grid").data("kendoGrid").dataSource;
+                                var filters = dataSource.filter();
+                                if (filters) {
+                                    var allData = dataSource.data();
+                                    var query = new kendo.data.Query(allData);
+                                    filterData = query.filter(filters).data;
+                                }
+                                else {
+                                    filterData = $scope.meetCompMasterdata;
+                                }
+                                //UPDATE Selected Product ROWS
+                                var selectedData = $linq.Enumerable().From(filterData)
+                                    .Where(function (x) {
+                                        return (x.IS_SELECTED == true);
+                                    })
+                                    .ToArray();
+                                return selectedData;
+                            }
+
+
+                            var isModelValid = function (data) {
+                                $scope.errorList = [];
+                                for (var i = 0; i < data.length; i++) {
+                                    var isError = false;
+                                    var errorObj = {
+                                        'COMP_SKU': false,
+                                        'COMP_PRC': false,
+                                        'COMP_BNCH': false,
+                                        'IA_BNCH': false,
+                                        'COMP_OVRRD_FLG': false,
+                                        'COMP_OVRRD_RSN': false,
+                                        'RW_NM': ""
+                                    };
+
+                                    //COMP_SKU Checking.....
+                                    var isCompSkuZero = false;
+                                    if (!isNaN(Math.abs(data[i].COMP_SKU))) {
+                                        isCompSkuZero = true;
+                                    }
+
+                                    if (isCompSkuZero && canUpdateMeetCompSKUPriceBench && data[i].MEET_COMP_STS.toLowerCase() != "na") {
+                                        errorObj.COMP_SKU = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    if (data[i].COMP_SKU.trim().length == 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                                        errorObj.COMP_SKU = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    //COMP_PRC checking.....
+                                    if (data[i].COMP_PRC <= 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                                        errorObj.COMP_PRC = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    //COMP_BNCH checking....
+                                    if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                                        errorObj.COMP_BNCH = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    //IA_BNCH checking....
+                                    if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                                        errorObj.IA_BNCH = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    //COMP_OVRRD_FLG checking....
+                                    if (data[i].COMP_OVRRD_FLG <= 0 && (usrRole == "DA" || isSuperSA)) {
+                                        errorObj.COMP_OVRRD_FLG = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    //COMP_OVRRD_RSN checking....
+                                    if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA" || isSuperSA)) {
+                                        errorObj.COMP_OVRRD_RSN = true;
+                                        errorObj.RW_NM = data[i].RW_NM;
+                                        isError = true;
+                                    }
+
+                                    if (isError)
+                                        $scope.errorList.push(errorObj);
+                                }
+
+                                if ($scope.errorList.length > 0)
+                                    return false;
+                                else
+                                    return true;
+                            }
+
+                            var expandSelected = function (colName, rowNumber) {
+                                $scope.isVisible = false;
+                                var grid = $("#grid").data("kendoGrid");
+                                var row_NO = [];
+                                var selectedUID = [];
+
+                                var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                    return $(row).data("uid");
+                                });
+
+                                for (var t = 0; t < expanded.length; t++) {
+                                    $scope.dataSourceParent._view.forEach(function (o) {
+                                        if (o.uid == expanded[t])
+                                            row_NO.push(o.RW_NM);
+                                    });
+                                }
+
+                                $scope.dataSourceParent.read();
+
+                                if (row_NO.length > 0) {
+                                    for (var t = 0; t < row_NO.length; t++) {
+                                        $scope.dataSourceParent._view.forEach(function (o) {
+                                            if (o.RW_NM == row_NO[t])
+                                                selectedUID.push(o.uid);
+                                        });
+                                    }
+
+                                    for (var cnt = 0; cnt < selectedUID.length; cnt++) {
+                                        grid.expandRow("tr[data-uid='" + selectedUID[cnt] + "']");
+                                    }
+
+                                    if (colName) {
+                                        var selUID = '';
+                                        if (rowNumber) {
+                                            $scope.dataSourceParent._view.forEach(function (o) {
+                                                if (o.RW_NM == rowNumber)
+                                                    selUID = o.uid
+                                            });
+
+                                        }
+                                        else {
+                                            selUID = selectedUID[0];
+                                        }
+                                        setFocusToCell(colName, selUID);
+                                    }
+                                }
+                                else {
+                                    var selUID = '';
+                                    if (rowNumber) {
+                                        $scope.dataSourceParent._view.forEach(function (o) {
+                                            if (o.RW_NM == rowNumber)
+                                                selUID = o.uid
+                                        });
+                                        setFocusToCell(colName, selUID);
+                                    }
+                                }
+                                $scope.isVisible = true;
+                            }
+
                             var isValid = false;
                             if (usrRole == "GA") {
-                                var isValid = isModelValid($scope.meetCompMasterdata);
+                                isValid = isModelValid($scope.meetCompMasterdata);
                             }
 
                             $scope.selectProdIDS = function (selectedID, event, dataItem) {
@@ -212,6 +376,25 @@
                                 //Holding expanded column
                                 expandSelected();
                             }
+
+                            var addToUpdateList = function (dataItem, FIELD_NM) {
+                                var indx = -1;
+                                $scope.meetCompUpdatedList.some(function (e, i) {
+                                    if (e.RW_NM == dataItem.RW_NM) {
+                                        indx = i;
+                                        return true;
+                                    }
+                                });
+
+                                if (indx > -1) {
+                                    $scope.meetCompUpdatedList.splice(indx, 1);
+                                }
+
+                                $scope.meetCompUpdatedList.push(dataItem);
+                                $scope.setUpdateFlag = true;
+
+                            }
+
                             //Add New Customer
                             $scope.addSKUForCustomer = function (mode, isSelected) {
                                 if ($scope.selectedCustomerText.trim().length > 0) {
@@ -593,14 +776,14 @@
                                         width: 150,
                                         editor: meetCompResultStatusEditor,
                                         template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_FLG#</div>",
-                                        filterable: { multi: true, search: true},
+                                        filterable: { multi: true, search: true },
                                         hidden: hideViewMeetCompOverride
                                     },
                                     {
                                         field: "COMP_OVRRD_RSN",
                                         title: "Analysis Override Comments",
                                         width: 220,
-                                        filterable: { multi: true, search: true},
+                                        filterable: { multi: true, search: true },
                                         template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_RSN#</div>",
                                         hidden: hideViewMeetCompOverride
                                     },
@@ -1020,6 +1203,7 @@
                                                             }
                                                         }
                                                     }
+
                                                     $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
                                                     addToUpdateList(options.model, "COMP_PRC");
 
@@ -1130,187 +1314,7 @@
 
                                 }
                             }
-
-                            function expandSelected(colName, rowNumber) {
-                                $scope.isVisible = false;
-                                var grid = $("#grid").data("kendoGrid");
-                                var row_NO = [];
-                                var selectedUID = [];
-
-                                var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                    return $(row).data("uid");
-                                });
-
-                                for (var t = 0; t < expanded.length; t++) {
-                                    $scope.dataSourceParent._view.forEach(function (o) {
-                                        if (o.uid == expanded[t])
-                                            row_NO.push(o.RW_NM);
-                                    });
-                                }
-
-                                $scope.dataSourceParent.read();
-
-                                if (row_NO.length > 0) {
-                                    for (var t = 0; t < row_NO.length; t++) {
-                                        $scope.dataSourceParent._view.forEach(function (o) {
-                                            if (o.RW_NM == row_NO[t])
-                                                selectedUID.push(o.uid);
-                                        });
-                                    }
-
-                                    for (var cnt = 0; cnt < selectedUID.length; cnt++) {
-                                        grid.expandRow("tr[data-uid='" + selectedUID[cnt] + "']");
-                                    }
-
-                                    if (colName) {
-                                        var selUID = '';
-                                        if (rowNumber) {
-                                            $scope.dataSourceParent._view.forEach(function (o) {
-                                                if (o.RW_NM == rowNumber)
-                                                    selUID = o.uid
-                                            });
-
-                                        }
-                                        else {
-                                            selUID = selectedUID[0];
-                                        }
-                                        setFocusToCell(colName, selUID);
-                                    }
-                                }
-                                else {
-                                    var selUID = '';
-                                    if (rowNumber) {
-                                        $scope.dataSourceParent._view.forEach(function (o) {
-                                            if (o.RW_NM == rowNumber)
-                                                selUID = o.uid
-                                        });
-                                        setFocusToCell(colName, selUID);
-                                    }
-                                }
-                                $scope.isVisible = true;
-                            }
-                            function setFocusToCell(colName, selUID) {
-                                var row = $("#grid").find("tr[data-uid='" + selUID + "']");
-                                var cell = $(row).children().eq(columnIndex[colName]);
-                                $('#grid').data('kendoGrid').editCell(cell);
-                            }
-                            function getProductLineData() {
-                                var filterData = [];
-                                var dataSource = $("#grid").data("kendoGrid").dataSource;
-                                var filters = dataSource.filter();
-                                if (filters) {
-                                    var allData = dataSource.data();
-                                    var query = new kendo.data.Query(allData);
-                                    filterData = query.filter(filters).data;
-                                }
-                                else {
-                                    filterData = $scope.meetCompMasterdata;
-                                }
-                                //UPDATE Selected Product ROWS
-                                var selectedData = $linq.Enumerable().From(filterData)
-                                    .Where(function (x) {
-                                        return (x.IS_SELECTED == true);
-                                    })
-                                    .ToArray();
-                                return selectedData;
-                            }
-
-                            function addToUpdateList(dataItem, FIELD_NM) {
-                                var indx = -1;
-                                $scope.meetCompUpdatedList.some(function (e, i) {
-                                    if (e.RW_NM == dataItem.RW_NM) {
-                                        indx = i;
-                                        return true;
-                                    }
-                                });
-
-                                if (indx > -1) {
-                                    $scope.meetCompUpdatedList.splice(indx, 1);
-                                }
-
-                                $scope.meetCompUpdatedList.push(dataItem);
-                                $scope.setUpdateFlag = true;
-
-                            }
-
-                            function isModelValid(data) {
-                                $scope.errorList = [];
-                                for (var i = 0; i < data.length; i++) {
-                                    var isError = false;
-                                    var errorObj = {
-                                        'COMP_SKU': false,
-                                        'COMP_PRC': false,
-                                        'COMP_BNCH': false,
-                                        'IA_BNCH': false,
-                                        'COMP_OVRRD_FLG': false,
-                                        'COMP_OVRRD_RSN': false,
-                                        'RW_NM': ""
-                                    };
-
-                                    //COMP_SKU Checking.....
-                                    var isCompSkuZero = false;
-                                    if (!isNaN(Math.abs(data[i].COMP_SKU))) {
-                                        isCompSkuZero = true;
-                                    }
-
-                                    if (isCompSkuZero && canUpdateMeetCompSKUPriceBench && data[i].MEET_COMP_STS.toLowerCase() != "na") {
-                                        errorObj.COMP_SKU = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    if (data[i].COMP_SKU.trim().length == 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                                        errorObj.COMP_SKU = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    //COMP_PRC checking.....
-                                    if (data[i].COMP_PRC <= 0 && canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                                        errorObj.COMP_PRC = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    //COMP_BNCH checking....
-                                    if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                                        errorObj.COMP_BNCH = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    //IA_BNCH checking....
-                                    if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                                        errorObj.IA_BNCH = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    //COMP_OVRRD_FLG checking....
-                                    if (data[i].COMP_OVRRD_FLG <= 0 && (usrRole == "DA" || isSuperSA)) {
-                                        errorObj.COMP_OVRRD_FLG = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    //COMP_OVRRD_RSN checking....
-                                    if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA" || isSuperSA)) {
-                                        errorObj.COMP_OVRRD_RSN = true;
-                                        errorObj.RW_NM = data[i].RW_NM;
-                                        isError = true;
-                                    }
-
-                                    if (isError)
-                                        $scope.errorList.push(errorObj);
-                                }
-
-                                if ($scope.errorList.length > 0)
-                                    return false;
-                                else
-                                    return true;
-                            }
-
-
+                            
                             $scope.saveAndRunMeetComp = function () {
                                 $scope.isValid = true;
                                 $scope.ROW_NMB = [];
