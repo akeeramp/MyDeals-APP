@@ -300,27 +300,33 @@ namespace Intel.MyDeals.BusinessLogic
         public SearchResultPacket GetNonTenderDealList(SearchParams data)
         {
             return GetDealList(data, new List<int>
-                {
-                    Attributes.TITLE.ATRB_SID,
-                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                    Attributes.CUST_MBR_SID.ATRB_SID,
-                    Attributes.CUST_ACCNT_DIV.ATRB_SID,
-                    Attributes.WF_STG_CD.ATRB_SID,
-                    Attributes.PS_WF_STG_CD.ATRB_SID,
-                    Attributes.TRKR_NBR.ATRB_SID,
-                    Attributes.PRODUCT_FILTER.ATRB_SID,
-                    Attributes.START_DT.ATRB_SID,
-                    Attributes.END_DT.ATRB_SID,
-                    Attributes.VOLUME.ATRB_SID,
-                    Attributes.REBATE_TYPE.ATRB_SID,
-                    Attributes.ECAP_PRICE.ATRB_SID,
-                    Attributes.CAP.ATRB_SID,
-                    Attributes.YCS2_PRC_IRBT.ATRB_SID,
-                    Attributes.GEO_COMBINED.ATRB_SID
-                },
-                new List<string> (),
-                new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
-                MyRulesTrigger.OnDealListLoad);
+            {
+                Attributes.TITLE.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.CUST_ACCNT_DIV.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.PS_WF_STG_CD.ATRB_SID,
+                Attributes.TRKR_NBR.ATRB_SID,
+                Attributes.PRODUCT_FILTER.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.VOLUME.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
+                Attributes.ECAP_PRICE.ATRB_SID,
+                Attributes.CAP.ATRB_SID,
+                Attributes.GEO_COMBINED.ATRB_SID,
+                Attributes.MRKT_SEG.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
+                Attributes.PROGRAM_PAYMENT.ATRB_SID,
+                Attributes.PAYOUT_BASED_ON.ATRB_SID,
+                Attributes.STRT_VOL.ATRB_SID,
+                Attributes.END_VOL.ATRB_SID,
+                Attributes.RATE.ATRB_SID
+            },
+            new List<string> (),
+            new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
+            MyRulesTrigger.OnDealListLoad);
         }
 
         /// <summary>

@@ -19,7 +19,7 @@
         </div>
         <div style="height: 37px; padding-left: 10px; border-bottom: 2px solid #bcbcbc;" ng-if="isPtr || isWip">
             <div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
-            <div class="fl editorTab" ng-class="{'inactive': !isWip}" ng-click="publishWipDeals()">Deal Editor</div>
+            <div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}" ng-click="publishWipDeals()">Deal Editor</div>
             <div class="clearboth"></div>
         </div>
     </div>
@@ -102,6 +102,15 @@
         cursor: default;
     }
     .editorTab.inactive {
+        color: #ffffff;
+        background-color: #00AEEF;
+        border-bottom: 2px solid #0071C5;
+        cursor: pointer;
+    }
+    .editorTab.inactive:hover {
+        background-color: #0071C5;
+    }
+    .editorTab.disabled, .editorTab.disabled:hover {
         background: #fdfdfd; /* Old browsers */
         background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
         background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
@@ -109,15 +118,7 @@
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
         color: #003C71;
         border-bottom: 2px solid #bcbcbc;
-        cursor: pointer;
-    }
-    .editorTab.inactive:hover {
-        background: #fdfdfd; /* Old browsers */
-        background: -moz-linear-gradient(top,  #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#fdfdfd',GradientType=0 ); /* IE6-9 */
-        color: #00AEEF;
+        cursor: default;
     }
 
     .noborders {

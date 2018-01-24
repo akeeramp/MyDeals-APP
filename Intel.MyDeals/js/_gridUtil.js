@@ -760,6 +760,15 @@ gridUtils.getDimLabel = function(key) {
     if (key.indexOf("20___7") >= 0) dim = "Secondary 7";
     if (key.indexOf("20___8") >= 0) dim = "Secondary 8";
     if (key.indexOf("20___9") >= 0) dim = "Secondary 9";
+    if (key.indexOf("10___1") >= 0) dim = "Tier 1";
+    if (key.indexOf("10___2") >= 0) dim = "Tier 2";
+    if (key.indexOf("10___3") >= 0) dim = "Tier 3";
+    if (key.indexOf("10___4") >= 0) dim = "Tier 4";
+    if (key.indexOf("10___5") >= 0) dim = "Tier 5";
+    if (key.indexOf("10___6") >= 0) dim = "Tier 6";
+    if (key.indexOf("10___7") >= 0) dim = "Tier 7";
+    if (key.indexOf("10___8") >= 0) dim = "Tier 8";
+    if (key.indexOf("10___9") >= 0) dim = "Tier 9";
 
     return dim;
 }
@@ -811,6 +820,34 @@ gridUtils.tenderDim = function (dataItem, field, format) {
 
         return rtn.join(", ");
     }
+
+}
+
+gridUtils.tierDim = function (dataItem, field, format) {
+    var rtn = [];
+    var rtnKit = [];
+    var key, dim, val;
+    var ar = dataItem[field];
+
+    for (key in ar) {
+        if (ar.hasOwnProperty(key) && key.indexOf("10___") >= 0) {
+            dim = gridUtils.getDimLabel(key);
+
+            val = ar[key];
+            if (format !== undefined) {
+                if (format === "c" && !isNaN(val)) {
+                    val = kendo.toString(parseFloat(val), format);
+                } else {
+                    val = kendo.toString(val, format);
+                }
+            }
+
+            rtn.push(val);
+            rtnKit.push("<div class='fl dimTitle'>" + dim + ":</div> <div class='fl dimValue'>" + val + "</div> ");
+        }
+    }
+
+    return (rtn.length <= 1) ? rtn.join("<div class='clearboth'></div>") : rtnKit.join("<div class='clearboth'></div>");
 
 }
 

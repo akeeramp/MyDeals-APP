@@ -320,9 +320,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.wipData = root.pricingTableData.WIP_DEAL;
 
     	// If no data was returned, we should redirect back to PTR
-        if (root.wipData.length === 0
-			|| ($scope.pricingTableData.PRC_TBL !== undefined && $scope.pricingTableData.PRC_TBL.length > 0 && $scope.pricingTableData.PRC_TBL[0].PASSED_VALIDATION !== "Complete") // user goes to "/wip" url of an incomplete ptr
-		) {
+        if (root.wipData.length === 0 || $scope.curPricingTable.PASSED_VALIDATION == "Dirty") { // Make PT dirty
             $state.go('contract.manager.strategy',
                 {
                     cid: $scope.contractData.DC_ID,
@@ -333,6 +331,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true);
+    }
+
+    function getPtrPassedValidation() {
+        return $scope.pricingTableData.PRC_TBL_ROW[0].PASSED_VALIDATION;
     }
 
     function getFormatedGeos(geos) {

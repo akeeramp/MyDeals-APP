@@ -119,6 +119,26 @@
             return val.replace(/_/g, ' ');
         }
 
+        $scope.enableDealEditorTab = function () {
+            if (!$scope.isPtr) return true;
+            var data = $scope.pricingTableData;
+            if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.PRC_TBL_ROW.length === 0) return false;
+            return true;
+        }
+
+        $scope.enableFlowBtn = function () {
+            if ($scope.contractData.PRC_ST === undefined || $scope.contractData.PRC_ST.length === 0) return false;
+            var passedItems = $linq.Enumerable().From($scope.contractData.PRC_ST).Where(
+                function (x) {
+                    var passedPtItems = $linq.Enumerable().From(x.PRC_TBL).Where(
+                        function (x) {
+                            return (x.PASSED_VALIDATION !== "Dirty");
+                        }).ToArray();
+                    return passedPtItems;
+                }).ToArray();
+            return passedItems.length > 0;
+        }
+
         $scope.removeDimKeyFromWipTemplates = function () {
             if ($scope.templates === undefined) return;
             if ($scope.templates.ModelTemplates === undefined) return;

@@ -57,12 +57,21 @@ namespace Intel.MyDeals.BusinessLogic
 				Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD);
 		}
 
-		/// <summary>
-		/// Get All Simple Dropdowns with grouping of atrbCd and obj_set_Type of dealtypeCd
-		/// Note: also return those that match "All Deals" type as well as the specified dealtypecd
-		/// </summary>
-		/// <returns>list of dropdowns</returns>
-		public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd)
+        public IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd)
+        {
+            atrbCd = atrbCd.ToUpper();
+            List<string> data = _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD).Select(d => d.DROP_DOWN).Distinct().ToList();
+
+            return data.Select(dropdownVal => new BasicDropdown {DROP_DOWN = dropdownVal}).Distinct().ToList();
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and obj_set_Type of dealtypeCd
+        /// Note: also return those that match "All Deals" type as well as the specified dealtypecd
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd)
 		{
 			atrbCd = atrbCd.ToUpper();
 			dealtypeCd = dealtypeCd.ToUpper();

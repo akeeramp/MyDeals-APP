@@ -15,8 +15,8 @@
                     k-data-source="rulesDataSource"
                     style="width: 250px;"></select>
         </div>
-
-        <div class="fr">
+        
+        <div class="fr btn-group" ng-hide="data[0].value === ''">
             <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="saveToExcel()">
                 <table>
                     <tbody>
@@ -25,33 +25,22 @@
                                 <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
                             <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
-                                Export to Excel<br>
-                                All Columns, All Data
+                                Excel<br>Export
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </button>
+            <button class="btn btn-sm ssToolbarBtn dropdown-toggle" style="height: 30px; margin-top: -5px;" aria-expanded="false" type="button" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right menu-container" role="menu" style="font-size: 13px;">
+                <li ng-click="saveToExcel()"><a>Export All Columns, All Data</a></li>
+                <li ng-click="saveCurrentToExcel()"><a>Export Current View</a></li>
+            </ul>
         </div>
         
-        <div class="fr">
-            <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="saveCurrentToExcel()">
-                <table>
-                    <tbody>
-                        <tr>
-                            <td style="border: 0px solid transparent;">
-                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
-                            </td>
-                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
-                                Export to Excel<br>
-                                Current View
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </button>
-        </div>
-
         <div class="fr">
             <button class="btn btn-sm ssToolbarBtn" ng-click="clearSortingFiltering()" title="Clear all sorting and filtering." style="margin-top: -5px;">
                 <table>
@@ -71,7 +60,7 @@
         </div>
         
         <div class="fr attrbMenu" style="margin-left: 4px;">
-            <ul kendo-menu k-options="columnMenu">
+            <ul kendo-menu k-options="columnMenu" style="margin-top: -3px;">
                 <li>
                     <i class="fl intelicon-view-by-columns skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
                     <span class="fl skyBlue" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>

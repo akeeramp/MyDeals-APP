@@ -7,7 +7,9 @@ namespace Intel.MyDeals.IBusinessLogic
 	{
         List<BasicDropdown> GetBasicDropdowns();
 
-	    IEnumerable<BasicDropdown> GetDropdowns(string atrbCd);
+        IEnumerable<BasicDropdown> GetDropdowns(string atrbCd);
+
+        IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd);
 
         IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd);
 

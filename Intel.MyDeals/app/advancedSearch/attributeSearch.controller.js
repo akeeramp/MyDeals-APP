@@ -115,6 +115,40 @@
 
         $scope.attributeSettings = [
             {
+                field: "Customer.CUST_MBR_SID",
+                title: "Customer",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Customers/GetMyCustomerNames",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "CUST_NM",
+                            dataValueField: "CUST_NM",
+                            valuePrimitive: true,
+                            optionLabel: "--Select Customer--"
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "CUST_NM",
+                lookupValue: "CUST_NM",
+                lookupUrl: "/api/Customers/GetMyCustomerNames"
+            }, {
+                field: "CUST_ACCNT_DIV",
+                title: "Division",
+                type: "string",
+                width: 140
+            }, {
                 field: "DC_ID",
                 title: "Deal",
                 type: "number",
@@ -122,68 +156,45 @@
                 filterable: "numObjFilter",
                 template: "<div ng-click='navToPath(dataItem)' class='tenderDealId'>#=data.DC_ID#</div>"
             }, {
-                field: "PRODUCT_FILTER",
-                title: "Product",
-                type: "string",
-                width: 250,
-                dimKey: 20,
-                filterable: "objFilter",
-                template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
-            }, {
-                field: "TRKR_NBR",
-                title: "Tracker #",
-                type: "string",
-                width: 210,
-                dimKey: 20,
-                filterable: "objFilter",
-                template: "#= gridUtils.tenderDim(data, 'TRKR_NBR') #"
-            }, {
-                field: "ECAP_PRICE",
-                title: "ECAP Price",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
-            }, {
-                field: "CAP",
-                title: "CAP",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
-            }, {
-                field: "YCS2_PRC_IRBT",
-                title: "YCS2",
-                type: "money",
-                dimKey: 20,
-                width: 170,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
-            }, {
-                field: "START_DT",
-                title: "Start Date",
-                type: "date",
-                template: "#= moment(START_DT).format('MM/DD/YYYY') #",
-                width: 130
-            }, {
-                field: "END_DT",
-                title: "End Date",
-                type: "date",
-                template: "#= moment(END_DT).format('MM/DD/YYYY') #",
-                width: 130
-            }, {
-                field: "VOLUME",
-                title: "Ceiling Vol",
-                type: "number",
-                width: 120
+                field: "WF_STG_CD",
+                title: "Deal Status",
+                type: "list",
+                width: 140,
+                template: "#=gridUtils.stgFullTitleChar(data)#",
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: {
+                                data: [
+                                    "Draft",
+                                    "Requested",
+                                    "Submitted",
+                                    "Pending",
+                                    "Approved",
+                                    "Active",
+                                    "Cancelled"
+                                ]
+                            },
+                            optionLabel: "--Select Status--"
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [
+                    { Value: "Draft" },
+                    { Value: "Requested" },
+                    { Value: "Submitted" },
+                    { Value: "Pending" },
+                    { Value: "Approved" },
+                    { Value: "Active" },
+                    { Value: "Cancelled" }
+                ]
+
             }, {
                 field: "OBJ_SET_TYPE_CD",
-                title: "Rebate Type",
+                title: "Deal Type",
                 type: "list",
                 width: 130,
                 filterable: {
@@ -211,13 +222,56 @@
                     { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }
                 ]
             }, {
-                field: "END_CUSTOMER_RETAIL",
-                title: "End Customer",
-                type: "string",
-                width: 140
+                field: "START_DT",
+                title: "Start Date",
+                type: "date",
+                template: "#= moment(START_DT).format('MM/DD/YYYY') #",
+                width: 130
             }, {
-                field: "Customer.CUST_DIV_NM",
-                title: "OEM",
+                field: "END_DT",
+                title: "End Date",
+                type: "date",
+                template: "#= moment(END_DT).format('MM/DD/YYYY') #",
+                width: 130
+            }, {
+                field: "PRODUCT_FILTER",
+                title: "Product",
+                type: "string",
+                width: 250,
+                dimKey: 20,
+                filterable: "objFilter",
+                template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
+            }, {
+                field: "MRKT_SEG",
+                title: "Market Segment",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function(element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
+            }, {
+                field: "REBATE_TYPE",
+                title: "Rebate Type",
                 type: "list",
                 width: 140,
                 filterable: {
@@ -227,34 +281,128 @@
                                 type: 'json',
                                 transport: {
                                     read: {
-                                        url: "/api/Customers/GetMyCustomerNames",
+                                        url: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE",
                                         type: "GET",
                                         dataType: "json"
                                     }
                                 }
                             }),
-                            dataTextField: "CUST_NM",
-                            dataValueField: "CUST_NM",
-                            valuePrimitive: true,
-                            optionLabel: "--Select Customer--"
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
                         });
                     },
                     extra: false
                 },
-                lookupText: "CUST_NM",
-                lookupValue: "CUST_NM",
-                lookupUrl: "/api/Customers/GetMyCustomerNames",
-                lookups: []
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE"
             }, {
-                field: "CUST_ACCNT_DIV",
-                title: "Cust Division",
-                type: "string",
-                width: 140
+                field: "CAP",
+                title: "CAP",
+                type: "money",
+                width: 170,
+                dimKey: 20,
+                format: "{0:c}",
+                filterable: "moneyObjFilter",
+                template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
             }, {
-                field: "GEO_COMBINED",
-                title: "Geo",
-                type: "string",
-                width: 100
+                field: "ECAP_PRICE",
+                title: "ECAP Price",
+                type: "money",
+                width: 170,
+                dimKey: 20,
+                format: "{0:c}",
+                filterable: "moneyObjFilter",
+                template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
+            }, {
+                field: "VOLUME",
+                title: "Ceiling Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "STRT_VOL",
+                title: "Start Volume",
+                type: "number",
+                width: 170,
+                dimKey: 10,
+                format: "{0:n}",
+                filterable: "numObjFilter",
+                template: "#= gridUtils.tierDim(data, 'STRT_VOL', 'n') #"
+            }, {
+                field: "END_VOL",
+                title: "End Volume",
+                type: "number",
+                width: 170,
+                dimKey: 10,
+                format: "{0:n}",
+                filterable: "numObjFilter",
+                template: "#= gridUtils.tierDim(data, 'END_VOL', 'n') #"
+            }, {
+                field: "RATE",
+                title: "Rate",
+                type: "money",
+                width: 170,
+                dimKey: 10,
+                format: "{0:c}",
+                filterable: "moneyObjFilter",
+                template: "#= gridUtils.tierDim(data, 'RATE', 'c') #"
+            }, {
+                field: "PROGRAM_PAYMENT",
+                title: "Program Payment",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT"
+            }, {
+                field: "PAYOUT_BASED_ON",
+                title: "Payout Based On",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
             }
         ];
 

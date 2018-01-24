@@ -1,25 +1,17 @@
 ﻿<div style="height: 37px; border-bottom: 1px solid #e8eaec; overflow: hidden;">
-    <!--<div class="fl flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
-    <div class="fl flowBtn disabled">Compliance</div>
-    <div class="fr flowBtn disabled">Manage</div>-->
-    <!--
-    <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">Compliance</div>
-    <div class="fr flowBtn" ng-class="{inactive: flowMode != 'Manage'}" ng-click="gotoManage()">Manage</div>
-        -->
-    <!--<div class="clearboth"></div>-->
     <table style="width: 100%;">
         <tr>
             <td style="width: 33%;">
                 <div class="flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
             </td>
             <td style="width: 34%; padding: 0 4px;">
-                <div class="flowBtn"ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">
+                <div class="flowBtn" ng-class="{inactive: flowMode != 'Compliance', disabled: enableFlowBtn() === false}" ng-click="gotoCompliance()">
                     <i ng-if="needMct()" class="intelicon-information-outlined red font-med" title="Meet Comp needs to be reviewed"></i>
                     Meet Comp
                 </div>
             </td>
             <td style="width: 33%">
-                <div class="flowBtn"ng-class="{inactive: Manage != 'Compliance'}" ng-click="gotoManage()">Manage</div>
+                <div class="flowBtn" ng-class="{inactive: Manage != 'Compliance', disabled: enableFlowBtn() === false}" ng-click="gotoManage()">Manage</div>
             </td>
         </tr>
     </table>
@@ -51,8 +43,8 @@
          text-align: center;
          cursor: default;
      }
-    .flowBtn.disabled {
-        background-color: #cccccc;
+    .flowBtn.disabled, .flowBtn.disabled:hover {
+        background-color: #cccccc !important;
         color: #999999;
         cursor: default;
     }

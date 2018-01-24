@@ -2,15 +2,16 @@
 
 	<div style="position:absolute; left: 5px; z-index: 900;  padding-top: 2px;">
 		<!-- Save Button -->
-        <button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
+        <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
             <table>
                 <tr>
                     <td>
                         <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                     </td>
                     <td style="padding-left: 5px; color: #00AEEF;">
-                        Save & Validate<br />
-                        Pricing Table
+                        <span class="text">
+                            Save & Validate
+                        </span>
                     </td>
                 </tr>
             </table>
@@ -156,8 +157,35 @@
 		background-color: transparent;
 	}
 
-		.help-add-prod i {
-			font-size: 40px;
-			color: #0071C5;
-		}
+	.help-add-prod i {
+		font-size: 40px;
+		color: #0071C5;
+	}
+
+    .ssToolbarBtn.btn-save, .ssToolbarBtn {
+        background-color: transparent;
+	}
+
+    .ssToolbarBtn.btn-save table tr td span.text {
+        font-size: 14px !important;
+        font-weight: 600;
+        line-height: 1em;
+	}
+    .ssToolbarBtn.btn-save:hover {
+        background-color: #f2f2f2;
+	}
+    .ssToolbarBtn.btn-save.notdirty {
+        cursor: not-allowed;
+    }
+    .ssToolbarBtn.btn-save.notdirty table tr td span.text {
+        font-size: 11px !important;
+        font-weight: 200;
+        line-height: 1em;
+	}
+    .ssToolbarBtn.btn-save.notdirty table tr td, .ssToolbarBtn.notdirty table tr td i {
+        color: #ababab !important;
+    }
+    .ssToolbarBtn.btn-save.notdirty:hover {
+        background-color: transparent;
+	}
 </style>

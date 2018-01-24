@@ -20,14 +20,16 @@
         <div class="toolbar" ng-hide="isCustomToolbarEnabled">
 
             <div class="fl">
-                <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
+                <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
                     <table>
                         <tr>
                             <td>
                                 <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i>
                             </td>
                             <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                Save & Validate <br />Deals
+                                <span class="text">
+                                    Save & Validate
+                                </span>
                             </td>
                         </tr>
                     </table>
@@ -47,8 +49,69 @@
                 </button>
 
             </div>
+            
+            <div class="fr" style="margin-top: 2px;">
+                <span class="k-textbox k-space-left" style="width: 300px; font-size: 16px">
+                    <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search..." ng-model="searchFilter" />
+                    <a ng-click="searchGrid()" class="k-icon" style="width: 30px; margin-left: -3px; margin-top: -12px; height: 25px;">
+                        <i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i>
+                    </a>
+                </span>
+            </div>
 
-            <div class="fl" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
+            <div class="fr btn-group" style="margin-top: 6px; margin-left: 4px; margin-right: 10px;" ng-hide="data[0].value === ''" ng-show="isExportable">
+                <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="exportToExcelCustomColumns()">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td style="border: 0px solid transparent;">
+                                    <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
+                                </td>
+                                <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                    Excel<br>Export
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn dropdown-toggle" style="height: 30px; margin-top: -5px;" aria-expanded="false" type="button" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right menu-container" role="menu" style="font-size: 13px;">
+                    <li ng-click="exportToExcelCustomColumns()"><a>Export All Columns, All Data</a></li>
+                    <li ng-click="exportToExcel()"><a>Export Current View</a></li>
+                </ul>
+            </div>
+
+            <div class="fr" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
+                <ul kendo-menu>
+                    <li>
+                        <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
+                        <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
+                        <i style="font-size: 40px !important; width: 1px !important;"></i>
+                        <ul>
+                            <li ng-click="addTab()">
+                                <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD TAB
+                            </li>
+                            <li ng-click="renameTab()">
+                                <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> RENAME TAB
+                            </li>
+                            <li ng-click="defaultLayout()">
+                                <i class="intelicon-dashboard-solid" style="font-size: 18px;"></i> DEFAULT LAYOUT
+                            </li>
+                            <li ng-click="customLayout()" ng-class="{'li-disabled': opOptions.custom === undefined}">
+                                <i class="intelicon-dashboard-outlined" style="font-size: 18px;"></i> CUSTOM LAYOUT
+                            </li>
+                            <li ng-click="saveLayout()">
+                                <i class="intelicon-save-outlined" style="font-size: 18px;"></i> SAVE LAYOUT
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="fr" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                 <ul kendo-menu k-options="columnMenu">
                     <li>
                         <i class="fl intelicon-view-by-columns" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
@@ -78,34 +141,7 @@
                 </ul>
             </div>
 
-            <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
-                <ul kendo-menu>
-                    <li>
-                        <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                        <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
-                        <i style="font-size: 40px !important; width: 1px !important;"></i>
-                        <ul>
-                            <li ng-click="addTab()">
-                                <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD TAB
-                            </li>
-                            <li ng-click="renameTab()">
-                                <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> RENAME TAB
-                            </li>
-                            <li ng-click="defaultLayout()">
-                                <i class="intelicon-dashboard-solid" style="font-size: 18px;"></i> DEFAULT LAYOUT
-                            </li>
-                            <li ng-click="customLayout()" ng-class="{'li-disabled': opOptions.custom === undefined}">
-                                <i class="intelicon-dashboard-outlined" style="font-size: 18px;"></i> CUSTOM LAYOUT
-                            </li>
-                            <li ng-click="saveLayout()">
-                                <i class="intelicon-save-outlined" style="font-size: 18px;"></i> SAVE LAYOUT
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
+            <!--<div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
                 <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
                     <table>
                         <tr>
@@ -135,23 +171,8 @@
                         </tr>
                     </table>
                 </button>
-            </div>
+            </div>-->
 
-            <div class="fr" style="margin-top: 2px;">
-                <span class="k-textbox k-space-left" style="width: 300px; font-size: 16px">
-                    <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search..." ng-model="searchFilter" />
-                    <a ng-click="searchGrid()" class="k-icon" style="width: 30px; margin-left: -3px; margin-top: -12px; height: 25px;">
-                        <i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i>
-                    </a>
-                </span>
-
-                <!--<button class="btn btn-sm btn-default" ng-click="searchGrid()">
-                <i class="intelicon-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Search"></i>
-                </button>
-                <button class="btn btn-sm btn-default" ng-click="clearSearchGrid()">
-                <i class="intelicon-cancel-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Clear Search"></i>
-                </button>-->
-            </div>
 
             <div class="clearboth"></div>
         </div>

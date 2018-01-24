@@ -1212,6 +1212,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.saveFunctions = function (model, col, newVal) {
 
                 model.dirty = true;
+                $scope._dirty = true;
 
                 $scope.root.saveCell(model, col, $scope, newVal);
 
