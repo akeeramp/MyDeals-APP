@@ -369,9 +369,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             grid.resize();
 
                             if (grid.dataSource.group().length > 0) {
-                                $("tr.k-grouping-row").each(function () {
-                                    grid.collapseGroup(this);
-                                });
+                                $("#detailGrid_" + pt.DC_ID).find('.k-icon.k-i-collapse').trigger('click');
                             }
 
                             // lame workaround.  checkboxes were not binding properly, so wait for them to load and set them.  True will pickup and check checkboxes
