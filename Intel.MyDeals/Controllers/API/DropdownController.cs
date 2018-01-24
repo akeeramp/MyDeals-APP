@@ -168,6 +168,15 @@ namespace Intel.MyDeals.Controllers.API
 		}
 
         [Authorize]
+        [Route("GetSoldToIds/{custId}/{geos}")]
+        public List<Dropdown> GetSoldToIds(int custId, string geos)
+        {
+            return SafeExecutor(() => _dropdownLib.GetSoldToIdDropdown(custId, geos.Split(','), null)
+                , $"Unable to get Sold To Ids for the contract's customer"
+            );
+        }
+
+        [Authorize]
         [Route("GetSoldToIds/{custId}/{geos}/{custDiv}")]
         public List<Dropdown> GetSoldToIds(int custId, string geos, string custDiv)
         {
