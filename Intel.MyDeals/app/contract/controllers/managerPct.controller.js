@@ -15,7 +15,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     var root = $scope.$parent;	// Access to parent scope
     $scope.root = root;
-    
+
     $scope.pctFilter = "";
     $scope.$parent.isSummaryHidden = false;
     gridPctUtils.columns = {};
@@ -32,7 +32,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
     var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
     var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || (window.usrRole === "SA" && window.isSuper);
-    
+
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
         $("#approvalDiv").removeClass("active");
@@ -250,7 +250,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         }
                     }
                 }
-                
+
                 for (var i = 0; i < response.length; i++) {
                     var item = response[i];
 
@@ -369,7 +369,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             grid.resize();
 
                             if (grid.dataSource.group().length > 0) {
-                                $(".k-grouping-row").each(function () {
+                                $("tr.k-grouping-row").each(function () {
                                     grid.collapseGroup(this);
                                 });
                             }
@@ -426,7 +426,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 .From($scope.CostTestGroupDetails[$scope.dealPtIdDict[dataItem.DEAL_ID]])
                 .Where(function (x) {
                     return x.DEAL_PRD_RNK === dealId;
-                }).ToArray();            
+                }).ToArray();
         }
 
         var modalInstance = $uibModal.open({
