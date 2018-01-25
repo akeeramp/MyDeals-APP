@@ -1204,7 +1204,26 @@ namespace Intel.MyDeals.BusinessRules
 			}
 		}
 
-		public static void CheckTotalDollarAmount(params object[] args)
+        public static void CheckTenderSettings(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string myRebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            if (myRebateType != "TENDER") return;
+
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (de == null) return;
+
+            if (de.AtrbValue.ToString() == "Frontend YCS2")
+            {
+                de.AddMessage("Tender deals can not be Frontend YCS2.");
+            }
+
+        }
+
+        public static void CheckTotalDollarAmount(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;

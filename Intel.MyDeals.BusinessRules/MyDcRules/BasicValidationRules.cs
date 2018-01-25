@@ -440,12 +440,19 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Check Tender Settings",
+                    ActionRule = MyDcActions.CheckTenderSettings,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
+                },
+                new MyOpRule
+                {
                     Title="Validate Product Json",
                     ActionRule = MyDcActions.CheckProductJson,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
                 },
-				new MyOpRule
+                new MyOpRule
 				{
 					Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
 					ActionRule = MyDcActions.CheckTotalDollarAmount,
