@@ -71,7 +71,13 @@
                 .then(function (response) {
                     var file = new Blob([response.data], { type: 'application/pdf' });
                     var fileURL = URL.createObjectURL(file);
-                    window.open(fileURL, "Quote Letter Preview");
+                    // Work around to avoid being blocked by chrome pop up blocker indicating this is untrusted location
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.href = fileURL;
+                    a.download = "QuoteLetter.pdf";
+                    a.click();
+                    //window.open(fileURL, "Quote Letter Preview");
                     logger.success("Successfully generated quote letter preview.");
                 }, function (response) {
                     logger.error("Unable to generate quote letter preview.", response, response.statusText);
