@@ -49,8 +49,8 @@ function messageBoard($compile, $timeout, objsetService) {
                         }
                     }
                 }
-                actnList.push(kendo.template($("#emailItemTemplate").html())(items));
 
+                actnList.push(kendo.template($("#emailItemTemplate").html())(items));
 
                 var url = '/Email/SubmissionNotification';
                 var form = $('<form action="' + url + '" method="post">' +

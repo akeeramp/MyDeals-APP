@@ -26,6 +26,11 @@ namespace Intel.MyDeals.Controllers
                 ? OpUserStack.MyOpUserToken.Usr.Email
                 : emailMessage.From;
 
+            emailMessage.Body = emailMessage.Body.Replace("MAILTO_TOKEN", from);
+
+            from = "mydeals.notification@intel.com";
+
+
             var message = new MailMessage
             {
                 From = new MailAddress(from),
