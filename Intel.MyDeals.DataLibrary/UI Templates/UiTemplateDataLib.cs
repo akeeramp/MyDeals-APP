@@ -509,7 +509,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRD_BCKT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 100,
+                Width = 150,
                 Label = "Products",
                 IsDimKey = true,
                 IsReadOnly = true,

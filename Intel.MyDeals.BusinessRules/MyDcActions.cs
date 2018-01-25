@@ -1189,7 +1189,8 @@ namespace Intel.MyDeals.BusinessRules
 				foreach (IOpDataElement tieredObj in tieredObjs)
 				{
 					int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
-					if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+					var excludingKitOffset = tierOffset - 1; // Kit offset, but not including "-1" for KIT ecap rows
+					if (tier >= (1 - excludingKitOffset) && tier <= (numOfTiers - excludingKitOffset))
 					{
 						AddTierValidationMessage(atrbWithValidation, "KIT Rebate must be equal to sum of total discount per line.", tier);
 					}

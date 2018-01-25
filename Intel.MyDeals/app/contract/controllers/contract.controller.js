@@ -2452,10 +2452,11 @@
                                     var tierCount = dataItem.NUM_OF_TIERS;
 
                                     if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                                    	if (dataItem.PRODUCT_FILTER === undefined) { continue; }
                                         dimStr = "_20___"
                                         isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
                                         relevantAtrbs = $scope.kitDimAtrbs;
-                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
+                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;      
                                     }
                                     // map tiered warnings
                                     for (var t = 1 - isKit; t <= tierCount - isKit; t++) {

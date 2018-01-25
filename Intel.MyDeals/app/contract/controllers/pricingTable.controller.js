@@ -320,7 +320,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.wipData = root.pricingTableData.WIP_DEAL;
 
         // If no data was returned, we should redirect back to PTR
-        if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
+        if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty 
             $state.go('contract.manager.strategy',
                 {
                     cid: $scope.contractData.DC_ID,
@@ -625,6 +625,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var qtyIndex = (root.colToLetter["QTY"].charCodeAt(0) - intA);
             var ecapIndex = (root.colToLetter["ECAP_PRICE"].charCodeAt(0) - intA);
             var kitEcapIndex = (root.colToLetter["ECAP_PRICE_____20_____1"].charCodeAt(0) - intA);
+            var ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
             var isDealGrpColumnIncludedInChanges = (range._ref.topLeft.col <= dealGrpColIndex) && (range._ref.bottomRight.col >= dealGrpColIndex);
             var isDscntPerLnColChanged = (range._ref.topLeft.col <= dscntPerLnIndex) && (range._ref.bottomRight.col >= dscntPerLnIndex);
@@ -651,7 +652,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        }
 					    }
 
-					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null && value.value != null) {
+					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null ) {
 					        var prevValue = angular.copy(myRow[colName]);
 					        var numOfTiers = root.numOfPivot(myRow);
 
@@ -659,7 +660,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        var myColLetter = String.fromCharCode(intA + (colIndex));
 					        var colName = root.letterToCol[myColLetter];
 					        var tierNbr = myRow["TIER_NBR"];
-					        myRow[colName] = value.value;
+					        if (ptTemplate.model.fields[colName].type == "number") {
+								// format numbers based on templating
+					        	myRow[colName] = (parseFloat(value.value) || 0); 
+					        } else {
+					        	myRow[colName] = value.value;
+					        }
 					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
 					        sourceData[(rowIndex - 1)]["dirty"] = true;
 
@@ -667,7 +673,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
 					            // Transform negative numbers into positive
 					            if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
-					            	myRow["QTY"] = Math.abs(value.value);
+					            	myRow["QTY"] = (Math.abs(value.value) || 0);
 					            }
 					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
@@ -721,7 +727,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        }
 
 					    	// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-					        if (colIndex == ecapIndex || colIndex == kitEcapIndex) {
+					        if (colIndex == ecapIndex || colIndex == kitEcapIndex) {								
 					        	// Get the first tier row
 					        	var firstTierRowIndex = (rowIndex - tierNbr);
 					        	var firstTierRow = data[firstTierRowIndex];
