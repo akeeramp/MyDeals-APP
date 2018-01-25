@@ -794,9 +794,15 @@ namespace Intel.MyDeals.BusinessRules
 			// NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
 			// set WIP Stages to Draft for a redeal if they already aren't there
-			if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft) r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
+		    if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft)
+		    {
+                r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
+                r.Dc.SetAtrb(AttributeCodes.PS_WF_STG_CD, OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
+                    ? WorkFlowStages.Requested
+                    : WorkFlowStages.Draft);
+            }
 
-			if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
+            if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
 			{
 				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
 				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);

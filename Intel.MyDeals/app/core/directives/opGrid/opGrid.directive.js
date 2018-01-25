@@ -1209,6 +1209,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             }
 
+            $scope.passThoughFunc = function (func, dataItem) {
+                return func(dataItem);
+            }
+
             $scope.saveFunctions = function (model, col, newVal) {
 
                 model.dirty = true;
@@ -1285,10 +1289,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         if (!!dataItem) {
                             dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
                             dataItem["WF_STG_CD"] = args.data.WIP_DEAL[i]["WF_STG_CD"];
+                            dataItem["PS_WF_STG_CD"] = args.data.WIP_DEAL[i]["PS_WF_STG_CD"];
                             dataItem["TRKR_NBR"] = args.data.WIP_DEAL[i]["TRKR_NBR"];
                             dataItem["AVG_RPU"] = args.data.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.data.WIP_DEAL[i]["MAX_RPU"];
-                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];                            
+                            dataItem["BID_STATUS"] = args.data.WIP_DEAL[i]["BID_STATUS"];
+                            dataItem["EXPIRE_FLG"] = args.data.WIP_DEAL[i]["EXPIRE_FLG"];
+                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];
                         }
                     }
                 }

@@ -552,6 +552,14 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     return tmplt;
 }
 
+gridUtils.uiBidStatusControlWrapper = function (passedData, field) {
+    var tmplt = '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + '}">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind-html="(passThoughFunc(root.showBidStatusWip, dataItem))"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
         ? passedData[field].join()
@@ -1009,7 +1017,7 @@ gridUtils.getBidActions = function (data) {
         'style="width: 100%;"></select>';
 }
 
-gridUtils.showBidStatusWip = function(data) {
+gridUtils.showBidStatusWip = function (data) {
     if (data.WF_STG_CD === "Draft") return "<i>Not Actionable</i>";
     return data.BID_STATUS;
 }

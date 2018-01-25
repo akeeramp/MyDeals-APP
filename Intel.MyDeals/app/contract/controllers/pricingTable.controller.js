@@ -3385,6 +3385,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
+    $scope.showBidStatusWip = function (dataItem) {
+        return gridUtils.showBidStatusWip(dataItem);
+    }
+
     $scope.customRedo = function () {
         // NOTE: Redo calls the onChange event (but undo does not), so there is no need to call syncUndo$scope.redoCounters() here
         if ($scope.redoCounter > 0) {
