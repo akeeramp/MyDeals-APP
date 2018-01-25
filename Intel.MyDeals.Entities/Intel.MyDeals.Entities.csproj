@@ -68,6 +68,7 @@
     <Compile Include="AtrbSaveItem.cs" />
     <Compile Include="AttributeCollection.cs" />
     <Compile Include="ContractToken.cs" />
+    <Compile Include="CostTestDataItem.cs" />
     <Compile Include="CostTestDetails.cs" />
     <Compile Include="DashboardFilter.cs" />
     <Compile Include="DcPath.cs" />

@@ -15,7 +15,7 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
     $scope.seeMore = false;
     $scope.extendedCols = ["MEET_COMP_PRD", "MEET_COMP_PRC", "BUSNS_OBJ", "PTNTL_MKT_IMPCT", "APRV_ATRNY", "DT_APRV"];
     $scope.disabled = dataItem._readonly || window.usrRole === "Legal" ? "disabled" : "";
-    
+
     $scope.toggleSee = function () {
         var c;
         var grid = $("#gridOverrideReason").data("kendoGrid");
@@ -48,45 +48,47 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                 }
             }
         },
-        height: 300,
         sortable: true,
         filterable: true,
         resizable: true,
+        scrollable: true,
         columns: [
             {
                 field: "isSelected",
                 title: "&nbsp;",
                 filterable: false,
                 template: "<div style='padding-left: 6px;'><input type='checkbox' " + $scope.disabled + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font'/><label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
-                width: "60px"
+                width: "60px",
+                locked:true
             },
             {
                 field: "INTEL_PRD",
                 title: "Intel Product",
-                width: "120px"
+                width: "220px",
+                locked:true
             },
             {
                 field: "SCPE",
                 title: "Scope",
-                width: "200px"
+                width: "350px"
             },
             {
                 field: "COST",
                 title: "Cost",
                 format: "{0:c}",
-                width: "120px"
+                width: "140px"
             },
             {
                 field: "PCT_LGL_EXCPT_STRT_DT",
                 title: "Exception Start Date",
                 template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_STRT_DT), 'M/d/yyyy') #",
-                width: "120px"
+                width: "150px"
             },
             {
                 field: "PCT_LGL_EXCPT_END_DT",
                 title: "Exception End Date",
                 template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_END_DT), 'M/d/yyyy') #",
-                width: "120px"
+                width: "150px"
             },
             {
                 field: "MEET_COMP_PRD",

@@ -1,6 +1,6 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using CustomEntities = Intel.MyDeals.Entities.Custom;
 
 namespace Intel.MyDeals.Entities
 {
@@ -8,9 +8,11 @@ namespace Intel.MyDeals.Entities
     public class CostTestDetail
     {
         [DataMember]
-        public List<CostTestDetailItem> CostTestDetailItems { get; set; }
+        public List<CustomEntities.CostTestDetailItem> CostTestDetailItems { get; set; }
+
         [DataMember]
         public List<CostTestGroupDetailItem> CostTestGroupDetailItems { get; set; }
+
         [DataMember]
         public List<CostTestGroupDealDetailItem> CostTestGroupDealDetailItems { get; set; }
     }
