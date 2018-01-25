@@ -2,15 +2,17 @@
     .module('app.core')
     .directive('dealTools', dealTools);
 
-dealTools.$inject = ['$timeout', 'logger', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary'];
+dealTools.$inject = ['$timeout', 'logger', 'objsetService', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary'];
 
-function dealTools($timeout, logger, dataService, $rootScope, $compile, $templateRequest, colorDictionary) {
+function dealTools($timeout, logger, objsetService, dataService, $rootScope, $compile, $templateRequest, colorDictionary) {
     return {
         scope: {
             dataItem: '=ngModel',
             isEditable: '@isEditable',
             isCommentEnabled: '=?',
-            isFileAttachmentEnabled: '=?'
+            isFileAttachmentEnabled: '=?',
+            isQuoteLetterEnabled: '=?',
+            isDeleteEnabled: '=?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
@@ -33,6 +35,8 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
 
             $scope.isCommentEnabled = $scope.assignVal("isCommentEnabled", true);
             $scope.isFileAttachmentEnabled = $scope.assignVal("isFileAttachmentEnabled", true);
+            $scope.isQuoteLetterEnabled = $scope.assignVal("isQuoteLetterEnabled", true);
+            $scope.isDeleteEnabled = $scope.assignVal("isDeleteEnabled", true);
 
             //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
@@ -51,10 +55,6 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             $scope.stgFullTitleChar = function () {
                 return gridUtils.stgFullTitleChar($scope.dataItem);
             }
-
-
-
-
 
             $scope.notesDialogShow = function () {
             }
@@ -162,10 +162,36 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             $scope.clkHoldIcon = function (dataItem) {
                 if (!$scope.rootScope.C_HOLD_DEALS) return;
                 var hVal = $scope.getHoldValue(dataItem);
-                if (hVal === "CanHold") $scope.openHoldDialog();
-                if (hVal === "TakeOffHold") $scope.openUnHoldDialog();
+                var ids = $scope.getLinkedHoldIds(dataItem);
+                if (hVal === "CanHold") $scope.openHoldDialog(ids);
+                if (hVal === "TakeOffHold") $scope.openUnHoldDialog(ids);
             }
 
+            $scope.getLinkedHoldIds = function (model) {
+                var ids = [];
+                if (model.isLinked !== undefined && model.isLinked) {
+                    var curHoldStatus = model._actionsPS.Hold === undefined ? false : model._actionsPS.Hold;
+                    var data = $scope.el.closest(".k-grid").data("kendoGrid").dataSource.data();
+                    for (var v = 0; v < data.length; v++) {
+                        var dataItem = data[v];
+                        if (dataItem.isLinked !== undefined && dataItem.isLinked) {
+                            if (dataItem._actionsPS === undefined) dataItem._actionsPS = {};
+                            if (dataItem._actionsPS.Hold !== undefined && dataItem._actionsPS.Hold === curHoldStatus) {
+                                ids.push({
+                                    DC_ID: dataItem["DC_ID"],
+                                    WF_STG_CD: dataItem["WF_STG_CD"]
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    ids.push({
+                        DC_ID: model["DC_ID"],
+                        WF_STG_CD: model["WF_STG_CD"]
+                    });
+                }
+                return ids;
+            }
 
 
             // FILES Items
@@ -361,7 +387,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                                 if ($scope.dataItem._dirty) {
                                     $scope._dirty = true;
                                     rootScope.saveCell($scope.dataItem, "NOTES");
-                                    $rootScope.$broadcast('data-item-changed', 'NOTES', $scope.dataItem);
+                                    $rootScope.$broadcast('data-item-changed', 'NOTES', $scope.dataItem, scope.el);
                                 }
                             }
                         }
@@ -429,16 +455,36 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 });
             }
 
-            $scope.openHoldDialog = function () {
-                kendo.confirm("<h4>Would you like to place the deal on hold?</h4><p>This will keep the deal in the Pricing Table, but it will not get<br/>promoted to active or get a tracker number for payment.</p>").then(function () {
-                    rootScope.actionWipDeal($scope.dataItem, 'Hold');
+            $scope.openHoldDialog = function (ids) {
+                var dealTxt = ids.length > 0 ? "deals" : "deal";
+                kendo.confirm("<h4>Would you like to place the " + dealTxt + " on hold?</h4><p>This will keep the " + dealTxt + " in the Pricing Table, but it will not get<br/>promoted to active or get a tracker number for payment.</p>").then(function () {
+                    $scope.actionHoldWipDeals({
+                        Hold: ids
+                    });
                 });
             }
 
-            $scope.openUnHoldDialog = function () {
-                kendo.confirm("<h4>Would you like to take the deal off hold?</h4><p>This will enable the deal in the Pricing Table and will<br/>enable it to get approved.</p>").then(function () {
-                    rootScope.actionWipDeal($scope.dataItem, 'Approve');
+            $scope.openUnHoldDialog = function (ids) {
+                var dealTxt = ids.length > 0 ? "deals" : "deal";
+                kendo.confirm("<h4>Would you like to take the " + dealTxt + " off hold?</h4><p>This will enable the " + dealTxt + " in the Pricing Table and will<br/>enable it to get approved.</p>").then(function () {
+                    $scope.actionHoldWipDeals({
+                        Approve: ids
+                    });
                 });
+            }
+
+            $scope.actionHoldWipDeals = function (data) {
+                $rootScope.$broadcast('busy', "Updating Deals", "Updating hold status of Deals.");
+                objsetService.actionWipDeals($scope.rootScope.contractData.CUST_MBR_SID, $scope.rootScope.contractData.DC_ID, data).then(
+                    function (returnData) {
+                        $rootScope.$broadcast('SyncHiddenItems', returnData, data);
+                        $rootScope.$broadcast('busy', "", "");
+                    },
+                    function (result) {
+                        $rootScope.$broadcast('busy', "", "");
+                        //debugger;
+                    }
+                );
             }
 
             // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.

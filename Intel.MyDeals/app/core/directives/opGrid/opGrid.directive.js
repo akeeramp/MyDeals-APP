@@ -510,8 +510,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //$scope.ds.dataSource.transport.read($scope.optionCallback);
             });
 
-            $scope.$on('data-item-changed', function (event, fieldName, dataItem) {
-                $scope.saveFunctions(dataItem, fieldName, dataItem[fieldName]);
+            $scope.$on('data-item-changed', function (event, fieldName, dataItem, el) {
+                $scope.saveFunctions(dataItem, fieldName, dataItem[fieldName], el);
             });
 
             $scope.applyHideIfAllRules = function (data) {

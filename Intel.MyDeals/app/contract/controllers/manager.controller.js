@@ -345,10 +345,34 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         return false;
     }
 
-    $scope.$on('data-item-changed', function (event, fieldName, dataItem) {
-        $scope.updateAtrbValue("WIP_DEAL", [dataItem["DC_ID"]], fieldName, dataItem[fieldName]);
+    $scope.$on('data-item-changed', function (event, fieldName, dataItem, el) {
+        var ids = [];
+        if (dataItem.isLinked !== undefined && dataItem.isLinked) {
+            var data = el.closest(".k-grid").data("kendoGrid").dataSource.data();
+            ids = $scope.syncLinked(fieldName, dataItem[fieldName], data);
+        } else {
+            ids.push(dataItem["DC_ID"]);
+        }
+        $scope.updateAtrbValue("WIP_DEAL", ids, fieldName, dataItem[fieldName]);
     });
-
+    $scope.syncLinked = function (newField, newValue, data) {
+        var ids = [];
+        for (var v = 0; v < data.length; v++) {
+            var dataItem = data[v];
+            if (dataItem.isLinked !== undefined && dataItem.isLinked) {
+                if (dataItem._behaviors === undefined) dataItem._behaviors = {};
+                if (dataItem._behaviors.isReadOnly === undefined) dataItem._behaviors.isReadOnly = {};
+                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false) {
+                    if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
+                    if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
+                        dataItem.set(newField, newValue);
+                        ids.push(dataItem.DC_ID);
+                    }
+                }
+            }
+        }
+        return ids;
+    }
 
     $scope.togglePt = function (ps,pt) {
 
@@ -397,9 +421,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 						{
 							field: "NOTES",
 							title: "Tools",
-							width: "90px",
+							width: "140px",
 							locked: true,
-							template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>",
+							template: "<deal-tools ng-model='dataItem' is-editable='true' is-file-attachment-enabled='false' is-quote-letter-enabled='false' is-delete-enabled='false'></deal-tools>",
 							filterable: false
 						}, {
 							field: "DC_ID",
@@ -489,6 +513,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							title: "Expired",
 							width: "100px",
 							filterable: { multi: true, search: true }
+						}, {
+						    field: "HAS_ATTACHED_FILES",
+						    title: "Attachments",
+						    width: "80px",
+						    template: "#= gridUtils.hasAttachments(data, 'HAS_ATTACHED_FILES') #"
 						}
         			]
         		}
@@ -535,7 +564,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							title: "Tools",
 							width: "90px",
 							locked: true,
-							template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>",
+							template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false' is-quote-letter-enabled='false'></deal-tools>",
 							filterable: false
 						}, {
 							field: "DC_ID",
@@ -602,6 +631,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 						    title: "Expired",
 						    width: "100px",
 						    filterable: { multi: true, search: true }
+						}, {
+						    field: "HAS_ATTACHED_FILES",
+						    title: "Attachments",
+						    width: "80px",
+						    template: "#= gridUtils.hasAttachments(data, 'HAS_ATTACHED_FILES') #"
 						}
         			]
         		}

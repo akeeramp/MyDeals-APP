@@ -621,6 +621,11 @@ gridUtils.getFormat = function (lType, lFormat) {
     return !lFormat ? "" : "| " + lFormat;
 }
 
+gridUtils.hasAttachments = function (passedData, field) {
+    if (passedData[field] === undefined || passedData[field] !== "1") return "";
+    return "<div style='margin: 0 5px;' title='To view attachments, please go to the Deal Editor'><i class='intelicon-attach'></i></div>";
+}
+
 gridUtils.convertPstToLocal = function (strDt) {
     moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
     return moment.tz(strDt, 'America/Los_Angeles').local().format('MM/DD/YYYY hh:mm:ss A');

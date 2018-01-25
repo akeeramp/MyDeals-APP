@@ -635,6 +635,10 @@
 
         $scope.OverrideDeleteContract();
 
+        $scope.$on('busy', function (event, title, message) {
+            $scope.setBusy(title, message);
+        });
+
         $scope.$on("kendoRendered",
             function (e) {
                 applyQuarters("StartSlider");
@@ -1517,6 +1521,10 @@
 
             });
 
+        $scope.$on('SyncHiddenItems',
+            function (event, data, dataItem) {
+                $scope.syncHoldItems(data, dataItem);
+            });
 
         $scope.actionPricingStrategies = function (data, emailEnabled) {
             $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
@@ -1557,38 +1565,7 @@
             $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!");
             objsetService.actionWipDeal($scope.getCustId(), $scope.contractData.DC_ID, wip, actn).then(
                 function (data) {
-                    $scope.messages = data.data.Messages;
-
-                    $timeout(function () {
-                        if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
-                            if (!wip._actions) wip._actions = {};
-                            wip._actions["Hold"] = true;
-                        }
-                        if (wip.WF_STG_CD !== "Hold" && $scope.messages[0].ShortMessage === "Hold") {
-                            // put on hold
-                            if (!wip._behaviors) wip._behaviors = {};
-                            if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
-                            wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
-                            wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
-                        }
-                        if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
-                            // taken off hold
-                            if (!wip._behaviors) wip._behaviors = {};
-                            if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
-                            wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
-                            wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
-                        }
-
-                        wip.WF_STG_CD = $scope.messages[0].ShortMessage;
-                        if ($scope.messages.length > 1) {
-                            wip.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
-                        }
-                        $scope.$broadcast('refresh');
-                        $scope.$broadcast('refreshStage', wip);
-                        $("#wincontractMessages").data("kendoWindow").open();
-                        $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
-                        $scope.setBusy("", "");
-                    }, 50);
+                    $scope.syncHoldItems(data, wip);
                 },
                 function (result) {
                     $scope.setBusy("", "");
@@ -1612,6 +1589,41 @@
                     //debugger;
                 }
             );
+        }
+        $scope.syncHoldItems = function(data, wip) {
+            $scope.messages = data.data.Messages;
+
+            $timeout(function () {
+                if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                    if (!wip._actions) wip._actions = {};
+                    wip._actions["Hold"] = true;
+                }
+                if (wip.WF_STG_CD !== "Hold" && $scope.messages[0].ShortMessage === "Hold") {
+                    // put on hold
+                    if (!wip._behaviors) wip._behaviors = {};
+                    if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
+                    wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
+                    wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
+                }
+                if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                    // taken off hold
+                    if (!wip._behaviors) wip._behaviors = {};
+                    if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
+                    wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
+                    wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
+                }
+
+                wip.WF_STG_CD = $scope.messages[0].ShortMessage;
+                if ($scope.messages.length > 1) {
+                    wip.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
+                }
+                $scope.$broadcast('refresh');
+                $scope.$broadcast('refreshStage', wip);
+                $("#wincontractMessages").data("kendoWindow").open();
+                $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
+                $scope.setBusy("", "");
+            }, 50);
+
         }
 
         // **** DELETE Methods ****
