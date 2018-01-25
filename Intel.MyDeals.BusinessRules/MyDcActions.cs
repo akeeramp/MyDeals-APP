@@ -1025,7 +1025,7 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			ValidateKitTieredDoubleAttribute(AttributeCodes.QTY.ToString(), "Quantity must have a positive value.", IsGreaterThanZero, r);
+			ValidateKitTieredDoubleAttribute(AttributeCodes.QTY.ToString(), "Quantity must be greater than 0.", IsGreaterThanZero, r);
 		}
 		public static void ValidateTierEcap(params object[] args)
 		{
