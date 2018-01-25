@@ -152,6 +152,11 @@ gridUtils.exportDimTrkrControlWrapper = function (passedData) {
     return tmplt;
 }
 
+gridUtils.getFormatedDim = function(dataItem, field, dim, format) {
+    var item = dataItem[field];
+    if (item === undefined || item[dim] === undefined) return item;
+    return gridUtils.formatValue(item[dim], format);
+}
 gridUtils.formatValue = function (val, format) {
     if (val === undefined) {
         val = "";

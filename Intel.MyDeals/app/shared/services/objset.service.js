@@ -53,6 +53,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
         readWipFromContract: readWipFromContract,
+        updateAtrbValue: updateAtrbValue,
 
         getWipDealsByPtr: getWipDealsByPtr,
         actionPricingStrategy: actionPricingStrategy,
@@ -195,6 +196,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function readWipFromContract(id) {
         return dataService.get(apiBaseContractUrl + 'GetWipFromContract/' + id);
+    }
+    function updateAtrbValue(custId, contractId, data) {
+        return dataService.post(apiBaseContractUrl + "UpdateAtrbValue/" + custId + '/' + contractId, data);
     }
 
 

@@ -28,6 +28,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList GetWipFromContract(int id);
 
+        OpDataCollectorFlattenedDictList UpdateAtrbValue(int custId, int contractId, AtrbSaveItem atrbSaveItem);
+
         bool IsDuplicateContractTitle(int dcId, string title);
 
         dynamic GetContractsStatus(DashboardFilter dashboardFilter);

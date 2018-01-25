@@ -33,26 +33,26 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> atrbs = new List<int>
             {
-                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.CAP.ATRB_SID,
+                Attributes.COST_TEST_RESULT.ATRB_SID,
+                Attributes.DEAL_DESC.ATRB_SID,
+                Attributes.ECAP_PRICE.ATRB_SID,
+                Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.EXPIRE_FLG.ATRB_SID,
+                Attributes.MAX_RPU.ATRB_SID,
+                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
+                Attributes.NOTES.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.START_DT.ATRB_SID,
-                Attributes.END_DT.ATRB_SID,
-                Attributes.NOTES.ATRB_SID,
-                Attributes.TRKR_NBR.ATRB_SID,
-                Attributes.COST_TEST_RESULT.ATRB_SID,
-                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
                 Attributes.TITLE.ATRB_SID,
-				Attributes.CAP.ATRB_SID,
-				Attributes.YCS2_PRC_IRBT.ATRB_SID,
-				Attributes.REBATE_TYPE.ATRB_SID,
-				Attributes.VOLUME.ATRB_SID,
-				Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
-				Attributes.DEAL_DESC.ATRB_SID,
-				Attributes.WF_STG_CD.ATRB_SID,
-				Attributes.EXPIRE_FLG.ATRB_SID,
-				Attributes.MAX_RPU.ATRB_SID
-			};
+                Attributes.TRKR_NBR.ATRB_SID,
+                Attributes.VOLUME.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.YCS2_PRC_IRBT.ATRB_SID,
+            };
 
             var step1 = OpDataElementType.PRC_TBL.GetByIDs(new List<int> {ptId}, opDataElementTypes, atrbs);
             var step2 = step1.AddParentPS(ptId);

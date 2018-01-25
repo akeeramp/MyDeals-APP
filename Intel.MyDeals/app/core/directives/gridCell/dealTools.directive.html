@@ -14,10 +14,10 @@
     
 
     <!-- Notes icon -->
-    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === '' && dataItem.PS_WF_STG_CD">
+    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
     </div>
-    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== '' && dataItem.PS_WF_STG_CD">
+    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
     </div>
 

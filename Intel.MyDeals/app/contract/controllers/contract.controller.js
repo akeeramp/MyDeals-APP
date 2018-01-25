@@ -1385,6 +1385,39 @@
             }
         }
 
+        $scope.updateAtrbValue = function (objSetType, ids, atrb, value) {
+            $scope.setBusy("Saving", "Please wait while your information is being saved.");
+            topbar.show();
+
+            var data = {
+                objSetType: objSetType,
+                ids: ids,
+                attribute: atrb,
+                value: value
+            };
+
+            objsetService.updateAtrbValue($scope.getCustId(), $scope.contractData.DC_ID, data).then(
+                function (results) {
+                    $scope.setBusy("Done", "Save Complete.");
+                    topbar.hide();
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);
+                    $scope.isAutoSaving = false;
+                },
+                function (response) {
+                    $scope.setBusy("Error", "Could not save the value.", "Error");
+                    logger.error("Could not save the value.", response, response.statusText);
+                    topbar.hide();
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);
+                    $scope.isAutoSaving = false;
+                }
+            );
+
+        }
+
         $scope.emailData = [];
         $scope.openEmailMsg = function () {
 

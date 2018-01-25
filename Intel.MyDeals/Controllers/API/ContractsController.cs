@@ -211,5 +211,18 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get WIP Deals {id}"
             );
         }
+
+
+        [Authorize]
+        [Route("UpdateAtrbValue/{custId}/{contractId}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedDictList UpdateAtrbValue(int custId, int contractId, AtrbSaveItem atrbSaveItem)
+        {
+            return SafeExecutor(() => _contractsLib.UpdateAtrbValue(custId, contractId, atrbSaveItem)
+                , $"Unable to update attribute"
+            );
+        }
+        //UpdateAtrbValue
     }
 }

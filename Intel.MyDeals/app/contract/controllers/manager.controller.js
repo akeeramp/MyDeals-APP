@@ -345,6 +345,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         return false;
     }
 
+    $scope.$on('data-item-changed', function (event, fieldName, dataItem) {
+        $scope.updateAtrbValue("WIP_DEAL", [dataItem["DC_ID"]], fieldName, dataItem[fieldName]);
+    });
+
+
     $scope.togglePt = function (ps,pt) {
 
         if (pt.isLoading === undefined || pt.isLoading === true) {
@@ -371,6 +376,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         							PASSED_VALIDATION: { type: "string" },
         							START_DT: { type: "date" },
         							END_DT: { type: "date" },
+        							COST_TEST_RESULT: { type: "string" },
+        							MEETCOMP_TEST_RESULT: { type: "string" },
         							NOTES: { type: "string" },
         							TRKR_NBR: { type: "object" },
         							TITLE: { type: "string" },
@@ -425,15 +432,21 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							width: "100px",
 							filterable: { multi: true, search: true }
 						}, {
-							field: "CAP",
-							title: "CAP",
-							template: "#= kendo.toString(data.CAP['20___0'], 'c') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
-							width: "100px",
-							filterable: { multi: true, search: true }
+						    field: "CAP",
+						    title: "CAP",
+						    template: "#= gridUtils.getFormatedDim(data, 'CAP', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+						    width: "100px",
+						    filterable: { multi: true, search: true }
 						}, {
-							field: "YCS2_PRC_IRBT",
+						    field: "ECAP_PRICE",
+						    title: "ECAP",
+						    template: "#= gridUtils.getFormatedDim(data, 'ECAP_PRICE', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+						    width: "100px",
+						    filterable: { multi: true, search: true }
+						}, {
+						    field: "YCS2_PRC_IRBT",
 							title: "YCS2",
-							template: "#= kendo.toString(data.YCS2_PRC_IRBT['20___0'], 'c') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+							template: "#= gridUtils.getFormatedDim(data, 'YCS2_PRC_IRBT', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
 							width: "100px",
 							filterable: { multi: true, search: true }
 						}, {
@@ -442,7 +455,17 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							width: "100px",
 							filterable: { multi: true, search: true }
 						}, {
-							field: "VOLUME",
+						    field: "COST_TEST_RESULT",
+						    title: "Cost Test Result",
+						    width: "100px",
+						    filterable: { multi: true, search: true }
+						}, {
+						    field: "MEETCOMP_TEST_RESULT",
+						    title: "Meet Comp Test Result",
+						    width: "100px",
+						    filterable: { multi: true, search: true }
+						}, {
+						    field: "VOLUME",
 							title: "Ceiling Volume",
 							width: "100px",
 							filterable: { multi: true, search: true }
@@ -493,6 +516,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         							WF_STG_CD: { type: "string" },
         							START_DT: { type: "date" },
         							END_DT: { type: "date" },
+        							COST_TEST_RESULT: { type: "string" },
+        							MEETCOMP_TEST_RESULT: { type: "string" },
         							NOTES: { type: "string" },
         							TRKR_NBR: { type: "object" },
         							TITLE: { type: "string" },
@@ -511,7 +536,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							width: "90px",
 							locked: true,
 							template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>",
-							filterable: false,
+							filterable: false
 						}, {
 							field: "DC_ID",
 							title: "Deal Id",
@@ -543,7 +568,22 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							width: "100px",
 							filterable: { multi: true, search: true }
 						}, {
-							field: "MAX_RPU",
+						    field: "REBATE_TYPE",
+						    title: "Rebate Type",
+						    width: "100px",
+						    filterable: { multi: true, search: true }
+						}, {
+						    field: "COST_TEST_RESULT",
+						    title: "Cost Test Result",
+						    width: "100px",
+						    filterable: { multi: true, search: true }
+						}, {
+						    field: "MEETCOMP_TEST_RESULT",
+						    title: "Meet Comp Test Result",
+						    width: "100px",
+						    filterable: { multi: true, search: true }
+						}, {
+						    field: "MAX_RPU",
 							title: "Max RPU",
 							width: "100px",
 							filterable: { multi: true, search: true }
@@ -557,6 +597,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							title: "Stage",
 							width: "100px",
 							filterable: { multi: true, search: true }
+						}, {
+						    field: "EXPIRE_FLG",
+						    title: "Expired",
+						    width: "100px",
+						    filterable: { multi: true, search: true }
 						}
         			]
         		}

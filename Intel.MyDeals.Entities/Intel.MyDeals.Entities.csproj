@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtrbSaveItem.cs" />
     <Compile Include="AttributeCollection.cs" />
     <Compile Include="ContractToken.cs" />
     <Compile Include="CostTestDetails.cs" />
