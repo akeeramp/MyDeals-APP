@@ -37,9 +37,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <summary>
         /// Get quote letter file object
         /// </summary>
-        public QuoteLetterFile GetDealQuoteLetter(string dealId, string headerInfo, string bodyInfo)
+        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealInfo, string headerInfo, string bodyInfo)
         {
-            return _quoteLetterDataLib.GetDealQuoteLetter(dealId,  headerInfo,  bodyInfo);
+            return _quoteLetterDataLib.GetDealQuoteLetter(quoteLetterDealInfo,  headerInfo,  bodyInfo);
         }
 
     }

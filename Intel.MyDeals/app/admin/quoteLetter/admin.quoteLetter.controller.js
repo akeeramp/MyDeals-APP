@@ -75,7 +75,7 @@
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.href = fileURL;
-                    a.download = "QuoteLetter.pdf";
+                    a.download = "QuoteLetter_Preview.pdf";
                     a.click();
                     //window.open(fileURL, "Quote Letter Preview");
                     logger.success("Successfully generated quote letter preview.");

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Telerik.Reporting.Processing;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
@@ -91,24 +92,29 @@ namespace Intel.MyDeals.DataLibrary
             return template;
         }
 
-        public QuoteLetterFile GetDealQuoteLetter(string dealId, string headerInfo, string bodyInfo)
+        public void GenerateBulkQuoteLetter(List<QuoteLetterData> quoteLetterDealInfoList)
         {
-            QuoteLetterData quoteLetterData;
+            GetDealQuoteLetterData(quoteLetterDealInfoList, 2); 
+            foreach (var qlData in quoteLetterDealInfoList)
+                GenerateQuoteLetterPDF(qlData);  
+        }
+        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)
+        {                        
+            QuoteLetterFile quoteLetterPdfBytes = new QuoteLetterFile();
+            var quoteLetterDataList = new List<QuoteLetterData>() { quoteLetterDealData };
 
             //preview quote letter data
             if (!string.IsNullOrEmpty(headerInfo) && !string.IsNullOrEmpty(bodyInfo))
-                quoteLetterData = SetDealQuoteLetterPreviewData(headerInfo, bodyInfo);
+                SetDealQuoteLetterPreviewData(quoteLetterDataList[0], headerInfo, bodyInfo);
             else
-                quoteLetterData = GetDealQuoteLetterData(dealId, 2); // callMode  = 3
+                GetDealQuoteLetterData(quoteLetterDataList, 2); 
 
-            var quoteLetterPdfBytes = GenerateQuoteLetterPDF(dealId, quoteLetterData, "DEV");  // TBD - VN
-
+            quoteLetterPdfBytes = GenerateQuoteLetterPDF(quoteLetterDataList[0]);
             return quoteLetterPdfBytes;
         }
 
-        private QuoteLetterData SetDealQuoteLetterPreviewData(string headerInfo, string bodyInfo)
-        {
-            var quoteLetterData = new QuoteLetterData();
+        private void SetDealQuoteLetterPreviewData(QuoteLetterData quoteLetterData, string headerInfo, string bodyInfo)
+        {            
             var quoteLetterContentData = new QuoteLetterContentInfo();        
             var quoteLetterTemplateData = new QuoteLetterTemplateInfo();
 
@@ -134,24 +140,21 @@ namespace Intel.MyDeals.DataLibrary
             quoteLetterTemplateData.HDR_INFO = headerInfo;
 
             quoteLetterData.ContentInfo = quoteLetterContentData;
-            quoteLetterData.TemplateInfo = quoteLetterTemplateData;
-
-            return quoteLetterData;
+            quoteLetterData.TemplateInfo = quoteLetterTemplateData;            
         }
 
         /// <summary>
         /// Get quote letter body based on deal id list
         /// </summary>
         /// <returns>QuoteLetterData with Content and Template data</returns>
-        public QuoteLetterData GetDealQuoteLetterData(string dealId, int callMode)
-        {
-            var quoteLetterData = new QuoteLetterData();
-            var quoteLetterContentData = new QuoteLetterContentInfo();
-            var quoteLetterTemplateData = new QuoteLetterTemplateInfo();
-
+        private List<QuoteLetterData> GetDealQuoteLetterData(List<QuoteLetterData> quoteLetterDealInfoList, int callMode)
+        {            
+            string dealIds = string.Empty;
+            dealIds = string.Join(",", quoteLetterDealInfoList.Select(dealInfo => dealInfo.ObjectSid).ToArray());
+            
             Procs.dbo.PR_MYDL_GET_QUOTE_INFO cmd = new Procs.dbo.PR_MYDL_GET_QUOTE_INFO()
             {
-                @ObjSidLst = dealId, //String.Join(",", dealIds), // TBD - VN - type_int_list
+                @ObjSidLst = dealIds, //String.Join(",", dealIds)
                 @callMode = callMode
             };
             try
@@ -160,19 +163,30 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     //Table 1
                     int IDX_EMAIL = DB.GetReaderOrdinal(rdr, "EMAIL");
+                    int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                    int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_PDF_FILE = DB.GetReaderOrdinal(rdr, "PDF_FILE");
+                    int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
                     int IDX_QUOTE_LETTER = DB.GetReaderOrdinal(rdr, "QUOTE_LETTER");
                     int IDX_TRKR_NBR = DB.GetReaderOrdinal(rdr, "TRKR_NBR");
 
                     while (rdr.Read())
                     {
-                        quoteLetterContentData = (new QuoteLetterContentInfo
+                        var quoteLetterContentData = (new QuoteLetterContentInfo
                         {
                             EMAIL = (IDX_EMAIL < 0 || rdr.IsDBNull(IDX_EMAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL),
+                            OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             PDF_FILE = (IDX_PDF_FILE < 0 || rdr.IsDBNull(IDX_PDF_FILE)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_PDF_FILE),
+                            PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
                             QUOTE_LETTER = (IDX_QUOTE_LETTER < 0 || rdr.IsDBNull(IDX_QUOTE_LETTER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_QUOTE_LETTER),
                             TRKR_NBR = (IDX_TRKR_NBR < 0 || rdr.IsDBNull(IDX_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR)
                         });
+
+                        var quoteLetterData = quoteLetterDealInfoList.FirstOrDefault(qlData => qlData.ObjectSid == quoteLetterContentData.OBJ_SID.ToString());
+                        if (quoteLetterData != null)
+                            quoteLetterData.ContentInfo = quoteLetterContentData;
+                       
                     } // while
 
                     rdr.NextResult();
@@ -185,14 +199,14 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
                     int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
                     int IDX_HDR_INFO = DB.GetReaderOrdinal(rdr, "HDR_INFO");
-                    int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
-                    int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
+                    int IDX_T_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                    int IDX_T_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
                     int IDX_RLSE_ID = DB.GetReaderOrdinal(rdr, "RLSE_ID");
                     int IDX_TMPLT_SID = DB.GetReaderOrdinal(rdr, "TMPLT_SID");
 
                     while (rdr.Read())
                     {
-                        quoteLetterTemplateData = (new QuoteLetterTemplateInfo
+                        var quoteLetterTemplateData = (new QuoteLetterTemplateInfo
                         {
                             BODY_INFO = (IDX_BODY_INFO < 0 || rdr.IsDBNull(IDX_BODY_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BODY_INFO),
                             CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
@@ -200,38 +214,35 @@ namespace Intel.MyDeals.DataLibrary
                             CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
                             CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
                             HDR_INFO = (IDX_HDR_INFO < 0 || rdr.IsDBNull(IDX_HDR_INFO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HDR_INFO),
-                            OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
-                            PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
+                            OBJ_SET_TYPE_CD = (IDX_T_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_T_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_T_OBJ_SET_TYPE_CD),
+                            PROGRAM_PAYMENT = (IDX_T_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_T_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_T_PROGRAM_PAYMENT),
                             RLSE_ID = (IDX_RLSE_ID < 0 || rdr.IsDBNull(IDX_RLSE_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RLSE_ID),
                             TMPLT_SID = (IDX_TMPLT_SID < 0 || rdr.IsDBNull(IDX_TMPLT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TMPLT_SID)
                         });
+
+                         
+
+                        var quoteLetterDataList = quoteLetterDealInfoList.Where(qlData => qlData.ContentInfo.PROGRAM_PAYMENT.ToUpper() == quoteLetterTemplateData.PROGRAM_PAYMENT.ToUpper() &&
+                                                                                               qlData.ContentInfo.OBJ_SET_TYPE_CD.ToUpper() == quoteLetterTemplateData.OBJ_SET_TYPE_CD.ToUpper());
+                        foreach(var qlData in quoteLetterDataList)
+                            qlData.TemplateInfo = quoteLetterTemplateData;
+
                     } // while
                 }
-
-                quoteLetterData.ContentInfo = quoteLetterContentData;
-                quoteLetterData.TemplateInfo = quoteLetterTemplateData;
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return quoteLetterData;
+            return quoteLetterDealInfoList;
         }
 
-        public QuoteLetterFile GenerateQuoteLetterPDF(string dealId, QuoteLetterData quoteLetterData, string env)
-        {
-            // This is the Normal Quote Letter generation engine.  There is an administrative shorthand version of this down below that takes inputs for PDF body from
-            // a UI source instead of DB.
-
-            // Env = which environment the request came from
-            // Mode 1 - read deals list - NOT USED HERE
-            // Mode 2 - get existing deal XML and Mailing list - USED
-            // Mode 3 - get adhoc deal XML and return to client - USED
-            // Mode 4 - clean-up operation for batch mailing list - NOT USED HERE
-
+        private QuoteLetterFile GenerateQuoteLetterPDF(QuoteLetterData quoteLetterData)
+        {            
             byte[] quoteLetterBytes;
-            string fileName = string.Empty;
+            string fileName = string.Empty;            
+            string fileNameDealId = string.IsNullOrEmpty(quoteLetterData.ObjectSid) ? "Preview" : quoteLetterData.ObjectSid;
 
             if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
             {
@@ -241,32 +252,32 @@ namespace Intel.MyDeals.DataLibrary
                     quoteLetterBytes = quoteLetterData.ContentInfo.PDF_FILE;
                 }
                 else
-                {
-
+                {               
                     // Generate new quote Letter PDf and Save to DB/Display to user
                     Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO);
                     ReportProcessor reportProcessor = new ReportProcessor();
                     Telerik.Reporting.InstanceReportSource instanceReportSource = new Telerik.Reporting.InstanceReportSource { ReportDocument = reportToExport };
                     RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
 
-                    fileName = result.DocumentName + ".pdf";
+                    
+                    fileName = result.DocumentName + "_" + fileNameDealId + ".pdf";
                     var ms = new MemoryStream(result.DocumentBytes) { Position = 0 };
                     quoteLetterBytes = ms.ToArray();
 
                     // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
                     if (!(string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR)) && !(quoteLetterData.ContentInfo.TRKR_NBR.Contains("*")))
-                        SaveQuotePDF(dealId, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
+                        SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
                 }
             }
             else
             {
-                string failedMessage = "XML data was empty: aborting send and removing" + dealId + " from list.";
+                string failedMessage = "XML data was empty: aborting send and removing" + fileNameDealId + " from list.";
                 quoteLetterBytes = Encoding.ASCII.GetBytes(failedMessage);
             }
 
             var quoteLetterFile = new QuoteLetterFile();
             quoteLetterFile.Content = quoteLetterBytes;
-            quoteLetterFile.Name = fileName;
+            quoteLetterFile.Name = string.IsNullOrEmpty(fileName) ? fileName = "QuoteLetter" + "_" + quoteLetterData.ContentInfo.OBJ_SID + ".pdf" : fileName;
 
             return quoteLetterFile;
 
@@ -366,18 +377,40 @@ namespace Intel.MyDeals.DataLibrary
             //return returnResults;
         }
 
-        private void SaveQuotePDF(string dealId, string trkrNumber, byte[] quoteLetterPdf)
+        private void SaveQuotePDF(QuoteLetterData quoteLetterData, string trkrNumber, byte[] quoteLetterPdf)
         {
-            var timer = DateTime.Now;
+            Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA cmd = new Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA
+            {
+               CUST_MBR_SID = Convert.ToInt32(quoteLetterData.CustomerId),
+               OBJ_TYPE_SID = Convert.ToInt32(quoteLetterData.ObjectTypeId),
+               OBJ_SID = Convert.ToInt32(quoteLetterData.ObjectSid),
+               TRKR_NBR = trkrNumber,
+               FILE_DATA = quoteLetterPdf
+            };
 
-            //TBD - VN
+            try
+            {
+                using (var rdr = DataAccess.ExecuteDataSet(cmd))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            //return template;
+            //var timer = DateTime.Now;
+
+            ////TBD - VN
             //var cmd = new PR_SAVE_QUOTE_LTTR_DATA
             //{
             //        (@CUST_MBR_SID INT,
             //@OBJ_TYPE_SID INT,
             //@OBJ_SID INT,
 
-                  //DEAL_MBR_SID = dealId,
+            //      DEAL_MBR_SID = dealId,
             //    TRKR_NBR = trkr,
             //    FILE_DATA = pdfBody
             //};

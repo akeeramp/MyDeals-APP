@@ -25,13 +25,14 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpGet]
-        [Route("GetDealQuoteLetter/{dealId}")]
-        public HttpResponseMessage GetDealQuoteLetter(string dealId)
+        [Route("GetDealQuoteLetter/{customerId}/{objectTypeId}/{dealId}")]
+        public HttpResponseMessage GetDealQuoteLetter(string customerId, string objectTypeId, string dealId)
         {
             byte[] quoteLetterFinalBytes = null;
             var result = new HttpResponseMessage(HttpStatusCode.OK);
-
-            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(dealId, string.Empty, string.Empty)
+            var quoteLetterDealInfo = new QuoteLetterData(customerId, objectTypeId, dealId); 
+            
+            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(quoteLetterDealInfo, string.Empty, string.Empty)
                 , $"Unable to download quote letter for {dealId}"
             );
             quoteLetterFinalBytes = quoteLetterFile.Content;
@@ -69,8 +70,8 @@ namespace Intel.MyDeals.Controllers.API
 
             byte[] quoteLetterFinalBytes = null;
             var result = new HttpResponseMessage(HttpStatusCode.OK);
-
-            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(string.Empty, template.HDR_INFO, template.BODY_INFO)
+            var quoteLetterDealInfo = new QuoteLetterData();
+            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(quoteLetterDealInfo, template.HDR_INFO, template.BODY_INFO)
             //var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter("502124", string.Empty, string.Empty)
                 , $"Unable to download preview quote letter"
             );

@@ -3840,10 +3840,10 @@
             $state.go(state, { cid: $scope.contractData.DC_ID });
         }
 
-        $scope.downloadQuoteLetter = function (dealdId) {
+        $scope.downloadQuoteLetter = function (customerSid, objTypeSid, objSid) {
 
             //document.location.href = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId ;
-            var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + dealdId;
+            var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + customerSid + "/" + objTypeSid + "/" + objSid;
             window.open(downloadPath, '_blank', '');
             //$scope.attachmentCount = response.data.length;
             //$scope.initComplete = true;

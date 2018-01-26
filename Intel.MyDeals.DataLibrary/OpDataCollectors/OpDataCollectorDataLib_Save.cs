@@ -204,6 +204,35 @@ namespace Intel.MyDeals.DataLibrary
                         in_emp_wwid = wwid,
                         in_btch_ids = new type_guid_list(packets.Where(p => p.HasData(false)).Select(p => p.BatchID))
                     }, null, out dsCheckConstraintErrors);
+
+
+                    // Check if the action list contains DealSaveActionCodes.GENERATE_QUOTE during Deal approval SAVE
+                    var packetQuoteLetterAction = packets.FirstOrDefault(p => p.Actions.Exists(pktAction => pktAction.Action == DealSaveActionCodes.GENERATE_QUOTE));
+
+                    //packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
+                    // Bulk Generate Quote Letter if Action list contains contains DealSaveActionCodes.GENERATE_QUOTE
+
+                    if (packetQuoteLetterAction != null && (dsCheckConstraintErrors == null || 
+                                                            dsCheckConstraintErrors.Tables.Count == 0))
+                    {
+                        var quoteLetterDataLib = new QuoteLetterDataLib();
+                        List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
+                        foreach(DataRow row in dtData.Rows)
+                        {
+                            string objectTypeSid = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_TYPE_SID].ToString();
+                            string objectSid = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID].ToString();
+                            if (objectTypeSid == "5" && !quoteLetterDataList.Exists(qlData => qlData.ObjectSid == objectSid)) // WIP deals                          
+                            {
+                                var quoteLetterData = new QuoteLetterData();
+                                quoteLetterData.ObjectTypeId = objectTypeSid;
+                                quoteLetterData.ObjectSid = objectSid;
+                                quoteLetterData.CustomerId = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.CUST_MBR_SID].ToString();
+
+                                quoteLetterDataList.Add(quoteLetterData);
+                            }
+                        }
+                        quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
+                    }
                 }
                 catch (Exception ex)
                 {
