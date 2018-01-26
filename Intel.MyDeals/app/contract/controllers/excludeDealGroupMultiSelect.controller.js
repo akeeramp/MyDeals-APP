@@ -97,10 +97,10 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
 			{ field: "OVLP_CNTRCT_NM", title: "Contract" },
 			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "120px" },
-            { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "180px" },
 			{ field: "OVLP_DEAL_STRT_DT", title: "Deal Start", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_STRT_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #", width: "120px" },
 			{ field: "OVLP_DEAL_END_DT", title: "Deal End", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_END_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #", width: "120px" },
 			{ field: "OVLP_ADDITIVE", title: "Additive", width: "120px" },
+            { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "180px" },
 			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" }
 		]
 	};
