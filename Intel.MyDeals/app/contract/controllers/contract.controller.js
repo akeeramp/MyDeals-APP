@@ -2996,14 +2996,14 @@
                     if (data[i]["DC_ID"] !== undefined && data[i]["DC_ID"] !== null) {
                         if (Array.isArray(source)) {
                             for (p = 0; p < source.length; p++) {
+                                if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
                                 if (data[i]["DC_ID"] === source[p]["DC_ID"]) {
                                     $scope.mapProperty(source[p], data[i]);
                                 }
-                                if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
                             }
                         } else {
-                            if (data[i]["DC_ID"] === source["DC_ID"]) $scope.mapProperty(source, data[i]);
                             if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
+                            if (data[i]["DC_ID"] === source["DC_ID"]) $scope.mapProperty(source, data[i]);
                         }
                     }
                 }

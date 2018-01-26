@@ -821,6 +821,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 										duplicateCheckerDict[prevValues[i]["PRD_BCKT"]] = true;
 									}
 								}
+
+								prevValues = prevValues.reverse();
+
 								// Update the row to have merged deal grp names
 								for (var i = 0; i < numOfExistingTiers; i++) {
 									var updateIndex = originalExistingIndex + i;
@@ -1383,7 +1386,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         data[r]["VOLUME"] = null;
                         data[r]["ECAP_PRICE"] = null;
                     }
-
+					
                     // Defaulted row values for specific SET TYPEs
                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     	data[r]["DSCNT_PER_LN"] = 0;
@@ -1397,6 +1400,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
                         // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
                         data[r]["ADJ_ECAP_UNIT"] = 0;
+                    } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") {
+                    	// TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+						data[r]["ECAP_PRICE"]= 0;
                     }
 
                     if (!root.curPricingTable || root.isPivotable()) {
@@ -1439,7 +1445,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
                     for (var key in ptTemplate.model.fields) {
-                        if (ptTemplate.model.fields.hasOwnProperty(key)) {
+                    	if (ptTemplate.model.fields.hasOwnProperty(key)) {
                             // Autofill default values from Contract level
                             if ((root.contractData[key] !== undefined) &&
                                 (root.contractData[key] !== null) &&
