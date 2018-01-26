@@ -124,7 +124,6 @@
             });
         }
 
-
         $scope.gotoContractEditor = function (ps, pt) {
             root.isPtr = false;
             root.isWip = false;
@@ -255,7 +254,7 @@
                     for (var i = 0; i < response.length; i++) {
                         var item = response[i];
 
-                        if (!gridPctUtils.columns[item.DEAL_ID]) {
+                        //if (!gridPctUtils.columns[item.DEAL_ID]) {
                             var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
                             var tmplt = "<table style='float: left; margin-top: -20px;'>"; // <colgroup><col style='width: 30px;'>
                             var trLocked = "<td style='width: 30px;'></td>";
@@ -295,7 +294,7 @@
 
                             gridPctUtils.columns[item.DEAL_ID] = tmplt + "<tbody><tr>" + trLocked + "</tr></tbody></table>";
                             $scope.unLockedGroupData[item.DEAL_ID] = "<table><tbody><tr>" + trUnLocked + "</tr></tbody></table>";
-                        }
+                        //}
                     }
 
                     if (!$scope.sumGridOptions) $scope.sumGridOptions = {};

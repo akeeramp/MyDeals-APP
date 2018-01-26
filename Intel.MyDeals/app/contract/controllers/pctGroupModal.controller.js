@@ -54,8 +54,11 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
                 field: "OVLP_WF_STG_CD",
                 title: "Stage",
                 width: "80px"
-            },
-            {
+            }, {
+                field: "OVLP_DEAL_DESC",
+                title: "Deal Description",
+                width: "120px"
+            }, {
                 field: "OVLP_DEAL_STRT_DT",
                 title: "Start Date",
                 template: "#= kendo.toString(new Date(OVLP_DEAL_STRT_DT), 'M/d/yyyy') #",
