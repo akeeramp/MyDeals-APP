@@ -519,14 +519,16 @@ namespace Intel.MyDeals.BusinessRules
 
 		public static void RequiredServerDealType(params object[] args)
 		{
-			// US53204 - TENDER: Tender deal item 2. Server deal type-drop down single select.Mandatory only for server products. Leave blank by default.
-			MyOpRuleCore r = new MyOpRuleCore(args);
+            // US53204 - TENDER: Tender deal item 2. Server deal type-drop down single select.Mandatory only for server products. Leave blank by default.
+            // DE34995 - 'Server Deal Type' should be mandatory for deals with Server products (not just tender)
+            MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
 
 			string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
-			string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+			//string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
 
-			if (deRebateTypeValue == "TENDER" && deProductCategoriesValue.Contains("SvrWS"))
+            //deRebateTypeValue == "TENDER" && 
+            if (deProductCategoriesValue.Contains("SvrWS"))
 			{
 				IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
 				if (deServerDealType != null) deServerDealType.IsRequired = true;
