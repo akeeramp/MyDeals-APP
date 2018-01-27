@@ -178,6 +178,11 @@
                 $scope.context.saved = true;
                 $timeout(function () {
                     $scope.context.saved = false;
+                    kendo.confirm("Would you like to run Price Cost Test now?")
+                        .then(function () {
+                            $scope.$broadcast('runForcedPctMct', {});
+                        },
+                        function () { });
                 }, 3000);
             }, function () { });
         }
@@ -217,15 +222,6 @@
 
             objsetService.getPctDetails(pt.DC_ID).then(
                 function (e) {
-
-                    if ($("#detailGrid_" + pt.DC_ID).length === 0) {
-                        var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
-                        var template = angular.element(html);
-                        var linkFunction = $compile(template);
-                        linkFunction($scope);
-
-                        $("#sumWipGrid_" + pt.DC_ID).html(template);
-                    }
 
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
                     $scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
@@ -399,6 +395,15 @@
                         }
                     }
 
+                    if ($("#detailGrid_" + pt.DC_ID).length === 0) {
+                        var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+                        var template = angular.element(html);
+                        var linkFunction = $compile(template);
+                        linkFunction($scope);
+
+                        $("#sumWipGrid_" + pt.DC_ID).html(template);
+                    }
+
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not load data.");
@@ -487,7 +492,7 @@
 
                         kendo.confirm("Would you like to run Price Cost Test now?")
                             .then(function () {
-                                root.refreshContractData();
+                                $scope.$broadcast('runForcedPctMct', {});
                             },
                             function () { });
                     });

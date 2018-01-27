@@ -124,6 +124,9 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 $scope.executePct();
             });
 
+            $scope.$on('runForcedPctMct', function (event, args) {
+                $scope.executePctViaBtn();
+            });
 
         }],
         link: function (scope, element, attr) {
