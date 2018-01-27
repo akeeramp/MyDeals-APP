@@ -507,7 +507,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							field: "WF_STG_CD",
 							title: "Stage",
 							width: "100px",
-							filterable: { multi: true, search: true }
+							filterable: { multi: true, search: true },
+							template: "#= gridUtils.stgFullTitleChar(data) #"
 						}, {
 							field: "EXPIRE_FLG",
 							title: "Expired",
@@ -625,7 +626,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 							field: "WF_STG_CD",
 							title: "Stage",
 							width: "100px",
-							filterable: { multi: true, search: true }
+							filterable: { multi: true, search: true },
+							template: "#= gridUtils.stgFullTitleChar(data) #"
 						}, {
 						    field: "EXPIRE_FLG",
 						    title: "Expired",
