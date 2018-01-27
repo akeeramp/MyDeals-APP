@@ -277,7 +277,7 @@ namespace Intel.MyDeals.DataLibrary
 
             var quoteLetterFile = new QuoteLetterFile();
             quoteLetterFile.Content = quoteLetterBytes;
-            quoteLetterFile.Name = string.IsNullOrEmpty(fileName) ? fileName = "QuoteLetter" + "_" + quoteLetterData.ContentInfo.OBJ_SID + ".pdf" : fileName;
+            quoteLetterFile.Name = string.IsNullOrEmpty(fileName) ? "QuoteLetter" + "_" + quoteLetterData.ContentInfo.OBJ_SID + ".pdf" : fileName;
 
             return quoteLetterFile;
 
