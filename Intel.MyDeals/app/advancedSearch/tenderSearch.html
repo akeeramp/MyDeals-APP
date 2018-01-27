@@ -64,6 +64,36 @@
             </button>
         </div>
 
+        <div class="fr attrbMenu" style="margin-top: 0;">
+            <ul kendo-menu k-options="columnMenu" style="margin-top: -3px;">
+                <li>
+                    <i class="fl intelicon-view-by-columns skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
+                    <span class="fl skyBlue" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                    <i style="font-size: 40px !important; width: 1px !important; color: \\#00AEEF;"></i>
+                    <ul>
+                        <li>
+                            <div style="padding: 0 10px;">
+                                <div>
+                                    <span class="k-textbox k-space-left" style="width: 100%; margin-bottom: 10px;">
+                                        <input type="search" ng-model="columnSearchFilter" />
+                                        <a class="k-icon intelicon-search"></a>
+                                    </span>
+                                </div>
+                                <div style="max-height: 200px; overflow: auto;">
+                                    <div ng-repeat="item in gridOptions.columns | filter:{title: columnSearchFilter} | orderBy: 'title'" class="chkColItem">
+                                        <input type='checkbox' checked='checked' class='sub-menu-checkbox check' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}' />
+                                        <label for="colChk{{item.field}}">
+                                            <span ng-bind-html="item.title"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
         <div class="clearboth"></div>
     </div>
 </script>
@@ -98,6 +128,13 @@
 
     .tenderDealId:hover {
         color: #003C71;
+    }
+
+    .attrbMenu .k-link {
+        padding: 3px 20px !important;
+    }
+    .attrbMenu .k-state-hover .k-link {
+        background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
     }
 
 </style>
