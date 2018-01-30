@@ -99,7 +99,7 @@ namespace Intel.MyDeals
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 DateTime date = (DateTime)value; 
-                if (value.ToString().Trim() == "01/01/0001")
+                if ((DateTime)value == DateTime.MinValue)
                 {
                     date = new DateTime(1900, 1, 1, 0, 0, 0, 0);
                 }
