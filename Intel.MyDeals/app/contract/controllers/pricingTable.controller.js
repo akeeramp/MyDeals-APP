@@ -666,8 +666,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        } else {
 					        	myRow[colName] = value.value;
 					        }
-					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
-					        sourceData[(rowIndex - 1)]["dirty"] = true;
 
 					        // Update Total Discount per line if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
@@ -725,16 +723,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                }
 								}
 					        }
+							// Get the first tier row
+					        var firstTierRowIndex = (rowIndex - tierNbr);
+					        var firstTierRow = data[firstTierRowIndex];
 
 					    	// Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == ecapIndex || colIndex == kitEcapIndex) {								
-					        	// Get the first tier row
-					        	var firstTierRowIndex = (rowIndex - tierNbr);
-					        	var firstTierRow = data[firstTierRowIndex];
-
+					        
 								// TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
 								firstTierRow["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, firstTierRowIndex, numOfTiers, false); //kitRebateTotalVal;
-							}
+					        }
+
+					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
+					    	//sourceData[(rowIndex - 1)]["dirty"] = true;
+
+					    	// HACK: Make the firstTierRow dirty or else we'd have a very weird re-tiering bug where 1st tier turns into the last changed 
+							//		tier on sync's e.success(). It doesn't what column was changed - any dim-ed/tiered column will cause this issue.
+							//		TODO: Still have no idea why this happens. Figuring out why is a todo.
+					        firstTierRow["dirty"] = true; 
 					    }
 					}
 				);
