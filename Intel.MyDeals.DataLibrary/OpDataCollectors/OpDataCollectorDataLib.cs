@@ -911,7 +911,10 @@ namespace Intel.MyDeals.DataLibrary
                     }
 
                     // If executing in parallel, lock around this....
-                    dt.Rows.Add(r);
+                    if (r[IDX_MDX_CD] != "X") // If the MDX code is unchanged, don't bother to add it, overhead for DB to process an unchanged record.
+                    {
+                        dt.Rows.Add(r);
+                    }
                 }
             }
 
