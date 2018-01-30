@@ -2137,7 +2137,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.syncAndValidateWipDeals = function (callback) {
-                $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
+                $scope.parentRoot.setBusy("Saving your data...", "Please wait as we Save your information!");
                 $timeout(function () {
                         util.console("syncAndValidateWipDeals");
                         util.console("contractDs.sync Started");
