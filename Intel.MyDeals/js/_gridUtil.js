@@ -449,41 +449,27 @@ gridUtils.exportTotalDiscountPerLineControlWrapper = function (passedData, forma
     return tmplt;
 }
 
-//this control wrapper is only used to calculate KIT deal's KIT_REBATE_BUNDLE_DISCOUNT
-gridUtils.uiKitRebateBundleDiscountControlWrapper = function (passedData) {
+//this control wrapper is only used to calculate KIT deal's system generated currency values such as rebate bundle discount and sum of total discounts per line
+gridUtils.uiKitCalculatedValuesControlWrapper = function (passedData, kittype, column) {
     var tmplt = '';
     tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'kit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
+    if (passedData.HAS_SUBKIT == "0" && kittype == "subkit") {
+        //no subkit allowed case
+        tmplt += '    <div class="vert-center">No Sub KIT</div>';
+    } else {
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitCalculatedValues : \'' + kittype + '\':\'' + column + '\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
+    }
     tmplt += '</div>';
     return tmplt;
 }
-gridUtils.exportKitRebateBundleDiscountControlWrapper = function (passedData) {
-    var val = gridUtils.kitRebateBundleDiscount(passedData, "kit");
-    return gridUtils.formatValue(val, "currency");
-}
 
-//this control wrapper is only used to calculate SKIT deal's SUBKIT_REBATE_BUNDLE_DISCOUNT
-gridUtils.uiSubKitRebateBundleDiscountControlWrapper = function (passedData) {
+gridUtils.exportKitCalculatedValuesControlWrapper = function (passedData, kittype, column) {
     var tmplt = '';
-    if (passedData.HAS_SUBKIT == "0") {
-        //no subkit allowed case
-        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
-        tmplt += '<div class="vert-center">No Sub KIT</div>';
-        tmplt += '</div>';
-    } else {
-        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
-        tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | kitRebateBundleDiscount : \'subkit\') ' + gridUtils.getFormat("", 'currency') + ')"></div>';
-        tmplt += '</div>';
-    }
-    return tmplt;
-}
-gridUtils.exportSubKitRebateBundleDiscountControlWrapper = function (passedData) {
-    var tmplt = '';
-    if (passedData.HAS_SUBKIT == "0") {
+    if (passedData.HAS_SUBKIT == "0" && kittype == "subkit") {
         //no subkit allowed case
         tmplt += 'No Sub KIT';
     } else {
-        var val = gridUtils.kitRebateBundleDiscount(passedData, "subkit");
+        var val = gridUtils.kitCalculatedValues(passedData, kittype, column);
         tmplt += gridUtils.formatValue(val, "currency");
     }
     return tmplt;
@@ -662,8 +648,7 @@ gridUtils.onDataValueChange = function (e) {
     return null;
 }
 
-gridUtils.kitRebateBundleDiscount = function (items, type) {
-
+gridUtils.kitCalculatedValues = function (items, kittype, column) {
     var data = items["ECAP_PRICE"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - also are QTY and dscnt_per_line required columns? if not we are going to need to put in checks
     var total = 0.00;
     var subkitSumCounter = 2;   //subkits are always going to be the primary and first secondary item, so only sum those two dims in that case
@@ -674,20 +659,27 @@ gridUtils.kitRebateBundleDiscount = function (items, type) {
             break;
         }
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {
-            if (type == "subkit") {
+            if (kittype == "subkit") {
                 subkitSumCounter--;
             }
-            //total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];    //this should be made to validate against the value below, should be equal
-            total += parseFloat(items["ECAP_PRICE"][dimkey]);
+            if (column == "rebateBundle") {
+                total += parseFloat(items["ECAP_PRICE"][dimkey]);
+            }
+            if (column == "sumTD") {
+                total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];
+            }
         }
     }
 
-    if (type == "subkit") {
-        total = total - items["ECAP_PRICE"]["20_____2"];
-    } else {
-        total = total - items["ECAP_PRICE"]["20_____1"];
+    if (column == "rebateBundle") {
+        if (kittype == "subkit") {
+            total = total - items["ECAP_PRICE"]["20_____2"];
+        }
+        if (kittype == "kit") {
+            total = total - items["ECAP_PRICE"]["20_____1"];
+        }
     }
-
+    
     return total;
 };
 

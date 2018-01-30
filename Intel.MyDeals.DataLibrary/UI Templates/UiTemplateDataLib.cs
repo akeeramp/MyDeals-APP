@@ -1297,12 +1297,12 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
-                Template = "#=gridUtils.uiKitRebateBundleDiscountControlWrapper(data)#",
+                Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'kit', 'rebateBundle')#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
-                ExcelTemplate = "#=gridUtils.exportKitRebateBundleDiscountControlWrapper(data)#"
+                ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'kit', 'rebateBundle')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
             {
@@ -1312,12 +1312,12 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
-                Template = "#=gridUtils.uiSubKitRebateBundleDiscountControlWrapper(data)#",
+                Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'subkit', 'rebateBundle')#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
-                ExcelTemplate = "#=gridUtils.exportSubKitRebateBundleDiscountControlWrapper(data)#"
+                ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'subkit', 'rebateBundle')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
@@ -1365,6 +1365,36 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportTotalDiscountPerLineControlWrapper(data, 'currency')#"
+            });
+            items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
+            {
+                Id = 10006,
+                AtrbCd = "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE",
+                Label = "KIT Sum of Total Discount Per Line",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'kit', 'sumTD')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                IsReadOnly = true,
+                ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'kit', 'sumTD')#"
+            });
+            items.Add(new UiTemplateContainerItem  // Fake atrb, for display purposes only
+            {
+                Id = 10006,
+                AtrbCd = "SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE",
+                Label = "Sub KIT Sum of Total Discount Per Line",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'subkit', 'sumTD')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                IsReadOnly = true,
+                ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'subkit', 'sumTD')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {

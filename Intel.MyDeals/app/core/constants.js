@@ -670,6 +670,12 @@
                     "TOTAL_DSCNT_PR_LN": {
                         "Groups": ["Deal Info", "SubKit"]
                     },
+                    "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE": {
+                        "Groups": ["Deal Info", "SubKit"]
+                    },
+                    "SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE": {
+                        "Groups": ["SubKit"]
+                    },
                     "CAP_INFO": {
                         "Groups": ["Deal Info", "CAP Info"]
                     },

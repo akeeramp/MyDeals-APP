@@ -339,7 +339,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             ////below used for calculating NORTHBRIDGE_SPLIT in KIT deals
             //string CHIPSET = "CS";
             //List<string> chipsetEcapDims = new List<string>();
-            //double northbridgeSum = 0.00;
+            //decimal northbridgeSum = 0.00;
 
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
@@ -462,7 +462,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         //    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0 && chipsetEcapDims.Contains(key))
                         //    {
                         //        var temp = opFlatItem[key];
-                        //        northbridgeSum += double.Parse(opFlatItem[key].ToString());
+                        //        northbridgeSum += decimal.Parse(opFlatItem[key].ToString());
                         //    }
                         //}
                     }

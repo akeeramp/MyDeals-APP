@@ -853,8 +853,8 @@ namespace Intel.MyDeals.BusinessRules
 			IOpDataElement deEcapPrice = r.Dc.GetDataElement(AttributeCodes.ECAP_PRICE);
 			if (deEcapPrice == null) return;
 
-			double price;
-			if (!double.TryParse(deEcapPrice.AtrbValue.ToString(), out price))
+			decimal price;
+			if (!decimal.TryParse(deEcapPrice.AtrbValue.ToString(), out price))
 			{
 				deEcapPrice.AddMessage("ECAP Price is not a valid number.");
 				return;
@@ -929,12 +929,12 @@ namespace Intel.MyDeals.BusinessRules
 
         #region Tiered Validations
 
-		private static bool IsGreaterThanZero(double attrb)
+		private static bool IsGreaterThanZero(decimal attrb)
 		{
 			return (attrb > 0);
 		}
 
-		private static bool IsGreaterOrEqualToZero(double attrb)
+		private static bool IsGreaterOrEqualToZero(decimal attrb)
 		{
 			return (attrb >= 0);
 		}
@@ -974,8 +974,8 @@ namespace Intel.MyDeals.BusinessRules
 				{
 					continue;
 				}
-				double startVol = 0;
-				double endVol = 0;
+				decimal startVol = 0;
+				decimal endVol = 0;
 				int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 				string relatedStartVol = "";
 
@@ -985,9 +985,9 @@ namespace Intel.MyDeals.BusinessRules
 					relatedStartVol = startVolDict[tier];
 				}
 
-				// Parse the double values
-				bool isEndDateANumber = Double.TryParse(atrb.AtrbValue.ToString(), out endVol);
-				bool isStrtDateANumber = Double.TryParse(relatedStartVol, out startVol);
+				// Parse the decimal values
+				bool isEndDateANumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out endVol);
+				bool isStrtDateANumber = Decimal.TryParse(relatedStartVol, out startVol);
 
 				// End Vol is unlimited
 				if (!isEndDateANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
@@ -1027,7 +1027,7 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			ValidateKitTieredDoubleAttribute(AttributeCodes.QTY.ToString(), "Quantity must be greater than 0.", IsGreaterThanZero, r);
+			ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Quantity must be greater than 0.", IsGreaterThanZero, r);
 		}
 		public static void ValidateTierEcap(params object[] args)
 		{
@@ -1044,20 +1044,20 @@ namespace Intel.MyDeals.BusinessRules
 			numOfTiers += 1;
 			int offset = 2; // Note that the offset is now 2 to account for KIT ECAPs at tier -1
 
-			ValidateTieredDoubleAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0.", IsGreaterThanZero, r, numOfTiers, offset, false);
+			ValidateTieredDecimalAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0.", IsGreaterThanZero, r, numOfTiers, offset, false);
 		}
 
-		public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+		public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
 		{
 			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
 			if (deNumTiers == null) return;
 
 			int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 
-			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
+			ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
 		}
 
-		public static void ValidateKitTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r)
+		public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r)
 		{
 			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			if (deNumTiers == null) return;
@@ -1066,10 +1066,10 @@ namespace Intel.MyDeals.BusinessRules
 			// TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
 			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
 
-			ValidateTieredDoubleAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false);
+			ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false);
 		}
 
-		public static void ValidateTieredDoubleAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
+		public static void ValidateTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
 		{
 			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
 			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
@@ -1093,8 +1093,8 @@ namespace Intel.MyDeals.BusinessRules
 						continue;
 					}
 
-					double safeParse = 0;
-					bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+					decimal safeParse = 0;
+					bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
 
 					if (!isNumber)
 					{
@@ -1146,9 +1146,9 @@ namespace Intel.MyDeals.BusinessRules
 			IEnumerable<IOpDataElement> tieredObjs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString());
 			IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
-			double kitEcap = 0; // KIT ECAP = tier of "-1"
-			double kitRebate = 0; // KIT Rebate = sum of all ecap prices - kitRebate
-			double totalDiscountsSum = 0;
+			decimal kitEcap = 0; // KIT ECAP = tier of "-1"
+			decimal kitRebate = 0; // KIT Rebate = sum of all ecap prices - kitRebate
+			decimal totalDiscountsSum = 0;
 
 			// Get KIT ecap sum
 			foreach (IOpDataElement tieredObj in tieredObjs)
@@ -1161,9 +1161,9 @@ namespace Intel.MyDeals.BusinessRules
 						IOpDataElement qty = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
 						IOpDataElement discountPerLine = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
 
-						double ecapPriceSafeParse = 0;
-						double qtySafeParse = 0;
-						double discountSafeParse = 0;
+						decimal ecapPriceSafeParse = 0;
+						decimal qtySafeParse = 0;
+						decimal discountSafeParse = 0;
 
 						if (ecapPrice == null || qty == null || discountPerLine == null)
 						{
@@ -1171,9 +1171,9 @@ namespace Intel.MyDeals.BusinessRules
 							return;
 						}
 
-						Double.TryParse(ecapPrice.AtrbValue.ToString(), out ecapPriceSafeParse);
-						Double.TryParse(qty.AtrbValue.ToString(), out qtySafeParse);
-						Double.TryParse(discountPerLine.AtrbValue.ToString(), out discountSafeParse);
+						Decimal.TryParse(ecapPrice.AtrbValue.ToString(), out ecapPriceSafeParse);
+						Decimal.TryParse(qty.AtrbValue.ToString(), out qtySafeParse);
+						Decimal.TryParse(discountPerLine.AtrbValue.ToString(), out discountSafeParse);
 
 						if (tier == -1)
 						{
@@ -1192,7 +1192,7 @@ namespace Intel.MyDeals.BusinessRules
 				}
 			}
 			// KIT ECAP must = (sum of total dicount per line * Qty ) BUT ONLY if the later is > 0
-			if (totalDiscountsSum > 0 && (Math.Round(kitRebate,2) - Math.Round(kitEcap,2)) != Math.Round(totalDiscountsSum,2))
+			if (totalDiscountsSum > 0 && kitRebate - kitEcap != totalDiscountsSum)
 			{
 				foreach (IOpDataElement tieredObj in tieredObjs)
 				{
@@ -1232,11 +1232,11 @@ namespace Intel.MyDeals.BusinessRules
 
 			IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
 			IOpDataElement totalDollarObj = r.Dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
-			double totalDollarAmount = 0;
+			decimal totalDollarAmount = 0;
 
 			if (totalDollarObj == null || myRebateType == null) return;
 
-			Double.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
+			Decimal.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
 
 			if (myRebateType.AtrbValue.ToString().Equals("DEBIT MEMO", StringComparison.OrdinalIgnoreCase))
 			{
@@ -1259,13 +1259,13 @@ namespace Intel.MyDeals.BusinessRules
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
 
-			double parsedRebateType = 0;
+			decimal parsedRebateType = 0;
 
 			IOpDataElement adjEcapUnit = r.Dc.GetDataElement(AttributeCodes.ADJ_ECAP_UNIT);
 			IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
 			if (rebateType == null || adjEcapUnit == null) return;
 
-			double.TryParse(adjEcapUnit.AtrbValue.ToString(), out parsedRebateType);
+			decimal.TryParse(adjEcapUnit.AtrbValue.ToString(), out parsedRebateType);
 
 			if (String.Equals(rebateType.AtrbValue.ToString(), "ECAP ADJ", StringComparison.OrdinalIgnoreCase) && (parsedRebateType <= 0))
 			{
