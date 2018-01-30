@@ -277,7 +277,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 {
                     if (key == AttributeCodes.ECAP_PRICE)
                     {
-                        var items = JsonConvert.DeserializeObject<Dictionary<string, float>>(opFlatItem[key].ToString());
+                        var jsonStr = opFlatItem[key].ToString().Replace("null", "0");
+                        var items = JsonConvert.DeserializeObject<Dictionary<string, float>>(jsonStr);
                         retItems[key] = items["20___0"];
                     }
                     else if (key == AttributeCodes.GEO_COMBINED)
