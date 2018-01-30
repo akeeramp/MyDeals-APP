@@ -19,10 +19,10 @@ namespace Intel.MyDeals.Entities
         public List<SecurityMask> SecurityMasks { get; set; }
 
 
-        public string DefineBaseKey(OpDataElementType opDataElementType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd)
+        public string DefineBaseKey(OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd)
         {
             const string delim = "_";
-            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", delim, opDataElementType, opRoleType.RoleTypeCd, wfStage, actionCd, atrbCd);
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}", delim, opDataElementType, opDataElementSetType, opRoleType.RoleTypeCd, wfStage, actionCd, atrbCd);
         }
 
         public bool ChkAtrbRules(OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType, string wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
@@ -36,7 +36,7 @@ namespace Intel.MyDeals.Entities
             if (securityActionCache == null) securityActionCache = new Dictionary<string, bool>();
 
             // Look for cache first
-            string secBaseKey = DefineBaseKey(opDataElementType, opUserToken.Role, wfStage, actionCd, atrbCd);
+            string secBaseKey = DefineBaseKey(opDataElementType, opDataElementSetType, opUserToken.Role, wfStage, actionCd, atrbCd);
             if (securityActionCache.ContainsKey(secBaseKey)) return securityActionCache[secBaseKey];
 
             SecurityAttribute sa = (from el in SecurityAttributes
