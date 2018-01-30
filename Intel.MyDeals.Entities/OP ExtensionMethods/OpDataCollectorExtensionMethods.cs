@@ -27,7 +27,8 @@ namespace Intel.MyDeals.Entities
         {
             if (dc == null) throw new ArgumentNullException("dc");
             IOpDataElement de = dc.GetDataElement(name);
-            return de?.AtrbValue.ToString() ?? ifNull;
+            string val = de?.AtrbValue.ToString();
+            return string.IsNullOrEmpty(val) ? ifNull : val;
         }
 
         /// <summary>
