@@ -58,29 +58,28 @@
                     </a>
                 </span>
             </div>
-
-            <div class="fr btn-group" style="margin-top: 6px; margin-left: 4px; margin-right: 10px;" ng-hide="data[0].value === ''" ng-show="isExportable">
-                <button class="btn btn-sm ssToolbarBtn" title="Export to Excel only the columns you currently see in the grid." style="margin-top: -5px;" ng-click="exportToExcelCustomColumns()">
+            
+            <div class="fr dropdown clearfix" style="margin-left: 4px; margin-right: 10px;" ng-hide="data[0].value === ''" ng-show="isExportable">
+                <button class="btn btn-sm ssToolbarBtn dropdown-toggle" id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
                     <table>
                         <tbody>
                             <tr>
-                                <td style="border: 0px solid transparent;">
+                                <td style="border: 0 solid transparent;">
                                     <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                                 </td>
                                 <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                     Excel<br>Export
                                 </td>
+                                <td>
+                                    <span class="caret" style="margin-left: 6px;"></span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </button>
-                <button class="btn btn-sm ssToolbarBtn dropdown-toggle" style="height: 30px; margin-top: -5px;" aria-expanded="false" type="button" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right menu-container" role="menu" style="font-size: 13px;">
-                    <li ng-click="exportToExcelCustomColumns()"><a>Export All Columns, All Data</a></li>
-                    <li ng-click="exportToExcel()"><a>Export Current View</a></li>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuOpGrid" style="font-size: 13px;">
+                    <li ng-click="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
+                    <li ng-click="exportToExcel()" style="cursor: pointer;"><a>Export Current View</a></li>
                 </ul>
             </div>
 

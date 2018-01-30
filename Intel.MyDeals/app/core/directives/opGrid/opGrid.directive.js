@@ -1217,6 +1217,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 model.dirty = true;
                 $scope._dirty = true;
+                $scope.root._dirty = true;
 
                 $scope.root.saveCell(model, col, $scope, newVal);
 
@@ -1269,8 +1270,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.$on('refreshStage', function (event, args) {
                 if (!!args) {
                     var dataItem = $scope.findDataItemById(args["DC_ID"]);
-                    dataItem["WF_STG_CD"] = args["WF_STG_CD"];
-                    dataItem["PS_WF_STG_CD"] = args["PS_WF_STG_CD"];
+                    if (dataItem !== undefined) {
+                        dataItem["WF_STG_CD"] = args["WF_STG_CD"];
+                        dataItem["PS_WF_STG_CD"] = args["PS_WF_STG_CD"];
+                    }
                 }
             });
 
@@ -1435,6 +1438,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
 
                 $scope._dirty = false;
+                $scope.root._dirty = false;
             }
 
             $scope.saveWipDeals = function () {

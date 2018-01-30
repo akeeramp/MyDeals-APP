@@ -128,14 +128,28 @@
 
         $scope.enableFlowBtn = function () {
             if ($scope.contractData.PRC_ST === undefined || $scope.contractData.PRC_ST.length === 0) return false;
-            var passedItems = $linq.Enumerable().From($scope.contractData.PRC_ST).Where(
-                function (x) {
-                    var passedPtItems = $linq.Enumerable().From(x.PRC_TBL).Where(
-                        function (x) {
-                            return (x.PASSED_VALIDATION !== "Dirty");
-                        }).ToArray();
-                    return passedPtItems;
-                }).ToArray();
+
+            var passedItems = [];
+            for (var ps = 0; ps < $scope.contractData.PRC_ST.length; ps++) {
+                var psItem = $scope.contractData.PRC_ST[ps];
+                if (psItem.PRC_TBL !== undefined) {
+                    for (var pt = 0; pt < psItem.PRC_TBL.length; pt++) {
+                        if (psItem.PRC_TBL[pt].PASSED_VALIDATION === "Complete") {
+                            passedItems.push(psItem.PRC_TBL[pt]);
+                        }
+                    }
+                }
+            }
+
+            //var passedItems = $linq.Enumerable().From($scope.contractData.PRC_ST).Where(
+            //    function (x) {
+            //        if (x.PRC_TBL === undefined) return false;
+            //        var passedPtItems = $linq.Enumerable().From(x.PRC_TBL).Where(
+            //            function (x) {
+            //                return (x.PASSED_VALIDATION === "Complete");
+            //            }).ToArray();
+            //        return passedPtItems;
+            //    }).ToArray();
             return passedItems.length > 0;
         }
 
@@ -2396,7 +2410,7 @@
 
             // if save already started saving... exit
             // if validate triggers from product translation continue..validating data
-            if ($scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Saving your data.." && $scope.isBusyMsgTitle !== "Overlapping Deals...") {
+            if ($scope.isBusyMsgTitle !== "Saving your data.." && $scope.isBusyMsgTitle !== "Overlapping Deals...") {
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
@@ -2410,11 +2424,7 @@
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
 
-            if (forceValidation) {
-                $scope.setBusy("Validating your data...", "Please wait as we validate your information!");
-            } else {
-                $scope.setBusy("Saving your data...", "Please wait as we save your information!");
-            }
+            $scope.setBusy("Saving your data...", "Please wait as we save your information!");
 
             // async save data
             topbar.show();
@@ -3734,7 +3744,7 @@
                 },
                 { reload: true });
         }
-        $scope.backToPricingTable = function () {    
+        $scope.backToPricingTable = function () {
         	if ($scope.isPtr) return;
 
             if (!$scope._dirty) {
