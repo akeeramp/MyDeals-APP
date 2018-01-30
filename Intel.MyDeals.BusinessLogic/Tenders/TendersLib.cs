@@ -254,34 +254,54 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 // YES... we are calling the DB once for Every Tender ID passed
                 // YES... this is inefficient... read above
-                OpDataCollector dcCntrct = OpDataElementType.WIP_DEAL.GetByIDs(
+
+                MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(
                     new List<int> {id},
-                    new List<OpDataElementType> { OpDataElementType.CNTRCT },
-                    new List<int> { Attributes.CUST_MBR_SID.ATRB_SID }
-                    )[OpDataElementType.CNTRCT].AllDataCollectors.First();
+                    new List<OpDataElementType> {OpDataElementType.CNTRCT},
+                    new List<int> {Attributes.CUST_MBR_SID.ATRB_SID}
+                );
 
-                // Build Contract Token based on Contract/Customer
-                ContractToken contractToken = new ContractToken
+                if (!myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any())
                 {
-                    ContractId = dcCntrct.DcID,
-                    CustId = int.Parse(dcCntrct.GetDataElementValue(AttributeCodes.CUST_MBR_SID)),
-                    NeedToCheckForDelete = false
-                };
-
-                // YES... we are updating the DB once for Every Tender ID passed
-                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, new List<int> { id }, Attributes.BID_STATUS, actn, actn == "Won");
-
-                // Get new Tender Action List
-                List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
-
-                // Apply messaging
-                opMsgQueue = retMyDealsData.GetAllMessages();
-                opMsgQueue.Messages.Add(new OpMsg
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        MsgType = OpMsg.MessageType.Warning,
+                        Message = "No Deal",
+                        ExtraDetails = $"Tender Deal {id} does not exist."
+                    });
+                }
+                else
                 {
-                    MsgType = OpMsg.MessageType.Info,
-                    Message = "Action List",
-                    ExtraDetails = actions
-                });
+                    OpDataCollector dcCntrct = OpDataElementType.WIP_DEAL.GetByIDs(
+                        new List<int> { id },
+                        new List<OpDataElementType> { OpDataElementType.CNTRCT },
+                        new List<int> { Attributes.CUST_MBR_SID.ATRB_SID }
+                        )[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
+
+                    // Build Contract Token based on Contract/Customer
+                    ContractToken contractToken = new ContractToken
+                    {
+                        ContractId = dcCntrct.DcID,
+                        CustId = int.Parse(dcCntrct.GetDataElementValue(AttributeCodes.CUST_MBR_SID)),
+                        NeedToCheckForDelete = false
+                    };
+
+                    // YES... we are updating the DB once for Every Tender ID passed
+                    MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, new List<int> { id }, Attributes.BID_STATUS, actn, actn == "Won");
+
+                    // Get new Tender Action List
+                    List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
+
+                    // Apply messaging
+                    opMsgQueue = retMyDealsData.GetAllMessages();
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        MsgType = OpMsg.MessageType.Info,
+                        Message = "Action List",
+                        ExtraDetails = actions
+                    });
+                }
+
             }
 
             return opMsgQueue;

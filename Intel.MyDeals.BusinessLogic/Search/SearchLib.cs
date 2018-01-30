@@ -270,15 +270,22 @@ namespace Intel.MyDeals.BusinessLogic
                 item["SortOrder"] = idSort[int.Parse(item[AttributeCodes.DC_ID].ToString())];
 
                 // Need to convert CUST_MBR_SID to Customer Object
-                CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
-
-                item["Customer"] = cust;
-
-                // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
-                if (!mtCustIds.Contains(cust.CUST_NM_SID))
+                if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))
                 {
-                    item["ECAP_PRICE"] = "no access";
-                    item["CAP"] = "no access";
+                    CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
+
+                    item["Customer"] = cust;
+
+                    // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
+                    if (!mtCustIds.Contains(cust.CUST_NM_SID))
+                    {
+                        item["ECAP_PRICE"] = "no access";
+                        item["CAP"] = "no access";
+                    }
+                }
+                else
+                {
+                    item["Customer"] = new CustomerDivision();
                 }
             }
 

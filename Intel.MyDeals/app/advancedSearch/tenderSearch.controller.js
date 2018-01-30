@@ -305,8 +305,6 @@
             return dataItem.BID_ACTNS.length > 1 && (scope.curLinkedVal === "" || scope.curLinkedVal === dataItem.BID_STATUS);
         }
 
-
-
         $scope.chkClick = function (dataItem, scope) {
             var isLinked = dataItem.isLinked;
             if (isLinked) {
@@ -362,17 +360,24 @@
                 function (data) {
 
                     var foundIt = false;
+                    var noDeals = [];
                     scope.messages = data.data.Messages;
 
                     for (var m = 0; m < scope.messages.length; m++) {
                         if (scope.messages[m].Message === "Action List") {
                             foundIt = true;
                         }
+                        else if (scope.messages[m].Message === "No Deal") {
+                            noDeals.push(scope.messages[m].ExtraDetails);
+                        }
                     }
 
-                    if (foundIt) {
+                    if (noDeals.length > 0) {
+                        kendo.alert("It looks like one or more deals were deleted.  We need to refresh the data.");
+                        $scope.$broadcast('reload-search-dataSource');
+                    } else if (foundIt) {
                         scope.curLinkedVal = "";
-                        scope.ds.read();  // we rely on the DS post load to close down the busy indicator
+                        scope.ds.read(); // we rely on the DS post load to close down the busy indicator
                     } else {
                         $timeout(function () {
                             scope.setBusy("", "");
