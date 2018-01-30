@@ -637,7 +637,7 @@
 
         vm.getFormatedDate = function (datVal) {
             var date = kendo.toString(new Date(datVal), 'M/d/yyyy');
-            if (date == '1/1/0001') {
+            if (date == '1/1/1900') {
                 return '';
             }
             return date;

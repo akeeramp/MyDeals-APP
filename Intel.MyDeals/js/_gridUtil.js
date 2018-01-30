@@ -508,7 +508,7 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     if (field === "CAP" && fieldVal === "No CAP") {
         tmplt += '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">';
         tmplt += '<div style="line-height: 1em; font-family: arial; text-align: center;font-weight:600">No CAP</div>';
-        if (startVal !== "" && kendo.toString(new Date(startVal), 'MM/dd/yy') !== '01/01/01') {
+        if (startVal !== "" && kendo.toString(new Date(startVal), 'MM/dd/yyyy') !== '01/01/1900') {
             tmplt += '<div>Availability:<span class="ng-binding" ng-bind="(dataItem.' + startDt + dimKeyWrapper + ' | date:\'MM/dd/yy\')"></span><span></div>';
         }
         tmplt += '</div>';
@@ -516,7 +516,7 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     } else if (field === "YCS2_PRC_IRBT" && fieldVal === "No YCS2") {
         tmplt += '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">';
         tmplt += '<div style="line-height: 1em; font-family: arial; text-align: center;font-weight:600">No YCS2</div>';
-        if (startVal !== "" && kendo.toString(new Date(startVal), 'MM/dd/yy') !== '01/01/01') {
+        if (startVal !== "" && kendo.toString(new Date(startVal), 'MM/dd/yyyy') !== '01/01/1900') {
             tmplt += '<div>Availability:<span class="ng-binding" ng-bind="(dataItem.' + startDt + dimKeyWrapper + ' | date:\'MM/dd/yy\')"></span><span></div>';
         }
         tmplt += '</div>';

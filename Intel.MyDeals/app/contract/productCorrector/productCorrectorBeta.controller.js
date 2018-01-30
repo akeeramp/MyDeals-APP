@@ -222,8 +222,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 var emptyData = {
                     BRND_NM: "",
                     CAP: "",
-                    CAP_END: "01/01/0001",
-                    CAP_START: "01/01/001",
+                    CAP_END: "01/01/1900",
+                    CAP_START: "01/01/1900",
                     DEAL_PRD_NM: "",
                     DEAL_PRD_TYPE: "",
                     FMLY_NM: "",
@@ -236,9 +236,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     PCSR_NBR: "",
                     PRD_ATRB_SID: "",
                     PRD_CAT_NM: "",
-                    PRD_END_DTM: "01/01/0001",
+                    PRD_END_DTM: "01/01/1900",
                     PRD_MBR_SID: 0,
-                    PRD_STRT_DTM: "01/01/0001",
+                    PRD_STRT_DTM: "01/01/1900",
                     USR_INPUT: vm.curRowIssues[key].name,
                     YCS2: "",
                     YCS2_END: "",
@@ -935,7 +935,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
     vm.getFormatedDate = function (datVal) {
         var date = kendo.toString(new Date(datVal), 'M/d/yyyy');
-        if (date === '1/1/0001') {
+        if (date === '1/1/1900') {
             return '';
         }
         return date;

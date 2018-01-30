@@ -46,12 +46,12 @@ namespace Intel.MyDeals
             };
 
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(dateTimeConverter);
-
+            
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            HttpContext.Current.Response.AddHeader("x-frame-options", "DENY");
+            HttpContext.Current.Response.AddHeader("x-frame-options", "DENY");            
         }
 
         private void Application_Error(Object sender, EventArgs e)
@@ -98,7 +98,12 @@ namespace Intel.MyDeals
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                DateTime date = (DateTime)value;
+                DateTime date = (DateTime)value; 
+                if (value.ToString().Trim() == "01/01/0001")
+                {
+                    date = new DateTime(1900, 1, 1, 0, 0, 0, 0);
+                }
+                
                 string strDate = ((date.Hour == 0 && date.Minute == 0) || (date.Hour == 23 && date.Minute == 59))
                     ? $"{date.Month}/{date.Day}/{date.Year}"
                     : $"{date.Month}/{date.Day}/{date.Year} {date.Hour}:{date.Minute}:{date.Second}.{date.Millisecond}";
