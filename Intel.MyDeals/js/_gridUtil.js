@@ -68,15 +68,6 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
         }
         
         tmplt += '<div class="uiControlDiv"';
-        
-        //tmplt += '<tr style="height: 25px;">';
-        //tmplt += '<td style="text-align:right;"';
-        //tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-        
-        //tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, "") + ')"></span>';
-        //tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, format) + ')"></span>';
-        //tmplt += '</td>';
-        //tmplt += '</tr>';
 
         tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
         tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
