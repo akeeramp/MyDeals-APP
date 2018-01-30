@@ -10,6 +10,8 @@ using Intel.MyDeals.Controllers;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 using System.Web.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Intel.MyDeals
 {
@@ -28,7 +30,24 @@ namespace Intel.MyDeals
             AntiForgeryConfig.SuppressXFrameOptionsHeader = true;            
             // Init log writers
             OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
-		}
+
+            JsonSerializerSettings jSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                DateFormatString = "MM/dd/yyyy hh:mm:ss"
+            };
+            jSettings.Converters.Add(new MyDateTimeConvertor());
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings = jSettings;
+
+            var dateTimeConverter = new IsoDateTimeConverter
+            {
+                DateTimeFormat = "MM/dd/yyyy hh:mm:ss"
+            };
+
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(dateTimeConverter);
+
+        }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
@@ -69,5 +88,22 @@ namespace Intel.MyDeals
 				perf.Clear();
 			}
 		}
-	}
+
+        public class MyDateTimeConvertor : DateTimeConverterBase
+        {
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                return DateTime.Parse(reader.Value.ToString());
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                DateTime date = (DateTime)value;
+                string strDate = ((date.Hour == 0 && date.Minute == 0) || (date.Hour == 23 && date.Minute == 59))
+                    ? $"{date.Month}/{date.Day}/{date.Year}"
+                    : $"{date.Month}/{date.Day}/{date.Year} {date.Hour}:{date.Minute}:{date.Second}.{date.Millisecond}";
+                writer.WriteValue(strDate);
+            }
+        }
+    }
 }
