@@ -18,7 +18,8 @@ namespace Intel.MyDeals.Entities
         /// <returns>User's key</returns>
         public static string GetMyKey()
         {
-            string key = IsTestMode ? "SJPATIL" : Utils.ThreadUser;
+            //string key = IsTestMode ? "SJPATIL" : Utils.ThreadUser; // Removed Sushant as Test Harness User and set back to normal IDSID operations
+            string key = Utils.ThreadUser;
             if (key.Contains("/"))
             {
                 key = key.Split('/').Last();
