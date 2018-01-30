@@ -2410,7 +2410,7 @@
 
             // if save already started saving... exit
             // if validate triggers from product translation continue..validating data
-            if ($scope.isBusyMsgTitle !== "Saving your data..." && $scope.isBusyMsgTitle !== "Overlapping Deals...") {
+            if ($scope.isBusyMsgTitle !== "Saving your data..." && $scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Overlapping Deals...") {
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
