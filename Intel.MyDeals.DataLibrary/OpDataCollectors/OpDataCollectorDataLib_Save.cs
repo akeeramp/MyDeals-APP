@@ -90,6 +90,7 @@ namespace Intel.MyDeals.DataLibrary
                 }
                 // if (contractToken.ContractId > 0) new CostTestDataLib().RunPct(OpDataElementType.CNTRCT.ToId(), new List<int> {contractToken.ContractId});
 
+                // EXIT SAVE CALL RESULTS
                 return ret;
             }
             catch (Exception ex)
@@ -191,6 +192,7 @@ namespace Intel.MyDeals.DataLibrary
 #endif
 
                 // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
+                // Goto "EXIT SAVE CALL RESULTS" for the results from this call
                 new DSOpDataPacketsToDatabase(DataAccess.ConnectionString).BulkImportDataSet(dsImport);
 
                 OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_MYDL_TMP_TO_WIP_ATRB.");

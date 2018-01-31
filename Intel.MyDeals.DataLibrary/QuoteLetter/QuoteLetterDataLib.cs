@@ -162,7 +162,7 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     //Table 1
-                    int IDX_EMAIL = DB.GetReaderOrdinal(rdr, "EMAIL");
+                    int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
                     int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_PDF_FILE = DB.GetReaderOrdinal(rdr, "PDF_FILE");
@@ -174,7 +174,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         var quoteLetterContentData = (new QuoteLetterContentInfo
                         {
-                            EMAIL = (IDX_EMAIL < 0 || rdr.IsDBNull(IDX_EMAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL),
+                            EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
                             OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             PDF_FILE = (IDX_PDF_FILE < 0 || rdr.IsDBNull(IDX_PDF_FILE)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_PDF_FILE),

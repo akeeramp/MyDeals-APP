@@ -764,39 +764,39 @@ namespace Intel.MyDeals.BusinessRules
 			// if not a major change... exit
 			if (!changedDes.Any() && !changedIncreaseDes.Any() && !changedDecreaseDes.Any() && r.Dc.DcID > 0) return;
 
-			// Define redeal reason
+            // Define redeal reason
 
-			// TO DO: Fix this later
+            // TO DO: Fix this later
 
-			//var reason = "Redeal due to major change: \n";
-			//if (r.Dc.DcID > 0)
-			//{
-			//    foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes))
-			//    {
-			//        MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
-			//        if (atrb.DATA_TYPE_CD == "DATETIME")
-			//        {
-			//            reason += $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy} \n";
-			//        }
-			//        else
-			//        {
-			//            reason += $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue} \n";
-			//        }
-			//    }
-			//}
-			//else
-			//{
-			//    reason += "New deal/s have been added to this strategy.";
-			//}
+            //var reason = "Redeal due to major change: \n";
+            //if (r.Dc.DcID > 0)
+            //{
+            //    foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes))
+            //    {
+            //        MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+            //        if (atrb.DATA_TYPE_CD == "DATETIME")
+            //        {
+            //            reason += $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy} \n";
+            //        }
+            //        else
+            //        {
+            //            reason += $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue} \n";
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    reason += "New deal/s have been added to this strategy.";
+            //}
 
-			//myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.ADD_TO_TIMELINE, reason, 30));
+            //myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.ADD_TO_TIMELINE, reason, 30));
 
-			// NOTE: We need to set the WIP and the PS stage
-			// WIP always is "Draft" and PS depends on the users workflow
-			// NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
+            // NOTE: We need to set the WIP and the PS stage
+            // WIP always is "Draft" and PS depends on the users workflow
+            // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
-			// set WIP Stages to Draft for a redeal if they already aren't there
-		    if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft)
+            // set WIP Stages to Draft for a redeal if they already aren't there
+            if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft)
 		    {
                 r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
                 r.Dc.SetAtrb(AttributeCodes.PS_WF_STG_CD, OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
@@ -808,11 +808,14 @@ namespace Intel.MyDeals.BusinessRules
 			{
 				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
 				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
-				string tracker = r.Dc.GetDataElementValue(AttributeCodes.TRKR_NBR);
-				if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
-				{
-					r.Dc.SetAtrb(AttributeCodes.TRKR_NBR, tracker + "*");
-				}
+                foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
+                {
+                    string tracker = de.AtrbValue.ToString();
+                    if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
+                    {
+                        de.AtrbValue = tracker + "*";
+                    }
+                }
 			}
 
 			// Locate and set Parent PS Attributes

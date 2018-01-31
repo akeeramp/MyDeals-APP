@@ -1310,7 +1310,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["AVG_RPU"] = args.data.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.data.WIP_DEAL[i]["MAX_RPU"];
                             dataItem["BID_STATUS"] = args.data.WIP_DEAL[i]["BID_STATUS"];
-                            dataItem["EXPIRE_FLG"] = args.data.WIP_DEAL[i]["EXPIRE_FLG"];
+                            dataItem["EXPIRE_FLG"] = args.data.WIP_DEAL[i]["EXPIRE_FLG"] === "True" || args.data.WIP_DEAL[i]["EXPIRE_FLG"] === "1" || args.data.WIP_DEAL[i]["EXPIRE_FLG"] === 1 || args.data.WIP_DEAL[i]["EXPIRE_FLG"] === true;  // Old one would break because setting value false = "False"
                             dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];
                         }
                     }
