@@ -1604,33 +1604,49 @@
                 }
             );
         }
+        $scope.syncHoldWipAllActions = function (wip) {
+            var arActions = ["Approve", "Reject", "Hold"];
+
+            for (var a = 0; a < arActions.length; a++) {
+                var actionItems = wip[arActions[a]];
+                if (actionItems !== undefined && actionItems !== null) {
+                    for (var i = 0; i < actionItems.length; i++) {
+                        $scope.syncHoldWip(actionItems[i]);
+                    }
+                }
+            }
+        }
+        $scope.syncHoldWip = function (dataItem) {
+            if (dataItem.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                if (!dataItem._actions) dataItem._actions = {};
+                dataItem._actions["Hold"] = true;
+            }
+            if (dataItem.WF_STG_CD !== "Hold" && $scope.messages[0].ShortMessage === "Hold") {
+                // put on hold
+                if (!dataItem._behaviors) dataItem._behaviors = {};
+                if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
+                dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
+            }
+            if (dataItem.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                // taken off hold
+                if (!dataItem._behaviors) dataItem._behaviors = {};
+                if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
+                dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
+            }
+
+            dataItem.WF_STG_CD = $scope.messages[0].ShortMessage;
+            if ($scope.messages.length > 1) {
+                dataItem.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
+            }
+        }
+
         $scope.syncHoldItems = function(data, wip) {
             $scope.messages = data.data.Messages;
 
             $timeout(function () {
-                if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
-                    if (!wip._actions) wip._actions = {};
-                    wip._actions["Hold"] = true;
-                }
-                if (wip.WF_STG_CD !== "Hold" && $scope.messages[0].ShortMessage === "Hold") {
-                    // put on hold
-                    if (!wip._behaviors) wip._behaviors = {};
-                    if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
-                    wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
-                    wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
-                }
-                if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
-                    // taken off hold
-                    if (!wip._behaviors) wip._behaviors = {};
-                    if (!wip._behaviors.isReadOnly) wip._behaviors.isReadOnly = {};
-                    wip._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
-                    wip._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
-                }
-
-                wip.WF_STG_CD = $scope.messages[0].ShortMessage;
-                if ($scope.messages.length > 1) {
-                    wip.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
-                }
+                $scope.syncHoldWipAllActions(wip);
                 $scope.$broadcast('refresh');
                 $scope.$broadcast('refreshStage', wip);
                 $("#wincontractMessages").data("kendoWindow").open();

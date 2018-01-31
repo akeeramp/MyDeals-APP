@@ -1270,13 +1270,25 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.$on('refreshStage', function (event, args) {
                 if (!!args) {
-                    var dataItem = $scope.findDataItemById(args["DC_ID"]);
-                    if (dataItem !== undefined) {
-                        dataItem["WF_STG_CD"] = args["WF_STG_CD"];
-                        dataItem["PS_WF_STG_CD"] = args["PS_WF_STG_CD"];
-                    }
+                    $scope.syncAllActions(args);
                 }
             });
+            $scope.syncAllActions = function (dataItems) {
+                var arActions = ["Approve", "Reject", "Hold"];
+
+                for (var a = 0; a < arActions.length; a++) {
+                    var actionItems = dataItems[arActions[a]];
+                    if (actionItems !== undefined && actionItems !== null) {
+                        for (var i = 0; i < actionItems.length; i++) {
+                            var dataItem = $scope.findDataItemById(actionItems[i]["DC_ID"]);
+                            if (dataItem !== undefined && dataItem !== null) {
+                                if (actionItems[i]["WF_STG_CD"] !== undefined) dataItem["WF_STG_CD"] = actionItems[i]["WF_STG_CD"];
+                                if (actionItems[i]["PS_WF_STG_CD"] !== undefined) dataItem["PS_WF_STG_CD"] = actionItems[i]["PS_WF_STG_CD"];
+                            }
+                        }
+                    }
+                }
+            }
 
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
