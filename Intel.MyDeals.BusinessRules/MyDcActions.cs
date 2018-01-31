@@ -1284,8 +1284,9 @@ namespace Intel.MyDeals.BusinessRules
 
 			int parsedQty = 0;
             IOpDataElement deQty = null;
+            IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
-			ProdMappings items = null;
+            ProdMappings items = null;
 			int numOfL1s = 0;
 			int numOfL2s = 0;
 
@@ -1327,7 +1328,7 @@ namespace Intel.MyDeals.BusinessRules
 							// Rule: Each L1 can only have a Qty of 1
 							if (parsedQty > 1)
 							{
-								AddTierValidationMessage(deQty, "L1 Products can only have a Qty of 1.", prdMapIndex);
+								AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", prdMapIndex);
 							}
 							numOfL1s += parsedQty;
 						}
@@ -1379,6 +1380,8 @@ namespace Intel.MyDeals.BusinessRules
             deQty1 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 0).FirstOrDefault();
             deQty2 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 1).FirstOrDefault();
 
+            IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+
             if (deQty1 != null) Int32.TryParse(deQty1.AtrbValue.ToString(), out qtyPrimary); else qtyPrimary = 0;
             if (deQty2 != null) Int32.TryParse(deQty2.AtrbValue.ToString(), out qtySecondary1); else qtySecondary1 = 0;
 
@@ -1386,11 +1389,11 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (qtyPrimary != 1)
                 {
-                    AddTierValidationMessage(deQty1, "L1 Products can only have a Qty of 1.", 0);
+                    AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", 0);
                 }
                 if (qtySecondary1 != 1)
                 {
-                    AddTierValidationMessage(deQty2, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.", 1);
+                    AddTierValidationMessage(atrbWithValidation, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.", 1);
                 }
             }
 
@@ -1398,11 +1401,11 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (qtyPrimary != 1)
                 {
-                    AddTierValidationMessage(deQty1, "L1 Products can only have a Qty of 1.", 0);
+                    AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", 0);
                 }
                 if (qtySecondary1 != 1 && hasL1 > 1)     //how do we check if second item is L1?  only want to run this if second product is also L1
                 {
-                    AddTierValidationMessage(deQty2, "L1 Products can only have a Qty of 1.", 1);
+                    AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", 1);
                 }
             }
         }

@@ -1347,7 +1347,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'QTY', 'number')#",
-                UiType = "NumericTextBox",
+                UiType = "IntegerTextBox",
                 Editor = "multiDimEditor",
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'QTY', 'number')#"
             });

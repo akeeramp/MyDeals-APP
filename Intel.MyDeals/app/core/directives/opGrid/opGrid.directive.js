@@ -1094,9 +1094,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 } else if (type === "CheckBox") {
 
-                } else if (type === "NumericTextBox") {
+                } else if (type === "NumericTextBox") { //2 decimal places used for money
                     el += '<input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
-
+                } else if (type === "IntegerTextBox") { //0 decimal places used for item counts
+                    el += '<input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
                 } else {
                     el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="width: 100%;" />';
                 }
