@@ -1043,12 +1043,43 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3594,
                 AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
                 Label = "Group Type",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 140,
-                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE",
+                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3594,
+                AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
+                Label = "Group Type",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 140,
+                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/PROGRAM",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3594,
+                AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
+                Label = "Group Type",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 140,
+                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/VOL_TIER",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
