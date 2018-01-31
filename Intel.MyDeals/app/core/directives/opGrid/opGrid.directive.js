@@ -1389,7 +1389,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (data[d].DC_PARENT_ID === ptrId) row = data[d];
                 }
                 if (!!row) data.splice(data.indexOf(row), 1);
-                scope.contractDs.sync();
+                if (data.length === 0) {
+                    $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshNoWipData', true);
+                } else {
+                    scope.contractDs.sync();
+                }
             }
 
             $scope.$on('syncDs', function (event, args) {

@@ -3397,6 +3397,15 @@
             $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
         });
 
+        $scope.$on('refreshNoWipData', function (event, args) {
+            $scope._dirty = false; // don't want to kick of listeners
+            $state.go('contract.manager.strategy', {
+                cid: $scope.contractData.DC_ID,
+                sid: $scope.curPricingStrategy.DC_ID,
+                pid: $scope.curPricingTable.DC_ID
+            }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
+        });
+
         $scope.$on('btnPctMctRunning', function (event, args) {
             $scope.setBusy("Running", "Price Cost Test and Meet Comp Test.");
         });
