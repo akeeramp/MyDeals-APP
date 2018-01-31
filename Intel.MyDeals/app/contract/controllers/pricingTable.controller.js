@@ -2552,7 +2552,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
-            root.setBusy("Validating your data...", "Please wait as we find your products!");
+            root.setBusy("Validating your data...", "Please wait as we find your products!"); 
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
                     topbar.hide();
@@ -2636,8 +2636,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 } else {
                     var userInput = updateUserInput(transformResults.ValidProducts[key]);
                 }
-                var contractProducts = userInput.contractProducts;
-                data[r].PTR_USER_PRD = contractProducts;
+
+                var contractProducts = userInput.contractProducts.toString().replace(/(\r\n|\n|\r)/gm, ""); // TODO: probably move all these replace functions should into the custom paste instead
+                var originalProducts = data[r].PTR_USER_PRD.toString().replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {  
+                	var orignalUnswappedDataDict = {}; // Dictionary<product, original dataItem>
+                	var originalProductsArr = originalProducts.split(',');
+                	var isProductOrderChanged = (contractProducts !== originalProducts);
+
+                	if (isProductOrderChanged) {
+						// Create a dictionary of products with their original tiered data
+                		for (var i = 0; i < originalProductsArr.length; i++) {
+                			var originalIndex = parseInt(r) + i; // i+1 is essentially the tier assuming the usr prd is in the right order. But then we minus 1 for getting the index so it's just i.
+                			orignalUnswappedDataDict[originalProductsArr[i]] = angular.copy(data[originalIndex]);
+                		}
+                	}
+                }
+
+                data[r].PTR_USER_PRD = contractProducts;   // Change the PTR_USER_PRD to the re-ordered product list 
                 sourceData[r].PTR_USER_PRD = contractProducts;
 
                 data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
@@ -2646,14 +2663,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // KIT update PRD_DRWAING_ORDER and merged rows
                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     data[r].PRD_DRAWING_ORD = kitObject.PRD_DRAWING_ORD;
-                    sourceData[r].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD
+                    sourceData[r].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD					
                     data[r]['dirty'] = true;
                     sourceData[r]['dirty'] = true;
                     var tierNbr = root.numOfPivot(data[r]);
                     var mergedRows = parseInt(r) + tierNbr;
                     var modifiedNumTiers = data[r].PTR_USER_PRD.split(',').length;
                     modifiedNumTiers = modifiedNumTiers < tierNbr ? tierNbr : modifiedNumTiers;
-                    for (var a = mergedRows - 1; a >= r ; a--) {
+                    for (var a = mergedRows - 1; a >= r ; a--) { // look at each tier by it's index, going backwards
+                    	if (isProductOrderChanged) {
+                    		// We had swapped around the product order, so we need to map corresponding dimmed/tiered attributes to their new product order too
+                    		var newContractProdArr = contractProducts.split(',');
+                    		var currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
+                    		for (var d = 0; d < root.kitDimAtrbs.length; d++) {
+                    			if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
+                    			data[a][root.kitDimAtrbs[d]] = orignalUnswappedDataDict[currProduct][root.kitDimAtrbs[d]];
+                    		}
+						}
+
                         data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                         sourceData[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                         data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
