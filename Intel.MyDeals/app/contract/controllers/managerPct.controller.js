@@ -592,7 +592,7 @@
                 field: "LOW_NET_PRC",
                 title: "Lowest Net Price",
                 format: "{0:c}",
-                template: "#= (LOW_NET_PRC == null) ? ' ' : kendo.toString(LOW_NET_PRC, 'c') #",
+                template: "<div title='#= LNP_FRMULA #'>#= (LOW_NET_PRC == null) ? ' ' : kendo.toString(LOW_NET_PRC, 'c') #</div>",
                 width: "140px",
                 parent: false,
                 filterable: { multi: true, search: true },
