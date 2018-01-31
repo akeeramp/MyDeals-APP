@@ -426,7 +426,7 @@
                 $scope.setBusy("", "");
                 var url = "/Contract#/manager/" + response.data.ContractId;
                 if (response.data.PricingStrategyId > 0 && response.data.PricingTableId > 0) {
-                    url += "/" + response.data.PricingStrategyId + "/" + response.dat2a.PricingTableId;
+                    url += "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId;
                 }
                 if (response.data.WipDealId > 0) url += "/wip";
                 win.location.href = url;
