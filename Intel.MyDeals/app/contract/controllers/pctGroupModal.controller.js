@@ -79,6 +79,11 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
                 field: "OVLP_CNSMPTN_RSN",
                 title: "Consumption Reason",
                 width: "120px"
+            },
+            {
+                field: "OVLP_CNSMPTN_RSN_CMNT",
+                title: "Consumption Reason Comments",
+                width: "140px"
             }
         ]
     };

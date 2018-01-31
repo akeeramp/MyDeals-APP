@@ -229,6 +229,7 @@
                     var response = e.data["CostTestDetailItems"];
 
                     var rollupPctBydeal = {};
+                    var costTestIncompleteReason = {};
                     for (var j = 0; j < response.length; j++) {
                         $scope.dealPtIdDict[response[j]["DEAL_ID"]] = pt.DC_ID;
                         var isOverridden = response[j]["COST_TEST_OVRRD_FLG"] === "Yes";
@@ -245,51 +246,52 @@
                                 rollupPctBydeal[response[j]["DEAL_ID"]] = "Pass";
                             }
                         }
+                        costTestIncompleteReason[response[j]["DEAL_ID"]] = rollupPctBydeal[response[j]["DEAL_ID"]] === "InComplete" ? response[j]["INCMPL_COST_TEST_RSN"] : "";
                     }
 
                     for (var i = 0; i < response.length; i++) {
                         var item = response[i];
 
                         //if (!gridPctUtils.columns[item.DEAL_ID]) {
-                            var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
-                            var tmplt = "<table style='float: left; margin-top: -20px;'>"; // <colgroup><col style='width: 30px;'>
-                            var trLocked = "<td style='width: 30px;'></td>";
-                            var trUnLocked = "";
+                        var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
+                        var tmplt = "<table style='float: left; margin-top: -20px;'>"; // <colgroup><col style='width: 30px;'>
+                        var trLocked = "<td style='width: 30px;'></td>";
+                        var trUnLocked = "";
 
-                            for (var c = 0; c < cols.length; c++) {
-                                var val = item[cols[c].field];
-                                if (!!cols[c].format) {
-                                    val = kendo.toString(val, cols[c].format.replace("{0:", "").replace("}", ""));
-                                }
-                                if (!!cols[c].template) {
-                                    var newVal = kendo.template(cols[c].template)(item);
-                                    if (newVal.indexOf("ng-bind") < 0) {
-                                        val = newVal;
-                                    }
-                                }
-                                if (cols[c].field === "DEAL_ID") {
-                                    val = "<b>" + val + "</b>";
-                                } else if (cols[c].field === "GRP_DEALS") {
-                                    var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showGroups(true, " + item["DEAL_ID"] + ")'>View</div>" : "";
-                                    val = "<div style='text-align: center;'>" + grp + "</div>";
-                                }
-
-                                if (!cols[c].hidden) {
-                                    if (cols[c].locked) {
-                                        if (cols[c].field === "PRC_CST_TST_STS") {
-                                            var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;");
-                                            trLocked += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
-                                        } else {
-                                            trLocked += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
-                                        }
-                                    } else {
-                                        trUnLocked += "<td style='padding-left: 0px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
-                                    }
+                        for (var c = 0; c < cols.length; c++) {
+                            var val = item[cols[c].field];
+                            if (!!cols[c].format) {
+                                val = kendo.toString(val, cols[c].format.replace("{0:", "").replace("}", ""));
+                            }
+                            if (!!cols[c].template) {
+                                var newVal = kendo.template(cols[c].template)(item);
+                                if (newVal.indexOf("ng-bind") < 0) {
+                                    val = newVal;
                                 }
                             }
+                            if (cols[c].field === "DEAL_ID") {
+                                val = "<b>" + val + "</b>";
+                            } else if (cols[c].field === "GRP_DEALS") {
+                                var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showGroups(true, " + item["DEAL_ID"] + ")'>View</div>" : "";
+                                val = "<div style='text-align: center;'>" + grp + "</div>";
+                            }
 
-                            gridPctUtils.columns[item.DEAL_ID] = tmplt + "<tbody><tr>" + trLocked + "</tr></tbody></table>";
-                            $scope.unLockedGroupData[item.DEAL_ID] = "<table><tbody><tr>" + trUnLocked + "</tr></tbody></table>";
+                            if (!cols[c].hidden) {
+                                if (cols[c].locked) {
+                                    if (cols[c].field === "PRC_CST_TST_STS") {
+                                        var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;", costTestIncompleteReason[response[i]["DEAL_ID"]]);
+                                        trLocked += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
+                                    } else {
+                                        trLocked += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                    }
+                                } else {
+                                    trUnLocked += "<td style='padding-left: 0px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                }
+                            }
+                        }
+
+                        gridPctUtils.columns[item.DEAL_ID] = tmplt + "<tbody><tr>" + trLocked + "</tr></tbody></table>";
+                        $scope.unLockedGroupData[item.DEAL_ID] = "<table><tbody><tr>" + trUnLocked + "</tr></tbody></table>";
                         //}
                     }
 
@@ -419,15 +421,16 @@
 
         $scope.gotoDealDetails = function (dcid) {
             $scope.setBusy("Loading..", "Redirecting to deal editor.");
-
+            var win = $window.open('');
             dataService.get("api/Search/GotoDeal/" + dcid).then(function (response) {
                 $scope.setBusy("", "");
                 var url = "/Contract#/manager/" + response.data.ContractId;
                 if (response.data.PricingStrategyId > 0 && response.data.PricingTableId > 0) {
-                    url += "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId;
+                    url += "/" + response.data.PricingStrategyId + "/" + response.dat2a.PricingTableId;
                 }
                 if (response.data.WipDealId > 0) url += "/wip";
-                var win = $window.open(url);
+                win.location.href = url;
+                win.focus();
             }, function (response) {
                 $scope.setBusy("Error", "Could not load deal data.");
                 logger.error("Could not load deal data.", response, response.statusText);
@@ -504,7 +507,7 @@
         }
 
         // Global Settings
-        var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_FLG', '', 'font-size: 20px !important;') #" : "&nbsp;";
+        var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_FLG', '', 'font-size: 20px !important;', INCMPL_COST_TEST_RSN) #" : "&nbsp;";
         $scope.cellColumns = {
             "PRC_CST_TST_STS": {
                 field: "PRC_CST_TST_STS",
@@ -519,7 +522,7 @@
                 field: "DEAL_ID",
                 title: "Deal Id",
                 width: "100px",
-                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='Click to go to the Deal Editor'> #= DEAL_ID # </a>",
+                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='#= PRC_CST_TST_STS !== \"InComplete\" ? \"Click to go to the Deal Editor\" : INCMPL_COST_TEST_RSN #'> #= DEAL_ID # </a>",
                 groupHeaderTemplate: "#= gridPctUtils.getColumnTemplate(value) #",
                 locked: true,
                 parent: true,
@@ -722,6 +725,7 @@
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
+                        DEAL_DESC: { type: "string" },
                         GRP_DEALS: { type: "string" },
                         DEAL_STRT_DT: { type: "string" },
                         CAP: { type: "number" },
@@ -740,7 +744,6 @@
                         CNSMPTN_RSN: { type: "string" },
                         PROG_PMT: { type: "string" },
                         DEAL_GRP_CMNT: { type: "string" },
-                        DEAL_DESC: { type: "string" },
                         LAST_COST_TEST_RUN: { type: "string" }
                     }
                 },
@@ -750,6 +753,7 @@
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
+                        DEAL_DESC: { type: "string" },
                         GRP_DEALS: { type: "string" },
                         DEAL_STRT_DT: { type: "string" },
                         CAP: { type: "number" },
@@ -768,7 +772,6 @@
                         CNSMPTN_RSN: { type: "string" },
                         PROG_PMT: { type: "string" },
                         DEAL_GRP_CMNT: { type: "string" },
-                        DEAL_DESC: { type: "string" },
                         LAST_COST_TEST_RUN: { type: "string" }
                     }
                 },
@@ -778,6 +781,7 @@
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
+                        DEAL_DESC: { type: "string" },
                         GRP_DEALS: { type: "string" },
                         DEAL_STRT_DT: { type: "string" },
                         MAX_RPU: { type: "number" },
@@ -794,7 +798,6 @@
                         CNSMPTN_RSN: { type: "string" },
                         PROG_PMT: { type: "string" },
                         DEAL_GRP_CMNT: { type: "string" },
-                        DEAL_DESC: { type: "string" },
                         LAST_COST_TEST_RUN: { type: "string" }
                     }
                 },
@@ -805,6 +808,7 @@
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
                         GRP_DEALS: { type: "string" },
+                        DEAL_DESC: { type: "string" },
                         DEAL_STRT_DT: { type: "string" },
                         MAX_RPU: { type: "number" },
                         LOW_NET_PRC: { type: "number" },
@@ -820,7 +824,6 @@
                         CNSMPTN_RSN: { type: "string" },
                         PROG_PMT: { type: "string" },
                         DEAL_GRP_CMNT: { type: "string" },
-                        DEAL_DESC: { type: "string" },
                         LAST_COST_TEST_RUN: { type: "string" }
                     }
                 }
@@ -830,6 +833,7 @@
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
+                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["GRP_DEALS"],
                     $scope.cellColumns["DEAL_STRT_DT"],
                     $scope.cellColumns["CAP"],
@@ -848,13 +852,13 @@
                     $scope.cellColumns["CNSMPTN_RSN"],
                     $scope.cellColumns["PROG_PMT"],
                     $scope.cellColumns["DEAL_GRP_CMNT"],
-                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ],
                 "KIT": [
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
+                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["GRP_DEALS"],
                     $scope.cellColumns["DEAL_STRT_DT"],
                     $scope.cellColumns["CAP"],
@@ -873,13 +877,13 @@
                     $scope.cellColumns["CNSMPTN_RSN"],
                     $scope.cellColumns["PROG_PMT"],
                     $scope.cellColumns["DEAL_GRP_CMNT"],
-                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ],
                 "VOL_TIER": [
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
+                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["GRP_DEALS"],
                     $scope.cellColumns["DEAL_STRT_DT"],
                     $scope.cellColumns["MAX_RPU"],
@@ -896,13 +900,13 @@
                     $scope.cellColumns["CNSMPTN_RSN"],
                     $scope.cellColumns["PROG_PMT"],
                     $scope.cellColumns["DEAL_GRP_CMNT"],
-                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ],
                 "PROGRAM": [
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
+                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["GRP_DEALS"],
                     $scope.cellColumns["DEAL_STRT_DT"],
                     $scope.cellColumns["MAX_RPU"],
@@ -919,7 +923,6 @@
                     $scope.cellColumns["CNSMPTN_RSN"],
                     $scope.cellColumns["PROG_PMT"],
                     $scope.cellColumns["DEAL_GRP_CMNT"],
-                    $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ]
             }

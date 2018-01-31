@@ -66,7 +66,7 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
         } else {
             tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
         }
-        
+
         tmplt += '<div class="uiControlDiv"';
 
         tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
@@ -679,7 +679,7 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
             total = total - items["ECAP_PRICE"]["20_____1"];
         }
     }
-    
+
     return total;
 };
 
@@ -1328,19 +1328,26 @@ gridPctUtils.getResultMappingIconClass = function (result) {
         return "intelicon-help-outlined";
     }
 }
-gridPctUtils.getResultSingleIcon = function (result, style) {
+gridPctUtils.getResultSingleIcon = function (result, style, incompleteReason) {
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
-
+    if (result === "InComplete") {
+        iconTitle = incompleteReason;
+    }
     return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
 }
-gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style) {
+gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style, incompleteReason) {
     var rtn = "<div style='text-align: center;'>";
 
     if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-passed-completed-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Passed with Override Status"></i>';
 
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
+
+    // If reason is incomplete display incomplete reason
+    if (result === "InComplete") {
+        iconTitle = incompleteReason;
+    }
 
     rtn += '<i ng-if="' + flg + '" class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
     rtn += "</div>";
