@@ -121,9 +121,9 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-                new MyOpRule
-                {
-                    Title="Rate must have a positive value",
+				new MyOpRule
+				{
+					Title="Rate must have a positive value",
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
@@ -173,6 +173,15 @@ namespace Intel.MyDeals.BusinessRules
 					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.ECAP_PRICE)
+				},
+				new MyOpRule
+				{
+					Title="Qty must be a whole number",
+					//ActionRule = MyDcActions.ExecuteActions,
+                    ActionRule = MyDcActions.ValidateTieredQty,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 				},
 				new MyOpRule
 				{

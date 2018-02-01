@@ -670,8 +670,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        // Update Total Discount per line if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
 					            // Transform negative numbers into positive
-					            if (colIndex == qtyIndex && parseInt(myRow["QTY"]) < 0) {
-					            	myRow["QTY"] = (Math.abs(value.value) || 0);
+					            if (colIndex == qtyIndex) {
+					            	myRow["QTY"] = (Math.abs(parseInt(value.value) || 0) || 0);
 					            }
 					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }

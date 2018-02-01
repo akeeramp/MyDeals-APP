@@ -942,6 +942,11 @@ namespace Intel.MyDeals.BusinessRules
 			return (attrb >= 0);
 		}
 
+		private static bool IsWholeNumber(decimal attrb)
+		{
+			return (attrb % 1 == 0) && (attrb >= 0);
+		}
+
 		public static void RollUpErrorMessage(params object[] args)
 		{
 			var r = new MyOpRuleCore(args);
@@ -1011,6 +1016,12 @@ namespace Intel.MyDeals.BusinessRules
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
 			ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
+		}
+		public static void ValidateTieredQty(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+			ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Qty must be a whole number.", IsWholeNumber, r);
 		}
 
 		public static void ValidateTierStartVol(params object[] args)
@@ -1177,7 +1188,7 @@ namespace Intel.MyDeals.BusinessRules
 						Decimal.TryParse(ecapPrice.AtrbValue.ToString(), out ecapPriceSafeParse);
 						Decimal.TryParse(qty.AtrbValue.ToString(), out qtySafeParse);
 						Decimal.TryParse(discountPerLine.AtrbValue.ToString(), out discountSafeParse);
-
+						
 						if (tier == -1)
 						{
 							// Only Kit Ecap is tier of -1
