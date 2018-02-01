@@ -648,7 +648,26 @@ namespace Intel.MyDeals.BusinessRules
 			}
 		}
 
-		public static void CheckVolume(params object[] args)
+        public static void CheckFrontendSoldPrcGrpCd(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            string sold = r.Dc.GetDataElementValue(AttributeCodes.DEAL_SOLD_TO_ID);
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.DEAL_SOLD_TO_ID);
+
+            if (progPayment == "Backend" || !string.IsNullOrEmpty(sold)) return;
+
+            int custId = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+            string prcCd = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId && c.ACTV_IND).Select(c => c.PRC_GRP_CD).FirstOrDefault();
+            if (string.IsNullOrEmpty(prcCd))
+            {
+                de.AddMessage("Frontend Deals cannot be created if no sold to values are selected and the customer doesn't have a Price Group Code.");
+            }
+        }
+
+        public static void CheckVolume(params object[] args)
 		{
 			// DE28830 - Deal Ceiling Validation message issue in case of Front End Deal fix
 			MyOpRuleCore r = new MyOpRuleCore(args);

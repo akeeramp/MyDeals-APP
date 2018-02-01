@@ -342,7 +342,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.CheckVolume,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-                },               
+                },
                 new MyOpRule
                 {
                     Title="Frontend can't be consumption",
@@ -351,6 +351,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
 				},
+                new MyOpRule
+                {
+                    Title="Frontend can't be created without Sold To and Price Grp Code",
+                    ActionRule = MyDcActions.CheckFrontendSoldPrcGrpCd,
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
                 new MyOpRule
                 {
                     Title="Billing Date Validations",

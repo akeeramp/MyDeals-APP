@@ -35,6 +35,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
                     int IDX_CUST_TYPE = DB.GetReaderOrdinal(rdr, "CUST_TYPE");
                     int IDX_HOSTED_GEO = DB.GetReaderOrdinal(rdr, "HOSTED_GEO");
+                    int IDX_PRC_GRP_CD = DB.GetReaderOrdinal(rdr, "PRC_GRP_CD");
 
                     while (rdr.Read())
                     {
@@ -48,7 +49,8 @@ namespace Intel.MyDeals.DataLibrary
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
                             CUST_TYPE = (IDX_CUST_TYPE < 0 || rdr.IsDBNull(IDX_CUST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_TYPE),
-                            HOSTED_GEO = (IDX_HOSTED_GEO < 0 || rdr.IsDBNull(IDX_HOSTED_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOSTED_GEO)
+                            HOSTED_GEO = (IDX_HOSTED_GEO < 0 || rdr.IsDBNull(IDX_HOSTED_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOSTED_GEO),
+                            PRC_GRP_CD = (IDX_PRC_GRP_CD < 0 || rdr.IsDBNull(IDX_PRC_GRP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_GRP_CD)
                         });
                     }
                 }
