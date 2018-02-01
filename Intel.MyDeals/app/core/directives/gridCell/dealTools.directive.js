@@ -47,6 +47,9 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false: rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
           
+            if ($scope.rootScope.C_DEL_DEALS === false) {
+                $scope.isDeleteEnabled = false;
+            }
 
             $scope.stgOneChar = function () {
                 return gridUtils.stgOneChar($scope.dataItem);
