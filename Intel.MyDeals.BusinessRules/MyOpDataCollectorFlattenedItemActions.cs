@@ -98,7 +98,7 @@ namespace Intel.MyDeals.BusinessRules
                     objsetActionItem.ActionReasons[action] = "Pricing Strategy did not pass validation.";
                 }
 
-                if (action == "Approve" && mctMissing)
+                if (action == "Approve" && mctMissing && stage != WorkFlowStages.Draft)
                 {
                     objsetActionItem.Actions[action] = false;
                     objsetActionItem.ActionReasons[action] = "Meet Comp Data is missing.  Please go to the Meet Comp Screen to populate missing data.";
