@@ -105,7 +105,8 @@ namespace Intel.MyDeals.Entities
             if (!dealIds.Any()) return;
 
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 60));
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
+            // BACKED OUT DUE TO BROKEN APPROVAL
+            //packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
         }
 
 
