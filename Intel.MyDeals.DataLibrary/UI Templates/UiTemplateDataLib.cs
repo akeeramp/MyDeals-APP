@@ -574,6 +574,19 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 29,
+                AtrbCd = "TEMP_TOTAL_DSCNT_PER_LN",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 120,
+                Label = "Total Discount per line",
+                IsDimKey = true,
+                IsReadOnly = true,
+                DataType = "number",
+                Format = "{0:c}"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 39,
                 AtrbCd = AttributeCodes.GEO_COMBINED,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -586,19 +599,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "dropdownName",
                 LookupValue = "dropdownName",
                 IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = "TEMP_TOTAL_DSCNT_PER_LN",
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 120,
-                Label = "Total Discount per line",
-                IsDimKey = true,
-                IsReadOnly = true,
-                DataType = "number",
-                Format = "{0:c}"
             });
             items.Add(new UiTemplateContainerItem
             {

@@ -166,7 +166,26 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-
+                new MyOpRule
+                {
+                    Title="Readonly if no chipset",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRODUCT_CATEGORIES) && de.AtrbValue != null && !de.AtrbValue.ToString().Contains("CS") && dc.DcID > 0).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] 
+                            {
+                                AttributeCodes.CS_SHIP_AHEAD_STRT_DT,
+                                AttributeCodes.CS_SHIP_AHEAD_END_DT
+                            } // Items to set reasonly
+                        }
+                    }
+                },
                 new MyOpRule
                 {
                     Title="Readonly WIP/Deal ALWAYS",
