@@ -76,7 +76,7 @@ namespace Intel.MyDeals.BusinessLogic
 			atrbCd = atrbCd.ToUpper();
 			dealtypeCd = dealtypeCd.ToUpper();
 			return _dataCollectionsDataLib.GetBasicDropdowns().
-				Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtypeCd.ToUpper() || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS") && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+				Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtypeCd.ToUpper() || (d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS" || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_TYPES")) && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
 		}
 
 		/// <summary>

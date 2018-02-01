@@ -339,7 +339,7 @@
         }
 
         function isAllDeals(val) {
-            if (val.dropdownName.toLowerCase() == "all deals" || val.dropdownName.toLowerCase() == "all_deals") {
+            if (val.dropdownName.toLowerCase() == "all deals" || val.dropdownName.toLowerCase() == "all_deals") {   //TODO: should we also be checking for "ALL_TYPES"?
                 return true;
             } else {
                 return false;
