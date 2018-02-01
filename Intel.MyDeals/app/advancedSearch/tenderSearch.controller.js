@@ -230,10 +230,56 @@
                 type: "string",
                 width: 140
             }, {
-                field: "Customer.CUST_DIV_NM",
+                field: "SERVER_DEAL_TYPE",
+                title: "SVR Deal Type",
+                type: "string",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                }
+            }, {
+                field: "Customer.CUST_NM",
                 title: "OEM",
                 type: "string",
-                width: 140
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoMultiSelect({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Customers/GetMyCustomersNameInfo",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "CUST_NM",
+                            dataValueField: "CUST_NM",
+                            tagMode: "single",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                }
             }, {
                 field: "CUST_ACCNT_DIV",
                 title: "Cust Division",

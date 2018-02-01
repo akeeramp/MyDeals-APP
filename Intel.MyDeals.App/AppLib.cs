@@ -164,7 +164,14 @@ namespace Intel.MyDeals.App
         {
             //return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2002).ToList();
             //var fullList = UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
-            var fullList = UserSettings[OpUserStack.GetMyKey().ToUpper()].AllMyCustomers.CustomerInfo;
+            OpUserToken opUserToken = OpUserStack.MyOpUserToken;
+
+            string key = OpUserStack.GetMyKey().ToUpper();
+            if (!UserSettings.ContainsKey(key))
+            {
+                PopulateUserSettings(opUserToken);
+            }
+            var fullList = UserSettings[key].AllMyCustomers.CustomerInfo;
 
             //var cdmsCustIds = fullList.Select(c => c.cdms_cust_id).Distinct();
 

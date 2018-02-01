@@ -115,11 +115,11 @@
                     <label title="{{showCustomers()}}">Customer:</label>
                     <select kendo-multi-select
                             k-data-text-field="'CUST_NM'"
-                            k-data-value-field="'CUST_SID'"
+                            k-data-value-field="'CUST_NM'"
                             k-filter="'contains'"
                             k-auto-bind="true"
                             k-tag-mode="'single'"
-                            k-value-primitive="false"
+                            k-value-primitive="true"
                             k-ng-model="customers"
                             k-auto-close="false"
                             k-data-source="customersDataSource"
@@ -247,5 +247,8 @@
     }
     .attrbMenu .k-state-hover .k-link {
         background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
+    }
+    .k-multiselect {
+        width: 360px;
     }
 </style>

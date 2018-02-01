@@ -120,13 +120,21 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-  //      [Authorize]
-		//[Route("GetMyCustomersSoldTo")]
-		//public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
-		//{
-  //          return SafeExecutor(AppLib.GetMyCustomersSoldTo
-  //              , "Unable to get My Customer Sold Tos"
-  //          );
-		//}
-	}
+        [Route("GetMyCustomersDivInfo")]
+        public IEnumerable<MyCustomersInformation> GetMyCustomersDivInfo()
+        {
+            return SafeExecutor(() => AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2003).OrderBy(c => c.CUST_DIV_NM)
+                , "Unable to get My Customers Info"
+            );
+        }
+
+        //      [Authorize]
+        //[Route("GetMyCustomersSoldTo")]
+        //public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
+        //{
+        //          return SafeExecutor(AppLib.GetMyCustomersSoldTo
+        //              , "Unable to get My Customer Sold Tos"
+        //          );
+        //}
+    }
 }

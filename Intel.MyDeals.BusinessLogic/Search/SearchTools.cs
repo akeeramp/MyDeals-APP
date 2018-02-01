@@ -28,6 +28,13 @@ namespace Intel.MyDeals.BusinessLogic
                 // pattern = substringof('CM806',PRODUCT_FILTER)
                 string newFilter = filter.Substring(strContainsKey.Length, filter.Length - strContainsKey.Length - 1).Replace("',",",").Replace("'","");
                 List<string> arNewFilter = newFilter.Split(',').ToList();
+
+                if (arNewFilter.Count > 2)
+                {
+                    var atrb = arNewFilter[arNewFilter.Count - 1];
+                    var vals = arNewFilter.Take(arNewFilter.Count - 1).ToArray();
+                    return $"{opDataElementType}_{atrb} IN ('{string.Join("','", vals)}')";
+                }
                 return $"{opDataElementType}_{arNewFilter[1]} LIKE '%{arNewFilter[0].Replace("*", "%")}%'";
             }
 
@@ -69,6 +76,8 @@ namespace Intel.MyDeals.BusinessLogic
             if (arSections.Count == 2)
             {
                 string atrb = arSections[0];
+                arSections[1] = arSections[1].Trim().Replace("'", "");
+
                 // Special case... CAP is a string becuase of ranges and "NO CAP" be we will treatit in the filter like a number
                 if (atrb != AttributeCodes.CAP)
                 {
@@ -76,13 +85,16 @@ namespace Intel.MyDeals.BusinessLogic
                     if (fieldInfo != null)
                     {
                         tick = stringDataTypes.Contains(((MyDealsAttribute)fieldInfo.GetValue(null)).DATA_TYPE_CD) ? "'" : "";
-                    } else if (atrb == "Customer/CUST_DIV_NM")
+                    }
+                    else if (atrb == "Customer/CUST_NM")
                     {
-                        tick = "'";
+                        tick = "";
+                        arSections[1] = "('" + arSections[1].Trim().Replace(",", "','") + "')";
+                        joinKey = " in ";
                     }
                 }
                 string passedAtrb = atrb == "DC_ID" ? "OBJ_SID" : atrb;
-                rtn = $"{opDataElementType}_{passedAtrb}{joinKey}{tick}{arSections[1].Trim().Replace("'","")}{tick}";
+                rtn = $"{opDataElementType}_{passedAtrb}{joinKey}{tick}{arSections[1]}{tick}";
             }
             return rtn;
         }
@@ -100,7 +112,7 @@ namespace Intel.MyDeals.BusinessLogic
             string rtn = string.Join(" and ", arFilterClauses);
 
             // Special columns... When we make the advanced search, need a better way than hard coding this
-            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_DIV_NM", "CUST_NM");
+            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
 
             return rtn;
         }

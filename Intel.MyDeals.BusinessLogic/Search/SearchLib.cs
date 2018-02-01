@@ -155,7 +155,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Customers
             if (data.Customers.Any())
             {
-                modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.CUST_MBR_SID} IN ({string.Join(",", data.Customers)})");
+                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers)}')");
             }
 
             // Add Custom Search
@@ -256,7 +256,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get a list of My Customers (the ones I have access)
             CustomerLib custLib = new CustomerLib();
-            List<int> mtCustIds = custLib.GetMyCustomersInfo().Select(c => c.CUST_DIV_SID).ToList();
+            List<int> mtCustIds = custLib.GetMyCustomersInfo().Select(c => c.CUST_SID).ToList();
 
             int sortCnt = 0;
             Dictionary<int, int> idSort = new Dictionary<int, int>();
@@ -308,28 +308,27 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return GetDealList(data, new List<int>
             {
-                Attributes.TITLE.ATRB_SID,
-                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                Attributes.CUST_MBR_SID.ATRB_SID,
-                Attributes.CUST_ACCNT_DIV.ATRB_SID,
-                Attributes.WF_STG_CD.ATRB_SID,
-                Attributes.PS_WF_STG_CD.ATRB_SID,
-                Attributes.TRKR_NBR.ATRB_SID,
-                Attributes.PRODUCT_FILTER.ATRB_SID,
-                Attributes.START_DT.ATRB_SID,
-                Attributes.END_DT.ATRB_SID,
-                Attributes.VOLUME.ATRB_SID,
-                Attributes.REBATE_TYPE.ATRB_SID,
-                Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
+                Attributes.CUST_ACCNT_DIV.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.ECAP_PRICE.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.END_VOL.ATRB_SID,
                 Attributes.GEO_COMBINED.ATRB_SID,
                 Attributes.MRKT_SEG.ATRB_SID,
-                Attributes.REBATE_TYPE.ATRB_SID,
-                Attributes.PROGRAM_PAYMENT.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.PAYOUT_BASED_ON.ATRB_SID,
+                Attributes.PRODUCT_FILTER.ATRB_SID,
+                Attributes.PROGRAM_PAYMENT.ATRB_SID,
+                Attributes.PS_WF_STG_CD.ATRB_SID,
+                Attributes.RATE.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
                 Attributes.STRT_VOL.ATRB_SID,
-                Attributes.END_VOL.ATRB_SID,
-                Attributes.RATE.ATRB_SID
+                Attributes.TITLE.ATRB_SID,
+                Attributes.TRKR_NBR.ATRB_SID,
+                Attributes.VOLUME.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID
             },
             new List<string> (),
             new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
@@ -344,32 +343,33 @@ namespace Intel.MyDeals.BusinessLogic
         public SearchResultPacket GetTenderDealList(SearchParams data)
         {
             return GetDealList(data, new List<int>
-                {
-                    Attributes.TITLE.ATRB_SID,
-                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                    Attributes.CUST_MBR_SID.ATRB_SID,
-                    Attributes.CUST_ACCNT_DIV.ATRB_SID,
-                    Attributes.BID_STATUS.ATRB_SID,
-                    Attributes.WF_STG_CD.ATRB_SID,
-                    Attributes.PS_WF_STG_CD.ATRB_SID,
-                    Attributes.TRKR_NBR.ATRB_SID,
-                    Attributes.PRODUCT_FILTER.ATRB_SID,
-                    Attributes.START_DT.ATRB_SID,
-                    Attributes.END_DT.ATRB_SID,
-                    Attributes.VOLUME.ATRB_SID,
-                    Attributes.REBATE_TYPE.ATRB_SID,
-                    Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
-                    Attributes.ECAP_PRICE.ATRB_SID,
-                    Attributes.CAP.ATRB_SID,
-                    Attributes.YCS2_PRC_IRBT.ATRB_SID,
-                    Attributes.QLTR_PROJECT.ATRB_SID,
-                    Attributes.QLTR_BID_GEO.ATRB_SID,
-                    Attributes.GEO_COMBINED.ATRB_SID
-                },
-                new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" },
-                null,
-                MyRulesTrigger.OnDealListLoad);
+            {
+                Attributes.BID_STATUS.ATRB_SID,
+                Attributes.CAP.ATRB_SID,
+                Attributes.CUST_ACCNT_DIV.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.ECAP_PRICE.ATRB_SID,
+                Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.GEO_COMBINED.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.PRODUCT_FILTER.ATRB_SID,
+                Attributes.PS_WF_STG_CD.ATRB_SID,
+                Attributes.QLTR_BID_GEO.ATRB_SID,
+                Attributes.QLTR_PROJECT.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
+                Attributes.SERVER_DEAL_TYPE.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.TITLE.ATRB_SID,
+                Attributes.TRKR_NBR.ATRB_SID,
+                Attributes.VOLUME.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.YCS2_PRC_IRBT.ATRB_SID
+            },
+            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" },
+            null,
+            MyRulesTrigger.OnDealListLoad);
         }
-
+    
     }
 }

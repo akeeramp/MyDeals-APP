@@ -62,7 +62,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 StrStart = st,
                 StrEnd = en,
-                Customers = string.IsNullOrEmpty(searchText) ? new List<int>() : searchText.Split(',').Select(int.Parse).ToList(),
+                Customers = string.IsNullOrEmpty(searchText) ? new List<string>() : searchText.Split(',').ToList(),
                 StrSorts = options.RawValues.OrderBy ?? "",
                 StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
                 Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),

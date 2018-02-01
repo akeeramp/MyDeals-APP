@@ -115,18 +115,18 @@
 
         $scope.attributeSettings = [
             {
-                field: "Customer.CUST_MBR_SID",
+                field: "Customer.CUST_NM",
                 title: "Customer",
                 type: "list",
                 width: 140,
                 filterable: {
                     ui: function (element) {
-                        element.kendoDropDownList({
+                        element.kendoMultiSelect({
                             dataSource: new kendo.data.DataSource({
                                 type: 'json',
                                 transport: {
                                     read: {
-                                        url: "/api/Customers/GetMyCustomerNames",
+                                        url: "/api/Customers/GetMyCustomersNameInfo",
                                         type: "GET",
                                         dataType: "json"
                                     }
@@ -134,15 +134,15 @@
                             }),
                             dataTextField: "CUST_NM",
                             dataValueField: "CUST_NM",
-                            valuePrimitive: true,
-                            optionLabel: "--Select Customer--"
+                            tagMode: "single",
+                            valuePrimitive: true
                         });
                     },
                     extra: false
                 },
                 lookupText: "CUST_NM",
                 lookupValue: "CUST_NM",
-                lookupUrl: "/api/Customers/GetMyCustomerNames"
+                lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
             }, {
                 field: "CUST_ACCNT_DIV",
                 title: "Division",
@@ -435,7 +435,7 @@
         $scope.customersDataSource = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "/api/Customers/GetMyCustomerNames",
+                    url: "/api/Customers/GetMyCustomersNameInfo",
                     dataType: "json"
                 }
             }
