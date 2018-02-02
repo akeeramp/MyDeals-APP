@@ -15,6 +15,7 @@
         , 'ui.toggle'
         , 'angular-linq'
         , 'angular.filter'
+        , 'intcAnalytics'
         /*
          * Our reusable cross app code modules
          */
