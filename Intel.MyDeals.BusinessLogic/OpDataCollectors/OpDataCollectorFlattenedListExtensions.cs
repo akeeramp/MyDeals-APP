@@ -183,11 +183,14 @@ namespace Intel.MyDeals.BusinessLogic
                     rolledbackIds = action.TargetDcIDs;
                 }
             }
-            foreach (OpDataAction action in responseData[OpDataElementType.PRC_TBL_ROW].Actions)
+            if (responseData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
             {
-                if (action.Value == "OBJ_DELETED")
+                foreach (OpDataAction action in responseData[OpDataElementType.PRC_TBL_ROW].Actions)
                 {
-                    deletedIds.Add(action.DcID ?? 0);
+                    if (action.Value == "OBJ_DELETED")
+                    {
+                        deletedIds.Add(action.DcID ?? 0);
+                    }
                 }
             }
             if (opDataElementType == OpDataElementType.PRC_ST)

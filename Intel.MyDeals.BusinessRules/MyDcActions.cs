@@ -826,7 +826,7 @@ namespace Intel.MyDeals.BusinessRules
             if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
 			{
 				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
-				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
+				r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date.ToString("MM/dd/yyyy"));
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
                 {
                     string tracker = de.AtrbValue.ToString();
