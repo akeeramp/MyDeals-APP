@@ -11,13 +11,15 @@ function iconMctPct(colorDictionary) {
             overrideValue: '=?overrideValue',
             canView: '=?canView',
             iconStyle: '=?iconStyle',
-            iconClass: '=?iconClass'
+            iconClass: '=?iconClass',
+            notRunMsg: '=?notRunMsg'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/iconMctPct.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
             if (!$scope.canView) $scope.canView = true;
+            if (!$scope.notRunMsg) $scope.notRunMsg = "Not Run Yet";
 
             function upperCase(str) {
                 return str.toUpperCase();
@@ -25,6 +27,10 @@ function iconMctPct(colorDictionary) {
             function titleCase(str) {
                 var firstLetterRx = /(^|\s)[a-z]/g;
                 return str.toLowerCase().replace(firstLetterRx, upperCase);
+            }
+
+            $scope.showTitle = function() {
+                return $scope.dataValue === "Not Run Yet" ? $scope.notRunMsg : $scope.dataValue;
             }
 
             $scope.getIconClass = function () {

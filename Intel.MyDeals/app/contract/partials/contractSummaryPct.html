@@ -64,7 +64,7 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 140px; text-align: center;">
-                                <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'bigIcon'"></icon-mct-pct>
+                                <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'bigIcon'" not-run-msg="'Inomplete validations, click table name to view'"></icon-mct-pct>
                             </td>
                             <td>
                                 <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
@@ -83,7 +83,7 @@
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': pt.isPtCollapsed, 'intelicon-right-next': !pt.isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 140px; color: #000000; text-align: center;">
-                                    <icon-mct-pct ng-model="pt.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'medIcon'"></icon-mct-pct>
+                                    <icon-mct-pct ng-model="pt.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'medIcon'" not-run-msg="'Inomplete validations, click table name to view'"></icon-mct-pct>
                                 </td>
                                 <td style="width: 30px;"></td>
                                 <td>
