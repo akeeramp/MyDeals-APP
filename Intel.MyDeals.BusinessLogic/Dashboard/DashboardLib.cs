@@ -36,6 +36,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.CAP.ATRB_SID,
                 Attributes.COST_TEST_RESULT.ATRB_SID,
                 Attributes.DEAL_DESC.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
