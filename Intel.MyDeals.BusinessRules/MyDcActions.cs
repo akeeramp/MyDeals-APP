@@ -919,7 +919,21 @@ namespace Intel.MyDeals.BusinessRules
 			}
 		}
 
-		public static void UserDefinedRpuRequired(params object[] args)
+        public static void ForecastVolumeRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement forecastVolume = r.Dc.GetDataElement(AttributeCodes.FRCST_VOL);
+            if (forecastVolume == null) return;
+
+            bool isL1Product = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L1, "0")) > 0;
+
+            if (isL1Product)
+                forecastVolume.IsRequired = true;  // Required for L1, ptional if L2 or Exempt.
+        }
+
+        public static void UserDefinedRpuRequired(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
