@@ -43,7 +43,8 @@ namespace Intel.MyDeals
                 "~/Scripts/angular-confirm.min.js",
                 "~/Scripts/base64-string.js",
                 "~/Scripts/lz-string.min.js",
-                "~/Scripts/bootstrap-switch.min.js"
+                "~/Scripts/bootstrap-switch.min.js",
+                "~/Scripts/intcAnalytics.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(

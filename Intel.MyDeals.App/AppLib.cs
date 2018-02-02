@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Authentication;
-using System.Web;
+using System.Net;
 using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -59,6 +59,7 @@ namespace Intel.MyDeals.App
 
             if (AVM != null && !forceLoad)
             {
+                LogAnalitics();
                 PopulateUserSettings(user);
                 return user;
             }
@@ -76,6 +77,8 @@ namespace Intel.MyDeals.App
 
             SetEnvName();
             SetVersion();
+
+            LogAnalitics();
 
             OpLog.Log("Found User" + user.Usr.FullName);
             return user;
@@ -216,6 +219,41 @@ namespace Intel.MyDeals.App
         {
             OpAuthenticationExtensions.ClearCache();
             UserSettings?.Clear();
+        }
+
+        public static void LogAnalitics()
+        {
+            //URL for appusage with IAP AppID in the URL
+            string requestUrl = "http://appusage.intel.com/Service/api/loguser/114464?environment=" + AVM.AppEnv;
+
+            //Create HttpWebRequest against the URL
+            HttpWebRequest loggingRequest = WebRequest.CreateHttp(requestUrl);
+
+            //Sets a 1 second timeout.  If the service responds, the app shouldn't hang. 
+            loggingRequest.Timeout = 1000;
+
+            //Set credentials so the user's current security context is used for the request
+            loggingRequest.Credentials = CredentialCache.DefaultCredentials;
+
+            HttpWebResponse response = null;
+
+            try
+            {
+                //Execute the request and get the response
+                response = (HttpWebResponse)loggingRequest.GetResponse();
+                //Check if it succeeded.
+                OpLog.Log(response.StatusCode == HttpStatusCode.OK ? "http://appusage.intel.com Usage Logged!" : "http://appusage.intel.com Usage Not Logged =(");
+            }
+            catch (Exception ex)
+            {
+                //Do something... or nothing.
+            }
+            finally
+            {
+                //close the response 
+                response?.Close();
+            }
+
         }
     }
 }

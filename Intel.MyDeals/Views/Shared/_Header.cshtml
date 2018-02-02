@@ -43,6 +43,8 @@
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD";} // We practice SAFE CODING on this project
     if (extraUserPrivs == "STDA") { extraUserPrivs = "A STuD"; } // Is something special, and much safer.
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
+
+    var env = ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
 }
 
 <div id="smbWindow"></div>
@@ -315,7 +317,9 @@
     window.isTester = "@isTester" === "True";
     window.isAdmin = "@isAdmin" === "True";
     window.isFinanceAdmin = "@isFinanceAdmin" === "True";
+
+    window.env = "@env";
 </script>
 
 
-
+<script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>

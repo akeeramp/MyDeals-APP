@@ -1,7 +1,8 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('app', [
+    angular.module('app',
+    [
         /*
          * Order is not important. Angular makes a
          * pass to register all of the modules listed
@@ -24,7 +25,8 @@
         'app.costtest',
         'app.dashboard',
         'app.tenderManager',
-        'app.testCases'
+        'app.testCases',
+        'intcAnalytics'
     ]);
 
 })()
