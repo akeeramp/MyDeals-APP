@@ -379,6 +379,25 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     List<string> pCat = new List<string>();
                     var dim = 0;
 
+                    if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+                    {
+                        var numDim = 0;
+                        foreach (string key in opFlatItem.Keys.Where(k => k.ToString().Contains("ECAP_PRICE") && !k.ToString().Contains(baseKitDimKey + "__"))) {
+                            numDim++;   //it's probably safe to assume kit will always have 10 positive dims at most, but to have less hard-coded maintenance we just caluclate it here using ECAP_PRICE
+                        }
+
+                        for (int i = 0; i < numDim; i++)
+                        {
+                            //blank out all cap and ycs2 details (we reset them later if needed, but this will prevent leftover data from lingering if we delete a product)
+                            opFlatItem[AttributeCodes.CAP + baseKitDimKey + i] = "";
+                            opFlatItem[AttributeCodes.CAP_STRT_DT + baseKitDimKey + i] = "";
+                            opFlatItem[AttributeCodes.CAP_END_DT + baseKitDimKey + i] = "";
+                            opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + i] = "";
+                            opFlatItem[AttributeCodes.YCS2_START_DT + baseKitDimKey + i] = "";
+                            opFlatItem[AttributeCodes.YCS2_END_DT + baseKitDimKey + i] = "";
+                        }
+                    }
+
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
                         if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
