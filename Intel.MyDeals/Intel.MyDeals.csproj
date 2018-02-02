@@ -1391,7 +1391,6 @@
     <Content Include="Scripts\d3\LICENSE" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
-    <Content Include="Scripts\intcAnalytics.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />

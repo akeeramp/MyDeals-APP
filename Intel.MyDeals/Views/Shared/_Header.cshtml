@@ -40,7 +40,7 @@
     if (isAdmin) { extraUserPrivs += "A"; extraUserPrivsDetail.Add("Admin User"); }
     if (isFinanceAdmin) { extraUserPrivs += "F"; extraUserPrivsDetail.Add("Finance Admin User"); }
     if (extraUserPrivs == "TDAF") { extraUserPrivs = "DAFT"; } // We are full on nuts on this project
-    if (extraUserPrivs == "STD") { extraUserPrivs = "STuD";} // We practice SAFE CODING on this project
+    if (extraUserPrivs == "STD") { extraUserPrivs = "STuD"; } // We practice SAFE CODING on this project
     if (extraUserPrivs == "STDA") { extraUserPrivs = "A STuD"; } // Is something special, and much safer.
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 
@@ -112,12 +112,12 @@
     <div class="menu-bar {}">
         <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
             @*<li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
-                    <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
-                </ul>
-            </li>*@
+                    <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
+                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
+                        <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
+                    </ul>
+                </li>*@
 
 
             <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
@@ -135,7 +135,7 @@
             }
 
             @*Instead of using href can use the ui-sref to translate routes,
-            however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
+                however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#"><i class="intelicon-settings-solid"></i> Admin <i class="intelicon-down"></i></a>
@@ -167,7 +167,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                                <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
@@ -222,31 +222,31 @@
 
 
             @*<li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="#">Some action</a></li>
-                    <li><a href="#">Some other action</a></li>
-                    <li class="divider"></li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Hover me for more options</a>
-                        <ul class="dropdown-menu">
-                            <li><a tabindex="-1">Second level</a></li>
-                            <li class="dropdown-submenu">
-                                <a href="#">Even More..</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">3rd level</a></li>
-                                    <li><a href="#">3rd level</a></li>
-                                </ul>
-                            </li>
-                            <li><a>Second level</a></li>
-                            <li><a>Second level</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
-            <li><a href="@Url.Action("Index", "Contract")">Contract</a></li>
-            <li><a href="@Url.Action("Index", "DealManager")">Deal Manager</a></li>*@
+                    <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>
+                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="#">Some action</a></li>
+                        <li><a href="#">Some other action</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Hover me for more options</a>
+                            <ul class="dropdown-menu">
+                                <li><a tabindex="-1">Second level</a></li>
+                                <li class="dropdown-submenu">
+                                    <a href="#">Even More..</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">3rd level</a></li>
+                                        <li><a href="#">3rd level</a></li>
+                                    </ul>
+                                </li>
+                                <li><a>Second level</a></li>
+                                <li><a>Second level</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                <li><a href="@Url.Action("Index", "Contract")">Contract</a></li>
+                <li><a href="@Url.Action("Index", "DealManager")">Deal Manager</a></li>*@
             @Html.Partial("_Search")
         </ul>
     </div>
@@ -258,23 +258,23 @@
         padding: 0 6px 6px 6px;
     }
 
-     nav .hdrIcon {
-         text-align: center;
-     }
-
-    nav .hdrIcon a {
-        padding: 6px;
+    nav .hdrIcon {
+        text-align: center;
     }
 
-    nav .hdrIcon a i {
-        line-height: .9em;
-        font-size: 20px;
-    }
+        nav .hdrIcon a {
+            padding: 6px;
+        }
 
-    nav .hdrIcon a div {
-        font-size: 9px;
-        line-height: .9em;
-    }
+            nav .hdrIcon a i {
+                line-height: .9em;
+                font-size: 20px;
+            }
+
+            nav .hdrIcon a div {
+                font-size: 9px;
+                line-height: .9em;
+            }
 </style>
 
 <script>
