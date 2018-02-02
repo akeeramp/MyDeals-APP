@@ -863,6 +863,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 150,
+                Label = "Kit Name",
                 IsFilterable = true,
                 IsSortable = true,
                 IsReadOnly = true,
@@ -1275,7 +1276,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 5,
                 AtrbCd = "KIT_ECAP",
-                Label = "KIT ECAP",
+                Label = "Net KIT Price",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
@@ -1292,7 +1293,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 5,
                 AtrbCd = "SUBKIT_ECAP",
-                Label = "Sub KIT ECAP",
+                Label = "Net Sub KIT Price",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
