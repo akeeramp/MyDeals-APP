@@ -146,6 +146,12 @@
                 filterable: $scope.numObjFilter,
                 template: "<div ng-click='navToPath(dataItem)' class='tenderDealId'>#=data.DC_ID#</div>"
             }, {
+                field: "CNTRCT_TITLE",
+                title: "Contract Title",
+                type: "string",
+                width: 120,
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' class='tenderDealId'>#=data.CNTRCT_TITLE#</a>"
+            }, {
                 field: "PRODUCT_FILTER",
                 title: "Product",
                 type: "string",
@@ -300,6 +306,28 @@
                 title: "Geo",
                 type: "string",
                 width: 100
+            }, {
+                field: "CRE_EMP_WWID",
+                title: "Created By",
+                type: "string",
+                width: 120
+            }, {
+                field: "CRE_DTM",
+                title: "Created Time",
+                type: "string",
+                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+                width: 140
+            }, {
+                field: "CHG_EMP_WWID",
+                title: "Last Update By",
+                type: "string",
+                width: 120
+            }, {
+                field: "CHG_DTM",
+                title: "Last Update Time",
+                type: "string",
+                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+                width: 140
             }
         ];
 

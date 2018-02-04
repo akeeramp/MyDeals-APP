@@ -224,6 +224,12 @@ namespace Intel.MyDeals.BusinessLogic
             // Get return list of dc_ids
             List<int> dcIds = res.SearchResults.OrderBy(s => s.SORT_ORD).Select(s => s.OBJ_SID).ToList();
 
+            Dictionary<int, AdvancedSearchResults> decoderById = new Dictionary<int, AdvancedSearchResults>();
+            foreach (AdvancedSearchResults item in res.SearchResults)
+            {
+                decoderById[item.OBJ_SID] = item;
+            }
+
             // Now get the actual data based on the "slice" of matching data... this is based on the dc_ids list
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
                 new List<OpDataElementType>
@@ -267,7 +273,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataCollectorFlattenedItem item in rtn)
             {
-                item["SortOrder"] = idSort[int.Parse(item[AttributeCodes.DC_ID].ToString())];
+                int dcId = int.Parse(item[AttributeCodes.DC_ID].ToString());
+                item["SortOrder"] = idSort[dcId];
+
+                item["CNTRCT_OBJ_SID"] = decoderById[dcId].CNTRCT_OBJ_SID;
+                item["CNTRCT_TITLE"] = decoderById[dcId].CNTRCT_TITLE;
+                item["CHG_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CHG_DTM.ToString());
+                item["CHG_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CHG_EMP_WWID;
+                item["CRE_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CRE_DTM.ToString());
+                item["CRE_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CRE_EMP_WWID;
 
                 // Need to convert CUST_MBR_SID to Customer Object
                 if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))
