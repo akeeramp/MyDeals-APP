@@ -149,12 +149,18 @@
                 type: "string",
                 width: 140
             }, {
+                field: "CNTRCT_TITLE",
+                title: "Contract Title",
+                type: "string",
+                width: 140,
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
+            }, {
                 field: "DC_ID",
                 title: "Deal",
                 type: "number",
                 width: 100,
                 filterable: "numObjFilter",
-                template: "<div ng-click='navToPath(dataItem)' class='tenderDealId'>#=data.DC_ID#</div>"
+                template: "<div ng-click='navToPath(dataItem)' class='objDealId'>#=data.DC_ID#</div>"
             }, {
                 field: "WF_STG_CD",
                 title: "Deal Status",
@@ -403,6 +409,38 @@
                 lookupText: "DROP_DOWN",
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
+            }, {
+                field: "END_CUSTOMER_RETAIL",
+                title: "End Customer",
+                type: "string",
+                width: 140
+            }, {
+                field: "NOTES",
+                title: "Comments / notes",
+                type: "string",
+                width: 250
+            }, {
+                field: "CRE_EMP_WWID",
+                title: "Created By",
+                type: "string",
+                width: 120
+            }, {
+                field: "CRE_DTM",
+                title: "Created Time",
+                type: "string",
+                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+                width: 140
+            }, {
+                field: "CHG_EMP_WWID",
+                title: "Last Update By",
+                type: "string",
+                width: 120
+            }, {
+                field: "CHG_DTM",
+                title: "Last Update Time",
+                type: "string",
+                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+                width: 140
             }
         ];
 

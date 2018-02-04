@@ -144,13 +144,13 @@
                 type: "number",
                 width: 100,
                 filterable: $scope.numObjFilter,
-                template: "<div ng-click='navToPath(dataItem)' class='tenderDealId'>#=data.DC_ID#</div>"
+                template: "<div ng-click='navToPath(dataItem)' class='objDealId'>#=data.DC_ID#</div>"
             }, {
                 field: "CNTRCT_TITLE",
                 title: "Contract Title",
                 type: "string",
                 width: 120,
-                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' class='tenderDealId'>#=data.CNTRCT_TITLE#</a>"
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
                 field: "PRODUCT_FILTER",
                 title: "Product",
