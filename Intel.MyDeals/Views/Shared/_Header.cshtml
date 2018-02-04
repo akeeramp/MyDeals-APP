@@ -7,10 +7,12 @@
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
     var usrRoleId = 0;
+    var usrEmail = "";
     try
     {
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
         usrWwid = ViewBag.UserToken.Usr.WWID;
+        usrEmail = ViewBag.UserToken.Usr.Email;
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
         usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
     }
@@ -311,6 +313,7 @@
     window.usrRoleId = parseInt("@usrRoleId");
     window.usrName = "@usrName";
     window.usrWwid = "@usrWwid";
+    window.usrEmail = "@usrEmail";
     window.isSuper = "@isSuper" === "True";
 
     window.isDeveloper = "@isDeveloper" === "True";

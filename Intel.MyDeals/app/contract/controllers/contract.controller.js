@@ -1438,76 +1438,6 @@
         }
 
         $scope.emailData = [];
-        $scope.openEmailMsg = function () {
-
-            function lastWord(words) {
-                var n = words.split(" ");
-                return n[n.length - 1];
-            }
-
-            var msgMapping = {};
-            for (var m = 0; m < $scope.messages.length; m++) {
-                msgMapping[$scope.messages[m].KeyIdentifiers[0]] = lastWord($scope.messages[m].Message);
-            }
-
-            var actns = ["Approve", "Revise", "Cancel", "Hold"];
-            var actnList = [];
-            for (var a = 0; a < actns.length; a++) {
-                var item = $scope.emailData[actns[a]];
-                if (!!item) {
-                    for (var i = 0; i < item.length; i++) {
-                        item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
-                        actnList.push("Strategy <b>'" + item[i].TITLE + "'</b> has been moved into the stage " + item[i].NEW_STG);
-                    }
-                }
-            }
-
-            var msg = encodeURIComponent(actnList.join("\n\n"));
-
-            document.location.href = "/Email/SubmissionNotification";
-            //document.location.href = "/Email/SubmissionNotification?body=" + msg;
-
-            //var email = '';
-            //var subject = 'My Deals Submission Notification';
-            //var emailBody = msg;
-            //document.location = "mailto:" + email + "?subject=" + subject + "&body=" + emailBody;
-
-            //var mailHTML = "<h1> Sample Email </h1>";
-            //var emailTo = "Valliappan.narayanan@intel.com";
-            //var emailSubject = "Javascript Email";
-            //var emailContent = 'To: ' + emailTo + '\n';
-            //emailContent += 'Subject: ' + emailSubject + '\n';
-            //emailContent += 'X-Unsent:1 ' + '\n';
-            //emailContent += 'Content-Type:text/html' + '\n';
-            //emailContent += '' + '\n';
-            //emailContent += "<html><head>/<head><body>" + mailHTML + "</body></html>";
-            //var textFile = null;
-            //var data = new Blob([emailContent], { type: 'text/plain' });
-
-            //textFile = window.URL.createObjectURL(data);
-            //var link = document.createElement('a');
-            //link.href = textFile;
-            //link.download = emailSubject + ".txt.eml";
-
-            //link.click();
-
-
-
-            //var email = 'sample@gmail.com';
-            //var subject = 'Test';
-            //var emailTo = "Valliappan.narayanan@intel.com";
-            //var emailSubject = "Javascript Email";
-            //var emailBody = "<html><head>/<head><body>" + mailHTML + "</body></html>";
-            ////var attach = 'path';
-            //document.location = "mailto:" + emailTo + "?subject=" + emailSubject + "&body=" + emailBody;
-
-
-
-            //document.location.href = textFile;
-
-
-            $scope.emailData = [];
-        }
 
         $scope.actionPricingStrategy = function (ps, actn) {
             $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!");
@@ -1528,14 +1458,6 @@
             );
         }
 
-        $scope.$on('FireEmailNotification',
-            function (event, args) {
-                //$scope.setRowIdStyle(args.data.PRC_TBL_ROW);
-                //$scope.root.switchingTabs = false;
-                $scope.openEmailMsg();
-
-            });
-
         $scope.$on('SyncHiddenItems',
             function (event, data, dataItem) {
                 $scope.syncHoldItems(data, dataItem);
@@ -1546,7 +1468,6 @@
 
             $scope.emailData = data;
             $scope.pricingStrategyStatusUpdated = false;
-            // $scope.openEmailMsg(); // TBD - VN - Testing
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1558,12 +1479,7 @@
                         $("#wincontractMessages").data("kendoWindow").open();
                         $scope.refreshContractData();
                         $scope.setBusy("", "");
-                        //if (emailEnabled)
-                        //    $scope.openEmailMsg();
                     }, 50);
-
-                    //if (emailEnabled)
-                    //    $scope.$broadcast('FireEmailNotification', null);
 
                     $scope.pricingStrategyStatusUpdated = true;
                 },
@@ -1571,10 +1487,6 @@
 
                 }
             );
-
-            if (emailEnabled)
-                $scope.openEmailMsg();
-
         }
         $scope.actionWipDeal = function (wip, actn) {
             $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!");

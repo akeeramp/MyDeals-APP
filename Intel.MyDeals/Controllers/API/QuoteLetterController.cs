@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using Intel.MyDeals.App;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using System.Net.Http;
@@ -9,7 +7,6 @@ using System.Net;
 using System.IO;
 using System.Net.Http.Headers;
 using System;
-using System.Web.Script.Serialization;
 
 namespace Intel.MyDeals.Controllers.API
 {

@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('messageBoard', messageBoard);
 
-messageBoard.$inject = ['$compile', '$timeout', 'objsetService'];
+messageBoard.$inject = ['$compile', '$timeout', 'objsetService', '$uibModal'];
 
-function messageBoard($compile, $timeout, objsetService) {
+function messageBoard($compile, $timeout, objsetService, $uibModal) {
 
     return {
         scope: {
@@ -21,7 +21,13 @@ function messageBoard($compile, $timeout, objsetService) {
             $scope.warnMsg = "";
             $scope.showDetails = false;
 
+            $scope.disableEmail = function () {
+                return $scope.$parent.emailData["Approve"] === undefined || $scope.$parent.emailData["Approve"].length === 0;
+            }
+
             $scope.openEmailMsg = function () {
+
+                $("#wincontractMessages").data("kendoWindow").close();
 
                 function lastWord(words) {
                     var n = words.split(" ");
@@ -33,7 +39,7 @@ function messageBoard($compile, $timeout, objsetService) {
                     msgMapping[$scope.messages[m].KeyIdentifiers[0]] = lastWord($scope.messages[m].Message);
                 }
 
-                var actns = ["Approve", "Revise", "Cancel", "Hold"];
+                var actns = ["Approve"];
                 var actnList = [];
 
                 var rootUrl = window.location.protocol + "//" + window.location.host;
@@ -50,16 +56,49 @@ function messageBoard($compile, $timeout, objsetService) {
                     }
                 }
 
-                actnList.push(kendo.template($("#emailItemTemplate").html())(items));
+                if (items.length === 0) {
+                    kendo.alert("No items were approved.");
+                    return;
+                }
 
-                var url = '/Email/SubmissionNotification';
-                var form = $('<form action="' + url + '" method="post">' +
-                  '<input type="text" name="Subject" value="My Deals Submission Notification" />' +
-                  '<input type="text" name="Body" value="' + actnList.join("\n\n") + '" />' +
-                  '<input type="text" name="From" value="" />' +
-                  '</form>');
-                $('body').append(form);
-                form.submit();
+                var data = {
+                    from: window.usrEmail,
+                    items: items
+                }
+                actnList.push(kendo.template($("#emailItemTemplate").html())(data));
+                var msg = actnList.join("\n\n");
+
+                var dataItem = {
+                    from: "mydeals.notification@intel.com",
+                    to: "",
+                    subject: "My Deals Action Required",
+                    body: msg
+                };
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: 'emailModal',
+                    controller: 'emailModalCtrl',
+                    size: 'lg',
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (result) {
+                    debugger;
+                }, function () { });
+                //var url = '/Email/SubmissionNotification';
+                //var form = $('<form action="' + url + '" method="post">' +
+                //  '<input type="text" name="Subject" value="My Deals Submission Notification" />' +
+                //  '<input type="text" name="Body" value="' + actnList.join("\n\n") + '" />' +
+                //  '<input type="text" name="From" value="" />' +
+                //  '</form>');
+                //$('body').append(form);
+                //form.submit();
             }
 
             $scope.$on('refresh', function (event, args) {

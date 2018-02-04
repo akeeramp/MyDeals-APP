@@ -16,7 +16,7 @@
                 <button class="btn btn-secondary btn-sm" type="button" ng-click="showDetails=false" ng-show="showDetails">
                     <i class="intelicon-down" style="font-size: 20px;"></i> Hide details
                 </button>
-                <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 15px;" ng-click="openEmailMsg()">
+                <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 15px;" ng-hide="disableEmail()" ng-click="openEmailMsg()">
                     <i class="intelicon-email-message-outlined" style="font-size: 20px;"></i> Email details
                 </button>
                 <div class="clearboth"></div>
@@ -33,9 +33,9 @@
 <script id="emailItemTemplate" type="text/x-kendo-template">
 
     <div style='font-family:sans-serif;'>
-        <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>My Deals Submission Notification</span></p>
+        <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>My Deals Action Required</span></p>
         <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
-        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:MAILTO_TOKEN'>MAILTO_TOKEN</a>.</span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:#= data.from #'>#= data.from #</a>.</span></p>
         <br/>
         <p><span style='font-size:18px;'>Pricing Strategies</span></p>
         <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <b style='color: \\#00AEEF;'>View Pricing Strategy</b> in order to view details in My Deals.</span></p>
@@ -49,12 +49,12 @@
                 </tr>
             </thead>
             <tbody>
-                # for (var i = 0; i < data.length; i++) { #
+                # for (var i = 0; i < data.items.length; i++) { #
                 <tr>
-                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data[i].url #'>#= data[i].DC_ID #</a></span> </td>
-                    <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data[i].TITLE #</span> </td>
-                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#767171;'>Moved to the #= data[i].NEW_STG # </span> </td>
-                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data[i].url #'>View Pricing Strategy</a></span> </td>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>#= data.items[i].DC_ID #</a></span> </td>
+                    <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].TITLE #</span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#767171;'>Moved to the #= data.items[i].NEW_STG # </span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>View Pricing Strategy</a></span> </td>
                 </tr>
                 # } #
             </tbody>

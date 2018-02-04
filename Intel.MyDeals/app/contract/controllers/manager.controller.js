@@ -810,6 +810,32 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
 
+    $scope.sendEmail = function () {
+        var dataItem = {
+            from: "philip.w.eckenroth@intel.com",
+            to: "",
+            subject: "Hello World",
+            body: "Hello <b>World</b>"
+        };
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'emailModal',
+            controller: 'emailModalCtrl',
+            size: 'lg',
+            resolve: {
+                dataItem: function () {
+                    return dataItem;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (result) {
+            debugger;
+        }, function () { });
+    }
+
     $scope.checkPctMctPriorToActioning = function (data, result) {
 
         // check for running MCP or PCT

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Reflection;
 using System.Web;
@@ -86,6 +88,39 @@ namespace Intel.MyDeals.Controllers
                 //return result;
                 return File(fs, "application/vnd.ms-outlook", "MyDealsSubmissionNotification.eml");
             }
+        }
+
+        [ValidateInput(false)]
+        //string body
+        [HttpPost]
+        public HttpResponseMessage EmailNotification(EmailMessage emailMessage)
+        {
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            var message = new MailMessage
+            {
+                From = new MailAddress("mydeals.notification@intel.com"),
+                Subject = emailMessage.Subject,
+                Body = emailMessage.Body,
+                IsBodyHtml = true,
+                Priority = MailPriority.High
+            };
+
+            foreach (string email in emailMessage.To)
+            {
+                message.To.Add(email.Trim());
+            }
+            message.CC.Add(OpUserStack.MyOpUserToken.Usr.Email);
+
+            using (var client = new SmtpClient())
+            {
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = true;
+                client.Host = "mail.intel.com";
+                client.Send(message);
+
+            }
+
+            return result;
         }
     }
 }
