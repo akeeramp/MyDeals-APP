@@ -794,9 +794,23 @@ gridUtils.tenderDim = function (dataItem, field, format) {
     var rtnKit = [];
     var key,dim,val;
     var ar = dataItem[field];
-    if (ar !== undefined && ar === "no access") {
+    if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
+
+    function compare(a, b) {
+        debugger;
+        if (a.last_nom < b.last_nom)
+            return -1;
+        if (a.last_nom > b.last_nom)
+            return 1;
+        return 0;
+    }
+
+    //if (ar !== undefined && ar !== null) {
+    //    debugger;
+    //    ar = ar.sort(compare);
+    //}
 
     if (dataItem.OBJ_SET_TYPE_CD.toUpperCase() === "ECAP" || dataItem.OBJ_SET_TYPE_CD.toUpperCase() === "KIT") {
         for (key in ar) {
@@ -817,6 +831,7 @@ gridUtils.tenderDim = function (dataItem, field, format) {
             }
         }
 
+        rtnKit.sort();
         return (rtn.length <= 1) ? rtn.join("<div class='clearboth'></div>") : rtnKit.join("<div class='clearboth'></div>");
     } else {
         for (key in ar) {
