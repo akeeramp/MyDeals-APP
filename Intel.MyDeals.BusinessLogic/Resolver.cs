@@ -19,7 +19,8 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IOpDataCollectorLib, OpDataCollectorLib>();
             registerService.RegisterType<IDropdownLib, DropdownLib>();
 			registerService.RegisterType<IEcapTrackerLib, EcapTrackerLib>();
-			registerService.RegisterType<IFilesLib, FilesLib>();            
+            registerService.RegisterType<IEmployeesLib, EmployeesLib>();
+            registerService.RegisterType<IFilesLib, FilesLib>();            
             registerService.RegisterType<IGeosLib, GeosLib>();
             registerService.RegisterType<ILoggingLib, LoggingLib>();
             registerService.RegisterType<IPricingStrategiesLib, PricingStrategiesLib>();

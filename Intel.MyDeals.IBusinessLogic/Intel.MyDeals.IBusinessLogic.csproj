@@ -59,6 +59,7 @@
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
+    <Compile Include="Employees\IEmployeesLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
     <Compile Include="Tenders\ITendersLib.cs" />

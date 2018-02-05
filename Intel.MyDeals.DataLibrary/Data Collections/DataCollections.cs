@@ -256,6 +256,17 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<AdminConstant> _getAdminConstants;
 
+        public static List<UsrProfileRole> GetUsrProfileRole()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getUsrProfileRole ?? (_getUsrProfileRole = new EmployeeDataLib().GetUsrProfileRole());
+            }
+        }
+
+        private static List<UsrProfileRole> _getUsrProfileRole;
+
+
         public static List<GeoDimension> GetGeoData()
         {
             lock (LOCK_OBJECT ?? new object())

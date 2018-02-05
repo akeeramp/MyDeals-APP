@@ -1,0 +1,28 @@
+﻿using System.Collections.Generic;
+using System.Web.Http;
+using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+
+namespace Intel.MyDeals.Controllers.API
+{
+    [RoutePrefix("api/Employees")]
+
+    public class EmployeeController : BaseApiController
+    {
+        private readonly IEmployeesLib _employeeLib;
+
+        public EmployeeController(IEmployeesLib employeeLib)
+        {
+            _employeeLib = employeeLib;
+        }
+
+        [Authorize]
+        [Route("GetUsrProfileRole")]
+        public IEnumerable<UsrProfileRole> GetUsrProfileRole()
+        {
+            return SafeExecutor(() => _employeeLib.GetUsrProfileRole()
+                , "Unable to get User Profiles"
+            );
+        }
+    }
+}

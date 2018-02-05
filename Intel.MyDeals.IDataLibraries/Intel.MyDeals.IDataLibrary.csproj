@@ -54,6 +54,7 @@
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
+    <Compile Include="Employees\IEmployeeDataLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterDataLib.cs" />
     <Compile Include="Search\IAdvancedSearchDataLib.cs" />
     <Compile Include="UserPreferences\IUserPreferencesDataLib.cs" />

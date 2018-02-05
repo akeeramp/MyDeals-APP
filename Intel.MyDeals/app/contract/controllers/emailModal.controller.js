@@ -39,48 +39,12 @@ function emailModalCtrl($scope, $uibModalInstance, dataItem) {
     }
 
     $scope.ds = new kendo.data.DataSource({
-        data: [
-            {
-                EMP_WWID: "10505693",
-                FRST_NM: "Philip",
-                LST_NM: "Eckenroth",
-                MI: "W",
-                EMAIL_ADDR: "philip.w.eckenroth@intel.com",
-                IDSID: "PWECKENR",
-                ROLE_NM: "DA",
-                USR_ACTV_IND: "1"
-            },
-            {
-                EMP_WWID: "10505693",
-                FRST_NM: "John",
-                LST_NM: "Doe",
-                MI: "W",
-                EMAIL_ADDR: "philip.w.eckenroth@intel.com",
-                IDSID: "PWECKENR",
-                ROLE_NM: "SA",
-                USR_ACTV_IND: "1"
-            },
-            {
-                EMP_WWID: "10505693",
-                FRST_NM: "Jane",
-                LST_NM: "Doe",
-                MI: "W",
-                EMAIL_ADDR: "philip.w.eckenroth@intel.com",
-                IDSID: "PWECKENR",
-                ROLE_NM: "FSE",
-                USR_ACTV_IND: "1"
-            },
-            {
-                EMP_WWID: "10505693",
-                FRST_NM: "Michael",
-                LST_NM: "Tipping",
-                MI: "H",
-                EMAIL_ADDR: "michael.h.tipping@intel.com",
-                IDSID: "MHTIPPIN",
-                ROLE_NM: "LEGAL",
-                USR_ACTV_IND: "1"
+        transport: {
+            read: {
+                url: "/api/Employees/GetUsrProfileRole",
+                dataType: "json"
             }
-        ],
+        },
         filter: $scope.getFilter()
     });
 

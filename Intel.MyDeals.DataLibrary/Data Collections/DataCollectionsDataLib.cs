@@ -99,7 +99,12 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetCustomerDivisions();
         }
 
-		public List<GeoDimension> GetGeoData()
+        public List<UsrProfileRole> GetUsrProfileRole()
+        {
+            return DataCollections.GetUsrProfileRole();
+        }
+
+        public List<GeoDimension> GetGeoData()
 		{
 			return DataCollections.GetGeoData();
 		}

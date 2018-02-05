@@ -338,6 +338,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "DealDeatils";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Get Usr and Role Lookup
+	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_USR_ROLE");
+	ds.Tables[0].TableName = "UsrProfileRole";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	// Get Deal Details
 	ds = dbobjects.ExecuteDataSet("exec PR_MANAGE_QUOTE_LETTER_TEMPLATES @intWWID=10548414, @mode='Get' ");
 	ds.Tables[0].TableName = "AdminQuoteLetter";
