@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderSearchController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq'];
+    tenderSearchController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$location'];
 
-    function tenderSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq) {
+    function tenderSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $location) {
 
         $scope.operatorSettings = {
             "operators": [
@@ -367,7 +367,7 @@
         $scope.startDt = $scope.$storage.startDate;
         $scope.endDt = $scope.$storage.endDate;
         $scope.customers = [];
-        $scope.searchText = "";
+        $scope.searchText = $location.search().id;
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;

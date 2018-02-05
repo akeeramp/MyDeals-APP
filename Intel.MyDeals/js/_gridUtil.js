@@ -1041,8 +1041,10 @@ gridUtils.getBidActions = function (data) {
 }
 
 gridUtils.showBidStatusWip = function (data) {
-    if (data.WF_STG_CD === "Draft") return "<i>Not Actionable</i>";
-    return data.BID_STATUS;
+    //if (data.WF_STG_CD === "Draft") return data.REBATE_TYPE === "TENDER" ? "<i>Not Actionable</i>" : "";
+    // new requirement... show blank for tender also
+    if (data.WF_STG_CD === "Draft") return "";
+    return "<a href='/advancedSearch#/tenderSearch?id=" + data.DC_ID + "'>" + data.BID_STATUS + "</a>";
 }
 
 gridUtils.stgFullTitleChar = function (dataItem) {
