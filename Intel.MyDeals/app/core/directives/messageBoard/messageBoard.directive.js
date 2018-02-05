@@ -71,7 +71,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                 var dataItem = {
                     from: "mydeals.notification@intel.com",
                     to: "",
-                    subject: "My Deals Action Required",
+                    subject: "My Deals Action Required!",
                     body: msg
                 };
                 var modalInstance = $uibModal.open({

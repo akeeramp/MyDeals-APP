@@ -6,7 +6,7 @@
         
         <form class="form-horizontal ng-pristine ng-valid">
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="inputTo">To</label>
+                <label class="col-sm-2 control-label" for="inputTo">To <b style="color: #FC4C02;">*</b></label>
 
                 <div class="col-sm-7">
                     <select kendo-multi-select k-options="selectOptions" k-ng-model="dataItem.to" style="max-height: 110px; overflow: auto;"></select>
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="inputSubject">Subject</label>
+                <label class="col-sm-2 control-label" for="inputSubject">Subject <b style="color: #FC4C02;">*</b></label>
 
                 <div class="col-sm-10">
                     <input class="form-control" ng-model="dataItem.subject" style="color: black;" id="inputSubject" type="text">
