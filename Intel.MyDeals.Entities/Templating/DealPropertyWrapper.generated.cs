@@ -1037,8 +1037,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute DEAL_GRP_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEAL_GRP_NM",
-			ATRB_DESC = "Deal Group Name for KIT",
-			ATRB_LBL = "Deal Group Name",
+			ATRB_DESC = "Kit Name",
+			ATRB_LBL = "Kit Name",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 3201,
 			DATA_TYPE_CD = "VARCHAR",

@@ -696,7 +696,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                var dealGrpKeyFirstIndex = myRowIndex;
 					                data = root.spreadDs.data();
 
-					                // Look for another occurance of the Deal Group Name
+					                // Look for another occurance of the Deal Group Name (AKA - Kit Name)
 					                for (var i = 0; i < data.length; i++) {
 					                    if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == formatStringAsDealGrpDictKey(myRow["DEAL_GRP_NM"])
 											&& parseInt(data[i]["TIER_NBR"]) == 1
@@ -706,7 +706,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                    }
 					                }
 
-					                if (dealGrpKeyFirstIndex != myRowIndex) { // Another occurance of the deal group name exists
+                                    if (dealGrpKeyFirstIndex != myRowIndex) { // Another occurance of the Deal Group Name (AKA - Kit Name) exists
 					                    var existingRow = data[dealGrpKeyFirstIndex];
 
 					                    // Prepare deal groups for merging confirmation after the range.forEachCell() is done
@@ -756,7 +756,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 closeButtonText: "Okay",
                                 hasActionButton: false,
                                 headerText: "cannot merge Deal groups",
-                                bodyText: "A deal group with the name \"" + key + "\" already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10). Please rename the Deal Group Name or remove products from this row and try again.",
+                                bodyText: "A Kit with the name \"" + key + "\" already exists.  Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10).  Please specify a different Kit Name or remove products from this row and try again.",
                                 closeResults: { "key": key }
                             };
                         } else {
@@ -766,7 +766,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 actionButtonText: "Merge rows",
                                 hasActionButton: true,
                                 headerText: "Deal group merge confirmation",
-                                bodyText: "A deal group with the name \"" + key + "\" already exists. Would you like to merge rows containing this Deal Group Name? Please note that any duplicate products will automatically be removed upon merging.",
+                                bodyText: "A Kit with the name \"" + key + "\" already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.",
                                 actionResults: { "key": key }, // HACK: without this, we won't get the correct key in the modal's .then()
                                 closeResults: { "key": key }
                             };
@@ -1035,7 +1035,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.spreadDs.sync();
                     $timeout(function () {
                         var cnt = 0;
-                        $scope.dealGrpNameDict = {}; // reset deal group name dict
+                        $scope.dealGrpNameDict = {}; // reset Deal Group name (AKA - Kit Name) dict
 
                         for (var c = 0; c < data.length; c++) {
                             if (data[c].DC_ID !== null) cnt++;

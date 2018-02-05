@@ -365,7 +365,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 200,
-                Label = "Deal Group Name *",
+                Label = "Kit Name *",
                 DataType = "string",
                 IsRequired = true
             });
