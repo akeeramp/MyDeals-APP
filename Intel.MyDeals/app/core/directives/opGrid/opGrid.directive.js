@@ -2131,6 +2131,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         }
                                     }
 
+                                    // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
+                                    var wips = $scope.$parent.$parent.$parent.$parent.$parent.pricingTableData.WIP_DEAL;
+                                    for (var w = 0; w < wips.length; w++) {
+                                        if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
+                                    }
+
                                     $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshContractData', false);
 
                                     util.console("Remove overlapping tab DONE");

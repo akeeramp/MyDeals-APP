@@ -636,7 +636,8 @@ namespace Intel.MyDeals.BusinessLogic
                         // Check overlapping
                         if (dc.GetAtrbValue(AttributeCodes.OVERLAP_RESULT).ToString() == "Fail")
                         {
-                            passedValidation = PassedValidation.Dirty;
+                            // If we are here... we have a valid PTR but overlap issue in WIP... there for PTR should go to Finalizing
+                            passedValidation = opDataElementType == OpDataElementType.WIP_DEAL ? PassedValidation.Dirty : PassedValidation.Finalizing;
                         }
 
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
