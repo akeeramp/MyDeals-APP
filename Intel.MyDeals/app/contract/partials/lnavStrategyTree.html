@@ -1,6 +1,6 @@
 ﻿<!-- Pricing Strategies -->
 <div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
-    
+	<div ng-if="isBusy" class="ss-loading-overlay" style="z-index: 0"></div>
     <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
 
         <div class="psNav" ng-class="{active: (curPricingStrategy.DC_ID == ps.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == false)}">

@@ -2949,8 +2949,10 @@
             }
         }
         $scope.mapProperty = function (src, data) {
-            if ($scope.isPivotable()) {
-                if (src["DC_ID"] === data["DC_ID"] && (!src.TIER_NBR && data.TIER_NBR === "1" || src.TIER_NBR === data.TIER_NBR)) {
+        	if ($scope.isPivotable()) {
+        		var srcTierNum = parseInt(src.TIER_NBR);
+        		var dataTierNum = parseInt(data.TIER_NBR);
+        		if (src["DC_ID"] === data["DC_ID"] && (!srcTierNum && dataTierNum === 1 || srcTierNum === dataTierNum)) {
                     var arItems = data;
                     for (var key in arItems) {
                         if (arItems.hasOwnProperty(key) && data[key] !== undefined)

@@ -1206,7 +1206,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // if row deleted count > 0  no need to add rows
             rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
-
+			
             for (var a = 0; a < numTier; a++) {
                 if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
@@ -1260,6 +1260,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var dcIdDict = {};
         var dictId = 0;
         var copyOfData = angular.copy(data);
+		
+        // clear validations for KIT in case the user added or removed a product from the PTR_USER_PRD csv. Otheriwse red validation flags will show on the wrong rows from dynamic tiering.
+        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT")
+        {
+        	root.clearValidations();
+        }
+
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
@@ -1725,7 +1732,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (!!data[key]._behaviors) {
                             var errors = data[key]._behaviors.isError;
                             if (errors && Object.keys(errors).length !== 0) {
-                                sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
+								// Put all validation errors as csv on the DC_ID (row A)
+                            	sheet.range(root.colToLetter["DC_ID"] + row + ":"+ root.colToLetter["DC_ID"] + row).background("#FC4C02").color("#FFFFFF");
                                 var myVal = "";
                                 var validMsg = data[key]._behaviors.validMsg;
                                 for (var myKey in validMsg) {
@@ -1736,8 +1744,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 validMsg["DC_ID"] = myVal;
                                 var isError = myVal !== "";
                                 data[key]._behaviors.isError["DC_ID"] = isError;
-                                sheet.range("A" + row + ":A" + row).validation(root.myDealsValidation(isError, myVal, false));
-                            }
+                                sheet.range(root.colToLetter["DC_ID"] + row + ":" + root.colToLetter["DC_ID"] + row).validation(root.myDealsValidation(isError, myVal, false));
+                            } 
                         }
                         // Product Status
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
