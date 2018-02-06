@@ -568,7 +568,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         		filterable: true,
         		resizable: true,
         		autoBind: false,
-        		dataSource: sa,
+        		dataSource: ds,
         		sortable: true,
         		height: 250,
         		columns: [
