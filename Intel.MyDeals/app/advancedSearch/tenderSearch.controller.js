@@ -349,7 +349,7 @@
             "url": function () {
                 var st = $scope.startDt.replace(/\//g, '-');
                 var en = $scope.endDt.replace(/\//g, '-');
-                var searchText = $scope.searchText === "" ? "null" : $scope.searchText;
+                var searchText = $scope.searchText === null || $scope.searchText === undefined || $scope.searchText === "" ? "null" : $scope.searchText;
                 var url = "/api/Search/GetTenderList/" + st + "/" + en + "/" + searchText;
                 $scope.savingToExcel = false;
                 return url;
