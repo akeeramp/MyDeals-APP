@@ -210,14 +210,6 @@
                 return;
             }
 
-            //if ($("#detailGrid_" + pt.DC_ID).length === 0) {
-            //    var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions.dc" + pt.DC_ID + "' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
-            //    var template = angular.element(html);
-            //    var linkFunction = $compile(template);
-            //    linkFunction($scope);
-
-            //    $("#sumWipGrid_" + pt.DC_ID).html(template);
-            //}
             $("#sumWipGrid_" + pt.DC_ID).html("<div style='margin: 10px;'><ul class='fa-ul'><li><i class='fa-li fa fa-spinner fa-spin'></i>Loading...</li></ul></div>");
 
             objsetService.getPctDetails(pt.DC_ID).then(
