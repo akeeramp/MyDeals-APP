@@ -3758,7 +3758,8 @@
                     dataItem.dirty = false;
                     dataItem._behaviors.isDirty["TITLE"] = false;
                 } else {
-                    $scope.saveUpperContract();
+                    $scope.updateAtrbValue(dataItem.dc_type, [dataItem.DC_ID], "TITLE", dataItem.TITLE);
+                    //$scope.saveUpperContract();
                 }
 
             }, function () { });
