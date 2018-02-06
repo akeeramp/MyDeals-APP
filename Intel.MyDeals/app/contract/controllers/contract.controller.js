@@ -2247,6 +2247,20 @@
                             }
                         }
 
+                        var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+                        for (var key in fields) {
+                            if (fields.hasOwnProperty(key)) {
+                                if (fields[key].type === "date")
+                                {
+                                    gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
+                                }
+                            }
+                        }
+
+                        // This is silly hardcoding because these are not in our tempalte and they are used by DSA only - set them to proper dates.
+                        if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
+                        if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
+                        if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
                     }
                 }
             }
