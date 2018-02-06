@@ -46,6 +46,35 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule // Set to read only if the deal has been cancelled (has a tracker + stage is cancelled)
+                {
+                    Title="Readonly if Cancelled",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.IS_CANCELLED) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.START_DT,
+                                AttributeCodes.END_DT,
+                                AttributeCodes.PTR_USER_PRD,
+                                AttributeCodes.DEAL_DESC,
+                                AttributeCodes.VOLUME,
+                                AttributeCodes.ECAP_PRICE,
+                                AttributeCodes.DSCNT_PER_LN,
+                                AttributeCodes.QTY,
+                                AttributeCodes.DEAL_COMB_TYPE,
+                                AttributeCodes.DEAL_GRP_EXCLDS,
+                                AttributeCodes.DEAL_GRP_CMNT,
+                                AttributeCodes.ON_ADD_DT,
+                                AttributeCodes.TERMS }
+                        }
+                    }
+                },
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
                 {
                     Title="Readonly if Tracker Exists",

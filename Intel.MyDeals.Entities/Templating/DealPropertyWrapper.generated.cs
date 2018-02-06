@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/23/2018 4:06:52 PM
+File Updated: 2/5/2018 11:10:21 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2199,6 +2199,22 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute IS_CANCELLED = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_CANCELLED",
+			ATRB_DESC = "Object Has Been Cancelled",
+			ATRB_LBL = "Is Cancelled",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3703,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/23/2018 4:06:28 PM
+File Updated: 2/5/2018 11:09:21 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1252,6 +1252,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Boolean
 		///</summary>
 		public const string IS_ADMIN = "IS_ADMIN";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3703
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_CANCELLED = "IS_CANCELLED";
 
 		///<summary>
 		/// DIM_SID: 50

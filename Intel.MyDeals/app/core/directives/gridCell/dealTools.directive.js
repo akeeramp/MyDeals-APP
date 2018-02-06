@@ -118,7 +118,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     else return 'CantRemoveHold';
                 }
                 else {
-                    if (!!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold === true) return 'CanHold';
+                    if ((!!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold === true) && dataItem.WF_STG_CD !== 'Cancelled') return 'CanHold';
                     else return 'NoHold';
                 }
             }
