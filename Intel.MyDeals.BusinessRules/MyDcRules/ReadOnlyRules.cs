@@ -80,7 +80,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly if Tracker Exists",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
@@ -90,7 +90,8 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
                                 AttributeCodes.PROD_INCLDS,
-                                AttributeCodes.PTR_USER_PRD }
+                                AttributeCodes.PTR_USER_PRD,
+                                AttributeCodes.DEAL_GRP_NM}
                         }
                     }
                 },
