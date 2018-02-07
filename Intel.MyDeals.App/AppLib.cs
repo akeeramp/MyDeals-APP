@@ -59,7 +59,6 @@ namespace Intel.MyDeals.App
 
             if (AVM != null && !forceLoad)
             {
-                LogAnalitics();
                 PopulateUserSettings(user);
                 return user;
             }
@@ -70,15 +69,13 @@ namespace Intel.MyDeals.App
             {
                 AppName = "MyDeals",
                 AppDescShort = "My Deals Solutions tool for managing rebate deals",
-                AppDesc = "My Deals is the interface to help monitor and control the workflow for creating, maintaining and monitoring rebate deals through Workbooks, Dashboards and Individual Deals.",
+                AppDesc = "My Deals is the interface to help monitor and control the workflow for creating, maintaining and monitoring rebate deals through Contracts, Dashboards and Individual Deals.",
                 AppCopy = "© 2016 DEAL COMPLIANCE SOLUTIONS",
                 AppCopyShort = "© 2016 My Deals"
             };
 
             SetEnvName();
             SetVersion();
-
-            LogAnalitics();
 
             OpLog.Log("Found User" + user.Usr.FullName);
             return user;
@@ -214,46 +211,5 @@ namespace Intel.MyDeals.App
         //        ? new List<MyCustomersSoldTo>()
         //        : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
         //}
-
-        public static void ClearCache()
-        {
-            OpAuthenticationExtensions.ClearCache();
-            UserSettings?.Clear();
-        }
-
-        public static void LogAnalitics()
-        {
-            //URL for appusage with IAP AppID in the URL
-            string requestUrl = "http://appusage.intel.com/Service/api/loguser/114464?environment=" + AVM.AppEnv;
-
-            //Create HttpWebRequest against the URL
-            HttpWebRequest loggingRequest = WebRequest.CreateHttp(requestUrl);
-
-            //Sets a 1 second timeout.  If the service responds, the app shouldn't hang. 
-            loggingRequest.Timeout = 1000;
-
-            //Set credentials so the user's current security context is used for the request
-            loggingRequest.Credentials = CredentialCache.DefaultCredentials;
-
-            HttpWebResponse response = null;
-
-            try
-            {
-                //Execute the request and get the response
-                response = (HttpWebResponse)loggingRequest.GetResponse();
-                //Check if it succeeded.
-                OpLog.Log(response.StatusCode == HttpStatusCode.OK ? "http://appusage.intel.com Usage Logged!" : "http://appusage.intel.com Usage Not Logged =(");
-            }
-            catch (Exception ex)
-            {
-                //Do something... or nothing.
-            }
-            finally
-            {
-                //close the response 
-                response?.Close();
-            }
-
-        }
     }
 }
