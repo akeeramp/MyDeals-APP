@@ -648,7 +648,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					    if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
 					        // Override of an existing deal grp name (new val != old val)
 					        if (prevValue !== null && prevValue !== undefined && prevValue.replace(/\s/g, "").length !== 0) {
-					            delete $scope.dealGrpNameDict[formatStringAsDealGrpDictKey(prevValue)];
+					            delete $scope.dealGrpNameDict[formatStringForDictKey(prevValue)];
 					        }
 					    }
 
@@ -698,7 +698,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 					                // Look for another occurance of the Deal Group Name (AKA - Kit Name)
 					                for (var i = 0; i < data.length; i++) {
-					                    if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == formatStringAsDealGrpDictKey(myRow["DEAL_GRP_NM"])
+					                    if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == formatStringForDictKey(myRow["DEAL_GRP_NM"])
 											&& parseInt(data[i]["TIER_NBR"]) == 1
 											&& i != myRowIndex) {
 					                        dealGrpKeyFirstIndex = i;
@@ -710,7 +710,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                    var existingRow = data[dealGrpKeyFirstIndex];
 
 					                    // Prepare deal groups for merging confirmation after the range.forEachCell() is done
-					                    var myKey = formatStringAsDealGrpDictKey(myRow["DEAL_GRP_NM"]);
+					                    var myKey = formatStringForDictKey(myRow["DEAL_GRP_NM"]);
 					                    if (!confirmationModPerDealGrp.hasOwnProperty(myKey)) {
 					                        confirmationModPerDealGrp[myKey] = {
 					                            "existingDcID": existingRow["DC_ID"],
@@ -793,7 +793,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								}
 								// Find/get all occurances with deal-grp-nm
 								for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-									if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+									if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
 										prevValues.push(angular.copy(data[i]));
 
 										if (data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
@@ -820,11 +820,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								// Check for and remove duplicates
 								var duplicateCheckerDict = {};
 								for (var i = prevValues.length - 1; i >= 0; i--) {
-									if (duplicateCheckerDict.hasOwnProperty(prevValues[i]["PRD_BCKT"])) {
+									prevValues[i] = prevValues[i].toString().trim(); // trim products
+									if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
 										prevValues.splice(i, 1);
 										numOfDuplicates++;
 									} else {
-										duplicateCheckerDict[prevValues[i]["PRD_BCKT"]] = true;
+										duplicateCheckerDict[formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
 									}
 								}
 
@@ -876,7 +877,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							, function (response) { // Cancel Merge
 							    // Find all occurances with deal-grp-nm
 							    for (var i = data.length - 1; i >= 0; i--) {
-							        if (formatStringAsDealGrpDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
+							        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
 							            // Don't clear the existing
 							            if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
 							                continue;
@@ -1134,17 +1135,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!root._dirty) {
             root._dirty = true;
         }
-
     }
-
-
-
+	
 
     //// <summary>
-    //// Formats a given sDealGrpDict key to expected format, whose format will help us ignore spaces and capitalization when comparing $scope.dealGrpNameDict keys.
+    //// Formats a given dictionary key to a format that ignores spaces and capitalization for easier key comparisons.
     //// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
     //// </summary>
-    function formatStringAsDealGrpDictKey(valueToFormat) {
+    function formatStringForDictKey(valueToFormat) {
         var result = "";
         if (valueToFormat != null) {
             result = valueToFormat.toString().toUpperCase().replace(/\s/g, "")
@@ -1362,11 +1360,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 		var usrPrdArr = data[r]["PTR_USER_PRD"].split(",");
                 		var duplicateCheckerDict = {};
                 		for (var i = usrPrdArr.length - 1; i >= 0; i--) {
-                			if (duplicateCheckerDict.hasOwnProperty(usrPrdArr[i])) {
+                			usrPrdArr[i] = usrPrdArr[i].toString().trim(); // trim products
+                			if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(usrPrdArr[i].toString()))) {
                 				// This is a duplicate, remove from list
                 				usrPrdArr.splice(i, 1);
                 			} else {
-                				duplicateCheckerDict[usrPrdArr[i]] = true;
+                				duplicateCheckerDict[formatStringForDictKey(usrPrdArr[i])] = true;
                 			}
                 		}
                 		data[r]["PTR_USER_PRD"] = usrPrdArr.join(",");
@@ -2657,7 +2656,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						// Create a dictionary of products with their original tiered data
                 		for (var i = 0; i < originalProductsArr.length; i++) {
                 			var originalIndex = parseInt(r) + i; // i+1 is essentially the tier assuming the usr prd is in the right order. But then we minus 1 for getting the index so it's just i.
-                			orignalUnswappedDataDict[originalProductsArr[i]] = angular.copy(data[originalIndex]);
+                			orignalUnswappedDataDict[formatStringForDictKey(originalProductsArr[i])] = angular.copy(data[originalIndex]); 
                 		}
                 	}
                 }
@@ -2685,7 +2684,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     		var currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
                     		for (var d = 0; d < root.kitDimAtrbs.length; d++) {
                     			if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
-                    			data[a][root.kitDimAtrbs[d]] = orignalUnswappedDataDict[currProduct][root.kitDimAtrbs[d]];
+                    			data[a][root.kitDimAtrbs[d]] = orignalUnswappedDataDict[formatStringForDictKey(currProduct)][root.kitDimAtrbs[d]];
                     		}
 						}
 
