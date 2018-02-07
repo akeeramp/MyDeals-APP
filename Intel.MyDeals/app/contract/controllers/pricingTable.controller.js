@@ -2682,7 +2682,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             for (var d = 0; d < root.kitDimAtrbs.length; d++) {
                                 if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
                                 // Check for undefined..Extra product might have been from user input translated e.g., 7230(F) ==> 7230F,7230
-                                if [formatStringForDictKey(currProduct)] !== undefined) {
+                                if (orignalUnswappedDataDict[formatStringForDictKey(currProduct)] !== undefined) {
                                     data[a][root.kitDimAtrbs[d]] = orignalUnswappedDataDict[formatStringForDictKey(currProduct)][root.kitDimAtrbs[d]];
                                 }
                             }
