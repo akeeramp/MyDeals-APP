@@ -221,7 +221,6 @@
                     var response = e.data["CostTestDetailItems"];
 
                     var rollupPctBydeal = {};
-                    var costTestIncompleteReason = {};
                     for (var j = 0; j < response.length; j++) {
                         $scope.dealPtIdDict[response[j]["DEAL_ID"]] = pt.DC_ID;
                         var isOverridden = response[j]["COST_TEST_OVRRD_FLG"] === "Yes";
@@ -238,7 +237,6 @@
                                 rollupPctBydeal[response[j]["DEAL_ID"]] = "Pass";
                             }
                         }
-                        costTestIncompleteReason[response[j]["DEAL_ID"]] = rollupPctBydeal[response[j]["DEAL_ID"]] === "InComplete" ? response[j]["INCMPL_COST_TEST_RSN"] : "";
                     }
 
                     for (var i = 0; i < response.length; i++) {
@@ -271,7 +269,7 @@
                             if (!cols[c].hidden) {
                                 if (cols[c].locked) {
                                     if (cols[c].field === "PRC_CST_TST_STS") {
-                                        var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;", costTestIncompleteReason[response[i]["DEAL_ID"]]);
+                                        var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;");
                                         trLocked += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
                                     } else {
                                         trLocked += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
@@ -514,7 +512,7 @@
                 field: "DEAL_ID",
                 title: "Deal Id",
                 width: "100px",
-                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='#= PRC_CST_TST_STS !== \"InComplete\" ? \"Click to go to the Deal Editor\" : INCMPL_COST_TEST_RSN #'> #= DEAL_ID # </a>",
+                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='#= PRC_CST_TST_STS !== \"InComplete\" ? \"Click to go to the Deal Editor\" : \"Incomplete: \" + INCMPL_COST_TEST_RSN #'> #= DEAL_ID # </a>",
                 groupHeaderTemplate: "#= gridPctUtils.getColumnTemplate(value) #",
                 locked: true,
                 parent: true,
@@ -526,6 +524,13 @@
                 width: "170px",
                 locked: true,
                 parent: false,
+                filterable: { multi: true, search: true },
+            },
+            "DEAL_DESC": {
+                field: "DEAL_DESC",
+                title: "Deal Description",
+                width: "140px",
+                parent: true,
                 filterable: { multi: true, search: true },
             },
             "DEAL_STRT_DT": {
@@ -675,13 +680,6 @@
             "DEAL_GRP_CMNT": {
                 field: "DEAL_GRP_CMNT",
                 title: "Deal Group Comments",
-                width: "140px",
-                parent: false,
-                filterable: { multi: true, search: true },
-            },
-            "DEAL_DESC": {
-                field: "DEAL_DESC",
-                title: "Deal Description",
                 width: "140px",
                 parent: false,
                 filterable: { multi: true, search: true },

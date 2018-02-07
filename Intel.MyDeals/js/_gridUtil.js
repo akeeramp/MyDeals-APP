@@ -158,7 +158,7 @@ gridUtils.exportDimTrkrControlWrapper = function (passedData) {
     return tmplt;
 }
 
-gridUtils.getFormatedDim = function(dataItem, field, dim, format) {
+gridUtils.getFormatedDim = function (dataItem, field, dim, format) {
     var item = dataItem[field];
     if (item === undefined || item[dim] === undefined) return item;
     return gridUtils.formatValue(item[dim], format);
@@ -338,7 +338,12 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
                 tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
             }
             tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\", \"" + dimkey + "\")'>";
-            tmplt += gridUtils.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, field + '_STRT_DT', field + '_END_DT', dimkey);
+            var fieldText = field + '_STRT_DT';
+            // Special handling for YCS2, naming convention is not followed in defining start date attribute..
+            if (field === "YCS2") {
+                fieldText = field + '_START_DT'
+            }
+            tmplt += gridUtils.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, fieldText, field + '_END_DT', dimkey);
             tmplt += "</op-popover>";
             tmplt += '</td>';
             tmplt += '</tr>';
@@ -760,7 +765,7 @@ gridUtils.lookupEditor = function (container, options) {
     }
 }
 
-gridUtils.getDimLabel = function(key) {
+gridUtils.getDimLabel = function (key) {
     var dim = "";
     if (key.indexOf("20____2") >= 0) dim = "SubKit";
     if (key.indexOf("20_____2") >= 0) dim = "SubKit";
@@ -792,7 +797,7 @@ gridUtils.getDimLabel = function(key) {
 gridUtils.tenderDim = function (dataItem, field, format) {
     var rtn = [];
     var rtnKit = [];
-    var key,dim,val;
+    var key, dim, val;
     var ar = dataItem[field];
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
@@ -896,7 +901,7 @@ gridUtils.dialogShow = function () {
     dialog.open();
 }
 
-gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
+gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
     var rows = [{ cells: [] }];
     var gridColumns = grid.columns;
     var colWidths = [];
@@ -1345,12 +1350,9 @@ gridPctUtils.getResultMappingIconClass = function (result) {
         return "intelicon-help-outlined";
     }
 }
-gridPctUtils.getResultSingleIcon = function (result, style, incompleteReason) {
+gridPctUtils.getResultSingleIcon = function (result, style) {
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
-    if (result === "InComplete") {
-        iconTitle = incompleteReason;
-    }
     return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
 }
 gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style, incompleteReason) {
@@ -1363,7 +1365,7 @@ gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, s
 
     // If reason is incomplete display incomplete reason
     if (result === "InComplete") {
-        iconTitle = incompleteReason;
+        iconTitle = "Incomplete: " + incompleteReason;
     }
 
     rtn += '<i ng-if="' + flg + '" class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
