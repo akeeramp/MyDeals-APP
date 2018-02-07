@@ -288,13 +288,23 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
 
-                    item["Customer"] = cust;
-
-                    // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
-                    if (!mtCustIds.Contains(cust.CUST_NM_SID))
+                    if (cust == null)
                     {
+                        item["Customer"] = new Dictionary<string,object>();
                         item["ECAP_PRICE"] = "no access";
                         item["CAP"] = "no access";
+                    }
+                    else
+                    {
+                        item["Customer"] = cust;
+
+                        // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
+                        if (!mtCustIds.Contains(cust.CUST_NM_SID))
+                        {
+                            item["ECAP_PRICE"] = "no access";
+                            item["CAP"] = "no access";
+                        }
+
                     }
                 }
                 else

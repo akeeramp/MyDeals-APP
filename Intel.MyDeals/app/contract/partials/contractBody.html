@@ -6,15 +6,7 @@
     <div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
         <div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
             <div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
-            <div class="myDealsControl"
-                 op-control-flat
-                 ng-model="curPricingTable"
-                 op-cd="'TITLE'"
-                 op-type="'TEXTBOX'"
-                 op-label="''"
-                 op-ui-mode="'HORIZONTAL'"
-                 op-class="'transparentInput fntLg noBottomBorder col-md-11'"
-                 op-style="'color: #000000; width: 100%;'"></div>
+            <div class="fl fntLg col-md-11" style="color: #000000; margin: 0 6px 2px 10px;">{{ curPricingTable.TITLE }}</div>
             <div class="clearboth"></div>
         </div>
         <div style="height: 37px; padding-left: 10px; border-bottom: 2px solid #bcbcbc;" ng-if="isPtr || isWip">

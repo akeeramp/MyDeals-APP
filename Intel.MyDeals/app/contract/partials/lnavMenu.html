@@ -2,10 +2,10 @@
     <div class="fr navIconLnk" title="Hide Panel" ng-click="toggleLnav()" style="border-left: 1px solid #e8eaec !important;">
         <i class="intelicon-shrink flip-horizontal"></i>
     </div>
-    <div class="fl navIconLnk" title="Save Contract" ng-click="saveUpperContract()" ng-show="isExistingContract()"
+    <!--<div class="fl navIconLnk" title="Save Contract" ng-click="saveUpperContract()" ng-show="isExistingContract()"
          ng-class="{'lnavBtnDisabled': ('contract.details' | isState) ? true : !_dirty }">
         <i class="intelicon-save-outlined"></i>
-    </div>
+    </div>-->
     <div class="fl navIconLnk" title="Add Pricing Strategy" ng-if="C_ADD_PRICING_STRATEGY" id="navIconAddPs" ng-click="toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
         <i class="intelicon-plus-max"></i>
     </div>

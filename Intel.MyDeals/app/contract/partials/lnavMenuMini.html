@@ -4,9 +4,9 @@
     <div class="navIconLnk" title="Show Panel" ng-click="toggleLnav()">
         <i class="intelicon-expand"></i>
     </div>
-    <div class="navIconLnk" title="Save Contract" ng-click="saveUpperContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
+    <!--<div class="navIconLnk" title="Save Contract" ng-click="saveUpperContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
         <i class="intelicon-save-outlined"></i>
-    </div>
+    </div>-->
     <div class="navIconLnk" title="Add Pricing Strategy" ng-if="C_ADD_PRICING_STRATEGY" ng-click="toggleLnav();toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
         <i class="intelicon-plus-max"></i>
     </div>
