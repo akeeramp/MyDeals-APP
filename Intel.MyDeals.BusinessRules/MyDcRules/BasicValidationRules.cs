@@ -216,6 +216,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Check for Expire Flag",
+                    ActionRule = MyDcActions.CheckExpireFlag,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+                },
+                new MyOpRule
+                {
                     Title="Check for Major Change by adding Pricing Table",
                     ActionRule = MyDcActions.MajorChangeAddPtCheck,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL},

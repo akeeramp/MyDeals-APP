@@ -201,17 +201,17 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $scope.pendingChange = function (e) {
-        $scope.togglePending();
+        $scope.togglePending(true);
     }
-    $scope.togglePending = function() {
+    $scope.togglePending = function(runActions) {
         if (!$scope.isPending) {
             $scope.isPending = true;
             root.contractData.CUST_ACCPT = "Pending";
-            $scope.actionItems(true, false);
+            if (runActions) $scope.actionItems(true, false);
         } else {
             $scope.isPending = false;
             root.contractData.CUST_ACCPT = "Accepted";
-            $scope.actionItems(true, true);
+            if (runActions) $scope.actionItems(true, true);
         }
     }
 
@@ -739,11 +739,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
 
     $scope.test = function() {
-        $scope.togglePending();
+        $scope.togglePending(true);
     }
 
     $scope.closeDialog = function () {
-        $scope.togglePending();
+        $scope.togglePending(false);
 
         // This is pretty bad... please don't tell anyone I did this :)
         // The toggle is setup like Angular but really only one way binding.
@@ -845,7 +845,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         });
 
         modalInstance.result.then(function (result) {
-            debugger;
         }, function () { });
     }
 

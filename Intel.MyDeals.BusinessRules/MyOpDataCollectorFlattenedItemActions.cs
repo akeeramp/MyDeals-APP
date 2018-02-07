@@ -34,6 +34,8 @@ namespace Intel.MyDeals.BusinessRules
             string pct = r.Dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
             string mct = r.Dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
             bool mctMissing = r.Dc.GetDataElementValue(AttributeCodes.COMP_MISSING_FLG) == "1";
+            bool hasL1 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1) != "0";
+            bool hasL2 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L2) != "0";
             string role = opUserToken.Role.RoleTypeCd;
             bool pctFailed = pct != "Pass" && pct != "NA";
             bool mctFailed = mct != "Pass" && mct != "NA";
@@ -116,7 +118,7 @@ namespace Intel.MyDeals.BusinessRules
                 //}
 
 
-                if (action == "Approve" && objsetActionItem.Actions[action])
+                if (action == "Approve" && objsetActionItem.Actions[action] && hasL1)
                 {
                     string reasonPctMct = "Pricing Strategy did not pass " + (pctFailed && mctFailed
                         ? "Price Cost Test and Meet Comp Test" 
@@ -175,9 +177,12 @@ namespace Intel.MyDeals.BusinessRules
 
             foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.PRODUCT_FILTER))
             {
-                int prodId =  int.Parse(de.AtrbValue.ToString());
-                ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
-                if (prod != null) de.AtrbValue = prod.PRODUCT_NAME;
+                if (de.AtrbValue.ToString() != "")
+                {
+                    int prodId = int.Parse(de.AtrbValue.ToString());
+                    ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
+                    if (prod != null) de.AtrbValue = prod.PRODUCT_NAME;
+                }
             }
         }
 

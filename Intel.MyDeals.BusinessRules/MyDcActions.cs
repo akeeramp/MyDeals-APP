@@ -754,7 +754,30 @@ namespace Intel.MyDeals.BusinessRules
 			}
 		}
 
-		public static void MajorChangeCheck(params object[] args)
+	    public static void CheckExpireFlag(params object[] args)
+	    {
+	        MyOpRuleCore r = new MyOpRuleCore(args);
+	        if (!r.IsValid) return;
+
+            string dcEnStr = r.Dc.GetDataElementValue(AttributeCodes.END_DT);
+            DateTime dcEn = DateTime.Parse(dcEnStr);
+            
+            string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
+
+            if (dcEn > DateTime.Now.Date && isExpired == "1") // If there is an expired flag, reset it if it is set
+            {
+                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");
+            }
+
+            if (dcEn < DateTime.Now.Date && isExpired == "0") // If there is an expired flag, reset it if it is set
+            {
+                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "1");
+            }
+
+        }
+
+
+        public static void MajorChangeCheck(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;

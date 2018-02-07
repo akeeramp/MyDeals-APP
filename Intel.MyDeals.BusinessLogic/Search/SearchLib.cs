@@ -242,7 +242,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Get all the products in a collection base on the PRODUCT_FILTER
             // Note: the first hit is a performance dog as the product cache builds for the first time
             List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
-                .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER)
+                .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
                 .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
             List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
 

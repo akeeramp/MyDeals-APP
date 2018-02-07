@@ -1274,7 +1274,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             });
             $scope.syncAllActions = function (dataItems) {
-                var arActions = ["Approve", "Reject", "Hold"];
+                var arActions = ["Approve", "Reject", "Hold", "Cancel"];
 
                 for (var a = 0; a < arActions.length; a++) {
                     var actionItems = dataItems[arActions[a]];
