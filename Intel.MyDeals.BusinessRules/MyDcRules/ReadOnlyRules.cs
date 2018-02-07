@@ -71,6 +71,13 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.DEAL_GRP_EXCLDS,
                                 AttributeCodes.DEAL_GRP_CMNT,
                                 AttributeCodes.ON_ADD_DT,
+                                AttributeCodes.YCS2_OVERLAP_OVERRIDE,
+                                AttributeCodes.REBATE_BILLING_START,
+                                AttributeCodes.REBATE_BILLING_END,
+                                AttributeCodes.CONSUMPTION_REASON,
+                                AttributeCodes.CONSUMPTION_REASON_CMNT,
+                                AttributeCodes.BACK_DATE_RSN_TXT,
+                                AttributeCodes.BACK_DATE_RSN,
                                 AttributeCodes.TERMS }
                         }
                     }
