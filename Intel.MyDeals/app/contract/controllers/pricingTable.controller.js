@@ -818,7 +818,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    // Check for and remove duplicates
 							    var duplicateCheckerDict = {};
 							    for (var i = prevValues.length - 1; i >= 0; i--) {
-							        prevValues[i] = prevValues[i].toString().trim(); // trim products
 							        if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
 							            prevValues.splice(i, 1);
 							            numOfDuplicates++;
