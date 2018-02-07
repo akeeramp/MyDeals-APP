@@ -336,6 +336,9 @@
                     "DEAL_DESC": {
                         "Groups": ["Deal Info"]
                     },
+                    "NUM_OF_TIERS": {
+                        "Groups": [ "All"]
+                    },
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },

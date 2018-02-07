@@ -1825,7 +1825,13 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.NUM_OF_TIERS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsHidden = true
+                Width = 140,
+                Label = "Number of Tiers",
+                Template = "#=gridUtils.uiControlWrapper(data, 'NUM_OF_TIERS')#",
+                IsHidden = true,
+                IsReadOnly = true,
+                IsFilterable = true,
+                IsSortable = true
             });
             items.Add(new UiTemplateContainerItem  // WIP VT, Program types
             {
