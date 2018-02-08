@@ -316,8 +316,9 @@ namespace Intel.MyDeals.BusinessLogic
                 myDealsData[OpDataElementType.WIP_DEAL].Messages.Messages.RemoveAll(r => true);
 
                 // Tack on the save action call now
-                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
-                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(dealIds.Where(d => !tenderDealIds.Contains(d)).ToList()); // not sure if we need it in both places or just the PS
+                List<int> nonTenderIds = dealIds.Where(d => !tenderDealIds.Contains(d)).ToList();
+                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, nonTenderIds);
+                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds); // not sure if we need it in both places or just the PS
             }
 
             myDealsData.EnsureBatchIDs();

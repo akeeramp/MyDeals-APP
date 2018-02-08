@@ -193,7 +193,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             myDealsData[opDataElementType].BatchID = Guid.NewGuid();
             myDealsData[opDataElementType].GroupID = -101; // Whatever the real ID of this object is
-            myDealsData[opDataElementType].AddSaveActions();
+            myDealsData[opDataElementType].AddSaveActions(null, ids);
             if (forceToGoActive) myDealsData[opDataElementType].AddGoingActiveActions(ids);
             myDealsData.EnsureBatchIDs();
 

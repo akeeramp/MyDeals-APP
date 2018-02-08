@@ -14,12 +14,12 @@ namespace Intel.MyDeals.Entities
             return odp != null && odp.AllDataElements.All(de => de.IsValid(attributeCollection));
         }
 
-        public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null)
+        public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null, List<int> dealIds = null)
         {
             if (packet.Data.Count > 0) // if there are not any data elements to save, dno't make actions.
             {
                 packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 10)); // Set action - save it.
-                packet.AddSyncActions(fullPacket);
+                packet.AddSyncActions(fullPacket, dealIds);
             }
         }
 
@@ -40,14 +40,20 @@ namespace Intel.MyDeals.Entities
             }
         }
 
-        public static void AddSyncActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null)
+        public static void AddSyncActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket, List<int> dealIds)
         {
             // This must happen *after* the major/minor check.  Sync deals must happen only if a deal goes active or is already active.
             if (packet.PacketType != OpDataElementType.WIP_DEAL) return;
+            if (dealIds == null) dealIds = new List<int>();
 
-            OpDataPacket<OpDataElementType> testPacket = fullPacket == null ? packet : fullPacket;
-            List<int> majorDealIds = testPacket.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && d.HasValueChanged).Select(d => d.DcID).ToList();
-            List<int> minorDealIds = testPacket.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged).Select(d => d.DcID).ToList();
+            OpDataPacket<OpDataElementType> testPacket = fullPacket ?? packet;
+            List<int> majorDealIds = testPacket.AllDataElements
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Select(d => d.DcID).ToList();
+
+            List<int> minorDealIds = testPacket.AllDataElements
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Select(d => d.DcID).ToList();
 
             if (majorDealIds.Any()) // 
             {
