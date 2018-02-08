@@ -3664,14 +3664,23 @@
                 return;
             }
 
-            $scope.setBusy("Loading...", "Loading the Deal Editor");
+            $scope.setBusy("Loading...", "Loading the Deal Editor");    
 
-            var valid = $scope.curPricingStrategy.PASSED_VALIDATION;
+            var isPtrDirty = false;
+            if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined) {
+                var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+                    function (x) {
+                        return (x.PASSED_VALIDATION === 'Dirty');
+                    }).ToArray();
+                if (dirtyItems.length > 0) isPtrDirty = true;
+            }
+
+
 
             // *** Removed because it opens a data integrity issue:
             // If use clicks save... then clicks the tab, it will bypass translation and PTR and WIP will be out of sync
             //!$scope._dirty &&
-            if ((valid === "Complete" || valid === "Finalizing") && !$scope._dirty) {
+            if (!isPtrDirty && !$scope._dirty) {
                 $state.go('contract.manager.strategy.wip',
                     {
                         cid: $scope.contractData.DC_ID,
