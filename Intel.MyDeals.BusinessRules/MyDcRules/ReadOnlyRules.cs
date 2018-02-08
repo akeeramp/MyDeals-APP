@@ -82,27 +82,46 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-                new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
+				new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
                 {
-                    Title="Readonly if Tracker Exists",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {
-                                AttributeCodes.PROD_INCLDS,
-                                AttributeCodes.PTR_USER_PRD,
-                                AttributeCodes.DEAL_GRP_NM}
-                        }
-                    }
-                },
-                new MyOpRule
+					Title="Readonly if Tracker Exists",
+					ActionRule = MyDcActions.ExecuteActions,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+					{
+						new OpRuleAction<IOpDataElement>
+						{
+							Action = BusinessLogicDeActions.SetReadOnly,
+							Target = new[] {
+								AttributeCodes.PROD_INCLDS,
+								AttributeCodes.PTR_USER_PRD,
+								AttributeCodes.DEAL_GRP_NM}
+						}
+					}
+				},
+				new MyOpRule // Set to read only if you have a TRACKER NUMBER
+                {
+					Title="Readonly if Tracker Exists",
+					ActionRule = MyDcActions.ExecuteActions,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.PROGRAM.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+					{
+						new OpRuleAction<IOpDataElement>
+						{
+							Action = BusinessLogicDeActions.SetReadOnly,
+							Target = new[] {
+								AttributeCodes.PTR_USER_PRD
+							}
+						}
+					}
+				},
+				new MyOpRule
                 {
                     Title="Readonly for Frontend With Tracker",
                     ActionRule = MyDcActions.ReadOnlyFrontendWithTracker,

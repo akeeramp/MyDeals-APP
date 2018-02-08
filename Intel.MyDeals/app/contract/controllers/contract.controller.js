@@ -31,6 +31,7 @@
         $scope.isAutoSaving = false;
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
+        $scope.maxKITproducts = 10;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -2889,7 +2890,7 @@
                             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                                 // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
                                 //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
-                                for (var i = 0 ; i < 10; i++) { // KITTODO: Replace "10" with a constant max Products value instead
+                                for (var i = 0 ; i < $scope.maxKITproducts; i++) {
                                     var tierToDel = (t + 1 + i);
                                     lData[dimAtrbs[a] + dimKey + tierToDel] = "";
                                 }

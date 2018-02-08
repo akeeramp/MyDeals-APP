@@ -73,7 +73,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     vm.requiredStringColumns = {};
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
     var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
-    $scope.dealGrpNameDict = {};
     //root.wipData;
     //root.wipOptions;
     var ssTools;
@@ -643,13 +642,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					    var myColLetter = String.fromCharCode(intA + (colIndex));
 					    var colName = root.letterToCol[myColLetter];
 
-					    if (value.value == undefined && colIndex == dealGrpColIndex) { // User hit the DELETE button on the DEAL_GRP cell
-					        // Override of an existing deal grp name (new val != old val)
-					        if (prevValue !== null && prevValue !== undefined && prevValue.replace(/\s/g, "").length !== 0) {
-					            delete $scope.dealGrpNameDict[formatStringForDictKey(prevValue)];
-					        }
-					    }
-
 					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 					        var prevValue = angular.copy(myRow[colName]);
 					        var numOfTiers = root.numOfPivot(myRow);
@@ -677,9 +669,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        // Logic to apply to merge cells (multiple tiers)
 					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
 					            // Set the deal group val to be the same as the first one of the merged rows
-					            if (colIndex == dealGrpColIndex) {
-					                value.value = dealGrpSkipVal;
-					                myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
+					        	if (colIndex == dealGrpColIndex) {
+					        		value.value = dealGrpSkipVal;
+					        		myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
 					            }
 					        }
 					        else { // Either a cell that is not merged OR the first row of a merged cell
@@ -706,17 +698,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 					                if (dealGrpKeyFirstIndex != myRowIndex) { // Another occurance of the Deal Group Name (AKA - Kit Name) exists
 					                    var existingRow = data[dealGrpKeyFirstIndex];
+					                    var isNonEditableKITname = ((parseInt(existingRow["HAS_TRACKER"]) || 0) == 1 || (!!existingRow._behaviors && !!existingRow._behaviors.isReadOnly && existingRow._behaviors.isReadOnly["PTR_USER_PRD"] == true));
 
-					                    // Prepare deal groups for merging confirmation after the range.forEachCell() is done
+					                	// Prepare deal groups for merging confirmation after the range.forEachCell() is done
 					                    var myKey = formatStringForDictKey(myRow["DEAL_GRP_NM"]);
 					                    if (!confirmationModPerDealGrp.hasOwnProperty(myKey)) {
-					                        confirmationModPerDealGrp[myKey] = {
-					                            "existingDcID": existingRow["DC_ID"],
-					                            "RowCount": parseInt(existingRow["NUM_OF_TIERS"]) + parseInt(myRow["NUM_OF_TIERS"])
-					                        }
+					                    	confirmationModPerDealGrp[myKey] = {
+					                    		"existingDcID": existingRow["DC_ID"],
+					                    		"RowCount": parseInt(existingRow["NUM_OF_TIERS"]) + parseInt(myRow["NUM_OF_TIERS"]),
+					                    		"isNonEditableKITname": isNonEditableKITname
+					                    	}
 					                    } else {
-					                        // Add to count for validation purposes
-					                        confirmationModPerDealGrp[myKey].RowCount = confirmationModPerDealGrp[myKey].RowCount + parseInt(myRow["NUM_OF_TIERS"]);
+					                    	// Add to count for validation purposes
+					                    	confirmationModPerDealGrp[myKey].RowCount = confirmationModPerDealGrp[myKey].RowCount + parseInt(myRow["NUM_OF_TIERS"]);
 					                    }
 					                }
 					            }
@@ -747,13 +741,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // Deal Group Merging
                 for (var key in confirmationModPerDealGrp) {
-                    if (confirmationModPerDealGrp.hasOwnProperty(key)) {
-                        if (confirmationModPerDealGrp[key].RowCount > 10) {
+                	if (confirmationModPerDealGrp.hasOwnProperty(key)) {
+                		if (confirmationModPerDealGrp[key].isNonEditableKITname) {
+                			// User tried to merge a deal group name that exists and cannot be edited (like when it has a tracker number)
+							modalOptions = {
+                				closeButtonText: "Okay",
+                				hasActionButton: false,
+                				headerText: "Cannot merge KIT name",
+                				bodyText: "A Kit with the name \"" + key + "\" already exists and its products cannot be edited. Please choose a different KIT name.",
+                				closeResults: { "key": key }
+                			};
+                		}
+                		else if (confirmationModPerDealGrp[key].RowCount > $scope.$parent.$parent.maxKITproducts) {
                             // Cannot merge
                             modalOptions = {
                                 closeButtonText: "Okay",
                                 hasActionButton: false,
-                                headerText: "cannot merge Deal groups",
+                                headerText: "Cannot merge KIT name",
                                 bodyText: "A Kit with the name \"" + key + "\" already exists.  Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10).  Please specify a different Kit Name or remove products from this row and try again.",
                                 closeResults: { "key": key }
                             };
@@ -763,7 +767,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 closeButtonText: "Cancel",
                                 actionButtonText: "Merge rows",
                                 hasActionButton: true,
-                                headerText: "Deal group merge confirmation",
+                                headerText: "KIT name merge confirmation",
                                 bodyText: "A Kit with the name \"" + key + "\" already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.",
                                 actionResults: { "key": key }, // HACK: without this, we won't get the correct key in the modal's .then()
                                 closeResults: { "key": key }
@@ -879,8 +883,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							            if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
 							                continue;
 							            }
-							            // Clear
-							            data[i]["DEAL_GRP_NM"] = "";
+							        	// Clear
+							            data[i]["DEAL_GRP_NM"]= "";
+							            data[i]["dirty"]= true;
 							        }
 							    }
 							    root.spreadDs.sync();
@@ -1033,7 +1038,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.spreadDs.sync();
                     $timeout(function () {
                         var cnt = 0;
-                        $scope.dealGrpNameDict = {}; // reset Deal Group name (AKA - Kit Name) dict
 
                         for (var c = 0; c < data.length; c++) {
                             if (data[c].DC_ID !== null) cnt++;
@@ -1147,9 +1151,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return result;
     }
 
-    function pivotKITDeals(data, n, dcIdDict, dictId, masterData) {
-        // NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards
-
+    function pivotKITDeals(data, n, dcIdDict, dictId, masterData, maxKITproducts) {
+        // NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards    	
         if ((data[n]["PTR_USER_PRD"] === "" || data[n]["PTR_USER_PRD"] === null) && data[n]["DC_ID"] === null) {
             return;
         }
@@ -1166,10 +1169,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // Update number of tiers
             var numTier = products.length;
-            data[n]["NUM_OF_TIERS"] = numTier > 10 ? 10 : numTier;
+            data[n]["NUM_OF_TIERS"] = numTier > maxKITproducts ? maxKITproducts : numTier;
         }
-        if (numTier !== undefined && numTier > 10) {
-            data[n]["NUM_OF_TIERS"] = numTier = 10;
+        if (numTier !== undefined && numTier > maxKITproducts) {
+            data[n]["NUM_OF_TIERS"] = numTier = maxKITproducts;
             if (data[n] === undefined) { return; }
             if (!data[n]._behaviors) data[n]._behaviors = {};
             if (!data[n]._behaviors) data[n]._behaviors = {};
@@ -1264,7 +1267,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                pivotKITDeals(data, n, dcIdDict, dictId, copyOfData);
+            	pivotKITDeals(data, n, dcIdDict, dictId, copyOfData, $scope.$parent.$parent.maxKITproducts);
                 dictId++;
             }
             if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === undefined || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
