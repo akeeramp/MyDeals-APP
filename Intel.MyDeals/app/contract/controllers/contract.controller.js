@@ -19,6 +19,7 @@
         $scope.isBusyMsgTitle = "";
         $scope.isBusyMsgDetail = "";
         $scope.isBusyType = "";
+        $scope.isBusyShowFunFact = false;
         $scope.stealthMode = false;
         $scope.messages = [];
         $scope.colToLetter = {};
@@ -188,28 +189,30 @@
         }
         $scope.removeDimKeyFromWipTemplates();
 
-        $scope.setBusy = function (msg, detail, msgType, isInstant) { // msgType can be Success, Error, Warning, and Info
+        $scope.setBusy = function (msg, detail, msgType, isInstant, isShowFunFact) { // msgType can be Success, Error, Warning, and Info
             if (isInstant == null) {
                 isInstant = false;
             }
 
             if (isInstant) {
-                $scope.setBusyBase(msg, detail, msgType);
+            	$scope.setBusyBase(msg, detail, msgType, isShowFunFact);
             } else {
                 $timeout(function () {
-                    $scope.setBusyBase(msg, detail, msgType);
+                	$scope.setBusyBase(msg, detail, msgType, isShowFunFact);
                 });
             }
         }
 
-        $scope.setBusyBase = function (msg, detail, msgType) {
-            var newState = msg != undefined && msg !== "";
+        $scope.setBusyBase = function (msg, detail, msgType, isShowFunFact) {
+        	var newState = msg != undefined && msg !== "";
+        	if (isShowFunFact == null) { isShowFunFact = false; }
 
             // if no change in state, simple update the text
             if ($scope.isBusy === newState) {
                 $scope.isBusyMsgTitle = msg;
                 $scope.isBusyMsgDetail = !detail ? "" : detail;
                 $scope.isBusyType = msgType;
+                $scope.isBusyShowFunFact = isShowFunFact;
                 return;
             }
 
@@ -218,11 +221,13 @@
                 $scope.isBusyMsgTitle = msg;
                 $scope.isBusyMsgDetail = !detail ? "" : detail;
                 $scope.isBusyType = msgType;
+                $scope.isBusyShowFunFact = isShowFunFact;
             } else {
                 $timeout(function () {
                     $scope.isBusyMsgTitle = msg;
                     $scope.isBusyMsgDetail = !detail ? "" : detail;
                     $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
                 }, 500);
             }
         }
@@ -884,7 +889,7 @@
                 if (confirm('Would you like to save your changes?')) {
                     event.preventDefault();
                     // async save data
-                    $scope.setBusy("Saving your data...", "Please wait as we save your information!");
+                    $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", false, true);
 
                     $scope.saveEntireContractRoot(fromState.name, false, false, toState.name, toParams);
                 }
@@ -1490,7 +1495,7 @@
             );
         }
         $scope.actionWipDeal = function (wip, actn) {
-            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!");
+        	$scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", false, true);
             objsetService.actionWipDeal($scope.getCustId(), $scope.contractData.DC_ID, wip, actn).then(
                 function (data) {
                     debugger;
@@ -1503,7 +1508,7 @@
             );
         }
         $scope.actionWipDeals = function (data) {
-            $scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!");
+        	$scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!", "Info", false, true);
             objsetService.actionWipDeals($scope.getCustId(), $scope.contractData.DC_ID, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1578,7 +1583,7 @@
         $scope.deletePricingStrategy = function (ps) {
             kendo.confirm("Are you sure that you want to delete this pricing strategy?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Deleting...", "Deleting the Pricing Strategy");
+                    $scope.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
@@ -1629,7 +1634,7 @@
         $scope.rollBackPricingStrategy = function (ps) {
             kendo.confirm("Are you sure that you want to undo this pricing strategy re-deal?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("RollBack...", "Rolling the Pricing Strategy back");
+                	$scope.setBusy("RollBack...", "Rolling the Pricing Strategy back", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
@@ -1664,7 +1669,7 @@
         $scope.cancelPricingStrategy = function (ps) {
             kendo.confirm("Are you sure that you want to cancel this pricing strategy?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Cancel...", "Canceling the Pricing Strategy back");
+                	$scope.setBusy("Cancel...", "Canceling the Pricing Strategy back", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     objsetService.cancelPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps).then(
@@ -2371,7 +2376,7 @@
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
 
-            $scope.setBusy("Saving your data...", "Please wait as we save your information!");
+            $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", false, true);
 
             // async save data
             topbar.show();
@@ -2419,7 +2424,7 @@
                     util.console("updateContractAndCurPricingTable Returned");
 
                     var i;
-                    $scope.setBusy("Saving your data...Done", "Processing results now!");
+                    $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", false, true);
 
                     var anyWarnings = false;
 
@@ -3373,7 +3378,7 @@
         $scope.addPricingTable = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving Pricing Table");
+            $scope.setBusy("Saving...", "Saving Pricing Table", "Info");
 
             // Clone base model and populate changes
             var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
@@ -3436,7 +3441,7 @@
         $scope.editPricingTable = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving Pricing Table");
+            $scope.setBusy("Saving...", "Saving Pricing Table", "Info", false, true);
 
             // Clone base model and populate changes
             var pt = util.clone($scope.currentPricingTable);
@@ -3669,7 +3674,7 @@
                 return;
             }
 
-            $scope.setBusy("Loading...", "Loading the Deal Editor");    
+            $scope.setBusy("Loading...", "Loading the Deal Editor", "Info");
 
             var isPtrDirty = false;
             if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined) {
@@ -3702,11 +3707,11 @@
             }
         }
         $scope.publishWipDealsBase = function () {
-            $scope.setBusy("Loading...", "Loading the Deal Editor");
+            $scope.setBusy("Loading...", "Loading the Deal Editor", "Info");
             $scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
         $scope.gotoToPricingTable = function () {
-            $scope.setBusy("Loading...", "Loading the Pricing Table Editor");
+        	$scope.setBusy("Loading...", "Loading the Pricing Table Editor", "Info");
             $scope.spreadNeedsInitialization = true;
             $state.go('contract.manager.strategy',
                 {

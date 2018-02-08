@@ -14,8 +14,31 @@
 		<div class="ss-icon-lg" ng-if="msgType == 'Error'">
 			<i class="intelicon-alert-solid red"></i>
 		</div>
-		
+
 		<h2 ng-bind="header"></h2>
 		<p ng-bind="description"></p>
+
+
+		<div ng-if="isShowFunFact" class="row ss-funfact-container">
+			<p ng-init="GetRandomFact()" class="col-md-12 ss-funfact-title">
+				{{ funFactTitle }}
+			</p>
+			<div ng-if="(!!currFunFact.FontAwesomeIcon && currFunFact.FontAwesomeIcon != '')" class="row">
+				<div class="col-md-3 ss-funfact-icon">
+					<i class="fa {{ funFactIcon }}"></i>
+				</div>
+				<div class="col-md-9 ss-funfact-description" style="text-align:left;">
+					{{ funFactDesc }}
+				</div>
+			</div>
+			<div ng-if="(currFunFact.FontAwesomeIcon == undefined || currFunFact.FontAwesomeIcon == '')" class="row">
+				<div class="col-md-12 ss-funfact-description" style="text-align:center;">
+					{{ funFactDesc }}
+				</div>
+			</div>
+		</div>
+
 	</div>
 </div>
+
+

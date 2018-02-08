@@ -126,3 +126,26 @@
     opacity: 0;
 }
 
+
+/* Fun fact styles */
+.ss-funfact-container {
+	background-color: #cceffc; 
+	border: 4px dotted #9bc7d8; 
+	padding: 20px; 
+	margin: 20px 0px 0px;
+}
+
+.ss-funfact-title {
+	margin-bottom: 8px; 
+	color: #555; 
+	font-size:17px;
+}
+
+.ss-funfact-icon {
+	 font-size: 30px; 
+	 color: #88a7b3;
+}
+
+.ss-funfact-description {
+	color: #555;
+}
