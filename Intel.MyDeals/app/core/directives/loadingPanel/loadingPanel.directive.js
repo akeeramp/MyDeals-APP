@@ -30,7 +30,8 @@ function loadingPanel() {
 			$scope.GetRandomFact = function(){
 				console.log("GET RANDOM FACT");
 				// Get a random number between min (inclusive) and max (exclusive)
-				var index = Math.floor(Math.random() * (($scope.funfactsList.length-1) - 0 + 1)) + 0;
+				var min = 0;
+				var index = Math.floor(Math.random() * (($scope.funfactsList.length) - min)) + min;
 				$scope.currFunFact = $scope.funfactsList[index];
 
 
@@ -90,7 +91,7 @@ function loadingPanel() {
 				},
 				{
 					"Description": "The toothfairy isn't real. She just isn't.",
-					"FontAwesomeIcon": "fa-lightbulb"
+					"FontAwesomeIcon": "fa-graduation-cap"
 				},
 				{
 					"Description": 'Sharks kill fewer than 10 people per year. Humans kill about 100 million sharks per year.',
@@ -169,7 +170,7 @@ function loadingPanel() {
 				},
 				{
 					"Description": "The Apple 1 was the first computer developed by Apple and was nothing more than a bag of parts. The Apple II was the first finished product sold by the company.",
-					"FontAwesomeIcon": "fa-aple"
+					"FontAwesomeIcon": "fa-apple"
 				}
 			]
 
