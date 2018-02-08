@@ -512,7 +512,7 @@
                 field: "DEAL_ID",
                 title: "Deal Id",
                 width: "100px",
-                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='#= PRC_CST_TST_STS !== \"InComplete\" ? \"Click to go to the Deal Editor\" : \"Incomplete: \" + INCMPL_COST_TEST_RSN #'> #= DEAL_ID # </a>",
+                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='Click to go to the Deal Editor'> #= DEAL_ID # </a>",
                 groupHeaderTemplate: "#= gridPctUtils.getColumnTemplate(value) #",
                 locked: true,
                 parent: true,
