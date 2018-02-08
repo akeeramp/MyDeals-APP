@@ -3653,6 +3653,11 @@
             }
         }
 
+        $scope.publishWipDealsFromTab = function () {
+            if ($scope.enableDealEditorTab() === false) return;
+            $scope.publishWipDeals();
+        }
+
         $scope.publishWipDeals = function () {
             if ($scope.isWip) return;
 
@@ -3806,9 +3811,11 @@
             $scope.goto('Deal Entry', 'contract.manager');
         }
         $scope.gotoCompliance = function () {
+            if (!$scope.enableFlowBtn()) return;
             $scope.goto('Compliance', 'contract.compliance');
         }
         $scope.gotoManage = function () {
+            if (!$scope.enableFlowBtn()) return;
             $scope.goto('Manage', 'contract.summary');
         }
         $scope.goto = function (mode, state) {

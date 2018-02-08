@@ -11,7 +11,7 @@
         </div>
         <div style="height: 37px; padding-left: 10px; border-bottom: 2px solid #bcbcbc;" ng-if="isPtr || isWip">
             <div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
-            <div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}" ng-click="publishWipDeals()">Deal Editor</div>
+            <div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}" ng-click="publishWipDealsFromTab()">Deal Editor</div>
             <div class="clearboth"></div>
         </div>
     </div>
@@ -115,6 +115,10 @@
 
     .noborders {
         border: 0 solid transparent !important;
+    }
+
+    #secContainerWrapper .disabled {
+        cursor: not-allowed;
     }
 </style>
 
