@@ -415,7 +415,7 @@ namespace Intel.MyDeals.BusinessLogic
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             MyDealsAttribute myDealsAttribute = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == atrbSaveItem.Attribute);
 
-            MyDealsData myDealsData = atrbSaveItem.ObjSetType.UpdateAtrbValue(new ContractToken
+            MyDealsData myDealsData = atrbSaveItem.ObjSetType.UpdateAtrbValue(new ContractToken("ContractToken Created - UpdateAtrbValue")
             {
                 CustId = custId,
                 ContractId = contractId

@@ -279,7 +279,7 @@ namespace Intel.MyDeals.BusinessLogic
                         )[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
 
                     // Build Contract Token based on Contract/Customer
-                    ContractToken contractToken = new ContractToken
+                    ContractToken contractToken = new ContractToken("ContractToken Created - ActionTenders")
                     {
                         ContractId = dcCntrct.DcID,
                         CustId = int.Parse(dcCntrct.GetDataElementValue(AttributeCodes.CUST_MBR_SID)),

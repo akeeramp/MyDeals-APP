@@ -213,6 +213,7 @@
     <Compile Include="Templating\TemplateExtensions\DcsProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DealTemplateDataGram.cs" />
     <Compile Include="TimeFlowItem.cs" />
+    <Compile Include="TimeFlowMedia.cs" />
     <Compile Include="UI Templates\UiColumn.cs" />
     <Compile Include="UI Templates\UiAtrbs.cs" />
     <Compile Include="UI Templates\UiFieldItem.cs" />

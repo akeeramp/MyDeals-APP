@@ -11,12 +11,25 @@ namespace Intel.MyDeals.Entities
             CopyFromId = 0;
             CopyFromObjType = OpDataElementType.CNTRCT;
             TimeFlow = new List<TimeFlowItem>();
-            stepCnt = 0;
-            lastTimeFlowItem = DateTime.Now;
+            _stepCnt = 0;
+            _lastTimeFlowItem = DateTime.Now;
+            AddTimeFlow("ContractToken Created", TimeFlowMedia.MT);
+        }
+        public ContractToken(string msg, TimeFlowMedia media = TimeFlowMedia.MT)
+        {
+            NeedToCheckForDelete = true;
+            CopyFromId = 0;
+            CopyFromObjType = OpDataElementType.CNTRCT;
+            TimeFlow = new List<TimeFlowItem>();
+            _stepCnt = 0;
+            _lastTimeFlowItem = DateTime.Now;
+            _lapTimeFlowItem = null;
+            AddTimeFlow(msg, media);
         }
 
-        private int stepCnt;
-        private DateTime lastTimeFlowItem;
+        private int _stepCnt;
+        private DateTime _lastTimeFlowItem;
+        private DateTime? _lapTimeFlowItem;
 
         public int ContractId { get; set; }
         public int CustId { get; set; }
@@ -27,16 +40,25 @@ namespace Intel.MyDeals.Entities
         public bool NeedToCheckForDelete { get; set; }
         public List<TimeFlowItem> TimeFlow { get; set; }
 
-        public void AddTimeFlow(string title)
+        public void MarkTimeFlow()
+        {
+            _lapTimeFlowItem = DateTime.Now;
+        }
+
+        public void AddTimeFlow(string title, TimeFlowMedia media, string details = null)
         {
             var now = DateTime.Now;
             TimeFlow.Add(new TimeFlowItem
             {
-                StepNum = stepCnt++,
+                StepNum = _stepCnt++,
                 StepTitle = title,
-                MsTiming = (lastTimeFlowItem - now).TotalMilliseconds
+                Media = media,
+                MsLapseTiming = (now - _lastTimeFlowItem).TotalMilliseconds,
+                MsExecutionTiming = _lapTimeFlowItem == null ? 0 : (now - (DateTime)_lapTimeFlowItem).TotalMilliseconds,
+                Details = details ?? ""
             });
-            lastTimeFlowItem = now;
+            _lastTimeFlowItem = now;
+            _lapTimeFlowItem = null;
         }
 
     }

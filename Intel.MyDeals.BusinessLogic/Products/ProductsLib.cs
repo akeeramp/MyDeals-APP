@@ -6,6 +6,7 @@ using System.Linq;
 using Intel.MyDeals.IBusinessLogic;
 using System.Text.RegularExpressions;
 using System;
+using System.Diagnostics;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -231,8 +232,18 @@ namespace Intel.MyDeals.BusinessLogic
 
         public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string DEAL_TYPE)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            if (EN.GLOBAL.DEBUG >= 1)
+            {
+                stopwatch.Start();
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tStart TranslateProducts {1}", stopwatch.Elapsed.TotalMilliseconds, string.Join(", ", prodNames.Select(s => s.USR_INPUT)), DateTime.Now);
+            }
+
             //var prodNames = new List<string>();
             Dictionary<string, string> mediaSubverticalResult = GetVerticalandMedia();
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetVerticalandMedia", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
+
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
             var productsTodb = new List<ProductEntryAttribute>();
             var productLookup = new ProductLookup
@@ -245,10 +256,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             //  Check if any product has alias mapping, this will call cache
             var aliasMapping = GetProductsFromAlias();
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductsFromAlias", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             foreach (var userProduct in prodNames)
             {
                 var products = TransformProducts(userProduct.USR_INPUT);
+
                 var prodTemp = products;
                 foreach (var product in prodTemp.ToList())
                 {
@@ -283,6 +297,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (index != -1)
                             products[index] = finalProdName;
                     }
+
                 }
                 List<ProductEntryAttribute> prodNamesList = new List<ProductEntryAttribute>();
                 foreach (var product in products)
@@ -339,19 +354,35 @@ namespace Intel.MyDeals.BusinessLogic
                     productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
                 }
             }
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished foreach (var userProduct in prodNames)", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             //  Product match master list
             var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, DEAL_TYPE);
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductDetails", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished ExtractValidandDuplicateProducts", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
+
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished TranslateProducts", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             return productLookup;
         }
 
         private Dictionary<string, string> GetVerticalandMedia()
         {
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tStarted GetProductsDetails", DateTime.Now);
+
             List<Product> prds = GetProductsDetails();
+
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductsDetails", DateTime.Now);
+
             var resultMEDIA = (from p in prds
                                group p by p.MM_MEDIA_CD
                           into g
@@ -362,7 +393,12 @@ namespace Intel.MyDeals.BusinessLogic
                                   into g
                                   select new { g.Key }).Distinct();
 
-            return resultMEDIA.Union(resultVERTICAL).Distinct().ToDictionary(d => d.Key, d => d.Key);
+            Dictionary<string, string> rtn = resultMEDIA.Union(resultVERTICAL).Distinct().ToDictionary(d => d.Key, d => d.Key);
+
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tPopulated Dictionary<string, string>", DateTime.Now);
+
+            return rtn;
         }
 
         private string RemoveVerticalAndMedia(string tempProdName, Dictionary<string, string> mediaResult, bool isEPMserach)
@@ -852,11 +888,17 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns type="List<ProductAlias>">List of affected rows</returns>
         public List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data)
         {
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tStarted SetProductAlias", DateTime.Now);
+            
             // Before adding a Alias mapping for a product check if Mydeals has the product
             var product = new List<string>();
             product.Add(data.PRD_NM);
             product.Add(data.PRD_ALS_NM);
             var isValidProduct = _productDataLib.SetProductAlias(mode, data);
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tReturn from DB", DateTime.Now);
+
             if (mode == CrudModes.Insert || mode == CrudModes.Update)
             {
                 if (!isValidProduct.Where(x => x.PRD_NM == data.PRD_NM).Any())
@@ -868,6 +910,9 @@ namespace Intel.MyDeals.BusinessLogic
                     throw new Exception($" \"{data.PRD_ALS_NM}\" is valid product name in MyDeals, this cannot be added as alias name.");
                 }
             }
+
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tFinished SetProductAlias", DateTime.Now);
 
             return isValidProduct;
         }

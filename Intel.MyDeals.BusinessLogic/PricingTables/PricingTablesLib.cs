@@ -447,7 +447,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.CUST_MBR_SID.ATRB_SID
                 });
 
-            ContractToken contractToken = new ContractToken
+            ContractToken contractToken = new ContractToken("ContractToken Created - GetOverlappingDeals")
             {
                 ContractId = 1,
                 NeedToCheckForDelete = false

@@ -40,7 +40,7 @@ namespace Intel.MyDeals.App
             // PERFORMANCE LOGGING - REMEMBER TO SET THIS BACK TO 0 - Find output in VS output window
             // 1 is basic logging
             // 4 is EXTREME VERSBOITY
-            EN.GLOBAL.DEBUG = 2;
+            EN.GLOBAL.DEBUG = 1;
 #endif
 
             OpUserToken user = null;

@@ -68,7 +68,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveContract(int custId, int contractId, OpDataCollectorFlattenedList contracts)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -85,7 +85,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList CopyContract(int custId, int contractId, int srcContractId, OpDataCollectorFlattenedList contracts)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - OpDataCollectorFlattenedDictList")
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -104,7 +104,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveFullContract(int custId, int contractId, bool delPtr, OpDataCollectorFlattenedDictList fullContracts)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -121,7 +121,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
         {
-            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
+            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken("ContractToken Created - SaveContractAndPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -139,7 +139,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
         {
-            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
+            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken("ContractToken Created - SaveAndValidateContractAndPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -157,7 +157,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveAndValidateAndPublishContractAndPricingTable(int custId, int contractId, ContractTransferPacket contractAndPricingTable)
         {
-            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
+            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken("ContractToken Created - SaveAndValidateAndPublishContractAndPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -173,7 +173,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpMsg DeleteContract(int custId, int contractId)
         {
-            return SafeExecutor(() => _contractsLib.DeleteContract(new ContractToken
+            return SafeExecutor(() => _contractsLib.DeleteContract(new ContractToken("ContractToken Created - DeleteContract")
             {
                 CustId = custId,
                 ContractId = contractId

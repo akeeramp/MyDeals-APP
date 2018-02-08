@@ -50,7 +50,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SavePricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SavePricingTable")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -67,7 +67,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveFullPricingTable(int custId, int contractId, OpDataCollectorFlattenedDictList fullpricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, new ContractToken
+            return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, new ContractToken("ContractToken Created - SaveFullPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -82,7 +82,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsg DeletePricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(new ContractToken
+            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(new ContractToken("ContractToken Created - DeletePricingTable")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -97,7 +97,7 @@ namespace Intel.MyDeals.Controllers.API
         public OpMsg RollBackPricingTable(int custId, int contractId, int dcId)
         {
             return SafeExecutor(() => _pricingTablesLib.RollBackObject(OpDataElementType.PRC_TBL,
-                new ContractToken
+                new ContractToken("ContractToken Created - RollBackPricingTable")
                 {
                     CustId = custId,
                     ContractId = contractId
@@ -113,7 +113,7 @@ namespace Intel.MyDeals.Controllers.API
         public OpMsg RollBackPricingTableRow(int custId, int contractId, int dcId)
         {
             return SafeExecutor(() => _pricingTablesLib.RollBackObject(OpDataElementType.PRC_TBL_ROW,
-                new ContractToken
+                new ContractToken("ContractToken Created - RollBackPricingTableRow")
                 {
                     CustId = custId,
                     ContractId = contractId
@@ -129,7 +129,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsgQueue CancelPricingTable(int custId, int contractId, string contractCustAccpt, OpDataCollectorFlattenedList pricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.CancelPricingTable(new ContractToken
+            return SafeExecutor(() => _pricingTablesLib.CancelPricingTable(new ContractToken("ContractToken Created - CancelPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -144,7 +144,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpMsg DeletePricingTableRow(int custId, int contractId, int ptrId)
         {
-            return SafeExecutor(() => _pricingTablesLib.DeletePricingTableRowById(new ContractToken
+            return SafeExecutor(() => _pricingTablesLib.DeletePricingTableRowById(new ContractToken("ContractToken Created - DeletePricingTableRow")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -158,7 +158,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpMsgQueue UnGroupPricingTableRow(int custId, int contractId, int ptrId)
         {
-            return SafeExecutor(() => _pricingTablesLib.UnGroupPricingTableRowById(new ContractToken
+            return SafeExecutor(() => _pricingTablesLib.UnGroupPricingTableRowById(new ContractToken("ContractToken Created - UnGroupPricingTableRow")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -209,7 +209,7 @@ namespace Intel.MyDeals.Controllers.API
             //    CustId = custId,
             //    ContractId = contractId
             //}, actnPs);
-            return SafeExecutor(() => _pricingTablesLib.ActionWipDeals(new ContractToken
+            return SafeExecutor(() => _pricingTablesLib.ActionWipDeals(new ContractToken("ContractToken Created - ActionWipDeals")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -273,7 +273,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList CopyPricingTable(int custId, int contractId, int srcId, OpDataCollectorFlattenedList data)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - CopyPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId,

@@ -6,7 +6,7 @@ namespace Intel.MyDeals.Entities
     {
         public SavePacket()
         {
-            MyContractToken = new ContractToken();
+            MyContractToken = new ContractToken("SavePacket Created");
             ValidateIds = new List<int>();
             SourceEvent = string.Empty;
         }

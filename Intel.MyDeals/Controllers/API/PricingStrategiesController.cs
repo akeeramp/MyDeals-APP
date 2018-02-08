@@ -53,7 +53,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SavePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -71,7 +71,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, int contractId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(new ContractToken
+            return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(new ContractToken("ContractToken Created - SaveFullPricingStrategy")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -87,7 +87,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsg DeletePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(new ContractToken
+            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(new ContractToken("ContractToken Created - DeletePricingStrategy")
             {
                 CustId = custId,
                 ContractId = contractId
@@ -102,7 +102,7 @@ namespace Intel.MyDeals.Controllers.API
         public OpMsg RollBackPricingStrategy(int custId, int contractId, int dcId)
         {
             return SafeExecutor(() => _pricingStrategiesLib.RollBackObject(OpDataElementType.PRC_ST, 
-                new ContractToken
+                new ContractToken("ContractToken Created - RollBackPricingStrategy")
                 {
                     CustId = custId,
                     ContractId = contractId
@@ -118,7 +118,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsgQueue CancelPricingStrategy(int custId, int contractId, string contractCustAccpt, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.CancelPricingStrategy(new ContractToken
+            return SafeExecutor(() => _pricingStrategiesLib.CancelPricingStrategy(new ContractToken("ContractToken Created - CancelPricingStrategy")
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -155,8 +155,8 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsgQueue ActionPricingStrategies(int custId, int contractId, string contractCustAccpt, Dictionary<string, List<WfActnItem>> actnPs)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(new ContractToken
-                {
+            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(new ContractToken("ContractToken Created - ActionPricingStrategies")
+            {
                     CustId = custId,
                     ContractId = contractId,
                     CustAccpt = contractCustAccpt
@@ -171,7 +171,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList CopyPricingStrategy(int custId, int contractId, int srcId, OpDataCollectorFlattenedList data)
         {
-            SavePacket savePacket = new SavePacket(new ContractToken
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - OpDataCollectorFlattenedDictList")
             {
                 CustId = custId,
                 ContractId = contractId,
