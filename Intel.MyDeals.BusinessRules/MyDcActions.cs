@@ -1208,7 +1208,7 @@ namespace Intel.MyDeals.BusinessRules
 			// Get number of "tiers" from product, since we don't save NUM_OF_TIERS
 			IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
 			if (deNumTiers == null) return;
-			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
+			int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;      //TODO: Investigate - isn't it possible for the user to use separators other than ","?
 
 			numOfTiers += 1; // Note that KIT ECAP is ECAP of tier -1
 			int tierOffset = 2; // Note that the offset is now 2 to account for KIT ECAPs at tier -1
@@ -1270,11 +1270,77 @@ namespace Intel.MyDeals.BusinessRules
 					var excludingKitOffset = tierOffset - 1; // Kit offset, but not including "-1" for KIT ecap rows
 					if (tier >= (1 - excludingKitOffset) && tier <= (numOfTiers - excludingKitOffset))
 					{
-						AddTierValidationMessage(atrbWithValidation, "KIT Rebate must be equal to sum of total discount per line.", tier);
+						AddTierValidationMessage(atrbWithValidation, "KIT Rebate must be equal to KIT sum of total discount per line.", tier);
 					}
 				}
 			}
 		}
+
+        public static void ValidateSubKitRebateBundleDiscount(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement hasSubkitDe = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.HAS_SUBKIT.ToString()).FirstOrDefault();
+            string hasSubkit = hasSubkitDe.AtrbValue.ToString();
+
+            if (hasSubkit == "0") return;
+            
+            IEnumerable<IOpDataElement> tieredObjs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString());
+            IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+
+            decimal subkitEcap = 0; // SUBKIT ECAP = tier of "-2"
+            decimal subkitStandaloneSum = 0; // SUBKIT Standalone Sum = sum of Primary and Secondary1 Ecaps
+            decimal totalDiscountsSum = 0;
+
+            // Get SUBKIT ecap sum
+            foreach (IOpDataElement tieredObj in tieredObjs)
+            {
+                if (tieredObj.DimKey.Count > 0)
+                {
+                    int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
+                    if (tier == -2 || tier == 0 || tier == 1)   // subkit OR primary OR secondary1
+                    {
+                        IOpDataElement ecapPrice = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
+                        IOpDataElement qty = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
+                        IOpDataElement discountPerLine = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
+
+                        decimal ecapPriceSafeParse = 0;
+                        decimal qtySafeParse = 0;
+                        decimal discountSafeParse = 0;
+
+                        if (ecapPrice == null || qty == null || discountPerLine == null)
+                        {
+                            return;
+                        }
+
+                        Decimal.TryParse(ecapPrice.AtrbValue.ToString(), out ecapPriceSafeParse);
+                        Decimal.TryParse(qty.AtrbValue.ToString(), out qtySafeParse);
+                        Decimal.TryParse(discountPerLine.AtrbValue.ToString(), out discountSafeParse);
+
+                        if (tier == -2)
+                        {
+                            // Only SubKit Ecap is tier of -2
+                            subkitEcap = ecapPriceSafeParse;
+                        }
+                        else
+                        {
+                            // Any other tier, namely Primary and Secondary1
+                            subkitStandaloneSum += ecapPriceSafeParse;
+
+                            // Calcuate total discount per line
+                            totalDiscountsSum += (qtySafeParse * discountSafeParse);
+                        }
+                    }
+                }
+            }
+            // SUBKIT ECAP must = (sum of total dicount per line * Qty ) of subkit eligible products BUT ONLY if there is a subkit rebate and only if total discount per line values is > 0
+            if (totalDiscountsSum > 0 && subkitStandaloneSum != subkitEcap && subkitStandaloneSum - subkitEcap != totalDiscountsSum)
+            {
+                AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 0);     //Assumption: Subkit Consists of Primary and Secondary1 Products
+                AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 1);     //Assumption: Subkit Consists of Primary and Secondary1 Products
+            }
+        }
 
         public static void CheckTenderSettings(params object[] args)
         {

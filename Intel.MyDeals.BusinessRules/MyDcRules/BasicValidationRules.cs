@@ -547,8 +547,16 @@ namespace Intel.MyDeals.BusinessRules
 					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-				}
-			};
+				},
+                new MyOpRule
+                {
+                    Title="SUBKIT ECAP equal to total discounts per line check",
+                    ActionRule = MyDcActions.ValidateSubKitRebateBundleDiscount,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                }
+            };
         }
     }
 }
