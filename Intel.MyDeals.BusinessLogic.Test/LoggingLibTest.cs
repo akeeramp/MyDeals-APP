@@ -110,7 +110,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             msgList.Add(msg);
 
             // ACT
-            bool insertResult = new LoggingLib(mockLoggingDataLib.Object).UploadDbLogPerfLogs(msgList).Result;
+            bool insertResult = new LoggingLib(mockLoggingDataLib.Object).UploadDbLogPerfLogs(msgList);
 
             // Assert
             Assert.IsTrue(
