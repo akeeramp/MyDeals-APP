@@ -32,6 +32,7 @@
         var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
         var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
         var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || (window.usrRole === "SA" && window.isSuper);
+        var hasRetailPullPermissionPrice = (hasPermissionPrice || (window.usrRole === "GA" && window.isSuper));
 
         $timeout(function () {
             $("#dealTypeDiv").removeClass("active");
@@ -644,7 +645,7 @@
                 width: "140px",
                 format: "{0:c}",
                 template: "#= (RTL_PULL_DLR == null) ? ' ' : kendo.toString(RTL_PULL_DLR, 'c') #",
-                hidden: !hasPermissionPrice,
+                hidden: !hasRetailPullPermissionPrice,
                 parent: false,
                 filterable: { multi: true, search: true },
             },
