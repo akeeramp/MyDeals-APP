@@ -144,16 +144,14 @@
                 }
             }
 
-            //var passedItems = $linq.Enumerable().From($scope.contractData.PRC_ST).Where(
-            //    function (x) {
-            //        if (x.PRC_TBL === undefined) return false;
-            //        var passedPtItems = $linq.Enumerable().From(x.PRC_TBL).Where(
-            //            function (x) {
-            //                return (x.PASSED_VALIDATION === "Complete");
-            //            }).ToArray();
-            //        return passedPtItems;
-            //    }).ToArray();
             return passedItems.length > 0;
+        }
+
+        $scope.showMeetCompTitle = function () {
+            return $scope.enableFlowBtn() ? "" : "Please click the Deal Editor in order to validate your deals before entering Meet Comp Data.";
+        }
+        $scope.showManageTitle = function () {
+            return $scope.enableFlowBtn() ? "" : "Please click the Deal Editor in order to validate your deals.";
         }
 
         $scope.removeDimKeyFromWipTemplates = function () {
