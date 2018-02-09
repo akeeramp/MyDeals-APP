@@ -27,13 +27,13 @@
     <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Date Range:</div>
 
     <select class="fr opUiContainer md"
-            kendo-combo-box
+            kendo-multi-select
             k-options="selectCustomerOptions"
-            k-ng-model="selectedCustomerId"
+            k-ng-model="selectedCustomerIds"
             k-change="refreshAllWidgets"
             k-value-primitive="true"
             style="width: 250px;"></select>
-    <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
+    <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;" title="{{custTitle()}}">Customers: <i class="intelicon-find-a-person-solid" style="font-size: 24px; "></i></div>
 
     <!--
     <select class="form-control input-sm k-input fr"

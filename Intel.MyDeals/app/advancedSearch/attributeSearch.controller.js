@@ -470,11 +470,34 @@
             }
         };
 
+        $scope.$storage = $localStorage;
+
+        $scope.$storage = $localStorage.$default({
+            startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
+            endDate: moment().add(6, 'months').format("MM/DD/YYYY")
+        });
+
+        // init dashboard
+        $scope.startDt = $scope.$storage.startDate;
+        $scope.endDt = $scope.$storage.endDate;
+        $scope.customers = []; //$scope.$storage.selectedCustomerIds;
+        $scope.searchText = "";
+
         $scope.customersDataSource = new kendo.data.DataSource({
             transport: {
                 read: {
                     url: "/api/Customers/GetMyCustomersNameInfo",
                     dataType: "json"
+                }
+            },
+            requestEnd: function (e) {
+                if ($scope.$storage.selectedCustomerIds === undefined || $scope.$storage.selectedCustomerIds.length === 0) return;
+
+                var data = e.response;
+                for (var d = 0; d < data.length; d++) {
+                    if ($scope.$storage.selectedCustomerIds.indexOf(data[d].CUST_SID) >= 0) {
+                        $scope.customers.push(data[d].CUST_NM);
+                    }
                 }
             }
         });
@@ -487,19 +510,11 @@
         }
 
         $scope.showCustomers = function () {
-            var custNames = $linq.Enumerable().From($scope.customers)
-                    .Select(function (x) {
-                        return (x.CUST_NM);
-                    }).ToArray();
-            return custNames.join(", ");
+            if ($scope.customers === undefined) return "";
+
+            return $scope.customers.join(", ");
         }
 
-        $scope.$storage = $localStorage;
-
-        $scope.$storage = $localStorage.$default({
-            startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
-            endDate: moment().add(6, 'months').format("MM/DD/YYYY")
-        });
 
         $scope.$on('invoke-search-datasource', function (event, args) {
             $scope.ruleData = args.rule;
@@ -510,11 +525,6 @@
             $scope.$broadcast('reload-search-rules', args);
         });
         
-        // init dashboard
-        $scope.startDt = $scope.$storage.startDate;
-        $scope.endDt = $scope.$storage.endDate;
-        $scope.customers = [];
-        $scope.searchText = "";
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;

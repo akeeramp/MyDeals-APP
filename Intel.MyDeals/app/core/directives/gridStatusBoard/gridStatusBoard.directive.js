@@ -7,7 +7,7 @@ gridStatusBoard.$inject = ['$compile', 'objsetService', '$timeout'];
 function gridStatusBoard($compile, objsetService, $timeout) {
     return {
         scope: {
-            custId: '=',
+            custIds: '=',
             startDt: '=',
             endDt: '=',
             favContractIds: '='
@@ -22,7 +22,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             $scope.stageCnt = 0;
             $scope.favCount = 0;
             $scope.alertCount = 0;
-            var activeFilter = 'All'
+            var activeFilter = 'All';
 
             // Construct the fav contract id map
             var favContractsMap = {};
@@ -68,7 +68,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         },
                         data: function () {
                             return {
-                                "CustomerIds": [$scope.custId],
+                                "CustomerIds": $scope.custIds,
                                 "StartDate": $scope.startDt,
                                 "EndDate": $scope.endDt
                             };
@@ -221,7 +221,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
 
             $scope.$on('refresh', function (event, args) {
                 var scope = event.currentScope;
-                scope.custId = args.custId;
+                scope.custIds = args.custIds;
                 scope.startDt = args.startDate;
                 scope.endDt = args.endDate;
                 scope.initDsLoaded = false;

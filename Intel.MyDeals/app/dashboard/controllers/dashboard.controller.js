@@ -9,14 +9,14 @@
 
 
 SetRequestVerificationToken.$inject = ['$http'];
-DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService'];
+DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService', '$linq'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
 
-function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService) {
+function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService, $linq) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
@@ -24,14 +24,14 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         selectedDashboardId: '1',
         startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
         endDate: moment().add(6, 'months').format("MM/DD/YYYY"),
-        selectedCustomerId: ''
+        selectedCustomerIds: []
     });
 
     // init dashboard
     $scope.selectedDashboardId = $scope.$storage.selectedDashboardId;
     $scope.startDate = $scope.$storage.startDate;
     $scope.endDate = $scope.$storage.endDate;
-    $scope.selectedCustomerId = $scope.$storage.selectedCustomerId;
+    $scope.selectedCustomerIds = $scope.$storage.selectedCustomerIds;
     $scope.favContractIds = "";
 
     $scope.C_CREATE_CONTRACT = securityService.chkDealRules('C_CREATE_CONTRACT', window.usrRole, null, null, null);
@@ -50,10 +50,26 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         dataTextField: "CUST_NM",
         dataValueField: "CUST_SID",
         valuePrimitive: true,
+        tagMode: "single",
         autoBind: false,
         autoClose: false,
         dataSource: $scope.custDs
     };
+    $scope.custTitle = function () {
+        var custData = $scope.custDs.data();
+        if (custData.length === 0) return "";
+
+        var custNms = $linq.Enumerable().From(custData).Where(
+            function (x) {
+                return ($scope.selectedCustomerIds.indexOf(x.CUST_SID) >= 0);
+            })
+            .Select(
+            function(x) {
+                return x.CUST_NM;
+            }).ToArray();
+
+        return custNms.join(", ");
+    }
 
     // **** LEFT NAVIGATION Methods ****
     //
@@ -180,7 +196,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
 
     $scope.refreshSingleWidget = function (widget) {
         // TODO::TJE - By broadcasting like this, widgets other than the one the one that that 'refresh' button was pressed for might get refreshed.
-        this.broadcastRefresh({ "selectedDashboardId": $scope.$storage.selectedDashboardId, "selectedCustomerId": $scope.$storage.selectedCustomerId, "startDate": $scope.$storage.startDate, "endDate": $scope.$storage.endDate });
+        this.broadcastRefresh({ "selectedDashboardId": $scope.$storage.selectedDashboardId, "selectedCustomerIds": $scope.$storage.selectedCustomerIds, "startDate": $scope.$storage.startDate, "endDate": $scope.$storage.endDate });
 
         // If the widget has a refreshEvent, call it.
         if (widget.refreshEvent != null)
@@ -216,10 +232,9 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             $scope.$storage.selectedDashboardId = scope.selectedDashboardId;
             $scope.$storage.startDate = scope.startDate;
             $scope.$storage.endDate = scope.endDate;
-            $scope.$storage.selectedCustomerId = scope.selectedCustomerId;
-
+            $scope.$storage.selectedCustomerIds = scope.selectedCustomerIds;
             // Broadcast 'refresh' event out to subscribers.
-            $rootScope.$broadcast('refresh', { "custId": scope.selectedCustomerId, "startDate": scope.startDate, "endDate": scope.endDate });
+            $rootScope.$broadcast('refresh', { "custIds": scope.selectedCustomerIds, "startDate": scope.startDate, "endDate": scope.endDate });
         }, 200);
     }
 
@@ -314,19 +329,25 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         $scope.copyCntrctCustomerName = '<All>';
         dataService.get("api/Customers/GetMyCustomerNames")
             .then(function (response) {
+                var custNms = [];
                 for (var i = 0; i < response.data.length; i++) {
-                    if (response.data[i].CUST_SID == $scope.$storage.selectedCustomerId) {
-                        $scope.copyCntrctCustomerName = response.data[i].CUST_NM;
-                        break;
+                    if ($scope.$storage.selectedCustomerIds.indexOf(response.data[i].CUST_SID) >= 0) {
+                        custNms.push(response.data[i].CUST_NM);
                     }
                 }
+                $scope.copyCntrctCustomerName = custNms.length === 0
+                    ? "All"
+                    : custNms.length > 4
+                        ? custNms.length + " customers selected"
+                        : custNms.join(", ");
             }, function (response) {
                 logger.error("Unable to GetMyCustomerNames.", response, response.statusText);
             });
 
         // Set $scope.copyCntrctList, then update the grid on the copy contract dialog.
+        debugger;
         var postData = {
-            "CustomerIds": [$scope.$storage.selectedCustomerId],
+            "CustomerIds": $scope.$storage.selectedCustomerIds,
             "StartDate": $scope.$storage.startDate,
             "EndDate": $scope.$storage.endDate
         };
@@ -379,7 +400,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         // Set the dlg properites.
         $scope.copyCntrctDlg.kendoDialog({
             width: "800px",
-            height: "600px",
+            height: "620px",
             title: "Select Contract to Create a Copy from",
             closable: false,
             modal: true
