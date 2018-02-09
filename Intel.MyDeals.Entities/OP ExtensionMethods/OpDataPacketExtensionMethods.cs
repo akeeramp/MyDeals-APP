@@ -51,8 +51,15 @@ namespace Intel.MyDeals.Entities
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
                 .Select(d => d.DcID).ToList();
 
+            // Also check Tender changes to Won
+            List<int> wonTenderIds = testPacket.AllDataElements
+                .Where(d => d.AtrbCdIs(AttributeCodes.BID_STATUS) && d.AtrbValue.ToString() == "Won" && d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Select(d => d.DcID).ToList();
+
+            majorDealIds.AddRange(wonTenderIds);
+
             List<int> minorDealIds = testPacket.AllDataElements
-                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged && !wonTenderIds.Contains(d.DcID) && (!dealIds.Any() || dealIds.Contains(d.DcID)))
                 .Select(d => d.DcID).ToList();
 
             if (majorDealIds.Any()) // 
