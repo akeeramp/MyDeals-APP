@@ -1,5 +1,4 @@
-﻿using Intel.MyDeals.BusinessLogic;
-using Intel.MyDeals.Entities.Logging;
+﻿using Intel.MyDeals.Entities.Logging;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
@@ -37,7 +36,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 // Don't use LogPerf here to avoid infinite loop
                 System.Diagnostics.Debug.WriteLine(ex);
-				return false;
+                return false;
             }
         }
 

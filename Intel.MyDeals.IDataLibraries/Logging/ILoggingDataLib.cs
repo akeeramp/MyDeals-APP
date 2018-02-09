@@ -1,6 +1,7 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Intel.MyDeals.IDataLibrary
 {
@@ -8,6 +9,6 @@ namespace Intel.MyDeals.IDataLibrary
     {
         LogConfig GetLogConfig();
 
-        bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
+        Task<bool> UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
     }
 }

@@ -27,7 +27,7 @@ namespace Intel.MyDeals
             UnityConfig.RegisterComponents();
             AppHelper.SetupDataAccessLib();
 
-            AntiForgeryConfig.SuppressXFrameOptionsHeader = true;            
+            AntiForgeryConfig.SuppressXFrameOptionsHeader = true;
             // Init log writers
             OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
 
@@ -46,12 +46,11 @@ namespace Intel.MyDeals
             };
 
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(dateTimeConverter);
-            
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            HttpContext.Current.Response.AddHeader("x-frame-options", "DENY");            
+            HttpContext.Current.Response.AddHeader("x-frame-options", "DENY");
         }
 
         private void Application_Error(Object sender, EventArgs e)
@@ -76,18 +75,18 @@ namespace Intel.MyDeals
 
             ((IController)controller).Execute(errCon.RequestContext);
         }
-		
-	    protected void Application_End()
-		{
-			LoggingLib loglib = new LoggingLib();
 
-			// Upload db logs
-			foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
-			{
-				loglib.UploadDbLogPerfLogs(perf.LogStack);
-				perf.Clear();
-			}
-		}
+        protected void Application_End()
+        {
+            LoggingLib loglib = new LoggingLib();
+
+            // Upload db logs
+            foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
+            {
+                loglib.UploadDbLogPerfLogs(perf.LogStack);
+                perf.Clear();
+            }
+        }
 
         public class MyDateTimeConvertor : DateTimeConverterBase
         {
@@ -98,12 +97,12 @@ namespace Intel.MyDeals
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                DateTime date = (DateTime)value; 
+                DateTime date = (DateTime)value;
                 if ((DateTime)value == DateTime.MinValue)
                 {
                     date = new DateTime(1900, 1, 1, 0, 0, 0, 0);
                 }
-                
+
                 string strDate = ((date.Hour == 0 && date.Minute == 0) || (date.Hour == 23 && date.Minute == 59))
                     ? $"{date.Month}/{date.Day}/{date.Year}"
                     : $"{date.Month}/{date.Day}/{date.Year} {date.Hour}:{date.Minute}:{date.Second}.{date.Millisecond}";

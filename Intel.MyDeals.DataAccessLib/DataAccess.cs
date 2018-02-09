@@ -6,13 +6,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Intel.Opaque;
+using System.Threading.Tasks;
 
 namespace Intel.MyDeals.DataAccessLib
 {
     public class DataAccess
     {
         #region Private Members
-        
+
         private const string DefaultApp = "MyDeals";
 
         public static string ConnectionString { get; set; }
@@ -23,7 +24,7 @@ namespace Intel.MyDeals.DataAccessLib
 
         public static string ConnectionDetails => Instance.ToString();
 
-        #endregion
+        #endregion Private Members
 
         #region Public Methods
 
@@ -33,7 +34,7 @@ namespace Intel.MyDeals.DataAccessLib
         {
             get
             {
-                if (_commandTimeout != null) return (int) _commandTimeout;
+                if (_commandTimeout != null) return (int)_commandTimeout;
 
                 const int defaultTimeout = 240;
                 string strDbTo = defaultTimeout.ToString();
@@ -67,21 +68,26 @@ namespace Intel.MyDeals.DataAccessLib
                 _commandTimeout = value;
             }
         }
-        private static int? _commandTimeout;
 
+        private static int? _commandTimeout;
 
         public static void ClearCache()
         {
             _commandTimeout = null;
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Execute SP Methods
 
         public static SqlDataReader ExecuteReader(SP proc)
         {
             return Instance.ExecuteReader(proc);
+        }
+
+        public static Task<SqlDataReader> ExecuteReaderAsync(SP proc)
+        {
+            return Instance.ExecuteReaderAsync(proc);
         }
 
         public static object ExecuteScalar(SP proc)
@@ -99,9 +105,9 @@ namespace Intel.MyDeals.DataAccessLib
             return Instance.ExecuteDataSet(proc);
         }
 
-        public static DataSet ExecuteDataSet(SP proc,int timeOut)
+        public static DataSet ExecuteDataSet(SP proc, int timeOut)
         {
-            return Instance.ExecuteDataSet(proc,timeOut);
+            return Instance.ExecuteDataSet(proc, timeOut);
         }
 
         /// <summary>
@@ -126,7 +132,7 @@ namespace Intel.MyDeals.DataAccessLib
             return Instance.ExecuteXML(proc, compress);
         }
 
-        #endregion
+        #endregion Execute SP Methods
 
         ///// <summary>
         ///// Write a message to the database logging tables.
@@ -179,7 +185,7 @@ namespace Intel.MyDeals.DataAccessLib
         //{
         //    WriteToEventViewer(callingFunction, message, DefaultApp, EventLogEntryType.Error, DefaultApp);
         //}
-        
+
         ///// <summary>
         ///// Write a message to the windows event log
         ///// </summary>
@@ -215,6 +221,5 @@ namespace Intel.MyDeals.DataAccessLib
         //    }
 
         //}
-
     }
 }

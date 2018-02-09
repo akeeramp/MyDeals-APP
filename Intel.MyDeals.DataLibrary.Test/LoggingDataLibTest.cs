@@ -4,16 +4,15 @@ using System;
 using Intel.MyDeals.Entities.Logging;
 using System.Collections.Generic;
 
-
 namespace Intel.MyDeals.DataLibrary.Test
 {
     [TestFixture]
     public class LoggingDataLibTests
     {
-		/// <summary>
-		/// Runs before the current test fixture
-		/// </summary>
-		[OneTimeSetUp]
+        /// <summary>
+        /// Runs before the current test fixture
+        /// </summary>
+        [OneTimeSetUp]
         public void SetupUserAndDatabase()
         {
             Console.WriteLine("Started Logging Library Tests.");
@@ -26,55 +25,55 @@ namespace Intel.MyDeals.DataLibrary.Test
         {
             Console.WriteLine("Completed Logging Library Tests.");
         }
-		
-		[TestCase]
-		public void GetLogConfig()
-		{
-			// Arrange, Act
-			LogConfig logConfig = new LoggingDataLib().GetLogConfig();
 
-			// Assert
-			Assert.IsNotNull(logConfig.MsgSrc);
-		}
+        [TestCase]
+        public void GetLogConfig()
+        {
+            // Arrange, Act
+            LogConfig logConfig = new LoggingDataLib().GetLogConfig();
 
-		[TestCase]
-		public void UploadDbLogPerfLogs()
-		{
-			// Arrange
-			string testString = "UNIT TEST - UploadDbLogPerfLogs";
-			string testStringShort = "UI UNIT TEST";
-			DateTime now = DateTime.UtcNow;
-			var user = OpUserStack.MyOpUserToken.Usr;
+            // Assert
+            Assert.IsNotNull(logConfig.MsgSrc);
+        }
 
-			DbLogPerfMessage msg = new DbLogPerfMessage
-			{
-				STEP = 0
-				, LOG_DTM = now
-				, LGN_NM = user.Idsid
-				, USR_NM = user.FullName
-				, CLNT_MCHN_NM = testStringShort
-				, SRVR = testStringShort
-				, MSG_SRC = testStringShort
-				, MTHD = testString
-				, MSG = testString
-				, STRT_DTM = now
-				, END_DTM = DateTime.MaxValue
-				, REC_CNT = 1
-				, THRD_ID = 0
-				, IS_ZIP = 0
-				, ERR_MSG = false
-				, RuntimeMs = 0
-			};
-			List<DbLogPerfMessage> msgList = new List<DbLogPerfMessage>();
-			msgList.Add(msg);
+        [TestCase]
+        public void UploadDbLogPerfLogs()
+        {
+            // Arrange
+            string testString = "UNIT TEST - UploadDbLogPerfLogs";
+            string testStringShort = "UI UNIT TEST";
+            DateTime now = DateTime.UtcNow;
+            var user = OpUserStack.MyOpUserToken.Usr;
 
-			// Act
-			bool insertResult =  new LoggingDataLib().UploadDbLogPerfLogs(msgList);
+            DbLogPerfMessage msg = new DbLogPerfMessage
+            {
+                STEP = 0,
+                LOG_DTM = now,
+                LGN_NM = user.Idsid,
+                USR_NM = user.FullName,
+                CLNT_MCHN_NM = testStringShort,
+                SRVR = testStringShort,
+                MSG_SRC = testStringShort,
+                MTHD = testString,
+                MSG = testString,
+                STRT_DTM = now,
+                END_DTM = DateTime.MaxValue,
+                REC_CNT = 1,
+                THRD_ID = 0,
+                IS_ZIP = 0,
+                ERR_MSG = false,
+                RuntimeMs = 0
+            };
+            List<DbLogPerfMessage> msgList = new List<DbLogPerfMessage>();
+            msgList.Add(msg);
 
-			// Assert
-			Assert.IsTrue(
-				insertResult = true
-			);
-		}
-	}
+            // Act
+            bool insertResult = new LoggingDataLib().UploadDbLogPerfLogs(msgList).Result;
+
+            // Assert
+            Assert.IsTrue(
+                insertResult = true
+            );
+        }
+    }
 }

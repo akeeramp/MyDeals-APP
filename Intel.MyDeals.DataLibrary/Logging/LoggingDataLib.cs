@@ -5,8 +5,8 @@ using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
@@ -42,46 +42,33 @@ namespace Intel.MyDeals.DataLibrary
             return ret.FirstOrDefault();
         }
 
-
-		/// <summary>
-		/// Saves a List of log data to db 
-		/// </summary>
-		public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
-		{
-			if (messages == null || !messages.Any()) { return false; }
-
-
-            // FOR NOW... TURNING OF PERF LOGGING
-		    // return false;
-
-
-
+        /// <summary>
+        /// Saves a List of log data to db,
+        /// Called from DbLogPerf asynchronously
+        /// </summary>
+        public async Task<bool> UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
+        {
+            if (messages == null || !messages.Any()) { return false; }
 
             t_db_log dt = new t_db_log(3000);
 
-			dt.AddRows(messages, messages.Count());
+            dt.AddRows(messages, messages.Count());
 
-            DataSet dsCheckConstraintErrors = null;
             var ret = new List<AdminApplications>();
             try
-            {				
-				Procs.dbo.PR_INS_DB_LOG_BULK cmd = new Procs.dbo.PR_INS_DB_LOG_BULK()
+            {
+                Procs.dbo.PR_INS_DB_LOG_BULK cmd = new Procs.dbo.PR_INS_DB_LOG_BULK()
                 {
                     in_db_log = dt,
                     in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
-
-				DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);
-				return true;
-			}
-			catch (Exception)
-			{
-				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
-				{
-					// DO SOME ERROR HANDLING
-				}
-				throw;
-			}
-		}		
-	}
+                await DataAccess.ExecuteReaderAsync(cmd);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+    }
 }
