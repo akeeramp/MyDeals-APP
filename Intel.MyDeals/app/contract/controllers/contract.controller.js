@@ -3811,6 +3811,14 @@
         }
 
         $scope.gotoDealEntry = function () {
+            //we reset any PS/PT/WIP specific information to remove unnecessary highlights or headers - perhaps this should be kept in the $scope.goto function instead? 
+            $scope.curPricingStrategyId = 0;
+            $scope.curPricingStrategy = {};
+            $scope.curPricingTable = {};
+            $scope.curPricingTableId = 0;
+            $scope.isPtr = false;
+            $scope.isWip = false;
+
             $scope.goto('Deal Entry', 'contract.manager');
         }
         $scope.gotoCompliance = function () {
