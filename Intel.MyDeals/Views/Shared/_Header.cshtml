@@ -152,7 +152,7 @@
                         <li><a href="Admin#/cache">Cache Manager</a></li>
                         <li><a href="Admin#/constants">Constants</a></li>
                     }
-                    @if (isSuper || isTester || isDeveloper)
+                    @if (isAdmin || isTester || isDeveloper)
                     {
                         <li><a href="Admin#/customers">Customer</a></li>
                         <li><a href="Admin#/geo">Geo</a></li>
@@ -162,7 +162,7 @@
                         <li><a href="Admin#/meetcomp">Meet Comp</a></li>
                     }
 
-                    @if (isSuper || isTester || isDeveloper)
+                    @if (isAdmin || isTester || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Products</a>
@@ -187,7 +187,7 @@
                         </li>
                     }
 
-                    @if (isSuper || isDeveloper)
+                    @if (isAdmin || isDeveloper)
                     {
                         <li><a href="Admin#/dropdowns">UI Control Values</a></li>
                     }
