@@ -78,6 +78,10 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_REASON_CMNT,
                                 AttributeCodes.BACK_DATE_RSN_TXT,
                                 AttributeCodes.BACK_DATE_RSN,
+                                AttributeCodes.TIER_NBR,
+                                AttributeCodes.STRT_VOL,
+                                AttributeCodes.END_VOL,
+                                AttributeCodes.RATE,
                                 AttributeCodes.TERMS }
                         }
                     }
