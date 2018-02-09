@@ -81,6 +81,10 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.TIER_NBR,
                                 AttributeCodes.STRT_VOL,
                                 AttributeCodes.END_VOL,
+                                AttributeCodes.TOTAL_DOLLAR_AMOUNT,
+                                AttributeCodes.ADJ_ECAP_UNIT,
+                                AttributeCodes.USER_AVG_RPU,
+                                AttributeCodes.USER_MAX_RPU,
                                 AttributeCodes.RATE,
                                 AttributeCodes.TERMS }
                         }
