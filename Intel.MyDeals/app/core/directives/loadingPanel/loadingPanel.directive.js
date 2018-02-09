@@ -62,11 +62,11 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-eye"
 				},
 				{
-					"Description": "Dogs' sense of smell is about 100,000 times stronger than humans', but they have just one-sixth our number of taste buds.",
+					"Description": "Dogs' sense of smell are about 100,000 times stronger than humans', but they have only one-sixth the number of taste buds.",
 					"FontAwesomeIcon": "fa-paw"
 				},
 				{
-					"Description": 'A supercolony of invasive Argentine ants, known as the "California large," covers 560 miles of the U.S. West Coast. It is currently engaged in a turf war with a nearby supercolony in Mexico.',
+					"Description": 'A supercolony of invasive Argentine ants, known as the "California large," covers 560 miles of the U.S. West Coast. The colony is currently engaged in a turf war with a nearby supercolony in Mexico.',
 					"FontAwesomeIcon": "fa-bug"
 				},
 				{
@@ -86,7 +86,7 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-hourglass"
 				},
 				{
-					"Description": 'Reindeer eyeballs turn blue in winter to help them see at lower light levels.',
+					"Description": "In winter, a Reindeer's eyeballs will turn blue. This helps them see at lower light levels.",
 					"FontAwesomeIcon": "fa-eye"
 				},
 				{
@@ -94,7 +94,7 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-graduation-cap"
 				},
 				{
-					"Description": 'Sharks kill fewer than 10 people per year. Humans kill about 100 million sharks per year.',
+					"Description": 'Sharks kill less than 10 people per year. Humans kill about 100 million sharks per year.',
 					"FontAwesomeIcon": "fa-tint"
 				},
 				{
@@ -109,7 +109,7 @@ function loadingPanel() {
 					"Description": "A giraffe's age can be calculated from its spots. The darker the spots, the older the giraffe."
 				},
 				{
-					"Description": 'If a Sun Bear is grabbed or bitten on its head, it can turn round inside the wrinkly skin on its head to bite the predator.',
+					"Description": 'If a Sun Bear is grabbed or bitten on its head, it can turn around using the wrinkly skin on its head to bite the predator.',
 					"FontAwesomeIcon": "fa-paw"
 				},
 				{
@@ -125,15 +125,15 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-tint"
 				},
 				{
-					"Description": 'A shark can see through in the cloudy water because of a particular membrane present in its eye called tapetum lucidum. This feature helps sharks prey in murky water.',
+					"Description": 'A shark can see through in the cloudy water because of a particular membrane in its eye called tapetum lucidum. This membrane helps them hunt in murky water.',
 					"FontAwesomeIcon": "fa-eye"
 				},
 				{
-					"Description": 'Sharks have very keen sense of hearing. It is proved by researchers that they can hear low pitch sound better below the range of human hearing.',
+					"Description": 'Sharks have very keen sense of hearing. They can hear low pitch sounds below the range of human hearing.',
 					"FontAwesomeIcon": "fa-headphones"
 				},
 				{
-					"Description": "Blue whales are the loudest mammals, producing low-frequency pulses that can be heard from more than 500 miles (800 km) away.",
+					"Description": "Blue whales are the loudest mammals. They can produce low-frequency pulses that can be heard from more than 500 miles (800 km) away.",
 					"FontAwesomeIcon": "fa-volume-up"
 				},
 				{
@@ -161,7 +161,7 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-film"
 				},
 				{
-					"Description": "Mary Kenneth Keller, the first woman to earn a Ph.D. in Computer Science in the United States also earned a Master’s degree in Mathematics and Physics, helped develop computer programming languages and she was a Catholic nun.",
+					"Description": "Mary Kenneth Keller was the first woman to earn a Ph.D. in Computer Science in the United States and also earned a Master’s degree in Mathematics and Physics. She helped develop computer programming languages and she was a Catholic nun.",
 					"FontAwesomeIcon": "fa-trophy"
 				},
 				{
