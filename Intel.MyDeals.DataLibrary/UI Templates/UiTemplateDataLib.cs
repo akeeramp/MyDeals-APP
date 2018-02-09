@@ -587,6 +587,14 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3348,
+                AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 180
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 39,
                 AtrbCd = AttributeCodes.GEO_COMBINED,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
