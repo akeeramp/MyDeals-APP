@@ -181,7 +181,17 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         bool exists = incomingPrds.Exists(prd => prd.Key == dePrd.AtrbCd + dePrd.DimKeyString.AtrbCdDimKeySafe());
                         if (!exists && dePrd.AtrbValue.ToString() != string.Empty)
-                            dePrd.AtrbValue = string.Empty;
+                        {
+                            if (dc.HasTracker())
+                            {
+                                opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Error, EN.MESSAGES.CANNOT_MODIFY_PRODUCTS));
+                                dc.Message.Messages.Add(new OpMsg(OpMsg.MessageType.Error, EN.MESSAGES.CANNOT_MODIFY_PRODUCTS));
+                            }
+                            else
+                            {
+                                dePrd.AtrbValue = string.Empty;
+                            }
+                        }
                     }
                 }
             }

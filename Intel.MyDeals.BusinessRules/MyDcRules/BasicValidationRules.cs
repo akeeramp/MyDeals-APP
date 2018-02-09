@@ -131,7 +131,15 @@ namespace Intel.MyDeals.BusinessRules
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
 				},
-				new MyOpRule
+                new MyOpRule
+                {
+                    Title="Check for Modified or deleted Products",
+                    ActionRule = MyDcActions.CheckForModifiedProducts,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+                },
+                new MyOpRule
 				{
 					Title="Must be greater than 0",
 					ActionRule = MyDcActions.ValidateTierStartVol,
@@ -213,6 +221,13 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.MajorChangeCheck,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete}
+                },
+                new MyOpRule
+                {
+                    Title="Check for Product changes in WIP",
+                    ActionRule = MyDcActions.ModifiedProductCheck,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnMergeComplete}
                 },
                 new MyOpRule
                 {

@@ -186,14 +186,14 @@ namespace Intel.MyDeals.BusinessLogic
                 OpDataCollector dc = myDealsData.ToOpDataCollector(id, idtype, parentid, parentidtype, opType, opDataElementSetType);
 
                 // Layer the passed items on top of the newly filled MyDealsData
-                dpDeals.Messages = dc.MergeDictionary(items, needToCheckForDelete);
+                myDealsData[opType].Messages.Merge(dc.MergeDictionary(items, needToCheckForDelete));
             }
 
             // if WIP, check for merge complete rules
             if (opType == OpDataElementType.WIP_DEAL)
             {
                 //myDealsData.InjectParentStages();
-                foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+                foreach (OpDataCollector dc in myDealsData[opType].AllDataCollectors)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnMergeComplete, null, myDealsData);
                 }
@@ -896,6 +896,27 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
+            bool hasCriticalErrors = false;
+
+            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                if (!data.ContainsKey(opDataElementType) && !myDealsData.ContainsKey(opDataElementType)) continue;
+                if (myDealsData[opDataElementType].Messages.HighestMessageType == "Error")
+                {
+                    hasCriticalErrors = true;
+                }
+            }
+
+            if (hasCriticalErrors)
+            {
+                OpLog.Log("SavePacketsBase - Failed.");
+
+                // "Clone" to object...
+                string json = JsonConvert.SerializeObject(myDealsData);
+                myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
+                return myDealsDataWithErrors;
+            }
+
             bool hasErrors = myDealsData.ValidationApplyRules(savePacket);
             if (hasErrors)
             {

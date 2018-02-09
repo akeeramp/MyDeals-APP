@@ -49,6 +49,8 @@
 
         public class MESSAGES
         {
+            public static readonly string CANNOT_MODIFY_PRODUCTS = "Cannot modify or remove products that already have a tracker number.  Refresh the screen to restore the original products.";
+
             public static readonly string BLIND_SEARCH = "No Blind Searches allowed.  Please fill in more information.";
             public static readonly string QUICK_SEARCH_SEARCHING = "Searching Deals (Quick Search)...";
 

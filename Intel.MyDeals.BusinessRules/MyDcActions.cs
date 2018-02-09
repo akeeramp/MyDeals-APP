@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
@@ -7,6 +8,7 @@ using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
+using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -395,7 +397,23 @@ namespace Intel.MyDeals.BusinessRules
 			}
 		}
 
-		public static void CheckCustDivValues(params object[] args)
+	    public static void CheckForModifiedProducts(params object[] args)
+	    {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement title = r.Dc.GetDataElement(AttributeCodes.TITLE);
+
+	        List<IOpDataElement> fact15s = r.Dc.GetDataElements(AttributeCodes.PRODUCT_FILTER).ToList();
+	        if (!fact15s.Any()) return;
+
+	        int i = 0;
+
+
+	    }
+
+
+        public static void CheckCustDivValues(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
@@ -776,6 +794,29 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+	    public static void ModifiedProductCheck(params object[] args)
+	    {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            if (!r.ExtraArgs.Any()) return;
+
+            var myDealsData = (MyDealsData)r.ExtraArgs[0];
+
+	        if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) || !myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) return;
+
+	        if (r.Dc.Message.HighestMessageType != "Error") return;
+
+	        var dcErrors = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Where(d => d.DcID == r.Dc.DcParentID);
+
+	        foreach (OpDataCollector dc in dcErrors)
+	        {
+                var dePrd = dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+                dePrd?.AddMessage(EN.MESSAGES.CANNOT_MODIFY_PRODUCTS);
+                dc.Message.WriteMessage(OpMsg.MessageType.Error, EN.MESSAGES.CANNOT_MODIFY_PRODUCTS);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Messages.WriteMessage(OpMsg.MessageType.Error, EN.MESSAGES.CANNOT_MODIFY_PRODUCTS);
+            }
+        }
 
         public static void MajorChangeCheck(params object[] args)
 		{

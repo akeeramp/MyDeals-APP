@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(data[AttributeCodes.dc_type]);
 
             foreach (OpMsg msg in myDealsData[opDataElementType].Messages.Messages
-                .Where(m => (m.MsgType == OpMsg.MessageType.Warning || m.MsgType == OpMsg.MessageType.Info) && m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString()))))
+                .Where(m => (m.MsgType == OpMsg.MessageType.Error || m.MsgType == OpMsg.MessageType.Warning || m.MsgType == OpMsg.MessageType.Info) && (!myDealsData[opDataElementType].Messages.Messages[0].KeyIdentifiers.Any() || m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString())))))
             {
                 switch (msg.MsgType)
                 {
@@ -29,6 +29,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         infoMsgs.Add(msg.Message.Replace("\r\n", ""));
                         break;
 
+                    case OpMsg.MessageType.Error:
                     case OpMsg.MessageType.Warning:
                         warnMsgs.Add(msg.Message.Replace("\r\n", ""));
                         break;
