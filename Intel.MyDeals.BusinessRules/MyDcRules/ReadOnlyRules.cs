@@ -257,6 +257,7 @@ namespace Intel.MyDeals.BusinessRules
                             {
                                 AttributeCodes.BID_STATUS,
                                 AttributeCodes.BLLG_DT,
+                                AttributeCodes.CAP,
                                 AttributeCodes.CAP_END_DT,
                                 AttributeCodes.CAP_STRT_DT,
                                 AttributeCodes.COST_TEST_RESULT,
@@ -270,6 +271,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.EXPIRE_FLG,
                                 AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.HAS_SUBKIT,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,
                                 AttributeCodes.OBJ_SET_TYPE_CD,
                                 AttributeCodes.ORIG_ECAP_TRKR_NBR,
@@ -288,8 +290,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.WF_STG_CD,
                                 AttributeCodes.YCS2_END_DT,
                                 AttributeCodes.YCS2_PRC_IRBT,
-                                AttributeCodes.YCS2_START_DT,
-                                AttributeCodes.CAP
+                                AttributeCodes.YCS2_START_DT
                             }
                         }
                     }

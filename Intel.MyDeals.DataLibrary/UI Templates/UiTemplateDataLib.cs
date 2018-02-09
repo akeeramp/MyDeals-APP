@@ -1265,8 +1265,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'ECAP_PRICE', 'currency')#",  //if the singleton case works all 3 should just use this control wrapper
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
@@ -1282,8 +1280,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20_____1', 'currency')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
@@ -1299,8 +1295,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20_____2', 'currency')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
@@ -1316,8 +1310,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Template = "#=gridUtils.uiPrimarySecondaryDimControlWrapper(data)#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportPrimarySecondaryDimControlWrapper(data)#"
             });
@@ -1331,8 +1323,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'kit', 'rebateBundle')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'kit', 'rebateBundle')#"
             });
@@ -1346,8 +1336,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'subkit', 'rebateBundle')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'subkit', 'rebateBundle')#"
             });
@@ -1360,8 +1348,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'DSCNT_PER_LN', 'currency')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
@@ -1376,8 +1362,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 DataType = "object",
                 Format = "{0:d}",
-                IsFilterable = true,
-                IsSortable = true,
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'QTY', 'number')#",
                 UiType = "IntegerTextBox",
                 Editor = "multiDimEditor",
@@ -1393,8 +1377,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiTotalDiscountPerLineControlWrapper(data, 'currency')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportTotalDiscountPerLineControlWrapper(data, 'currency')#"
             });
@@ -1408,8 +1390,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'kit', 'sumTD')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'kit', 'sumTD')#"
             });
@@ -1423,10 +1403,21 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiKitCalculatedValuesControlWrapper(data, 'subkit', 'sumTD')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'subkit', 'sumTD')#"
+            });
+            items.Add(new UiTemplateContainerItem   // We include this so that the subkit tab can filter against it, only appearing if any deals can have subkit or showing only the deals eligible for subkits
+            {
+                Id = 3701,
+                AtrbCd = "HAS_SUBKIT",
+                Label = "Has Subkit",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiControlWrapper(data, 'HAS_SUBKIT')#",
+                DataType = "object",
+                IsReadOnly = true,
+                IsFilterable = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -1438,8 +1429,6 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiDimInfoControlWrapper(data, 'CAP')#",
                 Label = "CAP Info",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor",
@@ -1454,8 +1443,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'CAP', 'currency')#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP', 'currency')#"
             });
@@ -1467,8 +1454,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'CAP_STRT_DT', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsHidden = true,
                 Width = 100,
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP_STRT_DT', 'date')#"
@@ -1481,8 +1466,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'CAP_END_DT', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsHidden = true,
                 Width = 100,
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP_END_DT', 'date')#"
@@ -1496,8 +1479,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Width = 130,
                 Label = "YCS2 Info",
-                IsFilterable = true,
-                IsSortable = true,
                 IsReadOnly = true,
                 Template = "#=gridUtils.uiDimInfoControlWrapper(data, 'YCS2')#",
                 BypassExport = true
@@ -1512,8 +1493,6 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'YCS2_PRC_IRBT', 'currency')#",
                 Label = "YCS2 Price",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 Format = "{0:c}",
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_PRC_IRBT', 'currency')#"
             });
@@ -1525,8 +1504,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'YCS2_START_DT', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsHidden = true,
                 Width = 100,
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_START_DT', 'date')#"
@@ -1539,8 +1516,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiPositiveDimControlWrapper(data, 'YCS2_END_DT', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
-                IsFilterable = true,
-                IsSortable = true,
                 IsHidden = true,
                 Width = 100,
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_END_DT', 'date')#"
@@ -1553,8 +1528,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 110,
-                IsFilterable = true,
-                IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'YCS2_OVERLAP_OVERRIDE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/YCS2_OVERLAP_OVERRIDE",
                 LookupText = "DROP_DOWN",

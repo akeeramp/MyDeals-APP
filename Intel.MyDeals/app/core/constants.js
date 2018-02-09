@@ -111,7 +111,7 @@
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
-                    { "name": "SubKit", "order": 3 },
+                    { "name": "SubKit", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_SUBKIT", "value": "0" }] },
                     { "name": "CAP Info", "order": 98 },
                     { "name": "All", "order": 99 }
                 ]
@@ -642,6 +642,9 @@
                     },
                     "DEAL_GRP_NM": {
                         "Groups": ["Deal Info", "SubKit"]
+                    },
+                    "HAS_SUBKIT": {
+                        "Groups": ["All"]
                     },
                     "PRD_BCKT": {
                         "Groups": ["Deal Info", "SubKit"]

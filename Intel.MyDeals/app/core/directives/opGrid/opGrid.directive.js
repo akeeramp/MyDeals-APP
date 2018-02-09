@@ -1137,24 +1137,30 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.showCols = function (grpName) {
+                $scope.contractDs.filter({});
+                $scope.searchFilter = "";
+
                 if ($scope.curGroup == grpName) {
-                    $scope.contractDs.filter({});
                     $scope.ovlpDataSource.filter({});
                 }
                 if (grpName.toLowerCase() == "overlapping") {
                     $scope.isOverlapping = true;
                     $scope.isLayoutConfigurable = false;
-                    $scope.searchFilter = "";
-                    $scope.contractDs.filter({});
                 }
                 else {
-
                     $scope.isOverlapping = false;
                     $scope.isLayoutConfigurable = true;
-                    $scope.searchFilter = "";
                     $scope.ovlpDataSource.filter({});
-
                 }
+
+                if (grpName.toLowerCase() == "subkit") {
+                    $scope.contractDs.filter({
+                        field: "HAS_SUBKIT",
+                        operator: "eq",
+                        value: "1"
+                    });
+                }
+
                 var c;
                 var colNames = [];
                 $scope.curGroup = grpName;
