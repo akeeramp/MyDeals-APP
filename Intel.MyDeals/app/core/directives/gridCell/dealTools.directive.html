@@ -28,7 +28,7 @@
 
     <!-- Quote Letter icon -->
     <div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
-        <i class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+        <i ng-if="dataItem.OBJ_SET_TYPE_CD === 'ECAP' || dataItem.OBJ_SET_TYPE_CD === 'KIT'" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
     </div>
 
     <!-- Delete icon -->
