@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/5/2018 11:09:21 AM
+File Updated: 2/12/2018 4:20:38 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2489,7 +2489,6 @@ namespace Intel.MyDeals.Entities {
 		public const string santhoshi = "santhoshi";
 		public const string SELECTION_LEVEL = "SELECTION_LEVEL";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
-		public const string Test = "Test";
 		public const string TEST_MS = "TEST_MS";
 		public const string Test2 = "Test2";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
@@ -2508,7 +2507,6 @@ namespace Intel.MyDeals.Entities {
 		public const string Legal = "Legal";
 		public const string RA = "RA";
 		public const string SA = "SA";
-		public const string DEV = "DEV";
 		public static Dictionary<string, string> Tiers = new Dictionary<string, string> {
 		["CBA"] = "Tier_2",
 		["DA"] = "Tier_4",
@@ -2518,7 +2516,6 @@ namespace Intel.MyDeals.Entities {
 		["Legal"] = "Tier_0",
 		["RA"] = "Tier_1",
 		["SA"] = "Tier_4",
-		["DEV"] = "Tier_0",
 		};
 	}
 
@@ -2527,7 +2524,6 @@ namespace Intel.MyDeals.Entities {
 
 	public static class WorkFlowStages {
 		public const string Active = "Active";
-		public const string All_WF_Stages = "All WF Stages";
 		public const string Approved = "Approved";
 		public const string Cancelled = "Cancelled";
 		public const string Complete = "Complete";
@@ -2539,6 +2535,7 @@ namespace Intel.MyDeals.Entities {
 		public const string Pending = "Pending";
 		public const string Requested = "Requested";
 		public const string Submitted = "Submitted";
+		public const string Test = "Test";
 	}
 
 
