@@ -356,20 +356,46 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
 }
 
 //this control wrapper to be used for displaying which product is associated with each dimention
-gridUtils.uiProductDimControlWrapper = function (passedData) {
-    var data = passedData["PTR_USER_PRD"].split(',');   //note: PTR_USER_PRD vs TITLE?  for WIP_DEALs this should be the same (?)
-
-    var tmplt = '<table>';
-    for (var i = 0; i < data.length; i++) {
-        tmplt += '<tr style="height: 25px;">';
-        tmplt += '<td style="text-align:right;"';
-        tmplt += ' ng-class="{isReadOnlyCell:true}">';
-        tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'' + data[i] + '\'"></span>';
-        tmplt += '</td>';
-        tmplt += '</tr>';
+gridUtils.uiProductDimControlWrapper = function (passedData, type) {
+    var data = passedData["PTR_USER_PRD"].split(',');
+    var tmplt = '';
+    if (type == "kit") {
+        tmplt += '<table>';
+        for (var i = 0; i < data.length; i++) {
+            tmplt += '<tr style="height: 25px;">';
+            tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-class="{isReadOnlyCell:true}">';
+            tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'' + data[i] + '\'"></span>';
+            tmplt += '</td>';
+            tmplt += '</tr>';
+        }
+        tmplt += '</table>';
+    } else if (type == "subkit" && passedData.HAS_SUBKIT == "1") {
+        tmplt += '<table>';
+        for (var i = 0; i < data.length; i++) {
+            if (i <= 1) {   //primary or secondary1
+                tmplt += '<tr style="height: 25px;">';
+                tmplt += '<td style="text-align:right;"';
+                tmplt += ' ng-class="{isReadOnlyCell:true}">';
+                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'' + data[i] + '\'"></span>';
+                tmplt += '</td>';
+                tmplt += '</tr>';
+            } else {
+                tmplt += '<tr style="height: 25px;">';
+                tmplt += '<td style="text-align:right;"';
+                tmplt += ' ng-class="{isReadOnlyCell:true}">';
+                tmplt += '<span class="" style="padding: 0 4px;"></span>';
+                tmplt += '</td>';
+                tmplt += '</tr>';
+            }
+        }
+        tmplt += '</table>';
+    } else {
+        //no subkit allowed case, i.e. type = "subkit" and HAS_SUBKIT == 0
+        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+        tmplt += '<div class="vert-center">No Sub KIT</div>';
+        tmplt += '</div>';
     }
-    tmplt += '</table>';
-
     return tmplt;
 }
 

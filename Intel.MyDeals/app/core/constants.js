@@ -631,12 +631,6 @@
                     "PRODUCT_CATEGORIES": {
                         "Groups": ["Deal Info"]
                     },
-                    "PROD_INCLDS": {
-                        "Groups": ["All"]
-                    },
-                    "TITLE": {
-                        "Groups": ["Deal Info"]
-                    },
                     "PRD_EXCLDS": {
                         "Groups": ["All"]
                     },
@@ -648,6 +642,9 @@
                     },
                     "PRD_BCKT": {
                         "Groups": ["Deal Info", "SubKit"]
+                    },
+                    "PRD_BCKT_SUBKIT": {
+                        "Groups": ["SubKit"]
                     },
                     "PRIMARY_OR_SECONDARY": {
                         "Groups": ["Deal Info", "SubKit"]

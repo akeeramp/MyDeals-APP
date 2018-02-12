@@ -1200,7 +1200,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                     $scope.grid.resize();
                     // Hack to resize grid
-                    $timeout(function () { $scope.searchGrid(); });
+                    if (grpName.toLowerCase() != "subkit") {
+                        //TODO: rather than not calling the timeout for subkit grpname, we should probably find a more elegant way to combine filters
+                        $timeout(function () { $scope.searchGrid(); });
+                    }
                 } else {
                     // CSS WAY... faster... not seeing any side effects yet
                     // hide all columns

@@ -1028,13 +1028,27 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRD_BCKT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Template = "#=gridUtils.uiProductDimControlWrapper(data)#",
+                Template = "#=gridUtils.uiProductDimControlWrapper(data, 'kit')#",
                 Width = 100,
-                Label = "Products",
+                Label = "MyDeals Products",
                 IsDimKey = true,
                 IsReadOnly = true,
                 DataType = "string",
                 ExcelTemplate = "#=PTR_USER_PRD#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP KIT
+            {
+                Id = 50,
+                AtrbCd = "PRD_BCKT_SUBKIT",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Template = "#=gridUtils.uiProductDimControlWrapper(data, 'subkit')#",
+                Width = 100,
+                Label = "Sub KIT Products",
+                IsDimKey = true,
+                IsReadOnly = true,
+                DataType = "string",
+                ExcelTemplate = "#=PTR_USER_PRD#"       //TODO: will likely need a custom excel export template for this one
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1042,6 +1056,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.TITLE,
                 Label = "MyDeals Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
                 IsFilterable = true,
                 IsSortable = true,
