@@ -17,7 +17,7 @@ namespace Intel.MyDeals.Controllers.API
         public BaseApiController()
         {
             op = OpAppConfig.Init();
-            AppLib.InitAvm(op);
+            //AppLib.InitAvm(op); Throwing error on server while uploading DbLogs for now disabling it..
         }
 
         /// <summary>
