@@ -45,7 +45,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //var earlyDateRequested = (dataItem.START_DT < today);
                 var wipDealDraftStage = (dataItem.WF_STG_CD.indexOf('Draft') !== -1);
 
-                return (isFrontendDeal  && wipDealDraftStage);    
+                return (isFrontendDeal && wipDealDraftStage);
             }
 
             $scope.ovlpData = [];
@@ -175,7 +175,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     var index = $scope.opOptions.groupColumns[val.field].Groups.indexOf($scope.curGroup);
                     if (index > -1) {
-                        $scope.opOptions.groupColumns[val.field].Groups.splice(index,1);
+                        $scope.opOptions.groupColumns[val.field].Groups.splice(index, 1);
                     }
                 }
             }
@@ -386,7 +386,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             });
                             if (columnOrderSetting && columnOrderSetting.length > 0) {
                                 customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
-                            }                            
+                            }
 
                             // 'PageSize'
                             var pageSize = 25;
@@ -396,7 +396,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             if (pageSizeArr && pageSizeArr.length > 0) {
                                 pageSize = Number(pageSizeArr[0].PRFR_VAL);
                             }
-                            
+
                             // Apply the settings.
                             $timeout(function () {
                                 $scope.cloneWithOrder("custom");
@@ -486,7 +486,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
             }
 
-            $scope.getColumnOrder = function(grid) {
+            $scope.getColumnOrder = function (grid) {
                 var columnOrderArr = [];
 
                 for (var i = 0; i < grid.columns.length; i++) {
@@ -639,11 +639,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
 
             var isDisableViaDealGrp = function (comparison) {
-            	if (typeof comparison !== "string") {
-            		return false;
-				}
-            	return comparison.toUpperCase() !== "ADDITIVE" && comparison.toUpperCase() !== "NON ADDITIVE";
-			}
+                if (typeof comparison !== "string") {
+                    return false;
+                }
+                return comparison.toUpperCase() !== "ADDITIVE" && comparison.toUpperCase() !== "NON ADDITIVE";
+            }
 
             var triedToApplyCustomLayout = false;
             var disableCellsBasedOnAnotherCellValue;
@@ -666,10 +666,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 pageable: $scope.pageable,
 
                 save: function (e) {
-                	var newField = util.getFirstKey(e.values);
+                    var newField = util.getFirstKey(e.values);
 
-                	disableCellsBasedOnAnotherCellValue(e.model, newField, e.values[newField], "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness.
-					$scope.saveFunctions(e.model, newField, e.values[newField]);
+                    disableCellsBasedOnAnotherCellValue(e.model, newField, e.values[newField], "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness.
+                    $scope.saveFunctions(e.model, newField, e.values[newField]);
                     gridUtils.onDataValueChange(e);
 
                 },
@@ -703,8 +703,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
 
                     if (!triedToApplyCustomLayout) {
-		    	        // Squirrel away the default column order, before we apply the custom layout.
-			            $scope.defaultColumnOrderArr = $scope.getColumnOrder(grid);
+                        // Squirrel away the default column order, before we apply the custom layout.
+                        $scope.defaultColumnOrderArr = $scope.getColumnOrder(grid);
 
                         // Apply the custom layout.
                         triedToApplyCustomLayout = true;
@@ -731,11 +731,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     // select the first column
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     if (!!tabStrip) {
-                    	tabStrip.select(0);
-                    	if ($scope.opOptions.groups !== undefined) {
-                    		$scope.showCols($scope.curGroup);
-                    		$scope.root.setBusy("", "");
-                    	}
+                        tabStrip.select(0);
+                        if ($scope.opOptions.groups !== undefined) {
+                            $scope.showCols($scope.curGroup);
+                            $scope.root.setBusy("", "");
+                        }
                     }
                 }, 10);
             }
@@ -1055,7 +1055,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             el += $scope.createEditEl("ECAP_PRICE", field.uiType, key, field.format);
                         }
                     }
-                } else if (options.field === "SUBKIT_ECAP") {                  
+                } else if (options.field === "SUBKIT_ECAP") {
                     model["20_____2"] = options.model["ECAP_PRICE"]["20_____2"];
                     for (var key in model) {
                         if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
@@ -1074,7 +1074,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                 }
-                
+
 
                 $(el).appendTo(container);
             }
@@ -1199,6 +1199,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                     $scope.grid.resize();
+                    // Hack to resize grid
+                    $timeout(function () { $scope.searchGrid(); });
                 } else {
                     // CSS WAY... faster... not seeing any side effects yet
                     // hide all columns
@@ -1323,9 +1325,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             });
 
-            $scope.$on('saveWithWarnings', function (event, args) {             
-              // need to clean out all flags... dirty, error, validMsg
-              $scope.cleanFlags();
+            $scope.$on('saveWithWarnings', function (event, args) {
+                // need to clean out all flags... dirty, error, validMsg
+                $scope.cleanFlags();
 
                 // need to set all flags... dirty, error, validMsg
                 if (!!args.data.WIP_DEAL) {
@@ -1333,7 +1335,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
                         if (dataItem != null) {
                             dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
-                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];                               
+                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];
                         }
 
                         if (args.data.WIP_DEAL[i].warningMessages !== undefined && args.data.WIP_DEAL[i].warningMessages.length !== 0) {
@@ -1710,10 +1712,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                 tabStrip.select(0);
                 $scope.showCols($scope.opOptions.groups[0].name);
-                $timeout(function () { $scope.searchFilter = OVLP_DEAL_OBJ_SID; }, 1000);
                 $scope.searchFilter = OVLP_DEAL_OBJ_SID;
-                $timeout(function () { $scope.searchFilter = OVLP_DEAL_OBJ_SID; }, 1000);
-                $scope.searchGrid();
+                $timeout(function () { $scope.searchGrid(); });
             }
 
 
@@ -1724,10 +1724,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     tabStrip.select(0);
                     $scope.showCols($scope.opOptions.groups[0].name);
-                    $timeout(function () { $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID; }, 1000);
                     $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID;
-                    $timeout(function () { $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID; }, 1000);
-                    $scope.searchGrid();
+                    $timeout(function () { $scope.searchGrid(); });
                 }
                 else {
                     var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip", '_blank');
@@ -2168,20 +2166,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.syncAndValidateWipDeals = function (callback) {
                 $scope.parentRoot.setBusy("Saving your data...", "Please wait as we Save your information!");
                 $timeout(function () {
-                        util.console("syncAndValidateWipDeals");
-                        util.console("contractDs.sync Started");
+                    util.console("syncAndValidateWipDeals");
+                    util.console("contractDs.sync Started");
 
-                        // Change array to string to prevent [object object] issue
-                        var gData = $scope.contractDs.data();
-                        for (var i = 0; i < gData.length; i++) {
-                            if (gData[i].QLTR_BID_GEO !== undefined && Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
-                        }
+                    // Change array to string to prevent [object object] issue
+                    var gData = $scope.contractDs.data();
+                    for (var i = 0; i < gData.length; i++) {
+                        if (gData[i].QLTR_BID_GEO !== undefined && Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
+                    }
 
-                        $scope.contractDs.sync();
+                    $scope.contractDs.sync();
 
-                        util.console("contractDs.sync Ended");
-                        $scope.root.validateWipDeals(callback);
-                    },
+                    util.console("contractDs.sync Ended");
+                    $scope.root.validateWipDeals(callback);
+                },
                     100);
             }
 
@@ -2381,9 +2379,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             function openDealGroupModal(container, col) {
-            	var containerDataItem = angular.element(container).scope().dataItem;
+                var containerDataItem = angular.element(container).scope().dataItem;
 
-            	var modal = $uibModal.open({
+                var modal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/partials/ptModals/excludeDealGroupMultiSelectModal.html',
                     controller: 'ExcludeDealGroupMultiSelectCtrl',
@@ -2391,27 +2389,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     windowClass: '',
                     size: 'lg',
                     resolve: {
-                    	dealId: angular.copy(containerDataItem["DC_ID"]),
-                    	cellCurrValues: function () {
-                    		return angular.copy(containerDataItem["DEAL_GRP_EXCLDS"])
-                    	},
-                    	cellCommentValue: function () {
-                    		return angular.copy(containerDataItem["DEAL_GRP_CMNT"])
-                    	},
-                    	colInfo: function () {
-                    		return col;
-                    	}
+                        dealId: angular.copy(containerDataItem["DC_ID"]),
+                        cellCurrValues: function () {
+                            return angular.copy(containerDataItem["DEAL_GRP_EXCLDS"])
+                        },
+                        cellCommentValue: function () {
+                            return angular.copy(containerDataItem["DEAL_GRP_CMNT"])
+                        },
+                        colInfo: function () {
+                            return col;
+                        }
                     }
-            	});
+                });
 
-            	modal.result.then(
+                modal.result.then(
                     function (result) {
-                    	containerDataItem.DEAL_GRP_EXCLDS = result.DEAL_GRP_EXCLDS;
-                    	containerDataItem.DEAL_GRP_CMNT = result.DEAL_GRP_CMNT;
-                    	containerDataItem.dirty = true;
+                        containerDataItem.DEAL_GRP_EXCLDS = result.DEAL_GRP_EXCLDS;
+                        containerDataItem.DEAL_GRP_CMNT = result.DEAL_GRP_CMNT;
+                        containerDataItem.dirty = true;
 
-                    	$scope.root.saveCell(containerDataItem, "DEAL_GRP_EXCLDS", containerDataItem.DEAL_GRP_EXCLDS)
-                    	$scope.root.saveCell(containerDataItem, "DEAL_GRP_CMNT", containerDataItem.DEAL_GRP_CMNT)
+                        $scope.root.saveCell(containerDataItem, "DEAL_GRP_EXCLDS", containerDataItem.DEAL_GRP_EXCLDS)
+                        $scope.root.saveCell(containerDataItem, "DEAL_GRP_CMNT", containerDataItem.DEAL_GRP_CMNT)
                     },
                     function () {
                     });
