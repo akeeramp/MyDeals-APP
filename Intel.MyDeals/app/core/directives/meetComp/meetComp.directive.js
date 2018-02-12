@@ -125,7 +125,7 @@
                         if (response.data.length > 0) {
                             response.data.forEach(function (obj) {
                                 obj.IS_SELECTED = false;
-                                
+
                                 //Setting COMP_PRC to null. Its nullable Int
                                 if (obj.COMP_PRC == 0) {
                                     obj.COMP_PRC = null;
@@ -543,6 +543,9 @@
                                     if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && (editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden")) {
                                         $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
                                     }
+                                    else if (editedROW.MEET_COMP_UPD_FLG == "N") {
+                                        $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
+                                    }
                                     else {
                                         input.keyup(function () {
                                             value = input.val();
@@ -568,7 +571,7 @@
                                                         var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
                                                         //Updating Product Line
-                                                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && ( selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete" ) ) {
                                                             $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
                                                             addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_OVRRD_RSN");
                                                         }
@@ -577,7 +580,7 @@
                                                         var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                             .Where(function (x) {
                                                                 return (
-                                                                    x.GRP_PRD_SID == temp_grp_prd &&
+                                                                    x.GRP_PRD_SID == editedROW.GRP_PRD_SID &&
                                                                     x.GRP == "DEAL" &&
                                                                     x.MEET_COMP_UPD_FLG == "Y" &&
                                                                     x.MEET_COMP_STS.toLowerCase() != "pass"
@@ -586,8 +589,10 @@
                                                             .ToArray();
 
                                                         for (var i = 0; i < tempData.length; i++) {
-                                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
-                                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                                            if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
+                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                                            }                                                            
                                                         }
                                                     }
                                                 }
@@ -604,8 +609,10 @@
                                                         .ToArray();
 
                                                     for (var i = 0; i < tempData.length; i++) {
-                                                        $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
-                                                        addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                                        if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
+                                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                                        }
                                                     }
                                                     if (tempData.length > 0) {
                                                         isUpdated = true;
@@ -1260,7 +1267,7 @@
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
                                                             //Updating Product Line
-                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && ( selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete" ) ) {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
                                                                 addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_OVRRD_FLG");
                                                             }
@@ -1268,13 +1275,19 @@
                                                             //Updating Deal line
                                                             var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                                 .Where(function (x) {
-                                                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS.toLowerCase() != "pass");
+                                                                    return (
+                                                                        x.GRP_PRD_SID == temp_grp_prd &&
+                                                                        x.GRP == "DEAL" &&
+                                                                        x.MEET_COMP_UPD_FLG == "Y" &&
+                                                                        x.MEET_COMP_STS.toLowerCase() != "pass");
                                                                 })
                                                                 .ToArray();
 
                                                             for (var i = 0; i < tempData.length; i++) {
-                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
-                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
+                                                                if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
+                                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -1282,13 +1295,19 @@
                                                         //Updating Deal line
                                                         var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                             .Where(function (x) {
-                                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS.toLowerCase() != "pass");
+                                                                return (
+                                                                    x.GRP_PRD_SID == temp_grp_prd &&
+                                                                    x.GRP == "DEAL" &&
+                                                                    x.MEET_COMP_UPD_FLG == "Y" &&
+                                                                    x.MEET_COMP_STS.toLowerCase() != "pass" );
                                                             })
                                                             .ToArray();
 
                                                         for (var i = 0; i < tempData.length; i++) {
-                                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
-                                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
+                                                            if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
+                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
+                                                            }
                                                         }
 
                                                         if (tempData.length > 0) {
@@ -1314,7 +1333,7 @@
 
                                 }
                             }
-                            
+
                             $scope.saveAndRunMeetComp = function () {
                                 $scope.isValid = true;
                                 $scope.ROW_NMB = [];
