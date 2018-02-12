@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using Intel.Opaque;
 using System.Web.Http;
+using Intel.MyDeals.App;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -16,6 +17,7 @@ namespace Intel.MyDeals.Controllers.API
         public BaseApiController()
         {
             op = OpAppConfig.Init();
+            AppLib.InitAvm(op);
         }
 
         /// <summary>
@@ -60,6 +62,5 @@ namespace Intel.MyDeals.Controllers.API
                 });
             }
         }
-
     }
 }
