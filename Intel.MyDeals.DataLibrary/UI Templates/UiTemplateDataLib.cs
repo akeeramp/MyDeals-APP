@@ -653,6 +653,27 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = true,
                 IsReadOnly = true   //only editable for ECAP deals
             });
+            /// PROGRAM_PAYMENT column behaviours in various deal types
+            ///  ECAP - Editable
+            ///  KIT - Readonly
+            ///  VOLTIER, PROGRAM - Readonly and Hiden
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                Width = 130,
+                IsDefaultable = true,
+                Label = "Program Payment *",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true,
+                IsReadOnly = true,   //only editable for ECAP deals
+                IsHidden = true // Hiden for VOLTIER, PROGRAM
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
@@ -1614,7 +1635,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
             });
-            
+
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3596,
