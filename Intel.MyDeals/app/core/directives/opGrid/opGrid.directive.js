@@ -2124,84 +2124,96 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     //Calling WEBAPI
                     objsetService.getOverlappingDeals(pricingTableID)
-                        .then(function (response) {
+                        .then(function(response) {
 
-                            pcService.addPerfTimes(response.data.PerformanceTimes);
+                                pcService.addPerfTimes(response.data.PerformanceTimes);
 
-                            var pcUi = new perfCacheBlock("Overlapping Tab Processing", "UI");
-                            util.console("Overlapping Deals Returned");
-                            if (response.data) {
-                                var data = response.data.Data;
-                                if (data.length > 0) {
+                                var pcUi = new perfCacheBlock("Overlapping Tab Processing", "UI");
+                                util.console("Overlapping Deals Returned");
+                                if (response.data) {
+                                    var data = response.data.Data;
+                                    if (data.length > 0) {
 
-                                    $scope.isOverlapping = true;
+                                        $scope.isOverlapping = true;
 
-                                    //Checking TAB already exist or not
-                                    $scope.addTabRequired();
+                                        //Checking TAB already exist or not
+                                        $scope.addTabRequired();
 
-                                    //Calculate Error count
-                                    $scope.ovlpErrorCounter(data);
+                                        //Calculate Error count
+                                        $scope.ovlpErrorCounter(data);
 
-                                    //Assigning Data to Overlapping GRID
-                                    $scope.ovlpData = data;
+                                        //Assigning Data to Overlapping GRID
+                                        $scope.ovlpData = data;
 
-                                    //Data massaging for END_DT
-                                    for (var i = 0; i < $scope.ovlpData.length; i++) {
-                                        //START DT massaging
-                                        var d = new Date($scope.ovlpData[i].START_DT);
-                                        $scope.ovlpData[i].START_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+                                        //Data massaging for END_DT
+                                        for (var i = 0; i < $scope.ovlpData.length; i++) {
+                                            //START DT massaging
+                                            var d = new Date($scope.ovlpData[i].START_DT);
+                                            $scope.ovlpData[i]
+                                                .START_DT =
+                                                d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
 
-                                        //END DT massaging
-                                        var d = new Date($scope.ovlpData[i].END_DT);
-                                        $scope.ovlpData[i].END_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
-                                    }
-
-                                    $scope.ovlpDataSource.read();
-
-                                    //Saving data for RedoUndo
-                                    $scope.ovlpDataRep = angular.copy($scope.ovlpData);
-
-                                    //Hiding Column Preference and Grid Preferences
-                                    $scope.isLayoutConfigurable = false;
-
-                                    $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshContractData', true);
-                                }
-                                else {
-                                    //Remove overlapping tab
-                                    util.console("Remove overlapping tab");
-                                    $scope.removeOverlapTab();
-                                    var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
-                                    if (!!tabStrip && $scope.curGroup === "Overlapping") {
-                                        tabStrip.select(0);
-                                        if ($scope.opOptions.groups !== undefined) {
-                                            $scope.showCols($scope.opOptions.groupColumns.tools.Groups[0]);
+                                            //END DT massaging
+                                            var d = new Date($scope.ovlpData[i].END_DT);
+                                            $scope.ovlpData[i]
+                                                .END_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
                                         }
+
+                                        $scope.ovlpDataSource.read();
+
+                                        //Saving data for RedoUndo
+                                        $scope.ovlpDataRep = angular.copy($scope.ovlpData);
+
+                                        //Hiding Column Preference and Grid Preferences
+                                        $scope.isLayoutConfigurable = false;
+
+                                        $scope.$parent.$parent.$parent.$parent.$parent
+                                            .$broadcast('refreshContractData', true);
+                                    } else {
+                                        //Remove overlapping tab
+                                        util.console("Remove overlapping tab");
+                                        $scope.removeOverlapTab();
+                                        var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+                                        if (!!tabStrip && $scope.curGroup === "Overlapping") {
+                                            tabStrip.select(0);
+                                            if ($scope.opOptions.groups !== undefined) {
+                                                $scope.showCols($scope.opOptions.groupColumns.tools.Groups[0]);
+                                            }
+                                        }
+
+                                        // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
+                                        var wips = $scope.$parent.$parent.$parent.$parent.$parent.pricingTableData
+                                            .WIP_DEAL;
+                                        for (var w = 0; w < wips.length; w++) {
+                                            if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
+                                        }
+
+                                        $scope.$parent.$parent.$parent.$parent.$parent
+                                            .$broadcast('refreshContractData', false);
+
+                                        util.console("Remove overlapping tab DONE");
                                     }
-
-                                    // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
-                                    var wips = $scope.$parent.$parent.$parent.$parent.$parent.pricingTableData.WIP_DEAL;
-                                    for (var w = 0; w < wips.length; w++) {
-                                        if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
-                                    }
-
-                                    $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshContractData', false);
-
-                                    util.console("Remove overlapping tab DONE");
                                 }
-                            }
-                            pcService.add(pcUi.stop());
+                                pcService.add(pcUi.stop());
 
-                            $scope.$parent.$parent.$parent.$parent.$parent.pc.add(pcService.stop());
-                            $scope.$parent.$parent.setBusy("", "");
-                            $timeout(function () {
-                                $scope.$parent.$parent.$parent.$parent.$parent.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                            }, 2000);
-                            
-                        },
-                        function (response) {
-                            //empty after moving sync and validate to happen before the getOverlappingDeals call is made
-                            $scope.$parent.$parent.setBusy("", "");
-                        });
+                                $scope.$parent.$parent.$parent.$parent.$parent.pc.add(pcService.stop());
+                                $scope.$parent.$parent.setBusy("", "");
+                                $timeout(function() {
+                                        $scope.$parent.$parent.$parent.$parent.$parent.pc.stop()
+                                            .drawChart("perfChart", "perfMs", "perfLegend");
+                                    },
+                                    2000);
+
+                            },
+                            function(response) {
+                                //empty after moving sync and validate to happen before the getOverlappingDeals call is made
+                                $scope.$parent.$parent.setBusy("", "");
+                            });
+                } else {
+                    $timeout(function () {
+                        $scope.$parent.$parent.$parent.$parent.$parent.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                    }, 2000);
+
                 }
             }
 
