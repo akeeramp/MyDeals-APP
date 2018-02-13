@@ -327,7 +327,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 { reload: true });
         }
 
-        root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true);
+        root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true, true);
     }
 
     function anyPtrDirtyValidation() {
@@ -2566,7 +2566,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
-            root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", false, true);
+            root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
             var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
 
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid

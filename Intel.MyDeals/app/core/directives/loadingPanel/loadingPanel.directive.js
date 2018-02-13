@@ -27,8 +27,8 @@ function loadingPanel() {
 			$scope.funFactDesc = "";
 			$scope.funFactIcon = "";
 
-			$scope.GetRandomFact = function(){
-				console.log("GET RANDOM FACT");
+			$scope.GetRandomFact = function () {
+
 				// Get a random number between min (inclusive) and max (exclusive)
 				var min = 0;
 				var index = Math.floor(Math.random() * (($scope.funfactsList.length) - min)) + min;
@@ -59,7 +59,7 @@ function loadingPanel() {
 				},
 				{
 					"Description": "Owls don't have eyeballs. They have eye tubes.",
-					"FontAwesomeIcon": "fa-eye"
+					"FontAwesomeIcon": "fa-eye-slash"
 				},
 				{
 					"Description": "Dogs' sense of smell are about 100,000 times stronger than humans', but they have only one-sixth the number of taste buds.",
@@ -70,11 +70,11 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-bug"
 				},
 				{
-					"Description": 'A single strand of spider silk is thinner than a human hair, but also five times stronger than steel of the same width. A rope just 2 inches thick could reportedly stop a Boeing 747.',
+					"Description": "A single strand of spider silk is thinner than a human hair, but also five times stronger than steel of the same width. A rope just 2 inches thick could reportedly stop a Boeing 747.",
 					"FontAwesomeIcon": "fa-plane"
 				},
 				{
-					"Description": 'Warmer weather causes more turtles to be born female than male.',
+					"Description": "Warmer weather causes more turtles to be born female than male.",
 					"FontAwesomeIcon": "fa-venus"
 				},
 				{
@@ -82,7 +82,7 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-diamond"
 				},
 				{
-					"Description": 'Less time separates the existence of humans and the tyrannosaurus rex than the T-rex and the stegosaurus.',
+					"Description": "Less time separates the existence of humans and the tyrannosaurus rex than the T-rex and the stegosaurus.",
 					"FontAwesomeIcon": "fa-hourglass"
 				},
 				{
@@ -94,7 +94,7 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-graduation-cap"
 				},
 				{
-					"Description": 'Sharks kill less than 10 people per year. Humans kill about 100 million sharks per year.',
+					"Description": "Sharks kill less than 10 people per year. Humans kill about 100 million sharks per year.",
 					"FontAwesomeIcon": "fa-tint"
 				},
 				{
@@ -102,34 +102,34 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-flask"
 				},
 				{
-					"Description": 'Some Reindeer have knees that make a clicking sound when they walk. It helps them keep together in a blizzard.',
+					"Description": "Some Reindeer have knees that make a clicking sound when they walk. It helps them keep together in a blizzard.",
 					//"FontAwesomeIcon": "fa-snowflake"
 				},
 				{
 					"Description": "A giraffe's age can be calculated from its spots. The darker the spots, the older the giraffe."
 				},
 				{
-					"Description": 'If a Sun Bear is grabbed or bitten on its head, it can turn around using the wrinkly skin on its head to bite the predator.',
+					"Description": "If a Sun Bear is grabbed or bitten on its head, it can turn around using the wrinkly skin on its head to bite the predator back.",
 					"FontAwesomeIcon": "fa-paw"
 				},
 				{
-					"Description": 'Most of the people think that arctic fox is just white, but in the summer their fur turns dark to blend in with the environment.',
+					"Description": "Over the winter the arctic fox has a heavy white coat, but in the summer their fur coat is shed for a thinner, two-tone brown pelage.",
 					//"FontAwesomeIcon": "fa-snowflake"
 				},
 				{
-					"Description": 'The world’s most expensive coffee brands are made from the dung of Thai elephants.',
+					"Description": "The world’s most expensive coffee brands are made from the dung of Thai elephants.",
 					"FontAwesomeIcon": "fa-coffee"
 				},
 				{
-					"Description": 'Hippopotamuses rest in water to keep their temperature down because they don’t have sweat glands.',
+					"Description": "Hippopotamuses rest in water to keep their temperature down because they don’t have sweat glands.",
 					"FontAwesomeIcon": "fa-tint"
 				},
 				{
-					"Description": 'A shark can see through in the cloudy water because of a particular membrane in its eye called tapetum lucidum. This membrane helps them hunt in murky water.',
+					"Description": "A shark can see through in the cloudy water because of a particular membrane in its eye called tapetum lucidum. This membrane helps them hunt in murky water.",
 					"FontAwesomeIcon": "fa-eye"
 				},
 				{
-					"Description": 'Sharks have very keen sense of hearing. They can hear low pitch sounds below the range of human hearing.',
+					"Description": "Sharks have very keen sense of hearing. They can hear low pitch sounds below the range of human hearing.",
 					"FontAwesomeIcon": "fa-headphones"
 				},
 				{
@@ -165,12 +165,22 @@ function loadingPanel() {
 					"FontAwesomeIcon": "fa-trophy"
 				},
 				{
-					"Description": "The first actual computer “bug” was a dead moth which was stuck in a Harvard Mark II computer in 1947.",
+					"Description": "The first actual computer “bug” was a dead moth stuck in a Harvard Mark II computer in 1947.",
 					"FontAwesomeIcon": "fa-bug"
 				},
 				{
 					"Description": "The Apple 1 was the first computer developed by Apple and was nothing more than a bag of parts. The Apple II was the first finished product sold by the company.",
 					"FontAwesomeIcon": "fa-apple"
+				},
+				{
+					"Title": "Pro Tip",
+					"Description": "Fart when people hug you. It makes them feel stronger.",
+					"FontAwesomeIcon": "fa-trophy"
+				},
+				{
+					"Title": "Pro Tip",
+					"Description": "Gordon Moore's original office is in Santa Clara on the 2nd floor of RNB. No one sits there anymore, but Intel staff continuously cleans and changes its decor. Go visit it when/if you're in Santa Clara!",
+					"FontAwesomeIcon": "fa-comment"
 				}
 			]
 

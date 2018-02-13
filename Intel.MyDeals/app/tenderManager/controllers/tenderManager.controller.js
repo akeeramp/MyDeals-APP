@@ -23,6 +23,7 @@
         $scope.isBusyMsgTitle = "";
         $scope.isBusyMsgDetail = "";
         $scope.isBusyType = "";
+        $scope.isBusyShowFunFact = false;
         $scope.searchText = "";
         $scope.curLinkedVal = "";
         $scope.helpMsg = "<div style=\"margin-bottom: 5px; \"><b>Search Tip</b></div>Search by Deal #, End Customer, Project Name, Bid Status <span class=\"color: #666666; font-size: 10px;\">(Offer, Lost, Won)</span>, Product or Tracker #<br/><div style=\"color: #666666; margin: 5px 0;\">Example: <i>i7-5*, Offer</i></div>";
@@ -487,15 +488,17 @@
             };
         }
 
-        $scope.setBusy = function (msg, detail, msgType) {
+        $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
-                var newState = msg != undefined && msg !== "";
+            	var newState = msg != undefined && msg !== "";
+            	if (isShowFunFact == null) { isShowFunFact = false; }
 
                 // if no change in state, simple update the text
                 if ($scope.isBusy === newState) {
                     $scope.isBusyMsgTitle = msg;
                     $scope.isBusyMsgDetail = !detail ? "" : detail;
                     $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
                     return;
                 }
 
@@ -504,11 +507,13 @@
                     $scope.isBusyMsgTitle = msg;
                     $scope.isBusyMsgDetail = !detail ? "" : detail;
                     $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
                 } else {
                     $timeout(function () {
                         $scope.isBusyMsgTitle = msg;
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
                         $scope.isBusyType = msgType;
+                        $scope.isBusyShowFunFact = isShowFunFact;
                     }, 500);
                 }
             });

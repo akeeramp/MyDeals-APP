@@ -188,7 +188,7 @@
         }
         $scope.removeDimKeyFromWipTemplates();
 
-        $scope.setBusy = function (msg, detail, msgType, isInstant, isShowFunFact) { // msgType can be Success, Error, Warning, and Info
+        $scope.setBusy = function (msg, detail, msgType, isShowFunFact, isInstant) { // msgType can be Success, Error, Warning, and Info
             if (isInstant == null) {
                 isInstant = false;
             }
@@ -867,7 +867,7 @@
                 if (confirm('Would you like to save your changes?')) {
                     event.preventDefault();
                     // async save data
-                    $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", false, true);
+                    $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
 
                     $scope.saveEntireContractRoot(fromState.name, false, false, toState.name, toParams);
                 }
@@ -1420,7 +1420,7 @@
         $scope.emailData = [];
 
         $scope.actionPricingStrategy = function (ps, actn) {
-            $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!");
+        	$scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
             objsetService.actionPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps, actn).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1444,7 +1444,7 @@
             });
 
         $scope.actionPricingStrategies = function (data, emailEnabled) {
-            $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
+        	$scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!", "Info", true);
 
             $scope.emailData = data;
             $scope.pricingStrategyStatusUpdated = false;
@@ -1469,7 +1469,7 @@
             );
         }
         $scope.actionWipDeal = function (wip, actn) {
-            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", false, true);
+            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
             objsetService.actionWipDeal($scope.getCustId(), $scope.contractData.DC_ID, wip, actn).then(
                 function (data) {
                     debugger;
@@ -1482,7 +1482,7 @@
             );
         }
         $scope.actionWipDeals = function (data) {
-            $scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!", "Info", false, true);
+            $scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!", "Info", true);
             objsetService.actionWipDeals($scope.getCustId(), $scope.contractData.DC_ID, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1678,7 +1678,7 @@
         $scope.deletePricingTable = function (ps, pt) {
             kendo.confirm("Are you sure that you want to delete this pricing table?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Deleting...", "Deleting the Pricing Table");
+                    $scope.setBusy("Deleting...", "Deleting the Pricing Table", "Info", true);
                     $scope._dirty = false;
                     topbar.show();
 
@@ -2352,7 +2352,7 @@
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
 
-            $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", false, true);
+            $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
 
             // async save data
             topbar.show();
@@ -2410,7 +2410,7 @@
                     util.console("updateContractAndCurPricingTable Returned");
 
                     var i;
-                    $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", false, true);
+                    $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
 
                     var anyWarnings = false;
 
@@ -3239,7 +3239,7 @@
         $scope.addPricingStrategy = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving the Pricing Strategy");
+            $scope.setBusy("Saving...", "Saving the Pricing Strategy", "Info", true);
 
             var ct = $scope.contractData;
 
@@ -3354,7 +3354,7 @@
         });
 
         $scope.$on('btnPctMctRunning', function (event, args) {
-            $scope.setBusy("Running", "Price Cost Test and Meet Comp Test.");
+        	$scope.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
         });
 
         $scope.$on('btnPctMctComplete', function (event, args) {
@@ -3434,7 +3434,7 @@
         $scope.editPricingTable = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving Pricing Table", "Info", false, true);
+            $scope.setBusy("Saving...", "Saving Pricing Table", "Info", true);
 
             // Clone base model and populate changes
             var pt = util.clone($scope.currentPricingTable);
@@ -3667,7 +3667,7 @@
                 return;
             }
 
-            $scope.setBusy("Loading...", "Loading the Deal Editor", "Info");
+            $scope.setBusy("Loading...", "Loading the Deal Editor", "Info", true);
 
             var isPtrDirty = false;
             if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined) {
@@ -3700,7 +3700,7 @@
             }
         }
         $scope.publishWipDealsBase = function () {
-            $scope.setBusy("Loading...", "Loading the Deal Editor", "Info");
+            $scope.setBusy("Loading...", "Loading the Deal Editor", "Info", true);
             $scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
         $scope.gotoToPricingTable = function () {

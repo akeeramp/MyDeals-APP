@@ -32,6 +32,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
             $scope.isBusyMsgTitle = "";
             $scope.isBusyMsgDetail = "";
             $scope.isBusyType = "";
+            $scope.isBusyShowFunFact = false;
             $scope.searchText = "";
             $scope.curLinkedVal = "";
             $scope.columnSearchFilter = "";
@@ -321,15 +322,17 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                 $scope.root.changeBidAction(dataItem, $scope);
             }
 
-            $scope.setBusy = function (msg, detail, msgType) {
+            $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
                 $timeout(function () {
-                    var newState = msg != undefined && msg !== "";
+                	var newState = msg != undefined && msg !== "";
+                	if (isShowFunFact == null) { isShowFunFact = false; }
 
                     // if no change in state, simple update the text
                     if ($scope.isBusy === newState) {
                         $scope.isBusyMsgTitle = msg;
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
                         $scope.isBusyType = msgType;
+                        $scope.isBusyShowFunFact = isShowFunFact;
                         return;
                     }
 
@@ -338,11 +341,13 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                         $scope.isBusyMsgTitle = msg;
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
                         $scope.isBusyType = msgType;
+                        $scope.isBusyShowFunFact = isShowFunFact;
                     } else {
                         $timeout(function () {
                             $scope.isBusyMsgTitle = msg;
                             $scope.isBusyMsgDetail = !detail ? "" : detail;
                             $scope.isBusyType = msgType;
+                            $scope.isBusyShowFunFact = isShowFunFact;
                         }, 500);
                     }
                 });

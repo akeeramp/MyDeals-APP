@@ -854,7 +854,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         var ids = $scope.getIdsToPctMct(data);
         if (ids.length > 0) {
             $(".iconRunPct").addClass("fa-spin grn");
-            $scope.root.setBusy("Running PCT/MCT", "Running Price Cost Test and Meet Comp Test.");
+            $scope.root.setBusy("Running PCT/MCT", "Running Price Cost Test and Meet Comp Test.", "Info", true);
             objsetService.runPctContract($scope.root.contractData.DC_ID).then(
                 function (e) {
 
@@ -863,7 +863,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                     var testType = window.usrRole === "GA" ? "MCT" : "PCT";
 
 
-                    $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.");
+                    $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
                     $(".iconRunPct").removeClass("fa-spin grn");
                     root.actionPricingStrategies(data, result);
                 },
