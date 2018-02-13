@@ -1168,6 +1168,7 @@
     <Content Include="Images\edit.png" />
     <Content Include="Images\Error.png" />
     <Content Include="Images\ChromeIcon.png" />
+    <Content Include="Images\instructions.png" />
     <Content Include="Images\intel-logo-blue-100.png" />
     <Content Include="Images\intel-logo-white-100.png" />
     <Content Include="Images\intel-logo-white-500.png" />
@@ -1175,6 +1176,7 @@
     <Content Include="Images\intelMyDeals.png" />
     <Content Include="Images\intelsm.png" />
     <Content Include="Images\learning101menu.png" />
+    <Content Include="Images\learning101menu_v2.png" />
     <Content Include="Images\loading022.gif" />
     <Content Include="Images\loadingSmall.gif" />
     <Content Include="Images\NoAccess.png" />
