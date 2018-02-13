@@ -80,6 +80,9 @@
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="Helpers\FixesHelpers.cs" />
+    <Compile Include="OpDataCollectorFlattenedDictListPacket.cs" />
+    <Compile Include="OverlappingListPacket.cs" />
+    <Compile Include="PerformanceTime.cs" />
     <Compile Include="QuoteLetterSave.cs" />
     <Compile Include="QuoteLetterFile.cs" />
     <Compile Include="QuoteLetterData.cs" />
@@ -212,6 +215,7 @@
     <Compile Include="Templating\TemplateExtensions\DcsDealProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DcsProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DealTemplateDataGram.cs" />
+    <Compile Include="TimeFlowHelper.cs" />
     <Compile Include="TimeFlowItem.cs" />
     <Compile Include="TimeFlowMedia.cs" />
     <Compile Include="UI Templates\UiColumn.cs" />

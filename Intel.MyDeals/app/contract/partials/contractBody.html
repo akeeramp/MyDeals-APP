@@ -9,6 +9,12 @@
             <div class="fl fntLg col-md-11" style="color: #000000; margin: 0 6px 2px 10px;">{{ curPricingTable.TITLE }}</div>
             <div class="clearboth"></div>
         </div>
+        <div id="perfMs"></div>
+        <div id="perfLegend"></div>
+        <div id="perfDetails"></div>
+        <div style="position: absolute; top: 70px; right: 5px;">
+            <div id="perfChart" style="height: 40px; padding: 0;"></div>
+        </div>
         <div style="height: 37px; padding-left: 10px; border-bottom: 2px solid #bcbcbc;" ng-if="isPtr || isWip">
             <div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
             <div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}" ng-click="publishWipDealsFromTab()">Deal Editor</div>
@@ -119,6 +125,69 @@
 
     #secContainerWrapper .disabled {
         cursor: not-allowed;
+    }
+
+    #perfMs {
+        position: absolute;
+        top: 56px;
+        right: 10px;
+        color: #000000; 
+        font-family: verdana;
+        font-size: 10px; 
+        margin-top: 5px; 
+        z-index: 1000;
+    }
+    #perfLegend {
+        position: absolute;
+        top: 95px;
+        right: 5px;
+        font-family: verdana;
+        font-size: 9px;
+        z-index: 1000;
+        color: #666666;
+    }
+    #perfDetails {
+        position: absolute;
+        top: 110px;
+        right: 5px;
+        font-family: verdana;
+        font-size: 10px;
+        z-index: 1000;
+        background-color: #ffffff;
+    }
+    #perfDetails th {
+        padding: 2px 4px;
+        color: #0071C5;
+    }
+    #perfDetails td {
+        padding: 2px 4px;
+        color: #333333;
+    }
+    .closePerf {
+        color: #cccccc;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .closePerf:hover {
+        color: #FC4C02;
+    }
+    .legKey {
+        width: 10px;
+        height: 10px;
+        border: 1px solid #bebebe;
+    }
+    .legData {
+        margin-left: 4px;
+        margin-right: 10px;
+        margin-top: -2px;
+    }
+    .showMore {
+        font-size: 18px;
+        color: #00AEEF;
+        cursor: pointer;
+    }
+    .showMore:hover {
+        color: #0071C5;
     }
 </style>
 

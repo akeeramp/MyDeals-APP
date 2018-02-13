@@ -236,7 +236,10 @@ namespace Intel.MyDeals.BusinessLogic
                         if (de.AtrbCd != AttributeCodes.BACK_DATE_RSN_TXT) // Prevent backdate reason needed from being flushed out.
                         {
                             de.AtrbValue = items[de.AtrbCd];
-                            if (de.AtrbID <= 2) de.State = OpDataElementState.Unchanged;
+                            if (de.AtrbID <= 2 || de.AtrbCd == AttributeCodes.COST_TEST_RESULT || de.AtrbCd == AttributeCodes.MEETCOMP_TEST_RESULT)
+                            {
+                                de.State = OpDataElementState.Unchanged;
+                            }
                         }
                     }
                 }

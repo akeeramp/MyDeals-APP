@@ -1,13 +1,14 @@
 ﻿<!-- Pricing Strategies -->
-<div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
-	<div ng-if="isBusy" class="ss-loading-overlay" style="z-index: 0"></div>
+<div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px;">
+    
+    <div ng-if="isBusy" class="ss-loading-overlay" style="z-index: 0"></div>
     <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
 
         <div class="psNav" ng-class="{active: (curPricingStrategy.DC_ID == ps.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == false)}">
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
                 <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;" ng-class="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
             </div>
-            <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false"  title="Stage: {{ ps.WF_STG_CD }}">
+            <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false" title="Stage: {{ ps.WF_STG_CD }}">
                 <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet' }}" style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;">
                     <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
@@ -37,7 +38,7 @@
                     <!-- If PS is active and you are allowed to cancel -->
                     <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingStrategy(ps)"><i class="intelicon-no-access"></i> Cancel Entire Pricing Strategy</a></li>
 
-                    <!-- TODO need to check for valid pricing strategy before actions -->                    
+                    <!-- TODO need to check for valid pricing strategy before actions -->
                     <!--<li role="presentation" ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
                         <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Approve')"><i class="intelicon-arrow-forward-right"></i> Approve</a>
                     </li>

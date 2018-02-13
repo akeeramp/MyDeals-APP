@@ -64,12 +64,14 @@ namespace Intel.MyDeals.DataLibrary
                 var orderedPackets = GetPacketsInOrder(packets.Values);
 
                 // Write them to dbo.MYDL_CL_WIP_ATRB
+                DateTime start = DateTime.Now;
                 ImportOpDataPackets(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID, contractToken.CustId);
+                contractToken.AddMark("Import WIP - PR_MYDL_TMP_TO_WIP_ATRB", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
                 OpLog.Log("DcsDealLib.SaveMyDealsData - Exit ImportOpDataPackets.");
 
                 // Get all the actions and process them in order
-                MyDealsData ret = batchMode ? ActionDealsBatch(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID) : ActionDeals(orderedPackets);
+                MyDealsData ret = batchMode ? ActionDealsBatch(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID, contractToken) : ActionDeals(orderedPackets);
 
                 OpLog.Log("DcsDealLib.SaveMyDealsData - Exit ActionDeals.");
 
@@ -84,9 +86,11 @@ namespace Intel.MyDeals.DataLibrary
 
 
                 // POST SAVE AND ACTION Tasks - This is brought back in because it is needed for approval actions and redeal actions.  If we don't send it, UI gets out of whack (technical term).
-                if (contractToken.ContractId > 0)
+                if (contractToken.ContractId > 0 && packets.ContainsKey(OpDataElementType.PRC_ST))
                 {
+                    DateTime startTime = DateTime.Now;
                     new CostTestDataLib().RollupResults(new List<int> { contractToken.ContractId });
+                    contractToken.AddMark("RollupResults - PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP", TimeFlowMedia.DB, (DateTime.Now - startTime).TotalMilliseconds);
                 }
                 // if (contractToken.ContractId > 0) new CostTestDataLib().RunPct(OpDataElementType.CNTRCT.ToId(), new List<int> {contractToken.ContractId});
 
@@ -274,7 +278,7 @@ namespace Intel.MyDeals.DataLibrary
             OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Done: deal.PR_MYDL_TMP_TO_WIP_ATRB.");
         }
 
-        private MyDealsData ActionDealsBatch(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid)
+        private MyDealsData ActionDealsBatch(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid, ContractToken contractToken)
         {
             // Save Data Cycle: Point 20
             int packetCnt = packets.Count();
@@ -298,12 +302,14 @@ namespace Intel.MyDeals.DataLibrary
                 return ret;
             }
 
+            DateTime start = DateTime.Now;
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_MNG_WIP_ACTNS
             {
                 in_emp_wwid = wwid,
                 in_btch_ids = guidList
             }))
             {
+                contractToken.AddMark("Save/Action - PR_MYDL_MNG_WIP_ACTNS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
                 OpLog.Log("DealDataLib.Save:ActionDealsBatch - SP Complete, begin post processing.");
 
                 ret = ReaderToDataCollectors(rdr, false);

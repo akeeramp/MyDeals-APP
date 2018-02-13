@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.Entities;
@@ -30,7 +31,10 @@ namespace Intel.MyDeals.BusinessLogic
             // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
             if (ids.Any() && opDataElementTypes.Any())
             {
+                DateTime start = DateTime.Now;
                 MyDealsData primaryMyDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data, savePacket.MyContractToken.NeedToCheckForDelete);
+                savePacket.MyContractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
                 foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in primaryMyDealsData)
                 {
                     myDealsData[kvp.Key] = kvp.Value;
@@ -39,7 +43,10 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (secondaryIds.Any() && secondaryOpDataElementTypes.Any())
             {
+                DateTime start = DateTime.Now;
                 MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data, savePacket.MyContractToken.NeedToCheckForDelete);
+                savePacket.MyContractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
                 foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in secondaryMyDealsData)
                 {
                     if (kvp.Value.AllDataElements.Any())

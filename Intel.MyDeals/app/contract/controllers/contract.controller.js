@@ -33,6 +33,7 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
         $scope.maxKITproducts = 10;
+        $scope.pc = new perfCacheBlock("Contract Controller","");
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -2370,6 +2371,9 @@
         }
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract, callback) {
+            var pc = new perfCacheBlock("Save Contract Root", "UX");
+            var pcUi = new perfCacheBlock("Gather data to pass", "UI");
+
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
@@ -2395,6 +2399,7 @@
             }
 
             var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
+            pc.mark("Built data structure");
 
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.Errors && !angular.equals(data.Errors, {})) {
@@ -2417,8 +2422,17 @@
 
             util.console("updateContractAndCurPricingTable Started");
             var isDelPtr = !!delPtr && delPtr.length > 0;
+
+            pc.add(pcUi.stop());
+            var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
+
+                    var data = results.data.Data;
+
+                    pcService.addPerfTimes(results.data.PerformanceTimes);
+                    pc.add(pcService.stop());
+                    var pcUI = new perfCacheBlock("Processing returned data", "UI");
                     util.console("updateContractAndCurPricingTable Returned");
 
                     var i;
@@ -2426,17 +2440,18 @@
 
                     var anyWarnings = false;
 
-                    if (!!results.data.PRC_TBL_ROW) {
-                        results.data.PRC_TBL_ROW = $scope.pivotData(results.data.PRC_TBL_ROW);
-                        for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
-                            if (!!results.data.PRC_TBL_ROW[i].PTR_SYS_PRD) {
+                    pc.mark("Constructing returnset");
+                    if (!!data.PRC_TBL_ROW) {
+                        data.PRC_TBL_ROW = $scope.pivotData(data.PRC_TBL_ROW);
+                        for (i = 0; i < data.PRC_TBL_ROW.length; i++) {
+                            if (!!data.PRC_TBL_ROW[i].PTR_SYS_PRD) {
                                 // check for pivots
-                                results.data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(results.data.PRC_TBL_ROW[i].PTR_SYS_PRD);
+                                data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(data.PRC_TBL_ROW[i].PTR_SYS_PRD);
                             }
-                            if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
+                            if (data.PRC_TBL_ROW[i].warningMessages !== undefined && data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
 
-                        $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
+                        $scope.updateResults(data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
 
                         if (!!$scope.spreadDs) {
                             $scope.spreadDs.read();
@@ -2444,10 +2459,10 @@
                         }
                     }
 
-                    if (!!results.data.WIP_DEAL) {
+                    if (!!data.WIP_DEAL) {
                         if (!$scope.switchingTabs) {
-                            for (i = 0; i < results.data.WIP_DEAL.length; i++) {
-                                var dataItem = results.data.WIP_DEAL[i];
+                            for (i = 0; i < data.WIP_DEAL.length; i++) {
+                                var dataItem = data.WIP_DEAL[i];
                                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
 
                                 if (anyWarnings) {
@@ -2458,7 +2473,7 @@
 
                                     if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                                     	if (dataItem.PRODUCT_FILTER === undefined) { continue; }
-                                        dimStr = "_20___"
+                                        dimStr = "_20___";
                                         isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
                                         relevantAtrbs = $scope.kitDimAtrbs;
                                         tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;      
@@ -2471,7 +2486,7 @@
                                     }
                                 }
                             }
-                            $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                            $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                         }
                     }
 
@@ -2480,7 +2495,7 @@
                     if (!anyWarnings || !forceValidation) {
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.resetDirty();
-                        $scope.$broadcast('saveComplete', results);
+                        $scope.$broadcast('saveComplete', data);
 
                         if (!!toState) {
                             if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
@@ -2493,7 +2508,7 @@
                         }
                     } else {
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
-                        $scope.$broadcast('saveWithWarnings', results);
+                        $scope.$broadcast('saveWithWarnings', data);
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 2000);
@@ -2509,6 +2524,12 @@
                     //if a callback function is provided, invoke it now once everything else is completed
                     if (!!callback && typeof callback === "function") {
                         callback();
+                        pc.add(pcUI.stop());
+                        $scope.pc.add(pc.stop());
+                    } else {
+                        pc.add(pcUI.stop());
+                        $scope.pc.add(pc.stop());
+                        $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                     }
 
                 },

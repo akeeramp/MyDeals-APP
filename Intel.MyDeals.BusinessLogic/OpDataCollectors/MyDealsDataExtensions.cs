@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessLogic
                 // Clear Passed Validation for PTR and WIP
                 if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
                 {
-                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION);
+                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId()));
                     foreach (OpDataElement de in passedAtrbs)
                     {
                         de.AtrbValue = PassedValidation.Dirty;
@@ -658,8 +658,19 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else if (dc.IsModified || !dc.IsModified && dcHasErrors && dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION) != PassedValidation.Dirty.ToString())
                     {
-                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
-                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL)
+                        {
+                            if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
+                            dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                        }
+                    }
+
+                    // PASSED_VALIDATION is a bit different.  IT was set to DIRTY on the beginning of saved and now reset
+                    // We need to look at the orig value and if it is the same... reset the state flag
+                    IOpDataElement deValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
+                    if (deValid?.State == OpDataElementState.Modified && deValid.AtrbValue.ToString() == deValid.OrigAtrbValue.ToString())
+                    {
+                        deValid.State = OpDataElementState.Unchanged;
                     }
 
                     if (savePacket.ValidateIds.Any() && !dcHasErrors && opDataElementType == OpDataElementType.WIP_DEAL)

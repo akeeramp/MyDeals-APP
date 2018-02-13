@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
@@ -220,11 +221,21 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [Route("GetOverlappingDeals/{PRICING_TABLES_ID}")]
-        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)     //Get all Product with Alias from ProductAlias
+        public OverlappingListPacket GetOverlappingDeals(int PRICING_TABLES_ID)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(PRICING_TABLES_ID)
+            DateTime start = DateTime.Now;
+            List<TimeFlowItem> timeFlows = new List<TimeFlowItem>();
+
+            var results = SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(PRICING_TABLES_ID, timeFlows)
                 , $"Unable to get {"Overlapping Data"}"
              );
+
+
+            return new OverlappingListPacket
+            {
+                Data = results,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Overlap Check of Contract", timeFlows)
+            };
         }
 
         [HttpPost]

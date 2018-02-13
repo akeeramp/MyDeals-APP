@@ -659,6 +659,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //},
                 sortable: true,
                 editable: $scope.isEditable,
+                autoBind: true,
                 navigatable: true,
                 filterable: true,
                 resizable: $scope.resizable,
@@ -714,6 +715,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             };
+
             disableCellsBasedOnAnotherCellValue = function (model, newField, fieldName, changedCell, cellToDisable, isDisabledFunction) {
                 if (newField === changedCell && !!fieldName) {
                     model._behaviors.isReadOnly[cellToDisable] = isDisabledFunction(fieldName);
@@ -731,10 +733,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     // select the first column
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     if (!!tabStrip) {
-                        tabStrip.select(0);
-                        if ($scope.opOptions.groups !== undefined) {
-                            $scope.showCols($scope.curGroup);
-                            $scope.root.setBusy("", "");
+                    	tabStrip.select(0);
+                    	if ($scope.opOptions.groups !== undefined) {
+                    		$scope.showCols($scope.curGroup);
+                    		$scope.root.setBusy("", "");
                         }
                     }
                 }, 10);
@@ -1137,7 +1139,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.showCols = function (grpName) {
-                $scope.contractDs.filter({});
+
+                if ($scope.contractDs.filter() !== undefined) $scope.contractDs.filter({});
                 $scope.searchFilter = "";
 
                 if ($scope.curGroup == grpName) {
@@ -1185,18 +1188,31 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     } else {
 
-                        //hide all columns
+                        //hide all columns -- NOTE the one by one SHOW/HIDE columns is an expensive call... spend more time determining if we need to actually make the call
                         if (!!$scope.grid && !!$scope.grid.columns) {
                             for (c = 0; c <= $scope.grid.columns.length; c++) {
-                                if ($scope.grid.columns[c] !== undefined && $scope.grid.columns[c].field !== "")
-                                    $scope.grid.hideColumn(c);
+                                if ($scope.grid.columns[c] !== undefined && $scope.grid.columns[c].field !== "") {
+
+                                    if (colNames.indexOf($scope.grid.columns[c].field) >= 0) {
+                                        // show column
+                                        if ($scope.grid.columns[c].hidden !== undefined && $scope.grid.columns[c].hidden === true) {
+                                            $scope.grid.showColumn(c);
+                                        }
+                                    } else {
+                                        // hide column
+                                        if ($scope.grid.columns[c].hidden === undefined || $scope.grid.columns[c].hidden === false) {
+                                            $scope.grid.hideColumn(c);
+                                        }
+                                    }
+
+                                }
                             }
                         }
 
                         //show columns in list
-                        for (c = 0; c < colNames.length; c++) {
-                            $scope.grid.showColumn(colNames[c]);
-                        }
+                        //for (c = 0; c < colNames.length; c++) {
+                        //    $scope.grid.showColumn(colNames[c]);
+                        //}
                     }
                     $scope.grid.resize();
                     // Hack to resize grid
@@ -1205,18 +1221,35 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $timeout(function () { $scope.searchGrid(); });
                     }
                 } else {
-                    // CSS WAY... faster... not seeing any side effects yet
-                    // hide all columns
-                    for (c = 0; c < $scope.grid.columns.length; c++) {
-                        $(".op-grid table th:nth-child(" + (c + 1) + "),td:nth-child(" + (c + 1) + "),col:nth-child(" + (c + 1) + ")").hide();
-                    }
 
-                    // show columns in list
-                    for (c = 0; c < $scope.grid.columns.length; c++) {
-                        if (colNames.indexOf($scope.grid.columns[c].field) >= 0) {
-                            $(".op-grid table th:nth-child(" + (c + 1) + "),td:nth-child(" + (c + 1) + "),col:nth-child(" + (c + 1) + ")").show();
+                    if (grpName === "All") {
+                        for (c = 0; c < $scope.grid.columns.length; c++) {
+                            $scope.grid.showColumn(c);
                         }
+
+                    } else {
+
+                        if (!!$scope.grid && !!$scope.grid.columns) {
+                            for (c = 0; c <= $scope.grid.columns.length; c++) {
+                                if ($scope.grid.columns[c] !== undefined && $scope.grid.columns[c].field !== "") {
+                                    $scope.grid.columns[c].hidden = colNames.indexOf($scope.grid.columns[c].field) < 0;
+                                }
+                            }
+                        }
+
+                        $scope.grid.setOptions({
+                            columns: $scope.grid.columns
+                        });
+                        //$scope.grid.setOptions(originalOptions);
+
+                        //$scope.grid.refresh();
+                        //debugger;
+                        //$scope.grid.setOptions({
+                        //    columns: $scope.grid.columns
+                        //});
                     }
+                    $scope.grid.resize();
+
                 }
 
             }
@@ -1310,19 +1343,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $("input.grid-link-checkbox").prop("checked", false);
                 });
 
-                if (!!args.data.WIP_DEAL) {
-                    for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
-                        var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
+                if (!!args.WIP_DEAL) {
+                    for (var i = 0; i < args.WIP_DEAL.length; i++) {
+                        var dataItem = $scope.findDataItemById(args.WIP_DEAL[i]["DC_ID"]);
                         if (!!dataItem) {
-                            dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
-                            dataItem["WF_STG_CD"] = args.data.WIP_DEAL[i]["WF_STG_CD"];
-                            dataItem["PS_WF_STG_CD"] = args.data.WIP_DEAL[i]["PS_WF_STG_CD"];
-                            dataItem["TRKR_NBR"] = args.data.WIP_DEAL[i]["TRKR_NBR"];
-                            dataItem["AVG_RPU"] = args.data.WIP_DEAL[i]["AVG_RPU"];
-                            dataItem["MAX_RPU"] = args.data.WIP_DEAL[i]["MAX_RPU"];
-                            dataItem["BID_STATUS"] = args.data.WIP_DEAL[i]["BID_STATUS"];
-                            dataItem["EXPIRE_FLG"] = args.data.WIP_DEAL[i]["EXPIRE_FLG"] === "True" || args.data.WIP_DEAL[i]["EXPIRE_FLG"] === "1" || args.data.WIP_DEAL[i]["EXPIRE_FLG"] === 1 || args.data.WIP_DEAL[i]["EXPIRE_FLG"] === true;  // Old one would break because setting value false = "False"
-                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];
+                            dataItem["PASSED_VALIDATION"] = args.WIP_DEAL[i]["PASSED_VALIDATION"];
+                            dataItem["WF_STG_CD"] = args.WIP_DEAL[i]["WF_STG_CD"];
+                            dataItem["PS_WF_STG_CD"] = args.WIP_DEAL[i]["PS_WF_STG_CD"];
+                            dataItem["TRKR_NBR"] = args.WIP_DEAL[i]["TRKR_NBR"];
+                            dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
+                            dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
+                            dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
+                            dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"] === "True" || args.WIP_DEAL[i]["EXPIRE_FLG"] === "1" || args.WIP_DEAL[i]["EXPIRE_FLG"] === 1 || args.WIP_DEAL[i]["EXPIRE_FLG"] === true;  // Old one would break because setting value false = "False"
+                            dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
                         }
                     }
                 }
@@ -1333,16 +1366,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.cleanFlags();
 
                 // need to set all flags... dirty, error, validMsg
-                if (!!args.data.WIP_DEAL) {
-                    for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
-                        var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
+                if (!!args.WIP_DEAL) {
+                    for (var i = 0; i < args.WIP_DEAL.length; i++) {
+                        var dataItem = $scope.findDataItemById(args.WIP_DEAL[i]["DC_ID"]);
                         if (dataItem != null) {
-                            dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
-                            dataItem["_behaviors"] = args.data.WIP_DEAL[i]["_behaviors"];
+                            dataItem["PASSED_VALIDATION"] = args.WIP_DEAL[i]["PASSED_VALIDATION"];
+                            dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];                               
                         }
 
-                        if (args.data.WIP_DEAL[i].warningMessages !== undefined && args.data.WIP_DEAL[i].warningMessages.length !== 0) {
-                            var beh = args.data.WIP_DEAL[i]._behaviors;
+                        if (args.WIP_DEAL[i].warningMessages !== undefined && args.WIP_DEAL[i].warningMessages.length !== 0) {
+                            var beh = args.WIP_DEAL[i]._behaviors;
                             if (!beh) beh = {};
                             if (beh.isError === undefined) beh.isError = {};
                             if (beh.validMsg === undefined) beh.validMsg = {};
@@ -2079,6 +2112,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.overlappingDealsSetup = function () {
                 var dealType = $scope.dealTypes[0];
                 if (dealType.toUpperCase() === "ECAP" && $scope.isOverlapNeeded) {
+                    var pcService = new perfCacheBlock("Overlapping Check", "MT");
+
                     util.console("Overlapping Deals Started");
                     $scope.$parent.$parent.setBusy("Overlapping Deals...", "Looking for Overlapping Deals!");
                     if (usrRole === "GA" || usrRole === "FSE") {
@@ -2090,9 +2125,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //Calling WEBAPI
                     objsetService.getOverlappingDeals(pricingTableID)
                         .then(function (response) {
+
+                            pcService.addPerfTimes(response.data.PerformanceTimes);
+
+                            var pcUi = new perfCacheBlock("Overlapping Tab Processing", "UI");
                             util.console("Overlapping Deals Returned");
                             if (response.data) {
-                                if (response.data.length > 0) {
+                                var data = response.data.Data;
+                                if (data.length > 0) {
 
                                     $scope.isOverlapping = true;
 
@@ -2100,10 +2140,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     $scope.addTabRequired();
 
                                     //Calculate Error count
-                                    $scope.ovlpErrorCounter(response.data);
+                                    $scope.ovlpErrorCounter(data);
 
                                     //Assigning Data to Overlapping GRID
-                                    $scope.ovlpData = response.data;
+                                    $scope.ovlpData = data;
 
                                     //Data massaging for END_DT
                                     for (var i = 0; i < $scope.ovlpData.length; i++) {
@@ -2149,7 +2189,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     util.console("Remove overlapping tab DONE");
                                 }
                             }
+                            pcService.add(pcUi.stop());
+
+                            $scope.$parent.$parent.$parent.$parent.$parent.pc.add(pcService.stop());
                             $scope.$parent.$parent.setBusy("", "");
+                            $timeout(function () {
+                                $scope.$parent.$parent.$parent.$parent.$parent.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                            }, 2000);
+                            
                         },
                         function (response) {
                             //empty after moving sync and validate to happen before the getOverlappingDeals call is made
@@ -2159,6 +2206,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.saveAndValidateGrid = function () {
+                $scope.$parent.$parent.$parent.$parent.$parent.pc = new perfCacheBlock("Deal Editor Save & Validate", "UX");
 
                 //procedures within sync and validate wip deals must complete before overlapping deals setup is run to ensure user changes are accounted for, thus we pass in overlappingDealsSetup as a callback function
                 $scope.syncAndValidateWipDeals($scope.overlappingDealsSetup);

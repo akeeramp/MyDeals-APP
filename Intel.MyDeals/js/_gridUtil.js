@@ -1082,6 +1082,32 @@ gridUtils.stgFullTitleChar = function (dataItem) {
     return dataItem.WF_STG_CD === "Draft" ? dataItem.PS_WF_STG_CD : dataItem.WF_STG_CD;
 }
 
+gridUtils.closeDetails = function () {
+    $("#perfDetails").html("");
+}
+
+gridUtils.showDetails = function (data) {
+    var rtn = "<div style='border: 1px solid #666666; padding: 6px;'>";
+    rtn += "<div class='fr'><i class='intelicon-close-solid closePerf' onClick='gridUtils.closeDetails()'></i></div>";
+    rtn += "<div style='font-size: 16px; margin-left: 10px; font-weight: 200;'>Performance Times</div>";
+    rtn += "<table><tr><th></th><th></th><th>Task / Action performed</th><th>Time in ms</th></tr>";
+
+    for (var d = 0; d < data.data.length; d++) {
+        rtn += "<tr>";
+        rtn += "<td><i class='intelicon-information-solid' style='font-size: 14px; color: " + data.data[d].color + ";'></i></td>";
+        rtn += "<td>" + data.data[d].name + "</td>";
+        rtn += "<td>" + data.data[d].title + "</td>";
+        rtn += "<td style='text-align: right;'>" + data.data[d].data[0].toFixed(2) + " ms</td>";
+        rtn += "</tr>";
+    }
+
+    rtn += "</table></div>";
+
+    $("#perfDetails").html(rtn);
+}
+
+
+
 
 function gridTools(model, cols) {
     this.model = model;
@@ -1408,4 +1434,187 @@ gridPctUtils.getPctFlag = function (flg, results, forceReadOnly, hasNoPermission
     rtn += '</div';
     return rtn;
 }
+
+
+
+
+
+
+function perfCacheMark(title) {
+    this.title = title;
+    this.type = "mark";
+    this.start = moment();
+}
+
+perfCacheMark.prototype.timeFormat = "MM/DD/YYYY HH:mm:ss:SSS";
+perfCacheMark.prototype.title = "";
+perfCacheMark.prototype.type = "";
+perfCacheMark.prototype.start = "";
+
+
+
+
+function perfCacheBlock(title, category) {
+    this.title = title;
+    this.category = category;
+    this.type = "block";
+    this.start = moment();
+    this.marks = [];
+    this.end = null;
+    this.executionMs = 0;
+}
+
+perfCacheBlock.prototype.timeFormat = "MM/DD/YYYY HH:mm:ss:SSS";
+perfCacheBlock.prototype.title = "";
+perfCacheBlock.prototype.category = "";
+perfCacheBlock.prototype.type = "";
+perfCacheBlock.prototype.start = "";
+perfCacheBlock.prototype.end = "";
+perfCacheBlock.prototype.lapse = 0;
+perfCacheBlock.prototype.executionMs = 0;
+perfCacheBlock.prototype.marks = [];
+
+perfCacheBlock.prototype.stop = function () {
+    this.end = moment();
+    this.executionMs = this.end.diff(this.start);
+    return this;
+};
+
+perfCacheBlock.prototype.mark = function (title) {
+    this.add(new perfCacheMark(title));
+};
+
+perfCacheBlock.prototype.block = function (data) {
+};
+
+perfCacheBlock.prototype.add = function (data) {
+    data.lapse = moment().diff(this.start);
+    if (data.type === "block") data.lapse -= data.executionMs;
+    this.marks.push(data);
+};
+
+perfCacheBlock.prototype.getChartColor = function (key) {
+    if (key === "UI") return "#FFA300";
+    if (key === "MT") return "#00AEEF";
+    if (key === "DB") return "#C4D600";
+    if (key === "Network") return "#FC4C02";
+    return "#dddddd";
+};
+
+perfCacheBlock.prototype.getChartData = function () {
+    if (this.marks.length > 0) {
+        var rtn = [];
+
+        // get all blocks
+        for (var m = 0; m < this.marks.length; m++) {
+            if (this.marks[m].type === "block") {
+                var data = this.marks[m].getChartData();
+                for (var d = 0; d < data.length; d++) {
+                    rtn.push(data[d]);
+                }
+            }
+        }
+
+        // get gap time
+        var totTime = 0;
+        for (var r = 0; r < rtn.length; r++) {
+            totTime += rtn[r].data[0];
+        }
+        if (this.executionMs > totTime) {
+            rtn.push({
+                name: "Unknown" ,
+                title: this.title,
+                data: [this.executionMs - totTime],
+                color: "#dddddd"
+            });
+        }
+
+        return rtn;
+    } else {
+        return [
+            {
+                name: this.category,
+                title: this.title,
+                data: [this.executionMs],
+                color: this.getChartColor(this.category)
+            }
+        ];
+    }
+}
+
+perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
+    if (!window.isDeveloper && !window.isTester) return;
+
+    var data = {
+        executionMs: this.executionMs,
+        data: this.getChartData()
+    };
+    perfCacheBlock.data = data;
+
+    var totTimes = {};
+
+    for (var d = 0; d < data.data.length; d++) {
+        var item = data.data[d];
+        if (totTimes[item.name] === undefined) totTimes[item.name] = 0;
+        totTimes[item.name] += item.data[0];
+    }
+
+    var legend = "";
+    var block = this;
+    Object.keys(totTimes).forEach(function (key, index) {
+        legend += "<div class='fl legKey' style='background-color: " + block.getChartColor(key) + ";'></div>";
+        legend += "<div class='fl legData'>" + key + ": " + this[key].toFixed(2) + "ms</div>";
+    }, totTimes);
+
+    $("#" + legendId).html(legend + "<div class='clearcoth'></div>");
+    $("#" + titleId).html("Total Execution Time: <b>" + data.executionMs + "ms</b> <i class='intelicon-show-results-outlined showMore' onClick='gridUtils.showDetails(perfCacheBlock.data)'></i>");
+    $("#" + chartId).kendoChart({
+        legend: {
+            visible: false
+        },
+        chartArea: {
+            width: 400
+        },
+        seriesDefaults: {
+            type: "bar",
+            stack: {
+                type: "100%"
+            }
+        },
+        series: data.data,
+        valueAxis: {
+            line: { visible: false },
+            labels: { visible: false },
+            minorGridLines: { visible: false },
+            majorGridLines: { visible: false }
+        },
+        categoryAxis: {
+            line: { visible: false },
+            minorGridLines: { visible: false },
+            majorGridLines: { visible: false }
+        },
+        tooltip: {
+            visible: true,
+            template: "#= series.name #: #= value.toFixed(2) # ms<br/><span style='color: \\#cccccc !important; font-size: 10px !important;'>#=series.title#</span>"
+        }
+    });
+
+};
+
+perfCacheBlock.prototype.addPerfTimes = function (performanceTimes) {
+    var lapse = 0;
+    for (var p = 0; p < performanceTimes.length; p++) {
+        var item = performanceTimes[p];
+        var media = "UI";
+        if (item.Media === 2) media = "MT";
+        if (item.Media === 3) media = "DB";
+        var perf = new perfCacheBlock(item.Title, media);
+        perf.type = "block";
+        perf.lapse = lapse;
+        perf.executionMs = item.ExecutionTime;
+        this.marks.push(perf);
+        lapse += item.ExecutionTime;
+    }
+}
+
 

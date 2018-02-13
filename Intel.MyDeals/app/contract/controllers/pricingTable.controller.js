@@ -1788,7 +1788,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     $scope.applySpreadsheetMerge();
                 }
             } else {
-                $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+                $scope.setRowIdStyle(args.PRC_TBL_ROW);
             }
             $scope.root.switchingTabs = false;
         });
@@ -1805,7 +1805,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     $scope.applySpreadsheetMerge();
                 }
             } else {
-                $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+                $scope.setRowIdStyle(args.PRC_TBL_ROW);
             }
             $scope.root.switchingTabs = false;
         });
@@ -2446,6 +2446,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function ValidateProducts(currentPricingTableRowData, publishWipDeals, currentRowNumber) {
+        var pcUi = new perfCacheBlock("Validate Products", "UI");
+
         var currentPricingTableRowData = currentPricingTableRowData.map(function (row, index) {
             return $.extend({}, row, { 'ROW_NUMBER': index + 1 });
         });
@@ -2458,7 +2460,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return x.ROW_NUMBER == currentRowNumber;
             });
         }
-
 
         var hasProductDependencyErr = false;
 
@@ -2553,9 +2554,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
 
         // Products invalid JSON data present in the row
-        var invalidProductJSONRows = pricingTableRowData.filter(function (x) {
+        var invalidProductJSONRows = pricingTableRowData.filter(function(x) {
             return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
-        })
+        });
+
+        $scope.pc.add(pcUi.stop());
 
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
@@ -2564,8 +2567,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", false, true);
+            var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
+
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
+                    $scope.pc.add(pcMt.stop());
                     topbar.hide();
                     if (response.statusText === "OK") {
                         response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
@@ -3069,6 +3075,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function validatePricingTableProducts() {
+        $scope.root.pc = new perfCacheBlock("Pricing Table Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false);
     }

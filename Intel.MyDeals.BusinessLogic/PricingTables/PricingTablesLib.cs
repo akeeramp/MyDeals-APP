@@ -428,10 +428,19 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)
+        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID, List<TimeFlowItem> timeFlows)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
+
+            DateTime start = DateTime.Now;
             List<Overlapping> overlapps = OD.GetOverlappingDeals(PRICING_TABLES_ID);
+            timeFlows.Add(new TimeFlowItem
+            {
+                StepTitle = "Get Overlapping Deals",
+                Media = TimeFlowMedia.DB,
+                MsLapseTiming = 0,
+                MsExecutionTiming = (DateTime.Now - start).TotalMilliseconds
+            });
 
             // Need to update
             List<int> wipIds = overlapps.Select(o => o.WIP_DEAL_OBJ_SID).Distinct().ToList();
@@ -482,7 +491,7 @@ namespace Intel.MyDeals.BusinessLogic
                 else
                 {
                     de.SetAtrbValue(value);
-                    de.State = OpDataElementState.Modified;
+                    if (de.AtrbValue.ToString() != de.OrigAtrbValue.ToString()) de.State = OpDataElementState.Modified;
                 }
 
                 // Only update passed validation to FALSE... if value failed.  NEVER just blindly set it to PASS
@@ -509,13 +518,23 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
-            myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
-            myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
-            myDealsData.EnsureBatchIDs();
+            if (myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Any(d => d.State != OpDataElementState.Unchanged))
+            {
+                myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+                myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
+                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+                myDealsData.EnsureBatchIDs();
 
-            MyDealsData retData = myDealsData.Save(contractToken);
-            //WIP_DEAL_OBJ_SID
+                start = DateTime.Now;
+                MyDealsData retData = myDealsData.Save(contractToken);
+                timeFlows.Add(new TimeFlowItem
+                {
+                    StepTitle = "Save Overlapping Results",
+                    Media = TimeFlowMedia.DB,
+                    MsLapseTiming = 0,
+                    MsExecutionTiming = (DateTime.Now - start).TotalMilliseconds
+                });
+            }
             return overlapps;
         }
 

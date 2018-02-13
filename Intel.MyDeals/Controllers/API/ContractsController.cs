@@ -1,8 +1,10 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
@@ -137,35 +139,51 @@ namespace Intel.MyDeals.Controllers.API
         [Route("SaveAndValidateContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
+        public OpDataCollectorFlattenedDictListPacket SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
         {
-            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken("ContractToken Created - SaveAndValidateContractAndPricingTable")
+            DateTime start = DateTime.Now;
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - SaveAndValidateContractAndPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId,
                 DeleteAllPTR = delPtr
-            }, contractAndPricingTable, forceValidation: true, forcePublish: true)
+            };
+
+            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(contractToken, contractAndPricingTable, forceValidation: true, forcePublish: true)
                 , "Unable to save the Contract"
             );
 
-            return result;
+            return new OpDataCollectorFlattenedDictListPacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Contract", contractToken.TimeFlow)
+            };
         }
 
         [Authorize]
         [Route("SaveAndValidateAndPublishContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public OpDataCollectorFlattenedDictList SaveAndValidateAndPublishContractAndPricingTable(int custId, int contractId, ContractTransferPacket contractAndPricingTable)
+        public OpDataCollectorFlattenedDictListPacket SaveAndValidateAndPublishContractAndPricingTable(int custId, int contractId, ContractTransferPacket contractAndPricingTable)
         {
-            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken("ContractToken Created - SaveAndValidateAndPublishContractAndPricingTable")
+            DateTime start = DateTime.Now;
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - SaveAndValidateAndPublishContractAndPricingTable")
             {
                 CustId = custId,
                 ContractId = contractId
-            }, contractAndPricingTable, forceValidation: true, forcePublish: true)
+            };
+
+            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(contractToken, contractAndPricingTable, forceValidation: true, forcePublish: true)
                 , "Unable to save the Contract"
             );
 
-            return result;
+            return new OpDataCollectorFlattenedDictListPacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Contract", contractToken.TimeFlow)
+            };
         }
 
         [Authorize]

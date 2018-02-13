@@ -186,8 +186,6 @@ function objsetService($http, dataService, logger, $q, $location) {
         } else if (forceValidation) {
             return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } else {
-            // Make sure we alsways validate and translate...
-            //return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
             return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         }
     }

@@ -61,5 +61,19 @@ namespace Intel.MyDeals.Entities
             _lapTimeFlowItem = null;
         }
 
+        public void AddMark(string title, TimeFlowMedia media, double executionTime)
+        {
+            var now = DateTime.Now;
+            TimeFlow.Add(new TimeFlowItem
+            {
+                StepNum = _stepCnt++,
+                StepTitle = title,
+                Media = media,
+                MsLapseTiming = (now - _lastTimeFlowItem).TotalMilliseconds,
+                MsExecutionTiming = executionTime,
+                Details = ""
+            });
+        }
+
     }
 }
