@@ -91,6 +91,15 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Title",
                 Width = 150
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3,
+                AtrbCd = AttributeCodes.TERMS,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                DataType = "string",
+                Label = "Terms",
+                Width = 150
+            });
 
             #endregion PRICING STRATEGIES
 
