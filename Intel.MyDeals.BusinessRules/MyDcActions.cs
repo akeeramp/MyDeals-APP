@@ -1114,10 +1114,10 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
-        }
+			ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one rate must be greater than 0.");
+		}
 
-        public static void ValidateTieredQty(params object[] args)
+		public static void ValidateTieredQty(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1163,18 +1163,18 @@ namespace Intel.MyDeals.BusinessRules
             ValidateTieredDecimalAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0.", IsGreaterThanZero, r, numOfTiers, offset, false);
         }
 
-        public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+        public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
         {
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
             if (deNumTiers == null) return;
 
             int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 
-            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol);
+            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
         }
 
-        public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r)
-        {
+        public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
+		{
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
             if (deNumTiers == null) return;
 
@@ -1182,16 +1182,18 @@ namespace Intel.MyDeals.BusinessRules
             // TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
             int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
 
-            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false);
+            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
         }
 
-        public static void ValidateTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false)
+        public static void ValidateTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
         {
             IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
             IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
-            // Validate and set validation message if applicable on each tier
-            foreach (IOpDataElement atrb in atrbs)
+			decimal totalOfAtrb = 0;
+
+			// Validate and set validation message if applicable on each tier
+			foreach (IOpDataElement atrb in atrbs)
             {
                 int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
@@ -1211,8 +1213,9 @@ namespace Intel.MyDeals.BusinessRules
 
                     decimal safeParse = 0;
                     bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+					totalOfAtrb += safeParse;
 
-                    if (!isNumber)
+					if (!isNumber)
                     {
                         AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
                     }
@@ -1222,7 +1225,23 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 }
             }
-        }
+
+			// Validation of totals
+			if (isValidateAtrbTotal)
+			{
+				if (!totalValidationCondition(totalOfAtrb))
+				{
+					foreach (IOpDataElement tieredObj in atrbs)
+					{
+						int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
+						if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+						{
+							AddTierValidationMessage(atrbWithValidation, totalValidationMessage, tier);
+						}
+					}
+				}
+			}
+		}
 
         private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
         {
