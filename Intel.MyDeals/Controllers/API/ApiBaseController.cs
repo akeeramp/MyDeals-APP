@@ -4,6 +4,7 @@ using System.Net.Http;
 using Intel.Opaque;
 using System.Web.Http;
 using Intel.MyDeals.App;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -44,7 +45,15 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return action();
+				if (OpUserStack.MyOpUserToken.Usr.WWID <= 0)
+				{
+					// Re-populate WWID
+					OpLog.Log("User WWID was not found. A server refresh likely happened between the time the user opened the page and the time the user clicked save. Now re-populating WWID.");
+					OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = OpUserStack.GetMyKey() } };
+					AppLib.PopulateUserSettings(opUserToken);
+				}
+
+				return action();
             }
             catch (Exception ex)
             {
