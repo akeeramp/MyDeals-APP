@@ -682,9 +682,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            }
 
 					            if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
-
+ 
 					                var dealGrpKeyFirstIndex = myRowIndex;
 					                data = root.spreadDs.data();
+
+					            	// Update the other tiers (because they may not update the other tiers if user drag-drops through only some of the rows of the merged row
+					                for (var i = 0; i < parseInt(data[myRowIndex]["NUM_OF_TIERS"]); i++) {
+					                	data[myRowIndex + i]["DEAL_GRP_NM"] = data[myRowIndex]["DEAL_GRP_NM"];
+									}
 
 					                // Look for another occurance of the Deal Group Name (AKA - Kit Name)
 					                for (var i = 0; i < data.length; i++) {
