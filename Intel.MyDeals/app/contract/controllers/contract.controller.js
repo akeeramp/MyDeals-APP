@@ -33,7 +33,7 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
         $scope.maxKITproducts = 10;
-        $scope.pc = new perfCacheBlock("Contract Controller","");
+        $scope.pc = new perfCacheBlock("Contract Controller", "");
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -194,17 +194,17 @@
             }
 
             if (isInstant) {
-            	$scope.setBusyBase(msg, detail, msgType, isShowFunFact);
+                $scope.setBusyBase(msg, detail, msgType, isShowFunFact);
             } else {
                 $timeout(function () {
-                	$scope.setBusyBase(msg, detail, msgType, isShowFunFact);
+                    $scope.setBusyBase(msg, detail, msgType, isShowFunFact);
                 });
             }
         }
 
         $scope.setBusyBase = function (msg, detail, msgType, isShowFunFact) {
-        	var newState = msg != undefined && msg !== "";
-        	if (isShowFunFact == null) { isShowFunFact = false; }
+            var newState = msg != undefined && msg !== "";
+            if (isShowFunFact == null) { isShowFunFact = false; }
 
             // if no change in state, simple update the text
             if ($scope.isBusy === newState) {
@@ -238,9 +238,10 @@
         $scope.ApplyTitlesToChildren();
         $scope.initialEndDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["END_DT"] && $scope.contractData._behaviors.isReadOnly["END_DT"];
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
+        $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
         $scope.needMct = function () {
-            if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false;
+            if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false
 
             for (var m = 0; m < $scope.contractData.PRC_ST.length; m++) {
                 var item = $scope.contractData.PRC_ST[m].MEETCOMP_TEST_RESULT;
@@ -394,35 +395,6 @@
 
             initiateCustDivCombobox();
 
-            var setDefaultContractTitle = function (custDiv) {
-                // UFT feedback... remove auto title
-                return;
-
-                // if user has touched the Title do not set the title
-                if ($scope.contractData.DC_ID <= 0 &&
-                    custDiv !== "" &&
-                    !$scope.contractData._behaviors.isDirty['TITLE'] &&
-                    $scope.contractData.CUST_MBR_SID > 0) {
-                    var defaultContractName = "";
-                    defaultContractName = "Intel-" +
-                        custDiv +
-                        " Q" +
-                        $scope.contractData.START_QTR +
-                        " " +
-                        $scope.contractData.START_YR;
-                    if ($scope.contractData.START_QTR != $scope.contractData.END_QTR ||
-                        $scope.contractData.START_YR != $scope.contractData.END_YR) {
-                        defaultContractName += "- Q" + $scope.contractData.END_QTR + " " + $scope.contractData.END_YR;
-                    }
-
-                    $scope.contractData.TITLE = defaultContractName;
-                    //User has not changed the title, system doing it set dirty flag to false.
-                    $timeout(function () {
-                        $scope.contractData._behaviors.isDirty['TITLE'] = false;
-                    });
-                }
-            }
-
             // Date Functions
             var validateDate = function (dateType) {
                 $scope.contractData._behaviors.isError['START_DT'] =
@@ -448,6 +420,13 @@
                             .validMsg['END_DT'] = moment(endDate).isAfter($scope.contractData.MaxDate)
                                 ? "End date cannot be greater than - " + $scope.contractData.MaxDate
                                 : "End date cannot be less than Start Date";
+                    }
+                    if ($scope.existingMinEndDate !== "") {
+                        if (moment(endDate).isBefore($scope.existingMinEndDate)) {
+                            $scope.contractData._behaviors.isError['END_DT'] = true;
+                            $scope.contractData._behaviors
+                                .validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + $scope.existingMinEndDate;
+                        }
                     }
                 }
             }
@@ -958,12 +937,10 @@
             }
 
             if (oldValue["CUST_ACCNT_DIV_UI"].toString() !== newValue["CUST_ACCNT_DIV_UI"].toString()) {
-                setDefaultContractTitle(newValue["CUST_ACCNT_DIV_UI"]);
                 $timeout(function () {
                     $scope.contractData.CUST_ACCNT_DIV = newValue["CUST_ACCNT_DIV_UI"].toString()
                         .replace(/,/g, '/');
-                },
-                    1);
+                }, 1);
             }
 
             if (oldValue["START_QTR"] !== newValue["START_QTR"] || oldValue["START_YR"] !== newValue["START_YR"]) {
@@ -971,9 +948,7 @@
                     if (delayStartFunction) $timeout.cancel(delayStartFunction);
                     delayStartFunction = $timeout(function () {
                         updateDateByQuarter('START_DATE', newValue["START_QTR"], newValue["START_YR"]);
-                        setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV_UI);
-                    },
-                        500);
+                    }, 500);
                 }
                 unWatchStartQuarter = false;
             }
@@ -1494,7 +1469,7 @@
             );
         }
         $scope.actionWipDeal = function (wip, actn) {
-        	$scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", false, true);
+            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", false, true);
             objsetService.actionWipDeal($scope.getCustId(), $scope.contractData.DC_ID, wip, actn).then(
                 function (data) {
                     debugger;
@@ -1507,7 +1482,7 @@
             );
         }
         $scope.actionWipDeals = function (data) {
-        	$scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!", "Info", false, true);
+            $scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!", "Info", false, true);
             objsetService.actionWipDeals($scope.getCustId(), $scope.contractData.DC_ID, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1563,7 +1538,7 @@
             }
         }
 
-        $scope.syncHoldItems = function(data, wip) {
+        $scope.syncHoldItems = function (data, wip) {
             $scope.messages = data.data.Messages;
 
             $timeout(function () {
@@ -1633,7 +1608,7 @@
         $scope.rollBackPricingStrategy = function (ps) {
             kendo.confirm("Are you sure that you want to undo this pricing strategy re-deal?").then(function () {
                 $scope.$apply(function () {
-                	$scope.setBusy("RollBack...", "Rolling the Pricing Strategy back", "Info");
+                    $scope.setBusy("RollBack...", "Rolling the Pricing Strategy back", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
@@ -1668,7 +1643,7 @@
         $scope.cancelPricingStrategy = function (ps) {
             kendo.confirm("Are you sure that you want to cancel this pricing strategy?").then(function () {
                 $scope.$apply(function () {
-                	$scope.setBusy("Cancel...", "Canceling the Pricing Strategy back", "Info");
+                    $scope.setBusy("Cancel...", "Canceling the Pricing Strategy back", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     objsetService.cancelPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps).then(
@@ -2258,8 +2233,7 @@
                         var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
                         for (var key in fields) {
                             if (fields.hasOwnProperty(key)) {
-                                if (fields[key].type === "date")
-                                {
+                                if (fields[key].type === "date") {
                                     gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
                                 }
                             }
@@ -2472,11 +2446,11 @@
                                     var tierCount = dataItem.NUM_OF_TIERS;
 
                                     if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                                    	if (dataItem.PRODUCT_FILTER === undefined) { continue; }
+                                        if (dataItem.PRODUCT_FILTER === undefined) { continue; }
                                         dimStr = "_20___";
                                         isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
                                         relevantAtrbs = $scope.kitDimAtrbs;
-                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;      
+                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
                                     }
                                     // map tiered warnings
                                     for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
@@ -2991,10 +2965,10 @@
             }
         }
         $scope.mapProperty = function (src, data) {
-        	if ($scope.isPivotable()) {
-        		var srcTierNum = parseInt(src.TIER_NBR);
-        		var dataTierNum = parseInt(data.TIER_NBR);
-        		if (src["DC_ID"] === data["DC_ID"] && (!srcTierNum && dataTierNum === 1 || srcTierNum === dataTierNum)) {
+            if ($scope.isPivotable()) {
+                var srcTierNum = parseInt(src.TIER_NBR);
+                var dataTierNum = parseInt(data.TIER_NBR);
+                if (src["DC_ID"] === data["DC_ID"] && (!srcTierNum && dataTierNum === 1 || srcTierNum === dataTierNum)) {
                     var arItems = data;
                     for (var key in arItems) {
                         if (arItems.hasOwnProperty(key) && data[key] !== undefined)
@@ -3730,7 +3704,7 @@
             $scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
         $scope.gotoToPricingTable = function () {
-        	$scope.setBusy("Loading...", "Loading the Pricing Table Editor", "Info");
+            $scope.setBusy("Loading...", "Loading the Pricing Table Editor", "Info");
             $scope.spreadNeedsInitialization = true;
             $state.go('contract.manager.strategy',
                 {
@@ -3741,7 +3715,7 @@
                 { reload: true });
         }
         $scope.backToPricingTable = function () {
-        	if ($scope.isPtr) return;
+            if ($scope.isPtr) return;
 
             if (!$scope._dirty) {
                 $scope.switchingTabs = true;
@@ -3832,7 +3806,7 @@
         }
 
         $scope.gotoDealEntry = function () {
-            //we reset any PS/PT/WIP specific information to remove unnecessary highlights or headers - perhaps this should be kept in the $scope.goto function instead? 
+            //we reset any PS/PT/WIP specific information to remove unnecessary highlights or headers - perhaps this should be kept in the $scope.goto function instead?
             $scope.curPricingStrategyId = 0;
             $scope.curPricingStrategy = {};
             $scope.curPricingTable = {};
