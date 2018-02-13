@@ -642,7 +642,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.KIT }, //KIT TODO: should it be readonly and thus here or do we move it up to be editable like ECAP?
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT }, //KIT TODO: should it be readonly and thus here or do we move it up to be editable like ECAP?
                 Width = 130,
                 IsDefaultable = true,
                 Label = "Program Payment *",
