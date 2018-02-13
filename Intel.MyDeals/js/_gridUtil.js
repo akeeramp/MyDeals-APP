@@ -1090,14 +1090,14 @@ gridUtils.showDetails = function (data) {
     var rtn = "<div style='border: 1px solid #666666; padding: 6px;'>";
     rtn += "<div class='fr'><i class='intelicon-close-solid closePerf' onClick='gridUtils.closeDetails()'></i></div>";
     rtn += "<div style='font-size: 16px; margin-left: 10px; font-weight: 200;'>Performance Times</div>";
-    rtn += "<table><tr><th></th><th></th><th>Task / Action performed</th><th>Time in ms</th></tr>";
+    rtn += "<table><tr><th></th><th></th><th>Task / Action performed</th><th>Time in sec</th></tr>";
 
     for (var d = 0; d < data.data.length; d++) {
         rtn += "<tr>";
         rtn += "<td><i class='intelicon-information-solid' style='font-size: 14px; color: " + data.data[d].color + ";'></i></td>";
         rtn += "<td>" + data.data[d].name + "</td>";
         rtn += "<td>" + data.data[d].title + "</td>";
-        rtn += "<td style='text-align: right;'>" + data.data[d].data[0].toFixed(2) + " ms</td>";
+        rtn += "<td style='text-align: right;'>" + (data.data[d].data[0]/1000).toFixed(4) + "s</td>";
         rtn += "</tr>";
     }
 
@@ -1563,11 +1563,11 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
     var block = this;
     Object.keys(totTimes).forEach(function (key, index) {
         legend += "<div class='fl legKey' style='background-color: " + block.getChartColor(key) + ";'></div>";
-        legend += "<div class='fl legData'>" + key + ": " + this[key].toFixed(2) + "ms</div>";
+        legend += "<div class='fl legData'>" + key + ": " + (this[key] / 1000).toFixed(4) + "s</div>";
     }, totTimes);
 
     $("#" + legendId).html(legend + "<div class='clearcoth'></div>");
-    $("#" + titleId).html("Total Execution Time: <b>" + data.executionMs + "ms</b> <i class='intelicon-show-results-outlined showMore' onClick='gridUtils.showDetails(perfCacheBlock.data)'></i>");
+    $("#" + titleId).html("Total Execution Time: <b>" + (data.executionMs / 1000) + "sec</b> <i class='intelicon-show-results-outlined showMore' onClick='gridUtils.showDetails(perfCacheBlock.data)'></i>");
     $("#" + chartId).kendoChart({
         legend: {
             visible: false
@@ -1595,7 +1595,7 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
         },
         tooltip: {
             visible: true,
-            template: "#= series.name #: #= value.toFixed(2) # ms<br/><span style='color: \\#cccccc !important; font-size: 10px !important;'>#=series.title#</span>"
+            template: "#= series.name #: #= (value / 1000).toFixed(4) #s<br/><span style='color: \\#cccccc !important; font-size: 10px !important;'>#=series.title#</span>"
         }
     });
 

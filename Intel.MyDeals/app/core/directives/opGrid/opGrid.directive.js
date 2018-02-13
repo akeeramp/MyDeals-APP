@@ -2198,11 +2198,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                                 $scope.$parent.$parent.$parent.$parent.$parent.pc.add(pcService.stop());
                                 $scope.$parent.$parent.setBusy("", "");
-                                $timeout(function() {
-                                        $scope.$parent.$parent.$parent.$parent.$parent.pc.stop()
-                                            .drawChart("perfChart", "perfMs", "perfLegend");
-                                    },
-                                    2000);
+                                $scope.$parent.$parent.$parent.$parent.$parent.pc.stop();
+                                $timeout(function () {
+                                    $scope.$parent.$parent.$parent.$parent.$parent.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                                },2000);
 
                             },
                             function(response) {
@@ -2210,8 +2209,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.$parent.$parent.setBusy("", "");
                             });
                 } else {
+                    $scope.$parent.$parent.$parent.$parent.$parent.pc.stop();
                     $timeout(function () {
-                        $scope.$parent.$parent.$parent.$parent.$parent.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$parent.$parent.$parent.$parent.$parent.pc.drawChart("perfChart", "perfMs", "perfLegend");
                     }, 2000);
 
                 }
