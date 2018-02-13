@@ -48,7 +48,7 @@
     </div>
 
     <!-- Hold icon -->
-    <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+    <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold'">
         <i ng-class='getHoldIcon(dataItem)' ng-style="getHoldStyle(dataItem)" ng-attr-title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkHoldIcon(dataItem)"></i>
     </div>
     <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1)">

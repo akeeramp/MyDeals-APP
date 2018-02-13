@@ -110,7 +110,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             // HOLD Items
             $scope.getHoldValue = function (dataItem) {
-                if (dataItem.WF_STG_CD === 'Active') return 'NoHold';
+                if (dataItem.WF_STG_CD === 'Active') return 'NoShowHold';
 
                 if (dataItem._actionsPS === undefined) dataItem._actionsPS = {};
                 if (dataItem.WF_STG_CD === 'Hold') {
@@ -123,9 +123,14 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 }
             }
             $scope.holdItems = {
+                "NoShowHold": { // The rest of this item don't really matter since it is bypassing drawing all togeather, but....
+                    "icon": "fa fa-hand-paper-o",
+                    "title": "Unable to place a hold on the deal at this stageXX",
+                    "style": { color: "#e7e7e8" }
+                },
                 "NoHold": {
                     "icon": "fa fa-hand-paper-o",
-                    "title": "Unable to place a hold on the deal at this stage",
+                    "title": "Unable to place a hold on the deal at this stageXX",
                     "style": { color: "#e7e7e8" }
                 },
                 "TakeOffHold": {
