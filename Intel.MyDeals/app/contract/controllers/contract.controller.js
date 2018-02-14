@@ -1472,7 +1472,6 @@
             $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
             objsetService.actionWipDeal($scope.getCustId(), $scope.contractData.DC_ID, wip, actn).then(
                 function (data) {
-                    debugger;
                     $scope.syncHoldItems(data, { Cancel: [wip] });
                     $scope.$broadcast('refreshStage', { Cancel: [wip] });
                 },

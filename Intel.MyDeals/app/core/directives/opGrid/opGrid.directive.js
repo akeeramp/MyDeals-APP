@@ -1328,6 +1328,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             if (dataItem !== undefined && dataItem !== null) {
                                 if (actionItems[i]["WF_STG_CD"] !== undefined) dataItem["WF_STG_CD"] = actionItems[i]["WF_STG_CD"];
                                 if (actionItems[i]["PS_WF_STG_CD"] !== undefined) dataItem["PS_WF_STG_CD"] = actionItems[i]["PS_WF_STG_CD"];
+                                if (arActions[a] === "Cancel") {
+                                    if (dataItem["_behaviors"] === undefined) dataItem["_behaviors"] = {};
+                                    if (dataItem["_behaviors"]["isReadOnly"] === undefined) dataItem["_behaviors"]["isReadOnly"] = {};
+                                    // force everything readonly
+                                    var fields = $scope.opOptions.columns;
+                                    for (var f = 0; f < fields.length; f++) {
+                                        dataItem["_behaviors"]["isReadOnly"][fields[f].field] = true;
+                                    }
+                                }
                             }
                         }
                     }
