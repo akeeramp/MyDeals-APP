@@ -584,7 +584,7 @@
                                                         var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                             .Where(function (x) {
                                                                 return (
-                                                                    x.GRP_PRD_SID == editedROW.GRP_PRD_SID &&
+                                                                    x.GRP_PRD_SID == temp_grp_prd &&
                                                                     x.GRP == "DEAL" &&
                                                                     x.MEET_COMP_UPD_FLG == "Y" &&
                                                                     x.MEET_COMP_STS.toLowerCase() != "pass"
