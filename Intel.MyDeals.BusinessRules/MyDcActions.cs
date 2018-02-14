@@ -1348,9 +1348,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement hasSubkitDe = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.HAS_SUBKIT.ToString()).FirstOrDefault();
-            string hasSubkit = hasSubkitDe.AtrbValue.ToString();
+            string hasSubkit = hasSubkitDe?.AtrbValue.ToString();
 
-            if (hasSubkit == "0") return;
+            if (hasSubkit == "0" || hasSubkit == null) return;
 
             IEnumerable<IOpDataElement> tieredObjs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString());
             IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
