@@ -168,16 +168,17 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataCollector dc in allDcs)
             {
                 IOpDataElement de = dc.GetDataElement(atrb.ATRB_COL_NM);
-                IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+                IOpDataElement deSource = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+                if (deSource == null) deSource = dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
 
                 if (de == null)
                 {
                     dc.DataElements.Add(new OpDataElement
                     {
-                        DcID = deCust.DcID,
-                        DcType = deCust.DcType,
-                        DcParentType = deCust.DcParentType,
-                        DcParentID = deCust.DcParentID,
+                        DcID = deSource.DcID,
+                        DcType = deSource.DcType,
+                        DcParentType = deSource.DcParentType,
+                        DcParentID = deSource.DcParentID,
                         AtrbID = atrb.ATRB_SID,
                         AtrbValue = value,
                         AtrbCd = atrb.ATRB_COL_NM,

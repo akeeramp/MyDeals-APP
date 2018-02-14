@@ -1537,6 +1537,28 @@
             }
         }
 
+        $scope.chgTerms = function() {
+            var dataItem = $scope.curPricingStrategy;
+
+            var data = {
+                objSetType: "PRC_ST",
+                ids: [dataItem["DC_ID"]],
+                attribute: "TERMS",
+                value: dataItem["TERMS"]
+            };
+
+            objsetService.updateAtrbValue($scope.getCustId(), $scope.contractData.DC_ID, data).then(
+                function (results) {
+                    $("#termSave").show();
+                    $timeout(function () {
+                        $("#termSave").hide();
+                    }, 3000);
+                },
+                function (response) {
+                }
+            );
+        }
+
         $scope.syncHoldItems = function (data, wip) {
             $scope.messages = data.data.Messages;
 

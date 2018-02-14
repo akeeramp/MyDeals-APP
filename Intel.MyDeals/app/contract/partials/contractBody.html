@@ -43,11 +43,13 @@
                         </div>
                         <div class="fl" style="padding: 4px 0;">Additional Discounts & Requirements</div>
                         <div class="fl" style="padding: 6px 10px 0 10px; color: #aaaaaa; font-style: italic; font-size: 12px;">**Note that any updates made here are copied on all tables under this Pricing Strategy</div>
+                        <div class="fr" style="border-radius: 4px; background-color: #C4D600; color: #ffffff; font-size: 11px; padding: 2px 6px; margin: 6px 10px 0 0; display: none;" id="termSave">Saved</div>
                         <div class="clearboth"></div>
                     </div>
                     <div id="subContainer">
                         <textarea kendo-editor
                                   k-ng-model="curPricingStrategy.TERMS"
+                                  k-change="chgTerms"
                                   k-tools="['fontSize','bold','italic','underline','strikeThrough','justifyLeft','justifyCenter','justifyRight','justifyFull', 'insertUnorderedList','insertOrderedList','indent','outdent']"
                                   style="height: 100%;" class="noborderEditor"></textarea>
                     </div>
