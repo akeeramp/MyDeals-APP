@@ -336,6 +336,9 @@
                     "DEAL_DESC": {
                         "Groups": ["Deal Info"]
                     },
+                    "PROD_INCLDS": {
+                        "Groups": ["Deal Info"]
+                    },
                     "NUM_OF_TIERS": {
                         "Groups": [ "All"]
                     },
@@ -465,6 +468,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "DEAL_DESC": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
                     "ON_ADD_DT": {
@@ -737,6 +743,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "VOLUME": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
                     "ON_ADD_DT": {

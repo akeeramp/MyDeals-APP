@@ -264,25 +264,9 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 100,
                 IsDefaultable = true,
                 Label = "Media",
-                UiType = "BUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.PROD_INCLDS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 100,
-                IsDefaultable = true,
-                Label = "Media",
-                IsHidden = true, // the differnce between KIT and other deal types
                 UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
@@ -764,7 +748,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 41,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.TENDER },
                 DataType = "string",
                 Width = 100,
                 UiType = "DROPDOWN",
@@ -772,21 +755,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 41,
-                AtrbCd = AttributeCodes.PROD_INCLDS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                DataType = "string",
-                Width = 100,
-                UiType = "DROPDOWN",
-                Label = "Media *",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                IsHidden = true // The only difference between KIT and the other deal types
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -1045,7 +1013,6 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 Label = "Media",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PROD_INCLDS')#",
                 IsFilterable = true,
                 IsSortable = true,

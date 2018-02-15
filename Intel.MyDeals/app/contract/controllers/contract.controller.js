@@ -3617,13 +3617,7 @@
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
                     if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
-                    if (!!newValue["PROD_INCLDS"]) {
-                        if ($scope.newPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                            newValue["PROD_INCLDS"].value = "All";
-                        } else {
-                            newValue["PROD_INCLDS"].value = "Tray";
-                        }
-                    }
+                    if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1";
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
