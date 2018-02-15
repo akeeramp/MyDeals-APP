@@ -345,7 +345,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             });
 
         // Set $scope.copyCntrctList, then update the grid on the copy contract dialog.
-        debugger;
+        //debugger;
         var postData = {
             "CustomerIds": $scope.$storage.selectedCustomerIds,
             "StartDate": $scope.$storage.startDate,
