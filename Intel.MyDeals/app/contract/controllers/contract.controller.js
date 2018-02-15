@@ -958,7 +958,6 @@
                     if (delayEndDateFunction) $timeout.cancel(delayEndDateFunction);
                     delayEndDateFunction = $timeout(function () {
                         updateDateByQuarter('END_DATE', newValue["END_QTR"], newValue["END_YR"]);
-                        setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV_UI);
                     },
                         500);
                 }
