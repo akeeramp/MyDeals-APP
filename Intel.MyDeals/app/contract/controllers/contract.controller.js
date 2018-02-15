@@ -2488,17 +2488,20 @@
                     topbar.hide();
 
                     if (!anyWarnings || !forceValidation) {
+                        $scope.stealthMode = true;
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
-                        $scope.resetDirty();
                         $scope.$broadcast('saveComplete', data);
+                        $scope.resetDirty();
 
                         if (!!toState) {
+                            $scope.stealthMode = false;
                             if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
                             $state.go(toState, toParams, { reload: true });
                         } else {
                             $timeout(function () {
                                 if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
                                     $scope.setBusy("", "");
+                                $scope.stealthMode = false;
                             }, 1000);
                         }
                     } else {
