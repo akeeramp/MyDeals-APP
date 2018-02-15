@@ -1596,7 +1596,8 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'VOLUME')#"
+                UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'VOLUME', 'number')#"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP All types

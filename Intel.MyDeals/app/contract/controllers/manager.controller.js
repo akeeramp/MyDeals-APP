@@ -380,7 +380,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         var ds;
 
-        if (pt.OBJ_SET_TYPE_CD == "ECAP") { // ECAP pt grid
+        if (pt.OBJ_SET_TYPE_CD == "ECAP" || pt.OBJ_SET_TYPE_CD == "KIT") { // ECAP or KIT pt grid
             ds = new kendo.data.DataSource({
                 type: "json",
                 transport: {
