@@ -32,7 +32,8 @@
         var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
         var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
         var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || (window.usrRole === "SA" && window.isSuper);
-        var hasRetailPullPermissionPrice = (hasPermissionPrice || (window.usrRole === "GA" && window.isSuper));
+        // This variable gives Super GA to see RTL_PULL_DLR and CAP (CAP column only for ECAP deals)
+        var hasSpecialPricePermission = (hasPermissionPrice || (window.usrRole === "GA" && window.isSuper));
 
         $timeout(function () {
             $("#dealTypeDiv").removeClass("active");
@@ -559,6 +560,16 @@
                 parent: false,
                 filterable: { multi: true, search: true },
             },
+            "ECAP_DEAL_CAP": {//ECAP_DEAL_CAP is custom column which displays CAP details, it is used in ECAP deals only.
+                field: "CAP",
+                title: "CAP",
+                format: "{0:c}",
+                template: "#= (CAP == null) ? ' ' : kendo.toString(CAP, 'c') #",
+                width: "100px",
+                hidden: !hasSpecialPricePermission,
+                parent: false,
+                filterable: { multi: true, search: true },
+            },
             "MAX_RPU": {
                 field: "MAX_RPU",
                 title: "Max RPU",
@@ -645,7 +656,7 @@
                 width: "140px",
                 format: "{0:c}",
                 template: "#= (RTL_PULL_DLR == null) ? ' ' : kendo.toString(RTL_PULL_DLR, 'c') #",
-                hidden: !hasRetailPullPermissionPrice,
+                hidden: !hasSpecialPricePermission,
                 parent: false,
                 filterable: { multi: true, search: true },
             },
@@ -719,7 +730,7 @@
                         DEAL_DESC: { type: "string" },
                         GRP_DEALS: { type: "string" },
                         DEAL_STRT_DT: { type: "string" },
-                        CAP: { type: "number" },
+                        ECAP_DEAL_CAP: { type: "number" },
                         ECAP_PRC: { type: "number" },
                         ECAP_FLR: { type: "number" },
                         LOW_NET_PRC: { type: "number" },
@@ -827,7 +838,7 @@
                     $scope.cellColumns["DEAL_DESC"],
                     $scope.cellColumns["GRP_DEALS"],
                     $scope.cellColumns["DEAL_STRT_DT"],
-                    $scope.cellColumns["CAP"],
+                    $scope.cellColumns["ECAP_DEAL_CAP"], // ECAP_DEAL_CAP is custom column which displays CAP details, it has different security setting than other deal type
                     $scope.cellColumns["ECAP_PRC"],
                     $scope.cellColumns["ECAP_FLR"],
                     $scope.cellColumns["LOW_NET_PRC"],
