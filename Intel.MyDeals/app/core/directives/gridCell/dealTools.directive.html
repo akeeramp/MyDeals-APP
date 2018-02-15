@@ -8,8 +8,12 @@
     </div>
 
     <!-- Split group icon -->
-    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1)">
+    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && dataItem.WF_STG_CD === 'Active')))">
         <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
+    </div>
+    <div class='fl md-icon-disabled rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
+        <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
+           title="You cannot split this group while it is being re-dealed."></i>
     </div>
     
 
