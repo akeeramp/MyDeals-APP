@@ -489,11 +489,13 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 						field: "COST_TEST_RESULT",
 						title: "Cost Test Result",
 						width: "100px",
+						hidden: !root.CAN_VIEW_COST_TEST,
 						filterable: { multi: true, search: true }
 					}, {
 						field: "MEETCOMP_TEST_RESULT",
 						title: "Meet Comp Test Result",
 						width: "100px",
+						hidden: !root.CAN_VIEW_MEET_COMP,
 						filterable: { multi: true, search: true }
 					}, {
 						field: "VOLUME",
@@ -618,11 +620,13 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 						field: "COST_TEST_RESULT",
 						title: "Cost Test Result",
 						width: "100px",
+						hidden: !root.CAN_VIEW_COST_TEST,
 						filterable: { multi: true, search: true }
 					}, {
 						field: "MEETCOMP_TEST_RESULT",
 						title: "Meet Comp Test Result",
 						width: "100px",
+						hidden: !root.CAN_VIEW_MEET_COMP,
 						filterable: { multi: true, search: true }
 					}, {
 						field: "MAX_RPU",
