@@ -2676,8 +2676,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var userInput = updateUserInput(transformResults.ValidProducts[key]);
                 }
 
-                //var contractProducts = userInput.contractProducts.toString().replace(/(\r\n|\n|\r)/gm, ""); // TODO: probably move all these replace functions should into the custom paste instead
-                //var originalProducts = data[r].PTR_USER_PRD.toString().replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+                var contractProducts = userInput.contractProducts.toString().replace(/(\r\n|\n|\r)/gm, ""); // TODO: probably move all these replace functions should into the custom paste instead
+                var originalProducts = data[r].PTR_USER_PRD.toString().replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
 
                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     var orignalUnswappedDataDict = {}; // Dictionary<product, original dataItem>
