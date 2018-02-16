@@ -245,7 +245,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
                 {
-                    OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
+                    OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString().Replace("\r", "").Replace("\n", ""));
                     if (dictValues != null && dictValues.ContainsKey(uniqDimBaseKey))
                     {
                         if (dictValues.ContainsKey(uniqDimBaseKey))

@@ -2585,6 +2585,15 @@
             return cols;
         }
 
+        $scope.forceRun = function () {
+            var data = $scope.contractData.PRC_ST;
+            for (var d = 0; d < data.length; d++) {
+                if (data[d].MEETCOMP_TEST_RESULT === "" || data[d].MEETCOMP_TEST_RESULT === "Not Run Yet") return true;
+                if (data[d].COST_TEST_RESULT === "" || data[d].COST_TEST_RESULT === "Not Run Yet") return true;
+            }
+            return false;
+        }
+
         $scope.syncCellValidationsOnAllRows = function (data) {
             // kind of annoying, but layering validations tends to stall all validations.
             // so... before applying any validations, we are cleaning all existing validations

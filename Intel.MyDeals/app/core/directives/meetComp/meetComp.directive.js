@@ -89,7 +89,9 @@
                         var localTime = gridUtils.convertLocalToPST(new Date());
                         var lastruntime = moment(LAST_MEET_COMP_RUN);
 
-                        var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss"); 0
+                        var forceRun = $scope.$parent.forceRun();
+
+                        var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss"); 
 
                         var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                         var hh = Math.abs(timeDiff.asHours());
@@ -98,17 +100,17 @@
 
                         var dsplNum = hh;
                         var dsplMsg = " hours ago";
-                        $scope.needToRunPct = ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
+                        $scope.needToRunPct = forceRun || ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
 
                         if (dsplNum < 1) {
                             dsplNum = mm;
                             dsplMsg = " mins ago";
-                            $scope.needToRunPct = false;
+                            if (!forceRun) $scope.needToRunPct = false;
                         }
                         if (dsplNum < 1) {
                             dsplNum = ss;
                             dsplMsg = " secs ago";
-                            $scope.needToRunPct = false;
+                            if (!forceRun) $scope.needToRunPct = false;
                         }
 
                         $scope.displayMessage = "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
@@ -126,6 +128,7 @@
                     }
 
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
+                        $scope.$parent.refreshContractData();
                         if (response.data.length > 0) {
                             response.data.forEach(function (obj) {
                                 obj.IS_SELECTED = false;

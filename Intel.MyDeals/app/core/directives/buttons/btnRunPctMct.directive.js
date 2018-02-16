@@ -14,7 +14,8 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             onComplete: '=?onComplete',
             lastRun: '=?lastRun',
             btnType: '=?btnType',
-            runIfStaleByHours: '=?runIfStaleByHours'
+            runIfStaleByHours: '=?runIfStaleByHours',
+            forceRun: "=?forceRun"
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/buttons/btnRunPctMct.directive.html',
@@ -35,6 +36,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             }
 
             if (!$scope.runIfStaleByHours) $scope.runIfStaleByHours = 0;
+            if (!$scope.forceRun) $scope.forceRun = false;
 
             $scope.lastRunDisplay = function () {
                 if ($(".iconRunPct").hasClass("fa-spin grn")) {
@@ -58,17 +60,17 @@ function btnRunPctMct(logger, objsetService, $timeout) {
 
                     var dsplNum = hh;
                     var dsplMsg = " hours ago";
-                    $scope.needToRunPct = ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
+                    $scope.needToRunPct = $scope.forceRun || ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
 
                     if (dsplNum < 1) {
                         dsplNum = mm;
                         dsplMsg = " mins ago";
-                        $scope.needToRunPct = false;
+                        if (!$scope.forceRun) $scope.needToRunPct = false;
                     }
                     if (dsplNum < 1) {
                         dsplNum = ss;
                         dsplMsg = " secs ago";
-                        $scope.needToRunPct = false;
+                        if (!$scope.forceRun) $scope.needToRunPct = false;
                     }
 
                     return "Last Run: " + Math.round(dsplNum) + dsplMsg;
