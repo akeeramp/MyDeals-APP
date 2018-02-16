@@ -32,7 +32,10 @@
 
     <!-- Quote Letter icon -->
     <div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
-        <i ng-if="dataItem.OBJ_SET_TYPE_CD === 'ECAP' || dataItem.OBJ_SET_TYPE_CD === 'KIT'" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+        <i ng-if="showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+    </div>
+    <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
+        <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
     </div>
 
     <!-- Delete icon -->

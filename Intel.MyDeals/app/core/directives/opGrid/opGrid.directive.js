@@ -26,6 +26,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.ovlpErrorCount = [];
             $scope.ovlpDataRep = [];
             $scope.numColsLocked = 0;
+            $scope.parentRoot = $scope.$parent.$parent.$parent.$parent.$parent;
 
             $timeout(function () {
                 $scope.tabStripDelay = true;
@@ -1455,7 +1456,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 if (!!row) data.splice(data.indexOf(row), 1);
                 if (data.length === 0) {
-                    $scope.$parent.$parent.$parent.$parent.$parent.$broadcast('refreshNoWipData', true);
+                    $scope.parentRoot.$broadcast('refreshNoWipData', true);
                 } else {
                     scope.contractDs.sync();
                 }
@@ -1764,8 +1765,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             // Go to Deal Details
             $scope.gotoDealDetails = function (dataItem) {
-                var sid = $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable;
-                if (dataItem.OVLP_CD == "SELF_OVLP" || dataItem.PRICING_TABLES == $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable.DC_ID) {
+                var sid = $scope.parentRoot.curPricingTable;
+                if (dataItem.OVLP_CD == "SELF_OVLP" || dataItem.PRICING_TABLES === $scope.parentRoot.curPricingTable.DC_ID) {
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     tabStrip.select(0);
                     $scope.showCols($scope.opOptions.groups[0].name);
@@ -2129,7 +2130,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.isOvlpAccess = true;
                     }
                     //Fetch Overlapping Data
-                    var pricingTableID = $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable.DC_ID;
+                    var pricingTableID = $scope.parentRoot.curPricingTable.DC_ID;
 
                     //Calling WEBAPI
                     objsetService.getOverlappingDeals(pricingTableID)
@@ -2176,8 +2177,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         //Hiding Column Preference and Grid Preferences
                                         $scope.isLayoutConfigurable = false;
 
-                                        $scope.$parent.$parent.$parent.$parent.$parent
-                                            .$broadcast('refreshContractData', true);
+                                        $scope.parentRoot.$broadcast('refreshContractData', true);
                                     } else {
                                         //Remove overlapping tab
                                         util.console("Remove overlapping tab");
@@ -2191,25 +2191,25 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         }
 
                                         // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
-                                        var wips = $scope.$parent.$parent.$parent.$parent.$parent.pricingTableData
+                                        var wips = $scope.parentRoot.pricingTableData
                                             .WIP_DEAL;
                                         for (var w = 0; w < wips.length; w++) {
                                             if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
                                         }
 
-                                        $scope.$parent.$parent.$parent.$parent.$parent
-                                            .$broadcast('refreshContractData', false);
+                                        $scope.parentRoot.$broadcast('refreshContractData', false);
 
                                         util.console("Remove overlapping tab DONE");
                                     }
                                 }
                                 pcService.add(pcUi.stop());
 
-                                $scope.$parent.$parent.$parent.$parent.$parent.pc.add(pcService.stop());
+                                $scope.parentRoot.pc.add(pcService.stop());
                                 $scope.$parent.$parent.setBusy("", "");
-                                $scope.$parent.$parent.$parent.$parent.$parent.pc.stop();
+                                $scope.parentRoot.pc.stop();
                                 $timeout(function () {
-                                    $scope.$parent.$parent.$parent.$parent.$parent.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                                    if ($scope.parentRoot !== undefined && $scope.parentRoot !== null)
+                                        $scope.parentRoot.pc.drawChart("perfChart", "perfMs", "perfLegend");
                                 },2000);
 
                             },
@@ -2218,16 +2218,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.$parent.$parent.setBusy("", "");
                             });
                 } else {
-                    $scope.$parent.$parent.$parent.$parent.$parent.pc.stop();
+                    $scope.parentRoot.pc.stop();
                     $timeout(function () {
-                        $scope.$parent.$parent.$parent.$parent.$parent.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.parentRoot.pc.drawChart("perfChart", "perfMs", "perfLegend");
                     }, 2000);
 
                 }
             }
 
             $scope.saveAndValidateGrid = function () {
-                $scope.$parent.$parent.$parent.$parent.$parent.pc = new perfCacheBlock("Deal Editor Save & Validate", "UX");
+                $scope.parentRoot.pc = new perfCacheBlock("Deal Editor Save & Validate", "UX");
 
                 //procedures within sync and validate wip deals must complete before overlapping deals setup is run to ensure user changes are accounted for, thus we pass in overlappingDealsSetup as a callback function
                 $scope.syncAndValidateWipDeals($scope.overlappingDealsSetup);

@@ -456,7 +456,7 @@
                         "Groups": ["Deal Info", "RPU"]
                     },
                     "SERVER_DEAL_TYPE": {
-                        "Groups": ["All"]
+                        "Groups": ["RPU", "All"]
                     },
                     "DEAL_COMB_TYPE": {
                     	"Groups": ["Deal Info"]

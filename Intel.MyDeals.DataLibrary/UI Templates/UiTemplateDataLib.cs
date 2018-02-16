@@ -837,7 +837,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 DataType = "object",
                 Label = "Deal Tools",
-                Width = 200,
+                Width = 210,
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,
@@ -1652,6 +1652,20 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SERVER_DEAL_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/VOL_TIER",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3347,
+                AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Width = 110,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SERVER_DEAL_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/PROGRAM",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });

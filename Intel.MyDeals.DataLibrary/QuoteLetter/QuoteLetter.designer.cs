@@ -225,8 +225,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox5.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox5.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox5.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox5.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><span style=\"color: #0" +
-    "00000\"><strong>End Customer/Retailer:</strong></span></span>";
+            this.htmlTextBox5.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><span style=\"color: #000000\"><strong>End Customer:</strong></span></span>";
             // 
             // htmlTextBox6
             // 
@@ -437,8 +436,7 @@ namespace Intel.MyDeals.DataLibrary
             this.lblStdAloneType.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.lblStdAloneType.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.lblStdAloneType.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.lblStdAloneType.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><span style=\"color: #0" +
-    "00000\"><strong>ECAP Type:</strong></span></span>";
+            this.lblStdAloneType.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><span style=\"color: #000000\"><strong>ECAP Type:</strong></span></span>";
             // 
             // htmlTextBox15
             // 
@@ -507,8 +505,7 @@ namespace Intel.MyDeals.DataLibrary
             this.lblStdAloneDesc.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.lblStdAloneDesc.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.lblStdAloneDesc.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.lblStdAloneDesc.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><span style=\"color: #0" +
-    "00000\"><strong>Product Description:</strong></span></span>";
+            this.lblStdAloneDesc.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><span style=\"color: #000000\"><strong>Product Description:</strong></span></span>";
             // 
             // txtECAPPrice
             // 
@@ -1120,7 +1117,7 @@ namespace Intel.MyDeals.DataLibrary
             reportParameter9.Name = "ECAPType";
             reportParameter9.Value = "ECAP Type";
             reportParameter10.Name = "Commit";
-            reportParameter10.Value = "Commit";
+            reportParameter10.Value = "Product code";
             reportParameter11.Name = "ProdDesc";
             reportParameter11.Value = "ProdDesc";
             reportParameter12.Name = "ECAPPrice";

@@ -495,6 +495,10 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 );
             }
 
+            $scope.showQuote = function (dataItem) {
+                return (dataItem.OBJ_SET_TYPE_CD === 'ECAP' || dataItem.OBJ_SET_TYPE_CD === 'KIT') && (dataItem.WF_STG_CD === 'Active' || dataItem.HAS_TRACKER === '1');
+            }
+
             // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.
             // Taken from Phil's absolutely awesome other color-coding areas in other JS files...  Had to hijack local function getStageBgColorStyle(stgFullTitleChar()) to get the right stage though.
             $scope.getStageBgColorStyle = function (c) {
