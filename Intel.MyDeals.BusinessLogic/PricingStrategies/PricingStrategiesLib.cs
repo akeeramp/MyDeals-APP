@@ -131,7 +131,8 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                Attributes.PASSED_VALIDATION.ATRB_SID
+                Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.HAS_L1.ATRB_SID
             };
 
             Dictionary<int, string> id2actnMapping = new Dictionary<int, string>();
@@ -158,6 +159,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
                 string stageIn = id2stageMapping[dc.DcID];
                 string actn = id2actnMapping[dc.DcID];
+                bool hasL1 = dc.GetDataElementValue(AttributeCodes.HAS_L1) != "0";
 
                 // concurency check
                 if (stageIn != stageInDb)
@@ -188,8 +190,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 // Meet Comp Test / Price Cost Test Check
-                bool needToRunMct = actn == "Approve" && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
-                bool needToRunPct = actn == "Approve" && stageIn == WorkFlowStages.Submitted;
+                bool needToRunMct = actn == "Approve" && hasL1 && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
+                bool needToRunPct = actn == "Approve" && hasL1 && stageIn == WorkFlowStages.Submitted;
                 if (needToRunMct || needToRunPct)
                 {
                     bool passMct, passPct;
