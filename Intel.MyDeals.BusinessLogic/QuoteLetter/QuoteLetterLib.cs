@@ -34,13 +34,15 @@ namespace Intel.MyDeals.BusinessLogic
             return _quoteLetterDataLib.AdminSaveTemplate(template);
         }
 
+
         /// <summary>
         /// Get quote letter file object
         /// </summary>
-        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealInfo, string headerInfo, string bodyInfo)
+        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)
         {
-            return _quoteLetterDataLib.GetDealQuoteLetter(quoteLetterDealInfo,  headerInfo,  bodyInfo);
+            return _quoteLetterDataLib.GetDealQuoteLetter(quoteLetterDealData, headerInfo, bodyInfo);
         }
+        
 
     }
 

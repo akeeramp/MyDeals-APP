@@ -9,5 +9,6 @@ namespace Intel.MyDeals.IBusinessLogic
         AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template);
 
         QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealInfo, string headerInfo, string bodyInfo);
+
     }
 }

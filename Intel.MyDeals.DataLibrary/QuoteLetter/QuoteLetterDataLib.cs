@@ -5,7 +5,6 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -98,10 +97,11 @@ namespace Intel.MyDeals.DataLibrary
             foreach (var qlData in quoteLetterDealInfoList)
                 GenerateQuoteLetterPDF(qlData);  
         }
+
         public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)
         {                        
             QuoteLetterFile quoteLetterPdfBytes = new QuoteLetterFile();
-            var quoteLetterDataList = new List<QuoteLetterData>() { quoteLetterDealData };
+            var quoteLetterDataList = new List<QuoteLetterData> { quoteLetterDealData };
 
             //preview quote letter data
             if (!string.IsNullOrEmpty(headerInfo) && !string.IsNullOrEmpty(bodyInfo))
@@ -241,8 +241,16 @@ namespace Intel.MyDeals.DataLibrary
         private QuoteLetterFile GenerateQuoteLetterPDF(QuoteLetterData quoteLetterData)
         {            
             byte[] quoteLetterBytes;
-            string fileName = string.Empty;            
-            string fileNameDealId = string.IsNullOrEmpty(quoteLetterData.ObjectSid) ? "Preview" : quoteLetterData.ObjectSid;
+            string dealId = quoteLetterData.ObjectSid;
+            int custId = int.Parse(quoteLetterData.CustomerId);
+            var custNm = DataCollections.GetCustomerDivisions()
+                .Where(c => c.CUST_NM_SID == custId || c.CUST_DIV_NM_SID == custId)
+                .Select(c => c.CUST_NM)
+                .FirstOrDefault();
+            var sku = "prod";
+            var ecapType = "ecap type";
+
+            string fileName = $"{custNm} {sku} + {ecapType} {dealId}.pdf";
 
             if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
             {
@@ -260,7 +268,6 @@ namespace Intel.MyDeals.DataLibrary
                     RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
 
                     
-                    fileName = result.DocumentName + "_" + fileNameDealId + ".pdf";
                     var ms = new MemoryStream(result.DocumentBytes) { Position = 0 };
                     quoteLetterBytes = ms.ToArray();
 
@@ -271,13 +278,13 @@ namespace Intel.MyDeals.DataLibrary
             }
             else
             {
-                string failedMessage = "XML data was empty: aborting send and removing" + fileNameDealId + " from list.";
+                string failedMessage = "XML data was empty: aborting send and removing" + dealId + " from list.";
                 quoteLetterBytes = Encoding.ASCII.GetBytes(failedMessage);
             }
 
             var quoteLetterFile = new QuoteLetterFile();
             quoteLetterFile.Content = quoteLetterBytes;
-            quoteLetterFile.Name = string.IsNullOrEmpty(fileName) ? "QuoteLetter" + "_" + quoteLetterData.ContentInfo.OBJ_SID + ".pdf" : fileName;
+            quoteLetterFile.Name = fileName;
 
             return quoteLetterFile;
 
