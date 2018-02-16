@@ -2117,8 +2117,17 @@
                         }
                     }
 
+
                     var validated_DC_Id = [];
                     for (var s = 0; s < sData.length; s++) {
+
+                    	if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                    		// HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
+                    		if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
+                    			sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
+                    		}
+                    	}
+
                         if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
                         sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
                         sData[s].dc_type = "PRC_TBL_ROW";
@@ -2828,6 +2837,11 @@
                             lData[tieredItem] = lData[tieredItem + "_____10___" + t];
 
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
+
+                    		// HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                            if (tieredItem == "END_VOL" && lData["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
+                        		lData["END_VOL"] = kendo.toString(parseInt(lData["END_VOL"] || 0), "n0");
+							}
                         }
                         // Disable all Start vols except the first
                         if (t !== 1 && !!data[d]._behaviors) {
@@ -2872,7 +2886,7 @@
                 }
             }
             var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
-            return kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
+            return rebateVal; // kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
         }
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format

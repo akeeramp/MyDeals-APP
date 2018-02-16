@@ -70,7 +70,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
     root.letterToCol = {};
     vm.readOnlyColLetters = [];
-    vm.requiredStringColumns = {};
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
     var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
     //root.wipData;
@@ -652,7 +651,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        var tierNbr = myRow["TIER_NBR"];
 					        if (ptTemplate.model.fields[colName].type == "number") {
 					            // format numbers based on templating
-					            myRow[colName] = (parseFloat(value.value) || 0);
+					        	myRow[colName] = (parseFloat(value.value) || 0);
 					        } else {
 					            myRow[colName] = value.value;
 					        }
@@ -924,7 +923,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
-                        var myRow = data[(rowIndex - 1)];
+                    	var myRow = data[(rowIndex - 1)];
+                    	var myColLetter = String.fromCharCode(intA + (colIndex));
+                    	var colName = root.letterToCol[myColLetter];
+
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 
                             var isEndVolUnlimited = false;
@@ -939,7 +941,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
                                     value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
-                                    //value.format = "##,#"; // TODO: fomatting the end vol (a string with number possibilities) does not work. Figure out why.
                                 }
                                 else if (colIndex === rateIndex) {
                                     value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -962,12 +963,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
                                     }
                                 }
+                            	// HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                                value.value = kendo.toString(value.value, "n0");
+								
                                 myRow.END_VOL = value.value;
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
                             }
                             // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
-                            var myColLetter = String.fromCharCode(intA + (colIndex));
-                            var colName = root.letterToCol[myColLetter];
                             myRow[colName] = value.value;
                             sourceData[(rowIndex - 1)][colName] = value.value;
                         }
@@ -1352,6 +1354,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var newItems = 0;
                 var pivotDim = 1;
 
+                var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+				
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex - 2) ; k++) {
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
@@ -1500,6 +1505,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
+                	if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                		// HACK: fix column formatting for the first row. Unsure why, but these columns will lose formatting sometimes
+                		var KitEcapRange = sheet.range(root.colToLetter["ECAP_PRICE_____20_____1"] + (topLeftRowIndex));
+                		var KitRebateRange = sheet.range(root.colToLetter["TEMP_KIT_REBATE"] + (topLeftRowIndex));
+
+                		if (KitEcapRange.format() != "$##,#0.00") {
+                			KitEcapRange.format("$##,#0.00");
+                		}
+                		if (KitRebateRange.format() != "$##,#0.00") {
+                			KitRebateRange.format("$##,#0.00");
+                		}
+                	}
+
                     // If we skipped spaces, we already collapsed, so remove the extra data outside the range
                     var st = data.length + 1;
                     var en = bottomRightRowIndex;
@@ -1904,7 +1922,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             //applyDropDowns(sheet, myFieldModel, myColumnName);
                         } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
                             sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
-                            vm.requiredStringColumns[key] = true;
                         }
                     } else {
                         // Add validations based on column type
@@ -1912,22 +1929,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             case "date":
                                 sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
                                 //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
-                                vm.requiredStringColumns[key] = true;
                                 break;
                             case "number":
                                 // Money Formatting
-                                if (myFieldModel.format == "{0:c}") {
+                            	if (myFieldModel.format == "{0:c}") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
                                 } else {
                                     sheet.range(myColumnName + ":" + myColumnName).format("##,#");
                                 }
                                 break;
-                            case "string":
-                                if (!myFieldModel.nullable) {
-                                    // TODO: find out how we do an isRequired on strings without LEN?
-                                    // Add required string columns to dictionay to add LEN validations onchange and later
-                                    vm.requiredStringColumns[key] = true;
-                                }
+                        	case "string":
+                        		if (key == "END_VOL") {
+                        			sheet.range(myColumnName + ":" + myColumnName).format("##,#");
+                        		}
                                 break;
                             default:
                                 break;
@@ -2127,6 +2141,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     for (var col = 0; col < state.data[row].length; col++) {
                         var cellData = state.data[row][col];
 
+                        if (typeof cellData.value == "string") {
+                        	cellData.value.replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+                        }
+
                         // Prevent the user form pasting in new cell styles
                         cellData.background = null;
                         cellData.bold = null;
@@ -2208,6 +2226,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     for (var col = 0; col < state.data[row].length; col++) {
                         var cellData = state.data[row][col];
+                        
+                        if (typeof cellData.value == "string") {
+                        	cellData.value.replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+                        }
 
                         // Prevent the user form pasting in new cell styles
                         cellData.background = null;
@@ -2654,8 +2676,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var userInput = updateUserInput(transformResults.ValidProducts[key]);
                 }
 
-                var contractProducts = userInput.contractProducts.toString().replace(/(\r\n|\n|\r)/gm, ""); // TODO: probably move all these replace functions should into the custom paste instead
-                var originalProducts = data[r].PTR_USER_PRD.toString().replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+                //var contractProducts = userInput.contractProducts.toString().replace(/(\r\n|\n|\r)/gm, ""); // TODO: probably move all these replace functions should into the custom paste instead
+                //var originalProducts = data[r].PTR_USER_PRD.toString().replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
 
                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     var orignalUnswappedDataDict = {}; // Dictionary<product, original dataItem>
