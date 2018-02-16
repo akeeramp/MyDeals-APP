@@ -1379,9 +1379,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (!!args.WIP_DEAL) {
                     for (var i = 0; i < args.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.WIP_DEAL[i]["DC_ID"]);
-                        if (dataItem != null) {
+                        if (!!dataItem) {
                             dataItem["PASSED_VALIDATION"] = args.WIP_DEAL[i]["PASSED_VALIDATION"];
-                            dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];                               
+                            dataItem["WF_STG_CD"] = args.WIP_DEAL[i]["WF_STG_CD"];
+                            dataItem["PS_WF_STG_CD"] = args.WIP_DEAL[i]["PS_WF_STG_CD"];
+                            dataItem["TRKR_NBR"] = args.WIP_DEAL[i]["TRKR_NBR"];
+                            dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
+                            dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
+                            dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
+                            dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"] === "True" || args.WIP_DEAL[i]["EXPIRE_FLG"] === "1" || args.WIP_DEAL[i]["EXPIRE_FLG"] === 1 || args.WIP_DEAL[i]["EXPIRE_FLG"] === true;  // Old one would break because setting value false = "False"
+                            dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
                         }
 
                         if (args.WIP_DEAL[i].warningMessages !== undefined && args.WIP_DEAL[i].warningMessages.length !== 0) {
