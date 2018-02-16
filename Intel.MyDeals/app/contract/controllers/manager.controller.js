@@ -681,8 +681,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         var result = $.grep(allPs, function (e) { return e.DC_ID === id; });
         var stage = result.length > 0 ? result[0].WF_STG_CD : "";
         var title = result.length > 0 ? result[0].TITLE : "";
+        var hasL1 = result.length > 0 ? result[0].HAS_L1 !== "0" : false;
 
-        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn };
+        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn, "HAS_L1": hasL1 };
     }
 
     function getActionItems(data, dataItem, actn, actnText) {
@@ -887,14 +888,14 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $scope.getIdsToPctMct = function (data) {
-
         var rtn = [];
         var role = window.usrRole;
         var apprItems = data["Approve"];
         if (!!apprItems) {
             for (var a = 0; a < apprItems.length; a++) {
                 var stage = apprItems[a]["WF_STG_CD"];
-                if ((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted")) {
+                var hasL1 = apprItems[a]["HAS_L1"];
+                if (hasL1 && ((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted"))) {
                     rtn.push(apprItems[a]["DC_ID"]);
                 }
             }
