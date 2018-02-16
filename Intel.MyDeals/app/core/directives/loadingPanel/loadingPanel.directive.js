@@ -20,7 +20,6 @@ function loadingPanel() {
 		transclude: 'true',
 		templateUrl: '/app/core/directives/loadingPanel/loadingPanel.directive.html',
 		controller: ['$scope', function($scope) {
-			console.log("TEST: " + ($scope.msgType));
 
 			// Fun facts
 			$scope.funFactTitle = "";

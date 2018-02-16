@@ -1481,13 +1481,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 for (var m = 0; m < msgs.length; m++) {
                     var dcId = msgs[m].KeyIdentifiers[0];
                     var dcParentId = msgs[m].KeyIdentifiers[1];
-                    var dcPrdTitle = msgs[m].ExtraDetails;
+                    var dcPrdTitle = msgs[m].ExtraDetails[0];
+                    var dcKitName = msgs[m].ExtraDetails[1];
 
                     for (var d = 0; d < data.length; d++) {
                         if (data[d].DC_ID === dcId) {
                             data[d].DC_PARENT_ID = dcParentId;
                             data[d]._parentCnt = 1;
                             data[d].PTR_USER_PRD = dcPrdTitle;
+                            if (dcKitName != "") {
+                                data[d].DEAL_GRP_NM = dcKitName;
+                            }
                         }
                     }
                 }

@@ -723,7 +723,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         #endregion Ensure
 
-        public static OpMsgQueue UpGroupPricingTableRow(this MyDealsData myDealsData, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
+        public static OpMsgQueue UnGroupPricingTableRow(this MyDealsData myDealsData, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
         {
             //   1) Get DC_ID
             //   2) Get all WIP with the parent of DC_ID
@@ -749,6 +749,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 ProdMappings items = null;
                 int ptrId = dcPtr.DcID;
+                int splitCount = 1;
 
                 if (elMapping == null)
                 {
@@ -829,6 +830,18 @@ namespace Intel.MyDeals.BusinessLogic
                     dcSplit.SetAtrb(AttributeCodes.GEO_COMBINED, strGeos);
                     dcSplit.SetModified(AttributeCodes.GEO_COMBINED);
 
+                    //enforce unique deal group name for kits that are split
+                    if (elMapping.ParentOpDataElementSetType.ToString() == "KIT")
+                    {
+                        //TODO: need to check that the name we are setting it to does not already exist in the PT as this can still result in duplicate deal group names in VERY specific cases (ie. Split "KitName" but for some reason we already have a deal group named "KitName (Split 1)" which would result in a duplicate
+                        string splitName = dcSplit.GetDataElementValue(AttributeCodes.DEAL_GRP_NM) + " (Split " + splitCount + ")"; 
+                        dcSplit.SetAtrb(AttributeCodes.DEAL_GRP_NM, splitName);
+                        dcSplit.SetModified(AttributeCodes.DEAL_GRP_NM);
+                        dcWip.SetAtrb(AttributeCodes.DEAL_GRP_NM, splitName);
+                        dcWip.SetModified(AttributeCodes.DEAL_GRP_NM);
+                        splitCount++;
+                    }
+
                     myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Add(dcSplit);
                 }
             }
@@ -882,12 +895,17 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (KeyValuePair<int, int> kvp in childToParentIdMapping)
             {
                 string usrPrdTitle = res2[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(c => c.DcID == kvp.Key && c.DcParentID == kvp.Value).Select(c => c.GetDataElementValue(AttributeCodes.PTR_USER_PRD)).FirstOrDefault();
+                string kitName = "";
+                if (elMapping.ParentOpDataElementSetType.ToString() == "KIT")
+                {
+                    kitName = res2[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(c => c.DcID == kvp.Key && c.DcParentID == kvp.Value).Select(c => c.GetDataElementValue(AttributeCodes.DEAL_GRP_NM)).FirstOrDefault();
+                }
 
-                opMsgQueue.Messages.Add(new OpMsg
+                    opMsgQueue.Messages.Add(new OpMsg
                 {
                     Message = $"Parent ID Changed from {childToOrigParentIdMapping[kvp.Key]} to {kvp.Value}",
                     MsgType = OpMsg.MessageType.Info,
-                    ExtraDetails = usrPrdTitle,
+                    ExtraDetails = new[] { usrPrdTitle, kitName },
                     KeyIdentifiers = new[] { kvp.Key, kvp.Value, childToOrigParentIdMapping[kvp.Key] }
                 });
             }

@@ -268,7 +268,7 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsgQueue UnGroupPricingTableRowById(ContractToken contractToken, int ptrId)
         {
             MyDealsData myDealsData = GetPricingTableRowAndWip(ptrId);
-            return myDealsData.UpGroupPricingTableRow(contractToken, _dataCollectorLib);
+            return myDealsData.UnGroupPricingTableRow(contractToken, _dataCollectorLib);
         }
 
         public OpMsgQueue ActionWipDeals(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actns)
