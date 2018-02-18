@@ -176,12 +176,12 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     //Table 1
+                    int IDX_CONTRACT_PRODUCT = DB.GetReaderOrdinal(rdr, "CONTRACT_PRODUCT");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
                     int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_PDF_FILE = DB.GetReaderOrdinal(rdr, "PDF_FILE");
-                    int IDX_PRIMARY_PRODUCT = DB.GetReaderOrdinal(rdr, "PRIMARY_PRODUCT");
                     int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
                     int IDX_QUOTE_LETTER = DB.GetReaderOrdinal(rdr, "QUOTE_LETTER");
                     int IDX_REBATE_TYPE = DB.GetReaderOrdinal(rdr, "REBATE_TYPE");
@@ -191,12 +191,12 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         var quoteLetterContentData = (new QuoteLetterContentInfo
                         {
+                            CONTRACT_PRODUCT = (IDX_CONTRACT_PRODUCT < 0 || rdr.IsDBNull(IDX_CONTRACT_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CONTRACT_PRODUCT),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
                             OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             PDF_FILE = (IDX_PDF_FILE < 0 || rdr.IsDBNull(IDX_PDF_FILE)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_PDF_FILE),
-                            PRIMARY_PRODUCT = (IDX_PRIMARY_PRODUCT < 0 || rdr.IsDBNull(IDX_PRIMARY_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMARY_PRODUCT),
                             PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
                             QUOTE_LETTER = (IDX_QUOTE_LETTER < 0 || rdr.IsDBNull(IDX_QUOTE_LETTER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_QUOTE_LETTER),
                             REBATE_TYPE = (IDX_REBATE_TYPE < 0 || rdr.IsDBNull(IDX_REBATE_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_TYPE),
@@ -263,7 +263,7 @@ namespace Intel.MyDeals.DataLibrary
             byte[] quoteLetterBytes;
             string dealId = quoteLetterData.ObjectSid;
             var custNm = EscapeSpecialChars(quoteLetterData.ContentInfo.CUST_NM);
-            var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.PRIMARY_PRODUCT);
+            var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.CONTRACT_PRODUCT).Split(',')[0];
             var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
             var inNegotiation = string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR) || quoteLetterData.ContentInfo.TRKR_NBR.IndexOf("*") >= 0;
 

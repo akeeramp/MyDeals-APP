@@ -131,7 +131,7 @@ namespace Intel.MyDeals.DataLibrary
 
 
             // T's and C's
-            txtProject.Value = EscapeSpecialChars(GetValue("Project"));
+            txtProject.Value = EscapeSpecialChars(GetValue("QltrProject"));
             txtTerms.Value = EscapeSpecialChars(GetValue("Terms"));
 
 
@@ -140,10 +140,14 @@ namespace Intel.MyDeals.DataLibrary
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))
             {
                 ttlAdditional.Visible = false;
-
+            }
+            if (string.IsNullOrEmpty(txtProject.Value))
+            {
                 lblProject.Visible = false;
                 txtProject.Visible = false;
-
+            }
+            if (string.IsNullOrEmpty(txtTerms.Value))
+            {
                 lblTerms.Visible = false;
                 txtTerms.Visible = false;
             }
