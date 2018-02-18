@@ -365,7 +365,7 @@ gridUtils.uiProductDimControlWrapper = function (passedData, type) {
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isReadOnlyCell:true}">';
-            tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'' + data[i] + '\'"></span>';
+            tmplt += '<span class="ng-binding" style="padding: 0 4px; color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="\'' + data[i] + '\'"></span>';
             tmplt += '</td>';
             tmplt += '</tr>';
         }
@@ -377,7 +377,7 @@ gridUtils.uiProductDimControlWrapper = function (passedData, type) {
                 tmplt += '<tr style="height: 25px;">';
                 tmplt += '<td style="text-align:right;"';
                 tmplt += ' ng-class="{isReadOnlyCell:true}">';
-                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="\'' + data[i] + '\'"></span>';
+                tmplt += '<span class="ng-binding" style="padding: 0 4px; color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="\'' + data[i] + '\'"></span>';
                 tmplt += '</td>';
                 tmplt += '</tr>';
             } else {
@@ -392,8 +392,8 @@ gridUtils.uiProductDimControlWrapper = function (passedData, type) {
         tmplt += '</table>';
     } else {
         //no subkit allowed case, i.e. type = "subkit" and HAS_SUBKIT == 0
-        tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
-        tmplt += '<div class="vert-center">No Sub KIT</div>';
+        tmplt += '<div class="uiControlDiv isReadOnlyCell">';
+        tmplt += '<div class="ng-binding vert-center">No Sub KIT</div>';
         tmplt += '</div>';
     }
     return tmplt;
@@ -401,7 +401,7 @@ gridUtils.uiProductDimControlWrapper = function (passedData, type) {
 
 gridUtils.uiProductControlWrapper = function (passedData, type) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-    tmplt += '     <div class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="dataItem.TITLE" ng-attr-title="dataItem.TITLE"></div>';
+    tmplt += '     <div class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="dataItem.TITLE" ng-attr-title="{{dataItem.TITLE}}"></div>';
     tmplt += '</div>';
     return tmplt;
 }
