@@ -40,6 +40,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return (item === undefined || item === null) ? defval : item;
             }
 
+            $scope.openDealProducts = function(dataItem) {
+                return $scope.parentRoot.openDealProducts(dataItem);
+            }
+
             $scope.displayFrontEndDateMessage = function (dataItem) {
                 var today = new Date();
                 var isFrontendDeal = (dataItem.PROGRAM_PAYMENT.indexOf('Frontend') !== -1);

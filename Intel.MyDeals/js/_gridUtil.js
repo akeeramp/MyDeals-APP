@@ -399,6 +399,13 @@ gridUtils.uiProductDimControlWrapper = function (passedData, type) {
     return tmplt;
 }
 
+gridUtils.uiProductControlWrapper = function (passedData, type) {
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+    tmplt += '     <div class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="dataItem.TITLE" ng-attr-title="dataItem.TITLE"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
 gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
     var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers

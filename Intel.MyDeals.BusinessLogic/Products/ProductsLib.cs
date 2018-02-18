@@ -51,6 +51,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetProductData();
         }
 
+        public List<Product> GetProductsByIds(IEnumerable<int> pids)
+        {
+            return _dataCollectionsDataLib.GetProductData().Where(p => pids.Contains(p.PRD_MBR_SID)).ToList();
+        }
+
         public List<Product> GetProductsDetails(bool getCachedResult = true)
         {
             if (!getCachedResult)

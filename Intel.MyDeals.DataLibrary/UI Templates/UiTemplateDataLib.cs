@@ -1054,7 +1054,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "MyDeals Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
-                Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
+                Template = "#=gridUtils.uiProductControlWrapper(data, 'TITLE')#",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 150

@@ -3839,6 +3839,27 @@
             }, function () { });
         }
 
+        $scope.openDealProducts = function (dataItem) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'dealProductsModal',
+                controller: 'dealProductsModalCtrl',
+                controllerAs: '$ctrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {}, function () { });
+        }
+
         $scope.toggleTerms = function () {
             var splitter = $("#k-splitter").data("kendoSplitter");
             if (splitter.options.panes[1].collapsed) {

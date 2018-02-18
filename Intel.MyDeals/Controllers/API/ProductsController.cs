@@ -4,6 +4,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -34,6 +35,15 @@ namespace Intel.MyDeals.Controllers.API
                 OpLogPerf.Log(ex);
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
+        }
+        [Authorize]
+        [Route("GetProductsByIds/{sids}")]
+        public IEnumerable<Product> GetProductsByIds(string sids)
+        {
+            List<int> pids = sids.Split(',').Select(int.Parse).ToList();
+            return SafeExecutor(() => _productsLib.GetProductsByIds(pids)
+                , $"GetProductsByIds failed"
+            );
         }
 
         [Authorize]
