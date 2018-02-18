@@ -20,7 +20,6 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
 
     $scope.gridOptions = {
         dataSource: {
-            type: "json",
             transport: {
                 read: "/api/Products/GetProductsByIds/" + prdIds.join(',')
             }

@@ -67,7 +67,7 @@
                                 <td style="border: 0 solid transparent;">
                                     <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                                 </td>
-                                <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                                <td style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent;">
                                     Excel<br>Export
                                 </td>
                                 <td>
@@ -139,6 +139,29 @@
                     </li>
                 </ul>
             </div>
+            
+            <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                <button class="btn btn-sm ssToolbarBtn" ng-click="toggleWrap()" ng-class="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap.">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                            </td>
+                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                Word<br />Wrap
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+            </div>
+
+            <!--<div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                <div class="btn-group btn-group-font">
+                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'sm'"><div style="font-size: 8px; margin-top: 9px;">A</div></label>
+                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'md'"><div style="font-size: 11px; margin-top: 6px;">A</div></label>
+                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'lg'"><div style="font-size: 14px; margin-top: 3px;">A</div></label>
+                </div>
+            </div>-->
 
             <!--<div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
                 <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
@@ -178,7 +201,7 @@
     </div>
 
     <div class="op-grid-container">
-        <kendo-grid ng-hide="isOverlapping" id="dealEditor" options="ds" class="opUiContainer dashboard md op-grid" style="height: 100%;"></kendo-grid>
+        <kendo-grid ng-hide="isOverlapping" id="dealEditor" options="ds" class="opUiContainer dashboard op-grid" ng-class="{'lg': fontSize == 'lg', 'md': fontSize == 'md', 'sm': fontSize == 'sm'}" style="height: 100%;"></kendo-grid>
         <kendo-grid ng-if="isOverlapping" id="overLapping" options="ovlp" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
     </div>
 
@@ -676,4 +699,11 @@
         line-height: 1em !important;
         margin-top: -1px !important;
     }
-</style>
+
+    .op-grid .opUiContainer.md.k-grid td {
+        height: inherit !important;
+    }
+    .toggleSelect {
+        background-color: #eeeeee !important;
+    }
+=</style>

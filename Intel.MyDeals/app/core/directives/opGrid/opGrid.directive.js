@@ -26,6 +26,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.ovlpErrorCount = [];
             $scope.ovlpDataRep = [];
             $scope.numColsLocked = 0;
+            $scope.wrapEnabled = false;
+            $scope.fontSize = 'md';
             $scope.parentRoot = $scope.$parent.$parent.$parent.$parent.$parent;
 
             $timeout(function () {
@@ -1566,6 +1568,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
 
                 return valid;
+            }
+
+            $scope.toggleWrap = function () {
+                var gridEl = $scope.elGrid;
+                $scope.wrapEnabled = !$scope.wrapEnabled;
+                var newVal = $scope.wrapEnabled ? "normal" : "nowrap";
+                var newH = $scope.wrapEnabled ? "100%" : "auto";
+
+                $(gridEl).find(".ng-binding").css("white-space", newVal);
+                $(gridEl).find(".ng-binding").css("height", newH);
+                $timeout(function () {
+                    $scope.grid.autoFitColumn(2);
+                }, 0);
             }
 
             $scope.clkSearchGrid = function (e) {
