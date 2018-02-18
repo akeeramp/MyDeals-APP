@@ -14,10 +14,10 @@ namespace Intel.MyDeals.DataLibrary
             NeedDataSource += Report3NeedDataSource;
         }
 
-        public QuoteLetter(string xml, string content0, string content1)
+        public QuoteLetter(string xml, string content0, string content1, int dealId)
         {
             InitializeComponent();
-            ProcessData(xml, content0, content1);
+            ProcessData(xml, content0, content1, dealId);
         }
 
         void Report3NeedDataSource(object sender, EventArgs e)
@@ -28,6 +28,23 @@ namespace Intel.MyDeals.DataLibrary
         string GetValue(string key)
         {
             return source.Descendants("PARAMETERS").Select(el => (el.Element(key) == null) ? string.Empty : ((string)el.Element(key)).Replace("\\n", "<br />")).FirstOrDefault();
+        }
+        string GetTrackerValue(string key)
+        {
+            var val = GetValue(key);
+
+            if (!string.IsNullOrEmpty(val) && val.IndexOf("*") < 0) return val;
+
+            return GetValue("RebateType").ToUpper() == "TENDER" ? "Bid Pending" : "In Negotiation";
+        }
+        string GetMoneyValue(string key)
+        {
+            var val = GetValue(key);
+            if (!string.IsNullOrEmpty(val))
+            {
+                val = Convert.ToDecimal(val).ToString("C2");
+            }
+            return val;
         }
 
         static string EscapeSpecialChars(string xml)
@@ -40,43 +57,85 @@ namespace Intel.MyDeals.DataLibrary
             xml = xml.Replace("\"", "&quot;");
             xml = xml.Replace("{", "(");
             xml = xml.Replace("}", ")");
+            xml = xml.Replace("+", "_");
             return xml;
         }
 
-        void ProcessData(string xml, string content0, string content1)
+        void ProcessData(string xml, string content0, string content1, int dealId)
         {
             source = XDocument.Parse(xml);
 
             MainContent.Value = content0.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetValue("Customer")));
             MainContent1.Value = content1;
 
+            htmlTextBox4.Value = "Intel Quote for Deal " + dealId;
             txtEndCustomer.Value = EscapeSpecialChars(GetValue("EndCustomer"));
-
             txtStartDate.Value = GetValue("StartDate");
             txtEndDate.Value = GetValue("EndDate");
-            txtOnAdDate.Value = GetValue("OnAdDate");
+            txtECAPType.Value = GetValue("RebateType");
             txtQuantity.Value = GetValue("Quantity");
-            txtProdSegment.Value = GetValue("ProdSegment");
-
-            // Product Info
-            txtECAPType.Value = GetValue("ECAPType");
-            txtProdDesc.Value = EscapeSpecialChars(GetValue("ProdDesc"));
-            txtECAPPrice.Value = GetValue("ECAPPrice");
-            txtCommit.Value = GetValue("Commit");
+            txtProgramPayment.Value = GetValue("ProgramPayment");
 
 
-            // Kit Info
-            string KitTrackerData = GetValue("ECAPPrice");
-            string CPUTrackerData = GetValue("CPUECAPPrice");
-            string CSTrackerData = GetValue("CSECAPPrice");
+            txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
+            txtK1Tracker.Value = GetTrackerValue("KTracker");
 
-            txtCPUECAPPrice.Value = (string.IsNullOrEmpty(CPUTrackerData) && string.IsNullOrEmpty(CSTrackerData)) ? "" : KitTrackerData + "<br /><br />" + CPUTrackerData + "<br /><br />" + CSTrackerData;
-            txtCPU.Value = GetValue("CPU");
-            txtCS.Value = GetValue("CS");
+            txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
+            txtK2Tracker.Value = GetTrackerValue("SKTracker");
+
+            txtP1Ecap.Value = GetMoneyValue("PECAPPrice");
+            txtP1ProdName.Value = GetValue("PProdDesc");
+            txtP1ProdSeg.Value = GetValue("PProdCat");
+            txtP1Tracker.Value = GetTrackerValue("PTracker");
+
+            txtS1Ecap.Value = GetMoneyValue("S1ECAPPrice");
+            txtS1ProdName.Value = GetValue("S1ProdDesc");
+            txtS1ProdSeg.Value = GetValue("S1ProdCat");
+            txtS1Tracker.Value = GetTrackerValue("S1Tracker");
+
+            txtS2Ecap.Value = GetMoneyValue("S2ECAPPrice");
+            txtS2ProdName.Value = GetValue("S2ProdDesc");
+            txtS2ProdSeg.Value = GetValue("S2ProdCat");
+            txtS2Tracker.Value = GetTrackerValue("S2Tracker");
+
+            txtS3Ecap.Value = GetMoneyValue("S3ECAPPrice");
+            txtS3ProdName.Value = GetValue("S3ProdDesc");
+            txtS3ProdSeg.Value = GetValue("S3ProdCat");
+            txtS3Tracker.Value = GetTrackerValue("S3Tracker");
+
+            txtS4Ecap.Value = GetMoneyValue("S4ECAPPrice");
+            txtS4ProdName.Value = GetValue("S4ProdDesc");
+            txtS4ProdSeg.Value = GetValue("S4ProdCat");
+            txtS4Tracker.Value = GetTrackerValue("S4Tracker");
+
+            txtS5Ecap.Value = GetMoneyValue("S5ECAPPrice");
+            txtS5ProdName.Value = GetValue("S5ProdDesc");
+            txtS5ProdSeg.Value = GetValue("S5ProdCat");
+            txtS5Tracker.Value = GetTrackerValue("S5Tracker");
+
+            txtS6Ecap.Value = GetMoneyValue("S6ECAPPrice");
+            txtS6ProdName.Value = GetValue("S6ProdDesc");
+            txtS6ProdSeg.Value = GetValue("S6ProdCat");
+            txtS6Tracker.Value = GetTrackerValue("S6Tracker");
+
+            txtS7Ecap.Value = GetMoneyValue("S7ECAPPrice");
+            txtS7ProdName.Value = GetValue("S7ProdDesc");
+            txtS7ProdSeg.Value = GetValue("S7ProdCat");
+            txtS7Tracker.Value = GetTrackerValue("S7Tracker");
+
+            txtS8Ecap.Value = GetMoneyValue("S8ECAPPrice");
+            txtS8ProdName.Value = GetValue("S8ProdDesc");
+            txtS8ProdSeg.Value = GetValue("S8ProdCat");
+            txtS8Tracker.Value = GetTrackerValue("S8Tracker");
+            
+
 
             // T's and C's
             txtProject.Value = EscapeSpecialChars(GetValue("Project"));
             txtTerms.Value = EscapeSpecialChars(GetValue("Terms"));
+
+
+            // Start hidding rows
 
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))
             {
@@ -89,38 +148,105 @@ namespace Intel.MyDeals.DataLibrary
                 txtTerms.Visible = false;
             }
 
-            if (string.IsNullOrEmpty(txtCPUECAPPrice.Value) && string.IsNullOrEmpty(txtCPU.Value) && string.IsNullOrEmpty(txtCS.Value))
+            if (string.IsNullOrEmpty(txtP1ProdName.Value))
             {
-                ttlKitInfo.Visible = false;
-
-                lblPriPrice.Visible = false;
-                txtCPUECAPPrice.Visible = false;
-
-                lblPriCommit.Visible = false;
-                txtCPU.Visible = false;
-
-                //lblCSPrice.Visible = false;
-                //txtCSECAPPrice.Visible = false;
-
-                lblCSCommit.Visible = false;
-                txtCS.Visible = false;
+                lblP1.Visible = false;
+                txtP1Ecap.Visible = false;
+                txtP1ProdName.Visible = false;
+                txtP1ProdSeg.Visible = false;
+                txtP1Tracker.Visible = false;
             }
-            else
+
+            if (string.IsNullOrEmpty(txtK1ProdName.Value))
             {
-                ttlProductInfo.Visible = false;
-
-                lblStdAloneType.Visible = false;
-                txtECAPType.Visible = false;
-
-                lblStdAlonePrice.Visible = false;
-                txtECAPPrice.Visible = false;
-
-                lblStdAloneCommit.Visible = false;
-                txtCommit.Visible = false;
-
-                lblStdAloneDesc.Visible = false;
-                txtProdDesc.Visible = false;
+                lblK1.Visible = false;
+                txtK1Ecap.Visible = false;
+                txtK1ProdName.Visible = false;
+                txtK1ProdSeg.Visible = false;
+                txtK1Tracker.Visible = false;
             }
+
+            if (string.IsNullOrEmpty(txtK2ProdName.Value))
+            {
+                lblK2.Visible = false;
+                txtK2Ecap.Visible = false;
+                txtK2ProdName.Visible = false;
+                txtK2ProdSeg.Visible = false;
+                txtK2Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS1ProdName.Value))
+            {
+                lblS1.Visible = false;
+                txtS1Ecap.Visible = false;
+                txtS1ProdName.Visible = false;
+                txtS1ProdSeg.Visible = false;
+                txtS1Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS2ProdName.Value))
+            {
+                lblS2.Visible = false;
+                txtS2Ecap.Visible = false;
+                txtS2ProdName.Visible = false;
+                txtS2ProdSeg.Visible = false;
+                txtS2Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS3ProdName.Value))
+            {
+                lblS3.Visible = false;
+                txtS3Ecap.Visible = false;
+                txtS3ProdName.Visible = false;
+                txtS3ProdSeg.Visible = false;
+                txtS3Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS4ProdName.Value))
+            {
+                lblS4.Visible = false;
+                txtS4Ecap.Visible = false;
+                txtS4ProdName.Visible = false;
+                txtS4ProdSeg.Visible = false;
+                txtS4Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS5ProdName.Value))
+            {
+                lblS5.Visible = false;
+                txtS5Ecap.Visible = false;
+                txtS5ProdName.Visible = false;
+                txtS5ProdSeg.Visible = false;
+                txtS5Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS6ProdName.Value))
+            {
+                lblS6.Visible = false;
+                txtS6Ecap.Visible = false;
+                txtS6ProdName.Visible = false;
+                txtS6ProdSeg.Visible = false;
+                txtS6Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS7ProdName.Value))
+            {
+                lblS7.Visible = false;
+                txtS7Ecap.Visible = false;
+                txtS7ProdName.Visible = false;
+                txtS7ProdSeg.Visible = false;
+                txtS7Tracker.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS8ProdName.Value))
+            {
+                lblS8.Visible = false;
+                txtS8Ecap.Visible = false;
+                txtS8ProdName.Visible = false;
+                txtS8ProdSeg.Visible = false;
+                txtS8Tracker.Visible = false;
+            }
+
 
         }
 
@@ -133,7 +259,7 @@ namespace Intel.MyDeals.DataLibrary
             string content1 = GetStringValue(parameters["content1"].Value);
             if (xml != string.Empty)
             {
-                ProcessData(xml, content0, content1);
+                ProcessData(xml, content0, content1, 0);
                 return;
             }
 
@@ -143,27 +269,11 @@ namespace Intel.MyDeals.DataLibrary
 
             txtStartDate.Value = GetStringValue(parameters["StartDate"].Value);
             txtEndDate.Value = GetStringValue(parameters["EndDate"].Value);
-            txtOnAdDate.Value = GetStringValue(parameters["OnAdDate"].Value);
-            txtQuantity.Value = GetStringValue(parameters["Quantity"].Value);
-            txtProdSegment.Value = GetStringValue(parameters["ProdSegment"].Value);
             txtECAPType.Value = GetStringValue(parameters["ECAPType"].Value);
-            txtProdDesc.Value = EscapeSpecialChars(GetStringValue(parameters["ProdDesc"].Value));
-
-            //txtTracker.Value = GetStringValue(parameters["Tracker"].Value);
-            txtECAPPrice.Value = GetStringValue(parameters["ECAPPrice"].Value);
-            txtCommit.Value = GetStringValue(parameters["Commit"].Value);
-
-            //txtCPUTracker.Value = GetStringValue(parameters["CPUTracker"].Value);
-            txtCPUECAPPrice.Value = GetStringValue(parameters["CPUECAPPrice"].Value);
-            txtCPU.Value = GetStringValue(parameters["CPU"].Value);
-
-            //txtCSTracker.Value = GetStringValue(parameters["CSTracker"].Value);
-            //txtCSECAPPrice.Value = GetStringValue(parameters["CSECAPPrice"].Value);
-            txtCS.Value = GetStringValue(parameters["CS"].Value);
-
+            txtQuantity.Value = GetStringValue(parameters["Quantity"].Value);
+            txtProgramPayment.Value = GetStringValue(parameters["ProdSegment"].Value);
             txtProject.Value = EscapeSpecialChars(GetStringValue(parameters["Project"].Value));
             txtTerms.Value = EscapeSpecialChars(GetStringValue(parameters["Terms"].Value));
-
 
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))
             {
@@ -178,8 +288,7 @@ namespace Intel.MyDeals.DataLibrary
 
         static string GetStringValue(object val)
         {
-            if (val == null || string.IsNullOrEmpty(val.ToString())) return string.Empty;
-            return val.ToString();
+            return string.IsNullOrEmpty(val?.ToString()) ? string.Empty : val.ToString();
         }
     }
 }

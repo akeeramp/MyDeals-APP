@@ -143,6 +143,20 @@ namespace Intel.MyDeals.DataLibrary
             quoteLetterData.TemplateInfo = quoteLetterTemplateData;            
         }
 
+        static string EscapeSpecialChars(string val)
+        {
+            val = val.Replace("&amp;", "and");
+            val = val.Replace("&", "and");
+            val = val.Replace("<", "&lt;");
+            val = val.Replace(">", "&gt;");
+            val = val.Replace("'", "&apos;");
+            val = val.Replace("\"", "&quot;");
+            val = val.Replace("{", "(");
+            val = val.Replace("}", ")");
+            val = val.Replace("+", "_");
+            return val;
+        }
+
         /// <summary>
         /// Get quote letter body based on deal id list
         /// </summary>
@@ -162,24 +176,30 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     //Table 1
+                    int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
                     int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_PDF_FILE = DB.GetReaderOrdinal(rdr, "PDF_FILE");
+                    int IDX_PRIMARY_PRODUCT = DB.GetReaderOrdinal(rdr, "PRIMARY_PRODUCT");
                     int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
                     int IDX_QUOTE_LETTER = DB.GetReaderOrdinal(rdr, "QUOTE_LETTER");
+                    int IDX_REBATE_TYPE = DB.GetReaderOrdinal(rdr, "REBATE_TYPE");
                     int IDX_TRKR_NBR = DB.GetReaderOrdinal(rdr, "TRKR_NBR");
 
                     while (rdr.Read())
                     {
                         var quoteLetterContentData = (new QuoteLetterContentInfo
                         {
+                            CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
                             OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             PDF_FILE = (IDX_PDF_FILE < 0 || rdr.IsDBNull(IDX_PDF_FILE)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_PDF_FILE),
+                            PRIMARY_PRODUCT = (IDX_PRIMARY_PRODUCT < 0 || rdr.IsDBNull(IDX_PRIMARY_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMARY_PRODUCT),
                             PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
                             QUOTE_LETTER = (IDX_QUOTE_LETTER < 0 || rdr.IsDBNull(IDX_QUOTE_LETTER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_QUOTE_LETTER),
+                            REBATE_TYPE = (IDX_REBATE_TYPE < 0 || rdr.IsDBNull(IDX_REBATE_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_TYPE),
                             TRKR_NBR = (IDX_TRKR_NBR < 0 || rdr.IsDBNull(IDX_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR)
                         });
 
@@ -242,37 +262,34 @@ namespace Intel.MyDeals.DataLibrary
         {            
             byte[] quoteLetterBytes;
             string dealId = quoteLetterData.ObjectSid;
-            int custId = int.Parse(quoteLetterData.CustomerId);
-            var custNm = DataCollections.GetCustomerDivisions()
-                .Where(c => c.CUST_NM_SID == custId || c.CUST_DIV_NM_SID == custId)
-                .Select(c => c.CUST_NM)
-                .FirstOrDefault();
-            var sku = "prod";
-            var ecapType = "ecap type";
+            var custNm = EscapeSpecialChars(quoteLetterData.ContentInfo.CUST_NM);
+            var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.PRIMARY_PRODUCT);
+            var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
+            var inNegotiation = string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR) || quoteLetterData.ContentInfo.TRKR_NBR.IndexOf("*") >= 0;
 
-            string fileName = $"{custNm} {sku} + {ecapType} {dealId}.pdf";
+            string fileName = $"{custNm} {sku} {ecapType} {dealId}.pdf";
 
             if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
             {
+
                 // If there is an existing PDF file exists in DB, use the existing one
-                if (quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
+                if (!inNegotiation && quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
                 {
                     quoteLetterBytes = quoteLetterData.ContentInfo.PDF_FILE;
                 }
                 else
                 {               
                     // Generate new quote Letter PDf and Save to DB/Display to user
-                    Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO);
+                    Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO, int.Parse(dealId));
                     ReportProcessor reportProcessor = new ReportProcessor();
                     Telerik.Reporting.InstanceReportSource instanceReportSource = new Telerik.Reporting.InstanceReportSource { ReportDocument = reportToExport };
                     RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
-
                     
                     var ms = new MemoryStream(result.DocumentBytes) { Position = 0 };
                     quoteLetterBytes = ms.ToArray();
 
                     // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
-                    if (!(string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR)) && !(quoteLetterData.ContentInfo.TRKR_NBR.Contains("*")))
+                    if (!inNegotiation)
                         SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
                 }
             }
@@ -282,106 +299,12 @@ namespace Intel.MyDeals.DataLibrary
                 quoteLetterBytes = Encoding.ASCII.GetBytes(failedMessage);
             }
 
-            var quoteLetterFile = new QuoteLetterFile();
-            quoteLetterFile.Content = quoteLetterBytes;
-            quoteLetterFile.Name = fileName;
+            return new QuoteLetterFile
+            {
+                Content = quoteLetterBytes,
+                Name = fileName
+            };
 
-            return quoteLetterFile;
-
-
-            //var cmd = new PR_IDMS_GET_QUOTE_INFO
-            //{
-            //    dealID = dealID.ToString(),
-            //    callMode = runMode
-            //};
-
-            //var returnedDS = DataAccess.ExecuteSpDataSetProc(ConnectionString, 0, cmd);  //Get XML data for thie specified deal
-
-            //DataTable dealDataTable = returnedDS.Tables[0];
-            //DataTable quoteTemplateTable = returnedDS.Tables[1];
-
-            //DataRow row = dealDataTable.Rows[0];
-            //var inputXML = row["QUOTE_LETTER"];
-            //var mailToList = row["EMAIL"].ToString();
-            //byte[] pdfFile = row["PDF_FILE"] as byte[]; // Read in the previously generated PDF file if one exists - short out generation if so.
-            //string trkrNbr = row["TRKR_NBR"].ToString();
-
-            //DataRow rowContent = quoteTemplateTable.Rows[0];
-            //var content0 = rowContent["CONTENT0"];
-            //var content1 = rowContent["CONTENT1"];
-
-
-            //if (runMode == 2) // Automated mailing batch
-            //{
-            //    var myMail = new MailMessage();
-
-            //    char[] splitter = { ';' };
-            //    string strReturnMessage;
-
-            //    if (env != "Production" || mailToList == string.Empty)
-            //    // This should never be empty, but you kow those whacky assumptions...
-            //    {
-            //        myMail.Subject = "[" + env + "] Quote Letter for Deal ID " + dealID;
-            //        myMail.Body = "See Attachment for Quote Letter<br>In production, this would be mailed to: " +
-            //                      mailToList;
-            //        mailToList = WebConfigurationManager.AppSettings["SupportDevelopers"];
-            //        if (env == "Test" || env == "CONS")
-            //        // OverrideMode mailing list if needed for non-prod envs or prod no mail list header
-            //        {
-            //            mailToList = WebConfigurationManager.AppSettings["QuoteTestingEMail"];
-            //        }
-            //        if (env == "Production")
-            //        {
-            //            myMail.Subject = "[Empty Production Mailing List] Quote Letter for Deal ID " + dealID;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        myMail.Subject = "Quote Letter for Deal ID " + dealID;
-            //        myMail.Body = "See Attachment for Quote Letter";
-            //    }
-
-            //    myMail.From = new MailAddress(WebConfigurationManager.AppSettings["SupportEMail"]);
-
-            //    var arMailToList = mailToList.Split(splitter);
-            //    foreach (var t in arMailToList.Where(t => t.Length > 0))
-            //    {
-            //        myMail.To.Add(new MailAddress(t));
-            //    }
-
-            //    myMail.IsBodyHtml = true;
-
-            //    var attachment = new Attachment(ms, fileName);
-            //    myMail.Attachments.Add(attachment);
-
-            //    // Save to DB since this was just generated for the first time (Mode 2)
-            //    if (!(string.IsNullOrEmpty(trkrNbr)) && !(trkrNbr.Contains("*"))) SaveQuotePDF(dealID, trkrNbr, ms.ToArray());
-
-            //    var client = new SmtpClient();
-            //    try
-            //    {
-            //        client.Send(myMail);
-            //        strReturnMessage = "Message sent:" + dealID;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        strReturnMessage = "Message send Failed: Deal ID = " + dealID + ", Message = " + ex.Message;
-            //    }
-
-            //    returnResults = Encoding.ASCII.GetBytes(strReturnMessage);
-            //}
-            //else
-            //{
-            //    byte[] response = ms.ToArray();
-
-            //    // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
-            //    if (!(string.IsNullOrEmpty(trkrNbr)) && !(trkrNbr.Contains("*"))) SaveQuotePDF(dealID, trkrNbr, response);
-
-            //    returnResults = response;
-            //}
-
-
-            //return returnResults;
         }
 
         private void SaveQuotePDF(QuoteLetterData quoteLetterData, string trkrNumber, byte[] quoteLetterPdf)

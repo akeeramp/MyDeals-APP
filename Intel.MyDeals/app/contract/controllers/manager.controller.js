@@ -428,9 +428,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 					{
 						field: "NOTES",
 						title: "Tools",
-						width: "140px",
+						width: "160px",
 						locked: true,
-						template: "<deal-tools ng-model='dataItem' is-editable='true' is-file-attachment-enabled='false' is-quote-letter-enabled='false' is-delete-enabled='false'></deal-tools>",
+						template: "<deal-tools ng-model='dataItem' is-editable='true' is-file-attachment-enabled='false' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
 						filterable: false
 					}, {
 						field: "DC_ID",
@@ -577,9 +577,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 					{
 						field: "NOTES",
 						title: "Tools",
-						width: "90px",
+						width: "160px",
 						locked: true,
-						template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false' is-quote-letter-enabled='false'></deal-tools>",
+						template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false' is-quote-letter-enabled='true'></deal-tools>",
 						filterable: false
 					}, {
 						field: "DC_ID",

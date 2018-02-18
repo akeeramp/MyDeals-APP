@@ -202,11 +202,10 @@
   <data name="MainContent1.Value" xml:space="preserve">
     <value>&lt;p&gt;REBATES AND BENEFITS OFFERED IN THIS INTEL ® QUOTE SHEET ARE NOT CONDITIONED ON ANY EXCLUSIVITY OR MARKET SHARE COMMITMENT.  FURTHERMORE, NOTHING IN THIS AGREEMENT SHALL PREVENT EITHER PARTY FROM ENTERING INTO SIMILAR ARRANGEMENTS WITH THIRD PARTIES.&lt;/p&gt;&lt;p&gt;THIS INTEL ® QUOTE SHEET CONSTITUES THE ENTIRE UNDERSTANDING AND AGREEMENT BETWEEN INTEL AND CUSTOMER WITH REGARD TO THE SUBJECT MATTER HEREOF AND SUPERSEDES ALL PRIOR AGREEMENTS, COMMUNICATIONS, REPRESENTATIONS AND DISCUSSIONS BETWEEN INTEL AND CUSTOMER, WHETHER WRITTEN OR ORAL.  ANY CONTRARY OR CONFLICTING TERM IS HEREBY REJECTED.  ANY MODIFICATION OR AMENDMENT TO THIS INTEL ® QUOTE SHEET SHALL BE DONE ONLY IN WRITTEN FORM AND AGREED BY AUTHORIZED REPRESENTATIVES OF INTEL AND CUSTOMER.&lt;/p&gt;&lt;p&gt;This Intel® Quote Sheet contains Intel confidential information. Customer shall treat this information according to the terms and conditions of the CNDA in place between Intel and Customer. In particular, Customer shall not disclose the information to third parties, including without limitation Customer’s contractors, and shall distribute it internally on a strict need-to-know basis only.&lt;/p&gt;&lt;p&gt;This Intel® Quote Sheet may be accepted by: (i) the signature on this Intel® Quote Sheet by a representative of Customer; (ii) other written or email communication accepting this Intel® Quote Sheet without any modification to the terms of this Intel® Quote Sheet by a representative of Customer; or (iii) Customer accepting any of the goods, services or funds specified in this Intel® Quote Sheet.&lt;/p&gt;</value>
   </data>
-  <assembly alias="Telerik.Reporting" name="Telerik.Reporting, Version=11.2.17.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be" />
-  <data name="$this.SnapGridSize" type="Telerik.Reporting.Drawing.Unit, Telerik.Reporting">
-    <value>0.1in</value>
-  </data>
   <data name="MainContent.Value" xml:space="preserve">
     <value>Dear CUSTOMERNAMEGOESHERE (Here in named “Customer”),&lt;br /&gt; &lt;br /&gt;In response to competitive offerings and taking the competitive environment into account, Intel Corporation; or any of its subsidiaries selling Intel® products (here in named “Intel”) to Customer, will offer the following discounted price (“ECAP Price”) to Customer, subject to the following terms and conditions.</value>
   </data>
+  <metadata name="$this.Zoom" type="System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>1.5</value>
+  </metadata>
 </root>

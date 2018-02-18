@@ -38,6 +38,8 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.isQuoteLetterEnabled = $scope.assignVal("isQuoteLetterEnabled", true);
             $scope.isDeleteEnabled = $scope.assignVal("isDeleteEnabled", true);
 
+            if ($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') $scope.isQuoteLetterEnabled = false;
+
             //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
             if (!$scope.$parent.contractData) {
@@ -522,7 +524,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             }
 
             $scope.showQuote = function (dataItem) {
-                return (dataItem.OBJ_SET_TYPE_CD === 'ECAP' || dataItem.OBJ_SET_TYPE_CD === 'KIT') && (dataItem.WF_STG_CD === 'Active' || dataItem.HAS_TRACKER === '1');
+                return dataItem.WF_STG_CD === 'Active' || dataItem.PS_WF_STG_CD === 'Pending' || dataItem.HAS_TRACKER === '1';
             }
 
             // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.
