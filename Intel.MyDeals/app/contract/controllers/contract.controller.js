@@ -58,6 +58,7 @@
 
         $scope.C_HOLD_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA" || window.usrRole === "DA");
         $scope.C_DEL_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA");
+        $scope.CAN_VIEW_EXPORT = (window.isDeveloper || window.isTester);
         $scope.canDeleteAttachment = function (wfStage) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
 
@@ -2852,7 +2853,7 @@
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
 
                     		// HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
-                            if (tieredItem == "END_VOL" && lData["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
+                            if (tieredItem === "END_VOL" && lData["END_VOL"]!== undefined && lData["END_VOL"].toString().toUpperCase() !== "UNLIMITED") {
                         		lData["END_VOL"] = kendo.toString(parseInt(lData["END_VOL"] || 0), "n0");
 							}
                         }
