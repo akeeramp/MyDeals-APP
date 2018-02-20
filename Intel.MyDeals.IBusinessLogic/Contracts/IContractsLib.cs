@@ -22,7 +22,10 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList GetFullContract(int id);
 
+        OpDataCollectorFlattenedList GetExportContract(int id);
+
         OpDataCollectorFlattenedDictList SaveFullContract(OpDataCollectorFlattenedDictList fullContracts, SavePacket savePacket);
+        
 
         OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish);
 

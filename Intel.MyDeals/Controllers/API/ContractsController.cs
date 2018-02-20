@@ -3,8 +3,6 @@ using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
-using System.Collections.Generic;
-using System.Linq;
 using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
@@ -42,6 +40,15 @@ namespace Intel.MyDeals.Controllers.API
         public OpDataCollectorFlattenedList GetUpperContract(int id)
         {
             return SafeExecutor(() => _contractsLib.GetUpperContract(id)
+                , $"Unable to get Contract {id}"
+            );
+        }
+
+        [Authorize]
+        [Route("GetExportContract/{id}")]
+        public OpDataCollectorFlattenedList GetExportContract(int id)
+        {
+            return SafeExecutor(() => _contractsLib.GetExportContract(id)
                 , $"Unable to get Contract {id}"
             );
         }

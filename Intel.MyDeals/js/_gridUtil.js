@@ -55,6 +55,8 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     var tmplt = '';
+    if (passedData[field] === undefined) return tmplt;
+
     if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
         //no subkit allowed case
         tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
@@ -77,6 +79,8 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
 }
 gridUtils.exportDimControlWrapper = function (passedData, field, dim, format) {
     var tmplt = '';
+    if (passedData[field] === undefined) return tmplt;
+
     if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
         //no subkit allowed case
         tmplt += 'No Sub KIT';
@@ -95,6 +99,9 @@ gridUtils.uiDimTrkrControlWrapper = function (passedData) {
     var dim = "";
     var field = "TRKR_NBR";
     var data = passedData[field];
+
+    if (data === undefined || Object.keys(data) === undefined || Object.keys(data) === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -127,6 +134,9 @@ gridUtils.exportDimTrkrControlWrapper = function (passedData) {
     var dim = "";
     var field = "TRKR_NBR";
     var data = passedData[field];
+
+    if (data === undefined || data === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '';
@@ -274,6 +284,9 @@ gridUtils.exportControlScheduleWrapper = function (passedData) {
 //this control wrapper to be used for dimentionalized attributes (0-based index, so not for VT attributes like numTiers)
 gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
     var data = passedData[field];
+
+    if (data === undefined || data === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '<table>';
@@ -300,6 +313,9 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
 }
 gridUtils.exportPositiveDimControlWrapper = function (passedData, field, format) {
     var data = passedData[field];
+
+    if (data === undefined || data === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '';
@@ -319,6 +335,9 @@ gridUtils.exportPositiveDimControlWrapper = function (passedData, field, format)
 
 gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
     var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
+
+    if (data === undefined || data === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var YCS2modifier = "";
@@ -409,6 +428,9 @@ gridUtils.uiProductControlWrapper = function (passedData, type) {
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
 gridUtils.uiPrimarySecondaryDimControlWrapper = function (passedData) {
     var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
+
+    if (data === undefined || data === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
     var setPrimary = true;
 
@@ -456,6 +478,9 @@ gridUtils.exportPrimarySecondaryDimControlWrapper = function (passedData) {
 //this control wrapper is only used to calculate KIT deal's TOTAL_DISCOUNT_PER_LINE
 gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
     var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
+
+    if (data === undefined || data === null) return "";
+
     var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
 
     var tmplt = '<table>';
@@ -688,6 +713,7 @@ gridUtils.onDataValueChange = function (e) {
 
 gridUtils.kitCalculatedValues = function (items, kittype, column) {
     var data = items["ECAP_PRICE"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - also are QTY and dscnt_per_line required columns? if not we are going to need to put in checks
+    if (data === undefined) return "";
     var total = 0.00;
     var subkitSumCounter = 2;   //subkits are always going to be the primary and first secondary item, so only sum those two dims in that case
 
@@ -700,10 +726,10 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
             if (kittype == "subkit") {
                 subkitSumCounter--;
             }
-            if (column == "rebateBundle") {
+            if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
                 total += parseFloat(items["ECAP_PRICE"][dimkey]);
             }
-            if (column == "sumTD") {
+            if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
                 total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];
             }
         }

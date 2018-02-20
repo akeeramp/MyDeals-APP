@@ -375,6 +375,7 @@
     <Content Include="app\contract\controllers\dropdownModal.controller.js" />
     <Content Include="app\contract\controllers\ecapTrackerAutoFillModal.controller.js" />
     <Content Include="app\contract\controllers\ecapTrackerModal.controller.js" />
+    <Content Include="app\contract\controllers\export.controller.js" />
     <Content Include="app\contract\controllers\managerOverlapping.controller.js" />
     <Content Include="app\contract\controllers\managerPct.controller.js" />
     <Content Include="app\contract\controllers\managerDealType.controller.js" />
@@ -392,6 +393,8 @@
     <Content Include="app\contract\controllers\pctOverrideReasonModal.controller.js" />
     <Content Include="app\contract\partials\contractCompliance.html" />
     <Content Include="app\contract\partials\contractComplianceHeader.html" />
+    <Content Include="app\contract\partials\contractExport.html" />
+    <Content Include="app\contract\partials\contractExportHeader.html" />
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
     <Content Include="app\contract\partials\contractSummaryOverlapping.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />

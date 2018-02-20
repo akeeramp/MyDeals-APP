@@ -16,8 +16,9 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 	// Variables
     var root = $scope.$parent;	// Access to parent scope
     root.curPricingTable.DC_ID = undefined;
-    var wipTemplate;
     root.wipData = [];
+    $scope.loading = true;
+    $scope.msg = "Loading Deals";
 
     gridUtils.onDataValueChange = function (e) {
         root._dirty = true;
@@ -26,149 +27,80 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
     // Generates options that kendo's html directives will use
     function initGrid(data) {
 
-		// Define Kendo Main Grid options
-		wipTemplate = root.templates.ModelTemplates.WIP_DEAL["ECAP"];
-
 		$timeout(function () {
-		    root.wipOptions = {};
-		    root.wipOptions.columns = wipTemplate.columns;
-		    root.wipOptions.model = wipTemplate.model;
-		    root.wipOptions.default = {};
-		    root.wipOptions.default.groups = [
-                { "name": "Deal Info", "order": 0 },
-                { "name": "Consumption", "order": 1 },
-                { "name": "Retail Cycle", "order": 2 },
-                { "name": "Backdate", "order": 3 },
-                { "name": "All", "order": 99 }
+		    var order = 0;
+		    var dealTypes = [
+                { dealType: "ECAP", name: "ECAP" },
+                { dealType: "VOL_TIER", name: "Volume Tier" },
+                { dealType: "KIT", name: "Kit" },
+                { dealType: "PROGRAM", name: "Program" }
 		    ];
-		    root.wipOptions.default.groupColumns = {
-		        "tools": {
-		            "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
-		        },
-		        "details": {
-		            "Groups": ["Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
-		        },
-		        "DC_ID": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "PASSED_VALIDATION": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "START_DT": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "END_DT": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "WF_STG_CD": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "OBJ_SET_TYPE_CD": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "PTR_USER_PRD": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "TITLE": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "PRODUCT_FILTER": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "DEAL_COMB_TYPE": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "ECAP_PRICE": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "CAP_INFO": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "CAP": {
-		            "Groups": ["All"]
-		        },
-		        "CAP_STRT_DT": {
-		            "Groups": ["All"]
-		        },
-		        "CAP_END_DT": {
-		            "Groups": ["All"]
-		        },
-		        "YCS2_INFO": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "YCS2_PRC_IRBT": {
-		            "Groups": ["All"]
-		        },
-		        "YCS2_START_DT": {
-		            "Groups": ["All"]
-		        },
-		        "YCS2_END_DT": {
-		            "Groups": ["All"]
-		        },
-		        "VOLUME": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "ON_ADD_DT": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "DEAL_SOLD_TO_ID": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "EXPIRE_YCS2": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "REBATE_TYPE": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "MRKT_SEG": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "GEO_COMBINED": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "TRGT_RGN": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "PAYOUT_BASED_ON": {
-		            "Groups": ["Deal Info", "Consumption"]
-		        },
-		        "PROGRAM_PAYMENT": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "TERMS": {
-		            "Groups": ["Deal Info"]
-		        },
-		        "REBATE_BILLING_START": {
-		            "Groups": ["Consumption"]
-		        },
-		        "REBATE_BILLING_END": {
-		            "Groups": ["Consumption"]
-		        },
-		        //"CONSUMPTION_REASON": {
-		        //    "Groups": ["Consumption"]
-		        //},
-		        //"CONSUMPTION_REASON_CMNT": {
-		        //    "Groups": ["Consumption"]
-		        //},
-		        "RETAIL_CYCLE": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        //"RETAIL_PULL": {
-		        //    "Groups": ["Retail Cycle"]
-		        //},
-		        //"RETAIL_PULL_USR_DEF": {
-		        //    "Groups": ["Retail Cycle"]
-		        //},
-		        //"RETAIL_PULL_USR_DEF_CMNT": {
-		        //    "Groups": ["Retail Cycle"]
-		        //},
-		        "ECAP_FLR": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "BACK_DATE_RSN": {
-		            "Groups": ["Backdate"]
+		    var show = [
+		        "DC_ID", "PASSED_VALIDATION", "CUST_MBR_SID", "TRKR_NBR", "START_DT", "END_DT", "OBJ_SET_TYPE_CD",
+		        "WF_STG_CD", "PRODUCT_CATEGORIES", "TITLE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
+		        "KIT_ECAP", "VOLUME", "CONSUMPTION_REASON", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "MRKT_SEG", "GEO_COMBINED",
+		        "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT"
+		    ];
+		    var usedCols = [];
+		    var excludeCols = ["details", "tools"];
+
+		    root.wipOptions = {};
+		    root.wipOptions.isPinEnabled = false;
+		    root.wipOptions.default = {};
+		    root.wipOptions.default.groups = [];
+		    root.wipOptions.default.groupColumns = {};
+		    root.wipOptions.columns = [];
+		    root.wipOptions.model = { fields: {}, id: "DC_ID" };
+
+		    var hasDeals = [];
+            for (var x = 0; x < data.length; x++) {
+                if (hasDeals.indexOf(data[x].OBJ_SET_TYPE_CD) < 0) hasDeals.push(data[x].OBJ_SET_TYPE_CD);
+            }
+
+		    for (var d = 0; d < dealTypes.length; d++) {
+		        var dealType = dealTypes[d];
+		        if (hasDeals.indexOf(dealType.dealType) >= 0) {
+		            root.wipOptions.default.groups.push({ "name": dealType.name, "order": order++ });
+
+		            var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[dealType.dealType];
+		            for (var c = 0; c < wipTemplate.columns.length; c++) {
+		                var col = wipTemplate.columns[c];
+
+		                col.hidden = show.indexOf(col.field) < 0;
+		                col.locked = false;
+
+		                //col.template = undefined;
+
+		                if (excludeCols.indexOf(col.field) < 0) {
+		                    // add to column
+		                    if (usedCols.indexOf(col.field) < 0) {
+		                        usedCols.push(col.field);
+		                        root.wipOptions.columns.push(col);
+		                    }
+
+		                    // Add to group columns
+
+		                    if (root.wipOptions.default.groupColumns[col.field] === undefined)
+		                        root.wipOptions.default.groupColumns[col.field] = { Groups: [] };
+
+		                    if (!col.hidden) {
+		                        root.wipOptions.default.groupColumns[col.field].Groups.push(dealType.name);
+		                    }
+		                    if (root.wipOptions.default.groupColumns[col.field].Groups.indexOf("All") < 0)
+		                        root.wipOptions.default.groupColumns[col.field].Groups.push("All");
+		                }
+		            }
+
+
+		            Object.keys(wipTemplate.model.fields).forEach(function (key, index) {
+		                if (excludeCols.indexOf(key) < 0) {
+		                    if (root.wipOptions.model.fields[key] === undefined)
+		                        root.wipOptions.model.fields[key] = this[key];
+		                }
+		            }, wipTemplate.model.fields);
 		        }
-		    };
+		    }
+		    root.wipOptions.default.groups.push({ "name": "All", "order": order++ });
 
 		    root.wipData = data;
 		}, 10);
@@ -178,8 +110,11 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
     objsetService.readWipFromContract($scope.contractData.DC_ID).then(function (response) {
         if (response.data) {
             initGrid(response.data.WIP_DEAL);
-        } else {
-            //debugger;
+            $scope.msg = "Drawing Grid";
+            $timeout(function () {
+                $scope.msg = "Done";
+                $scope.loading = false;
+            }, 2000);
         }
     });
 

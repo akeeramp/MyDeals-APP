@@ -59,6 +59,7 @@
         $scope.C_HOLD_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA" || window.usrRole === "DA");
         $scope.C_DEL_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA");
         $scope.CAN_VIEW_EXPORT = (window.isDeveloper || window.isTester);
+        $scope.CAN_VIEW_ALL_DEALS = (window.isDeveloper || window.isTester);
         $scope.canDeleteAttachment = function (wfStage) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
 

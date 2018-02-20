@@ -469,19 +469,20 @@ namespace Intel.MyDeals.BusinessLogic
                 IOpDataElement de = dc.GetDataElement(AttributeCodes.OVERLAP_RESULT);
                 IOpDataElement deValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
                 IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+                IOpDataElement deDefault = deCust ?? dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
 
-                contractToken.CustId = int.Parse(deCust.AtrbValue.ToString());
+                contractToken.CustId = deCust == null ? 0 : int.Parse(deCust.AtrbValue.ToString());
 
-                string value = wipIds.Contains(deCust.DcID) ? "Fail" : "Pass";
+                string value = wipIds.Contains(deDefault.DcID) ? "Fail" : "Pass";
 
                 if (de == null)
                 {
                     dc.DataElements.Add(new OpDataElement
                     {
-                        DcID = deCust.DcID,
-                        DcType = deCust.DcType,
-                        DcParentType = deCust.DcParentType,
-                        DcParentID = deCust.DcParentID,
+                        DcID = deDefault.DcID,
+                        DcType = deDefault.DcType,
+                        DcParentType = deDefault.DcParentType,
+                        DcParentID = deDefault.DcParentID,
                         AtrbID = Attributes.OVERLAP_RESULT.ATRB_SID,
                         AtrbCd = Attributes.OVERLAP_RESULT.ATRB_COL_NM,
                         AtrbValue = value,
@@ -501,10 +502,10 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     dc.DataElements.Add(new OpDataElement
                     {
-                        DcID = deCust.DcID,
-                        DcType = deCust.DcType,
-                        DcParentType = deCust.DcParentType,
-                        DcParentID = deCust.DcParentID,
+                        DcID = deDefault.DcID,
+                        DcType = deDefault.DcType,
+                        DcParentType = deDefault.DcParentType,
+                        DcParentID = deDefault.DcParentID,
                         AtrbID = Attributes.PASSED_VALIDATION.ATRB_SID,
                         AtrbCd = Attributes.PASSED_VALIDATION.ATRB_COL_NM,
                         AtrbValue = PassedValidation.Dirty,

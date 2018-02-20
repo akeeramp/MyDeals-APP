@@ -108,6 +108,21 @@ namespace Intel.MyDeals.BusinessLogic
             return GetContract(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
+        public OpDataCollectorFlattenedList GetExportContract(int id)
+        {
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                OpDataElementType.CNTRCT,
+                OpDataElementType.PRC_ST,
+                OpDataElementType.PRC_TBL,
+                OpDataElementType.PRC_TBL_ROW
+            };
+
+            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes)
+                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted)
+                .ToHierarchialList(OpDataElementType.CNTRCT);
+        }
+
         /// <summary>
         /// Save a contract header
         /// </summary>
@@ -356,58 +371,25 @@ namespace Intel.MyDeals.BusinessLogic
                 OpDataElementType.WIP_DEAL
             };
 
-            List<int> atrbs = new List<int>
-            {
-                Attributes.BACK_DATE_RSN.ATRB_SID,
-                Attributes.CAP.ATRB_SID,
-                Attributes.CAP_END_DT.ATRB_SID,
-                Attributes.CAP_STRT_DT.ATRB_SID,
-                //Attributes.COMPETITIVE_PRICE.ATRB_SID,
-                //Attributes.COMP_BENCH.ATRB_SID,
-                //Attributes.COMP_SKU.ATRB_SID,
-                //Attributes.COMP_SKU_OTHR.ATRB_SID,
-                //Attributes.COMP_TARGET_SYSTEM_PRICE.ATRB_SID,
-                //Attributes.CONSUMPTION_REASON.ATRB_SID,
-                //Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID,
-                Attributes.COST_TEST_FAIL_OVERRIDE.ATRB_SID,
-                Attributes.COST_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
-                Attributes.COST_TEST_RESULT.ATRB_SID,
-                Attributes.COST_TYPE_USED.ATRB_SID,
-                Attributes.DEAL_COMB_TYPE.ATRB_SID,
-                Attributes.ECAP_FLR.ATRB_SID,
-                Attributes.ECAP_PRICE.ATRB_SID,
-                Attributes.REBATE_TYPE.ATRB_SID,
-                Attributes.END_DT.ATRB_SID,
-                Attributes.GEO_COMBINED.ATRB_SID,
-                Attributes.IA_BENCH.ATRB_SID,
-                Attributes.MEETCOMP_TEST_FAIL_OVERRIDE.ATRB_SID,
-                Attributes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
-                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
-                Attributes.MRKT_SEG.ATRB_SID,
-                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                Attributes.PASSED_VALIDATION.ATRB_SID,
-                Attributes.PAYOUT_BASED_ON.ATRB_SID,
-                //Attributes.PRD_COST.ATRB_SID,
-                Attributes.PRODUCT_FILTER.ATRB_SID,
-                Attributes.PROGRAM_PAYMENT.ATRB_SID,
-                Attributes.PTR_USER_PRD.ATRB_SID,
-                Attributes.RETAIL_CYCLE.ATRB_SID,
-                //Attributes.RETAIL_PULL.ATRB_SID,
-                //Attributes.RETAIL_PULL_USR_DEF.ATRB_SID,
-                //Attributes.RETAIL_PULL_USR_DEF_CMNT.ATRB_SID,
-                Attributes.START_DT.ATRB_SID,
-                Attributes.TERMS.ATRB_SID,
-                Attributes.TITLE.ATRB_SID,
-                Attributes.TRGT_RGN.ATRB_SID,
-                Attributes.VOLUME.ATRB_SID,
-                Attributes.WF_STG_CD.ATRB_SID,
-                Attributes.YCS2_END_DT.ATRB_SID,
-                Attributes.YCS2_OVERLAP_OVERRIDE.ATRB_SID,
-                Attributes.YCS2_PRC_IRBT.ATRB_SID,
-                Attributes.YCS2_START_DT.ATRB_SID,
-            };
+            List<int> atrbs = new List<int>();
 
-            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
+            OpDataCollectorFlattenedDictList data = OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false);
+
+            CustomerLib custLib = new CustomerLib();
+            foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+            {
+                if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))
+                {
+                    CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
+                    item["Customer"] = cust ?? new CustomerDivision();
+                }
+                else
+                {
+                    item["Customer"] = new CustomerDivision();
+                }
+            }
+
+            return data;
         }
 
         public OpDataCollectorFlattenedDictList UpdateAtrbValue(int custId, int contractId, AtrbSaveItem atrbSaveItem)

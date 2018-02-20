@@ -1,9 +1,30 @@
-﻿<div style="padding: 20px; height: 100%;">
-    <div ng-if="wipData.length == 0">
-        <div><img src="/images/032.gif" /></div>
-        Loading all deals....
+﻿<div ng-if="loading" style="padding-top: 200px; width: 100%; text-align: center;">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
     </div>
-    
-    <div op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" ng-if="wipData.length > 0"></div>
+    <div style="font-size: 30px;" ng-bind="msg"></div>
+    <div class="ss-icon-lg" ng-if="msg == 'Done'">
+        <i class="intelicon-passed-completed-solid sky-blue"></i>
+    </div>
+
 </div>
 
+<div ng-if="!loading" style="padding: 20px; height: 100%;">
+    <div op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions"></div>
+</div>
+
+<style>
+    .op-grid .isReadOnlyCell {
+        background-color: #ffffff !important;
+    }
+
+    .dealTag {
+        top: 43px !important;
+        right: 10px !important;
+        background: linear-gradient(to bottom, transparent 0%,transparent 100%) !important;
+    }
+</style>

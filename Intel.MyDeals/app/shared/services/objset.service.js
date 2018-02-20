@@ -24,6 +24,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         updateContract: updateContract,
         deleteContract: deleteContract,
         isDuplicateContractTitle: isDuplicateContractTitle,
+        getExportContract: getExportContract,
 
         createPricingStrategy: createPricingStrategy,
         copyPricingStrategy: copyPricingStrategy,
@@ -101,6 +102,10 @@ function objsetService($http, dataService, logger, $q, $location) {
     function isDuplicateContractTitle(dcId, title) {
         return dataService.get(apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId + '/' + title);
     }
+    function getExportContract(id) {
+        return dataService.get(apiBaseContractUrl + 'GetExportContract/' + id);
+    }
+
     // #### PRICING STRATEGY CRUD ####
 
     function createPricingStrategy(custId, contractId, ps) {

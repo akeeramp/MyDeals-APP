@@ -77,6 +77,23 @@
                     }
                 }
             }, {
+                state: 'contract.export',
+                config: {
+                    url: '/export',
+                    views: {
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractExportHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractExport.html',
+                            controller: 'exportController'
+                        }
+                    }
+                }
+            }, {
                 state: 'contract.compliance',
                 config: {
                     url: '/compliance',

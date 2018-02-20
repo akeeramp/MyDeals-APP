@@ -1145,6 +1145,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
+            $scope.filterDealType = function (dealType) {
+                var dealTypes = [
+                    { dealType: "ECAP", name: "ECAP" },
+                    { dealType: "VOL_TIER", name: "Volume Tier" },
+                    { dealType: "KIT", name: "Kit" },
+                    { dealType: "PROGRAM", name: "Program" }
+                ];
+
+                for (var d = 0; d < dealTypes.length; d++) {
+                    if (dealType === dealTypes[d].name) {
+                        $scope.contractDs.filter({
+                            field: "OBJ_SET_TYPE_CD",
+                            operator: "eq",
+                            value: dealTypes[d].dealType
+                        });
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             $scope.showCols = function (grpName) {
 
                 if ($scope.contractDs.filter() !== undefined) $scope.contractDs.filter({});
@@ -1170,6 +1191,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         value: "1"
                     });
                 }
+
+                $scope.filterDealType(grpName);
 
                 var c;
                 var colNames = [];
@@ -1262,6 +1285,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.passThoughFunc = function (func, dataItem) {
+                if (func === undefined || func === null) return null;
                 return func(dataItem);
             }
 
@@ -1620,6 +1644,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 else {
                     if (searchValue.length < 3) {
+                        // This breaks the tab filtering
                         $scope.clearSearchGrid();
                         return;
                     }
@@ -1655,7 +1680,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.clearSearchGrid = function () {
-                $scope.contractDs.filter({});
+                if (!$scope.filterDealType($scope.curGroup)) {
+                    $scope.contractDs.filter({});
+                }
             }
 
             $scope.addToTab = function (data) {
