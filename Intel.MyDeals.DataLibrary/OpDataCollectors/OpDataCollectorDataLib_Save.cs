@@ -75,6 +75,33 @@ namespace Intel.MyDeals.DataLibrary
 
                 OpLog.Log("DcsDealLib.SaveMyDealsData - Exit ActionDeals.");
 
+                // Post save, check to see if there were any Quote Letter Generation actions that need to be processed.
+                foreach (var packet in orderedPackets)
+                {
+                    var packetQuoteLetterAction = packet.Actions.FirstOrDefault(pktAction => pktAction.Action == DealSaveActionCodes.GENERATE_QUOTE);
+
+                    if (packetQuoteLetterAction != null && (ret != null && ret.Count > 0 && LogMessages.Count == 0))
+                    {
+                        var quoteLetterDataLib = new QuoteLetterDataLib();
+                        List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
+
+                        foreach (int dealId in packetQuoteLetterAction.TargetDcIDs)
+                        {
+                            var quoteLetterData = new QuoteLetterData();
+                            quoteLetterData.ObjectTypeId = OpDataElementType.WIP_DEAL.ToId().ToString();
+                            quoteLetterData.ObjectSid = dealId.ToString();
+
+                            OpDataCollector dc = ret[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcID == dealId).FirstOrDefault();
+                            OpDataElement de = dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).FirstOrDefault();
+                            quoteLetterData.CustomerId = de.AtrbValue.ToString();
+
+                            quoteLetterDataList.Add(quoteLetterData);
+                        }
+                        quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
+                    }
+                }
+
+
 #if DEBUG
                 // Dump random debugging log messsage into the first returned packet.
                 if (ret != null && ret.Count > 0 && LogMessages.Count > 0)
@@ -212,33 +239,33 @@ namespace Intel.MyDeals.DataLibrary
                     }, null, out dsCheckConstraintErrors);
 
 
-                    // Check if the action list contains DealSaveActionCodes.GENERATE_QUOTE during Deal approval SAVE
-                    var packetQuoteLetterAction = packets.FirstOrDefault(p => p.Actions.Exists(pktAction => pktAction.Action == DealSaveActionCodes.GENERATE_QUOTE));
+                    //// Check if the action list contains DealSaveActionCodes.GENERATE_QUOTE during Deal approval SAVE
+                    //var packetQuoteLetterAction = packets.FirstOrDefault(p => p.Actions.Exists(pktAction => pktAction.Action == DealSaveActionCodes.GENERATE_QUOTE));
 
-                    //packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
-                    // Bulk Generate Quote Letter if Action list contains contains DealSaveActionCodes.GENERATE_QUOTE
+                    ////packetQuoteLetterAction.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
+                    //// Bulk Generate Quote Letter if Action list contains contains DealSaveActionCodes.GENERATE_QUOTE
 
-                    if (packetQuoteLetterAction != null && (dsCheckConstraintErrors == null || 
-                                                            dsCheckConstraintErrors.Tables.Count == 0))
-                    {
-                        var quoteLetterDataLib = new QuoteLetterDataLib();
-                        List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
-                        foreach(DataRow row in dtData.Rows)
-                        {
-                            string objectTypeSid = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_TYPE_SID].ToString();
-                            string objectSid = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID].ToString();
-                            if (objectTypeSid == "5" && !quoteLetterDataList.Exists(qlData => qlData.ObjectSid == objectSid)) // WIP deals                          
-                            {
-                                var quoteLetterData = new QuoteLetterData();
-                                quoteLetterData.ObjectTypeId = objectTypeSid;
-                                quoteLetterData.ObjectSid = objectSid;
-                                quoteLetterData.CustomerId = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.CUST_MBR_SID].ToString();
+                    //if (packetQuoteLetterAction != null && (dsCheckConstraintErrors == null || 
+                    //                                        dsCheckConstraintErrors.Tables.Count == 0))
+                    //{
+                    //    var quoteLetterDataLib = new QuoteLetterDataLib();
+                    //    List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
+                    //    foreach(DataRow row in dtData.Rows)
+                    //    {
+                    //        string objectTypeSid = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_TYPE_SID].ToString();
+                    //        string objectSid = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID].ToString();
+                    //        if (objectTypeSid == "5" && !quoteLetterDataList.Exists(qlData => qlData.ObjectSid == objectSid)) // WIP deals                          
+                    //        {
+                    //            var quoteLetterData = new QuoteLetterData();
+                    //            quoteLetterData.ObjectTypeId = objectTypeSid;
+                    //            quoteLetterData.ObjectSid = objectSid;
+                    //            quoteLetterData.CustomerId = row[Entities.deal.MYDL_CL_WIP_ATRB_TMP.CUST_MBR_SID].ToString();
 
-                                quoteLetterDataList.Add(quoteLetterData);
-                            }
-                        }
-                        quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
-                    }
+                    //            quoteLetterDataList.Add(quoteLetterData);
+                    //        }
+                    //    }
+                    //    quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
+                    //}
                 }
                 catch (Exception ex)
                 {

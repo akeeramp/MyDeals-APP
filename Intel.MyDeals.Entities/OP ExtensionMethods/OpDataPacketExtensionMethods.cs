@@ -119,7 +119,7 @@ namespace Intel.MyDeals.Entities
 
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 60));
             // BACKED OUT DUE TO BROKEN APPROVAL
-            //packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
         }
 
 
