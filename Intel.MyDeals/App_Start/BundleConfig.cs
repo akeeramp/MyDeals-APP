@@ -189,6 +189,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/pctOverrideReasonModal.controller.js"
                 , "~/app/contract/controllers/pricingTable.controller.js"
                 , "~/app/contract/controllers/renameTitleModal.controller.js"
+                , "~/app/contract/controllers/selectPricingTableModal.controller.js"
                 , "~/app/contract/productSelector/productSelector.controller.js"
                 , "~/app/contract/productCorrector/productCorrector.controller.js"
                 , "~/app/contract/productCorrector/productCorrectorBeta.controller.js"

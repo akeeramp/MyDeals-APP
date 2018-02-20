@@ -1,0 +1,37 @@
+﻿<script type="text/ng-template" id="selectPricingTableModal">
+    <div class="modal-header modalBlueBody">
+        <h5 class="modal-title" id="modal-title">Multiple Pricing Tables</h5>
+    </div>
+    <div class="modal-body modalBlueBody" id="modal-body">
+
+        <div>
+            This Pricing Strategy contains multiple Pricing Tables.  Please select which Pricing Table you would like to view:
+        </div>
+        
+        <div style="margin: 20px 0; max-height: 190px; overflow: auto; padding: 5px;">
+            <div ng-repeat="pt in pts">
+                <button class="btn btn-primary btn-full" type="button" ng-click="pickPt(pt)">{{pt.DC_ID}} - {{pt.TITLE}}</button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fr">
+                    <button class="btn btn-warning" type="button" style="margin-right: 8px;" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</script>
+
+<style>
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+    .btn-full {
+        margin: 5px 0;
+        width: 100%;
+    }
+</style>

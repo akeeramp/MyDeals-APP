@@ -389,6 +389,7 @@
     <Content Include="app\contract\controllers\emailModal.controller.js" />
     <Content Include="app\contract\controllers\pctGroupModal.controller.js" />
     <Content Include="app\contract\controllers\dealProductsModal.controller.js" />
+    <Content Include="app\contract\controllers\selectPricingTableModal.controller.js" />
     <Content Include="app\contract\controllers\renameTitleModal.controller.js" />
     <Content Include="app\contract\controllers\pctOverrideReasonModal.controller.js" />
     <Content Include="app\contract\partials\contractCompliance.html" />
@@ -425,6 +426,7 @@
     <Content Include="app\contract\partials\ptModals\emailModal.html" />
     <Content Include="app\contract\partials\ptModals\pctGroupModal.html" />
     <Content Include="app\contract\partials\ptModals\dealProductsModal.html" />
+    <Content Include="app\contract\partials\ptModals\selectPricingTableModal.html" />
     <Content Include="app\contract\partials\ptModals\renameTitleModal.html" />
     <Content Include="app\contract\partials\ptModals\pctOverrideReasonModal.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />

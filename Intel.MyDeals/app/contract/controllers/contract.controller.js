@@ -1123,6 +1123,72 @@
             $scope.isAddPricingTableHidden = true;
         }
 
+        $scope.showHelp = function() {
+            $timeout(function () {
+                $scope._dirty = false; // don't want to kick of listeners
+                $state.go('contract.manager', { cid: $scope.contractData.DC_ID }, { reload: true });
+            });
+        }
+
+        $scope.gotoContractEditor = function (ps, pt) {
+            $scope.isPtr = false;
+            $scope.isWip = false;
+
+            if (pt === undefined && ps.PRC_TBL !== undefined && ps.PRC_TBL.length > 0) {
+                // let's see if there are any pts... if so, grab the first one
+                if (ps.PRC_TBL.length === 1) {
+                    pt = ps.PRC_TBL[0];
+                } else {
+                    var pts = ps.PRC_TBL;
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'selectPricingTableModal',
+                        controller: 'selectPricingTableModalCtrl',
+                        controllerAs: '$ctrl',
+                        size: 'md',
+                        resolve: {
+                            pts: function () {
+                                return pts;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (retPt) {
+                        if (retPt === undefined) return;
+                        $scope.gotoContractEditor(ps, retPt);
+                        return;
+                    }, function () { });
+
+                    return;
+                }
+            }
+
+            if (!pt) {
+                $state.go('contract.manager',
+                    {
+                        cid: ps.DC_PARENT_ID
+                    }, { reload: true });
+            }
+
+            if (!!pt) {
+                $state.go('contract.manager.strategy',
+                    {
+                        cid: ps.DC_PARENT_ID,
+                        sid: ps.DC_ID,
+                        pid: pt.DC_ID
+                    }, { reload: true });
+            } else {
+                $state.go('contract.manager.strategy',
+                    {
+                        cid: ps.DC_PARENT_ID,
+                        sid: ps.DC_ID
+                    }, { reload: true });
+            }
+        }
+
+
         $scope.showAddPricingTable = function (ps) {
             $scope.isAddPricingTableHidden = false;
             $scope.isAddStrategyHidden = true;

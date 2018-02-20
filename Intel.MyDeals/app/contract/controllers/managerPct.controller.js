@@ -127,30 +127,7 @@
         }
 
         $scope.gotoContractEditor = function (ps, pt) {
-            root.isPtr = false;
-            root.isWip = false;
-
-            if (!pt) {
-                $state.go('contract.manager',
-                    {
-                        cid: ps.DC_PARENT_ID
-                    });
-            }
-
-            if (!!pt) {
-                $state.go('contract.manager.strategy',
-                    {
-                        cid: ps.DC_PARENT_ID,
-                        sid: ps.DC_ID,
-                        pid: pt.DC_ID
-                    });
-            } else {
-                $state.go('contract.manager.strategy',
-                    {
-                        cid: ps.DC_PARENT_ID,
-                        sid: ps.DC_ID
-                    });
-            }
+            root.gotoContractEditor(ps, pt);
         }
 
         $scope.onOff = function (val) {

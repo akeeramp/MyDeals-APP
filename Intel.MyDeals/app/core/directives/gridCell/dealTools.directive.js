@@ -9,10 +9,10 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
         scope: {
             dataItem: '=ngModel',
             isEditable: '@isEditable',
-            isCommentEnabled: '=?',
-            isFileAttachmentEnabled: '=?',
-            isQuoteLetterEnabled: '=?',
-            isDeleteEnabled: '=?'
+            isCommentEnabled: '<?',
+            isFileAttachmentEnabled: '<?',
+            isQuoteLetterEnabled: '<?',
+            isDeleteEnabled: '<?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
