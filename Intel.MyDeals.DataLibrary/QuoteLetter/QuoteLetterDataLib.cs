@@ -262,12 +262,21 @@ namespace Intel.MyDeals.DataLibrary
         {            
             byte[] quoteLetterBytes;
             string dealId = quoteLetterData.ObjectSid;
-            var custNm = EscapeSpecialChars(quoteLetterData.ContentInfo.CUST_NM);
-            var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.CONTRACT_PRODUCT).Split(',')[0];
-            var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
+
+            string fileName = $"QuoteLetter_Preview.pdf";
+            if (!string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.CUST_NM) &&
+                !string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.CONTRACT_PRODUCT) &&
+                !string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.REBATE_TYPE))
+            {
+                var custNm = EscapeSpecialChars(quoteLetterData.ContentInfo.CUST_NM);
+                var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.CONTRACT_PRODUCT).Split(',')[0];
+                var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
+
+                fileName = $"{custNm} {sku} {ecapType} {dealId}.pdf";
+            }
+
             var inNegotiation = string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR) || quoteLetterData.ContentInfo.TRKR_NBR.IndexOf("*") >= 0;
 
-            string fileName = $"{custNm} {sku} {ecapType} {dealId}.pdf";
 
             if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
             {
@@ -280,7 +289,7 @@ namespace Intel.MyDeals.DataLibrary
                 else
                 {               
                     // Generate new quote Letter PDf and Save to DB/Display to user
-                    Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO, int.Parse(dealId));
+                    Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO, string.IsNullOrWhiteSpace(dealId) ? 0 : int.Parse(dealId));
                     ReportProcessor reportProcessor = new ReportProcessor();
                     Telerik.Reporting.InstanceReportSource instanceReportSource = new Telerik.Reporting.InstanceReportSource { ReportDocument = reportToExport };
                     RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
