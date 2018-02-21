@@ -529,7 +529,8 @@
     }
 
     .ptNav .ptBtn {
-        display: none;
+        display: inline;
+        /*display: none;*/
         font-size: 14px;
         color: #ffffff;
         line-height: 1.3em;
