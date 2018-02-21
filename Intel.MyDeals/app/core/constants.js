@@ -437,6 +437,9 @@
                     "WF_STG_CD": {
                         "Groups": ["Deal Info"]
                     },
+                    "EXPIRE_FLG": {
+                        "Groups": ["All"]
+                    },
                     "TRKR_NBR": {
                         "Groups": ["Deal Info"]
                     },
