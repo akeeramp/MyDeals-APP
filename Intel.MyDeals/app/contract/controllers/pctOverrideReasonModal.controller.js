@@ -140,6 +140,12 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
             if (data[r].isSelected) rtnVal.push(data[r].MYDL_PCT_LGL_EXCPT_SID);
         }
 
+        if (rtnVal.length == 0) {
+			// Nothing was selected
+        	$uibModalInstance.dismiss();
+        	return;
+        }
+
         $scope.dataItem.COST_TEST_OVRRD_CMT = rtnVal.join(",");
 
         var newItem = {
