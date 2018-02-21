@@ -80,7 +80,9 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     var packetQuoteLetterAction = packet.Actions.FirstOrDefault(pktAction => pktAction.Action == DealSaveActionCodes.GENERATE_QUOTE);
 
-                    if (packetQuoteLetterAction != null && (ret != null && ret.Count > 0 && LogMessages.Count == 0))
+                    // Mike... I removed this because the log message is only eanbled in DEBUG mode.  When building to non debug, this variable isn't declared.
+                    // && LogMessages.Count == 0
+                    if (packetQuoteLetterAction != null && (ret != null && ret.Count > 0))
                     {
                         var quoteLetterDataLib = new QuoteLetterDataLib();
                         List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
