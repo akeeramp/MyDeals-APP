@@ -385,6 +385,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
                         if (el.$parent.$parent.$parent.root !== undefined) {
                             el.$parent.$parent.$parent.root.saveCell(el.$parent.$parent.dataItem, el.opCd, el.$parent.$parent.$parent);
+                            el.$parent.$parent.$parent.root.$broadcast('data-item-changed', el.opCd, el.$parent.$parent.dataItem, el);
                         }
 
                         //Note: the above 2 lines would update the wip deal level cell and mark it as dirty while ensuring it will be detected for saving.  the line below will instead do the same but will additionally update wip deal cells that are grouped (may be buggy with some editors)
