@@ -225,9 +225,9 @@ namespace Intel.MyDeals.BusinessLogic
                             }
                             else
                             {
-                                string atrbdate = string.IsNullOrEmpty(de.AtrbValue.ToString()) ? "" : DateTime.Parse(de.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                                string atrbdate = string.IsNullOrEmpty(de.AtrbValue.ToString().Replace("Invalid date", "")) ? "" : DateTime.Parse(de.AtrbValue.ToString().Replace("Invalid date", "")).ToString("MM/dd/yyyy");
                                 if (atrbdate != date.ToString("MM/dd/yyyy"))
-                                    de.AtrbValue = DateTime.Parse(items[de.AtrbCd].ToString()).ToString("MM/dd/yyyy");
+                                    de.AtrbValue = DateTime.Parse(items[de.AtrbCd].ToString().Replace("Invalid date", "")).ToString("MM/dd/yyyy");
                             }
                         }
                     }
@@ -252,7 +252,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             if (de.DataType == "System.DateTime" &&
                                 !String.IsNullOrEmpty(dictValues[uniqDimBaseKey].ToString().Replace("Invalid date", "")))
-                                dictValues[uniqDimBaseKey] = DateTime.Parse(dictValues[uniqDimBaseKey].ToString()).ToString("MM/dd/yyyy");
+                                dictValues[uniqDimBaseKey] = DateTime.Parse(dictValues[uniqDimBaseKey].ToString().Replace("Invalid date", "")).ToString("MM/dd/yyyy");
                             de.AtrbValue = dictValues[uniqDimBaseKey];
                         }
                     }
