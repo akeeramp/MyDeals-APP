@@ -81,7 +81,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                 $scope.numObjFilter = {
                     ui: function (element) {
                         element.kendoNumericTextBox({
-                            format: "d",
+                            format: "#",
                             decimals: 0
                         });
                     },

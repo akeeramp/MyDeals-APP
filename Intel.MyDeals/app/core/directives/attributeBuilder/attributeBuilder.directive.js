@@ -250,7 +250,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value"/>';
                     }
                     else if (fieldType === "number") {
-                        html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'n0\'" style="width: 200px;" k-ng-model="dataItem.value"/>';
+                        html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;" k-ng-model="dataItem.value"/>';
                     }
                     else if (fieldType === "money") {
                         html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;" k-ng-model="dataItem.value"/>';
