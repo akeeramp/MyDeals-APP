@@ -216,7 +216,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $scope.deleteContract = function () {
+        $scope.root.deleteContract();
 
+        return;
+        debugger;
         // TODO need to check if there are any tracker numbers
 
         kendo.confirm("Are you sure that you want to delete this contract?").then(function () {

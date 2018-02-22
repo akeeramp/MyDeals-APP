@@ -285,6 +285,9 @@
     </div>
 
     <div id="secFooter">
+        <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="deleteContract()" ng-if="contractData.DC_ID && contractData.DC_ID > 0">
+            <span>Delete Contract</span>
+        </button>
         <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">
             <span>{{isCopyContract ? 'Copy Contract' : 'Create Contract'}}</span>
         </button>
@@ -309,24 +312,28 @@
         padding: 10px 0 0 0;
     }
 
-        .k-dialog .promptUserDialog h4 {
-            color: #003C71;
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 0;
-        }
+    .k-dialog .promptUserDialog h4 {
+        color: #003C71;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 0;
+    }
 
-        .k-dialog .promptUserDialog p {
-            font-size: 12px;
-            padding: 10px 20px;
-        }
+    .k-dialog .promptUserDialog p {
+        font-size: 12px;
+        padding: 10px 20px;
+    }
 
     .delete-attach-icon {
         font-size: 16px;
         cursor: pointer;
     }
 
-        .delete-attach-icon:hover {
-            text-decoration: none;
-        }
+    .delete-attach-icon:hover {
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background-color: #00AEFF;
+    }
 </style>
