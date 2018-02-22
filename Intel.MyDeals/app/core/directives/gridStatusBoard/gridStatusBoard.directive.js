@@ -138,6 +138,15 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 filterable: true,
                 sortable: true,
                 pageable: true,
+                filterMenuInit: function (e) {
+                    if (e.field === "CUST_NM") {
+                        var filterMultiCheck = this.thead.find("[data-field=" + e.field + "]").data("kendoFilterMultiCheck")  //= e.target.closest(".k-grid").getKendoGrid();
+                        filterMultiCheck.container.empty();
+                        filterMultiCheck.checkSource.sort({ field: e.field, dir: "asc" });
+                        filterMultiCheck.checkSource.data(filterMultiCheck.checkSource.view().toJSON());
+                        filterMultiCheck.createCheckBoxes();
+                    }
+                },
                 columns: [
                     {
                         field: "WF_STG_CD",
@@ -159,19 +168,47 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         title: "Customer",
                         field: "CUST_NM",
                         width: "140px",
-                        filterable: { multi: true }
+                        filterable: { multi: true, search: true }
                     }, {
                         field: "STRT_DTM",
                         title: "Start Date",
                         format: "{0: MM/dd/yyyy}",
                         width: "110px",
-                        filterable: { multi: true }
+                        filterable: {
+                            ui: function (element) {
+                                element.kendoDatePicker({
+                                    format: "{0: MM/dd/yyyy}"
+                                });
+                            },
+                            operators: {
+                                date: {
+                                    eq: "Is Equal To",
+                                    neq: "Is Not Equal To",
+                                    gt: "After",
+                                    lt: "Before"
+                                }
+                            }
+                        }
                     }, {
                         field: "END_DTM",
                         title: "End Date",
                         format: "{0: MM/dd/yyyy}",
                         width: "110px",
-                        filterable: { multi: true }
+                        filterable: {
+                            ui: function (element) {
+                                element.kendoDatePicker({
+                                    format: "{0: MM/dd/yyyy}"
+                                });
+                            },
+                            operators: {
+                                date: {
+                                    eq: "Is Equal To",
+                                    neq: "Is Not Equal To",
+                                    gt: "After",
+                                    lt: "Before"
+                                }
+                            }
+                        }
                     }, {
                         title: "Notes",
                         field: "NOTES",

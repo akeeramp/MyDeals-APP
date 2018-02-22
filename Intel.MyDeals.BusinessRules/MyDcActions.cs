@@ -996,7 +996,7 @@ namespace Intel.MyDeals.BusinessRules
             bool isL1Product = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L1, "0")) > 0;
 
             if (isL1Product)
-                forecastVolume.IsRequired = true;  // Required for L1, ptional if L2 or Exempt.
+                forecastVolume.IsRequired = true;  // Required for L1, optional if L2 or Exempt.
         }
 
         public static void UserDefinedRpuRequired(params object[] args)
