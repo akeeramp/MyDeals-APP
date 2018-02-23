@@ -1644,8 +1644,13 @@
             }
 
             dataItem.WF_STG_CD = $scope.messages[0].ShortMessage;
+            //PS moved to 
             if ($scope.messages.length > 1) {
-                dataItem.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
+                for (var i = 1; i < $scope.messages.length; i++) {
+                    if ($scope.messages[i].Message.indexOf("PS moved to ") >= 0) {
+                        dataItem.PS_WF_STG_CD = $scope.messages[1].ShortMessage;
+                    }
+                }
             }
         }
 
