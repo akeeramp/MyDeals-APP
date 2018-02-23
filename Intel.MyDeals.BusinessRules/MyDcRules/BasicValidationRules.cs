@@ -421,7 +421,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Validate Geos",
                     ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate, MyRulesTrigger.OnSave},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
