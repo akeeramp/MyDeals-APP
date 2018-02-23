@@ -34,6 +34,8 @@ function iconMctPct(colorDictionary) {
             }
 
             $scope.getIconClass = function () {
+                if ($scope.dataValue === undefined) return "intelicon-help-solid";
+
                 var c = titleCase($scope.dataValue);
                 if (c.toUpperCase() === "PASS") return "intelicon-passed-completed-solid";
                 if (c.toUpperCase() === "FAIL") return "intelicon-alert-solid";
@@ -42,6 +44,8 @@ function iconMctPct(colorDictionary) {
                 return "intelicon-help-solid";
             }
             $scope.getColor = function (k, c) {
+                if (c === undefined) return "#aaaaaa";
+
                 c = titleCase(c);
                 if (c === "Incomplete") c = "InComplete"; // It should all be upper case now, but, just in case...
                 if (c === "Na") c = "NA"; // It should all be upper case now, but, just in case...
