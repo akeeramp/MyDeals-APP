@@ -30,7 +30,7 @@
         $scope.isWip = false;
         $scope.child = null;
         $scope.isAutoSaving = false;
-        $scope.defCust = $localStorage.selectedCustomerId;
+        $scope.defCust = $localStorage.selectedCustomerIds.length > 0 ? $localStorage.selectedCustomerIds[0] : undefined;
         $scope.switchingTabs = false;
         $scope.maxKITproducts = 10;
         $scope.pc = new perfCacheBlock("Contract Controller", "");
