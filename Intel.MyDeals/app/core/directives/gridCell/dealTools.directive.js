@@ -186,7 +186,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                         var dataItem = data[v];
                         if (dataItem.isLinked !== undefined && dataItem.isLinked) {
                             if (dataItem._actionsPS === undefined) dataItem._actionsPS = {};
-                            if (dataItem._actionsPS.Hold !== undefined && dataItem._actionsPS.Hold === curHoldStatus) {
+                            if (dataItem._actionsPS.Hold !== undefined && dataItem._actionsPS.Hold === curHoldStatus && (dataItem.WF_STG_CD === model.WF_STG_CD)) {
                                 ids.push({
                                     DC_ID: dataItem["DC_ID"],
                                     WF_STG_CD: dataItem["WF_STG_CD"]
@@ -513,6 +513,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 $rootScope.$broadcast('busy', "Updating Deals", "Updating hold status of Deals.");
                 objsetService.actionWipDeals($scope.rootScope.contractData.CUST_MBR_SID, $scope.rootScope.contractData.DC_ID, data).then(
                     function (returnData) {
+                        //debugger;
                         $rootScope.$broadcast('SyncHiddenItems', returnData, data);
                         $rootScope.$broadcast('busy', "", "");
                     },
