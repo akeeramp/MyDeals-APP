@@ -65,7 +65,7 @@
 
             // Found it... redirect
             var url = "/Contract#/manager/" + response.data.ContractId;
-            if (window.usrRole === "DA") url += "/Summary";
+            if (window.usrRole === "DA") url += "/summary";
 
             document.location.href = url;
 
