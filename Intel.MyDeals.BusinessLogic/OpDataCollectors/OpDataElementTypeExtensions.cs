@@ -148,6 +148,8 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static MyDealsData UpdateAtrbValue(this OpDataElementType opDataElementType, ContractToken contractToken, List<int> ids, MyDealsAttribute atrb, object value, bool forceToGoActive = false)
         {
+            List<int> quotableIds = new List<int>();
+
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
                 opDataElementType
@@ -165,11 +167,17 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<OpDataCollector> allDcs = myDealsData[opDataElementType].AllDataCollectors.ToList();
 
+            if (myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
+            {
+                List<string> quotableTypes = new List<string> { "ECAP", "KIT" };
+                quotableIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                    .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString())).Select(d => d.DcID).ToList();
+            }
+
             foreach (OpDataCollector dc in allDcs)
             {
                 IOpDataElement de = dc.GetDataElement(atrb.ATRB_COL_NM);
-                IOpDataElement deSource = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
-                if (deSource == null) deSource = dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+                IOpDataElement deSource = dc.GetDataElement(AttributeCodes.CUST_MBR_SID) ?? dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
 
                 if (de == null)
                 {
@@ -195,7 +203,11 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData[opDataElementType].BatchID = Guid.NewGuid();
             myDealsData[opDataElementType].GroupID = -101; // Whatever the real ID of this object is
             myDealsData[opDataElementType].AddSaveActions(null, ids);
-            if (forceToGoActive) myDealsData[opDataElementType].AddGoingActiveActions(ids);
+            if (forceToGoActive)
+            {
+                myDealsData[opDataElementType].AddGoingActiveActions(ids);
+                myDealsData[opDataElementType].AddQuoteLetterActions(quotableIds);
+            }
             myDealsData.EnsureBatchIDs();
 
             return myDealsData.Save(contractToken);

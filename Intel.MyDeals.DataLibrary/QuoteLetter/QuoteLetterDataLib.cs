@@ -263,6 +263,11 @@ namespace Intel.MyDeals.DataLibrary
             byte[] quoteLetterBytes;
             string dealId = quoteLetterData.ObjectSid;
 
+            if (quoteLetterData.TemplateInfo == null)
+            {
+                return null;
+            }
+
             string fileName = $"QuoteLetter_Preview.pdf";
             if (!string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.CUST_NM) &&
                 !string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.CONTRACT_PRODUCT) &&

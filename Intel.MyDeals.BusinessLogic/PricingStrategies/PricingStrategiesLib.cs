@@ -243,6 +243,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> dealIds = new List<int>();
             List<int> tenderDealIds = new List<int>();
+            List<int> quotableDealIds = new List<int>();
             if (psGoingActive.Any())
             {
                 List<OpDataElementType> opDataElementTypesActive = new List<OpDataElementType>
@@ -260,11 +261,17 @@ namespace Intel.MyDeals.BusinessLogic
                 var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive, opDataElementTypesActive, atrbsActive);
 
                 myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
-                List<OpDataElement> deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+                List<OpDataElement> deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                    .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
                 dealIds = deals.Select(d => d.DcID).ToList();
 
-                List<OpDataElement> tenderDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
+                List<OpDataElement> tenderDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                    .Where(d => d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
                 tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
+
+                List<string> quotableTypes = new List<string> { "ECAP", "KIT"};
+                quotableDealIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                    .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString())).Select(d => d.DcID).ToList();
 
                 foreach (OpDataElement de in deals)
                 {
@@ -321,6 +328,8 @@ namespace Intel.MyDeals.BusinessLogic
                 List<int> nonTenderIds = dealIds.Where(d => !tenderDealIds.Contains(d)).ToList();
                 myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, nonTenderIds);
                 myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds); // not sure if we need it in both places or just the PS
+                myDealsData[OpDataElementType.WIP_DEAL].AddQuoteLetterActions(quotableDealIds); // not sure if we need it in both places or just the PS
+                
             }
 
             myDealsData.EnsureBatchIDs();
