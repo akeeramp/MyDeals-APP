@@ -44,14 +44,14 @@ namespace Intel.MyDeals.Controllers.API
 
             if (!string.IsNullOrEmpty(fName))
             {
-                string[] swapString = { "(", ")", "-", "&", "'", "*", "^", " " };
+                string[] swapString = { "(", ")", "-", "&", "'", "*", "^", " ", "®" };
                 foreach (string s in swapString)
                 {
                     fName = fName.Replace(s, "_");
                 }
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
-                result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fName));
+                result.Content.Headers.Add("Content-Disposition", $"attachment;filename={fName}");
             }
             else
                 result = Request.CreateResponse(HttpStatusCode.NotFound);
