@@ -180,6 +180,71 @@ function loadingPanel() {
 					"Title": "Pro Tip",
 					"Description": "Gordon Moore's original office is in Santa Clara on the 2nd floor of RNB. No one sits there anymore, but Intel staff continuously cleans and changes its decor. Go visit it when/if you're in Santa Clara!",
 					"FontAwesomeIcon": "fa-comment"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "It took humanity approximately 4 times longer to switch from copper swords to steel swords than it took to switch from steel swords to nuclear bombs.",
+				    "FontAwesomeIcon": "fa-bomb"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Next to the US army, Disney World is the largest buyer and importer of explosives in the USA.",
+				    "FontAwesomeIcon": "fa-bomb"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Anne Frank and Martin Luther King Jr. were born in the same year.",
+				    "FontAwesomeIcon": "fa-child"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Vending machines have killed more people than sharks.",
+				    "FontAwesomeIcon": "fa-calculator"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Pineapples take 2 years to grow.",
+				    "FontAwesomeIcon": "fa-utensils"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "There are more chickens in America than people on the planet.",
+				    "FontAwesomeIcon": "fa-users"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Bill Clinton, George W. Bush and Donald Trump were all born within a 66-day stretch.",
+				    "FontAwesomeIcon": "fa-flag"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Nearly the entire continent of South America is east of Florida.",
+				    "FontAwesomeIcon": "fa-map"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "There are more atoms in a teaspoon of water than there are teaspoons of water in the Atlantic.",
+				    "FontAwesomeIcon": "fa-tint"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "Giraffes and humans possess the same amount of neck bones.",
+				    "FontAwesomeIcon": "fa-user"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "In the mid-1880s Aluminum was more valuable than gold, now we use it expendably to wrap food.",
+				    "FontAwesomeIcon": "fa-dollar-sign"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "When you speak inside your mind small muscles in your throat mimic the formation of each word.  This is called subvocalisation.",
+				    "FontAwesomeIcon": "fa-microphone-slash"
+				},
+				{
+				    "Title": "Did You Know",
+				    "Description": "There is more bacteria living inside a single person's digestive system than the number of human beings who have ever existed in history.",
+				    "FontAwesomeIcon": "fa-globe"
 				}
 			]
 

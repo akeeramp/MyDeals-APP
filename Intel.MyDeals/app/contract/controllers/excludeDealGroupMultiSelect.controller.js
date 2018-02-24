@@ -63,7 +63,6 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	});
 
 	function init() {
-		console.log("initted")
 
 		return dataService.get(colInfo.lookupUrl + "/" + dealId).then(
 			function (response) {
