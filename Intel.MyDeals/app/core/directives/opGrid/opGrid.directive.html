@@ -20,7 +20,7 @@
         <div class="toolbar" ng-hide="isCustomToolbarEnabled">
 
             <div class="fl">
-                <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
+                <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty && !isOverlapping}" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
                     <table>
                         <tr>
                             <td>
