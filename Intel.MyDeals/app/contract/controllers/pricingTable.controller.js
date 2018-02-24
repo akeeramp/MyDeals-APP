@@ -231,7 +231,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var dcId = 0;
         nonMergedColIndexesDict = {};
         var numDeleted = 0;
-
+		
         sheet.batch(function () {
             sheet.range("A" + (rowOffset) + ":ZZ" + root.ptRowCount).unmerge();
             for (var d = 0; d < data.length; d++) {
@@ -459,7 +459,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //PTR_SYS_PRD
             sheet.range(root.colToLetter["PTR_SYS_PRD"] + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
-            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
+            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts); 
             if (root.colToLetter["PRD_DRAWING_ORD"] != undefined) {
                 sheet.range(root.colToLetter['PRD_DRAWING_ORD'] + (rowStart)).value(productSelectorOutput.prdDrawingOrd);
             }
@@ -478,7 +478,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //sheet.range(root.colToLetter['TIER_NBR'] + (a)).value(modifiedNumTiers);
                         modifiedNumTiers--;
                         systemModifiedProductInclude = true;
-                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts);
+                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts); 
                         systemModifiedProductInclude = false;
                     }
                     rowStart = mergedRows - 1;
@@ -876,6 +876,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    //sync
 							    root.spreadDs.sync();
 							    $scope.applySpreadsheetMerge();
+							    clearUndoHistory();
 							    root.child.setRowIdStyle(data);
 
 							}
@@ -913,13 +914,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
-
+			
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
             var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
 
             // On End_vol col change
-            if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged) {
+            if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged || isProductColumnIncludedInChanges) {
 
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
@@ -969,6 +970,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 myRow.END_VOL = value.value;
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
                             }
+
+                        	// Tracker number shenanigans
+							// TODO: better shenanigan check
+                            if (colIndex == productColIndex) {
+                            	// Make sure that the user doesn't delete all products when we have a tracker number								
+                            	if (myRow.HAS_TRACKER == 1
+									&& (value.value == null || value.value.toString().replace(/\s/g, "").length === 0)
+								) {
+                            		if (myRow.TIER_NBR == 1){
+                            			var modalOptions = {
+                            				closeButtonText: 'Close',
+                            				hasActionButton: false,
+                            				headerText: 'Cannot remove deal with tracker',
+                            				bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
+                            			};
+                            			confirmationModal.showModal({}, modalOptions);
+                            		}
+                            		value.value = myRow.PTR_USER_PRD; // revert
+                            	}
+                            }
+
                             // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
                             myRow[colName] = value.value;
                             sourceData[(rowIndex - 1)][colName] = value.value;
@@ -1135,7 +1157,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             $timeout(function () {
-                $scope.applySpreadsheetMerge();
+            	$scope.applySpreadsheetMerge();
             }, 10);
 
         }
@@ -1269,8 +1291,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // clear validations for KIT in case the user added or removed a product from the PTR_USER_PRD csv. Otheriwse red validation flags will show on the wrong rows from dynamic tiering.
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             root.clearValidations();
+			clearUndoHistory();
         }
-
+		
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
@@ -2280,6 +2303,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     ref: pasteRef
                 });
                 $scope.applySpreadsheetMerge();
+                clearUndoHistory();
             }
         });
     }
