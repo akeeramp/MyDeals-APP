@@ -525,7 +525,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             }
 
             $scope.showQuote = function (dataItem) {
-                return dataItem.WF_STG_CD === 'Active' || dataItem.PS_WF_STG_CD === 'Pending' || dataItem.HAS_TRACKER === '1';
+                return dataItem.WF_STG_CD !== 'Cancelled' && (dataItem.WF_STG_CD === 'Active' || dataItem.PS_WF_STG_CD === 'Pending' || dataItem.HAS_TRACKER === '1');
             }
 
             // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.

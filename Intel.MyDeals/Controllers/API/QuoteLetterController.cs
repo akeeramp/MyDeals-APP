@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using System.Net.Http.Headers;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -41,16 +42,12 @@ namespace Intel.MyDeals.Controllers.API
             }
 
             string fName = quoteLetterFile.Name;
+            fName = Regex.Replace(fName, @"[^0-9a-zA-Z _.]+", "");
+            fName = fName.Replace(" ", "_");
 
             if (!string.IsNullOrEmpty(fName))
             {
-                string[] swapString = { "(", ")", "-", "&", "'", "*", "^", " ", "®" };
-                foreach (string s in swapString)
-                {
-                    fName = fName.Replace(s, "_");
-                }
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
                 result.Content.Headers.Add("Content-Disposition", $"attachment;filename={fName}");
             }
             else
