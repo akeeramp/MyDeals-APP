@@ -289,7 +289,7 @@
             <span>Delete Contract</span>
         </button>
         <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">
-            <span>{{isCopyContract ? 'Copy Contract' : 'Create Contract'}}</span>
+            <span ng-bind="saveBtnName()"></span>
         </button>
     </div>
 </div>

@@ -242,6 +242,11 @@
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
+        $scope.saveBtnName = function () {
+            if ($scope.isCopyContract) return 'Copy Contract';
+            return $scope.contractData.DC_ID > 0 ? 'Save Contract' : 'Create Contract';
+        }
+
         $scope.needMct = function () {
             if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false
 
