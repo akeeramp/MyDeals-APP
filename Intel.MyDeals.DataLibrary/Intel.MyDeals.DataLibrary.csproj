@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="Telerik.Reporting, Version=11.2.17.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Progress\Telerik Reporting R3 2017\Bin\Telerik.Reporting.dll</HintPath>
+      <HintPath>..\Shared Libraries\Telerik.Reporting.dll</HintPath>
     </Reference>
     <Reference Include="TIBCO.EMS">
       <HintPath>..\Shared Libraries\TIBCO.EMS.dll</HintPath>
