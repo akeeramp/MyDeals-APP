@@ -42,6 +42,16 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpGet]
+        [Route("GotoPt/{dcid}")]
+        public DcPath GotoPt(int dcid)
+        {
+            return SafeExecutor(() => _searchLib.GotoDcId(OpDataElementType.PRC_TBL, dcid)
+                , $"Unable to get Search Results"
+            );
+        }
+
+        [Authorize]
+        [HttpGet]
         [Route("GotoPs/{dcid}")]
         public DcPath GotoPs(int dcid)
         {
@@ -98,6 +108,24 @@ namespace Intel.MyDeals.Controllers.API
                 rtn.SearchResults,
                 Request.ODataProperties().NextLink,
                 rtn.SearchCount);
+        }
+
+        [Authorize]
+        [Route("GetGlobalSearchList/{opType}/{take}/{searchText}")]
+        [HttpGet]
+        public OpDataCollectorFlattenedList GetGlobalSearchList(string opType, int take, string searchText)
+        {
+            if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
+
+            return _searchLib.GetGlobalList(new SearchParams
+            {
+                StrStart = DateTime.MinValue,
+                StrEnd = DateTime.MaxValue,
+                StrSearch = searchText,
+                StrFilters = "",
+                Skip = 0,
+                Take = take <= 1 ? 1 : take - 1
+            }, OpDataElementTypeConverter.FromString(opType));
         }
 
     }

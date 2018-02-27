@@ -85,6 +85,14 @@
                 }
             },
             {
+                state: 'advancedSearch.gotoPt',
+                config: {
+                    url: 'gotoPt/{dcid:int}',
+                    templateUrl: '/app/advancedSearch/ptSearch.html',
+                    controller: 'PtSearchController'
+                }
+            },
+            {
                 state: 'advancedSearch.gotoDeal',
                 config: {
                     url: 'gotoDeal/{dcid:int}',

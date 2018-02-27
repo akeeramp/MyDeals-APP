@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using Intel.MyDeals.App;
-using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers
 {

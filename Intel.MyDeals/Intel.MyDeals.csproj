@@ -356,6 +356,12 @@
     <Content Include="app\admin\workflow\admin.workflow.controller.js" />
     <Content Include="app\admin\workflow\workflow.html" />
     <Content Include="app\admin\workflow\workflow.service.js" />
+    <Content Include="app\advancedSearch\globalSearchResults.directive.js" />
+    <Content Include="app\advancedSearch\globalSearch.html" />
+    <Content Include="app\advancedSearch\globalSearch.directive.js" />
+    <Content Include="app\advancedSearch\globalSearchResults.directive.html" />
+    <Content Include="app\advancedSearch\ptSearch.html" />
+    <Content Include="app\advancedSearch\ptSearch.controller.js" />
     <Content Include="app\advancedSearch\tenderSearch.html" />
     <Content Include="app\advancedSearch\tenderSearch.controller.js" />
     <Content Include="app\advancedSearch\attributeSearch.html" />

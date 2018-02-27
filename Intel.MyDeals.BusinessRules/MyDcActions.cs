@@ -1166,7 +1166,7 @@ namespace Intel.MyDeals.BusinessRules
         public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
         {
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            if (deNumTiers == null) return;
+            if (deNumTiers == null || deNumTiers.AtrbValue.ToString() == string.Empty) return;
 
             int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 

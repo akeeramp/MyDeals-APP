@@ -1,74 +1,86 @@
 ﻿<!-- Search Start -->
+<div kendo-window id="winGlobalSearchResults" k-title="'Search Results'" k-visible="false" k-width="'900px;'">
+    <div global-search-results></div>
+</div>
 
-<div class="fr">
-    <div class="navbar-form navbar-left hidden-xs" role="search" style="margin: 0; padding-right: 0; border: 0 solid transparent;">
-        <div class="form-group">
-            <a class="search intelicon-search" style="margin-right: 5px; float: left; font-size: 14px;"></a>
-            <input class="form-control" id="quickSearch" type="text" placeholder="Search for deal #, contract, or pricing strategy" style="width: 320px; font-size: 14px; line-height: .9em; padding: 4px 5px 5px 5px; border: 0 solid transparent; height: auto;">
+<div global-search class="fr"></div>
+
+@*<div class="fr">
+        <div class="navbar-form navbar-left hidden-xs" role="search" style="margin: 0; padding-right: 0; border: 0 solid transparent;">
+            <div class="form-group">
+                <a class="search intelicon-search" style="margin-right: 5px; float: left; font-size: 14px;"></a>
+                <input class="form-control" id="quickSearch" type="text" placeholder="Search for deal #, contract, or pricing strategy" style="width: 320px; font-size: 14px; line-height: .9em; padding: 4px 5px 5px 5px; border: 0 solid transparent; height: auto;">
+            </div>
         </div>
     </div>
-</div>
 
-<div id="header-nav-search-results" style="display: none;" class="draggable-search">
-    <div class="draggable-handle">
-        <button type="button" id="searchClose" class="close" aria-hidden="true">&times;</button>
-        <div style='font-weight: bold; padding: 5px;'>Search Results</div>
+    <div id="header-nav-search-results" style="display: none;" class="draggable-search">
+        <div class="draggable-handle">
+            <button type="button" id="searchClose" class="close" aria-hidden="true">&times;</button>
+            <div style='font-weight: bold; padding: 5px;'>Search Results</div>
+        </div>
+        <div id="header-nav-search-results-searching">
+            <search-results id="globalSearchControl" hide-search="true"></search-results>
+        </div>
+        <div id="header-nav-search-results-container"></div>
     </div>
-    <div id="header-nav-search-results-searching">
-        <search-results id="globalSearchControl" hide-search="true"></search-results>
-    </div>
-    <div id="header-nav-search-results-container"></div>
-</div>
 
-<script id="searchresultdealtemplate" type="text/x-kendo-template">
-    <div class="searchresultitem">
-        <input type="hidden" value="#= DealNbr #" />
-        <span class="pull-left notification-light-pad medium" style="margin-top: 3px;">
-            <img src="/images/deallist1.png"> \\##= DealNbr #
-        </span>
-        <span class="pull-right text-muted small notification-light-pad" style="text-align: right;">
-            #= moment(StartDate).format("MM/DD/YYYY") # - #= moment(EndDate).format("MM/DD/YYYY") #<br />
-            #= DealType # / #= Stage #
-        </span>
-        <div class="clearboth"></div>
-    </div>
-</script>
+    <script id="searchresultdealtemplate" type="text/x-kendo-template">
+        <div class="searchresultitem">
+            <input type="hidden" value="#= DealNbr #" />
+            <span class="pull-left notification-light-pad medium" style="margin-top: 3px;">
+                <img src="/images/deallist1.png"> \\##= DealNbr #
+            </span>
+            <span class="pull-right text-muted small notification-light-pad" style="text-align: right;">
+                #= moment(StartDate).format("MM/DD/YYYY") # - #= moment(EndDate).format("MM/DD/YYYY") #<br />
+                #= DealType # / #= Stage #
+            </span>
+            <div class="clearboth"></div>
+        </div>
+    </script>
 
-<script id="searchresultworkbooktemplate" type="text/x-kendo-template">
-    <div class="searchresultwbitem">
-        <input type="hidden" value="#= WB_ID #" />
-        <span class="pull-left notification-light-pad medium" style="margin-top: 3px;">
-            <img src="/images/excel_unicolor24.png">\\##= WB_ID #
-        </span>
-        <span class="pull-right text-muted small notification-light-pad" style="text-align: right;">
-            #= WB_NM #<br />
-            #= kendo.toString(START_DT, 'MM/dd/yyyy') # - #= kendo.toString(END_DT, 'MM/dd/yyyy') #
-        </span>
-        <div class="clearboth"></div>
-    </div>
-</script>
+    <script id="searchresultworkbooktemplate" type="text/x-kendo-template">
+        <div class="searchresultwbitem">
+            <input type="hidden" value="#= WB_ID #" />
+            <span class="pull-left notification-light-pad medium" style="margin-top: 3px;">
+                <img src="/images/excel_unicolor24.png">\\##= WB_ID #
+            </span>
+            <span class="pull-right text-muted small notification-light-pad" style="text-align: right;">
+                #= WB_NM #<br />
+                #= kendo.toString(START_DT, 'MM/dd/yyyy') # - #= kendo.toString(END_DT, 'MM/dd/yyyy') #
+            </span>
+            <div class="clearboth"></div>
+        </div>
+    </script>
 
-<script id="searchresultexacttemplate" type="text/x-kendo-template">
-    <div class="searchresultitem">
-        <input type="hidden" value="#= DealNbr #" />
-        <span class="pull-left notification-light-pad medium" style="margin-top: 3px;">
-            <img src="/images/edit.png"> Exact Match<br />
-            <img src="/images/032.gif" />
-        </span>
-        <span class="pull-right text-muted small notification-light-pad" style="text-align: right;">
-            Taking you there now
-        </span>
-        <div class="clearboth"></div>
-    </div>
-</script>
+    <script id="searchresultexacttemplate" type="text/x-kendo-template">
+        <div class="searchresultitem">
+            <input type="hidden" value="#= DealNbr #" />
+            <span class="pull-left notification-light-pad medium" style="margin-top: 3px;">
+                <img src="/images/edit.png"> Exact Match<br />
+                <img src="/images/032.gif" />
+            </span>
+            <span class="pull-right text-muted small notification-light-pad" style="text-align: right;">
+                Taking you there now
+            </span>
+            <div class="clearboth"></div>
+        </div>
+    </script>
 
-<script id="searchnoresulttemplate" type="text/x-kendo-template">
-    <div class="error draggable-search">
-        <p>Unable to match any deals or workbooks to your search.  Please try again.</p>
-    </div>
-</script>
+    <script id="searchnoresulttemplate" type="text/x-kendo-template">
+        <div class="error draggable-search">
+            <p>Unable to match any deals or workbooks to your search.  Please try again.</p>
+        </div>
+    </script>
 
-<script src="@Url.Content("~/js/_search.js")"></script>
+    <script src="@Url.Content("~/js/_search.js")"></script>*@
 <link href="@Url.Content("~/css/_search.css")" rel="stylesheet" type="text/css" />
+<script>
+    //$("#winGlobalSearchResults").hide();
+    //setTimeout(function () {
+    //    var winSearch = $("#winGlobalSearchResults").data("kendoWindow");
+    //    if (winSearch !== undefined) winSearch.close();
+    //}, 500);
+</script>
 <!-- Search End -->
 

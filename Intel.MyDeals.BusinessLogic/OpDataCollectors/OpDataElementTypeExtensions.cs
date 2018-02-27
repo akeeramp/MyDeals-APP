@@ -126,6 +126,8 @@ namespace Intel.MyDeals.BusinessLogic
                         break;
                     case OpDataElementType.PRC_ST:
                         dcPath.PricingStrategyId = dcId;
+                        if (dcPath.PricingTableId == 0)
+                            dcPath.PricingTableId = myDealsData[OpDataElementType.PRC_TBL].AllDataElements.Where(s => s.DcParentID == dcId).Select(s => s.DcID).FirstOrDefault();
                         break;
                     case OpDataElementType.PRC_TBL:
                         dcPath.PricingTableId = dcId;

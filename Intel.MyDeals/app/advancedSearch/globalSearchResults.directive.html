@@ -1,0 +1,168 @@
+﻿
+<div class="container-fluid">
+    <div style="margin-bottom: 15px; text-align: center;">
+        <i class="search intelicon-search" style="margin-right: 10px; font-size: 28px; color: #0071C5; vertical-align: sub;"></i>
+        <input type="text" placeholder="Search for deal #, contract, or pricing strategy" 
+               class="k-input searchResultInpt" 
+               ng-model="$root.globalSearchResultsData.searchText" 
+               ng-keypress="EnterPressed($event)">
+        <div class="btn-group" style="margin-top: -3px;">
+            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
+            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
+            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
+            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_TBL'" uncheckable>Pricing Table</label>
+            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'WIP_DEAL'" uncheckable>Deals</label>
+        </div>
+    </div>
+    <div class="row row-modal">
+        <div class="col-md-{{$root.globalSearchResultsData.colCount}} row-container" ng-if="$root.globalSearchResultsData.searchIn.indexOf('CNTRCT') >= 0">
+            <h5>Contracts</h5>
+            <div class="results-container">
+                <div ng-show="$root.globalSearchResultsData.results.CNTRCT.searching" class="waiting">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="no-items" ng-show="$root.globalSearchResultsData.results.CNTRCT.data.length === 0 && !$root.globalSearchResultsData.results.CNTRCT.searching">
+                    No contracts found.
+                </div>
+                <div ng-repeat="item in $root.globalSearchResultsData.results.CNTRCT.data" class="search-result-item" ng-click="gotoContract(item.DC_ID)">
+                    <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span>
+                    </div>
+                    <div style="color: #00AEEF;">{{item.TITLE}}</div>
+                </div>
+            </div>
+            <div class="see-more" ng-click="more('CNTRCT')" ng-show="$root.globalSearchResultsData.results.CNTRCT.data.length === $root.globalSearchResultsData.take">view more</div>
+        </div>
+        <div class="col-md-{{$root.globalSearchResultsData.colCount}} row-container" ng-if="$root.globalSearchResultsData.searchIn.indexOf('PRC_ST') >= 0">
+            <h5>Pricing Strategy</h5>
+            <div class="results-container">
+                <div ng-show="$root.globalSearchResultsData.results.PRC_ST.searching" class="waiting">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="no-items" ng-show="$root.globalSearchResultsData.results.PRC_ST.data.length === 0 && !$root.globalSearchResultsData.results.PRC_ST.searching">
+                    No pricing strategies found.
+                </div>
+                <div ng-repeat="item in $root.globalSearchResultsData.results.PRC_ST.data" class="search-result-item" ng-click="gotoPs(item.DC_ID)">
+                    <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}</div>
+                    <div style="color: #00AEEF;">{{item.TITLE}}</div>
+                </div>
+            </div>
+            <div class="see-more" ng-click="more('PRC_ST')" ng-show="$root.globalSearchResultsData.results.PRC_ST.data.length === $root.globalSearchResultsData.take">view more</div>
+        </div>
+        <div class="col-md-{{$root.globalSearchResultsData.colCount}} row-container" ng-if="$root.globalSearchResultsData.searchIn.indexOf('PRC_TBL') >= 0">
+            <h5>Pricing Table</h5>
+            <div class="results-container">
+                <div ng-show="$root.globalSearchResultsData.results.PRC_TBL.searching" class="waiting">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="no-items" ng-show="$root.globalSearchResultsData.results.PRC_TBL.data.length === 0 && !$root.globalSearchResultsData.results.PRC_TBL.searching">
+                    No pricing tables found.
+                </div>
+                <div ng-repeat="item in $root.globalSearchResultsData.results.PRC_TBL.data" class="search-result-item" ng-click="gotoPt(item.DC_ID)">
+                    <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}</div>
+                    <div style="color: #00AEEF;">{{item.TITLE}}</div>
+                </div>
+            </div>
+            <div class="see-more" ng-click="more('PRC_TBL')" ng-show="$root.globalSearchResultsData.results.PRC_TBL.data.length === $root.globalSearchResultsData.take">view more</div>
+        </div>
+        <div class="col-md-{{$root.globalSearchResultsData.colCount}} row-container" ng-if="$root.globalSearchResultsData.searchIn.indexOf('WIP_DEAL') >= 0">
+            <h5>Deal</h5>
+            <div class="results-container">
+                <div ng-show="$root.globalSearchResultsData.results.WIP_DEAL.searching" class="waiting">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="no-items" ng-show="$root.globalSearchResultsData.results.WIP_DEAL.data.length === 0 && !$root.globalSearchResultsData.results.WIP_DEAL.searching">
+                    No deals found.
+                </div>
+                <div ng-repeat="item in $root.globalSearchResultsData.results.WIP_DEAL.data" class="search-result-item" ng-click="gotoDeal(item.DC_ID)">
+                    <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}</div>
+                    <div style="color: #00AEEF;">{{item.TITLE}}</div>
+                </div>
+            </div>
+            <div class="see-more" ng-click="more('WIP_DEAL')" ng-show="$root.globalSearchResultsData.results.WIP_DEAL.data.length === $root.globalSearchResultsData.take">view more</div>
+        </div>
+    </div>
+    <div class="search-advanced-tag">
+        Not what you are looking for? Try our <a ng-click="gotoAdvanced()" style="cursor: pointer;">Advanced Search</a>
+    </div>
+</div>
+
+<style>
+    .k-window-actions .k-i-close {
+        color: #ffffff !important;
+    }
+
+    .row.row-modal .row-container {
+        padding: 0;
+        font-size: 12px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+    }
+
+    .results-container {
+        border: 1px solid #eeeeee;
+        margin: 0 4px;
+        padding: 5px;
+        height: 250px;
+        overflow: auto;
+    }
+
+    .row-modal h5 {
+        margin: 0 4px 2px 6px;
+        font-size: 18px;
+        font-weight: 200;
+        font-family: "Intel Clear";
+        font-style: normal;
+    }
+
+    .waiting {
+        text-align: center;
+        padding-top: 50px;
+        color: #999999;
+    }
+    .waiting div {
+        margin-top: 10px;
+    }
+    .no-items {
+        padding: 35px 5px;
+        text-align: center;
+    }
+    .search-result-item {
+        border-bottom: 1px solid #eeeeee;
+        padding: 5px;
+        cursor: pointer;
+    }
+    .search-result-item:hover {
+        background-color: #efefef;
+    }
+    .see-more {
+        text-align: right;
+        cursor: pointer;
+        color: #00AEEF;
+        margin-right: 6px;
+    }
+    .see-more:hover {
+        color: #0071C5;
+    }
+    .search-advanced-tag {
+        margin-top: 8px;
+        margin-bottom: -15px;
+        margin-left: -25px;
+        text-align: left;    
+    }
+    .searchResultInpt {
+        height: 22px;
+        padding-left: 5px;
+        margin-right: 6px;
+        width: 325px;
+        margin-bottom: 15px;
+    }
+</style>

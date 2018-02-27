@@ -2,14 +2,14 @@
     'use strict';
     angular
         .module('app.advancedSearch')
-        .controller('PsSearchController', PsSearchController)
+        .controller('PtSearchController', PtSearchController)
         .run(SetRequestVerificationToken);
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    PsSearchController.$inject = ['dataService', '$scope', '$stateParams', '$timeout', 'logger'];
+    PtSearchController.$inject = ['dataService', '$scope', '$stateParams', '$timeout', 'logger'];
 
-    function PsSearchController(dataService, $scope, $stateParams, $timeout, logger) {
+    function PtSearchController(dataService, $scope, $stateParams, $timeout, logger) {
 
         // get the dcid
         $scope.dcid = $stateParams.dcid;
@@ -18,7 +18,7 @@
         $scope.isBusyMsgDetail = "";
         $scope.isBusyType = "";
         $scope.isBusyShowFunFact = false;
-        $scope.status = "Currently looking for your Pricing Strategy.";
+        $scope.status = "Currently looking for your Pricing Table.";
 
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
@@ -51,25 +51,21 @@
             });
         }
 
-        $scope.setBusy("Searching...", "Searching for Pricing Strategy " + $scope.dcid);
+        $scope.setBusy("Searching...", "Searching for Pricing Table " + $scope.dcid);
 
         //perform search operation
-        dataService.get("api/Search/GotoPs/" + $scope.dcid).then(function (response) {
+        dataService.get("api/Search/GotoPt/" + $scope.dcid).then(function (response) {
 
             // Didn't find it?
             if (response.data.ContractId <= 0) {
-                $scope.status = response.data.Message === "" ? "Unable to locate the Pricing Strategy." : response.data.Message;
+                $scope.status = response.data.Message === "" ? "Unable to locate the Pricing Table." : response.data.Message;
                 $scope.setBusy("", "");
                 return;
             }
 
             // Found it... redirect
-            var url = "/Contract#/manager/" + response.data.ContractId;
-            if (window.usrRole === "DA") {
-                url += "/summary";
-            } else if (response.data.PricingTableId > 0) {
-                url += "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId + "/wip";
-            }
+            var url = "/Contract#/manager/" + response.data.ContractId + "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId;
+            if (window.usrRole === "DA") url += "/Contract#/manager/" + response.data.ContractId + "/summary";
 
             document.location.href = url;
 

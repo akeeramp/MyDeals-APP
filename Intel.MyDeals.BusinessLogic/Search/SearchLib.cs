@@ -9,6 +9,7 @@ using System.Collections;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.Opaque.Data;
+using Kendo.Mvc.UI;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -396,6 +397,43 @@ namespace Intel.MyDeals.BusinessLogic
             null,
             MyRulesTrigger.OnDealListLoad);
         }
-    
+
+        public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType)
+        {
+            List<int> atrbs = new List<int>
+            {
+                Attributes.CUST_ACCNT_DIV.ATRB_SID,
+                Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.TITLE.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID
+            };
+
+            int dcIdNum;
+            string whereClause, orderBy, searchIn;
+
+            if (int.TryParse(data.StrSearch, out dcIdNum))
+            {
+                whereClause = $"{deType}_OBJ_SID = {dcIdNum}";
+                orderBy = $"{deType}_OBJ_SID desc";
+                searchIn = $"{deType}";
+            }
+            else
+            {
+                whereClause = $"{deType}_TITLE LIKE '%{data.StrSearch}%'";
+                orderBy = $"{deType}_OBJ_SID desc";
+                searchIn = $"{deType}";
+            }
+
+            SearchPacket res = new SearchLib().GetAdvancedSearchResults(whereClause, orderBy, searchIn, 0, data.Take);
+
+            List<int> dcIds = res.SearchResults.Where(s => s.OBJ_TYPE == deType.ToString()).OrderByDescending(s => s.OBJ_SID).Select(s => s.OBJ_SID).ToList();
+            MyDealsData myDealsData = deType.GetByIDs(dcIds, new List<OpDataElementType> { deType }, atrbs);
+            return myDealsData.ToOpDataCollectorFlattenedDictList(deType, ObjSetPivotMode.Nested, false);
+        }
+
     }
 }

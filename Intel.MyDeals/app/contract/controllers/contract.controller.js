@@ -1294,7 +1294,7 @@
                         newRow["CUST_ACCNT_DIV"] = $scope.contractData.CUST_ACCNT_DIV;
                         newRow["CUST_MBR_SID"] = $scope.contractData.CUST_MBR_SID;
 
-                        $scope.$broadcast('addRowByTrackerNumber', newRow)
+                        $scope.$broadcast('addRowByTrackerNumber', newRow);
                     },
                     function () {
                         // Do Nothing on cancel
