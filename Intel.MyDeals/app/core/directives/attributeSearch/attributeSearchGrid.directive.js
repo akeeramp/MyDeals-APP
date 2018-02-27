@@ -36,6 +36,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
             $scope.searchText = "";
             $scope.curLinkedVal = "";
             $scope.columnSearchFilter = "";
+            $scope.wrapEnabled = false;
 
             $scope.rulesDataSource = new kendo.data.DataSource({
                 data: $scope.rules
@@ -375,6 +376,14 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
 
             $scope.renderCustNm = function (dataItem) {
                 return dataItem.CUST_MBR_SID;
+            }
+
+            $scope.toggleWrap = function () {
+                var gridEl = $("#attributeGrid");
+                $scope.wrapEnabled = !$scope.wrapEnabled;
+                var newVal = $scope.wrapEnabled ? "normal" : "nowrap";
+
+                $(gridEl).find("td").css("white-space", newVal);
             }
 
             $scope.clearSortingFiltering = function () {

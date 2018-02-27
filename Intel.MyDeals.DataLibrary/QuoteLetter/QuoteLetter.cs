@@ -68,7 +68,7 @@ namespace Intel.MyDeals.DataLibrary
             MainContent.Value = content0.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetValue("Customer")));
             MainContent1.Value = content1;
 
-            htmlTextBox4.Value = "Intel Quote for Deal " + dealId;
+            htmlTextBox4.Value = "Deal #" + dealId;
             txtEndCustomer.Value = EscapeSpecialChars(GetValue("EndCustomer"));
             txtStartDate.Value = GetValue("StartDate");
             txtEndDate.Value = GetValue("EndDate");
@@ -78,55 +78,44 @@ namespace Intel.MyDeals.DataLibrary
 
 
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
-            txtK1Tracker.Value = GetTrackerValue("KTracker");
 
             txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
-            txtK2Tracker.Value = GetTrackerValue("SKTracker");
 
             txtP1Ecap.Value = GetMoneyValue("PECAPPrice");
             txtP1ProdName.Value = GetValue("PProdDesc");
             txtP1ProdSeg.Value = GetValue("PProdCat");
-            txtP1Tracker.Value = GetTrackerValue("PTracker");
 
             txtS1Ecap.Value = GetMoneyValue("S1ECAPPrice");
             txtS1ProdName.Value = GetValue("S1ProdDesc");
             txtS1ProdSeg.Value = GetValue("S1ProdCat");
-            txtS1Tracker.Value = GetTrackerValue("S1Tracker");
 
             txtS2Ecap.Value = GetMoneyValue("S2ECAPPrice");
             txtS2ProdName.Value = GetValue("S2ProdDesc");
             txtS2ProdSeg.Value = GetValue("S2ProdCat");
-            txtS2Tracker.Value = GetTrackerValue("S2Tracker");
 
             txtS3Ecap.Value = GetMoneyValue("S3ECAPPrice");
             txtS3ProdName.Value = GetValue("S3ProdDesc");
             txtS3ProdSeg.Value = GetValue("S3ProdCat");
-            txtS3Tracker.Value = GetTrackerValue("S3Tracker");
 
             txtS4Ecap.Value = GetMoneyValue("S4ECAPPrice");
             txtS4ProdName.Value = GetValue("S4ProdDesc");
             txtS4ProdSeg.Value = GetValue("S4ProdCat");
-            txtS4Tracker.Value = GetTrackerValue("S4Tracker");
 
             txtS5Ecap.Value = GetMoneyValue("S5ECAPPrice");
             txtS5ProdName.Value = GetValue("S5ProdDesc");
             txtS5ProdSeg.Value = GetValue("S5ProdCat");
-            txtS5Tracker.Value = GetTrackerValue("S5Tracker");
 
             txtS6Ecap.Value = GetMoneyValue("S6ECAPPrice");
             txtS6ProdName.Value = GetValue("S6ProdDesc");
             txtS6ProdSeg.Value = GetValue("S6ProdCat");
-            txtS6Tracker.Value = GetTrackerValue("S6Tracker");
 
             txtS7Ecap.Value = GetMoneyValue("S7ECAPPrice");
             txtS7ProdName.Value = GetValue("S7ProdDesc");
             txtS7ProdSeg.Value = GetValue("S7ProdCat");
-            txtS7Tracker.Value = GetTrackerValue("S7Tracker");
 
             txtS8Ecap.Value = GetMoneyValue("S8ECAPPrice");
             txtS8ProdName.Value = GetValue("S8ProdDesc");
             txtS8ProdSeg.Value = GetValue("S8ProdCat");
-            txtS8Tracker.Value = GetTrackerValue("S8Tracker");
             
 
 
@@ -136,6 +125,11 @@ namespace Intel.MyDeals.DataLibrary
 
 
             // Start hidding rows
+
+            if (GetValue("KitCheck") == "N")
+            {
+                lblP1.Value = " ";
+            }
 
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))
             {
@@ -158,7 +152,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtP1Ecap.Visible = false;
                 txtP1ProdName.Visible = false;
                 txtP1ProdSeg.Visible = false;
-                txtP1Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtK1ProdName.Value))
@@ -167,7 +160,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtK1Ecap.Visible = false;
                 txtK1ProdName.Visible = false;
                 txtK1ProdSeg.Visible = false;
-                txtK1Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtK2ProdName.Value))
@@ -176,7 +168,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtK2Ecap.Visible = false;
                 txtK2ProdName.Visible = false;
                 txtK2ProdSeg.Visible = false;
-                txtK2Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS1ProdName.Value))
@@ -185,7 +176,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS1Ecap.Visible = false;
                 txtS1ProdName.Visible = false;
                 txtS1ProdSeg.Visible = false;
-                txtS1Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS2ProdName.Value))
@@ -194,7 +184,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS2Ecap.Visible = false;
                 txtS2ProdName.Visible = false;
                 txtS2ProdSeg.Visible = false;
-                txtS2Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS3ProdName.Value))
@@ -203,7 +192,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS3Ecap.Visible = false;
                 txtS3ProdName.Visible = false;
                 txtS3ProdSeg.Visible = false;
-                txtS3Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS4ProdName.Value))
@@ -212,7 +200,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS4Ecap.Visible = false;
                 txtS4ProdName.Visible = false;
                 txtS4ProdSeg.Visible = false;
-                txtS4Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS5ProdName.Value))
@@ -221,7 +208,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS5Ecap.Visible = false;
                 txtS5ProdName.Visible = false;
                 txtS5ProdSeg.Visible = false;
-                txtS5Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS6ProdName.Value))
@@ -230,7 +216,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS6Ecap.Visible = false;
                 txtS6ProdName.Visible = false;
                 txtS6ProdSeg.Visible = false;
-                txtS6Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS7ProdName.Value))
@@ -239,7 +224,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS7Ecap.Visible = false;
                 txtS7ProdName.Visible = false;
                 txtS7ProdSeg.Visible = false;
-                txtS7Tracker.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS8ProdName.Value))
@@ -248,7 +232,6 @@ namespace Intel.MyDeals.DataLibrary
                 txtS8Ecap.Visible = false;
                 txtS8ProdName.Visible = false;
                 txtS8ProdSeg.Visible = false;
-                txtS8Tracker.Visible = false;
             }
 
 

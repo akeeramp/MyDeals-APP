@@ -153,14 +153,14 @@
                 title: "Contract Title",
                 type: "string",
                 width: 140,
-                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
                 field: "DC_ID",
                 title: "Deal",
                 type: "number",
                 width: 100,
                 filterable: "numObjFilter",
-                template: "<div ng-click='navToPath(dataItem)' class='objDealId'>#=data.DC_ID#</div>"
+                template: "<a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
             }, {
                 field: "WF_STG_CD",
                 title: "Deal Status",
@@ -243,7 +243,7 @@
                 field: "PRODUCT_FILTER",
                 title: "Product",
                 type: "string",
-                width: 250,
+                width: 400,
                 dimKey: 20,
                 filterable: "objFilter",
                 template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
@@ -410,6 +410,13 @@
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
             }, {
+                field: "TOTAL_DOLLAR_AMOUNT",
+                title: "Total Dollar Amount",
+                type: "number",
+                width: 170,
+                format: "{0:c}",
+                filterable: "moneyObjFilter"
+            }, {
                 field: "END_CUSTOMER_RETAIL",
                 title: "End Customer",
                 type: "string",
@@ -427,17 +434,6 @@
             }, {
                 field: "CRE_DTM",
                 title: "Created Time",
-                type: "string",
-                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
-                width: 140
-            }, {
-                field: "CHG_EMP_WWID",
-                title: "Last Update By",
-                type: "string",
-                width: 120
-            }, {
-                field: "CHG_DTM",
-                title: "Last Update Time",
                 type: "string",
                 template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
                 width: 140

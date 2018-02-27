@@ -243,20 +243,20 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 var fieldType = field.type;
 
                 if (scope.dataItem.operator === "IN") {
-                    html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value"/>';
+                    html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     if (helpMsg["IN"] !== undefined) html += '<div class="sm-help">' + helpMsg["IN"] + '</div>';
                 } else {
                     if (fieldType === "string") {
-                        html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value"/>';
+                        html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     }
                     else if (fieldType === "number") {
-                        html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;" k-ng-model="dataItem.value"/>';
+                        html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     }
                     else if (fieldType === "money") {
-                        html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;" k-ng-model="dataItem.value"/>';
+                        html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     }
                     else if (fieldType === "date") {
-                        html = '<input kendo-date-picker k-format="\'MM/dd/yyyy\'" style="width: 200px;" k-ng-model="dataItem.value"/>';
+                        html = '<input kendo-date-picker k-format="\'MM/dd/yyyy\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     }
                     else if (fieldType === "list") {
 
@@ -298,7 +298,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         html += 'style="min-width: 200px; max-width: 400px;"></select>{{dataItem.value}}';
                     }
                     else if (fieldType === "bool") {
-                        html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
+                        html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     }
 
                     if (helpMsg[fieldType] !== undefined) html += '<div class="sm-help">' + helpMsg[fieldType] + '</div>';
@@ -309,6 +309,13 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 el.html(x);
                 $compile(x)(scope);
             }
+
+            $scope.enterPressed = function (event) {
+                //KeyCode 13 is 'Enter'
+                if (event.keyCode === 13) {
+                    $scope.runRule();
+                }
+            };
 
             $scope.closeField = function (e) {
                 setTimeout(() => { $(e.sender.element).focusout(); }, 0);

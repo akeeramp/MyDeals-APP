@@ -544,8 +544,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Translate PRODUCT_FILTER to English",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.TranslateProductFilter,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnDealListLoad },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }
                 },
                 new MyOpRule
                 {

@@ -18,10 +18,25 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         prdIds.push(value);
     });
 
+    var prdData = {
+        "PrdIds": prdIds
+    }
+
     $scope.gridOptions = {
         dataSource: {
             transport: {
-                read: "/api/Products/GetProductsByIds/" + prdIds.join(',')
+                read: {
+                    url: "/api/Products/GetProductsByIds",
+                    dataType: "json",
+                    type: "POST",
+                    traditional: true
+                },
+                parameterMap: function (data, type) {
+
+                    if (type === "read") {
+                        return prdData;
+                    }
+                }
             }
         },
         toolbar: [{ name: 'excel', text: '<div class="excelText"><span>Excel<br/>Export</span></div>' }],

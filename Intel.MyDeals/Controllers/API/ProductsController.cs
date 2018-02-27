@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Intel.MyDeals.DataLibrary;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -36,12 +37,13 @@ namespace Intel.MyDeals.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
+
         [Authorize]
-        [Route("GetProductsByIds/{sids}")]
-        public IEnumerable<Product> GetProductsByIds(string sids)
+        [HttpPost]
+        [Route("GetProductsByIds")]
+        public IEnumerable<Product> GetProductsByIds(ProductMicroPacket prdIds)
         {
-            List<int> pids = sids.Split(',').Select(int.Parse).ToList();
-            return SafeExecutor(() => _productsLib.GetProductsByIds(pids)
+            return SafeExecutor(() => _productsLib.GetProductsByIds(prdIds.PrdIds)
                 , $"GetProductsByIds failed"
             );
         }

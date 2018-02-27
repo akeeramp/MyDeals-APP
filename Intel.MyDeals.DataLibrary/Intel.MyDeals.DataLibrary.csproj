@@ -83,6 +83,7 @@
     <Compile Include="Dashboard\DashboardDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
+    <Compile Include="ProductMicroPacket.cs" />
     <Compile Include="QuoteLetter\QuoteLetterDataLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetter.cs">
       <SubType>Component</SubType>

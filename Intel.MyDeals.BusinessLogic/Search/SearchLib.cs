@@ -353,6 +353,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.START_DT.ATRB_SID,
                 Attributes.STRT_VOL.ATRB_SID,
                 Attributes.TITLE.ATRB_SID,
+                Attributes.TOTAL_DOLLAR_AMOUNT.ATRB_SID,
                 Attributes.TRKR_NBR.ATRB_SID,
                 Attributes.VOLUME.ATRB_SID,
                 Attributes.WF_STG_CD.ATRB_SID
