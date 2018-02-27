@@ -39,6 +39,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.TRGT_RGN,
                                 AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.QTY,
                                 AttributeCodes.ON_ADD_DT,
                                 AttributeCodes.QLTR_BID_GEO,
                                 AttributeCodes.END_CUSTOMER_RETAIL,
@@ -67,7 +68,8 @@ namespace Intel.MyDeals.BusinessRules
 							Target = new[] {
 								AttributeCodes.PROD_INCLDS,
 								AttributeCodes.PTR_USER_PRD,
-								AttributeCodes.DEAL_GRP_NM}
+                                AttributeCodes.QTY,
+                                AttributeCodes.DEAL_GRP_NM}
 						}
 					}
 				},
