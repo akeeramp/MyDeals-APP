@@ -1311,6 +1311,13 @@ namespace Intel.MyDeals.BusinessRules
                         Decimal.TryParse(qty.AtrbValue.ToString(), out qtySafeParse);
                         Decimal.TryParse(discountPerLine.AtrbValue.ToString(), out discountSafeParse);
 
+						// Qty check
+						if (qtySafeParse > 1 && discountSafeParse == 0)
+						{
+							AddTierValidationMessage(qty, "Qty must be 1 if Discount per Line is $0.", tier);
+						}
+
+						// Kit ECAP
                         if (tier == -1)
                         {
                             // Only Kit Ecap is tier of -1

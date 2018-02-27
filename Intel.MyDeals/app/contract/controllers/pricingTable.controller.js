@@ -941,7 +941,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             if (!isEndVolUnlimited) {
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
-                                    value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                	value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                                 }
                                 else if (colIndex === rateIndex) {
                                     value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -1314,7 +1314,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // fix merge issues
         if (data.length > 0) {
-            var lastItem = data[data.length - 1];
+        	var lastItem = data[data.length - 1];
             var numTier = root.numOfPivot(lastItem);
             var offset = getOffsetByIndex(data, data.length - 1, numTier);
             if (offset > 0) {
