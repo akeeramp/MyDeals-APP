@@ -283,6 +283,7 @@ namespace Intel.MyDeals.BusinessLogic
                 item["CHG_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CHG_EMP_WWID;
                 item["CRE_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CRE_DTM.ToString());
                 item["CRE_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CRE_EMP_WWID;
+                item["CRE_EMP_NAME"] = decoderById[dcId].WIP_DEAL_CRE_EMP_NAME;
 
                 // Need to convert CUST_MBR_SID to Customer Object
                 if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))

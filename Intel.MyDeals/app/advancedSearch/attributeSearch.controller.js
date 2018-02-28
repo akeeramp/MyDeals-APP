@@ -427,10 +427,10 @@
                 type: "string",
                 width: 250
             }, {
-                field: "CRE_EMP_WWID",
+                field: "CRE_EMP_NAME",
                 title: "Created By",
                 type: "string",
-                width: 120
+                width: 160
             }, {
                 field: "CRE_DTM",
                 title: "Created Time",

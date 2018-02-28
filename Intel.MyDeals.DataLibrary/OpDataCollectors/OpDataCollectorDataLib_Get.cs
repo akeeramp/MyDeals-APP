@@ -69,7 +69,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 if (!odcs.ContainsKey(oType)) odcs[oType] = new OpDataPacket<OpDataElementType> {PacketType = oType};
             }
-
+            
             return odcs;
         }
 

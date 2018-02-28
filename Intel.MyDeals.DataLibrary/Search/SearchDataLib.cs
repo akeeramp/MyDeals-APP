@@ -93,6 +93,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_WIP_DEAL_CHG_DTM = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CHG_DTM");
                     int IDX_WIP_DEAL_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CHG_EMP_WWID");
                     int IDX_WIP_DEAL_CRE_DTM = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CRE_DTM");
+                    int IDX_WIP_DEAL_CRE_EMP_NAME = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CRE_EMP_NAME");
                     int IDX_WIP_DEAL_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CRE_EMP_WWID");
 
                     while (rdr.Read())
@@ -110,6 +111,7 @@ namespace Intel.MyDeals.DataLibrary
                                 WIP_DEAL_CHG_DTM = (IDX_WIP_DEAL_CHG_DTM < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_WIP_DEAL_CHG_DTM),
                                 WIP_DEAL_CHG_EMP_WWID = (IDX_WIP_DEAL_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_CHG_EMP_WWID),
                                 WIP_DEAL_CRE_DTM = (IDX_WIP_DEAL_CRE_DTM < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_WIP_DEAL_CRE_DTM),
+                                WIP_DEAL_CRE_EMP_NAME = (IDX_WIP_DEAL_CRE_EMP_NAME < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CRE_EMP_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WIP_DEAL_CRE_EMP_NAME),
                                 WIP_DEAL_CRE_EMP_WWID = (IDX_WIP_DEAL_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_CRE_EMP_WWID)
                             });
                         }
