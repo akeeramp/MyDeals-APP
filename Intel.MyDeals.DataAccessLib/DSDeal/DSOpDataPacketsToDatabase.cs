@@ -81,7 +81,7 @@ namespace Intel.MyDeals.DataAccessLib
                         conn.Open();
                         cmd.Connection = conn;
                         cmd.ExecuteNonQuery();
-                    }
+                    } // Doesn't need to use a conn.Close() since the using block does iDispose when completed.
                 }
             }
             catch (Exception ex2)
@@ -165,6 +165,7 @@ namespace Intel.MyDeals.DataAccessLib
                             }
                         }
                     }
+                    conn.Close(); // Remove sleeping DB processes
                 }
             });
         }
@@ -223,6 +224,7 @@ namespace Intel.MyDeals.DataAccessLib
                         */
 
                     }
+                    conn.Close(); // Remove sleeping DB processes
                 }
             }
             );

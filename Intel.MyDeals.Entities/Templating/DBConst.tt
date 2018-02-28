@@ -599,4 +599,5 @@
 	PopIndent();
 	WriteLine("}"); // namespace
 
+	conn.Close();
 #>

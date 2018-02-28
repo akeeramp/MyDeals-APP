@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/12/2018 4:20:38 PM
+File Updated: 2/27/2018 9:02:07 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2475,6 +2475,7 @@ namespace Intel.MyDeals.Entities {
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
+		public const string EMP_CHG_THRESHOLD = "EMP_CHG_THRESHOLD";
 		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
@@ -2524,6 +2525,7 @@ namespace Intel.MyDeals.Entities {
 
 	public static class WorkFlowStages {
 		public const string Active = "Active";
+		public const string All_WF_Stages = "All WF Stages";
 		public const string Approved = "Approved";
 		public const string Cancelled = "Cancelled";
 		public const string Complete = "Complete";
@@ -2535,7 +2537,6 @@ namespace Intel.MyDeals.Entities {
 		public const string Pending = "Pending";
 		public const string Requested = "Requested";
 		public const string Submitted = "Submitted";
-		public const string Test = "Test";
 	}
 
 

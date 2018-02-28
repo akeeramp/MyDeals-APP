@@ -733,4 +733,6 @@
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 
+	conn.Close();
+
 #>

@@ -255,7 +255,8 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     Attributes.WF_STG_CD.ATRB_SID,
                     Attributes.BID_STATUS.ATRB_SID,
-                    Attributes.REBATE_TYPE.ATRB_SID
+                    Attributes.REBATE_TYPE.ATRB_SID,
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
                 };
 
                 var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive, opDataElementTypesActive, atrbsActive);

@@ -136,7 +136,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         // clear global check
         document.getElementById('all_rad_approve').checked = false;
         document.getElementById('all_rad_revise').checked = false;
-        document.getElementById('all_rad_cancel').checked = false;
+        //document.getElementById('all_rad_cancel').checked = false; // Appears to have been removed somewhere
     }
 
     $scope.clkAllRow = function (e, className) {
