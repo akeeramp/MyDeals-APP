@@ -125,7 +125,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
             scope.blend = {
                 //checkboxes refuse to ng-bind to bool primitives...
-                blended: (scope.value.indexOf("[") > -1)
+                blended: (scope.value !== undefined && scope.value.indexOf("[") > -1)
             };
 
             scope.getWidth = function (length) {

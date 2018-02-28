@@ -259,6 +259,19 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+            //    Width = 100,
+            //    IsDefaultable = true,
+            //    UiType = "BUTTONGROUP",
+            //    LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/All_Deals",
+            //    LookupText = "DROP_DOWN",
+            //    LookupValue = "DROP_DOWN"
+            //});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
