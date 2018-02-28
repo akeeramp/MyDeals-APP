@@ -179,6 +179,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CONTRACT_PRODUCT = DB.GetReaderOrdinal(rdr, "CONTRACT_PRODUCT");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
+                    int IDX_END_CUSTOMER = DB.GetReaderOrdinal(rdr, "END_CUSTOMER");
                     int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_PDF_FILE = DB.GetReaderOrdinal(rdr, "PDF_FILE");
@@ -194,6 +195,7 @@ namespace Intel.MyDeals.DataLibrary
                             CONTRACT_PRODUCT = (IDX_CONTRACT_PRODUCT < 0 || rdr.IsDBNull(IDX_CONTRACT_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CONTRACT_PRODUCT),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
+                            END_CUSTOMER = (IDX_END_CUSTOMER < 0 || rdr.IsDBNull(IDX_END_CUSTOMER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER),
                             OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             PDF_FILE = (IDX_PDF_FILE < 0 || rdr.IsDBNull(IDX_PDF_FILE)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_PDF_FILE),
@@ -274,10 +276,11 @@ namespace Intel.MyDeals.DataLibrary
                 !string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.REBATE_TYPE))
             {
                 var custNm = EscapeSpecialChars(quoteLetterData.ContentInfo.CUST_NM);
+                var endcust = EscapeSpecialChars(quoteLetterData.ContentInfo.END_CUSTOMER);
                 var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.CONTRACT_PRODUCT).Split(',')[0];
                 var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
-
-                fileName = $"{custNm} {sku} {ecapType} {dealId}.pdf";
+                
+                fileName = $"{custNm} {(ecapType.ToUpper() == "TENDER" ? endcust : string.Empty)} {sku} {ecapType} {dealId}.pdf";
             }
 
             var inNegotiation = string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR) || quoteLetterData.ContentInfo.TRKR_NBR.IndexOf("*") >= 0;

@@ -71,7 +71,7 @@
                 .then(function (response) {
                     var file = new Blob([response.data], { type: 'application/pdf' });
                     var fileURL = URL.createObjectURL(file);
-                    // Work around to avoid being blocked by chrome pop up blocker indicating this is untrusted location
+                    // Work around to avoid being blocked by chrome pop up blocker indicating this is untrusted location - VN
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.href = fileURL;
