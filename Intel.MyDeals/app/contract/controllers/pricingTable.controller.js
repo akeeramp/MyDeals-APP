@@ -2939,6 +2939,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         root.setBusy("", "");
                         $timeout(function () {
+                            if (transformResult.AbortProgration) {
+                                return true;
+                            }
                             if (!publishWipDeals) {
                                 root.validatePricingTable();
                             } else {

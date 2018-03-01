@@ -1048,6 +1048,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         vm.curRowData = [];
         vm.curRowProds = [];
         GetProductCorrectorData.AutoValidatedProducts = util.deepClone(GetProductCorrectorData.ValidProducts);
+        GetProductCorrectorData['AbortProgration'] = true;
         $uibModalInstance.close(GetProductCorrectorData);
     }
 
