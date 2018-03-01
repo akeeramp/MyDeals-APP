@@ -95,7 +95,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             GetDealQuoteLetterData(quoteLetterDealInfoList, 2); 
             foreach (var qlData in quoteLetterDealInfoList)
-                GenerateQuoteLetterPDF(qlData);  
+                GenerateQuoteLetterPDF(qlData, true);  // Force quote letter generation when a deal is approved (part of deal Approval flow)
         }
 
         public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)
@@ -260,7 +260,7 @@ namespace Intel.MyDeals.DataLibrary
             return quoteLetterDealInfoList;
         }
 
-        private QuoteLetterFile GenerateQuoteLetterPDF(QuoteLetterData quoteLetterData)
+        private QuoteLetterFile GenerateQuoteLetterPDF(QuoteLetterData quoteLetterData, bool forceRegenerateQuoteLetter = false)
         {            
             byte[] quoteLetterBytes;
             string dealId = quoteLetterData.ObjectSid;
@@ -290,7 +290,8 @@ namespace Intel.MyDeals.DataLibrary
             {
 
                 // If there is an existing PDF file exists in DB, use the existing one
-                if (!inNegotiation && quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
+                if (!inNegotiation && !forceRegenerateQuoteLetter && 
+                    quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
                 {
                     quoteLetterBytes = quoteLetterData.ContentInfo.PDF_FILE;
                 }
@@ -306,7 +307,7 @@ namespace Intel.MyDeals.DataLibrary
                     quoteLetterBytes = ms.ToArray();
 
                     // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
-                    if (!inNegotiation)
+                    if (!inNegotiation || forceRegenerateQuoteLetter)
                         SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
                 }
             }
