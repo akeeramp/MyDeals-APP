@@ -144,7 +144,10 @@
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
                     @*<li><a href="/error/ResetAVM">Clear View Model</a></li>*@
-                    <li><a id="clearViewModelLink" href="/error/ResetAVM" onclick="clearSessionData(); return false;">Clear View Model</a></li>
+                    @if (isDeveloper)
+                    {
+                        <li><a id="clearViewModelLink" href="/error/ResetAVM" onclick="clearSessionData(); return false;">Clear View Model</a></li>
+                    }
                     <li><a href="Admin#/employee">Set Your Role</a></li>
 
                     @if (isDeveloper)
