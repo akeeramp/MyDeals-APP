@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/27/2018 9:02:07 PM
+File Updated: 3/1/2018 4:59:21 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -835,7 +835,7 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3676
 		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
+		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string EXPIRE_FLG = "EXPIRE_FLG";
 
