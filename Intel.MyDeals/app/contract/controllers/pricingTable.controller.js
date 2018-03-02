@@ -221,7 +221,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-    $scope.applySpreadsheetMerge = function (w) {
+    $scope.applySpreadsheetMerge = function () {
         var c, letter;
         var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet.activeSheet();
@@ -799,27 +799,29 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    }
 							    // Find/get all occurances with deal-grp-nm
 							    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-							        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
-							            prevValues.push(angular.copy(data[i]));
+							    	if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+							    		for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1); j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM, so we want to backtrack to include the other tiers within that group 
+							    			prevValues.push(angular.copy(data[j]));
 
-							            if (data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							                // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
-							                //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
+							    			if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+							    				// HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
+							    				//		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
 
-							                numOfExistingTiers++;
+							    				numOfExistingTiers++;
 
-							                if (parseInt(data[i]["TIER_NBR"]) == 1) {
-							                    continue;
-							                }
-							            }
-							            else {
-							                if (i < originalExistingIndex) {
-							                    // the original index will change if the row is above the original and gets spliced
-							                    originalExistingIndex -= 1;
-							                }
-							                // "delete" the rows to merge
-							                data.splice(i, 1);
-							            }
+							    				if (parseInt(data[j]["TIER_NBR"]) == 1) {
+							    					continue;
+							    				}
+							    			}
+							    			else {
+							    				if (j < originalExistingIndex) {
+							    					// the original index will change if the row is above the original and gets spliced
+							    					originalExistingIndex -= 1;
+							    				}
+							    				// "delete" the rows to merge
+							    				data.splice(j, 1);
+							    			}
+							    		}
 							        }
 							    }
 							    var numOfDuplicates = 0;
@@ -868,14 +870,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    }
 							    // Recalculate KIT Rebate
 							    // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-							    data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(originalExistingCopy["NUM_OF_TIERS"]), false);
+							    data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(data[originalExistingIndex]["NUM_OF_TIERS"]), false);
 
 							    data[originalExistingIndex]['dirty'] = true;
 							    sourceData[originalExistingIndex]['dirty'] = true;
 
-							    //sync
-							    root.spreadDs.sync();
-							    $scope.applySpreadsheetMerge();
+								//sync
+							    spreadDsSync();
 							    clearUndoHistory();
 							    root.child.setRowIdStyle(data);
 
@@ -893,14 +894,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							            data[i]["dirty"]= true;
 							        }
 							    }
-							    root.spreadDs.sync();
+							    spreadDsSync();
 							}
 						);
                     }
                 }
 
-                // sync
-                root.spreadDs.sync();
+            	// sync
+            	spreadDsSync();
             }
         }
 
@@ -998,7 +999,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 );
                 cleanupData(data);
-                root.spreadDs.sync();
+                spreadDsSync();
             }
         }
 
@@ -1033,8 +1034,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     data.splice(rowStart, numToDel);
 
-                                    // now apply array to Datasource... one event triggered
-                                    root.spreadDs.sync();
+                                	// now apply array to Datasource... one event triggered
+                                    spreadDsSync();
 
                                     $timeout(function () {
                                         var n = data.length + 2;
@@ -1063,10 +1064,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
-                    cleanupData(data);
-                    root.spreadDs.sync();
+                	cleanupData(data);
+                	spreadDsSync();
                     $timeout(function () {
-                        var cnt = 0;
+                    	var cnt = 0;
 
                         for (var c = 0; c < data.length; c++) {
                             if (data[c].DC_ID !== null) cnt++;
@@ -1524,8 +1525,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (pivotDim > numPivotRows) pivotDim = 1;
                 }
 
-                // now apply array to Datasource... one event triggered
-                root.spreadDs.sync();
+                spreadDsSync();
 
                 sheet.batch(function () {
                 	if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
@@ -1637,9 +1637,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     //}
                 });
 
-                $scope.applySpreadsheetMerge();
-
-                root.spreadDs.sync();
+                spreadDsSync();
 
                 root.child.setRowIdStyle(data);
 
@@ -1650,6 +1648,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }, 10);
+    }
+
+    function spreadDsSync() {
+    	root.spreadDs.sync();
+
+    	// NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
+    	if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+    		$scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
+    	}
     }
 
     function GetFirstEdiatableBeforeProductCol() {
@@ -2774,7 +2781,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var sheet = spreadsheet.activeSheet();
             syncSpreadRows(sheet, 2, 200);// This will also call root.spreadDs.sync();
         } else {
-            root.spreadDs.sync();
+        	spreadDsSync();
         }
         if (isAllValidated) {
             root.child.setRowIdStyle(data);
@@ -2925,8 +2932,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var sheet = spreadsheet.activeSheet();
                         syncSpreadRows(sheet, 2, 200); // NOTE: 2 accounts for the top row
                     } else {
-                        deleteRowFromCorrector(data);
-                        root.spreadDs.sync();
+                    	deleteRowFromCorrector(data);
+                    	spreadDsSync();
                     }
                     if (root.spreadDs.data().length === 0) {
                         root.setBusy("No Products Found", "Please add products.", "Warning");
