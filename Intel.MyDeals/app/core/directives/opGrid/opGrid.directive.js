@@ -2447,6 +2447,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     function (targetRegions) { //returns as an array
                         containerDataItem.TRGT_RGN = targetRegions.join();
                         containerDataItem.dirty = true;
+                        $scope._dirty = true;
+                        $scope.root._dirty = true;
 
                         $scope.root.saveCell(containerDataItem, "TRGT_RGN", $scope);
                         //Note: we do not call the below because we do not want target region to update all linked rows.  If we did, uncomment the below line and comment out the one above
@@ -2503,6 +2505,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         containerDataItem.MRKT_SEG = marketSegments;
                         //for some reason I can't get the grid to flag these cells as dirty when changing it via modal, so we manually do it below
                         //containerDataItem.dirty = true;
+                        //$scope._dirty = true;
+                        //$scope.root._dirty = true;
                         //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(containerDataItem, "MRKT_SEG");
 
                         $scope.saveFunctions(containerDataItem, "MRKT_SEG", containerDataItem.MRKT_SEG);
@@ -2540,6 +2544,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         containerDataItem.DEAL_GRP_EXCLDS = result.DEAL_GRP_EXCLDS;
                         containerDataItem.DEAL_GRP_CMNT = result.DEAL_GRP_CMNT;
                         containerDataItem.dirty = true;
+                        $scope._dirty = true;
+                        $scope.root._dirty = true;
 
                         $scope.root.saveCell(containerDataItem, "DEAL_GRP_EXCLDS", containerDataItem.DEAL_GRP_EXCLDS)
                         $scope.root.saveCell(containerDataItem, "DEAL_GRP_CMNT", containerDataItem.DEAL_GRP_CMNT)
