@@ -380,9 +380,9 @@ namespace Intel.MyDeals.DataLibrary
 
                 //This attribute is registered as a system.boolean for its Dot_Net_Data_Type column, but returns a string containing 1/0. 
                 //The DB is returning true/false strings sometimes, 0/1 others. The UI wants a true/false string. So we're converting it on the fly.                                       
-                if(ode.AtrbID == 3676){
-                    ode.AtrbValue = ode.AtrbValue.ToString() == 1.ToString() ? true.ToString() : false.ToString();
-                }
+                //if(ode.AtrbID == 3676){
+                    //ode.AtrbValue = ode.AtrbValue.ToString() == 1.ToString() ? true.ToString() : false.ToString();
+                //}
 
                 odc.DataElements.Add(ode);
             }

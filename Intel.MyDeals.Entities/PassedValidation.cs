@@ -3,8 +3,6 @@
     public enum PassedValidation
     {
         Dirty,
-        Valid,
-        Finalizing,
         Complete
     }
 }

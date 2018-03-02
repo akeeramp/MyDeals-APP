@@ -26,7 +26,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="myDealsData">The unflattened deals collection to pass up to DB.</param>
         /// <param name="data">The flattened UI data format.</param>
         /// <returns></returns>
-        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, bool needToCheckForDelete = true)
+        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, SavePacket savePacket = null)
         {
             // Save Data Cycle: Point 6
             if (data == null) return myDealsData;
@@ -40,7 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (KeyValuePair<OpDataElementType, OpDataCollectorFlattenedList> kvp in data)
             {
-                myDealsData.Merge(kvp.Key, kvp.Value, needToCheckForDelete);
+                myDealsData.Merge(kvp.Key, kvp.Value, savePacket);
 
                 // Clear Passed Validation for PTR and WIP
                 if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
@@ -65,7 +65,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="opType">Which collector type to process.</param>
         /// <param name="data">The flattened UI data format.</param>
         /// <returns></returns>
-        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataElementType opType, OpDataCollectorFlattenedList data, bool needToCheckForDelete = true)
+        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataElementType opType, OpDataCollectorFlattenedList data, SavePacket savePacket = null)
         {
             // Save Data Cycle: Point 5
             // Save Data Cycle: Point 13
@@ -75,6 +75,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> foundIds = new List<int>();
             List<int> wipIds = new List<int>();
+            bool needToCheckForDelete = savePacket?.MyContractToken.NeedToCheckForDelete ?? false;
+            List<int> validIds = savePacket?.ValidateIds ?? new List<int>();
 
             foreach (OpDataCollectorFlattenedItem items in data)
             {
@@ -95,6 +97,8 @@ namespace Intel.MyDeals.BusinessLogic
                 //    foundIds.Add(id);
                 //}
                 foundIds.Add(id);
+
+                //var applicableIds = data.Select(d => d.)
 
                 // Look for WIP Deals that need to be mapped to Parent
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)
@@ -203,6 +207,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (opType == OpDataElementType.WIP_DEAL)
             {
                 List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
+                //List<int> delIds = wipIds.Where(w => validIds.Contains(w) && !foundIds.Contains(w)).Distinct().ToList();
                 AddDeleteActions(myDealsData[OpDataElementType.WIP_DEAL], delIds);
             }
 
@@ -220,7 +225,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (opType == OpDataElementType.PRC_TBL_ROW && needToCheckForDelete)
             {
                 List<int> ptrIds = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(p => p.DcID).ToList();
-                List<int> delIds = ptrIds.Where(w => !foundIds.Contains(w) && w > 0).Distinct().ToList();
+                List<int> delIds = ptrIds.Where(w => validIds.Contains(w) && !foundIds.Contains(w) && w > 0).Distinct().ToList();
                 AddDeleteActions(myDealsData[OpDataElementType.PRC_TBL_ROW], delIds);
             }
 
@@ -627,20 +632,16 @@ namespace Intel.MyDeals.BusinessLogic
                     if (savePacket.ValidateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
                         // only force publish to PTR
-                        PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL
-                            ? PassedValidation.Complete
-                            : savePacket.ForcePublish
-                                ? PassedValidation.Finalizing
-                                : PassedValidation.Valid;
+                        PassedValidation passedValidation = PassedValidation.Complete;
 
                         // Check overlapping
                         if (dc.GetAtrbValue(AttributeCodes.OVERLAP_RESULT).ToString() == "Fail")
                         {
                             // If we are here... we have a valid PTR but overlap issue in WIP... there for PTR should go to Finalizing
-                            passedValidation = opDataElementType == OpDataElementType.WIP_DEAL ? PassedValidation.Dirty : PassedValidation.Finalizing;
+                            passedValidation = opDataElementType == OpDataElementType.WIP_DEAL ? PassedValidation.Dirty : PassedValidation.Complete;
                         }
 
-                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
+                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Complete)
                         {
                             dirtyPtrs.Add(dc.DcID);
                         }
@@ -930,7 +931,7 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 if (!data.ContainsKey(opDataElementType) && !myDealsData.ContainsKey(opDataElementType)) continue;
-                if (myDealsData[opDataElementType].Messages.HighestMessageType == "Error")
+                if (myDealsData.ContainsKey(opDataElementType) && myDealsData[opDataElementType].Messages.HighestMessageType == "Error")
                 {
                     hasCriticalErrors = true;
                 }

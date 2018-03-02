@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Intel.MyDeals.Entities
 {
     public class ContractTransferPacket
@@ -14,5 +16,7 @@ namespace Intel.MyDeals.Entities
         public OpDataCollectorFlattenedList WipDeals { get; set; }
 
         public string EventSource { get; set; }
+        
+        public List<int> PtrDelIds { get; set; }
     }
 }

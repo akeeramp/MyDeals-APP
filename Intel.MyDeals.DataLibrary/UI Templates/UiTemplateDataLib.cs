@@ -962,8 +962,9 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Label = "Deal Expired?",
+                DataType = "string",
                 Width = 90,
-                Template = "#=gridUtils.uiControlWrapper(data, 'EXPIRE_FLG')#"
+                Template = "#=gridUtils.uiBoolControlWrapper(data, 'EXPIRE_FLG')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {

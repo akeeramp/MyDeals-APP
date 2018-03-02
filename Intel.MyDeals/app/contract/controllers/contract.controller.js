@@ -34,6 +34,7 @@
         $scope.switchingTabs = false;
         $scope.maxKITproducts = 10;
         $scope.pc = new perfCacheBlock("Contract Controller", "");
+        $scope.delPtrIds = [];
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -2347,15 +2348,15 @@
                 source = "WIP_DEAL";
                 gData = $scope.wipData;
 
-                for (var iterator = 0; iterator < gData.length; iterator++) {
-                    if (gData[iterator].EXPIRE_FLG === true) {
-                        gData[iterator].EXPIRE_FLG = 1;
+                //for (var iterator = 0; iterator < gData.length; iterator++) {
+                //    if (gData[iterator].EXPIRE_FLG === true) {
+                //        gData[iterator].EXPIRE_FLG = 1;
 
-                    }
-                    else {
-                        gData[iterator].EXPIRE_FLG = 0;
-                    }
-                }
+                //    }
+                //    else {
+                //        gData[iterator].EXPIRE_FLG = 0;
+                //    }
+                //}
 
                 // Wip Deal
                 if (gData !== undefined && gData !== null) {
@@ -2420,12 +2421,13 @@
                 }
             }
 
+            //.filter(function (a) { return a._dirty })
             return {
-                "Contract": modCt,
-                "PricingStrategy": modPs,
+                "Contract": [],
+                "PricingStrategy": [],
                 "PricingTable": curPricingTableData,
-                "PricingTableRow": sData === undefined ? [] : sData,
-                "WipDeals": gData === undefined ? [] : gData,
+                "PricingTableRow": sData === undefined ? [] : sData.filter(function (a) { return a._dirty }),
+                "WipDeals": gData === undefined ? [] : gData.filter(function (a) { return a._dirty }),
                 "EventSource": source,
                 "Errors": errs
             }
@@ -2556,6 +2558,7 @@
 
             util.console("updateContractAndCurPricingTable Started");
             var isDelPtr = !!delPtr && delPtr.length > 0;
+            if (isDelPtr) copyData.PtrDelIds = delPtr;
 
             pc.add(pcUi.stop());
             var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
@@ -2631,6 +2634,7 @@
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.$broadcast('saveComplete', data);
                         $scope.resetDirty();
+                        $scope.delPtrIds = [];
 
                         if (!!toState) {
                             $scope.stealthMode = false;

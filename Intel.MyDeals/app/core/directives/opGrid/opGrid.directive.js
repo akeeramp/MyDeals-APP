@@ -1394,7 +1394,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
                             dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
-                            dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"] === "True" || args.WIP_DEAL[i]["EXPIRE_FLG"] === "1" || args.WIP_DEAL[i]["EXPIRE_FLG"] === 1 || args.WIP_DEAL[i]["EXPIRE_FLG"] === true;  // Old one would break because setting value false = "False"
+                            dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"];
                             dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
                         }
                     }
@@ -1417,7 +1417,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
                             dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
-                            dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"] === "True" || args.WIP_DEAL[i]["EXPIRE_FLG"] === "1" || args.WIP_DEAL[i]["EXPIRE_FLG"] === 1 || args.WIP_DEAL[i]["EXPIRE_FLG"] === true;  // Old one would break because setting value false = "False"
+                            dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"];
                             dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
                         }
 
@@ -1468,6 +1468,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                 }
+            }
+
+            $scope.showBool = function(val) {
+                return val === "1" ? "Yes": " ";
             }
 
             $scope.findDataItemById = function (id) {

@@ -127,6 +127,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.spreadNeedsInitialization = true;
 
+        pricingTableData.data["PRC_ST"] = [];
+        pricingTableData.data["PRC_TBL"] = [];
+
         // Pricing Table data
         root.pricingTableData = pricingTableData.data;
 
@@ -397,7 +400,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     return true;
                 },
                 dealType: function () {
-                    return root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD;
+                    return root.curPricingTable.OBJ_SET_TYPE_CD;
                 }
             }
         });
@@ -615,7 +618,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
         // KIT
-        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
             var dscntPerLnIndex = (root.colToLetter["DSCNT_PER_LN"].charCodeAt(0) - intA);
             var qtyIndex = (root.colToLetter["QTY"].charCodeAt(0) - intA);
@@ -911,7 +914,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //}
 
         // VOL-TIER
-        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
@@ -1387,7 +1390,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
 
                 // For KITs, remove duplicate products. Must be before cleanup()
-                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     for (var r = 0; r < data.length; r++) {
                         if (data[r]["PTR_USER_PRD"] === undefined || data[r]["PTR_USER_PRD"] === null) { continue; }
                         var usrPrdArr = data[r]["PTR_USER_PRD"].split(",");
@@ -1411,7 +1414,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 for (var r = 0; r < data.length; r++) {
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
                         // Calcuate the KIT Rebate in case the number of products/tiers changes
-                        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                             tierNbr = data[r]["TIER_NBR"];
                             if (tierNbr == 1) {
                                 data[r]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, r, data[r]["NUM_OF_TIERS"], false);
@@ -1528,7 +1531,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 spreadDsSync();
 
                 sheet.batch(function () {
-                	if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "KIT") {
+                    if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                 		// HACK: fix column formatting for the first row. Unsure why, but these columns will lose formatting sometimes
                 		var KitEcapRange = sheet.range(root.colToLetter["ECAP_PRICE_____20_____1"] + (topLeftRowIndex));
                 		var KitRebateRange = sheet.range(root.colToLetter["TEMP_KIT_REBATE"] + (topLeftRowIndex));
@@ -2454,7 +2457,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             return enableSplitProducts;
                         },
                         dealType: function () {
-                            return root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD;
+                            return root.curPricingTable.OBJ_SET_TYPE_CD;
                         }
                     }
                 });
@@ -2825,7 +2828,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     return angular.copy(rowData);
                 },
                 dealType: function () {
-                    return angular.copy(root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD);
+                    return angular.copy(root.curPricingTable.OBJ_SET_TYPE_CD);
                 }
             }
         });

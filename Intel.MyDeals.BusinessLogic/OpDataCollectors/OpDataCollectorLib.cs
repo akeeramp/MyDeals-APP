@@ -32,7 +32,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (ids.Any() && opDataElementTypes.Any())
             {
                 DateTime start = DateTime.Now;
-                MyDealsData primaryMyDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data, savePacket.MyContractToken.NeedToCheckForDelete);
+                MyDealsData primaryMyDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data, savePacket);
                 savePacket.MyContractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
                 foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in primaryMyDealsData)
@@ -44,7 +44,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (secondaryIds.Any() && secondaryOpDataElementTypes.Any())
             {
                 DateTime start = DateTime.Now;
-                MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data, savePacket.MyContractToken.NeedToCheckForDelete);
+                MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data, savePacket);
                 savePacket.MyContractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
                 foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in secondaryMyDealsData)
@@ -78,7 +78,7 @@ namespace Intel.MyDeals.BusinessLogic
 			data.PredictIdsAndLevels(out ids, out opDataElementTypes, out opTypeGrp);
 
 			// Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
-			MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data, savePacket.MyContractToken.NeedToCheckForDelete);
+			MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data, savePacket);
 
 			return myDealsData.SavePacketsBase(data, savePacket);
 		}

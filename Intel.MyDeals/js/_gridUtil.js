@@ -42,6 +42,15 @@ gridUtils.uiParentControlWrapper = function (dataItem) {
     return tmplt;
 }
 
+gridUtils.uiBoolControlWrapper = function (dataItem, field) {
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell"';
+    //tmplt += '    <div class="ng-binding vert-center" ng-show="(dataItem.' + field + ' == 1)">Yes</div>';
+    //tmplt += '    <div class="ng-binding vert-center" ng-show="(dataItem.' + field + ' != 1)">No</div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="showBool(dataItem.' + field + ')"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -207,7 +216,7 @@ gridUtils.uiControlEndDateWrapper = function (passedData, field, format) {
     tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
     //tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
     //tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')" ng-class="{\'redfont\': dataItem.EXPIRE_FLG}"></div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')" ng-class="{\'redfont\': dataItem.EXPIRE_FLG == 1}"></div>';
     tmplt += '</div>';
     return tmplt;
 }
@@ -1330,6 +1339,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 var source = parentSource;
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
+                    item._dirty = true;
                     if (!!item["PRD_BCKT"]) {
                         // User can insert row in between for KIT deals
                         var indx = gTools.getLastIndexByDcId(item.DC_ID, source);
@@ -1355,6 +1365,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                     var item = e.data.models[i];
                     if (!!item.DC_ID) {
                         if (!!item["TIER_NBR"]) {
+                            item._dirty = true;
                             var indx = item["TIER_NBR"] - 1;
 
                             for (var j = 0; j < source.length; j++) {
@@ -1363,6 +1374,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                                 }
                             }
                         } else {
+                            item._dirty = true;
                             source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
                         }
                     }
@@ -1378,6 +1390,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 // locate item in original datasource and remove it
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
+                    item._dirty = true;
                     // Remove the last matching row from the source data
                     if (!!item["PRD_BCKT"]) {
                         source.splice(gTools.getLastIndexByDcId(item.DC_ID, source), 1);

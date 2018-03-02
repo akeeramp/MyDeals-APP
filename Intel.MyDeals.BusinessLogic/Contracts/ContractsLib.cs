@@ -188,7 +188,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 data[OpDataElementType.PRC_TBL] = pricingTables;
                 primaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL);
-                secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL);
+                //secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL);
                 secondaryIds = pricingTables.Where(items => items.ContainsKey(AttributeCodes.DC_ID))
                         .Select(items => int.Parse(items[AttributeCodes.DC_ID].ToString())).ToList();
             }
@@ -271,6 +271,8 @@ namespace Intel.MyDeals.BusinessLogic
                     translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl(pt);
                 }
             }
+
+            if (contractAndStrategy.PtrDelIds != null && contractAndStrategy.PtrDelIds.Any()) validationIds.AddRange(contractAndStrategy.PtrDelIds);
 
             SavePacket savePacket = new SavePacket
             {

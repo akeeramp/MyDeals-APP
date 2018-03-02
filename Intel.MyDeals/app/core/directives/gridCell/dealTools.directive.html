@@ -1,7 +1,10 @@
 ﻿
 <div class="dealTools">
-    <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
+    
+    <div class="dirtyTip" ng-show="dataItem._dirty" title="This deal has been modified"></div>
 
+    <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
+    
     <!-- Checkbox -->
     <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
         <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
