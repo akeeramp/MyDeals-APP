@@ -86,6 +86,7 @@
     {
     }
     .isErrorCell {
+        background-color: #ffb3ac;
     }
     .isErrorWrapper .k-state-default.k-picker-wrap, .isErrorWrapper .k-state-default.k-numeric-wrap, .isErrorWrapper .k-state-default.k-dropdown-wrap {
         border: 1px solid #ed8282;
