@@ -22,7 +22,8 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
             $scope.showDetails = false;
 
             $scope.disableEmail = function () {
-                return $scope.$parent.emailData["Approve"] === undefined || $scope.$parent.emailData["Approve"].length === 0;
+                return false;
+                //return $scope.$parent.emailData["Approve"] === undefined || $scope.$parent.emailData["Approve"].length === 0;
             }
 
             $scope.openEmailMsg = function () {
@@ -39,7 +40,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                     msgMapping[$scope.messages[m].KeyIdentifiers[0]] = lastWord($scope.messages[m].Message);
                 }
 
-                var actns = ["Approve"];
+                var actns = ["Approve", "Revise"];
                 var actnList = [];
 
                 var rootUrl = window.location.protocol + "//" + window.location.host;
@@ -49,6 +50,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                     var item = $scope.$parent.emailData[actns[a]];
                     if (!!item) {
                         for (var i = 0; i < item.length; i++) {
+                            item[i].CNTRCT = "#" + $scope.$parent.contractData.DC_ID + " " + $scope.$parent.contractData.TITLE;
                             item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
                             item[i].url = rootUrl + "/advancedSearch#/gotoPs/" + item[i].DC_ID;
                             items.push(item[i]);
@@ -89,16 +91,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                 });
 
                 modalInstance.result.then(function (result) {
-                    debugger;
                 }, function () { });
-                //var url = '/Email/SubmissionNotification';
-                //var form = $('<form action="' + url + '" method="post">' +
-                //  '<input type="text" name="Subject" value="My Deals Submission Notification" />' +
-                //  '<input type="text" name="Body" value="' + actnList.join("\n\n") + '" />' +
-                //  '<input type="text" name="From" value="" />' +
-                //  '</form>');
-                //$('body').append(form);
-                //form.submit();
             }
 
             $scope.$on('refresh', function (event, args) {
