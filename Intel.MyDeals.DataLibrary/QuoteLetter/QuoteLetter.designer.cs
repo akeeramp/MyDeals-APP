@@ -112,20 +112,20 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox2 = new Telerik.Reporting.HtmlTextBox();
             this.htmlTextBox12 = new Telerik.Reporting.HtmlTextBox();
             this.txtStatus = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank1 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank2 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank3 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank4 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank5 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank6 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank7 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank8 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank9 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlank10 = new Telerik.Reporting.HtmlTextBox();
             this.MainContent = new Telerik.Reporting.HtmlTextBox();
             this.pageFooter = new Telerik.Reporting.PageFooterSection();
             this.htmlTextBox18 = new Telerik.Reporting.HtmlTextBox();
             this.pageInfoTextBox = new Telerik.Reporting.TextBox();
-            this.htmlTextBox3 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox14 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox16 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox17 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox19 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox20 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox21 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox22 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox23 = new Telerik.Reporting.HtmlTextBox();
-            this.htmlTextBox24 = new Telerik.Reporting.HtmlTextBox();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeader
@@ -256,16 +256,16 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox2,
             this.htmlTextBox12,
             this.txtStatus,
-            this.htmlTextBox3,
-            this.htmlTextBox14,
-            this.htmlTextBox16,
-            this.htmlTextBox17,
-            this.htmlTextBox19,
-            this.htmlTextBox20,
-            this.htmlTextBox21,
-            this.htmlTextBox22,
-            this.htmlTextBox23,
-            this.htmlTextBox24});
+            this.lblBlank1,
+            this.lblBlank2,
+            this.lblBlank3,
+            this.lblBlank4,
+            this.lblBlank5,
+            this.lblBlank6,
+            this.lblBlank7,
+            this.lblBlank8,
+            this.lblBlank9,
+            this.lblBlank10});
             this.panel1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(3.9378803194267675E-05D), Telerik.Reporting.Drawing.Unit.Inch(0.92503899335861206D));
             this.panel1.Name = "panel1";
             this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(7.53832483291626D), Telerik.Reporting.Drawing.Unit.Inch(23.89996337890625D));
@@ -440,9 +440,10 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox9.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
             this.htmlTextBox9.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
             this.htmlTextBox9.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.htmlTextBox9.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
             this.htmlTextBox9.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.htmlTextBox9.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Ceiling Vol </" +
-    "strong>(Qty)<strong>:</strong></span>";
+    "strong>(Qty)</span>";
             // 
             // htmlTextBox15
             // 
@@ -517,6 +518,7 @@ namespace Intel.MyDeals.DataLibrary
             this.txtQuantity.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.txtQuantity.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
             this.txtQuantity.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.txtQuantity.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
             this.txtQuantity.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.txtQuantity.Value = "";
             // 
@@ -2290,6 +2292,296 @@ namespace Intel.MyDeals.DataLibrary
             this.txtStatus.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.txtStatus.Value = "";
             // 
+            // lblBlank1
+            // 
+            this.lblBlank1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(1.5345742702484131D));
+            this.lblBlank1.Name = "lblBlank1";
+            this.lblBlank1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0926100015640259D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank1.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank1.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank1.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank1.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank1.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank1.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank1.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank1.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank1.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank1.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank1.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank1.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank1.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank1.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank1.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank1.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank1.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank1.Style.Font.Name = "Intel Clear";
+            this.lblBlank1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank1.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank1.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank1.Value = "&nbsp;";
+            // 
+            // lblBlank2
+            // 
+            this.lblBlank2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057788848876953D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
+            this.lblBlank2.Name = "lblBlank2";
+            this.lblBlank2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank2.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank2.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank2.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank2.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank2.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank2.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank2.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank2.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank2.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank2.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank2.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank2.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank2.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank2.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank2.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank2.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank2.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank2.Style.Font.Name = "Intel Clear";
+            this.lblBlank2.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank2.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank2.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank2.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank2.Value = "&nbsp;";
+            // 
+            // lblBlank3
+            // 
+            this.lblBlank3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057788848876953D), Telerik.Reporting.Drawing.Unit.Inch(1.98433518409729D));
+            this.lblBlank3.Name = "lblBlank3";
+            this.lblBlank3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank3.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank3.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank3.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank3.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank3.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank3.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank3.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank3.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank3.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank3.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank3.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank3.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank3.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank3.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank3.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank3.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank3.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank3.Style.Font.Name = "Intel Clear";
+            this.lblBlank3.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank3.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank3.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank3.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank3.Value = "&nbsp;";
+            // 
+            // lblBlank4
+            // 
+            this.lblBlank4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057788848876953D), Telerik.Reporting.Drawing.Unit.Inch(2.2093362808227539D));
+            this.lblBlank4.Name = "lblBlank4";
+            this.lblBlank4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank4.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank4.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank4.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank4.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank4.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank4.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank4.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank4.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank4.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank4.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank4.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank4.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank4.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank4.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank4.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank4.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank4.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank4.Style.Font.Name = "Intel Clear";
+            this.lblBlank4.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank4.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank4.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank4.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank4.Value = "&nbsp;";
+            // 
+            // lblBlank5
+            // 
+            this.lblBlank5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
+            this.lblBlank5.Name = "lblBlank5";
+            this.lblBlank5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank5.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank5.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank5.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank5.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank5.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank5.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank5.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank5.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank5.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank5.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank5.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank5.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank5.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank5.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank5.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank5.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank5.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank5.Style.Font.Name = "Intel Clear";
+            this.lblBlank5.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank5.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank5.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank5.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank5.Value = "&nbsp;";
+            // 
+            // lblBlank6
+            // 
+            this.lblBlank6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
+            this.lblBlank6.Name = "lblBlank6";
+            this.lblBlank6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0926100015640259D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank6.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank6.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank6.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank6.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank6.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank6.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank6.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank6.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank6.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank6.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank6.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank6.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank6.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank6.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank6.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank6.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank6.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank6.Style.Font.Name = "Intel Clear";
+            this.lblBlank6.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank6.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank6.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank6.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank6.Value = "&nbsp;&nbsp;&nbsp;&nbsp;";
+            // 
+            // lblBlank7
+            // 
+            this.lblBlank7.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(2.8843379020690918D));
+            this.lblBlank7.Name = "lblBlank7";
+            this.lblBlank7.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank7.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank7.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank7.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank7.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank7.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank7.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank7.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank7.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank7.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank7.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank7.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank7.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank7.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank7.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank7.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank7.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank7.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank7.Style.Font.Name = "Intel Clear";
+            this.lblBlank7.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank7.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank7.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank7.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank7.Value = "&nbsp;";
+            // 
+            // lblBlank8
+            // 
+            this.lblBlank8.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(3.1093356609344482D));
+            this.lblBlank8.Name = "lblBlank8";
+            this.lblBlank8.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank8.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank8.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank8.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank8.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank8.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank8.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank8.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank8.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank8.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank8.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank8.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank8.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank8.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank8.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank8.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank8.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank8.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank8.Style.Font.Name = "Intel Clear";
+            this.lblBlank8.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank8.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank8.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank8.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank8.Value = "&nbsp;";
+            // 
+            // lblBlank9
+            // 
+            this.lblBlank9.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(3.3094143867492676D));
+            this.lblBlank9.Name = "lblBlank9";
+            this.lblBlank9.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank9.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank9.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank9.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank9.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank9.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank9.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank9.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank9.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank9.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank9.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank9.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank9.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank9.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank9.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank9.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank9.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank9.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank9.Style.Font.Name = "Intel Clear";
+            this.lblBlank9.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank9.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank9.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank9.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank9.Value = "&nbsp;";
+            // 
+            // lblBlank10
+            // 
+            this.lblBlank10.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
+            this.lblBlank10.Name = "lblBlank10";
+            this.lblBlank10.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlank10.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlank10.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank10.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank10.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlank10.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlank10.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlank10.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank10.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank10.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank10.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlank10.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlank10.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank10.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank10.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank10.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank10.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlank10.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlank10.Style.Font.Name = "Intel Clear";
+            this.lblBlank10.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlank10.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlank10.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlank10.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlank10.Value = "&nbsp;";
+            // 
             // MainContent
             // 
             this.MainContent.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(7.8876815678086132E-05D), Telerik.Reporting.Drawing.Unit.Inch(0.20011822879314423D));
@@ -2336,296 +2628,6 @@ namespace Intel.MyDeals.DataLibrary
             this.pageInfoTextBox.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.pageInfoTextBox.StyleName = "PageInfo";
             this.pageInfoTextBox.Value = "=PageNumber";
-            // 
-            // htmlTextBox3
-            // 
-            this.htmlTextBox3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(1.5345742702484131D));
-            this.htmlTextBox3.Name = "htmlTextBox3";
-            this.htmlTextBox3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0926100015640259D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox3.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox3.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox3.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox3.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox3.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox3.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox3.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox3.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox3.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox3.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox3.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox3.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox3.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox3.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox3.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox3.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox3.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox3.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox3.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox3.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox3.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox3.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox3.Value = "&nbsp;";
-            // 
-            // htmlTextBox14
-            // 
-            this.htmlTextBox14.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057788848876953D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
-            this.htmlTextBox14.Name = "htmlTextBox14";
-            this.htmlTextBox14.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox14.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox14.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox14.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox14.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox14.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox14.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox14.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox14.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox14.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox14.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox14.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox14.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox14.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox14.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox14.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox14.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox14.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox14.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox14.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox14.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox14.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox14.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox14.Value = "&nbsp;";
-            // 
-            // htmlTextBox16
-            // 
-            this.htmlTextBox16.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057788848876953D), Telerik.Reporting.Drawing.Unit.Inch(1.98433518409729D));
-            this.htmlTextBox16.Name = "htmlTextBox16";
-            this.htmlTextBox16.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox16.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox16.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox16.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox16.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox16.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox16.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox16.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox16.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox16.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox16.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox16.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox16.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox16.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox16.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox16.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox16.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox16.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox16.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox16.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox16.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox16.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox16.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox16.Value = "&nbsp;";
-            // 
-            // htmlTextBox17
-            // 
-            this.htmlTextBox17.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057788848876953D), Telerik.Reporting.Drawing.Unit.Inch(2.2093362808227539D));
-            this.htmlTextBox17.Name = "htmlTextBox17";
-            this.htmlTextBox17.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox17.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox17.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox17.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox17.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox17.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox17.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox17.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox17.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox17.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox17.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox17.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox17.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox17.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox17.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox17.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox17.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox17.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox17.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox17.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox17.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox17.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox17.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox17.Value = "&nbsp;";
-            // 
-            // htmlTextBox19
-            // 
-            this.htmlTextBox19.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
-            this.htmlTextBox19.Name = "htmlTextBox19";
-            this.htmlTextBox19.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox19.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox19.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox19.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox19.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox19.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox19.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox19.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox19.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox19.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox19.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox19.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox19.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox19.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox19.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox19.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox19.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox19.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox19.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox19.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox19.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox19.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox19.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox19.Value = "&nbsp;";
-            // 
-            // htmlTextBox20
-            // 
-            this.htmlTextBox20.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
-            this.htmlTextBox20.Name = "htmlTextBox20";
-            this.htmlTextBox20.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0926100015640259D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox20.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox20.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox20.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox20.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox20.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox20.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox20.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox20.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox20.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox20.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox20.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox20.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox20.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox20.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox20.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox20.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox20.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox20.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox20.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox20.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox20.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox20.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox20.Value = "&nbsp;&nbsp;&nbsp;&nbsp;";
-            // 
-            // htmlTextBox21
-            // 
-            this.htmlTextBox21.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(2.8843379020690918D));
-            this.htmlTextBox21.Name = "htmlTextBox21";
-            this.htmlTextBox21.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox21.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox21.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox21.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox21.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox21.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox21.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox21.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox21.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox21.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox21.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox21.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox21.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox21.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox21.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox21.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox21.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox21.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox21.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox21.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox21.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox21.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox21.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox21.Value = "&nbsp;";
-            // 
-            // htmlTextBox22
-            // 
-            this.htmlTextBox22.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(3.1093356609344482D));
-            this.htmlTextBox22.Name = "htmlTextBox22";
-            this.htmlTextBox22.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox22.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox22.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox22.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox22.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox22.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox22.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox22.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox22.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox22.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox22.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox22.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox22.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox22.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox22.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox22.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox22.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox22.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox22.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox22.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox22.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox22.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox22.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox22.Value = "&nbsp;";
-            // 
-            // htmlTextBox23
-            // 
-            this.htmlTextBox23.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(3.3094143867492676D));
-            this.htmlTextBox23.Name = "htmlTextBox23";
-            this.htmlTextBox23.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox23.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox23.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox23.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox23.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox23.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox23.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox23.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox23.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox23.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox23.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox23.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox23.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox23.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox23.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox23.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox23.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox23.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox23.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox23.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox23.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox23.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox23.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox23.Value = "&nbsp;";
-            // 
-            // htmlTextBox24
-            // 
-            this.htmlTextBox24.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.4057793617248535D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
-            this.htmlTextBox24.Name = "htmlTextBox24";
-            this.htmlTextBox24.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0987813472747803D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
-            this.htmlTextBox24.Style.BackgroundColor = System.Drawing.Color.White;
-            this.htmlTextBox24.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox24.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox24.Style.BorderColor.Left = System.Drawing.Color.White;
-            this.htmlTextBox24.Style.BorderColor.Right = System.Drawing.Color.White;
-            this.htmlTextBox24.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.htmlTextBox24.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox24.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox24.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox24.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.htmlTextBox24.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.htmlTextBox24.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox24.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox24.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox24.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox24.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.htmlTextBox24.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.htmlTextBox24.Style.Font.Name = "Intel Clear";
-            this.htmlTextBox24.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.htmlTextBox24.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
-            this.htmlTextBox24.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.htmlTextBox24.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox24.Value = "&nbsp;";
             // 
             // QuoteLetter
             // 
@@ -2794,15 +2796,15 @@ namespace Intel.MyDeals.DataLibrary
         private HtmlTextBox htmlTextBox2;
         private HtmlTextBox htmlTextBox12;
         private HtmlTextBox txtStatus;
-        private HtmlTextBox htmlTextBox3;
-        private HtmlTextBox htmlTextBox14;
-        private HtmlTextBox htmlTextBox16;
-        private HtmlTextBox htmlTextBox17;
-        private HtmlTextBox htmlTextBox19;
-        private HtmlTextBox htmlTextBox20;
-        private HtmlTextBox htmlTextBox21;
-        private HtmlTextBox htmlTextBox22;
-        private HtmlTextBox htmlTextBox23;
-        private HtmlTextBox htmlTextBox24;
+        private HtmlTextBox lblBlank1;
+        private HtmlTextBox lblBlank2;
+        private HtmlTextBox lblBlank3;
+        private HtmlTextBox lblBlank4;
+        private HtmlTextBox lblBlank5;
+        private HtmlTextBox lblBlank6;
+        private HtmlTextBox lblBlank7;
+        private HtmlTextBox lblBlank8;
+        private HtmlTextBox lblBlank9;
+        private HtmlTextBox lblBlank10;
     }
 }

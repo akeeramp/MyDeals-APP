@@ -78,7 +78,9 @@ namespace Intel.MyDeals.DataLibrary
 
             string stage = GetValue("WfStgCd");
             string psStage = GetValue("PsWfStgCd");
-            txtStatus.Value = stage == "Draft" ? psStage : stage;
+            string tracker = GetValue("PTracker");
+            txtStatus.Value = tracker == "" ? "Offer" : "Active";
+            //txtStatus.Value = stage == "Draft" ? psStage : stage;
 
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
@@ -163,6 +165,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtK1Ecap.Visible = false;
                 txtK1ProdName.Visible = false;
                 txtK1ProdSeg.Visible = false;
+                lblBlank1.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtK2ProdName.Value))
@@ -171,6 +174,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtK2Ecap.Visible = false;
                 txtK2ProdName.Visible = false;
                 txtK2ProdSeg.Visible = false;
+                lblBlank2.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS1ProdName.Value))
@@ -179,6 +183,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS1Ecap.Visible = false;
                 txtS1ProdName.Visible = false;
                 txtS1ProdSeg.Visible = false;
+                lblBlank3.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS2ProdName.Value))
@@ -187,6 +192,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS2Ecap.Visible = false;
                 txtS2ProdName.Visible = false;
                 txtS2ProdSeg.Visible = false;
+                lblBlank4.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS3ProdName.Value))
@@ -195,6 +201,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS3Ecap.Visible = false;
                 txtS3ProdName.Visible = false;
                 txtS3ProdSeg.Visible = false;
+                lblBlank5.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS4ProdName.Value))
@@ -203,6 +210,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS4Ecap.Visible = false;
                 txtS4ProdName.Visible = false;
                 txtS4ProdSeg.Visible = false;
+                lblBlank6.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS5ProdName.Value))
@@ -211,6 +219,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS5Ecap.Visible = false;
                 txtS5ProdName.Visible = false;
                 txtS5ProdSeg.Visible = false;
+                lblBlank7.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS6ProdName.Value))
@@ -219,6 +228,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS6Ecap.Visible = false;
                 txtS6ProdName.Visible = false;
                 txtS6ProdSeg.Visible = false;
+                lblBlank8.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS7ProdName.Value))
@@ -227,6 +237,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS7Ecap.Visible = false;
                 txtS7ProdName.Visible = false;
                 txtS7ProdSeg.Visible = false;
+                lblBlank9.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS8ProdName.Value))
@@ -235,6 +246,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtS8Ecap.Visible = false;
                 txtS8ProdName.Visible = false;
                 txtS8ProdSeg.Visible = false;
+                lblBlank10.Visible = false;
             }
 
 
