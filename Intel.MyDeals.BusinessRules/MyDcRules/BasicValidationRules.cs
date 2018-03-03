@@ -327,22 +327,22 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-                new MyOpRule
-                {
-                    Title="Make sure End Date is later than Credit Date",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                    AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, AttributeCodes.BLLG_DT),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = MyDeActions.AddMessage,
-                            Args = new object[] {"End date must be greater than any Credit date."},
-                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
-                        }
-                    }
-                },
+                //new MyOpRule
+                //{
+                //    Title="Make sure End Date is later than Credit Date",
+                //    ActionRule = MyDcActions.ExecuteActions,
+                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                //    AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, AttributeCodes.BLLG_DT),
+                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                //    {
+                //        new OpRuleAction<IOpDataElement>
+                //        {
+                //            Action = MyDeActions.AddMessage,
+                //            Args = new object[] {"End date must be greater than any Credit date."},
+                //            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
+                //        }
+                //    }
+                //},
                 new MyOpRule
                 {
                     Title="Default Workflow on Save",
