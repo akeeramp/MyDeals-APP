@@ -76,6 +76,9 @@ namespace Intel.MyDeals.DataLibrary
             txtQuantity.Value = GetValue("Quantity");
             txtProgramPayment.Value = GetValue("ProgramPayment");
 
+            string stage = GetValue("WfStgCd");
+            string psStage = GetValue("PsWfStgCd");
+            txtStatus.Value = stage == "Draft" ? psStage : stage;
 
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
