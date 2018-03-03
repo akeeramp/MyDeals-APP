@@ -133,6 +133,13 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 return ret;
             }
 
+            scope.hasMultipleGeos = function () {
+                if (scope.opCd === "GEO_COMBINED" && scope.value.length > 1) {
+                    return true;
+                }
+                return false;
+            }
+
             scope.updateBlend = function () {
                 if (scope.blend.blended) {
                     scope.value = convertToBlend(scope.value);

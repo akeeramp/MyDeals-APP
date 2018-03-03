@@ -9,7 +9,7 @@
     </div>
     <div class="autofill-settings modal-body">
         <div class="row" style="padding-bottom:50px">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div ng-repeat="(key, value) in vm.autofillData.DEFAULT">
                     <div ng-if="value.type == 'BUTTONGROUP'">
 
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div ng-repeat="(key, value) in vm.autofillData.DEFAULT">
                     <div ng-if="value.type == 'EMBEDDEDMULTISELECT'">
                         <div op-control-data-element

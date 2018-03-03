@@ -566,6 +566,17 @@
         background-color: #0071C5;
     }
 
+    .label-desc {
+        color: #FC4C02;
+        font-size: 11px;
+    }
+
+    .geo-desc {
+        font-size: 11px;
+        font-weight: 200;
+        color: #FC4C02;
+    }
+
     .flatWhiteInput {
         width: 100%;
         padding: 0;
