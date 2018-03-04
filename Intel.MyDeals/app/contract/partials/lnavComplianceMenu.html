@@ -1,7 +1,28 @@
 ﻿<div>
-    <div class="fr navIconLnk" title="Hide Panel" ng-click="toggleLnav()" style="border-left: 1px solid #e8eaec !important;">
+    <div class="fr navIconLnk hint-collapse" title="Noticed your screen resolution is rather small.  We recommend you collapse the left navigation for more screen space." ng-click="toggleLnav()" style="border-left: 1px solid #e8eaec !important;">
+        <i class="intelicon-shrink flip-horizontal"></i>
+    </div>
+    <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" ng-click="toggleLnav()" style="border-left: 1px solid #e8eaec !important;">
         <i class="intelicon-shrink flip-horizontal"></i>
     </div>
 
     <div class="clearboth"></div>
 </div>
+
+<style>
+    .hint-collapse {
+        display: none;
+    }
+
+    @media (max-width: 1000px) {
+        .hint-collapse {
+            background-color: #f3D54E;
+            color: #ffffff;
+            display: inherit;
+        }
+
+        .no-hint-collapse {
+            display: none;
+        }
+    }
+</style>

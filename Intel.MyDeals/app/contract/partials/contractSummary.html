@@ -108,7 +108,7 @@
 </div>
 
 <div id="sum-wrapper">
-    <div id="sum-header">
+    <div id="sum-header" style="min-width: 800px;">
         <div ui-view="summaryContentView"></div>
         <div kendo-tab-strip class="gradTab" ng-if="canFilterDealTypes">
             <ul>
@@ -121,7 +121,6 @@
             </ul>
             <input ng-model="dealTypeFilter" type="hidden" />
         </div>
-
 
         <div class="sum-filter-bar" style="padding: 0 10px;">
             <table style="width: 100%;">
@@ -141,7 +140,7 @@
                                class="with-font" id="all_rad_revise"
                                ng-click="clkAllRow($event, 'psCheck-Revise')" /><label for="all_rad_revise"></label>
                     </td>
-                    <td style="width: 100px; text-align: center;">
+                    <td style="width: 100px; text-align: center;" nowrap>
                         <div class="btn-group">
                             <button class="btn btn-sm btn-skyblue" type="button" ng-click="clearFilter()" title="Click to clear the filter" style="padding: 5px 10px 4px 10px; margin-right: 1px; margin-top: -2px; border-right: 1px solid #0071C5">
                                 <i class="fa fa-filter" aria-hidden="true" style="font-size: 18px;" ng-class="{'filterUsed': hasFilter()}"></i>
@@ -192,7 +191,7 @@
                     <!--<td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Cancel</td>-->
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
-                    <td>Pricing Strategy Name | Table Name</td>
+                    <td style="line-height: 1.1em;">Pricing Strategy / Table Name</td>
                     <!--<td style="width: 100px; text-align: center;"># of Tables</td>-->
                     <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                         <btn-run-pct-mct ng-model="root"
@@ -220,7 +219,7 @@
             <hr />
         </div>
     </div>
-    <div id="sum-container" >
+    <div id="sum-container" style="min-width: 800px;">
         <div class="sum-main-body">
             <div class="sum-main-container">
                 <div ng-repeat="ps in contractData.PRC_ST | filter: summaryFilter" class="sumPsContainer">

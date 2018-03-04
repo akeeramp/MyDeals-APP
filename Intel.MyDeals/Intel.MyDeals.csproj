@@ -405,6 +405,7 @@
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
     <Content Include="app\contract\partials\contractSummaryOverlapping.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
+    <Content Include="app\contract\partials\lnavFlowMini.html" />
     <Content Include="app\contract\partials\ptModals\datePickerModal.html" />
     <Content Include="app\contract\partials\contractSummaryPct.html" />
     <Content Include="app\contract\partials\contractSummaryDealType.html" />

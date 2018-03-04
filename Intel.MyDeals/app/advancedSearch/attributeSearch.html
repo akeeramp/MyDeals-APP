@@ -24,7 +24,7 @@
                             <td style="border: 0px solid transparent;">
                                 <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
-                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Excel<br>Export
                             </td>
                             <td style="border: 0 solid transparent;">
@@ -48,7 +48,7 @@
                             <td style="border: 0px solid transparent;">
                                 <i class="intelicon-cancel-filter-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
-                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Clear Grid's<br>
                                 Sorting/Filtering
                             </td>
@@ -62,7 +62,7 @@
             <ul kendo-menu k-options="columnMenu" style="margin-top: -3px;">
                 <li>
                     <i class="fl intelicon-view-by-columns skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                    <span class="fl skyBlue" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                    <span class="fl skyBlue hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
                     <i style="font-size: 40px !important; width: 1px !important; color: \\#00AEEF;"></i>
                     <ul>
                         <li>
@@ -95,7 +95,7 @@
                         <td style="border: 0px solid transparent;">
                             <i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                         </td>
-                        <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                        <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                             Word<br />Wrap
                         </td>
                     </tr>
@@ -119,48 +119,57 @@
 <div id="horizontal-search">
     <div id="search-info-container" ng-show="showSearchFilters">
         
-        <div class="left-container">
-            <div class="left-inner-container">
+        <div class="row search-container">
+            <div class="col-md-5 left-inner-container">
                 <h5>Search</h5>
                 <p>
                     <i>Default filter is auto populated from the dashboard but you may overwrite at anytime. This will not change your dashboard filters.</i>
                 </p>
 
-                <div style="margin-bottom: 20px;">
-                    <label title="{{showCustomers()}}">Customers: <i class="intelicon-find-a-person-solid" style="font-size: 20px; "></i></label>
-                    <select kendo-multi-select
-                            k-data-text-field="'CUST_NM'"
-                            k-data-value-field="'CUST_NM'"
-                            k-filter="'contains'"
-                            k-auto-bind="true"
-                            k-tag-mode="'single'"
-                            k-value-primitive="true"
-                            k-ng-model="customers"
-                            k-auto-close="false"
-                            k-data-source="customersDataSource"
-                            style="width: 258px; margin-right: 7px;" class="fr"></select>
+                <div style="margin-bottom: 20px;" class="fl">
+                    <table>
+                        <tr>
+                            <td style="width: 130px;">
+                                <label title="{{showCustomers()}}">Customers: <i class="intelicon-find-a-person-solid" style="font-size: 20px;"></i></label>
+                            </td>
+                            <td>
+                                <select kendo-multi-select
+                                        k-data-text-field="'CUST_NM'"
+                                        k-data-value-field="'CUST_NM'"
+                                        k-filter="'contains'"
+                                        k-auto-bind="true"
+                                        k-tag-mode="'single'"
+                                        k-value-primitive="true"
+                                        k-ng-model="customers"
+                                        k-auto-close="false"
+                                        k-data-source="customersDataSource"
+                                        style="width: 250px; margin-right: 7px;"></select>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    
                 </div>
 
-                <div>
+                <div class="fl">
                     <label>Date Range:</label>
                     <input kendo-date-picker
                            ng-model="startDt"
                            ng-change="changeDt(startDate,endDate)"
                            k-ng-model="startDtObject"
-                           style="width: 110px;"/>
+                           style="width: 110px;" />
                     <span style="margin: 0 10px;">to</span>
                     <input kendo-date-picker
                            ng-model="endDt"
                            ng-change="changeDt(startDate,endDate)"
                            k-ng-model="endDtObject"
-                           style="width: 110px;"/>
+                           style="width: 110px;" />
                 </div>
+                
+                <div class="clearboth"></div>
             </div>
-        </div>
-
-        <div class="right-container">
-            <div class="right-inner-container">
-                <div attribute-builder 
+            <div class="col-md-7 right-inner-container">
+                <div attribute-builder
                      grid-id="'attributeGrid'"
                      operator-settings="operatorSettings"
                      attribute-settings="attributeSettings"></div>
@@ -221,7 +230,7 @@
     #search-info-container .left-inner-container {
         border: 1px solid transparent;
         border-radius: 6px;
-        padding: 20px 10px 20px 20px;
+        padding: 0 10px 20px 10px;
     }
 
     #search-info-container .right-container {
@@ -273,5 +282,8 @@
     }
     .objDealId:hover {
         color: #003C71;
+    }
+    .search-container {
+        padding: 25px 20px;
     }
 </style>

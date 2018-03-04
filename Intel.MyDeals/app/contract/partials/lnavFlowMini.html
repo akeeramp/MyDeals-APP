@@ -1,0 +1,66 @@
+﻿<div class="navIconLnk" title="Deal Entry" ng-click="toggleLnav();gotoDealEntry()">
+    <i class="fa fa-pencil-square-o nav-icn" aria-hidden="true"></i>
+</div>
+
+<div class="navIconLnk" title="Meet Comp" ng-click="gotoCompliance()">
+    <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
+</div>
+
+<div class="navIconLnk dropdown" title="Contract Manager">
+    <a class="dropdown-toggle" role="button" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown">
+        <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
+        <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
+    </a>
+    <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+        <li role="presentation">
+            <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+        </li>
+        <li role="presentation">
+            <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+        </li>
+        <li role="presentation" ng-if="CAN_VIEW_COST_TEST">
+            <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+        </li>
+        <li role="presentation" ng-if="CAN_VIEW_EXPORT">
+            <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+        </li>
+        <li role="presentation" ng-if="CAN_VIEW_ALL_DEALS">
+            <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+        </li>
+    </ul>
+</div>
+
+<style>
+    .navTextLnk {
+        font-size: 10px;
+        text-align: center;
+        color: #ffffff;
+        line-height: 1.2em;
+        height: 40px;
+        padding: 7px 0;
+        background-color: #00AEEF;
+        cursor: pointer;
+        border-top: 1px solid #0071C5;
+    }
+
+    .navTextLnk:hover {
+        background-color: #0071C5;
+    }
+
+    .navTextLnk a i, .navIconLnk a i {
+        color: #00AEEF;
+    }
+    .navIconLnk:hover a i {
+        color: #FFFFFF;
+    }
+
+    .navTextLnk .nav-icn, .navIconLnk .nav-icn {
+        font-size: 20px; 
+        margin-top: 4px;
+    }
+    .navTextLnk .nav-extra, .navIconLnk .nav-extra {
+        font-size: 14px; 
+        vertical-align: super; 
+        margin-left: 1px;
+    }
+</style>

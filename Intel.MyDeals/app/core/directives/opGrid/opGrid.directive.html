@@ -26,7 +26,7 @@
                             <td>
                                 <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i>
                             </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
                                 <span class="text">
                                     Save & Validate
                                 </span>
@@ -41,7 +41,7 @@
                             <td>
                                 <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                             </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
                                 Show/Hide<br />Additional Discounts
                             </td>
                         </tr>
@@ -51,7 +51,7 @@
             </div>
             
             <div class="fr" style="margin-top: 2px;">
-                <span class="k-textbox k-space-left" style="width: 300px; font-size: 16px">
+                <span class="k-textbox k-space-left opGridSearchInput">
                     <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search..." ng-model="searchFilter" />
                     <a ng-click="searchGrid()" class="k-icon" style="width: 30px; margin-left: -3px; margin-top: -12px; height: 25px;">
                         <i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i>
@@ -67,7 +67,7 @@
                                 <td style="border: 0 solid transparent;">
                                     <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                                 </td>
-                                <td style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent;">
+                                <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent;">
                                     Excel<br>Export
                                 </td>
                                 <td>
@@ -87,7 +87,7 @@
                 <ul kendo-menu>
                     <li>
                         <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                        <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
+                        <span class="fl hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
                         <i style="font-size: 40px !important; width: 1px !important;"></i>
                         <ul>
                             <li ng-click="addTab()">
@@ -114,7 +114,7 @@
                 <ul kendo-menu k-options="columnMenu">
                     <li>
                         <i class="fl intelicon-view-by-columns" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                        <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                        <span class="fl hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
                         <i style="font-size: 40px !important; width: 1px !important;"></i>
                         <ul>
                             <li>
@@ -147,7 +147,7 @@
                             <td>
                                 <i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                             </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
                                 Word<br />Wrap
                             </td>
                         </tr>
@@ -706,4 +706,19 @@
     .toggleSelect {
         background-color: #eeeeee !important;
     }
-=</style>
+
+    .opGridSearchInput {
+        width: 300px; 
+        font-size: 16px
+    }
+    @media (max-width: 1180px) {
+        .opGridSearchInput {
+            width: 200px; 
+        }
+    }
+    @media (max-width: 1100px) {
+        .opGridSearchInput {
+            width: 140px; 
+        }
+    }
+</style>

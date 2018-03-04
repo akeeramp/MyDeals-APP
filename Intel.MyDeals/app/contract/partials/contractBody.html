@@ -32,7 +32,7 @@
 
             <div>
                 <div ui-view="pricingTableView" class="fullHeight">
-                    <div ng-include="'app/contract/partials/info.html'" style="overflow: auto !important;"></div>
+                    <div ng-include="'app/contract/partials/info.html'" style="overflow: auto !important; height: 100%;"></div>
                 </div>
             </div>
 
@@ -191,6 +191,20 @@
     }
     .showMore:hover {
         color: #0071C5;
+    }
+
+    .hint-collapse {
+        display: none;
+    }
+    @media (max-width: 1000px) {
+        .hint-collapse {
+            background-color: #f3D54E;
+            color: #ffffff;
+            display: inherit;
+        }
+        .no-hint-collapse {
+            display: none;
+        }
     }
 </style>
 

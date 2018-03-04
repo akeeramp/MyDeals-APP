@@ -7,10 +7,21 @@
     overflow: hidden;
 }
 
+.prodSelectorSearch .prod-autocomplete {
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 400px !important;
+}
+@media (max-width: 1100px) {
     .prodSelectorSearch .prod-autocomplete {
-        padding-top: 0px;
-        padding-bottom: 0px;
+        width: 240px !important;
     }
+}
+@media (max-width: 800px) {
+    .prodSelectorSearch .prod-autocomplete {
+        width: 180px !important;
+    }
+}
 
 .textProdSelector {
     font-size: 21px;
@@ -25,7 +36,19 @@
 
 .prodHeader {
     color: white;
-    font-size: 32px;
+    font-size: 26px;
+}
+@media (max-width: 1100px) {
+    .prodHeader {
+        font-size: 20px;
+        padding-top: 8px;
+    }
+}
+@media (max-width: 800px) {
+    .prodHeader {
+        font-size: 18px;
+        padding-top: 8px;
+    }
 }
 
 .breadCrumbWrapper {
@@ -37,9 +60,9 @@
 .modalCloseIcon {
     color: white;
     font-size: 32px;
-    padding-top: 12px;
+    padding-top: 0;
     padding-left: 20px;
-}
+    margin-top: -8px;}
 
 .productSelectorpath.breadcrumb > li + li:before {
     padding: 0 5px;
@@ -161,6 +184,12 @@ a.prdAnchor {
 .prdBtn {
     font-size: 13px;
 }
+@media (max-width: 1300px) {
+    .prdBtn {
+        padding: 6px;
+    }
+}
+
 
     .prdBtn.btn-primary {
         background-color: #01AEEF;
@@ -304,7 +333,7 @@ a.prdAnchor {
 }
 
 .prdSelector-modal-window, .modal-dialog {
-    width: 85%;
+    width: 95%;
     margin-left: auto;
     margin-right: auto;
 }

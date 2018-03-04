@@ -196,7 +196,7 @@
     }
     #subContainer {
         height: 100%;
-        overflow: hidden;
+        /*overflow: hidden;*/
         min-height: 50px;
     }
 

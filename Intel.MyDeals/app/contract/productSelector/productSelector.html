@@ -2,28 +2,25 @@
 <div class="product-selector modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;;">
     <div class="prodSelector modal-header">
         <div class="row">
-            <div class="col-md-3">
-                <p class="prodHeader cursorArea">Product Selector</p>
+            <div class="col-md-4 col-sm-4 col-xs-4">
+                <p class="prodHeader cursorArea">Product Selector <img ang-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></p>
+                
             </div>
-            <div class="col-md-1" style="padding-top:15px;">
-                <img ng-if="loading" src="/Images/loadingSmall.gif" />
-            </div>
-            <div class="col-md-5 prodSelectorSearch">
-                <!--<div class="input-group">-->
-                <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
+            <div class="col-md-8 col-sm-8 col-xs-8 prodSelectorSearch">
+                <div class="modalCloseIcon fr">
+                    <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
+                </div>
+                <button class="btn btn-default prdBtn fr" ng-click="vm.clearSearch()" style="margin: 0 0 0 8px;">Clear</button>
+                <button class="btn btn-primary prdBtn fr" ng-click="vm.searchProduct()" style="margin: 0 0 0 10px;">Search</button>
+                <input id="productSearch"
+                       class="prod-autocomplete fr form-control input-sm"
+                       ng-model="vm.userInput"
+                       ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null"
+                       type="text"
+                       kendo-autocomplete
+                       k-options="vm.productOptions"
                        k-data-value-field="'PRD_MBR_SID'" />
-                <!--<span class="input-group-addon">
-                    <input role="button" type="checkbox" title="Show suggestions within the global filters" ng-model="vm.searchWithinFilters">
-                </span>-->
-                <!--</div>-->
             </div>
-            <div class="col-md-2" style="padding-left:0px;padding-top:8px">
-                <button class="btn btn-primary prdBtn" ng-click="vm.searchProduct()">Search</button>
-                <button class="btn btn-default prdBtn" ng-click="vm.clearSearch()" style="margin-left:2px;">Clear</button>
-            </div>
-            <span class="modalCloseIcon">
-                <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
-            </span>
         </div>
         <div ng-if="!vm.showTree" class="row breadCrumbWrapper">
             <ul class="productSelectorpath breadcrumb">

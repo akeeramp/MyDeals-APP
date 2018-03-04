@@ -2,10 +2,10 @@
     <div style="padding-left:10px;padding-right:10px">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
-                <div class="col-sm-5 cursorArea" style="padding-left:0px">
+                <div class="col-sm-5 col-xs-5 cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
                 </div>
-                <div class="col-sm-6 text-center headerMsg">
+                <div class="col-sm-6 col-xs-6 text-center headerMsg">
                     <span ng-if="vm.issueRowKeys.length <= 1">
                         MyDeals needs help with your entered product
                     </span>
@@ -477,6 +477,19 @@
         color: white;
         font-size: 32px;
     }
+    @media (max-width: 1000px) {
+        .prodText {
+            font-size: 26px;
+        }
+    }
+    @media (max-width: 900px) {
+        .prodText {
+            font-size: 22px;
+        }
+        .subHeaderMsg {
+            font-size: 15px;
+        }
+    }
 
     .rowNavPanel {
         color: white;
@@ -721,7 +734,7 @@
     }
 
     .prdCorrector-modal-window, .modal-dialog {
-        width: 85%;
+        width: 95%;
         margin-left: auto;
         margin-right: auto;
     }

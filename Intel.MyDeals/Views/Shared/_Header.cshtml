@@ -57,12 +57,6 @@
             <tr>
                 <td>
                     <div class="navbar-header">
-                        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#myDeals-navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="sr-only icon-bar"></span>
-                            <span class="sr-only icon-bar"></span>
-                            <span class="sr-only icon-bar"></span>
-                        </button>
                         <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
                         <a class="navbar-brand" href="@Url.Action("Index", "Home", new {Area = ""})">MyDeals</a>
                     </div>
@@ -140,7 +134,7 @@
                 however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#"><i class="intelicon-settings-solid"></i> Admin <i class="intelicon-down"></i></a>
+                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
                     @*<li><a href="/error/ResetAVM">Clear View Model</a></li>*@

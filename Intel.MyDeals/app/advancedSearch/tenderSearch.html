@@ -15,7 +15,7 @@
                style="width: 110px;" />
 
         <span class="t-tip" kendo-tooltip k-position="'top'" k-content="'{{opOptions.messages.help}}'">
-            <span class="k-textbox" style="width: 300px; margin: 0 5px 0 15px;">
+            <span class="k-textbox tenderSearchInput">
                 <input type="text" placeholder="enter search criteria" ng-model="root.searchText" ng-keypress="EnterPressed($event)" />
             </span>
         </span>
@@ -29,7 +29,7 @@
                             <td style="border: 0px solid transparent;">
                                 <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
-                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Excel<br>Export
                             </td>
                             <td style="border: 0 solid transparent;">
@@ -53,7 +53,7 @@
                             <td style="border: 0px solid transparent;">
                                 <i class="intelicon-cancel-filter-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
-                            <td style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                            <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Clear All<br>
                                 Sorting/Filtering
                             </td>
@@ -67,7 +67,7 @@
             <ul kendo-menu k-options="columnMenu" style="margin-top: -3px;">
                 <li>
                     <i class="fl intelicon-view-by-columns skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                    <span class="fl skyBlue" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                    <span class="fl skyBlue hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
                     <i style="font-size: 40px !important; width: 1px !important; color: \\#00AEEF;"></i>
                     <ul>
                         <li>
@@ -142,5 +142,14 @@
 
     .k-multiselect {
         width: 360px;
+    }
+    .tenderSearchInput {
+        width: 300px; 
+        margin: 0 5px 0 15px;
+    }
+    @media (max-width: 1150px) {
+        .tenderSearchInput {
+            width: 180px; 
+        }
     }
 </style>
