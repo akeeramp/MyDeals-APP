@@ -3,117 +3,195 @@
     Layout = "~/Views/Shared/_LayoutBlank.cshtml";
 }
 
-<img src="/images/intelMyDeals.png" id="intelLogo" />
-
-<div class="outer">
-    <div class="middle">
-        <div class="inner">
-            <img src="/images/NoAccess.png" />
-            <div class="innertxt">
-                <p>
-                    It appears you do not have access to MyDeals. <br/>
-                    Please go to <a href="http://eam.intel.com/eamweb/">http://eam.intel.com/eamweb/</a> to request access to MyDeals.
-                </p>
-                <p style="font-size: 10px;">
-                    @if (Model != null)
-                    {
-                        @Html.Raw("<b>Details</b>:&nbsp;")
-                        @Model.Exception.Message
-                    }
-                </p>
-                <button id="btnHome">Take me back to the Homepage</button>
-            </div>
-
-        </div>
-    </div>
+<div class="noaccess-header">
+    <img src="/images/intel-logo-white-100.png" id="intelLogo" />
+    <span class="main-logo-title">My Deals</span>
+    <i class="fr intelicon-help-solid" style="color: #ffffff; font-size: 30px; margin-top: 5px;"></i>
+    
 </div>
 
+<div class="container-fluid">
+    <div class="row">
+        <h1>It appears you do not have access to the My Deals tool...</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="info-container">
+                <h3>Main User Rules</h3>
+                <div class="info-box-container">
 
+                    <div class="role-title">
+                        FSE - Field Sales Engineer
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
 
+                    <div class="role-title">
+                        GA - Geo Approver
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
 
+                    <div class="role-title">
+                        SGA - Super Geo Approver
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
 
-<script>
-    $("#btnHome").kendoButton({
-        click: function() {
-            document.location.href = "@Url.Action("Index", "Home")";
-        }
-    });
-</script>
+                    <div class="role-title">
+                        DA - Division Approver
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="info-container">
+                <h3>Support Roles</h3>
+                <div class="info-box-container">
+
+                    <div class="role-title">
+                        RA - Rebate Analyst
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
+
+                    <div class="role-title">
+                        Legal - Legal Representative
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
+
+                    <div class="role-title">
+                        Finance - Finance Support
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
+
+                    <div class="role-title">
+                        SA - System Administrator
+                        <div class="fr lnk"><a href="https://ags.intel.com">Apply <i class="intelicon-right-next"></i></a></div>
+                    </div>
+                    <div class="role-desc">
+                        Put some description of the role in here.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h2>To gain access please visit <a href="https://ags.intel.com">AGS</a> and select one of the described roles above.</h2>
+    </div>
+</div>
 
 
 <style>
     body {
         height: 100%;
-        background-color: #000000;
-        color: #ffffff;
-        background-image: url(/images/security.png);
-        background-size: cover;
-    }
-
-    .outer {
-        display: table;
-        position: absolute;
-        height: 100%;
-        width: 100%;
-    }
-
-    .middle {
-        height: 100%;
-        display: table-cell;
-        vertical-align: bottom;
-    }
-
-    .innertxt {
-        width: 600px;
-        padding: 0 20px;
-    }
-
-    .innertxt a {
-        color: #FFA300;
-    }
-
-    p {
+        background-color: #FFFFFF;
+        color: #000000;
         font-family: "Intel Clear", "Arial";
         font-size: 16px;
     }
 
+    #intelLogo {
+        width: 50px;
+        height: 33px;   
+    }
+    .main-logo-title {
+        margin-left: 8px;
+    }
+
+    .lnk {
+        font-weight: normal;
+        font-weight: 200;
+    }
+    .lnk a {
+        color: #00AEEF;
+    }
+
+    .noaccess-header {
+        background-color: #0071C5;
+        color: #ffffff;
+        height: 70px;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .info-container {
+        text-align: center;
+    }
+
+    .info-box-container {
+        border: 1px solid #d7d7d7;
+        border-radius: 6px;
+        padding: 30px;
+        margin: 10px 50px;
+        text-align: left;
+    }
+
     h1 {
         font-family: "Intel Clear", "Arial";
-        font-size: 80px;
+        font-size: 30px;
         font-weight: bold;
         font-weight: 700;
         font-style: normal;
-        margin-bottom: 0;
-        padding-bottom: 0;
+        margin: 40px 10px 20px 10px;
+        text-align: center;
     }
 
-    pre {
-        margin: 10px;
-    }
-
-    .debugWin {
-        overflow: scroll;
-        background-color: #000000;
-        background-color: rgba(0, 0, 0, 0.7);
-        height: 120px;
-        width: 100%;
-        margin-top: 40px;
+    h2 {
         font-family: "Intel Clear", "Arial";
-        font-size: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        font-weight: 700;
+        font-style: normal;
+        margin: 40px 10px 20px 10px;
+        text-align: center;
     }
 
-    .debugWin pre {
+    h3 {
         font-family: "Intel Clear", "Arial";
-        font-size: 10px;
-        border: 0 solid transparent;
-        background-color: transparent;
+        font-size: 20px;
+        font-weight: bold;
+        font-weight: 700;
+        font-style: normal;
+        text-align: center;
         color: #0071C5;
     }
 
+    .role-title {
+        font-family: "Intel Clear", "Arial";
+        font-size: 14px;
+        font-weight: bold;
+        font-weight: 600;
+        color: #000000;
+    }
 
-    #intelLogo {
-        position: absolute;
-        top: 20px;
-        left: 20px;
+    .role-desc {
+        font-family: "Intel Clear", "Arial";
+        font-size: 12px;
+        font-weight: normal;
+        font-weight: 200;
+        font-style: normal;
+        color: #000000;
+        margin: 10px 10px 20px 20px;
     }
 </style>
