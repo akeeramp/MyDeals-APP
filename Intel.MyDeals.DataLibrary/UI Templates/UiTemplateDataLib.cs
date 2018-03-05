@@ -2343,6 +2343,7 @@ namespace Intel.MyDeals.DataLibrary
                 case "CUSTOM":
                     return "object";
 
+                case "DATE":
                 case "DATETIME":
                     return "date";
 
