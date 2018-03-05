@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Intel.MyDeals.App;
 using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers
@@ -35,6 +36,16 @@ namespace Intel.MyDeals.Controllers
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
             return View(AppLib.AVM);
+        }
+
+        public ActionResult NeedCustomers()
+        {
+            Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
+
+            // Set the user details to view bag, these variables are available to all the views
+            ViewBag.UserToken = OpUserStack.MyOpUserToken;
+
+            return View();
         }
 
         public ActionResult ResetAVM()

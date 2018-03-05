@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using Intel.MyDeals.App;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -33,6 +34,12 @@ namespace Intel.MyDeals.Controllers
             ViewBag.IsFinanceAdmin = user.IsFinanceAdmin();
             ViewBag.IsSuperSa = user.IsSuperSa();
             ViewBag.IsTester = user.IsTester();
+
+            var idsid = user.Usr.Idsid.ToUpper();
+            if (AppLib.UserSettings != null && AppLib.UserSettings.ContainsKey(idsid) && AppLib.UserSettings[idsid].AllMyCustomers.CustomerInfo.Any()) return;
+
+            // Redirect to "Request Customer" page
+            filterContext.Result = new RedirectResult("/Error/NeedCustomers");
         }
     }
 }

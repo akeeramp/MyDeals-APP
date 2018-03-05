@@ -42,6 +42,16 @@ namespace Intel.MyDeals.Controllers.API
 		}
 
         [Authorize]
+        [Route("GetActiveCustomersByGeo/{geos}")]
+        public IEnumerable<CustomerDivision> GetActiveCustomersByGeo(string geos)
+        {
+            List<string> arGeos = geos.Split(',').ToList();
+            return SafeExecutor(() => _customerLib.GetCustomerDivisionsActive().Where(g => geos == "WW" || arGeos.Contains(g.HOSTED_GEO))
+                , "Unable to get Customers"
+            );
+        }
+
+        [Authorize]
         [Route("GetCustomerDivisionsByCustNmSid/{custNmSid}")]
         public IEnumerable<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
         {

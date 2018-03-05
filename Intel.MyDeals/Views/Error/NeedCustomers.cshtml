@@ -1,0 +1,235 @@
+﻿@model HandleErrorInfo
+@{
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+}
+
+<div class="noaccess-header">
+    <img src="/images/intel-logo-white-100.png" id="intelLogo" />
+    <span class="main-logo-title">My Deals</span>
+    <i class="fr intelicon-help-solid" style="color: #ffffff; font-size: 30px; margin-top: 5px;"></i>
+
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <h1>Welcome to My Deals.</h1><h2>  Looks like you do not have any customers assigned.</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="info-container">
+                <div class="customers-container">
+                    Select Customers <span class="desc">Select all of the customer account that pertain to your job role</span>
+                    <select id="customers"></select>
+                    <div class="filter-container">
+                        <div class="btn-group btn-group-sm" data-toggle="buttons">
+                            <label class="btn btn-default active">
+                                <input name="options" id="WW" type="radio" checked="" autocomplete="off"> WW
+                            </label>
+                            <label class="btn btn-default">
+                                <input name="options" id="ASMO" type="radio" autocomplete="off"> ASMO
+                            </label>
+                            <label class="btn btn-default">
+                                <input name="options" id="APAC" type="radio" autocomplete="off"> APAC
+                            </label>
+                            <label class="btn btn-default">
+                                <input name="options" id="EMEA" type="radio" autocomplete="off"> EMEA
+                            </label>
+                            <label class="btn btn-default">
+                                <input name="options" id="IJKK" type="radio" autocomplete="off"> IJKK
+                            </label>
+                            <label class="btn btn-default">
+                                <input name="options" id="PRC" type="radio" autocomplete="off"> PRC
+                            </label>
+                        </div>
+                        <div>Filter account by geo</div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="btn btn-primary skyblue" type="button" onClick="clkSubmit()">Submit Request</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var geo = "WW";
+    var ds = new kendo.data.DataSource({
+        type: "json",
+        transport: {
+            read: {
+                url: function () {
+                    return "/api/Customers/GetActiveCustomersByGeo/" + geo;
+                }
+            }
+        }
+    });
+
+    function clkSubmit() {
+        var multiselect = $("#customers").data("kendoMultiSelect");
+        var dataItems = multiselect.dataItems();
+        if (dataItems.length === 0) {
+            kendo.alert("Please select at least one customer account.");
+            return;
+        }
+        debugger;
+    }
+
+    $(document).ready(function () {
+
+        $('.btn-group .btn').on('click',
+            function () {
+                geo = $(this).text().trim();
+                ds.read();
+            });
+
+        $("#customers").kendoMultiSelect({
+            placeholder: "Select customers...",
+            dataTextField: "CUST_DIV_NM",
+            dataValueField: "CUST_MBR_SID",
+            autoBind: true,
+            autoClose: false,
+            dataSource: ds
+        });
+    });
+
+</script>
+
+<style>
+    body {
+        height: 100%;
+        background-color: #FFFFFF;
+        color: #000000;
+        font-family: "Intel Clear", "Arial";
+        font-size: 16px;
+    }
+
+    #intelLogo {
+        width: 50px;
+        height: 33px;
+    }
+
+    .main-logo-title {
+        margin-left: 8px;
+    }
+
+    .k-window-titlebar.k-dialog-titlebar.k-header {
+        display: none;
+    }
+
+    .filter-container {
+        margin-top: 10px;
+        text-align: right;
+        font-size: 12px;
+        color: #aaaaaa;
+    }
+
+    .skyblue {
+        background-color: #00AEEF;
+        border: 1px solid #00AEEF;
+    }
+    .skyblue:hover {
+        background-color: #0071C5;
+        border: 1px solid #0071C5;
+    }
+
+    .customers-container .desc {
+        color: #aaaaaa;
+        font-size: 12px;
+        margin-left: 20px;
+    }
+
+    .customers-container {
+        margin: 20px 60px;
+        text-align: left;
+    }
+    .customers-container .k-multiselect-wrap {
+        font-size: 12px;
+    }
+    #customers_listbox li {
+        font-size: 12px;
+    }
+
+    .lnk {
+        font-weight: normal;
+        font-weight: 200;
+    }
+
+    .lnk a {
+        color: #00AEEF;
+    }
+
+    .noaccess-header {
+        background-color: #0071C5;
+        color: #ffffff;
+        height: 70px;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .info-container {
+        text-align: center;
+    }
+
+    .info-box-container {
+        border: 1px solid #d7d7d7;
+        border-radius: 6px;
+        padding: 30px;
+        margin: 10px 50px;
+        text-align: left;
+    }
+
+    h1 {
+        font-family: "Intel Clear", "Arial";
+        font-size: 40px;
+        font-weight: bold;
+        font-weight: 700;
+        font-style: normal;
+        margin: 50px 10px 10px 10px;
+        text-align: center;
+    }
+
+    h2 {
+        font-family: "Intel Clear", "Arial";
+        font-size: 20px;
+        font-weight: bold;
+        font-weight: 700;
+        font-style: normal;
+        margin: 20px 10px 30px 10px;
+        text-align: center;
+        color: #0071C5;
+    }
+
+    h3 {
+        font-family: "Intel Clear", "Arial";
+        font-size: 16px;
+        font-weight: bold;
+        font-weight: 700;
+        font-style: normal;
+        text-align: center;
+        margin-bottom: 5px;
+        color: #0071C5;
+    }
+
+    .role-title {
+        font-family: "Intel Clear", "Arial";
+        font-size: 14px;
+        font-weight: bold;
+        font-weight: 600;
+        color: #000000;
+    }
+
+    .role-desc {
+        font-family: "Intel Clear", "Arial";
+        font-size: 12px;
+        font-weight: normal;
+        font-weight: 200;
+        font-style: normal;
+        color: #000000;
+        margin: 10px 10px 20px 20px;
+    }
+</style>
