@@ -189,5 +189,6 @@
     .widget-container.container-fluid {
         padding-left: 5px;
         padding-right: 5px;
+        min-width: 100%;
     }
 

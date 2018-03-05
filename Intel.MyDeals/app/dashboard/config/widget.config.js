@@ -37,6 +37,26 @@ widgetConfig.configWidgets = function () {
             api: {}
         },
         resizeEvent: function (widget) {
+            var wxs = 400;
+            var wsm = 600;
+            var mdEls = $(".widget-new-contract .widget-md");
+            var smEls = $(".widget-new-contract .widget-sm");
+            var xsEls = $(".widget-new-contract .widget-xs");
+
+            var w = $(".widget-new-contract").width();
+            if (w > wsm) {
+                smEls.hide();
+                xsEls.hide();
+                mdEls.show();
+            } else if (w > wxs) {
+                mdEls.hide();
+                xsEls.hide();
+                smEls.show();
+            } else {
+                mdEls.hide();
+                smEls.hide();
+                xsEls.show();
+            }
         },
         refreshEvent: function () {
         }
@@ -60,11 +80,13 @@ widgetConfig.configWidgets = function () {
         },
         resizeEvent: function () {
             var grid = $("#gridContractStatus");
-            grid.data("kendoGrid").resize();
+            var kGrid = grid.data("kendoGrid");
+            if (kGrid !== undefined && kGrid !== null) kGrid.resize();
         },
         refreshEvent: function () {
             var grid = $("#gridContractStatus");
-            grid.data("kendoGrid").resize();
+            var kGrid = grid.data("kendoGrid");
+            if (kGrid !== undefined && kGrid !== null) kGrid.resize();
         }
     };
 
@@ -87,6 +109,18 @@ widgetConfig.configWidgets = function () {
             api: {}
         },
         resizeEvent: function (widget) {
+            var wsm = 400;
+            var mdEls = $(".widget-search-contract .widget-md");
+            var smEls = $(".widget-search-contract .widget-sm");
+
+            var w = $(".widget-search-contract").width();
+            if (w > wsm) {
+                smEls.hide();
+                mdEls.show();
+            } else {
+                mdEls.hide();
+                smEls.show();
+            }
         },
         refreshEvent: function () {
         }

@@ -1,31 +1,80 @@
-﻿
-<div style="width: 100%;">
-    <div style="text-align: center;">
-        <input type="text" placeholder="Search for deal #, contract, or pricing strategy"
-               class="k-input searchDashInpt"
-               ng-model="$root.globalSearchResultsData.searchText"
-               ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
-        <button id="searchButton" class="btn btn-default" type="button" ng-click="forceExecute();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
-            <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
-        </button>
-    </div>
-    
-    <div style="text-align: center;">
-        <div class="btn-group">
-            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
-            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
-            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
-            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_TBL'" uncheckable>Pricing Table</label>
-            <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'WIP_DEAL'" uncheckable>Deals</label>
+﻿<div class="widget-search-contract">
+
+    <div style="width: 100%;" class="widget-md">
+        <div style="text-align: center;">
+            <input type="text" placeholder="Search for deal #, contract, or pricing strategy"
+                   class="k-input searchDashInpt"
+                   ng-model="$root.globalSearchResultsData.searchText"
+                   ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
+            <button id="searchButton" class="btn btn-default" type="button" ng-click="forceExecute();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
+                <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
+            </button>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="btn-group">
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_TBL'" uncheckable>Pricing Table</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'WIP_DEAL'" uncheckable>Deals</label>
+            </div>
         </div>
     </div>
+
+
+    <div style="width: 100%;" class="widget-sm">
+        <div style="text-align: center;">
+            <input type="text" placeholder="Search"
+                   class="k-input searchDashInptSm"
+                   ng-model="$root.globalSearchResultsData.searchText"
+                   ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
+            <button id="searchButton" class="btn btn-default" type="button" ng-click="forceExecute();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
+                <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
+            </button>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="btn-group">
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_TBL'" uncheckable>Pricing Table</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'WIP_DEAL'" uncheckable>Deals</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 <style>
     .searchDashInpt {
         padding: 6px 10px;
         width: 320px;
         margin: 20px 15px;
+    }
+    .searchDashInptSm {
+        padding: 6px 10px;
+        width: 160px;
+        margin: 20px 15px;
+    }
+    .widget-sm .btn-group div {
+        margin: 1px;
+        width: 220px;
+    }
+    .widget-sm .btn-group div label {
+        width: 100%;
     }
 </style>
 

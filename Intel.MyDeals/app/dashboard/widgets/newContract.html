@@ -1,37 +1,79 @@
-﻿<div class="container-fluid widget-container" style="overflow: auto; text-align: center; display: table;">
-    <div style="padding: 20px 0 0 0;">
-        <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
-            <i class="intelicon-new-document-solid text-warning"></i>
+﻿<div class="container-fluid widget-container widget-new-contract" style="overflow: auto; text-align: center; display: table;">
+    
+    <div class="widget-xs">
+        <div style="padding: 20px 0 0 0;">
+            <div class="fl" style="font-size: 30px; margin: -5px 10px 0 0; height: 20px">
+                <i class="intelicon-new-document-solid text-warning"></i>
+            </div>
+
+            <div class="fl btn-mock" onclick="newCntrct()" ng-if="C_CREATE_CONTRACT">
+                <div class="btn-ttl">Create Contract</div>
+            </div>
+            <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">Create Contract</div>
+            </div>
+
+            <div class="clearboth"></div>
+            <div class="btn-desc" ng-if="C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">To get started, first create a MyDeals contract</div>
+            <div class="btn-desc" ng-if="!C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">You <b>do not</b> have access to Create Contracts</div>
         </div>
 
-        <div class="fl btn-mock" onclick="newCntrct()" ng-if="C_CREATE_CONTRACT">
-            <div class="btn-ttl">Create a MyDeals Contract</div>
-            <div class="btn-desc">To get started, first create a MyDeals contract</div>
-        </div>
-        <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
-            <div class="btn-ttl">Create a MyDeals Contract</div>
-            <div class="btn-desc">You <b>do not</b> have access to Create Contracts</div>
-        </div>
+        <div style="padding: 25px 0 0 0;">
+            <div class="fl" style="font-size: 30px; margin: -5px 10px 0 0; height: 20px">
+                <i class="intelicon-copy-solid text-warning"></i>
+            </div>
 
-        <div class="clearboth"></div>
+            <div class="fl btn-mock" ng-click="openCopyCntrctDlg()" ng-if="C_CREATE_CONTRACT">
+                <div class="btn-ttl">Copy Contract</div>
+            </div>
+            <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">Copy Contract</div>
+            </div>
+
+            <div class="clearboth"></div>
+            <div class="btn-desc" ng-if="C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">Or, create a MyDeals contract from an existing one</div>
+            <div class="btn-desc" ng-if="!C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">You <b>do not</b> have access to Create Contracts</div>
+        </div>
     </div>
 
-    <div style="padding: 25px 0 0 0;">
-        <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
-            <i class="intelicon-copy-solid text-warning"></i>
+    <div class="widget-md widget-sm">
+        <div style="padding: 20px 0 0 0;">
+            <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
+                <i class="intelicon-new-document-solid text-warning"></i>
+            </div>
+
+            <div class="fl btn-mock" onclick="newCntrct()" ng-if="C_CREATE_CONTRACT">
+                <div class="btn-ttl">Create a MyDeals Contract</div>
+                <div class="btn-desc">To get started, first create a MyDeals contract</div>
+            </div>
+            <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">Create a MyDeals Contract</div>
+                <div class="btn-desc">You <b>do not</b> have access to Create Contracts</div>
+            </div>
+
+            <div class="clearboth"></div>
         </div>
 
-        <div class="fl btn-mock" ng-click="openCopyCntrctDlg()" ng-if="C_CREATE_CONTRACT">
-            <div class="btn-ttl">Copy a MyDeals Contract</div>
-            <div class="btn-desc">Or, create a MyDeals contract from an existing one</div>
-        </div>
-        <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
-            <div class="btn-ttl">Copy a MyDeals Contract</div>
-            <div class="btn-desc">You <b>do not</b> have access to Create Contracts</div>
-        </div>
+        <div style="padding: 25px 0 0 0;">
+            <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
+                <i class="intelicon-copy-solid text-warning"></i>
+            </div>
 
-        <div class="clearboth"></div>
+            <div class="fl btn-mock" ng-click="openCopyCntrctDlg()" ng-if="C_CREATE_CONTRACT">
+                <div class="btn-ttl">Copy a MyDeals Contract</div>
+                <div class="btn-desc">Or, create a MyDeals contract from an existing one</div>
+            </div>
+            <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">Copy a MyDeals Contract</div>
+                <div class="btn-desc">
+                    You <b>do not</b> have access to Create Contracts
+                </div>
+            </div>
+
+            <div class="clearboth"></div>
+        </div>
     </div>
+
 </div>
 
 <script>

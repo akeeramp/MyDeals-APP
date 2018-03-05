@@ -122,6 +122,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
 
             // callback fired when item is resized,
             resize: function (event, $element, widget) {
+                $scope.dashboardData.allWidgets[widget.id].resizeEvent();
             },
 
             // callback fired when item is finished resizing
@@ -129,7 +130,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
                 $timeout(function () {
                     $scope.dashboardData.allWidgets[widget.id].resizeEvent();
                     $scope.saveLayout(); // Persist the current grid settings to the DB.
-                }, 800);
+                }, 100);
             }
         }
     };
@@ -157,6 +158,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
 
     //subscribe widget on window resize event
     angular.element(window).on('resize', function (e) {
+        $scope.resizeAll();
         $scope.$broadcast('resize');
     });
 
@@ -315,6 +317,19 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
                 }
                 $scope.dashboardData.currentWidgets.push(widgetToAdd);
             }
+        }
+
+        $timeout(function () {
+            $scope.resizeAll();
+        }, 500);
+
+    }
+
+    $scope.resizeAll = function() {
+        for (var i = 0; i < $scope.dashboardData.currentWidgets.length; i++) {
+            var widget = $scope.dashboardData.currentWidgets[i];
+            if ($scope.dashboardData.allWidgets[widget.id].resizeEvent != null)
+                $scope.dashboardData.allWidgets[widget.id].resizeEvent();
         }
     }
 

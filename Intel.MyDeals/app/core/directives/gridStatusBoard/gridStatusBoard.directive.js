@@ -137,7 +137,10 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 resizable: true,
                 filterable: true,
                 sortable: true,
-                pageable: true,
+                pageable: {
+                    pageSize: 25,
+                    buttonCount: 5
+                },
                 filterMenuInit: function (e) {
                     if (e.field === "CUST_NM") {
                         var filterMultiCheck = this.thead.find("[data-field=" + e.field + "]").data("kendoFilterMultiCheck")  //= e.target.closest(".k-grid").getKendoGrid();
@@ -163,6 +166,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     }, {
                         title: "Contract Title",
                         field: "TITLE",
+                        width: "200px",
                         template: '<span><a href="/Contract\\#/manager/#:CNTRCT_OBJ_SID#' + $scope.jumptoSummary + '" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: \\#FFA300;">[#:CNTRCT_OBJ_SID#]</span> #:TITLE#</a></span>'
                     }, {
                         title: "Customer",
