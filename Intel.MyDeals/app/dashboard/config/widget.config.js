@@ -47,15 +47,15 @@ widgetConfig.configWidgets = function () {
             if (w > wsm) {
                 smEls.hide();
                 xsEls.hide();
-                mdEls.show();
+                kendo.fx(mdEls).fadeIn().duration(700).play();
             } else if (w > wxs) {
                 mdEls.hide();
                 xsEls.hide();
-                smEls.show();
+                kendo.fx(smEls).fadeIn().duration(700).play();
             } else {
                 mdEls.hide();
                 smEls.hide();
-                xsEls.show();
+                kendo.fx(xsEls).fadeIn().duration(700).play();
             }
         },
         refreshEvent: function () {
@@ -116,10 +116,10 @@ widgetConfig.configWidgets = function () {
             var w = $(".widget-search-contract").width();
             if (w > wsm) {
                 smEls.hide();
-                mdEls.show();
+                kendo.fx(mdEls).fadeIn().duration(700).play();
             } else {
                 mdEls.hide();
-                smEls.show();
+                kendo.fx(smEls).fadeIn().duration(700).play();
             }
         },
         refreshEvent: function () {

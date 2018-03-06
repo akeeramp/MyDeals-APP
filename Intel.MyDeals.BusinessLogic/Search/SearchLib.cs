@@ -419,7 +419,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (int.TryParse(data.StrSearch, out dcIdNum))
             {
-                whereClause = $"{deType}_OBJ_SID = {dcIdNum}";
+                whereClause = $"{deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch}%'";
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }

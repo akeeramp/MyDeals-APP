@@ -321,7 +321,7 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
 
         $timeout(function () {
             $scope.resizeAll();
-        }, 500);
+        }, 1000);
 
     }
 
