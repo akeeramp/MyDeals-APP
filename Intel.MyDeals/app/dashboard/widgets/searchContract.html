@@ -6,12 +6,12 @@
                    class="k-input searchDashInpt"
                    ng-model="$root.globalSearchResultsData.searchText"
                    ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
-            <button id="searchButton" class="btn btn-default" type="button" ng-click="forceExecute();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
-                <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
-            </button>
         </div>
 
         <div style="text-align: center;">
+            <div>
+                Search By:
+            </div>
             <div class="btn-group">
                 <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
                 <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
@@ -29,12 +29,12 @@
                    class="k-input searchDashInptSm"
                    ng-model="$root.globalSearchResultsData.searchText"
                    ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
-            <button id="searchButton" class="btn btn-default" type="button" ng-click="forceExecute();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
-                <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
-            </button>
         </div>
 
         <div style="text-align: center;">
+            <div>
+                Search By:
+            </div>
             <div class="btn-group">
                 <div>
                     <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
@@ -61,12 +61,12 @@
 <style>
     .searchDashInpt {
         padding: 6px 10px;
-        width: 320px;
+        width: 360px;
         margin: 20px 15px;
     }
     .searchDashInptSm {
         padding: 6px 10px;
-        width: 160px;
+        width: 200px;
         margin: 20px 15px;
     }
     .widget-sm .btn-group div {
