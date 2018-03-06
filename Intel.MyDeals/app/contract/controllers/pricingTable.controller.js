@@ -2159,7 +2159,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             customPaste: function () {
                 // Default Kendo code for paste event
                 var clip = this._clipboard;
-                var state = clip._content;
+                var state = angular.copy(clip._content);
                 var sheet = clip.workbook.activeSheet();
 
                 if (clip.isExternal()) {
@@ -2178,7 +2178,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         	cellData.value.replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
                         }
 
-                        // Prevent the user form pasting in new cell styles
+                        // Prevent the user from pasting in new cell styles
                         cellData.background = null;
                         cellData.bold = null;
                         cellData.borderBottom = null;
@@ -2226,7 +2226,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 //
                 var row;
                 var clip = this._clipboard;
-                var state = clip._content;
+                var state = angular.copy(clip._content);  //we need to create a copy of clip._content because we modify state below.  Because js copies by reference for objects, not creating an copy of it would cause the clipboard's content to change and exponentially grow by numoftier padding in consecutive pastes.
+
+                for (var i = state.data.length - 1; i >= 0; i--) {  //remove any leftover "padding" rows that contain null values
+                    if (state.data[i][0]["value"] == null) {
+                        state.data.splice(i, 1);
+                    }
+                }
+
                 var sheet = clip.workbook.activeSheet();
                 var newData = [];
                 var padNumRows = 0;
@@ -2242,7 +2249,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var colNum = pasteRef.topLeft.col;
                 if (!nonMergedColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only
                     for (row = 0; row < state.data.length; row++) {
-                        var numTiers = root.numOfPivot(row);
+                        var numTiers = root.numOfPivot(row);    //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later
                         for (var t = 0; t < numTiers; t++) {
                             newData.push(util.deepClone(state.data[row]));
                         }
