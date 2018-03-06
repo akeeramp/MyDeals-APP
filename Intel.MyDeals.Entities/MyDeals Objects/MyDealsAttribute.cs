@@ -23,6 +23,7 @@ namespace Intel.MyDeals.Entities
             switch(TGT_COL_TYPE)
             {
                 case "INT": return "ATRB_VAL_INT";
+                case "DATE": return "ATRB_VAL_DTM";
                 case "DATETIME": return "ATRB_VAL_DTM";
                 case "MONEY": return "ATRB_VAL_MONEY";
                 default :

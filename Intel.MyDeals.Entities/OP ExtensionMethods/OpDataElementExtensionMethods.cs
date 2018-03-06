@@ -349,6 +349,7 @@ namespace Intel.MyDeals.Entities
                     case "MONEY":
                     case "INT":
                         return float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) > float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString());
+                    case "DATE":
                     case "DATETIME":
                         return (DateTime)atrb.GetValueStronglyTyped(testValue, false) > (DateTime)atrb.GetValueStronglyTyped(oav, false);
                     case "VARCHAR":
@@ -388,6 +389,7 @@ namespace Intel.MyDeals.Entities
                     case "MONEY":
                     case "INT":
                         return float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) < float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString());
+                    case "DATE":
                     case "DATETIME":
                         return (DateTime)atrb.GetValueStronglyTyped(testValue, false) < (DateTime)atrb.GetValueStronglyTyped(oav, false);
                     case "VARCHAR":
