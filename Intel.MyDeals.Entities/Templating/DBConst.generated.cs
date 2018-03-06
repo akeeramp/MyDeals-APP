@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/1/2018 4:59:21 PM
+File Updated: 3/5/2018 10:43:15 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2345,6 +2345,14 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 200
+		/// SRT_ORD: 150
+		/// Copy Contract Contents
+		///</summary>
+		public const string COPY_CONTRACT = "COPY_CONTRACT";
+
+
+		///<summary>
 		/// ACTN_SID: 210
 		/// SRT_ORD: 50
 		/// Roll the deal details back to the last valid active tracker state
@@ -2385,22 +2393,6 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
-		/// ACTN_SID: 201
-		/// SRT_ORD: 2200
-		/// Copy Object Contents Results
-		///</summary>
-		public const string OBJ_COPIED = "OBJ_COPIED";
-
-
-		///<summary>
-		/// ACTN_SID: 200
-		/// SRT_ORD: 150
-		/// Copy Object Contents
-		///</summary>
-		public const string OBJ_COPY = "OBJ_COPY";
-
-
-		///<summary>
 		/// ACTN_SID: 207
 		/// SRT_ORD: 40
 		/// UI Generated Action to initiate a delete object action
@@ -2416,12 +2408,12 @@ namespace Intel.MyDeals.Entities {
 		public const string OBJ_DELETED = "OBJ_DELETED";
 
 
-		///<summary>
-		/// ACTN_SID: 218
-		/// SRT_ORD: 120
-		/// Execute Cost Test calls
-		///</summary>
-		public const string RUN_COST_TEST = "RUN_COST_TEST";
+        ///<summary>
+        /// ACTN_SID: 218
+        /// SRT_ORD: 120
+        /// Execute Cost Test calls
+        ///</summary>
+        public const string RUN_COST_TEST = "RUN_COST_TEST";
 
 
 		///<summary>
@@ -2461,7 +2453,6 @@ namespace Intel.MyDeals.Entities {
 	//-- ToolConstantName ---------------------------------------------------------------------------------
 
 	public static class ToolConstantName {
-		public const string ADMIN_MESSAGE = "ADMIN_MESSAGE";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
@@ -2470,29 +2461,29 @@ namespace Intel.MyDeals.Entities {
 		public const string COST_TEST_PRD_MODE_2 = "COST_TEST_PRD_MODE_2";
 		public const string COST_TEST_ROLES = "COST_TEST_ROLES";
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
+		public const string COST_TST_MIGRATION = "COST_TST_MIGRATION";
 		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
-		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
+		public const string ECAP_KIT_MIGRATION = "ECAP_KIT_MIGRATION";
+		public const string ECAP_MIGRATION = "ECAP_MIGRATION";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
-		public const string EMP_CHG_THRESHOLD = "EMP_CHG_THRESHOLD";
+		public const string ENV = "ENV";
 		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
-		public const string INCL_GDM_PCSR_HIER = "INCL_GDM_PCSR_HIER";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
+		public const string LOCKED_OUT_ROLES = "LOCKED_OUT_ROLES";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
-		public const string PROD_REPLACE_CHARSET = "PROD_REPLACE_CHARSET";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
-		public const string santhoshi = "santhoshi";
-		public const string SELECTION_LEVEL = "SELECTION_LEVEL";
+		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
+		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
-		public const string TEST_MS = "TEST_MS";
-		public const string Test2 = "Test2";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
+		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";
 		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";
 	}
 
@@ -2578,8 +2569,7 @@ namespace Intel.MyDeals.Entities {
 		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
 		public const string ATRB_DELETED = "ATRB_DELETED";
 		public const string CALC_MSP = "CALC_MSP";
-		public const string OBJ_COPY = "OBJ_COPY";
-		public const string OBJ_COPIED = "OBJ_COPIED";
+		public const string COPY_CONTRACT = "COPY_CONTRACT";
 		public const string OBJ_DELETE = "OBJ_DELETE";
 		public const string OBJ_DELETED = "OBJ_DELETED";
 		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
@@ -2601,6 +2591,7 @@ namespace Intel.MyDeals.Entities {
 		public const string C_APPROVE = "C_APPROVE";
 		public const string C_CANCEL_DEAL = "C_CANCEL_DEAL";
 		public const string C_REVISE_DEAL = "C_REVISE_DEAL";
+		public const string C_EDIT_MEET_COMP_OVERRIDE = "C_EDIT_MEET_COMP_OVERRIDE";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
 		public const string C_IS_DEV = "C_IS_DEV";
 	}
@@ -2677,12 +2668,12 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.ALL_OBJ_TYPE] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
 				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER },
-				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.KIT,OpDataElementSetType.ALL_TYPES },
 			}
 		);
 	}
