@@ -275,6 +275,11 @@ using System.Collections.Generic;
 
 	// Sold To Ids
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_CUST_SOLD_TO_ID");
+	ds.Tables[0].TableName = "CustSoldToIds";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Sold To Ids
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_GEO_SOLD_TO_ID");
 	ds.Tables[0].TableName = "SoldToIds";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
