@@ -24,14 +24,14 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataElementType> opDataElementTypes = inclusive
                 ? new List<OpDataElementType>
                 {
-                    //OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_ST,
                     //OpDataElementType.PRC_TBL,
                     OpDataElementType.PRC_TBL_ROW,
                     OpDataElementType.WIP_DEAL
                 }
                 : new List<OpDataElementType>
                 {
-                    //OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_ST,
                     //OpDataElementType.PRC_TBL,
                     OpDataElementType.PRC_TBL_ROW
                 };
@@ -54,11 +54,11 @@ namespace Intel.MyDeals.BusinessLogic
                     opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested, true);
             }
 
-            //var prntActions = data[OpDataElementType.PRC_ST][0]["_actions"];
-            //foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
-            //{
-            //    item["_actionsPS"] = prntActions;
-            //}
+            var prntActions = data[OpDataElementType.PRC_ST][0]["_actions"];
+            foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+            {
+                item["_actionsPS"] = prntActions;
+            }
 
             return data;
             //return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
