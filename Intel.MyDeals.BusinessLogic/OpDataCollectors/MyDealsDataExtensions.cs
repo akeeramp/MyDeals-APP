@@ -597,7 +597,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var dcHasErrors = false;
 
-                    OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave);
+                    OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave, null, dc, myDealsData);
                     if (savePacket.ValidateIds.Any())
                     {
                         dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
@@ -937,6 +937,20 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            bool hasErrors = false;
+            if (!hasCriticalErrors)
+            {
+                hasErrors = myDealsData.ValidationApplyRules(savePacket);
+                foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+                {
+                    if (!data.ContainsKey(opDataElementType) && !myDealsData.ContainsKey(opDataElementType)) continue;
+                    if (myDealsData.ContainsKey(opDataElementType) && myDealsData[opDataElementType].Messages.HighestMessageType == "Error")
+                    {
+                        hasCriticalErrors = true;
+                    }
+                }
+            }
+
             if (hasCriticalErrors)
             {
                 OpLog.Log("SavePacketsBase - Failed.");
@@ -947,7 +961,6 @@ namespace Intel.MyDeals.BusinessLogic
                 return myDealsDataWithErrors;
             }
 
-            bool hasErrors = myDealsData.ValidationApplyRules(savePacket);
             if (hasErrors)
             {
                 // "Clone" to object...

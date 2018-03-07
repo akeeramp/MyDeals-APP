@@ -7,6 +7,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.Opaque.Rules;
 using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 
@@ -415,6 +416,16 @@ namespace Intel.MyDeals.BusinessRules
             if (!fact15s.Any()) return;
 
             int i = 0;
+        }
+
+        public static void CheckGeos(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            if (!r.HasExtraArgs) return;
+
+            var deGeo = r.Dc.GetDataElement(AttributeCodes.GEO_COMBINED);
+            deGeo?.CheckGeos(r.ExtraArgs);
         }
 
         public static void CheckCustDivValues(params object[] args)

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.OpDataCollectors;
 using Intel.MyDeals.Entities;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessRules
@@ -137,6 +138,14 @@ namespace Intel.MyDeals.BusinessRules
                 else
                 {
                     de.AddMessage(geo + " is not a valid Geo.");
+
+                    if (args == null || args.Length < 2) continue;
+
+                    var dc = (OpDataCollector)args[0];
+                    dc?.Message.WriteMessage(OpMsg.MessageType.Error, geo + " is not a valid Geo.");
+
+                    var myDealsData = (MyDealsData)args[1];
+                    myDealsData?[OpDataElementType.PRC_TBL_ROW].Messages.WriteMessage(OpMsg.MessageType.Error, geo + " is not a valid Geo.");
                 }
             }
 
