@@ -89,6 +89,15 @@
                 }
             },
             {
+                state: 'admin.manageemployee',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/employee/manageEmployee.html',
+                    url: 'manageEmployee',
+                    controller: 'manageEmployeeController',
+                }
+            },
+            {
                 state: 'admin.geo',
                 abstract: false,
                 config: {

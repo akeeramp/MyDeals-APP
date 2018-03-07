@@ -101,71 +101,73 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			return _securityAttributesLib.SaveSecurityMappings(saveMappings);
 		}
-		#endregion
+        #endregion
 
-		#region SecurityActions
+        #region SecurityActions
 
-		[HttpGet]
-        [Route("GetSecurityActions")]
-        public IEnumerable<SecurityActions> GetSecurityActions()
-        {
-            return _securityAttributesLib.GetSecurityActions();
-        }
+        ////DEV_REBUILD_REMOVALS
+        //[HttpGet]
+        //      [Route("GetSecurityActions")]
+        //      public IEnumerable<SecurityActions> GetSecurityActions()
+        //      {
+        //          return _securityAttributesLib.GetSecurityActions();
+        //      }
 
-        [HttpPost]
-        [AntiForgeryValidate]
-        [Route("InsertAction")]
-        public SecurityActions InsertAction(SecurityActions action)
-        {
-            return _securityAttributesLib.ManageSecurityAction(action, CrudModes.Insert);
-        }
+        //[HttpPost]
+        //[AntiForgeryValidate]
+        //[Route("InsertAction")]
+        //public SecurityActions InsertAction(SecurityActions action)
+        //{
+        //    return _securityAttributesLib.ManageSecurityAction(action, CrudModes.Insert);
+        //}
 
-        [HttpPut]
-        [AntiForgeryValidate]
-        [Route("UpdateAction")]
-        public SecurityActions UpdateAction(SecurityActions action)
-        {
-            return _securityAttributesLib.ManageSecurityAction(action, CrudModes.Update);
-        }
+        //[HttpPut]
+        //[AntiForgeryValidate]
+        //[Route("UpdateAction")]
+        //public SecurityActions UpdateAction(SecurityActions action)
+        //{
+        //    return _securityAttributesLib.ManageSecurityAction(action, CrudModes.Update);
+        //}
 
-        [Route("DeleteAction")]
-        public bool DeleteAction(int id)
-        {
-            return _securityAttributesLib.DeleteSecurityAction(id);
-        }
+        //[Route("DeleteAction")]
+        //public bool DeleteAction(int id)
+        //{
+        //    return _securityAttributesLib.DeleteSecurityAction(id);
+        //}
 
         #endregion SecurityActions
 
         #region Admin Application
 
-        [HttpGet]
-        [Route("GetAdminApplications")]
-        public IEnumerable<AdminApplications> GetAdminApplications()
-        {
-            return _securityAttributesLib.GetAdminApplications();
-        }
+        ////DEV_REBUILD_REMOVALS
+        //[HttpGet]
+        //[Route("GetAdminApplications")]
+        //public IEnumerable<AdminApplications> GetAdminApplications()
+        //{
+        //    return _securityAttributesLib.GetAdminApplications();
+        //}
 
-        [HttpPost]
-        [AntiForgeryValidate]
-        [Route("InsertAdminApplication")]
-        public AdminApplications InsertApplication(AdminApplications app)
-        {
-            return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Insert);
-        }
+        //[HttpPost]
+        //[AntiForgeryValidate]
+        //[Route("InsertAdminApplication")]
+        //public AdminApplications InsertApplication(AdminApplications app)
+        //{
+        //    return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Insert);
+        //}
 
-        [HttpPut]
-        [AntiForgeryValidate]
-        [Route("UpdateAdminApplication")]
-        public AdminApplications UpdateAdminApplication(AdminApplications app)
-        {
-			return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Update);
-        }
+        //     [HttpPut]
+        //     [AntiForgeryValidate]
+        //     [Route("UpdateAdminApplication")]
+        //     public AdminApplications UpdateAdminApplication(AdminApplications app)
+        //     {
+        //return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Update);
+        //     }
 
-        [Route("DeleteAdminApplication")]
-        public bool DeleteAdminApplication(int id)
-        {
-            return _securityAttributesLib.DeleteAdminApplication(id);
-        }
+        //[Route("DeleteAdminApplication")]
+        //public bool DeleteAdminApplication(int id)
+        //{
+        //    return _securityAttributesLib.DeleteAdminApplication(id);
+        //}
 
         #endregion Admin Application
 
@@ -204,34 +206,35 @@ namespace Intel.MyDeals.Controllers.API
 
         #region Admin RoleTypes
 
-        [HttpGet]
-        [Route("GetAdminRoleTypes")]
-        public IEnumerable<AdminRoleType> GetAdminRoleTypes()
-        {
-            return _securityAttributesLib.GetAdminRoleTypes();
-        }
+        ////DEV_REBUILD_REMOVALS
+        //[HttpGet]
+        //[Route("GetAdminRoleTypes")]
+        //public IEnumerable<AdminRoleType> GetAdminRoleTypes()
+        //{
+        //    return _securityAttributesLib.GetAdminRoleTypes();
+        //}
 
-        [HttpPost]
-        [AntiForgeryValidate]
-        [Route("InsertAdminRoleType")]
-        public AdminRoleType InsertAdminRoleType(AdminRoleType RoleType)
-        {
-            return _securityAttributesLib.ManageAdminRoleType(RoleType, CrudModes.Insert);
-        }
+        //[HttpPost]
+        //[AntiForgeryValidate]
+        //[Route("InsertAdminRoleType")]
+        //public AdminRoleType InsertAdminRoleType(AdminRoleType RoleType)
+        //{
+        //    return _securityAttributesLib.ManageAdminRoleType(RoleType, CrudModes.Insert);
+        //}
 
-        [HttpPut]
-        [AntiForgeryValidate]
-        [Route("UpdateAdminRoleType")]
-        public AdminRoleType UpdateAdminRoleType(AdminRoleType RoleType)
-        {
-            return _securityAttributesLib.ManageAdminRoleType(RoleType, CrudModes.Update);
-        }
+        //[HttpPut]
+        //[AntiForgeryValidate]
+        //[Route("UpdateAdminRoleType")]
+        //public AdminRoleType UpdateAdminRoleType(AdminRoleType RoleType)
+        //{
+        //    return _securityAttributesLib.ManageAdminRoleType(RoleType, CrudModes.Update);
+        //}
 
-        [Route("DeleteAdminRoleType")]
-        public bool DeleteAdminRoleType(int id)
-        {
-            return _securityAttributesLib.DeleteAdminRoleType(id);
-        }
+        //[Route("DeleteAdminRoleType")]
+        //public bool DeleteAdminRoleType(int id)
+        //{
+        //    return _securityAttributesLib.DeleteAdminRoleType(id);
+        //}
 
         #endregion Admin RoleTypes
     }

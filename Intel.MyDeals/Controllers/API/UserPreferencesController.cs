@@ -49,5 +49,29 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to set UserOpToken");
         }
 
+        [Authorize]
+        [Route("GetOtherUserTokenByWWID/{wwid}")]
+        public OpMsg GetOtherUserTokenByWWID(int wwid)
+        {
+            return SafeExecutor(() => new EmployeesLib().GetOtherUserToken(wwid, null)
+                , $"Unable to GetOtherUserToken");
+        }
+
+        [Authorize]
+        [Route("GetOtherUserTokenByIDSID/{idsid}")]
+        public OpMsg GetOtherUserTokenByIDSID(string idsid)
+        {
+            return SafeExecutor(() => new EmployeesLib().GetOtherUserToken(0, idsid)
+                , $"Unable to GetOtherUserToken");
+        }
+
+        [Authorize]
+        [Route("GetManageUserData/{wwid}")]
+        public List<ManageUsersInfo> GetManageUserData(int wwid)
+        {
+            return SafeExecutor(() => new EmployeesLib().GetManageUserData(wwid)
+                , $"Unable to GetManageUserData");
+        }
+
     }
 }

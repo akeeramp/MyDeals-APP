@@ -17,48 +17,49 @@ namespace Intel.MyDeals.DataLibrary
 		{
 		}
 
-		/// <summary>
-		/// Get a list of possible ECAP Adjustment Tracker Numbers that match filterData parameter
-		/// </summary>
-		/// <returns>list of ECAP Adjustment Tracker Numbers</returns>
-		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
-		{
-			var ret = new List<EcapTrackerResult>();
-			try
-			{
-				in_t_trkr_atrb dt = new in_t_trkr_atrb();
-				dt.AddRow(filterData);
-				Procs.dbo.PR_MYDL_GET_TRKR_BY_ATRB cmd = new Procs.dbo.PR_MYDL_GET_TRKR_BY_ATRB
-				{
-					in_t_trkr_atrb = dt
-				};
+        /// <summary>
+        /// Get a list of possible ECAP Adjustment Tracker Numbers that match filterData parameter
+        /// </summary>
+        /// <returns>list of ECAP Adjustment Tracker Numbers</returns>
+        /// ////DEV_REBUILD_REMOVALS
+        //public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
+        //{
+        //	var ret = new List<EcapTrackerResult>();
+        //	try
+        //	{
+        //		in_t_trkr_atrb dt = new in_t_trkr_atrb();
+        //		dt.AddRow(filterData);
+        //		Procs.dbo.PR_MYDL_GET_TRKR_BY_ATRB cmd = new Procs.dbo.PR_MYDL_GET_TRKR_BY_ATRB
+        //		{
+        //			in_t_trkr_atrb = dt
+        //		};
 
-				using (var rdr = DataAccess.ExecuteReader(cmd))
-				{
-					int IDX_ORIG_ECAP_TRKR_NBR = DB.GetReaderOrdinal(rdr, "ORIG_ECAP_TRKR_NBR");
+        //		using (var rdr = DataAccess.ExecuteReader(cmd))
+        //		{
+        //			int IDX_ORIG_ECAP_TRKR_NBR = DB.GetReaderOrdinal(rdr, "ORIG_ECAP_TRKR_NBR");
 
-					while (rdr.Read())
-					{
-						ret.Add(new EcapTrackerResult
-						{
-							DROP_DOWN = (IDX_ORIG_ECAP_TRKR_NBR < 0 || rdr.IsDBNull(IDX_ORIG_ECAP_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ORIG_ECAP_TRKR_NBR)
-						});
-					} // while
-				}
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw;
-			}
-			return ret;
-		}
+        //			while (rdr.Read())
+        //			{
+        //				ret.Add(new EcapTrackerResult
+        //				{
+        //					DROP_DOWN = (IDX_ORIG_ECAP_TRKR_NBR < 0 || rdr.IsDBNull(IDX_ORIG_ECAP_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ORIG_ECAP_TRKR_NBR)
+        //				});
+        //			} // while
+        //		}
+        //	}
+        //	catch (Exception ex)
+        //	{
+        //		OpLogPerf.Log(ex);
+        //		throw;
+        //	}
+        //	return ret;
+        //}
 
-		/// <summary>
-		/// Get a list of existing deal details based on ECAP Adjustment Tracker Numbers
-		/// </summary>
-		/// <returns>list of EcapTrackerData</returns>
-		public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers, int custId)
+        /// <summary>
+        /// Get a list of existing deal details based on ECAP Adjustment Tracker Numbers
+        /// </summary>
+        /// <returns>list of EcapTrackerData</returns>
+        public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers, int custId)
 		{
 			var ret = new List<EcapTrackerData>();
 			try

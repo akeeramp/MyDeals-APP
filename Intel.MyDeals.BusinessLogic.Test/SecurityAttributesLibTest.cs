@@ -57,118 +57,120 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			SecurityWrapper results = new SecurityAttributesLib().GetSecurityMasks();
 			Assert.IsTrue(results.SecurityAttributes.Any());
 		}
-		#endregion
-		
-		#region SecurityActions
+        #endregion
 
-		[TestMethod]
-		public void AdminSecurityActionsGet()
-		{
-			List<SecurityActions> results = new SecurityAttributesLib().GetSecurityActions();
-			Assert.IsTrue(results.Any());
-		}
+        #region SecurityActions
 
-		[TestMethod]
-		public void AdminSecurityActionsManage()
-		{
-            //INSERT
-            string testString = "UNIT TEST - InsertSecurityActions";
-            //string testStringShort = "TEST";
+        ////DEV_REBUILD_REMOVALS
+        //[TestMethod]
+        //public void AdminSecurityActionsGet()
+        //{
+        //	List<SecurityActions> results = new SecurityAttributesLib().GetSecurityActions();
+        //	Assert.IsTrue(results.Any());
+        //}
 
-            SecurityActions action = new SecurityActions
-            {
-                ACTN_CAT_CD = testString,
-                ACTN_NM = testString,
-                ACTN_DESC = testString,
-                SRT_ORD = 0,
-                //WFSTG_ACTN_CD = testStringShort
-            };
-            SecurityActions insertResult = new SecurityAttributesLib().ManageSecurityAction(action, CrudModes.Insert);
+        //[TestMethod]
+        //public void AdminSecurityActionsManage()
+        //{
+        //          //INSERT
+        //          string testString = "UNIT TEST - InsertSecurityActions";
+        //          //string testStringShort = "TEST";
 
-            Assert.IsTrue(
-                insertResult.ACTN_CAT_CD == action.ACTN_CAT_CD
-                && insertResult.ACTN_NM == action.ACTN_NM
-                && insertResult.ACTN_DESC == action.ACTN_DESC
-                && insertResult.SRT_ORD == action.SRT_ORD
-                //&& insertResult.WFSTG_ACTN_CD == action.WFSTG_ACTN_CD
-                );
+        //          SecurityActions action = new SecurityActions
+        //          {
+        //              ACTN_CAT_CD = testString,
+        //              ACTN_NM = testString,
+        //              ACTN_DESC = testString,
+        //              SRT_ORD = 0,
+        //              //WFSTG_ACTN_CD = testStringShort
+        //          };
+        //          SecurityActions insertResult = new SecurityAttributesLib().ManageSecurityAction(action, CrudModes.Insert);
 
-            //UPDATE
-            testString = "UNIT TEST - UpdateSecurityActions";
-            insertResult.ACTN_CAT_CD = testString;
-            insertResult.ACTN_NM = testString;
-            insertResult.ACTN_DESC = testString;
+        //          Assert.IsTrue(
+        //              insertResult.ACTN_CAT_CD == action.ACTN_CAT_CD
+        //              && insertResult.ACTN_NM == action.ACTN_NM
+        //              && insertResult.ACTN_DESC == action.ACTN_DESC
+        //              && insertResult.SRT_ORD == action.SRT_ORD
+        //              //&& insertResult.WFSTG_ACTN_CD == action.WFSTG_ACTN_CD
+        //              );
 
-            SecurityActions updateResult = new SecurityAttributesLib().ManageSecurityAction(insertResult, CrudModes.Update);
+        //          //UPDATE
+        //          testString = "UNIT TEST - UpdateSecurityActions";
+        //          insertResult.ACTN_CAT_CD = testString;
+        //          insertResult.ACTN_NM = testString;
+        //          insertResult.ACTN_DESC = testString;
 
-            Assert.IsTrue(
-                updateResult.ACTN_CAT_CD == insertResult.ACTN_CAT_CD
-                && updateResult.ACTN_NM == insertResult.ACTN_NM
-                && updateResult.ACTN_DESC == insertResult.ACTN_DESC
-                && updateResult.SRT_ORD == insertResult.SRT_ORD
-                //&& updateResult.WFSTG_ACTN_CD == insertResult.WFSTG_ACTN_CD
-                );
+        //          SecurityActions updateResult = new SecurityAttributesLib().ManageSecurityAction(insertResult, CrudModes.Update);
 
-            //DELETE
-            bool deleteResult = new SecurityAttributesLib().DeleteSecurityAction(updateResult.SECUR_ACTN_SID);
-            Assert.IsTrue(deleteResult);
-        }
+        //          Assert.IsTrue(
+        //              updateResult.ACTN_CAT_CD == insertResult.ACTN_CAT_CD
+        //              && updateResult.ACTN_NM == insertResult.ACTN_NM
+        //              && updateResult.ACTN_DESC == insertResult.ACTN_DESC
+        //              && updateResult.SRT_ORD == insertResult.SRT_ORD
+        //              //&& updateResult.WFSTG_ACTN_CD == insertResult.WFSTG_ACTN_CD
+        //              );
+
+        //          //DELETE
+        //          bool deleteResult = new SecurityAttributesLib().DeleteSecurityAction(updateResult.SECUR_ACTN_SID);
+        //          Assert.IsTrue(deleteResult);
+        //      }
 
 
         #endregion
 
         #region Applications
 
-        [TestMethod]
-        public void AdminApplicationsGet()
-        {
-            IEnumerable<AdminApplications> results = new SecurityAttributesLib().GetAdminApplications();
-            Assert.IsTrue(results.Any());
-        }
+        ////DEV_REBUILD_REMOVALS
+        //[TestMethod]
+        //public void AdminApplicationsGet()
+        //{
+        //    IEnumerable<AdminApplications> results = new SecurityAttributesLib().GetAdminApplications();
+        //    Assert.IsTrue(results.Any());
+        //}
 
-        [TestMethod]
-        public void AdminApplicationsManage()
-        {
-            //INSERT
-            string testString = "UNIT TEST - InsertAdminApplications";
-            string testStringShort = "TEST";
+        //[TestMethod]
+        //public void AdminApplicationsManage()
+        //{
+        //    //INSERT
+        //    string testString = "UNIT TEST - InsertAdminApplications";
+        //    string testStringShort = "TEST";
 
-            AdminApplications app = new AdminApplications
-            {
-                APP_NM = testStringShort,
-                APP_DESC = testString,
-                APP_SID = 0,
-                APP_SUITE = testString,
-                ACTV_IND = false
-            };
-            AdminApplications insertResult = new SecurityAttributesLib().ManageAdminApplication(app, CrudModes.Insert);
+        //    AdminApplications app = new AdminApplications
+        //    {
+        //        APP_NM = testStringShort,
+        //        APP_DESC = testString,
+        //        APP_SID = 0,
+        //        APP_SUITE = testString,
+        //        ACTV_IND = false
+        //    };
+        //    AdminApplications insertResult = new SecurityAttributesLib().ManageAdminApplication(app, CrudModes.Insert);
 
-            Assert.IsTrue(
-                insertResult.APP_NM == app.APP_NM
-                && insertResult.APP_DESC == app.APP_DESC
-                && insertResult.APP_SID != 0
-                && insertResult.APP_SUITE == app.APP_SUITE
-                && insertResult.ACTV_IND == app.ACTV_IND
-                );
+        //    Assert.IsTrue(
+        //        insertResult.APP_NM == app.APP_NM
+        //        && insertResult.APP_DESC == app.APP_DESC
+        //        && insertResult.APP_SID != 0
+        //        && insertResult.APP_SUITE == app.APP_SUITE
+        //        && insertResult.ACTV_IND == app.ACTV_IND
+        //        );
 
-            //UPDATE
-            testString = "UNIT TEST - UpdateAdminApplications";
-            insertResult.APP_DESC = testString;
+        //    //UPDATE
+        //    testString = "UNIT TEST - UpdateAdminApplications";
+        //    insertResult.APP_DESC = testString;
 
-            AdminApplications updateResult = new SecurityAttributesLib().ManageAdminApplication(insertResult, CrudModes.Update);
+        //    AdminApplications updateResult = new SecurityAttributesLib().ManageAdminApplication(insertResult, CrudModes.Update);
 
-            Assert.IsTrue(
-                updateResult.APP_NM == insertResult.APP_NM
-                && updateResult.APP_DESC == insertResult.APP_DESC
-                && updateResult.APP_SID == insertResult.APP_SID
-                && updateResult.APP_SUITE == insertResult.APP_SUITE
-                && updateResult.ACTV_IND == insertResult.ACTV_IND
-                );
+        //    Assert.IsTrue(
+        //        updateResult.APP_NM == insertResult.APP_NM
+        //        && updateResult.APP_DESC == insertResult.APP_DESC
+        //        && updateResult.APP_SID == insertResult.APP_SID
+        //        && updateResult.APP_SUITE == insertResult.APP_SUITE
+        //        && updateResult.ACTV_IND == insertResult.ACTV_IND
+        //        );
 
-            //DELETE
-            bool deleteResult = new SecurityAttributesLib().DeleteAdminApplication(updateResult.APP_SID);
-            Assert.IsTrue(deleteResult);
-        }
+        //    //DELETE
+        //    bool deleteResult = new SecurityAttributesLib().DeleteAdminApplication(updateResult.APP_SID);
+        //    Assert.IsTrue(deleteResult);
+        //}
 
         #endregion
 
@@ -241,66 +243,67 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
         #region RoleTypes
 
-        [TestMethod]
-        public void AdminRoleTypesGet()
-        {
-            IEnumerable<AdminRoleType> results = new SecurityAttributesLib().GetAdminRoleTypes();
-            Assert.IsTrue(results.Any());
-        }
+        ////DEV_REBUILD_REMOVALS
+        //[TestMethod]
+        //public void AdminRoleTypesGet()
+        //{
+        //    IEnumerable<AdminRoleType> results = new SecurityAttributesLib().GetAdminRoleTypes();
+        //    Assert.IsTrue(results.Any());
+        //}
 
-        [TestMethod]
-        public void AdminRoleTypesManage()
-        {
-            //INSERT
-            string testString = "UNIT TEST - InsertAdminRoleTypes";
-            string testStringShort = "TEST";
+        //[TestMethod]
+        //public void AdminRoleTypesManage()
+        //{
+        //    //INSERT
+        //    string testString = "UNIT TEST - InsertAdminRoleTypes";
+        //    string testStringShort = "TEST";
 
-            AdminRoleType roleType = new AdminRoleType
-            {
-                ROLE_SID = 0,
-                ROLE_NM = testStringShort,
-                ROLE_DSPLY_NM = testStringShort,
-                ROLE_DESC = testString,
-                ROLE_TIER_NM = testStringShort,
-                IS_SNGL_SLCT = false,
-                ACTV_IND = false,
-                APP_SID = 1
-                //TODO: Need to generate and ensure existance of a TEST APP due to APP_SID FK Constraint. Right now, app with SID=1 not guaranteed to exist.
-            };
-            AdminRoleType insertResult = new SecurityAttributesLib().ManageAdminRoleType(roleType, CrudModes.Insert);
+        //    AdminRoleType roleType = new AdminRoleType
+        //    {
+        //        ROLE_SID = 0,
+        //        ROLE_NM = testStringShort,
+        //        ROLE_DSPLY_NM = testStringShort,
+        //        ROLE_DESC = testString,
+        //        ROLE_TIER_NM = testStringShort,
+        //        IS_SNGL_SLCT = false,
+        //        ACTV_IND = false,
+        //        APP_SID = 1
+        //        //TODO: Need to generate and ensure existance of a TEST APP due to APP_SID FK Constraint. Right now, app with SID=1 not guaranteed to exist.
+        //    };
+        //    AdminRoleType insertResult = new SecurityAttributesLib().ManageAdminRoleType(roleType, CrudModes.Insert);
 
-            Assert.IsTrue(
-                insertResult.ROLE_NM == roleType.ROLE_NM
-                && insertResult.ROLE_DSPLY_NM == roleType.ROLE_DSPLY_NM
-                && insertResult.ROLE_SID != 0
-                && insertResult.ROLE_DESC == roleType.ROLE_DESC
-                && insertResult.ROLE_TIER_NM == roleType.ROLE_TIER_NM
-                && insertResult.IS_SNGL_SLCT == roleType.IS_SNGL_SLCT
-                && insertResult.ACTV_IND == roleType.ACTV_IND
-                && insertResult.APP_SID == roleType.APP_SID
-                );
+        //    Assert.IsTrue(
+        //        insertResult.ROLE_NM == roleType.ROLE_NM
+        //        && insertResult.ROLE_DSPLY_NM == roleType.ROLE_DSPLY_NM
+        //        && insertResult.ROLE_SID != 0
+        //        && insertResult.ROLE_DESC == roleType.ROLE_DESC
+        //        && insertResult.ROLE_TIER_NM == roleType.ROLE_TIER_NM
+        //        && insertResult.IS_SNGL_SLCT == roleType.IS_SNGL_SLCT
+        //        && insertResult.ACTV_IND == roleType.ACTV_IND
+        //        && insertResult.APP_SID == roleType.APP_SID
+        //        );
 
-            //UPDATE
-            testString = "UNIT TEST - UpdateAdminRoleTypes";
-            insertResult.ROLE_DESC = testString;
+        //    //UPDATE
+        //    testString = "UNIT TEST - UpdateAdminRoleTypes";
+        //    insertResult.ROLE_DESC = testString;
 
-            AdminRoleType updateResult = new SecurityAttributesLib().ManageAdminRoleType(insertResult, CrudModes.Update);
+        //    AdminRoleType updateResult = new SecurityAttributesLib().ManageAdminRoleType(insertResult, CrudModes.Update);
 
-            Assert.IsTrue(
-                updateResult.ROLE_NM == insertResult.ROLE_NM
-                && updateResult.ROLE_DSPLY_NM == insertResult.ROLE_DSPLY_NM
-                && updateResult.ROLE_SID == insertResult.ROLE_SID
-                && updateResult.ROLE_DESC == insertResult.ROLE_DESC
-                && updateResult.ROLE_TIER_NM == insertResult.ROLE_TIER_NM
-                && updateResult.IS_SNGL_SLCT == insertResult.IS_SNGL_SLCT
-                && updateResult.ACTV_IND == insertResult.ACTV_IND
-                && updateResult.APP_SID == insertResult.APP_SID
-                );
+        //    Assert.IsTrue(
+        //        updateResult.ROLE_NM == insertResult.ROLE_NM
+        //        && updateResult.ROLE_DSPLY_NM == insertResult.ROLE_DSPLY_NM
+        //        && updateResult.ROLE_SID == insertResult.ROLE_SID
+        //        && updateResult.ROLE_DESC == insertResult.ROLE_DESC
+        //        && updateResult.ROLE_TIER_NM == insertResult.ROLE_TIER_NM
+        //        && updateResult.IS_SNGL_SLCT == insertResult.IS_SNGL_SLCT
+        //        && updateResult.ACTV_IND == insertResult.ACTV_IND
+        //        && updateResult.APP_SID == insertResult.APP_SID
+        //        );
 
-            //DELETE
-            bool deleteResult = new SecurityAttributesLib().DeleteAdminRoleType(updateResult.ROLE_SID);
-            Assert.IsTrue(deleteResult);
-        }
+        //    //DELETE
+        //    bool deleteResult = new SecurityAttributesLib().DeleteAdminRoleType(updateResult.ROLE_SID);
+        //    Assert.IsTrue(deleteResult);
+        //}
 
         #endregion
     }

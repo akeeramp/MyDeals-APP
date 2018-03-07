@@ -126,25 +126,27 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetSecurityWrapper();
         }
 
-        public List<AdminApplications> GetAdminApplications()
-        {
-            return DataCollections.GetAdminApplications();
-        }
+        ////DEV_REBUILD_REMOVALS
+        //public List<AdminApplications> GetAdminApplications()
+        //{
+        //    return DataCollections.GetAdminApplications();
+        //}
 
         public List<AdminDealType> GetAdminDealTypes()
         {
             return DataCollections.GetAdminDealTypes();
         }
 
-        public List<AdminRoleType> GetAdminRoleTypes()
-        {
-            return DataCollections.GetAdminRoleTypes();
-        }
+        ////DEV_REBUILD_REMOVALS
+        //public List<AdminRoleType> GetAdminRoleTypes()
+        //{
+        //    return DataCollections.GetAdminRoleTypes();
+        //}
 
-        public List<SecurityActions> GetSecurityActions()
-        {
-            return DataCollections.GetSecurityActions();
-        }
+        //public List<SecurityActions> GetSecurityActions()
+        //{
+        //    return DataCollections.GetSecurityActions();
+        //}
 
         public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
         {

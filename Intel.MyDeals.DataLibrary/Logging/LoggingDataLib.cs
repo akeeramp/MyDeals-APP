@@ -54,7 +54,8 @@ namespace Intel.MyDeals.DataLibrary
 
             dt.AddRows(messages, messages.Count());
 
-            var ret = new List<AdminApplications>();
+            ////DEV_REBUILD_REMOVALS
+            //var ret = new List<AdminApplications>();
             try
             {
                 Procs.dbo.PR_INS_DB_LOG_BULK cmd = new Procs.dbo.PR_INS_DB_LOG_BULK()

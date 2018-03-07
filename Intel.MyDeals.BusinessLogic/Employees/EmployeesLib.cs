@@ -44,5 +44,17 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpMsg("Role has been set");
         }
 
+        public OpMsg GetOtherUserToken(int wwid, string idsid)
+        {
+            new EmployeeDataLib().GetOtherUserToken(wwid, idsid);
+            return new OpMsg("Role has been fetched");
+        }
+
+        public List<ManageUsersInfo> GetManageUserData(int wwid)
+        {
+            //return new EmployeeDataLib().GetManageUserData(wwid).Where(e => e.ACTV_IND).OrderBy(e => e.LST_NM).ToList()
+            return new EmployeeDataLib().GetManageUserData(wwid).ToList();
+        }
+
     }
 }

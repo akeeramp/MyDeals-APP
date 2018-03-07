@@ -349,15 +349,16 @@ namespace Intel.MyDeals.DataLibrary
 
         #region Security Attributes
 
-        public static List<AdminApplications> GetAdminApplications()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getAdminApplications ?? (_getAdminApplications = new SecurityAttributesDataLib().GetAdminApplications());
-            }
-        }
+        ////DEV_REBUILD_REMOVALS
+        //public static List<AdminApplications> GetAdminApplications()
+        //{
+        //    lock (LOCK_OBJECT ?? new object())
+        //    {
+        //        return _getAdminApplications ?? (_getAdminApplications = new SecurityAttributesDataLib().GetAdminApplications());
+        //    }
+        //}
 
-        private static List<AdminApplications> _getAdminApplications;
+        //private static List<AdminApplications> _getAdminApplications;
 
         public static List<AdminDealType> GetAdminDealTypes()
         {
@@ -369,25 +370,26 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<AdminDealType> _getAdminDealTypes;
 
-        public static List<AdminRoleType> GetAdminRoleTypes()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getAdminRoleTypes ?? (_getAdminRoleTypes = new SecurityAttributesDataLib().GetAdminRoleTypes());
-            }
-        }
+        ////DEV_REBUILD_REMOVALS
+        //public static List<AdminRoleType> GetAdminRoleTypes()
+        //{
+        //    lock (LOCK_OBJECT ?? new object())
+        //    {
+        //        return _getAdminRoleTypes ?? (_getAdminRoleTypes = new SecurityAttributesDataLib().GetAdminRoleTypes());
+        //    }
+        //}
 
-        private static List<AdminRoleType> _getAdminRoleTypes;
+        //private static List<AdminRoleType> _getAdminRoleTypes;
 
-        public static List<SecurityActions> GetSecurityActions()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getSecurityActions ?? (_getSecurityActions = new SecurityAttributesDataLib().GetSecurityActions());
-            }
-        }
+        //public static List<SecurityActions> GetSecurityActions()
+        //{
+        //    lock (LOCK_OBJECT ?? new object())
+        //    {
+        //        return _getSecurityActions ?? (_getSecurityActions = new SecurityAttributesDataLib().GetSecurityActions());
+        //    }
+        //}
 
-        private static List<SecurityActions> _getSecurityActions;
+        //private static List<SecurityActions> _getSecurityActions;
 
         #endregion Security Attributes
 

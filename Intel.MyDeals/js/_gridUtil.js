@@ -35,6 +35,10 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.booleanDisplay = function (passedData, field) {
+    return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
+}
+
 gridUtils.uiParentControlWrapper = function (dataItem) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
     tmplt += '    <div class="ng-binding vert-center" ng-bind="showStage(dataItem)"></div>';

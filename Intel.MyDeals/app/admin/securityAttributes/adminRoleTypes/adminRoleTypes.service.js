@@ -28,8 +28,9 @@
 		    return dataService.put(URL + 'UpdateAdminRoleType', roleType);
 		}
 
-		function deleteRoleType(id) {
-		    return dataService.Delete(URL + 'DeleteAdminRoleType?id=' + id);
-		}
+        ////DEV_REBUILD_REMOVALS
+		//function deleteRoleType(id) {
+		//    return dataService.Delete(URL + 'DeleteAdminRoleType?id=' + id);
+		//}
 	}
 })();

@@ -25,20 +25,21 @@ namespace Intel.MyDeals.BusinessLogic
 			_ecapTrackerDataLib = ecapTrackerDataLib;
 		}
 
-		/// <summary>
-		/// Get a list of possible ECAP Adjustment Tracker Numbers that match filterData parameter
-		/// </summary>
-		/// <returns>list of ECAP Adjustment Tracker Numbers</returns>
-		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
-		{
-			return _ecapTrackerDataLib.GetEcapTrackerList(filterData);
-		}
+        /// <summary>
+        /// Get a list of possible ECAP Adjustment Tracker Numbers that match filterData parameter
+        /// </summary>
+        /// <returns>list of ECAP Adjustment Tracker Numbers</returns>
+        /// ////DEV_REBUILD_REMOVALS
+        //public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
+        //{
+        //	return _ecapTrackerDataLib.GetEcapTrackerList(filterData);
+        //}
 
-		/// <summary>
-		/// Get a list of existing deal details based on ECAP Adjustment Tracker Numbers
-		/// </summary>
-		/// <returns>list of EcapTrackerData</returns>
-		public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers, int custId)
+        /// <summary>
+        /// Get a list of existing deal details based on ECAP Adjustment Tracker Numbers
+        /// </summary>
+        /// <returns>list of EcapTrackerData</returns>
+        public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers, int custId)
 		{
 			return _ecapTrackerDataLib.GetDealDetailsBasedOnTrackerNumbers(trackerNumbers, custId);
 		}

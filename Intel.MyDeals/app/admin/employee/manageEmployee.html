@@ -1,0 +1,28 @@
+﻿<div class="container-fluid">
+    <div class="row full">
+            <div ng-show="!isDropdownsLoaded">
+                <h3>Loading grid data... </h3>
+            </div>
+            <!-- Main block -->
+
+            <div class="col-md-12">
+                <div kendo-grid="grid" class="table" expand-k-grid options="gridOptions"></div>
+            </div>
+
+        <!-- place a button here -->
+    </div>
+    <div class="row">save button</div>
+</div>
+
+<style>
+    .empRole {
+        margin: 40px;
+    }
+    .my_sidebar {
+        padding: 40px;
+        background-color: #eeeeee;
+    }
+    .my_filters {
+        padding: 40px;
+    }
+</style>

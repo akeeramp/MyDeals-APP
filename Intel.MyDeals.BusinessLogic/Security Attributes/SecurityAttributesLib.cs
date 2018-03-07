@@ -124,45 +124,47 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region SecurityActions
 
-        public List<SecurityActions> GetSecurityActions()
-		{
-			return _dataCollectionsDataLib.GetSecurityActions();
-		}
+        ////DEV_REBUILD_REMOVALS
+        //      public List<SecurityActions> GetSecurityActions()
+        //{
+        //	return _dataCollectionsDataLib.GetSecurityActions();
+        //}
 
-		public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
-		{
-			return _securityAttributesDataLib.ManageSecurityAction(action, state);
-		}
+        //public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
+        //{
+        //	return _securityAttributesDataLib.ManageSecurityAction(action, state);
+        //}
 
-		public bool DeleteSecurityAction(int id)
-		{
-			return _securityAttributesDataLib.DeleteSecurityAction(id);
-		}
+        //public bool DeleteSecurityAction(int id)
+        //{
+        //	return _securityAttributesDataLib.DeleteSecurityAction(id);
+        //}
 
-		#endregion SecurityActions
+        #endregion SecurityActions
 
-		#region Admin Applications
+        #region Admin Applications
 
-		public List<AdminApplications> GetAdminApplications()
-		{
-			return _dataCollectionsDataLib.GetAdminApplications();
-		}
+        ////DEV_REBUILD_REMOVALS
+        //public List<AdminApplications> GetAdminApplications()
+        //{
+        //	return _dataCollectionsDataLib.GetAdminApplications();
+        //}
 
-		public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
-		{
-			return _securityAttributesDataLib.ManageAdminApplication(app, state);
-		}
+        //public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
+        //{
+        //	return _securityAttributesDataLib.ManageAdminApplication(app, state);
+        //}
 
-		public bool DeleteAdminApplication(int id)
-		{
-			return _securityAttributesDataLib.DeleteAdminApplication(id);
-		}
+        //public bool DeleteAdminApplication(int id)
+        //{
+        //	return _securityAttributesDataLib.DeleteAdminApplication(id);
+        //}
 
-		#endregion Admin Applications
+        #endregion Admin Applications
 
-		#region Admin DealTypes
+        #region Admin DealTypes
 
-		public List<AdminDealType> GetAdminDealTypes()
+        public List<AdminDealType> GetAdminDealTypes()
 		{
 			return _dataCollectionsDataLib.GetAdminDealTypes();
 		}
@@ -177,25 +179,26 @@ namespace Intel.MyDeals.BusinessLogic
 			return _securityAttributesDataLib.DeleteAdminDealType(id);
 		}
 
-		#endregion Admin DealTypes
+        #endregion Admin DealTypes
 
-		#region Admin RoleTypes
+        #region Admin RoleTypes
 
-		public List<AdminRoleType> GetAdminRoleTypes()
-		{
-			return _dataCollectionsDataLib.GetAdminRoleTypes();
-		}
+        ////DEV_REBUILD_REMOVALS
+        //public List<AdminRoleType> GetAdminRoleTypes()
+        //{
+        //	return _dataCollectionsDataLib.GetAdminRoleTypes();
+        //}
 
-		public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
-		{
-			return _securityAttributesDataLib.ManageAdminRoleType(roleType, state);
-		}
+        //public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
+        //{
+        //	return _securityAttributesDataLib.ManageAdminRoleType(roleType, state);
+        //}
 
-		public bool DeleteAdminRoleType(int id)
-		{
-			return _securityAttributesDataLib.DeleteAdminRoleType(id);
-		}
+        //public bool DeleteAdminRoleType(int id)
+        //{
+        //	return _securityAttributesDataLib.DeleteAdminRoleType(id);
+        //}
 
-		#endregion Admin RoleTypes
-	}
+        #endregion Admin RoleTypes
+    }
 }

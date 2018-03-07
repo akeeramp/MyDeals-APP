@@ -49,9 +49,9 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Application objects - Used by other classes to break data up per application, this is for admin screens only
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @emp_wwid = 10505693, @mode = 'Setup'");
-	ds.Tables[0].TableName = "AdminApplications";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	//ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @emp_wwid = 10505693, @mode = 'Setup'");
+	//ds.Tables[0].TableName = "AdminApplications";
+	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Deal Type objects - system deal types like "ECAP" and "VOL TIER"
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_OBJ_SET_TYPES] @WWID = 10505693, @MODE = 'Setup'");
@@ -59,14 +59,14 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Role Type objects - for basic roles information like "FSE" and "SA"
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ROLE_MSTR] @emp_wwid = 10505693, @mode = 'Setup'");
-	ds.Tables[0].TableName = "AdminRoleType";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	//ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ROLE_MSTR] @emp_wwid = 10505693, @mode = 'Setup'");
+	//ds.Tables[0].TableName = "AdminRoleType";
+	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Actions objects - For field security programming flags
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ACTIONS] @emp_wwid = 10505693, @mode = 'Setup'");
-	ds.Tables[0].TableName = "SecurityActions";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	//ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ACTIONS] @emp_wwid = 10505693, @mode = 'Setup'");
+	//ds.Tables[0].TableName = "SecurityActions";
+	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Logging Config data
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_LOG_CONFIG_DATA] @in_msg_src = 'UI_LOG'");
@@ -284,7 +284,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Meet Comp data
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_UPD_MEET_COMP_BCK @MODE='SELECT', @MEET_COMP_SID = '6312'");
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_UPD_MEET_COMP @MODE='SELECT', @MEET_COMP_SID = '6312'");
 	ds.Tables[0].TableName = "MeetComp";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -355,6 +355,11 @@ using System.Collections.Generic;
 
 	ds.Tables[1].TableName = "QuoteLetterTemplateInfo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
+	// Get Manage Users Data
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MANAGE_USERS @wwid = 10548414");
+	ds.Tables[0].TableName = "ManageUsersInfo";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

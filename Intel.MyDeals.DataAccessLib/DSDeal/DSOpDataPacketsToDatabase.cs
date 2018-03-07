@@ -67,28 +67,30 @@ namespace Intel.MyDeals.DataAccessLib
                 return;
             }
 
-            try
-            {
-                // We have failed, and we have not wired in a rollback, try to semi-rollback here...
-                using (var cmd = (new Procs.dbo.PR_DEAL_WF_DEL
-                {
-                    BTCH_ID = uqId,
-                    STG_ONLY = true
-                }).ToSqlCommand())
-                {
-                    using (SqlConnection conn = new SqlConnection(ConnectionString))
-                    {
-                        conn.Open();
-                        cmd.Connection = conn;
-                        cmd.ExecuteNonQuery();
-                    } // Doesn't need to use a conn.Close() since the using block does iDispose when completed.
-                }
-            }
-            catch (Exception ex2)
-            {
-                WriteMessage(OpMsg.MessageType.Debug, ex2.ToString());
-                WriteMessage(OpMsg.MessageType.Error, "Error rolling back the transaction.");
-            }
+            ////DEV_REBUILD_REMOVALS
+            // THIS IS A DANGEROUS THING TO REMOVE THAT MIGHT INTRODUCE DATA CORRUPTION, BUT ANCILLA SAID IT NEEDS TO GO.
+            //try
+            //{
+            //    // We have failed, and we have not wired in a rollback, try to semi-rollback here...
+            //    using (var cmd = (new Procs.dbo.PR_DEAL_WF_DEL
+            //    {
+            //        BTCH_ID = uqId,
+            //        STG_ONLY = true
+            //    }).ToSqlCommand())
+            //    {
+            //        using (SqlConnection conn = new SqlConnection(ConnectionString))
+            //        {
+            //            conn.Open();
+            //            cmd.Connection = conn;
+            //            cmd.ExecuteNonQuery();
+            //        } // Doesn't need to use a conn.Close() since the using block does iDispose when completed.
+            //    }
+            //}
+            //catch (Exception ex2)
+            //{
+            //    WriteMessage(OpMsg.MessageType.Debug, ex2.ToString());
+            //    WriteMessage(OpMsg.MessageType.Error, "Error rolling back the transaction.");
+            //}
         }
 
         /// <summary>

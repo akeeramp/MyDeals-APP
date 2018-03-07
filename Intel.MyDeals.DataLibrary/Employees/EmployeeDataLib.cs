@@ -549,5 +549,92 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public void GetOtherUserToken(int wwid, string idsid)
+        {
+            try
+            {
+                // Call Proc
+                int j = 0;
+                //DataAccessLib.StoredProcedures.MyDeals.dbo.PR_SET_USR_ROLE cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_SET_USR_ROLE
+                //{
+                //    IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
+                //    RoleId = data.roleTypeId,
+                //    IsDeveloper = data.isDeveloper,
+                //    IsTester = data.isTester,
+                //    IsSuper = data.isSuper,
+                //    IsAdmin = data.isAdmin,
+                //    IsFinanceAdmin = data.isFinanceAdmin
+                //};
+
+                //var rdr = DataAccess.ExecuteReader(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
+        public List<ManageUsersInfo> GetManageUserData(int wwid)
+        {
+            List<ManageUsersInfo> rtn = new List<ManageUsersInfo>();
+
+            var cmd = new Procs.dbo.PR_MANAGE_USERS()
+            {
+                wwid = wwid
+            }; 
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //TABLE 1
+                    var ret = new List<ManageUsersInfo>();
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
+                    int IDX_FRST_NM = DB.GetReaderOrdinal(rdr, "FRST_NM");
+                    int IDX_IS_DEVELOPER = DB.GetReaderOrdinal(rdr, "IS_DEVELOPER");
+                    int IDX_IS_SUPER = DB.GetReaderOrdinal(rdr, "IS_SUPER");
+                    int IDX_IS_TESTER = DB.GetReaderOrdinal(rdr, "IS_TESTER");
+                    int IDX_LST_MOD_BY = DB.GetReaderOrdinal(rdr, "LST_MOD_BY");
+                    int IDX_LST_MOD_DT = DB.GetReaderOrdinal(rdr, "LST_MOD_DT");
+                    int IDX_LST_NM = DB.GetReaderOrdinal(rdr, "LST_NM");
+                    int IDX_MI = DB.GetReaderOrdinal(rdr, "MI");
+                    int IDX_USR_CUST = DB.GetReaderOrdinal(rdr, "USR_CUST");
+                    int IDX_USR_GEOS = DB.GetReaderOrdinal(rdr, "USR_GEOS");
+                    int IDX_USR_ROLE = DB.GetReaderOrdinal(rdr, "USR_ROLE");
+                    int IDX_USR_VERTS = DB.GetReaderOrdinal(rdr, "USR_VERTS");
+
+                    while (rdr.Read())
+                    {
+                        rtn.Add(new ManageUsersInfo
+                        {
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+                            EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
+                            FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
+                            IS_DEVELOPER = (IDX_IS_DEVELOPER < 0 || rdr.IsDBNull(IDX_IS_DEVELOPER)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_DEVELOPER),
+                            IS_SUPER = (IDX_IS_SUPER < 0 || rdr.IsDBNull(IDX_IS_SUPER)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_SUPER),
+                            IS_TESTER = (IDX_IS_TESTER < 0 || rdr.IsDBNull(IDX_IS_TESTER)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_TESTER),
+                            LST_MOD_BY = (IDX_LST_MOD_BY < 0 || rdr.IsDBNull(IDX_LST_MOD_BY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_MOD_BY),
+                            LST_MOD_DT = (IDX_LST_MOD_DT < 0 || rdr.IsDBNull(IDX_LST_MOD_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_LST_MOD_DT),
+                            LST_NM = (IDX_LST_NM < 0 || rdr.IsDBNull(IDX_LST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_NM),
+                            MI = (IDX_MI < 0 || rdr.IsDBNull(IDX_MI)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MI),
+                            USR_CUST = (IDX_USR_CUST < 0 || rdr.IsDBNull(IDX_USR_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_CUST),
+                            USR_GEOS = (IDX_USR_GEOS < 0 || rdr.IsDBNull(IDX_USR_GEOS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_GEOS),
+                            USR_ROLE = (IDX_USR_ROLE < 0 || rdr.IsDBNull(IDX_USR_ROLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_ROLE),
+                            USR_VERTS = (IDX_USR_VERTS < 0 || rdr.IsDBNull(IDX_USR_VERTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_VERTS)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                throw OpMsgQueue.CreateFault(ex);
+            }
+
+            return rtn;
+        }
+
+
     }
 }

@@ -28,8 +28,9 @@
             return dataService.put(URL + 'UpdateAdminApplication', application);
         }
 
-        function deleteApplication(id) {
-            return dataService.Delete(URL + 'DeleteAdminApplication?id=' + id);
-        }
+        ////DEV_REBUILD_REMOVALS
+        //function deleteApplication(id) {
+        //    return dataService.Delete(URL + 'DeleteAdminApplication?id=' + id);
+        //}
     }
 })();

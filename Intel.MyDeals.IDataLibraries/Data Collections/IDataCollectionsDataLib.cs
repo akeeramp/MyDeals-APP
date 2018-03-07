@@ -47,13 +47,15 @@ namespace Intel.MyDeals.IDataLibrary
 
         #region Security Attributes
 
-        List<AdminApplications> GetAdminApplications();
+        ////DEV_REBUILD_REMOVALS
+        //List<AdminApplications> GetAdminApplications();
 
         List<AdminDealType> GetAdminDealTypes();
 
-        List<AdminRoleType> GetAdminRoleTypes();
+        ////DEV_REBUILD_REMOVALS
+        //List<AdminRoleType> GetAdminRoleTypes();
 
-        List<SecurityActions> GetSecurityActions();
+        //List<SecurityActions> GetSecurityActions();
 
         #endregion Security Attributes
 

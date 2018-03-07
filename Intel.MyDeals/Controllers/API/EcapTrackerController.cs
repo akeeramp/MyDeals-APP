@@ -17,19 +17,20 @@ namespace Intel.MyDeals.Controllers.API
 			_ecapTrackerLib = ecapTrackerLib;
 		}
 
-		[HttpPost]
-        [AntiForgeryValidate]
-        [Route("GetEcapTrackerList")]
-		public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
-		{
-			var result = SafeExecutor(() => _ecapTrackerLib.GetEcapTrackerList(filterData)
-				, $"Unable to get ECAP adjustment tracker list"
-			);
+        ////DEV_REBUILD_REMOVALS
+        //[HttpPost]
+        //      [AntiForgeryValidate]
+        //      [Route("GetEcapTrackerList")]
+        //public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
+        //{
+        //	var result = SafeExecutor(() => _ecapTrackerLib.GetEcapTrackerList(filterData)
+        //		, $"Unable to get ECAP adjustment tracker list"
+        //	);
 
-			return result;
-		}
-		
-		[HttpGet]
+        //	return result;
+        //}
+
+        [HttpGet]
 		[Route("GetDealDataViaTrackerNumber/{trackerNumber}/{custId}")]
 		public EcapTrackerData GetDealDataViaTrackerNumber(string trackerNumber, int custId)
 		{
