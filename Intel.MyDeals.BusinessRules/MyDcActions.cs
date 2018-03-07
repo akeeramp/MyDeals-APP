@@ -681,7 +681,7 @@ namespace Intel.MyDeals.BusinessRules
 
             int custId = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID));
             string prcCd = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId && c.ACTV_IND).Select(c => c.PRC_GRP_CD).FirstOrDefault();
-            if (string.IsNullOrEmpty(prcCd))
+            if (string.IsNullOrEmpty(prcCd) && !de.IsReadOnly)
             {
                 de.AddMessage("Frontend Deals cannot be created if no sold to values are selected and the customer doesn't have a Price Group Code.");
             }
