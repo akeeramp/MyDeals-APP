@@ -1363,6 +1363,39 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return ids;
     }
 
+
+	/// <summary>
+	//	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste) then resize the spreadsheet row
+	/// </summary> 
+    function sanitizeAndResizeRow(stringToSanitize, sheet, sheetRowIndex) {
+    	var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g); // NOTE: put this before the sanitize!
+    	stringToSanitize = sanitizeString(stringToSanitize, ", ")
+
+    	if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
+    		var rowSizeHeight = 150;
+    		if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+    			rowSizeHeight = 50;
+    		}
+    		sheet.rowHeight(sheetRowIndex, rowSizeHeight);
+    	}
+
+    	return stringToSanitize;
+    }
+
+	/// <summary>
+	//	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste)  
+	/// </summary>  
+    function sanitizeString(stringToSanitize, lineBreakReplacementCharacter) {
+    	var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
+    	if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
+    	///
+    	//stringToSanitize = stringToSanitize.replace(/[^\x00-\x7F]/g, ""); // NOTE: Remove non-ASCII characters (also takes out hidden characters that causes js dictionary breaking)
+
+    	stringToSanitize = stringToSanitize.replace(/\r?\n\r?\n?|\n|\r/g, lineBreakReplacementCharacter) // replace all new line characters with commas 			
+   
+    	return stringToSanitize;
+    }
+
     function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex, isAddedByTrackerNumber) {
         // Now lets sync all values.
         // This is a performance boost
@@ -1386,7 +1419,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex - 2) ; k++) {
-                    if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
+                	if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
                 }
 
                 // For KITs, remove duplicate products. Must be before cleanup()
@@ -1405,128 +1438,135 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         }
                         data[r]["PTR_USER_PRD"] = usrPrdArr.join(",");
+                        data[r]["PTR_USER_PRD"] = sanitizeAndResizeRow(data[r]["PTR_USER_PRD"].toString(), sheet, (r + 1));
                     }
                 }
                 cleanupData(data);
 
                 var tierNbr = 0;
+				
+                sheet.batch(function () {
+                	for (var r = 0; r < data.length; r++) {
+                		if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
+                			// Calcuate the KIT Rebate in case the number of products/tiers changes
+                			if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                				tierNbr = data[r]["TIER_NBR"];
+                				if (tierNbr == 1) {
+                					data[r]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, r, data[r]["NUM_OF_TIERS"], false);
+                				}
+                			}
 
-                for (var r = 0; r < data.length; r++) {
-                    if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
-                        // Calcuate the KIT Rebate in case the number of products/tiers changes
-                        if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                            tierNbr = data[r]["TIER_NBR"];
-                            if (tierNbr == 1) {
-                                data[r]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, r, data[r]["NUM_OF_TIERS"], false);
-                            }
-                        }
+                			// This is an existing row. Don't do anything else
+                			continue;
+                		}
+						
+						// Sanitize data. // HACK: if the user were to double click onto a cell, our customPaste code is not hit, so we need to sanitize here
+                		data[r]["PTR_USER_PRD"] = sanitizeAndResizeRow(data[r]["PTR_USER_PRD"].toString(), sheet, (r + 1));
+                	
 
-                        // This is an existing row. Don't do anything else
-                        continue;
-                    }
+                		newItems++;
+                		var numPivotRows = root.numOfPivot(data[r]);
+                		data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
+                		data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
+                		data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+                		if (!isAddedByTrackerNumber) {
+                			data[r]["VOLUME"] = null;
+                			data[r]["ECAP_PRICE"] = null;
+                		}
 
-                    newItems++;
-                    var numPivotRows = root.numOfPivot(data[r]);
-                    data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
-                    data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
-                    data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
-                    if (!isAddedByTrackerNumber) {
-                        data[r]["VOLUME"] = null;
-                        data[r]["ECAP_PRICE"] = null;
-                    }
+                		// Defaulted row values for specific SET TYPEs
+                		if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                			data[r]["DSCNT_PER_LN"] = 0;
+                			data[r]["DSCNT_PER_LN"] = 0;
+                			data[r]["QTY"] = 1;
+                			data[r]["ECAP_PRICE"] = 0;
+                			data[r]["ECAP_PRICE_____20_____1"] = 0; // KIT ECAP
+                			data[r]["TEMP_KIT_REBATE"] = 0;
+                			data[r]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
+                			data[r]["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
+                		} else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
+                			// TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+                			data[r]["ADJ_ECAP_UNIT"] = 0;
+                		} else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") {
+                			// TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+                			data[r]["ECAP_PRICE"] = 0;
+                		}
 
-                    // Defaulted row values for specific SET TYPEs
-                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                        data[r]["DSCNT_PER_LN"] = 0;
-                        data[r]["DSCNT_PER_LN"] = 0;
-                        data[r]["QTY"] = 1;
-                        data[r]["ECAP_PRICE"] = 0;
-                        data[r]["ECAP_PRICE_____20_____1"] = 0; // KIT ECAP
-                        data[r]["TEMP_KIT_REBATE"] = 0;
-                        data[r]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
-                        data[r]["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
-                    } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
-                        // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
-                        data[r]["ADJ_ECAP_UNIT"] = 0;
-                    } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") {
-                        // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
-                        data[r]["ECAP_PRICE"] = 0;
-                    }
+                		if (!root.curPricingTable || root.isPivotable()) {
+                			if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
+                				// must be a new row... use the autofilter tier number info
+                				data[r]["TIER_NBR"] = pivotDim;
+                				data[r]["NUM_OF_TIERS"] = numPivotRows;
 
-                    if (!root.curPricingTable || root.isPivotable()) {
-                        if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
-                            // must be a new row... use the autofilter tier number info
-                            data[r]["TIER_NBR"] = pivotDim;
-                            data[r]["NUM_OF_TIERS"] = numPivotRows;
+                				if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                					// Default to 0
+                					data[r]["RATE"] = 0;
 
-                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
-                                // Default to 0
-                                data[r]["RATE"] = 0;
-
-                                if (pivotDim === parseInt(numPivotRows)) {
-                                    // default last end vol to "unlimited"
-                                    data[r]["END_VOL"] = unlimitedVal;
-                                } else {
-                                    // Default to 0
-                                    data[r]["END_VOL"] = 0;
-                                }
-                                // disable non-first start vols
-                                if (pivotDim !== 1) {
-                                    if (!data[r]._behaviors) {
-                                        data[r]._behaviors = {};
-                                    }
-                                    if (!data[r]._behaviors.isReadOnly) {
-                                        data[r]._behaviors.isReadOnly = {};
-                                    }
-                                    // Flag start vol cols to disable
-                                    var rowInfo = data[r];
-                                    data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
-                                    // Default to 0
-                                    data[r]["STRT_VOL"] = 0;
-                                } else {
-                                    // 1st tier row
-                                    data[r]["STRT_VOL"] = 1;
-                                }
-                            }
-                        }
-                    }
+                					if (pivotDim === parseInt(numPivotRows)) {
+                						// default last end vol to "unlimited"
+                						data[r]["END_VOL"] = unlimitedVal;
+                					} else {
+                						// Default to 0
+                						data[r]["END_VOL"] = 0;
+                					}
+                					// disable non-first start vols
+                					if (pivotDim !== 1) {
+                						if (!data[r]._behaviors) {
+                							data[r]._behaviors = {};
+                						}
+                						if (!data[r]._behaviors.isReadOnly) {
+                							data[r]._behaviors.isReadOnly = {};
+                						}
+                						// Flag start vol cols to disable
+                						var rowInfo = data[r];
+                						data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+                						// Default to 0
+                						data[r]["STRT_VOL"] = 0;
+                					} else {
+                						// 1st tier row
+                						data[r]["STRT_VOL"] = 1;
+                					}
+                				}
+                			}
+                		}
 
 
-                    for (var key in ptTemplate.model.fields) {
-                        if (ptTemplate.model.fields.hasOwnProperty(key)) {
-                            // Autofill default values from Contract level
-                            if ((root.contractData[key] !== undefined) &&
-                                (root.contractData[key] !== null) &&
-                                (root.colToLetter[key] != undefined) &&
-                                key !== "DC_ID"
-                            ) {
-                                var fillValue = root.contractData[key];
-                                if (ptTemplate.model.fields[key].type === "date") {
-                                    fillValue = new Date(root.contractData[key]);
-                                }
-                                data[r][key] = fillValue;
-                            }
+                		for (var key in ptTemplate.model.fields) {
+                			if (ptTemplate.model.fields.hasOwnProperty(key)) {
+                				// Autofill default values from Contract level
+                				if ((root.contractData[key] !== undefined) &&
+									(root.contractData[key] !== null) &&
+									(root.colToLetter[key] != undefined) &&
+									key !== "DC_ID"
+								) {
+                					var fillValue = root.contractData[key];
+                					if (ptTemplate.model.fields[key].type === "date") {
+                						fillValue = new Date(root.contractData[key]);
+                					}
+                					data[r][key] = fillValue;
+                				}
 
-                            // Auto fill default values from Pricing Strategy level
-                            if ((root.curPricingTable[key] !== undefined) &&
-                                (root.curPricingTable[key] !== null) &&
-                                (root.colToLetter[key] != undefined) &&
-                                key !== "DC_ID"
-                                && !isAddedByTrackerNumber
-								&& (data[r][key] === null || data[r][key] === "") // don't override if there is an existing value
-                            ) {
-                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
-                                    // Dont override the row num tiers with pricing table numtiiers for kit deals
-                                } else {
-                                    data[r][key] = root.curPricingTable[key];
-                                }
-                            }
-                        }
-                    }
-                    // increment pivot dim (example tier 1 to tier 2)
-                    pivotDim++;
-                    if (pivotDim > numPivotRows) pivotDim = 1;
-                }
+                				// Auto fill default values from Pricing Strategy level
+                				if ((root.curPricingTable[key] !== undefined) &&
+									(root.curPricingTable[key] !== null) &&
+									(root.colToLetter[key] != undefined) &&
+									key !== "DC_ID"
+									&& !isAddedByTrackerNumber
+									&& (data[r][key] === null || data[r][key] === "") // don't override if there is an existing value
+								) {
+                					if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
+                						// Dont override the row num tiers with pricing table numtiiers for kit deals
+                					} else {
+                						data[r][key] = root.curPricingTable[key];
+                					}
+                				}
+                			}
+                		}
+                		// increment pivot dim (example tier 1 to tier 2)
+                		pivotDim++;
+                		if (pivotDim > numPivotRows) pivotDim = 1;
+                	}
+                });
 
                 spreadDsSync();
 
@@ -2156,6 +2196,64 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     range._adjustRowHeight();
                 }
             },
+            sanitizeAndFormatPasteData: function (state, sheet) { // Non-default Kendo code for paste event
+            	for (row = state.data.length - 1; row >= 0; row--) {
+            		// Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
+            		if (state.data[row] == null) { continue; }
+
+            		for (var col = state.data[row].length - 1; col >= 0; col--) {
+            			var cellData = state.data[row][col];
+
+            			if (typeof cellData.value == "string") {
+            				var sanitizedString = sanitizeString(cellData.value, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+
+            				// NOTE: we need to check that all the values are ot null or empty again because now have have sanitized the string
+            				if (cellData.value != sanitizedString) {
+            					cellData.value = sanitizedString;
+            					// Don't allow paste of the value if the pasted value is empty (empty string or only white space), which it could be after sanitizing the data
+            					if (cellData.value.replace(/\s/g, "").length === 0) {
+            						state.data[row].splice(col, 1);
+            					}
+            					if (state.data[row].length === 0) {
+            						state.data.splice(row, 1);
+            						continue;
+            					}
+            				}
+            			}
+
+            			// Prevent the user form pasting in new cell styles
+            			cellData.background = null;
+            			cellData.bold = null;
+            			cellData.borderBottom = null;
+            			cellData.borderLeft = null;
+            			cellData.borderRight = null;
+            			cellData.borderTop = null;
+            			cellData.color = cellStyle.color;
+            			cellData.fontFamily = cellStyle.fontfamily;
+            			cellData.fontSize = cellStyle.fontSize;
+            			cellData.italic = null;
+            			cellData.link = null;
+            			cellData.textAlign = cellStyle.textAlign;
+            			cellData.underline = null;
+            			cellData.verticalAlign = cellStyle.verticalAlign;
+            			cellData.wrap = null;
+
+            			// Get the current cell
+            			var myRow = sheet.activeCell().topLeft.row + row;
+            			var myCol = sheet.activeCell().topLeft.col + col;
+
+            			// Workround to prevent Kendo bug where users can copy/paste another cell's validation onto a new cell
+            			if (sheet.range(myRow, myCol).getState().data[0] !== undefined) {
+            				var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
+            				if (originalCellState != null) {
+            					cellData.validation = originalCellState.validation;
+            					cellData.editor = originalCellState.editor;
+            				}
+            			}
+            		}
+            	}
+            	return state;
+            },
             customPaste: function () {
                 // Default Kendo code for paste event
                 var clip = this._clipboard;
@@ -2166,47 +2264,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     clip.origin = state.origRef;
                 }
 
-                // Non-default Kendo code for paste event
-                for (var row = 0; row < state.data.length; row++) {
-                    // Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
-                    if (state.data[row] == null) { continue; }
-
-                    for (var col = 0; col < state.data[row].length; col++) {
-                        var cellData = state.data[row][col];
-
-                        if (typeof cellData.value == "string") {
-                        	cellData.value.replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
-                        }
-
-                        // Prevent the user from pasting in new cell styles
-                        cellData.background = null;
-                        cellData.bold = null;
-                        cellData.borderBottom = null;
-                        cellData.borderLeft = null;
-                        cellData.borderRight = null;
-                        cellData.borderTop = null;
-                        cellData.color = cellStyle.color;
-                        cellData.fontFamily = cellStyle.fontfamily;
-                        cellData.fontSize = cellStyle.fontSize;
-                        cellData.italic = null;
-                        cellData.link = null;
-                        cellData.textAlign = cellStyle.textAlign;
-                        cellData.underline = null;
-                        cellData.verticalAlign = cellStyle.verticalAlign;
-                        cellData.wrap = null;
-
-                        // Get the current cell
-                        var myRow = sheet.activeCell().topLeft.row + row;
-                        var myCol = sheet.activeCell().topLeft.col + col;
-
-                        // Workround to prevent Kendo bug where users can copy/paste another cell's validation onto a new cell
-                        var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
-                        if (originalCellState != null) {
-                            cellData.validation = originalCellState.validation;
-                            cellData.editor = originalCellState.editor;
-                        }
-                    }
-                }
+            	// Non-default Kendo code for paste event
+                this.sanitizeAndFormatPasteData(state, sheet);
 
                 // Prevent user from pasting merged cells
                 state.mergedCells = null;
@@ -2257,49 +2316,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     state.data = newData;
                 }
-                //}
+            	//}
 
-                // Non-default Kendo code for paste event
-                for (row = 0; row < state.data.length; row++) {
-                    // Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
-                    if (state.data[row] == null) { continue; }
-
-                    for (var col = 0; col < state.data[row].length; col++) {
-                        var cellData = state.data[row][col];
-                        
-                        if (typeof cellData.value == "string") {
-                        	cellData.value.replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
-                        }
-
-                        // Prevent the user form pasting in new cell styles
-                        cellData.background = null;
-                        cellData.bold = null;
-                        cellData.borderBottom = null;
-                        cellData.borderLeft = null;
-                        cellData.borderRight = null;
-                        cellData.borderTop = null;
-                        cellData.color = cellStyle.color;
-                        cellData.fontFamily = cellStyle.fontfamily;
-                        cellData.fontSize = cellStyle.fontSize;
-                        cellData.italic = null;
-                        cellData.link = null;
-                        cellData.textAlign = cellStyle.textAlign;
-                        cellData.underline = null;
-                        cellData.verticalAlign = cellStyle.verticalAlign;
-                        cellData.wrap = null;
-
-                        // Get the current cell
-                        var myRow = sheet.activeCell().topLeft.row + row;
-                        var myCol = sheet.activeCell().topLeft.col + col;
-
-                        // Workround to prevent Kendo bug where users can copy/paste another cell's validation onto a new cell
-                        var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
-                        if (originalCellState != null) {
-                            cellData.validation = originalCellState.validation;
-                            cellData.editor = originalCellState.editor;
-                        }
-                    }
-                }
+            	// Non-default Kendo code for paste event
+                this.sanitizeAndFormatPasteData(state, sheet);
 
                 // Prevent user from pasting merged cells
                 state.mergedCells = null;
