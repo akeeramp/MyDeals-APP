@@ -84,6 +84,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_CNTRCT_C2A_DATA_C2A_ID = DB.GetReaderOrdinal(rdr, "CNTRCT_C2A_DATA_C2A_ID");
                     int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
                     int IDX_CNTRCT_TITLE = DB.GetReaderOrdinal(rdr, "CNTRCT_TITLE");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
@@ -102,6 +103,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             ret.Add(new AdvancedSearchResults
                             {
+                                CNTRCT_C2A_DATA_C2A_ID = (IDX_CNTRCT_C2A_DATA_C2A_ID < 0 || rdr.IsDBNull(IDX_CNTRCT_C2A_DATA_C2A_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTRCT_C2A_DATA_C2A_ID),
                                 CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
                                 CNTRCT_TITLE = (IDX_CNTRCT_TITLE < 0 || rdr.IsDBNull(IDX_CNTRCT_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTRCT_TITLE),
                                 OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),

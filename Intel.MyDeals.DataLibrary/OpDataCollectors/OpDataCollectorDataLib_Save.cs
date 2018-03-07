@@ -94,10 +94,14 @@ namespace Intel.MyDeals.DataLibrary
                             quoteLetterData.ObjectSid = dealId.ToString();
 
                             OpDataCollector dc = ret[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcID == dealId).FirstOrDefault();
-                            OpDataElement de = dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).FirstOrDefault();
-                            quoteLetterData.CustomerId = de.AtrbValue.ToString();
+                            if (dc != null)
+                            {
+                                OpDataElement de =
+                                    dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).FirstOrDefault();
+                                quoteLetterData.CustomerId = de.AtrbValue.ToString();
 
-                            quoteLetterDataList.Add(quoteLetterData);
+                                quoteLetterDataList.Add(quoteLetterData);
+                            }
                         }
                         quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
                     }
@@ -195,22 +199,22 @@ namespace Intel.MyDeals.DataLibrary
                 }
             });
 
-            foreach (DataRow row in dtData.Rows)
-            {
-                var attributeCol = row.Table.Columns.IndexOf(ATRB_SID);
-                if (row[attributeCol].ToString() != 3676.ToString())
-                    continue;
+            //foreach (DataRow row in dtData.Rows)
+            //{
+            //    var attributeCol = row.Table.Columns.IndexOf(ATRB_SID);
+            //    if (row[attributeCol].ToString() != 3676.ToString())
+            //        continue;
 
-                var attributeValueCol = row.Table.Columns.IndexOf(ATRB_VAL);
-                //if (row[attributeValueCol].ToString().ToUpper() == false.ToString().ToUpper())
-                //{
-                //    row[attributeValueCol] = 0;
-                //}
-                //else if (row[7].ToString().ToUpper() == true.ToString().ToUpper())
-                //{
-                //    row[attributeValueCol] = 1;
-                //}
-            }
+            //    var attributeValueCol = row.Table.Columns.IndexOf(ATRB_VAL);
+            //    //if (row[attributeValueCol].ToString().ToUpper() == false.ToString().ToUpper())
+            //    //{
+            //    //    row[attributeValueCol] = 0;
+            //    //}
+            //    //else if (row[7].ToString().ToUpper() == true.ToString().ToUpper())
+            //    //{
+            //    //    row[attributeValueCol] = 1;
+            //    //}
+            //}
 
             // If there is nothing to send to the DB, just pre-empt the whole process.  Just make sure that you also account for solo actions without save data (DE33251)
             if (dtData.Rows.Count != 0 || dtAction.Rows.Count != 0)

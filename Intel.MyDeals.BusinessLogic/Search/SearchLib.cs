@@ -188,6 +188,11 @@ namespace Intel.MyDeals.BusinessLogic
             // grid level filters and passed serverside and need to be converted into a sql where compatible string
             string strFilters = SearchTools.BuildFilterClause(data.StrFilters, opDataElementType);
 
+            // couple special cases here
+            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
+            rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
+            rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
+
             // If no found filters... return
             if (string.IsNullOrEmpty(strFilters)) return rtn;
 
@@ -279,6 +284,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 item["CNTRCT_OBJ_SID"] = decoderById[dcId].CNTRCT_OBJ_SID;
                 item["CNTRCT_TITLE"] = decoderById[dcId].CNTRCT_TITLE;
+                item["CNTRCT_C2A_DATA_C2A_ID"] = decoderById[dcId].CNTRCT_C2A_DATA_C2A_ID;
                 item["CHG_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CHG_DTM.ToString());
                 item["CHG_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CHG_EMP_WWID;
                 item["CRE_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CRE_DTM.ToString());

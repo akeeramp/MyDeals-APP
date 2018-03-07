@@ -155,6 +155,11 @@
                 width: 140,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
+                field: "CNTRCT_C2A_DATA_C2A_ID",
+                title: "C2A Id",
+                type: "string",
+                width: 100
+            }, {
                 field: "DC_ID",
                 title: "Deal",
                 type: "number",

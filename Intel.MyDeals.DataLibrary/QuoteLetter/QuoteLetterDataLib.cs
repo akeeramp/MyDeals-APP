@@ -290,7 +290,7 @@ namespace Intel.MyDeals.DataLibrary
             {
 
                 // If there is an existing PDF file exists in DB, use the existing one
-                if (!inNegotiation && !forceRegenerateQuoteLetter && 
+                if (!forceRegenerateQuoteLetter && 
                     quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
                 {
                     quoteLetterBytes = quoteLetterData.ContentInfo.PDF_FILE;
