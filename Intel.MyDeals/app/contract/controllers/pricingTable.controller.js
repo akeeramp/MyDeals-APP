@@ -2683,6 +2683,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.publishWipDealsBase();
             }
         } else {
+            kendo.alert("All of the products looks good.");
             root.setBusy("", "");
         }
     }
@@ -2830,6 +2831,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             root.publishWipDealsBase();
                         } // Call Save and Validate API from Contract Manager
                     } else {
+                        kendo.alert("All of the products looks good.");
                         root.setBusy("", "");
                     }
                 }, 20);
@@ -2995,6 +2997,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.publishWipDealsBase();
                                 } // Call Save and Validate API from Contract Manager
                             } else {
+                                kendo.alert("All of the products looks good.");
                                 root.setBusy("", "");
                             }
                         }, 20);
