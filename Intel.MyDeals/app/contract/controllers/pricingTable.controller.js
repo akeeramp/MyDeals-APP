@@ -1067,8 +1067,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
-                	cleanupData(data);
-                	spreadDsSync();
                     $timeout(function () {
                     	var cnt = 0;
 
@@ -1086,6 +1084,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         prdRange.enable(true);
                         prdRange.background(null);
 
+                		cleanupData(data);
+                		spreadDsSync();
                         clearUndoHistory();
 
                         $scope.applySpreadsheetMerge();
