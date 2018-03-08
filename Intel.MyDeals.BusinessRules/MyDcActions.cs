@@ -800,7 +800,7 @@ namespace Intel.MyDeals.BusinessRules
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");
             }
 
-            if (dcEn < DateTime.Now.Date && isExpired == "0") // If there is an expired flag, reset it if it is set
+            if (dcEn < DateTime.Now.Date && (isExpired == "0" || isExpired == "")) // If there is an expired flag, reset it if it is set
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "1");
             }
@@ -1205,33 +1205,38 @@ namespace Intel.MyDeals.BusinessRules
 			// Validate and set validation message if applicable on each tier
 			foreach (IOpDataElement atrb in atrbs)
             {
-                int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
-
-                if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+                if (atrb.DimKey.FirstOrDefault() != null)
                 {
-                    if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
-                    {
-                        AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
-                        continue;
-                    }
 
-                    // unlimited end vol
-                    if (isEndVol && (tier == numOfTiers) && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        continue;
-                    }
+                    int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
-                    decimal safeParse = 0;
-                    bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
-					totalOfAtrb += safeParse;
+                    if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+                    {
+                        if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                            continue;
+                        }
 
-					if (!isNumber)
-                    {
-                        AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
-                    }
-                    else if (!validationCondition(safeParse))
-                    {
-                        AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                        // unlimited end vol
+                        if (isEndVol && (tier == numOfTiers) &&
+                            atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        decimal safeParse = 0;
+                        bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+                        totalOfAtrb += safeParse;
+
+                        if (!isNumber)
+                        {
+                            AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
+                        }
+                        else if (!validationCondition(safeParse))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                        }
                     }
                 }
             }
@@ -1303,9 +1308,9 @@ namespace Intel.MyDeals.BusinessRules
                     int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
                     if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
                     {
-                        IOpDataElement ecapPrice = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
-                        IOpDataElement qty = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
-                        IOpDataElement discountPerLine = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
+                        IOpDataElement ecapPrice = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE && de.DimKey.FirstOrDefault() != null && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
+                        IOpDataElement qty = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString() && de.DimKey.FirstOrDefault() != null && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
+                        IOpDataElement discountPerLine = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString() && de.DimKey.FirstOrDefault() != null && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
 
                         decimal ecapPriceSafeParse = 0;
                         decimal qtySafeParse = 0;
