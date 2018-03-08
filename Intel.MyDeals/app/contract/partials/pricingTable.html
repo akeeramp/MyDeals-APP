@@ -2,7 +2,8 @@
 
 	<div style="position:absolute; left: 5px; z-index: 900;  padding-top: 2px;">
 		<!-- Save Button -->
-        <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
+	    <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="validatePricingTableProducts()" 
+                title="Save your pricing table, validate the products, and stay in your Pricing Table Editor">
             <table>
                 <tr>
                     <td>
@@ -38,11 +39,12 @@
 		</button>		
 
 		<!-- Product Selector Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_EDIT_PRODUCT" ng-click="openProductSelector()" title="Open Product Selector">
+	    <button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_EDIT_PRODUCT" ng-click="openProductSelector()" 
+                title="Use Product Selector to search for product(s)">
 			<table>
 				<tr>
 					<td>
-						<i class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 26px"></i>
+						<i class="intelicon-search skyBlue" aria-hidden="true" style="font-size: 26px"></i>
 					</td>
 					<td class="hidden-sm hidden-xs" style="padding-left: 5px; color: #00AEEF;">
 						Product <br />Selector
@@ -50,7 +52,23 @@
 				</tr>
 			</table>
 		</button>
-		<button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
+
+        <!-- Product Validator Button -->
+        <button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_EDIT_PRODUCT" ng-click="validateOnlyProducts()"
+                title="Use Product Selector to search for product(s)">
+            <table>
+                <tr>
+                    <td>
+                        <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 26px"></i>
+                    </td>
+                    <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        Validate Products <br />Entered in web sheet
+                    </td>
+                </tr>
+            </table>
+        </button>
+
+	    <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
 			<table>
 				<tr>
 					<td>
@@ -63,7 +81,8 @@
 			</table>
 		</button>
 
-        <button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_ADD_PRICING_TABLE" ng-click="showEditPricingTableDefaults(root.curPricingTable)" title="Autofill Defaults">
+	    <button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_ADD_PRICING_TABLE" ng-click="showEditPricingTableDefaults(root.curPricingTable)" 
+                title="View Autofill defaults, when changing values only new items entered in the grid will reflect updatess">
             <table>
                 <tr>
                     <td>

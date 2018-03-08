@@ -25,6 +25,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     vm.openProdCorrector = openProdCorrector;
     $scope.openProductSelector = openProductSelector;
     $scope.openInfoDialog = openInfoDialog;
+    $scope.validateOnlyProducts = validateOnlyProducts;
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
@@ -2398,7 +2399,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 context = options;
                 open();
             },
-            icon: "fa fa-check ssEditorBtn"
+            icon: "intelicon-search ssEditorBtn"
         };
 
         function open() {
@@ -2417,7 +2418,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Runs the translation that eventually may open up corrector
                 // Send the whole data function is intelligent to handle single and multiple rows
                 var data = root.spreadDs.data();
-                ValidateProducts(data, false, currentRow + 1);
+                ValidateProducts(data, false, true, currentRow + 1);
             }
             else { // open the selector
                 var currentPricingTableRowData = context.range._sheet.dataSource._data[currentRow];
@@ -2528,12 +2529,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         sheet.range(root.colToLetter['PTR_USER_PRD'] + (row + 1)).validation(root.myDealsValidation(isError, msg, false));
     }
 
-    function ValidateProducts(currentPricingTableRowData, publishWipDeals, currentRowNumber) {
+    function ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         var pcUi = new perfCacheBlock("Validate Products", "UI");
 
         var currentPricingTableRowData = currentPricingTableRowData.map(function (row, index) {
             return $.extend({}, row, { 'ROW_NUMBER': index + 1 });
         });
+
+        if (saveOnContinue === undefined || saveOnContinue === null) saveOnContinue = false;
 
         currentPricingTableRowData = root.deNormalizeData(currentPricingTableRowData);
 
@@ -2673,12 +2676,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var data = { 'ProdctTransformResults': {}, 'InValidProducts': {}, 'DuplicateProducts': {}, 'ValidProducts': {} };
             data = buildTranslatorOutputObject(invalidProductJSONRows, data);
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals);
-        } else { // No products to validate, call the Validate and Save from contract manager
+        } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
             if (!publishWipDeals) {
                 root.validatePricingTable();
             } else {
                 root.publishWipDealsBase();
             }
+        } else {
+            // maybe we need to close down the busy indicatore here... not sure what else needs to happen.
         }
     }
 
@@ -3160,15 +3165,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return updatedUserInput;
     }
 
+    function validateOnlyProducts() {
+        var data = cleanupData(root.spreadDs.data());
+        ValidateProducts(data, false, false);
+    }
+
     function validatePricingTableProducts() {
         $scope.root.pc = new perfCacheBlock("Pricing Table Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
-        ValidateProducts(data, false);
+        ValidateProducts(data, false, true);
     }
 
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
-        ValidateProducts(data, true);
+        ValidateProducts(data, true, true);
     }
 
     // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
