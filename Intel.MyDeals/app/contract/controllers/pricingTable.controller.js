@@ -235,7 +235,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var dcId = 0;
         nonMergedColIndexesDict = {};
         var numDeleted = 0;
-		
+
         sheet.batch(function () {
             sheet.range("A" + (rowOffset) + ":ZZ" + root.ptRowCount).unmerge();
             for (var d = 0; d < data.length; d++) {
@@ -463,7 +463,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //PTR_SYS_PRD
             sheet.range(root.colToLetter["PTR_SYS_PRD"] + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
-            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts); 
+            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
             if (root.colToLetter["PRD_DRAWING_ORD"] != undefined) {
                 sheet.range(root.colToLetter['PRD_DRAWING_ORD'] + (rowStart)).value(productSelectorOutput.prdDrawingOrd);
             }
@@ -482,7 +482,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //sheet.range(root.colToLetter['TIER_NBR'] + (a)).value(modifiedNumTiers);
                         modifiedNumTiers--;
                         systemModifiedProductInclude = true;
-                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts); 
+                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts);
                         systemModifiedProductInclude = false;
                     }
                     rowStart = mergedRows - 1;
@@ -655,7 +655,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        var tierNbr = myRow["TIER_NBR"];
 					        if (ptTemplate.model.fields[colName].type == "number") {
 					            // format numbers based on templating
-					        	myRow[colName] = (parseFloat(value.value) || 0);
+					            myRow[colName] = (parseFloat(value.value) || 0);
 					        } else {
 					            myRow[colName] = value.value;
 					        }
@@ -672,9 +672,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        // Logic to apply to merge cells (multiple tiers)
 					        if (skipUntilRow != null && rowIndex < skipUntilRow) { // Subsequent (non-first) row of a merged cell
 					            // Set the deal group val to be the same as the first one of the merged rows
-					        	if (colIndex == dealGrpColIndex) {
-					        		value.value = dealGrpSkipVal;
-					        		myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
+					            if (colIndex == dealGrpColIndex) {
+					                value.value = dealGrpSkipVal;
+					                myRow["DEAL_GRP_NM"] = dealGrpSkipVal;
 					            }
 					        }
 					        else { // Either a cell that is not merged OR the first row of a merged cell
@@ -685,14 +685,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            }
 
 					            if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
- 
+
 					                var dealGrpKeyFirstIndex = myRowIndex;
 					                data = root.spreadDs.data();
 
-					            	// Update the other tiers (because they may not update the other tiers if user drag-drops through only some of the rows of the merged row
-					                for (var i = 0; i < parseInt(data[myRowIndex]["NUM_OF_TIERS"]); i++) {
-					                	data[myRowIndex + i]["DEAL_GRP_NM"] = data[myRowIndex]["DEAL_GRP_NM"];
-									}
+					                // Update the other tiers (because they may not update the other tiers if user drag-drops through only some of the rows of the merged row
+					                for (var i = 0; i < parseInt(data[myRowIndex]["NUM_OF_TIERS"]) ; i++) {
+					                    data[myRowIndex + i]["DEAL_GRP_NM"] = data[myRowIndex]["DEAL_GRP_NM"];
+					                }
 
 					                // Look for another occurance of the Deal Group Name (AKA - Kit Name)
 					                for (var i = 0; i < data.length; i++) {
@@ -708,17 +708,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                    var existingRow = data[dealGrpKeyFirstIndex];
 					                    var isNonEditableKITname = ((parseInt(existingRow["HAS_TRACKER"]) || 0) == 1 || (!!existingRow._behaviors && !!existingRow._behaviors.isReadOnly && existingRow._behaviors.isReadOnly["PTR_USER_PRD"] == true));
 
-					                	// Prepare deal groups for merging confirmation after the range.forEachCell() is done
+					                    // Prepare deal groups for merging confirmation after the range.forEachCell() is done
 					                    var myKey = formatStringForDictKey(myRow["DEAL_GRP_NM"]);
 					                    if (!confirmationModPerDealGrp.hasOwnProperty(myKey)) {
-					                    	confirmationModPerDealGrp[myKey] = {
-					                    		"existingDcID": existingRow["DC_ID"],
-					                    		"RowCount": parseInt(existingRow["NUM_OF_TIERS"]) + parseInt(myRow["NUM_OF_TIERS"]),
-					                    		"isNonEditableKITname": isNonEditableKITname
-					                    	}
+					                        confirmationModPerDealGrp[myKey] = {
+					                            "existingDcID": existingRow["DC_ID"],
+					                            "RowCount": parseInt(existingRow["NUM_OF_TIERS"]) + parseInt(myRow["NUM_OF_TIERS"]),
+					                            "isNonEditableKITname": isNonEditableKITname
+					                        }
 					                    } else {
-					                    	// Add to count for validation purposes
-					                    	confirmationModPerDealGrp[myKey].RowCount = confirmationModPerDealGrp[myKey].RowCount + parseInt(myRow["NUM_OF_TIERS"]);
+					                        // Add to count for validation purposes
+					                        confirmationModPerDealGrp[myKey].RowCount = confirmationModPerDealGrp[myKey].RowCount + parseInt(myRow["NUM_OF_TIERS"]);
 					                    }
 					                }
 					            }
@@ -749,18 +749,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // Deal Group Merging
                 for (var key in confirmationModPerDealGrp) {
-                	if (confirmationModPerDealGrp.hasOwnProperty(key)) {
-                		if (confirmationModPerDealGrp[key].isNonEditableKITname) {
-                			// User tried to merge a deal group name that exists and cannot be edited (like when it has a tracker number)
-							modalOptions = {
-                				closeButtonText: "Okay",
-                				hasActionButton: false,
-                				headerText: "Cannot merge KIT name",
-                				bodyText: "A Kit with the name \"" + key + "\" already exists and its products cannot be edited. Please choose a different KIT name.",
-                				closeResults: { "key": key }
-                			};
-                		}
-                		else if (confirmationModPerDealGrp[key].RowCount > $scope.$parent.$parent.maxKITproducts) {
+                    if (confirmationModPerDealGrp.hasOwnProperty(key)) {
+                        if (confirmationModPerDealGrp[key].isNonEditableKITname) {
+                            // User tried to merge a deal group name that exists and cannot be edited (like when it has a tracker number)
+                            modalOptions = {
+                                closeButtonText: "Okay",
+                                hasActionButton: false,
+                                headerText: "Cannot merge KIT name",
+                                bodyText: "A Kit with the name \"" + key + "\" already exists and its products cannot be edited. Please choose a different KIT name.",
+                                closeResults: { "key": key }
+                            };
+                        }
+                        else if (confirmationModPerDealGrp[key].RowCount > $scope.$parent.$parent.maxKITproducts) {
                             // Cannot merge
                             modalOptions = {
                                 closeButtonText: "Okay",
@@ -803,29 +803,29 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    }
 							    // Find/get all occurances with deal-grp-nm
 							    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-							    	if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
-							    		for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1); j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM, so we want to backtrack to include the other tiers within that group 
-							    			prevValues.push(angular.copy(data[j]));
+							        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+							            for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM, so we want to backtrack to include the other tiers within that group
+							                prevValues.push(angular.copy(data[j]));
 
-							    			if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							    				// HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
-							    				//		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
+							                if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+							                    // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
+							                    //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
 
-							    				numOfExistingTiers++;
+							                    numOfExistingTiers++;
 
-							    				if (parseInt(data[j]["TIER_NBR"]) == 1) {
-							    					continue;
-							    				}
-							    			}
-							    			else {
-							    				if (j < originalExistingIndex) {
-							    					// the original index will change if the row is above the original and gets spliced
-							    					originalExistingIndex -= 1;
-							    				}
-							    				// "delete" the rows to merge
-							    				data.splice(j, 1);
-							    			}
-							    		}
+							                    if (parseInt(data[j]["TIER_NBR"]) == 1) {
+							                        continue;
+							                    }
+							                }
+							                else {
+							                    if (j < originalExistingIndex) {
+							                        // the original index will change if the row is above the original and gets spliced
+							                        originalExistingIndex -= 1;
+							                    }
+							                    // "delete" the rows to merge
+							                    data.splice(j, 1);
+							                }
+							            }
 							        }
 							    }
 							    var numOfDuplicates = 0;
@@ -879,7 +879,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    data[originalExistingIndex]['dirty'] = true;
 							    sourceData[originalExistingIndex]['dirty'] = true;
 
-								//sync
+							    //sync
 							    spreadDsSync();
 							    clearUndoHistory();
 							    root.child.setRowIdStyle(data);
@@ -893,9 +893,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							            if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
 							                continue;
 							            }
-							        	// Clear
-							            data[i]["DEAL_GRP_NM"]= "";
-							            data[i]["dirty"]= true;
+							            // Clear
+							            data[i]["DEAL_GRP_NM"] = "";
+							            data[i]["dirty"] = true;
 							        }
 							    }
 							    spreadDsSync();
@@ -904,8 +904,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 }
 
-            	// sync
-            	spreadDsSync();
+                // sync
+                spreadDsSync();
             }
         }
 
@@ -919,7 +919,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
-			
+
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
             var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
@@ -929,9 +929,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
-                    	var myRow = data[(rowIndex - 1)];
-                    	var myColLetter = String.fromCharCode(intA + (colIndex));
-                    	var colName = root.letterToCol[myColLetter];
+                        var myRow = data[(rowIndex - 1)];
+                        var myColLetter = String.fromCharCode(intA + (colIndex));
+                        var colName = root.letterToCol[myColLetter];
 
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 
@@ -946,7 +946,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             if (!isEndVolUnlimited) {
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
-                                	value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                    value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                                 }
                                 else if (colIndex === rateIndex) {
                                     value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -969,31 +969,31 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
                                     }
                                 }
-                            	// HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                                // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                                 value.value = kendo.toString(value.value, "n0");
-								
+
                                 myRow.END_VOL = value.value;
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
                             }
 
-                        	// Tracker number shenanigans
-							// TODO: better shenanigan check
+                            // Tracker number shenanigans
+                            // TODO: better shenanigan check
                             if (colIndex == productColIndex) {
-                            	// Make sure that the user doesn't delete all products when we have a tracker number								
-                            	if (myRow.HAS_TRACKER == 1
+                                // Make sure that the user doesn't delete all products when we have a tracker number
+                                if (myRow.HAS_TRACKER == 1
 									&& (value.value == null || value.value.toString().replace(/\s/g, "").length === 0)
 								) {
-                            		if (myRow.TIER_NBR == 1){
-                            			var modalOptions = {
-                            				closeButtonText: 'Close',
-                            				hasActionButton: false,
-                            				headerText: 'Cannot remove deal with tracker',
-                            				bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
-                            			};
-                            			confirmationModal.showModal({}, modalOptions);
-                            		}
-                            		value.value = myRow.PTR_USER_PRD; // revert
-                            	}
+                                    if (myRow.TIER_NBR == 1) {
+                                        var modalOptions = {
+                                            closeButtonText: 'Close',
+                                            hasActionButton: false,
+                                            headerText: 'Cannot remove deal with tracker',
+                                            bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
+                                        };
+                                        confirmationModal.showModal({}, modalOptions);
+                                    }
+                                    value.value = myRow.PTR_USER_PRD; // revert
+                                }
                             }
 
                             // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
@@ -1038,7 +1038,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     data.splice(rowStart, numToDel);
 
-                                	// now apply array to Datasource... one event triggered
+                                    // now apply array to Datasource... one event triggered
                                     spreadDsSync();
 
                                     $timeout(function () {
@@ -1069,7 +1069,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
                     $timeout(function () {
-                    	var cnt = 0;
+                        var cnt = 0;
 
                         for (var c = 0; c < data.length; c++) {
                             if (data[c].DC_ID !== null) cnt++;
@@ -1085,8 +1085,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         prdRange.enable(true);
                         prdRange.background(null);
 
-                		cleanupData(data);
-                		spreadDsSync();
+                        cleanupData(data);
+                        spreadDsSync();
                         clearUndoHistory();
 
                         $scope.applySpreadsheetMerge();
@@ -1162,7 +1162,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             $timeout(function () {
-            	$scope.applySpreadsheetMerge();
+                $scope.applySpreadsheetMerge();
             }, 10);
 
         }
@@ -1186,7 +1186,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function pivotKITDeals(data, n, dcIdDict, dictId, masterData, maxKITproducts) {
-        // NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards    	
+        // NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards
         if ((data[n]["PTR_USER_PRD"] === "" || data[n]["PTR_USER_PRD"] === null) && data[n]["DC_ID"] === null) {
             return;
         }
@@ -1296,13 +1296,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // clear validations for KIT in case the user added or removed a product from the PTR_USER_PRD csv. Otheriwse red validation flags will show on the wrong rows from dynamic tiering.
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             root.clearValidations();
-			clearUndoHistory();
+            clearUndoHistory();
         }
-		
+
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-            	pivotKITDeals(data, n, dcIdDict, dictId, copyOfData, $scope.$parent.$parent.maxKITproducts);
+                pivotKITDeals(data, n, dcIdDict, dictId, copyOfData, $scope.$parent.$parent.maxKITproducts);
                 dictId++;
             }
             if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === undefined || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
@@ -1319,7 +1319,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // fix merge issues
         if (data.length > 0) {
-        	var lastItem = data[data.length - 1];
+            var lastItem = data[data.length - 1];
             var numTier = root.numOfPivot(lastItem);
             var offset = getOffsetByIndex(data, data.length - 1, numTier);
             if (offset > 0) {
@@ -1365,36 +1365,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
 
-	/// <summary>
-	//	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste) then resize the spreadsheet row
-	/// </summary> 
+    /// <summary>
+    //	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste) then resize the spreadsheet row
+    /// </summary>
     function sanitizeAndResizeRow(stringToSanitize, sheet, sheetRowIndex) {
-    	var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g); // NOTE: put this before the sanitize!
-    	stringToSanitize = sanitizeString(stringToSanitize, ", ")
+        var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g); // NOTE: put this before the sanitize!
+        stringToSanitize = sanitizeString(stringToSanitize, ", ")
 
-    	if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
-    		var rowSizeHeight = 150;
-    		if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
-    			rowSizeHeight = 50;
-    		}
-    		sheet.rowHeight(sheetRowIndex, rowSizeHeight);
-    	}
+        if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
+            var rowSizeHeight = 150;
+            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                rowSizeHeight = 50;
+            }
+            sheet.rowHeight(sheetRowIndex, rowSizeHeight);
+        }
 
-    	return stringToSanitize;
+        return stringToSanitize;
     }
 
-	/// <summary>
-	//	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste)  
-	/// </summary>  
+    /// <summary>
+    //	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste)
+    /// </summary>
     function sanitizeString(stringToSanitize, lineBreakReplacementCharacter) {
-    	var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
-    	if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
-    	///
-    	//stringToSanitize = stringToSanitize.replace(/[^\x00-\x7F]/g, ""); // NOTE: Remove non-ASCII characters (also takes out hidden characters that causes js dictionary breaking)
+        var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
+        if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
+        ///
+        //stringToSanitize = stringToSanitize.replace(/[^\x00-\x7F]/g, ""); // NOTE: Remove non-ASCII characters (also takes out hidden characters that causes js dictionary breaking)
 
-    	stringToSanitize = stringToSanitize.replace(/\r?\n\r?\n?|\n|\r/g, lineBreakReplacementCharacter) // replace all new line characters with commas 			
-   
-    	return stringToSanitize;
+        stringToSanitize = stringToSanitize.replace(/\r?\n\r?\n?|\n|\r/g, lineBreakReplacementCharacter) // replace all new line characters with commas
+
+        return stringToSanitize;
     }
 
     function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex, isAddedByTrackerNumber) {
@@ -1417,10 +1417,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
                 var sheet = spreadsheet.activeSheet();
-				
+
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex - 2) ; k++) {
-                	if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
+                    if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
                 }
 
                 // For KITs, remove duplicate products. Must be before cleanup()
@@ -1445,145 +1445,145 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 cleanupData(data);
 
                 var tierNbr = 0;
-				
+
                 sheet.batch(function () {
-                	for (var r = 0; r < data.length; r++) {
-                		if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
-                			// Calcuate the KIT Rebate in case the number of products/tiers changes
-                			if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                				tierNbr = data[r]["TIER_NBR"];
-                				if (tierNbr == 1) {
-                					data[r]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, r, data[r]["NUM_OF_TIERS"], false);
-                				}
-                			}
+                    for (var r = 0; r < data.length; r++) {
+                        if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
+                            // Calcuate the KIT Rebate in case the number of products/tiers changes
+                            if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                                tierNbr = data[r]["TIER_NBR"];
+                                if (tierNbr == 1) {
+                                    data[r]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, r, data[r]["NUM_OF_TIERS"], false);
+                                }
+                            }
 
-                			// This is an existing row. Don't do anything else
-                			continue;
-                		}
-						
-						// Sanitize data. // HACK: if the user were to double click onto a cell, our customPaste code is not hit, so we need to sanitize here
-                		data[r]["PTR_USER_PRD"] = sanitizeAndResizeRow(data[r]["PTR_USER_PRD"].toString(), sheet, (r + 1));
-                	
+                            // This is an existing row. Don't do anything else
+                            continue;
+                        }
 
-                		newItems++;
-                		var numPivotRows = root.numOfPivot(data[r]);
-                		data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
-                		data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
-                		data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
-                		if (!isAddedByTrackerNumber) {
-                			data[r]["VOLUME"] = null;
-                			data[r]["ECAP_PRICE"] = null;
-                		}
-
-                		// Defaulted row values for specific SET TYPEs
-                		if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                			data[r]["DSCNT_PER_LN"] = 0;
-                			data[r]["DSCNT_PER_LN"] = 0;
-                			data[r]["QTY"] = 1;
-                			data[r]["ECAP_PRICE"] = 0;
-                			data[r]["ECAP_PRICE_____20_____1"] = 0; // KIT ECAP
-                			data[r]["TEMP_KIT_REBATE"] = 0;
-                			data[r]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
-                			data[r]["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
-                		} else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
-                			// TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
-                			data[r]["ADJ_ECAP_UNIT"] = 0;
-                		} else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") {
-                			// TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
-                			data[r]["ECAP_PRICE"] = 0;
-                		}
-
-                		if (!root.curPricingTable || root.isPivotable()) {
-                			if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
-                				// must be a new row... use the autofilter tier number info
-                				data[r]["TIER_NBR"] = pivotDim;
-                				data[r]["NUM_OF_TIERS"] = numPivotRows;
-
-                				if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
-                					// Default to 0
-                					data[r]["RATE"] = 0;
-
-                					if (pivotDim === parseInt(numPivotRows)) {
-                						// default last end vol to "unlimited"
-                						data[r]["END_VOL"] = unlimitedVal;
-                					} else {
-                						// Default to 0
-                						data[r]["END_VOL"] = 0;
-                					}
-                					// disable non-first start vols
-                					if (pivotDim !== 1) {
-                						if (!data[r]._behaviors) {
-                							data[r]._behaviors = {};
-                						}
-                						if (!data[r]._behaviors.isReadOnly) {
-                							data[r]._behaviors.isReadOnly = {};
-                						}
-                						// Flag start vol cols to disable
-                						var rowInfo = data[r];
-                						data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
-                						// Default to 0
-                						data[r]["STRT_VOL"] = 0;
-                					} else {
-                						// 1st tier row
-                						data[r]["STRT_VOL"] = 1;
-                					}
-                				}
-                			}
-                		}
+                        // Sanitize data. // HACK: if the user were to double click onto a cell, our customPaste code is not hit, so we need to sanitize here
+                        data[r]["PTR_USER_PRD"] = sanitizeAndResizeRow(data[r]["PTR_USER_PRD"].toString(), sheet, (r + 1));
 
 
-                		for (var key in ptTemplate.model.fields) {
-                			if (ptTemplate.model.fields.hasOwnProperty(key)) {
-                				// Autofill default values from Contract level
-                				if ((root.contractData[key] !== undefined) &&
+                        newItems++;
+                        var numPivotRows = root.numOfPivot(data[r]);
+                        data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
+                        data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
+                        data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+                        if (!isAddedByTrackerNumber) {
+                            data[r]["VOLUME"] = null;
+                            data[r]["ECAP_PRICE"] = null;
+                        }
+
+                        // Defaulted row values for specific SET TYPEs
+                        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            data[r]["DSCNT_PER_LN"] = 0;
+                            data[r]["DSCNT_PER_LN"] = 0;
+                            data[r]["QTY"] = 1;
+                            data[r]["ECAP_PRICE"] = 0;
+                            data[r]["ECAP_PRICE_____20_____1"] = 0; // KIT ECAP
+                            data[r]["TEMP_KIT_REBATE"] = 0;
+                            data[r]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
+                            data[r]["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
+                        } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
+                            // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+                            data[r]["ADJ_ECAP_UNIT"] = 0;
+                        } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") {
+                            // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+                            data[r]["ECAP_PRICE"] = 0;
+                        }
+
+                        if (!root.curPricingTable || root.isPivotable()) {
+                            if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
+                                // must be a new row... use the autofilter tier number info
+                                data[r]["TIER_NBR"] = pivotDim;
+                                data[r]["NUM_OF_TIERS"] = numPivotRows;
+
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                                    // Default to 0
+                                    data[r]["RATE"] = 0;
+
+                                    if (pivotDim === parseInt(numPivotRows)) {
+                                        // default last end vol to "unlimited"
+                                        data[r]["END_VOL"] = unlimitedVal;
+                                    } else {
+                                        // Default to 0
+                                        data[r]["END_VOL"] = 0;
+                                    }
+                                    // disable non-first start vols
+                                    if (pivotDim !== 1) {
+                                        if (!data[r]._behaviors) {
+                                            data[r]._behaviors = {};
+                                        }
+                                        if (!data[r]._behaviors.isReadOnly) {
+                                            data[r]._behaviors.isReadOnly = {};
+                                        }
+                                        // Flag start vol cols to disable
+                                        var rowInfo = data[r];
+                                        data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+                                        // Default to 0
+                                        data[r]["STRT_VOL"] = 0;
+                                    } else {
+                                        // 1st tier row
+                                        data[r]["STRT_VOL"] = 1;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        for (var key in ptTemplate.model.fields) {
+                            if (ptTemplate.model.fields.hasOwnProperty(key)) {
+                                // Autofill default values from Contract level
+                                if ((root.contractData[key] !== undefined) &&
 									(root.contractData[key] !== null) &&
 									(root.colToLetter[key] != undefined) &&
 									key !== "DC_ID"
 								) {
-                					var fillValue = root.contractData[key];
-                					if (ptTemplate.model.fields[key].type === "date") {
-                						fillValue = new Date(root.contractData[key]);
-                					}
-                					data[r][key] = fillValue;
-                				}
+                                    var fillValue = root.contractData[key];
+                                    if (ptTemplate.model.fields[key].type === "date") {
+                                        fillValue = new Date(root.contractData[key]);
+                                    }
+                                    data[r][key] = fillValue;
+                                }
 
-                				// Auto fill default values from Pricing Strategy level
-                				if ((root.curPricingTable[key] !== undefined) &&
+                                // Auto fill default values from Pricing Strategy level
+                                if ((root.curPricingTable[key] !== undefined) &&
 									(root.curPricingTable[key] !== null) &&
 									(root.colToLetter[key] != undefined) &&
 									key !== "DC_ID"
 									&& !isAddedByTrackerNumber
 									&& (data[r][key] === null || data[r][key] === "") // don't override if there is an existing value
 								) {
-                					if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
-                						// Dont override the row num tiers with pricing table numtiiers for kit deals
-                					} else {
-                						data[r][key] = root.curPricingTable[key];
-                					}
-                				}
-                			}
-                		}
-                		// increment pivot dim (example tier 1 to tier 2)
-                		pivotDim++;
-                		if (pivotDim > numPivotRows) pivotDim = 1;
-                	}
+                                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
+                                        // Dont override the row num tiers with pricing table numtiiers for kit deals
+                                    } else {
+                                        data[r][key] = root.curPricingTable[key];
+                                    }
+                                }
+                            }
+                        }
+                        // increment pivot dim (example tier 1 to tier 2)
+                        pivotDim++;
+                        if (pivotDim > numPivotRows) pivotDim = 1;
+                    }
                 });
 
                 spreadDsSync();
 
                 sheet.batch(function () {
                     if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                		// HACK: fix column formatting for the first row. Unsure why, but these columns will lose formatting sometimes
-                		var KitEcapRange = sheet.range(root.colToLetter["ECAP_PRICE_____20_____1"] + (topLeftRowIndex));
-                		var KitRebateRange = sheet.range(root.colToLetter["TEMP_KIT_REBATE"] + (topLeftRowIndex));
+                        // HACK: fix column formatting for the first row. Unsure why, but these columns will lose formatting sometimes
+                        var KitEcapRange = sheet.range(root.colToLetter["ECAP_PRICE_____20_____1"] + (topLeftRowIndex));
+                        var KitRebateRange = sheet.range(root.colToLetter["TEMP_KIT_REBATE"] + (topLeftRowIndex));
 
-                		if (KitEcapRange.format() != "$##,#0.00") {
-                			KitEcapRange.format("$##,#0.00");
-                		}
-                		if (KitRebateRange.format() != "$##,#0.00") {
-                			KitRebateRange.format("$##,#0.00");
-                		}
-                	}
+                        if (KitEcapRange.format() != "$##,#0.00") {
+                            KitEcapRange.format("$##,#0.00");
+                        }
+                        if (KitRebateRange.format() != "$##,#0.00") {
+                            KitRebateRange.format("$##,#0.00");
+                        }
+                    }
 
                     // If we skipped spaces, we already collapsed, so remove the extra data outside the range
                     var st = data.length + 1;
@@ -1695,12 +1695,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function spreadDsSync() {
-    	root.spreadDs.sync();
+        root.spreadDs.sync();
 
-    	// NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
-    	if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
-    		$scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
-    	}
+        // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
+        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+            $scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
+        }
     }
 
     function GetFirstEdiatableBeforeProductCol() {
@@ -2006,16 +2006,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 break;
                             case "number":
                                 // Money Formatting
-                            	if (myFieldModel.format == "{0:c}") {
+                                if (myFieldModel.format == "{0:c}") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
                                 } else {
                                     sheet.range(myColumnName + ":" + myColumnName).format("##,#");
                                 }
                                 break;
-                        	case "string":
-                        		if (key == "END_VOL") {
-                        			sheet.range(myColumnName + ":" + myColumnName).format("##,#");
-                        		}
+                            case "string":
+                                if (key == "END_VOL") {
+                                    sheet.range(myColumnName + ":" + myColumnName).format("##,#");
+                                }
                                 break;
                             default:
                                 break;
@@ -2198,62 +2198,62 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             },
             sanitizeAndFormatPasteData: function (state, sheet) { // Non-default Kendo code for paste event
-            	for (row = state.data.length - 1; row >= 0; row--) {
-            		// Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
-            		if (state.data[row] == null) { continue; }
+                for (row = state.data.length - 1; row >= 0; row--) {
+                    // Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
+                    if (state.data[row] == null) { continue; }
 
-            		for (var col = state.data[row].length - 1; col >= 0; col--) {
-            			var cellData = state.data[row][col];
+                    for (var col = state.data[row].length - 1; col >= 0; col--) {
+                        var cellData = state.data[row][col];
 
-            			if (typeof cellData.value == "string") {
-            				var sanitizedString = sanitizeString(cellData.value, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+                        if (typeof cellData.value == "string") {
+                            var sanitizedString = sanitizeString(cellData.value, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
 
-            				// NOTE: we need to check that all the values are ot null or empty again because now have have sanitized the string
-            				if (cellData.value != sanitizedString) {
-            					cellData.value = sanitizedString;
-            					// Don't allow paste of the value if the pasted value is empty (empty string or only white space), which it could be after sanitizing the data
-            					if (cellData.value.replace(/\s/g, "").length === 0) {
-            						state.data[row].splice(col, 1);
-            					}
-            					if (state.data[row].length === 0) {
-            						state.data.splice(row, 1);
-            						continue;
-            					}
-            				}
-            			}
+                            // NOTE: we need to check that all the values are ot null or empty again because now have have sanitized the string
+                            if (cellData.value != sanitizedString) {
+                                cellData.value = sanitizedString;
+                                // Don't allow paste of the value if the pasted value is empty (empty string or only white space), which it could be after sanitizing the data
+                                if (cellData.value.replace(/\s/g, "").length === 0) {
+                                    state.data[row].splice(col, 1);
+                                }
+                                if (state.data[row].length === 0) {
+                                    state.data.splice(row, 1);
+                                    continue;
+                                }
+                            }
+                        }
 
-            			// Prevent the user form pasting in new cell styles
-            			cellData.background = null;
-            			cellData.bold = null;
-            			cellData.borderBottom = null;
-            			cellData.borderLeft = null;
-            			cellData.borderRight = null;
-            			cellData.borderTop = null;
-            			cellData.color = cellStyle.color;
-            			cellData.fontFamily = cellStyle.fontfamily;
-            			cellData.fontSize = cellStyle.fontSize;
-            			cellData.italic = null;
-            			cellData.link = null;
-            			cellData.textAlign = cellStyle.textAlign;
-            			cellData.underline = null;
-            			cellData.verticalAlign = cellStyle.verticalAlign;
-            			cellData.wrap = null;
+                        // Prevent the user form pasting in new cell styles
+                        cellData.background = null;
+                        cellData.bold = null;
+                        cellData.borderBottom = null;
+                        cellData.borderLeft = null;
+                        cellData.borderRight = null;
+                        cellData.borderTop = null;
+                        cellData.color = cellStyle.color;
+                        cellData.fontFamily = cellStyle.fontfamily;
+                        cellData.fontSize = cellStyle.fontSize;
+                        cellData.italic = null;
+                        cellData.link = null;
+                        cellData.textAlign = cellStyle.textAlign;
+                        cellData.underline = null;
+                        cellData.verticalAlign = cellStyle.verticalAlign;
+                        cellData.wrap = null;
 
-            			// Get the current cell
-            			var myRow = sheet.activeCell().topLeft.row + row;
-            			var myCol = sheet.activeCell().topLeft.col + col;
+                        // Get the current cell
+                        var myRow = sheet.activeCell().topLeft.row + row;
+                        var myCol = sheet.activeCell().topLeft.col + col;
 
-            			// Workround to prevent Kendo bug where users can copy/paste another cell's validation onto a new cell
-            			if (sheet.range(myRow, myCol).getState().data[0] !== undefined) {
-            				var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
-            				if (originalCellState != null) {
-            					cellData.validation = originalCellState.validation;
-            					cellData.editor = originalCellState.editor;
-            				}
-            			}
-            		}
-            	}
-            	return state;
+                        // Workround to prevent Kendo bug where users can copy/paste another cell's validation onto a new cell
+                        if (sheet.range(myRow, myCol).getState().data[0] !== undefined) {
+                            var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
+                            if (originalCellState != null) {
+                                cellData.validation = originalCellState.validation;
+                                cellData.editor = originalCellState.editor;
+                            }
+                        }
+                    }
+                }
+                return state;
             },
             customPaste: function () {
                 // Default Kendo code for paste event
@@ -2265,7 +2265,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     clip.origin = state.origRef;
                 }
 
-            	// Non-default Kendo code for paste event
+                // Non-default Kendo code for paste event
                 this.sanitizeAndFormatPasteData(state, sheet);
 
                 // Prevent user from pasting merged cells
@@ -2317,9 +2317,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     state.data = newData;
                 }
-            	//}
+                //}
 
-            	// Non-default Kendo code for paste event
+                // Non-default Kendo code for paste event
                 this.sanitizeAndFormatPasteData(state, sheet);
 
                 // Prevent user from pasting merged cells
@@ -2640,7 +2640,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
 
         // Products invalid JSON data present in the row
-        var invalidProductJSONRows = pricingTableRowData.filter(function(x) {
+        var invalidProductJSONRows = pricingTableRowData.filter(function (x) {
             return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
         });
 
@@ -2661,7 +2661,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     topbar.hide();
                     if (response.statusText === "OK") {
                         response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
-                        cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
+                        cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
                     }
                 }, function (response) {
                     topbar.hide();
@@ -2675,7 +2675,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else if (invalidProductJSONRows.length > 0) {
             var data = { 'ProdctTransformResults': {}, 'InValidProducts': {}, 'DuplicateProducts': {}, 'ValidProducts': {} };
             data = buildTranslatorOutputObject(invalidProductJSONRows, data);
-            cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals);
+            cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
         } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
             if (!publishWipDeals) {
                 root.validatePricingTable();
@@ -2683,7 +2683,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.publishWipDealsBase();
             }
         } else {
-            // maybe we need to close down the busy indicatore here... not sure what else needs to happen.
+            root.setBusy("", "");
         }
     }
 
@@ -2700,7 +2700,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return data;
     }
 
-    function cookProducts(currentRow, transformResults, rowData, publishWipDeals) {
+    function cookProducts(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue) {
         var data = root.spreadDs.data();
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
         // Process multiple match products
@@ -2728,7 +2728,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
                     || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
                 root.setBusy("", "");
-                vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals);
+                vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue);
                 isAllValidated = false;
                 break;
             }
@@ -2816,18 +2816,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var sheet = spreadsheet.activeSheet();
             syncSpreadRows(sheet, 2, 200);// This will also call root.spreadDs.sync();
         } else {
-        	spreadDsSync();
+            spreadDsSync();
         }
         if (isAllValidated) {
             root.child.setRowIdStyle(data);
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 $timeout(function () {
-                    if (!publishWipDeals) {
-                        root.validatePricingTable();
+                    if (saveOnContinue) {
+                        if (!publishWipDeals) {
+                            root.validatePricingTable();
+                        } else {
+                            root.publishWipDealsBase();
+                        } // Call Save and Validate API from Contract Manager
                     } else {
-                        root.publishWipDealsBase();
-                    } // Call Save and Validate API from Contract Manager
+                        root.setBusy("", "");
+                    }
                 }, 20);
             }
             else {
@@ -2839,7 +2843,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-    function openProdCorrector(currentRow, transformResults, rowData, publishWipDeals) {
+    function openProdCorrector(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue) {
         var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
 
         var modal = $uibModal.open({
@@ -2967,8 +2971,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var sheet = spreadsheet.activeSheet();
                         syncSpreadRows(sheet, 2, 200); // NOTE: 2 accounts for the top row
                     } else {
-                    	deleteRowFromCorrector(data);
-                    	spreadDsSync();
+                        deleteRowFromCorrector(data);
+                        spreadDsSync();
                     }
                     if (root.spreadDs.data().length === 0) {
                         root.setBusy("No Products Found", "Please add products.", "Warning");
@@ -2981,14 +2985,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         root.setBusy("", "");
                         $timeout(function () {
-                            if (transformResult.AbortProgration) {
-                                return true;
-                            }
-                            if (!publishWipDeals) {
-                                root.validatePricingTable();
+                            if (saveOnContinue) {
+                                if (transformResult.AbortProgration) {
+                                    return true;
+                                }
+                                if (!publishWipDeals) {
+                                    root.validatePricingTable();
+                                } else {
+                                    root.publishWipDealsBase();
+                                } // Call Save and Validate API from Contract Manager
                             } else {
-                                root.publishWipDealsBase();
-                            } // Call Save and Validate API from Contract Manager
+                                root.setBusy("", "");
+                            }
                         }, 20);
                     } else {
                         $timeout(function () {
