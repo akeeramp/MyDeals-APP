@@ -3450,7 +3450,7 @@
                     $scope.addStrategyDisabled = false;
                     $scope.refreshContractData($scope.curPricingStrategyId);
                 },
-                function (result) {
+                function (response) {
                     $scope.addStrategyDisabled = false;
                     logger.error("Could not create the pricing strategy.", response, response.statusText);
                     $scope.setBusy("", "");

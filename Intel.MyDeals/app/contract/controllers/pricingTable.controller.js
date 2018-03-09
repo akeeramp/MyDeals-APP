@@ -2683,6 +2683,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.publishWipDealsBase();
             }
         } else {
+            $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
             kendo.alert("All of the products looks good.");
             root.setBusy("", "");
         }
@@ -2831,6 +2832,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             root.publishWipDealsBase();
                         } // Call Save and Validate API from Contract Manager
                     } else {
+                        $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                         kendo.alert("All of the products looks good.");
                         root.setBusy("", "");
                     }
@@ -2997,6 +2999,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.publishWipDealsBase();
                                 } // Call Save and Validate API from Contract Manager
                             } else {
+                                $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                                 kendo.alert("All of the products looks good.");
                                 root.setBusy("", "");
                             }
@@ -3177,6 +3180,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function validateOnlyProducts() {
+        $scope.root.pc = new perfCacheBlock("Pricing Table Product Validation", "UX");
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false, false);
     }
