@@ -29,6 +29,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.showPendingC2A = false;
     $scope.needToRunPct = false;
     $scope.canBypassEmptyActions = false;
+    $scope.ranManuallySincePageLoaded = false;
     root.enablePCT = false;
 
     $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
@@ -167,6 +168,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $scope.refreshContractDataIfNeeded = function (e, executedFromBtn) {
+        if (!!executedFromBtn && executedFromBtn === true) $scope.ranManuallySincePageLoaded = true;
+
         objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
             var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
             var newContractData = $scope.root.initContract(data);
@@ -884,6 +887,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     $scope.getIdsToPctMct = function (data) {
         var rtn = [];
+
+        // If I just ran it by hand... don't do it again
+        if ($scope.ranManuallySincePageLoaded) return rtn;
+
         var role = window.usrRole;
         var apprItems = data["Approve"];
         if (!!apprItems) {
