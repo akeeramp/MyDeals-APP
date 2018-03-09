@@ -51,11 +51,21 @@ namespace Intel.MyDeals.Controllers
         public ActionResult ResetAVM()
         {
             new CacheLib().ClearCache();
-            //new DataCollectionsDataLib().ClearCache();
+            AppLib.InitAvm(OpAppConfig.Init(), AvmforceMode.AVM);
+            return RedirectToAction("Index", "Home");
+        }
 
-            OpCore op = OpAppConfig.Init();
-            OpUserToken user = AppLib.InitAvm(op, true);
+        public ActionResult ResetMyCache()
+        {
+            new CacheLib().ClearCache("_getMyCustomers");
+            AppLib.InitAvm(OpAppConfig.Init(), AvmforceMode.User);
+            return RedirectToAction("Index", "Home");
+        }
 
+        public ActionResult ResetMT()
+        {
+            new CacheLib().ClearCache();
+            AppLib.InitAvm(OpAppConfig.Init(), AvmforceMode.All);
             return RedirectToAction("Index", "Home");
         }
     }

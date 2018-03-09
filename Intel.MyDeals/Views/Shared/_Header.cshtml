@@ -137,11 +137,42 @@
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
-                    @*<li><a href="/error/ResetAVM">Clear View Model</a></li>*@
-                    @if (isDeveloper)
-                    {
-                        <li><a id="clearViewModelLink" href="/error/ResetAVM" onclick="clearSessionData(); return false;">Clear View Model</a></li>
-                    }
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1">TroubleShooting</a>
+                        <ul class="dropdown-menu" style="width: 300px;">
+                            <li class="menu-detailed"><a href="/error/ResetMyCache" onclick="clearSessionData('/error/ResetMyCache');return false;">
+                                <i class="fl fa fa-user-md"></i>
+                                <div class="fl">
+                                    Clear <b>My</b> View Model
+                                    <div>Clear only your settings</div>
+                                </div>
+                                <div class="clearboth"></div>
+                            </a></li>
+                            @if (isDeveloper)
+                            {
+                                <li class="menu-detailed">
+                                    <a href="/error/ResetAVM" onclick="clearSessionData('/error/ResetAVM'); return false;">
+                                        <i class="fl fa fa-medkit"></i>
+                                        <div class="fl">
+                                            Clear <b>App</b> View Model
+                                            <div>Clear only the Middle Tier Cache</div>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </a>
+                                </li>
+                                <li class="menu-detailed">
+                                    <a href="/error/ResetMT" onclick="clearSessionData('/error/ResetMT'); return false;">
+                                        <i class="fl fa fa-heartbeat"></i>
+                                        <div class="fl">
+                                            Clear <b>All</b> View Models
+                                            <div>Clear Middle Tier and ALL Users</div>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
                     <li><a href="Admin#/employee">Set Your Role</a></li>
 
                     @if (isDeveloper)
@@ -261,19 +292,32 @@
         text-align: center;
     }
 
-        nav .hdrIcon a {
-            padding: 6px;
-        }
+    nav .hdrIcon a {
+        padding: 6px;
+    }
 
-            nav .hdrIcon a i {
-                line-height: .9em;
-                font-size: 20px;
-            }
+    nav .hdrIcon a i {
+        line-height: .9em;
+        font-size: 20px;
+    }
 
-            nav .hdrIcon a div {
-                font-size: 9px;
-                line-height: .9em;
-            }
+    nav .hdrIcon a div {
+        font-size: 9px;
+        line-height: .9em;
+    }
+
+    .menu-detailed a i {
+        font-size: 28px !important; 
+        color: #00AEEF; 
+        margin: 2px 10px 0 0;
+        width: 30px;
+    }
+    .menu-detailed a div {
+        line-height: 1.2em;
+    }
+    .menu-detailed a div > div {
+        font-size: 10px; color: #aaaaaa;
+    }
 </style>
 
 <script>
@@ -287,7 +331,7 @@
         window.open("/egg/mb/menu.html", "_blank", "toolbar=no,scrollbars=no,menubar=no,status=no,titlebar=no,resizable=no,width=642,height=482,top=200,left=200");
     }
 
-    function clearSessionData() {
+    function clearSessionData(newPath) {
         localStorage.clear(); // clear local storage
         sessionStorage.clear(); // clear session storage
 
@@ -303,7 +347,7 @@
             }
         }
 
-        window.location = "/error/ResetAVM";
+        window.location = newPath;
     }
 
     window.usrRole = "@usrRole";

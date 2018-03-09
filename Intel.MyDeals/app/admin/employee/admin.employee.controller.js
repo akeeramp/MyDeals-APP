@@ -34,7 +34,7 @@
                 .then(function (response) {
                     logger.success("Role was changed", "Done");
                     window.clearSessionData();
-                    document.location.href = "/error/ResetAVM";
+                    document.location.href = "/error/ResetMyCache";
                 }, function (response) {
                     logger.error("Unable to set User Roles.", response, response.statusText);
                 });

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Authentication;
-using System.Net;
 using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -23,17 +22,34 @@ namespace Intel.MyDeals.App
             set { OpUserStack.UserSettings = value; }
         }
 
-        public static OpUserToken InitAvm(OpCore op, bool forceLoad = false)
+        public static OpUserToken InitAvm(OpCore op, AvmforceMode forceMode = AvmforceMode.None)
         {
             // TODO: Some day - call this in a more clean fashion
-            if (forceLoad)
+            switch (forceMode)
             {
-                AVM = null;
-                OpUserStack.Clear();
-                UserSettings[OpUserStack.GetMyKey()] = null;
+                case AvmforceMode.User:
+                    // clear out user settings
+                    OpUserStack.Clear();
+                    UserSettings[OpUserStack.GetMyKey()] = null;
 
-                // Clear user cache of current user not all the users who are already authenticated
-                op.ClearUserCache("MyDeals", GetEnvironment());
+                    // Clear user cache of current user not all the users who are already authenticated
+                    op.ClearUserCache("MyDeals", GetEnvironment());
+                    break;
+
+                case AvmforceMode.AVM:
+                    AVM = null;
+                    break;
+
+                case AvmforceMode.All:
+                    AVM = null;
+
+                    // clear out all user settings
+                    OpUserStack.ClearAllUsers();
+                    UserSettings.Clear();
+
+                    // Clear all user cache
+                    OpAuthenticationExtensions.ClearCache();
+                    break;
             }
 
 #if DEBUG
@@ -57,7 +73,7 @@ namespace Intel.MyDeals.App
 
             new AccountsLib().SetUserAccessLevel(user);
 
-            if (AVM != null && !forceLoad)
+            if (AVM != null && forceMode == AvmforceMode.All)
             {
                 PopulateUserSettings(user);
                 return user;

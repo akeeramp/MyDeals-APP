@@ -80,6 +80,7 @@
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="Helpers\FixesHelpers.cs" />
+    <Compile Include="OP ExtensionMethods\AvmforceMode.cs" />
     <Compile Include="OpDataCollectorFlattenedDictListPacket.cs" />
     <Compile Include="OverlappingListPacket.cs" />
     <Compile Include="PerformanceTime.cs" />

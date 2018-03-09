@@ -41,6 +41,11 @@ namespace Intel.MyDeals.Entities
             UserSettings[key] = new UserSetting {UserToken = new OpUserToken {Usr = new OpUser {Idsid = key} } };
         }
 
+        public static void ClearAllUsers()
+        {
+            UserSettings.Clear();
+        }
+
 
         /// <summary>
         /// Get the authenticated user's UserSettings
