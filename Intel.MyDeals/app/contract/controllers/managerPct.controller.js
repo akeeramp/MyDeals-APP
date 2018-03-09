@@ -25,6 +25,7 @@
         $scope.dealPtIdDict = {};
         $scope.CostTestGroupDetails = {};
         $scope.CostTestGroupDealDetails = {};
+        root.enablePCT = false;
 
         // change negative values in grid from "()" to "-"
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
@@ -95,6 +96,22 @@
                 container = container.next();
             }
             $scope.isAllCollapsed = !$scope.isAllCollapsed;
+        }
+
+        $scope.$on('refreshContractDataComplete', function (event) {
+            $scope.calcNeedToRunStatus();
+        });
+
+        $scope.calcNeedToRunStatus = function () {
+            root.enablePCT = false;
+            if (root.contractData.PRC_ST === undefined || root.contractData.PRC_ST === null) return;
+
+            for (var d = 0; d < root.contractData.PRC_ST.length; d++) {
+                var stg = root.contractData.PRC_ST[d].WF_STG_CD;
+                if (stg !== "Pending" && stg !== "Approved") {
+                    root.enablePCT = true;
+                }
+            }
         }
 
         $scope.refreshContractDataIfNeeded = function (e, executedFromBtn) {
@@ -906,6 +923,8 @@
                 ]
             }
         }
+
+        $scope.calcNeedToRunStatus();
 
     }
 })();

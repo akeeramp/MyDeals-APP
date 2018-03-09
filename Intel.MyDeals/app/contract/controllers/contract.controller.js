@@ -289,6 +289,8 @@
 
                 $scope.OverrideDeleteContract();
 
+                $scope.$broadcast('refreshContractDataComplete');
+
                 $timeout(function () {
                     $scope.$apply();
                 });

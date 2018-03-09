@@ -29,6 +29,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.showPendingC2A = false;
     $scope.needToRunPct = false;
     $scope.canBypassEmptyActions = false;
+    root.enablePCT = false;
 
     $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
 
@@ -332,6 +333,23 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         }
         $scope.updateAtrbValue("WIP_DEAL", ids, fieldName, dataItem[fieldName]);
     });
+    $scope.$on('refreshContractDataComplete', function (event) {
+        $scope.calcNeedToRunStatus();
+    });
+
+    $scope.calcNeedToRunStatus = function () {
+        root.enablePCT = false;
+        if (root.contractData.PRC_ST === undefined || root.contractData.PRC_ST === null) return;
+
+        for (var d = 0; d < root.contractData.PRC_ST.length; d++) {
+            var stg = root.contractData.PRC_ST[d].WF_STG_CD;
+            if (stg !== "Pending" && stg !== "Approved") {
+                root.enablePCT = true;
+            }
+        }
+    }
+
+    //refreshContractDataComplete
     $scope.syncLinked = function (newField, newValue, data) {
         var ids = [];
         for (var v = 0; v < data.length; v++) {
@@ -930,7 +948,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.LAST_COST_TEST_RUN_DSPLY = '&nbsp;';
     }
     $scope.clearFilter();
-
+    $scope.calcNeedToRunStatus();
 
 }
 })();

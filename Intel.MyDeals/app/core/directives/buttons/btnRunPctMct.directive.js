@@ -14,6 +14,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             onComplete: '=?onComplete',
             lastRun: '=?lastRun',
             btnType: '=?btnType',
+            enabled: '=?enabled',
             runIfStaleByHours: '=?runIfStaleByHours',
             forceRun: "=?forceRun"
         },
@@ -36,12 +37,18 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             }
 
             if (!$scope.runIfStaleByHours) $scope.runIfStaleByHours = 0;
-            if (!$scope.forceRun) $scope.forceRun = false;
+            if ($scope.forceRun === undefined || $scope.forceRun === null) $scope.forceRun = false;
+            if ($scope.enabled === undefined || $scope.enabled === null) $scope.enabled = true;
 
             $scope.lastRunDisplay = function () {
                 if ($(".iconRunPct").hasClass("fa-spin grn")) {
                     return "Running " + $scope.text;
                 }
+
+                if ($scope.enabled === false) {
+                    return $scope.text + " is saved";
+                }
+
                 if (!!$scope.lastRun) {
 
                     // Get local time in UTC
@@ -84,7 +91,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
 
 
             $timeout(function () {
-                if ($scope.needToRunPct) {
+                if ($scope.needToRunPct && $scope.enabled) {
                     $scope.$broadcast('runPctMct', {});
                 }
             }, (3000));
@@ -95,6 +102,8 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             }
 
             $scope.executePct = function () {
+                if (!$scope.enabled) return;
+
                 $(".iconRunPct").addClass("fa-spin grn");
                 if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctRunning', {});
 
@@ -123,10 +132,12 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             }
 
             $scope.$on('runPctMct', function (event, args) {
+                if (!$scope.enabled) return;
                 $scope.executePct();
             });
 
             $scope.$on('runForcedPctMct', function (event, args) {
+                if (!$scope.enabled) return;
                 $scope.executePctViaBtn();
             });
 

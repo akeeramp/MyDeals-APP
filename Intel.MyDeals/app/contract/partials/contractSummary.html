@@ -199,8 +199,9 @@
                                          last-run="root.contractData.LAST_COST_TEST_RUN"
                                          on-complete="refreshContractDataIfNeeded"
                                          run-if-stale-by-hours="3"
+                                         enabled="enablePCT"
                                          force-run="root.forceRun()"
-                                         btn-type ="'pct'"
+                                         btn-type="'pct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
                     </td>
                     <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_MEET_COMP">
@@ -209,6 +210,7 @@
                                          last-run="root.contractData.LAST_COST_TEST_RUN"
                                          on-complete="refreshContractDataIfNeeded"
                                          run-if-stale-by-hours="3"
+                                         enabled="enablePCT"
                                          force-run="root.forceRun()"
                                          btn-type ="'mct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
