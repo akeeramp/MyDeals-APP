@@ -442,8 +442,8 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox9.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox9.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
             this.htmlTextBox9.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox9.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Ceiling Vol </" +
-    "strong>(Qty)</span>";
+            this.htmlTextBox9.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Max Quantity</" +
+    "strong></span>";
             // 
             // htmlTextBox15
             // 
