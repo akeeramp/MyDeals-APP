@@ -56,6 +56,14 @@
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
                         suggestedProduct.isExcludeProduct && (dealType == 'VOL_TIER' || dealType == 'PROGRAM') : false;
         vm.enableMultipleSelection = dealType == 'VOL_TIER' || dealType == 'PROGRAM';
+        vm.isDeveloper = isDeveloper;
+        vm.isTester = isTester;
+        vm.ToggleShowTree = toggleShowTree;
+        vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
+
+        function resetexcludeProductMessage() {
+            vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
+        }
 
         var searchProcessed = false;
         if (pricingTableRow.PROD_INCLDS == undefined || pricingTableRow.PROD_INCLDS == null || pricingTableRow.PROD_INCLDS == "") {
@@ -893,6 +901,36 @@
                 }
             });
 
+            vm.excludedProducts = vm.excludedProducts.map(function (x) {
+                return {
+                    BRND_NM: x.BRND_NM,
+                    CAP: x.CAP,
+                    CAP_END: x.CAP_END,
+                    CAP_START: x.CAP_START,
+                    DEAL_PRD_NM: x.DEAL_PRD_NM,
+                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
+                    FMLY_NM: x.FMLY_NM,
+                    HAS_L1: x.HAS_L1,
+                    HAS_L2: x.HAS_L2,
+                    HIER_NM_HASH: x.HIER_NM_HASH,
+                    HIER_VAL_NM: x.HIER_VAL_NM,
+                    MM_MEDIA_CD: x.MM_MEDIA_CD,
+                    MTRL_ID: x.MTRL_ID,
+                    PCSR_NBR: x.PCSR_NBR,
+                    PRD_ATRB_SID: x.PRD_ATRB_SID,
+                    PRD_CAT_NM: x.PRD_CAT_NM,
+                    PRD_END_DTM: x.PRD_END_DTM,
+                    PRD_MBR_SID: x.PRD_MBR_SID,
+                    PRD_STRT_DTM: x.PRD_STRT_DTM,
+                    USR_INPUT: x.DERIVED_USR_INPUT, // When products are validated from corrector user opens and closes Selector update derived user input
+                    YCS2: x.YCS2,
+                    YCS2_END: x.YCS2_END,
+                    YCS2_START: x.YCS2_START,
+                    EXCLUDE: true
+                }
+            });
+
             // For kit deals re arrange the products primary secondary
             var prdDrawingOrd = "";
             var contractProduct = "";
@@ -928,7 +966,7 @@
             //Only for kit prdDrawingOrd will be populated
             var productSelectorOutput = {
                 'splitProducts': vm.splitProducts, 'validateSelectedProducts': pricingTableSysProducts,
-                    'prdDrawingOrd': prdDrawingOrd, 'contractProduct': contractProduct
+                'prdDrawingOrd': prdDrawingOrd, 'contractProduct': contractProduct
             };
             $uibModalInstance.close(productSelectorOutput);
         }
@@ -1096,7 +1134,58 @@
             //template: '<div class="productSelector searchTemplate">#: Name #<div><small><b>Type:</b> #= Type #</small></div></div>',
         };
 
+        // Toggle the show Tree
+        function toggleShowTree(showSelectMenu) {
+            vm.selectPath(0);
+            if (showSelectMenu) {
+                vm.showTree = false;
+                return;
+            }
+            vm.showTree = !vm.showTree;
+            vm.gridData = [];
+            dataSourceProduct.read();
+            resetexcludeProductMessage();
+        }
+
+        function showLevle4(product) {
+            vm.excludeProductMessage = product.HIER_VAL_NM;
+            // To get all the L4's under a higher product hierarchy for a program or voltier deal treat it as Front END YCS2 deal
+            var data = [{
+                ROW_NUMBER: 1, // By default pass one as user will select only one value from popup
+                USR_INPUT: product.HIER_NM_HASH.replace(/\s\s+/g, ' '),
+                EXCLUDE: "",
+                FILTER: pricingTableRow.PROD_INCLDS,
+                START_DATE: pricingTableRow.START_DT,
+                END_DATE: pricingTableRow.END_DT,
+                GEO_COMBINED: pricingTableRow.GEO_COMBINED,
+                PROGRAM_PAYMENT: "Frontend YCS2",
+                COLUMN_TYPE: 0,
+                // Send 1 if EPM_NM
+            }];
+
+            productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, "ECAP").then(function (response) {
+                vm.gridData = response.data;
+                vm.gridData = response.data.map(function (x) {
+                    x['selected'] = true;
+                    x['parentSelected'] = true;
+                    return x;
+                });
+                searchProcessed = true;
+                dataSourceProduct.read();
+                $timeout(function () {
+                    toggleColumnsWhenEmpty(vm.gridData, 'prodGrid');
+                });
+            }, function (response) {
+                logger.error("Unable to get products.", response, response.statusText);
+            });
+        }
+
         function showSingleProductHeirarchy(product) {
+            if (vm.showTree) {
+                showLevle4(product)
+                return false;
+            }
+
             var data = {
                 "searchHash": product.HIER_NM_HASH,
                 "startDate": moment(pricingTableRow.START_DT).format("l"),

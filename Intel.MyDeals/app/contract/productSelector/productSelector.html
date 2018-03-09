@@ -30,7 +30,7 @@
             </ul>
         </div>
         <div ng-if="vm.showTree" class="textProdSelector" style="margin-bottom:17px;margin-top:4px;">
-            Selected Products:
+            <i class="fa fa-arrow-circle-left" role="button" ng-click="vm.ToggleShowTree(true)" title="Go to Select menu"></i> Exclude Products under : {{vm.excludeProductMessage}}
         </div>
     </div>
     <div style="height:80%">
@@ -98,10 +98,11 @@
                 </div>
             </div>
             <div ng-if="vm.showTree && !vm.showSuggestions">
-                <div class="k-treelist product" kendo-tree-view k-options="vm.tree">
-                    <div k-template>
-                        {{dataItem.name}}
+                <!--<div class="k-treelist product" kendo-tree-view k-options="vm.tree">
+                    <div k-template>{{dataItem.name}}
                     </div>
+                </div>-->
+                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct">
                 </div>
             </div>
             <div ng-if="!vm.showTree && !vm.showSuggestions">
@@ -170,12 +171,13 @@
                 <trashcan title="Clear excluded products" class="fr" ng-click="vm.clearProducts('E')"></trashcan>
             </div>
             <div ng-if="!vm.excludeMode" class="row">
-                <div ng-class="{'col-md-6':vm.enableMultipleSelection, 'paddingRight15':vm.dealType!='VOL_TIER'}">
-                    <span ng-class="{'paddingLeft15':vm.dealType!='VOL_TIER'}">
+                <div ng-class="{'col-md-6':vm.enableMultipleSelection, 'paddingRight15': !vm.enableMultipleSelection}">
+                    <span ng-class="{'paddingLeft15': !vm.enableMultipleSelection}">
                         <span ng-class="{'paddingLeftNone':vm.enableMultipleSelection}" class="text-left textProdSelector">
                             Selected Products
                             <span ng-class="{'animate':vm.animateInclude}" class="arcAnimate">
                                 <small role="button">&nbsp;({{vm.addedProducts.length}})</small>
+                                <i style="padding-left:10px;" role="button" ng-if="vm.enableMultipleSelection && (vm.isDeveloper || vm.isTester)" ng-class="{'heirSelected': vm.showTree }" class="fa fa-sitemap" ng-click="vm.ToggleShowTree()" title="Toggle show Deal Products(L4's)"></i>
                             </span>
                         </span>
                     </span>

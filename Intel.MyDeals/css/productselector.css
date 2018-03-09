@@ -7,16 +7,18 @@
     overflow: hidden;
 }
 
-.prodSelectorSearch .prod-autocomplete {
-    padding-top: 0;
-    padding-bottom: 0;
-    width: 400px !important;
-}
+    .prodSelectorSearch .prod-autocomplete {
+        padding-top: 0;
+        padding-bottom: 0;
+        width: 400px !important;
+    }
+
 @media (max-width: 1100px) {
     .prodSelectorSearch .prod-autocomplete {
         width: 240px !important;
     }
 }
+
 @media (max-width: 800px) {
     .prodSelectorSearch .prod-autocomplete {
         width: 180px !important;
@@ -38,12 +40,14 @@
     color: white;
     font-size: 26px;
 }
+
 @media (max-width: 1100px) {
     .prodHeader {
         font-size: 20px;
         padding-top: 8px;
     }
 }
+
 @media (max-width: 800px) {
     .prodHeader {
         font-size: 18px;
@@ -62,7 +66,8 @@
     font-size: 32px;
     padding-top: 0;
     padding-left: 20px;
-    margin-top: -8px;}
+    margin-top: -8px;
+}
 
 .productSelectorpath.breadcrumb > li + li:before {
     padding: 0 5px;
@@ -89,6 +94,10 @@ a.prdAnchor {
 
 .productSelector.Warning {
     color: #FFA300;
+}
+
+.heirSelected {
+    color: #01AEEF;
 }
 
 .productSelector.Issue {
@@ -184,6 +193,7 @@ a.prdAnchor {
 .prdBtn {
     font-size: 13px;
 }
+
 @media (max-width: 1300px) {
     .prdBtn {
         padding: 6px;
@@ -191,23 +201,23 @@ a.prdAnchor {
 }
 
 
-    .prdBtn.btn-primary {
+.prdBtn.btn-primary {
+    background-color: #01AEEF;
+}
+
+    .prdBtn.btn-primary:hover {
+        background-color: #01AEEF;
+        color: #1a3e6f;
+    }
+
+    .prdBtn.btn-primary:focus, .btn-primary:active {
+        outline: none !important;
         background-color: #01AEEF;
     }
 
-        .prdBtn.btn-primary:hover {
-            background-color: #01AEEF;
-            color: #1a3e6f;
-        }
-
-        .prdBtn.btn-primary:focus, .btn-primary:active {
-            outline: none !important;
-            background-color: #01AEEF;
-        }
-
-.prodSelected .btn-primary:focus, .btn-primary:hover{
-    color:#fff;
-    background-color:#01AEEF;
+.prodSelected .btn-primary:focus, .btn-primary:hover {
+    color: #fff;
+    background-color: #01AEEF;
 }
 
 .prodSelector .leftNavFilter {
@@ -215,7 +225,7 @@ a.prdAnchor {
     height: calc(85vh - 390px);
     padding: 4px;
     overflow: auto;
-    font-family:'Intel Clear', 'Arial';
+    font-family: 'Intel Clear', 'Arial';
 }
 
 .prodSelector .badge.upperBadge {
@@ -235,35 +245,35 @@ a.prdAnchor {
 }
 
 .filterTitleUnderline {
-        margin: 5px;
-        font-size: 15px;
-        color: #1a3e6f;
-        border-bottom: 1px solid #D3D3D3;
-        font-weight: bold;
-    }
+    margin: 5px;
+    font-size: 15px;
+    color: #1a3e6f;
+    border-bottom: 1px solid #D3D3D3;
+    font-weight: bold;
+}
 
 .lblSelected label span {
-        color: white !important;
-    }
+    color: white !important;
+}
 
 .lblSelected {
-        background: rgba(2, 173, 255, 1);
-    }
+    background: rgba(2, 173, 255, 1);
+}
 
 .lblNotSelected {
-        background: none;
-    }
+    background: none;
+}
 
 .lblFilterProd > span {
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        color: #00AEEF !important;
-    }
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #00AEEF !important;
+}
 
 .lblFilterProd:before {
-        color: transparent !important;
-        width: 0px !important;
-    }
+    color: transparent !important;
+    width: 0px !important;
+}
 
 .prodSelector .filterGrp {
     font-family: arial;
@@ -595,4 +605,3 @@ input[type=checkbox].with-sm-font {
         transform-origin: 50% 50%;
         opacity: 0;
     }
-
