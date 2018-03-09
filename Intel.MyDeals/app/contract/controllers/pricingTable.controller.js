@@ -1417,7 +1417,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
                 var sheet = spreadsheet.activeSheet();
-
+				
+            	// Fix the topLeftRowIndex in case the user skips spaces otherwise we'll have tier-disabling bugs
+                if ((topLeftRowIndex - 1) > data.length) {
+                	var difference =  topLeftRowIndex- data.length;
+                	topLeftRowIndex -= difference;
+				}
+				
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex - 2) ; k++) {
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
@@ -1602,7 +1608,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     // check merge issues
                     var numPivotRows = root.numOfPivot(data[data.length - 1]);
-                    var offset = getOffsetByIndex(data, bottomRightRowIndex - 2);
+                    var offset = getOffsetByIndex(data, bottomRightRowIndex - 2); 
                     if (offset > 0) {
                         bottomRightRowIndex += numPivotRows - offset;
                     }
