@@ -155,6 +155,12 @@
                 width: 140,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
+                field: "PRC_ST_TITLE",
+                title: "Pricing Strategy",
+                type: "string",
+                width: 140,
+                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
+            }, {
                 field: "CNTRCT_C2A_DATA_C2A_ID",
                 title: "C2A Id",
                 type: "string",
@@ -424,6 +430,11 @@
             }, {
                 field: "END_CUSTOMER_RETAIL",
                 title: "End Customer",
+                type: "string",
+                width: 140
+            }, {
+                field: "DEAL_GRP_NM ",
+                title: "Kit Name",
                 type: "string",
                 width: 140
             }, {

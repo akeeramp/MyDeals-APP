@@ -90,6 +90,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
                     int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+                    int IDX_PRC_ST_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_ST_OBJ_SID");
+                    int IDX_PRC_ST_TITLE = DB.GetReaderOrdinal(rdr, "PRC_ST_TITLE");
                     int IDX_SORT_ORD = DB.GetReaderOrdinal(rdr, "SORT_ORD");
                     int IDX_WIP_DEAL_CHG_DTM = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CHG_DTM");
                     int IDX_WIP_DEAL_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_CHG_EMP_WWID");
@@ -109,6 +111,8 @@ namespace Intel.MyDeals.DataLibrary
                                 OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                                 OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
                                 OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
+                                PRC_ST_OBJ_SID = (IDX_PRC_ST_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_ST_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_ST_OBJ_SID),
+                                PRC_ST_TITLE = (IDX_PRC_ST_TITLE < 0 || rdr.IsDBNull(IDX_PRC_ST_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_ST_TITLE),
                                 SORT_ORD = (IDX_SORT_ORD < 0 || rdr.IsDBNull(IDX_SORT_ORD)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_SORT_ORD),
                                 WIP_DEAL_CHG_DTM = (IDX_WIP_DEAL_CHG_DTM < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_WIP_DEAL_CHG_DTM),
                                 WIP_DEAL_CHG_EMP_WWID = (IDX_WIP_DEAL_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_CHG_EMP_WWID),

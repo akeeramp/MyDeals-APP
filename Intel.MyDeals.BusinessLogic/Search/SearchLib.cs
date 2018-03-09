@@ -191,6 +191,7 @@ namespace Intel.MyDeals.BusinessLogic
             // couple special cases here
             rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
+            rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
 
             // If no found filters... return
@@ -285,6 +286,8 @@ namespace Intel.MyDeals.BusinessLogic
                 item["CNTRCT_OBJ_SID"] = decoderById[dcId].CNTRCT_OBJ_SID;
                 item["CNTRCT_TITLE"] = decoderById[dcId].CNTRCT_TITLE;
                 item["CNTRCT_C2A_DATA_C2A_ID"] = decoderById[dcId].CNTRCT_C2A_DATA_C2A_ID;
+                item["PRC_ST_OBJ_SID"] = decoderById[dcId].PRC_ST_OBJ_SID;
+                item["PRC_ST_TITLE"] = decoderById[dcId].PRC_ST_TITLE;
                 item["CHG_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CHG_DTM.ToString());
                 item["CHG_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CHG_EMP_WWID;
                 item["CRE_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CRE_DTM.ToString());
@@ -343,6 +346,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.CAP.ATRB_SID,
                 Attributes.CUST_ACCNT_DIV.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.DEAL_GRP_NM.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
