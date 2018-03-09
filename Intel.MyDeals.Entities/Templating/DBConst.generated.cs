@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/5/2018 10:43:15 PM
+File Updated: 3/9/2018 2:39:07 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2345,14 +2345,6 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
-		/// ACTN_SID: 200
-		/// SRT_ORD: 150
-		/// Copy Contract Contents
-		///</summary>
-		public const string COPY_CONTRACT = "COPY_CONTRACT";
-
-
-		///<summary>
 		/// ACTN_SID: 210
 		/// SRT_ORD: 50
 		/// Roll the deal details back to the last valid active tracker state
@@ -2393,6 +2385,14 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 200
+		/// SRT_ORD: 150
+		/// Copy Object Contents
+		///</summary>
+		public const string OBJ_COPY = "OBJ_COPY";
+
+
+		///<summary>
 		/// ACTN_SID: 207
 		/// SRT_ORD: 40
 		/// UI Generated Action to initiate a delete object action
@@ -2408,12 +2408,12 @@ namespace Intel.MyDeals.Entities {
 		public const string OBJ_DELETED = "OBJ_DELETED";
 
 
-        ///<summary>
-        /// ACTN_SID: 218
-        /// SRT_ORD: 120
-        /// Execute Cost Test calls
-        ///</summary>
-        public const string RUN_COST_TEST = "RUN_COST_TEST";
+		///<summary>
+		/// ACTN_SID: 218
+		/// SRT_ORD: 120
+		/// Execute Cost Test calls
+		///</summary>
+		public const string RUN_COST_TEST = "RUN_COST_TEST";
 
 
 		///<summary>
@@ -2569,7 +2569,7 @@ namespace Intel.MyDeals.Entities {
 		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
 		public const string ATRB_DELETED = "ATRB_DELETED";
 		public const string CALC_MSP = "CALC_MSP";
-		public const string COPY_CONTRACT = "COPY_CONTRACT";
+		public const string OBJ_COPY = "OBJ_COPY";
 		public const string OBJ_DELETE = "OBJ_DELETE";
 		public const string OBJ_DELETED = "OBJ_DELETED";
 		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
