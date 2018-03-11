@@ -559,8 +559,9 @@ namespace Intel.MyDeals.BusinessRules
 
             string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
             string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string deDealTypeValue = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
-            if (deRebateTypeValue == "TENDER" && deProductCategoriesValue.Contains("SvrWS"))
+            if (deDealTypeValue == "ECAP" && deRebateTypeValue == "TENDER" && deProductCategoriesValue.Contains("SvrWS"))
             {
                 IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
                 if (deServerDealType != null) deServerDealType.IsRequired = true;

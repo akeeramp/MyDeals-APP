@@ -167,7 +167,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "SERVER_DEAL_TYPE": {
-                        "Groups": ["All"]
+                        "Groups": ["Deal Info"]
                     },
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
@@ -322,7 +322,7 @@
                         "Groups": ["Deal Info", "RPU"]
                     },
                     "SERVER_DEAL_TYPE": {
-                        "Groups": ["All"]
+                        "Groups": ["Deal Info"]
                     },
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
@@ -459,7 +459,7 @@
                         "Groups": ["Deal Info", "RPU"]
                     },
                     "SERVER_DEAL_TYPE": {
-                        "Groups": ["RPU", "All"]
+                        "Groups": ["Deal Info", "RPU"]
                     },
                     "DEAL_COMB_TYPE": {
                     	"Groups": ["Deal Info"]
@@ -731,7 +731,7 @@
                         "Groups": ["All"]
                     },
                     "SERVER_DEAL_TYPE": {
-                        "Groups": ["All"]
+                        "Groups": ["Deal Info"]
                     },
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
