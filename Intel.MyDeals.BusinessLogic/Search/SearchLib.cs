@@ -429,13 +429,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (int.TryParse(data.StrSearch, out dcIdNum))
             {
-                whereClause = $"{deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch}%'";
+                whereClause = $"{deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace(" ","%")}%'";
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }
             else
             {
-                whereClause = $"{deType}_TITLE LIKE '%{data.StrSearch}%'";
+                whereClause = $"{deType}_TITLE LIKE '%{data.StrSearch.Replace(" ", "%")}%'";
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }

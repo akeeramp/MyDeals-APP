@@ -577,7 +577,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 						title: "Tools",
 						width: "160px",
 						locked: true,
-						template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false' is-quote-letter-enabled='true'></deal-tools>",
+						template: "<deal-tools ng-model='dataItem' is-editable='true' is-file-attachment-enabled='false' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
 						filterable: false
 					}, {
 						field: "DC_ID",
