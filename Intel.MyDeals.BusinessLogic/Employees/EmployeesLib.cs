@@ -9,20 +9,6 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class EmployeesLib : IEmployeesLib
     {
-        #region Employees
-
-        public EmployeeDetailData GetEmployeeDetail(string userIdentifier, string roles, string geos)
-        {
-            return new EmployeeDataLib().GetEmployeeDetail(userIdentifier, roles, geos);
-        }
-
-        public AppRoleLookup GetApplicationRoles()
-        {
-            return new EmployeeDataLib().GetApplicationRoles();
-        }
-
-        #endregion Employees
-
         public UserSetting GetUserSettings(OpUserToken opUserToken)
         {
             return new EmployeeDataLib().GetUserSettings(opUserToken);
@@ -33,27 +19,27 @@ namespace Intel.MyDeals.BusinessLogic
             return DataCollections.GetUsrProfileRole().Where(e => e.USR_ACTV_IND).OrderBy(e => e.LST_NM).ToList();
         }
 
-        public IEnumerable<UserPreference> GetUserPreference()
-        {
-            return new EmployeeDataLib().GetUserPreference();
-        }
-
         public OpMsg SetOpUserToken(OpUserTokenParameters data)
         {
             new EmployeeDataLib().SetOpUserToken(data);
             return new OpMsg("Role has been set");
         }
 
-        public OpMsg GetOtherUserToken(int wwid, string idsid)
-        {
-            new EmployeeDataLib().GetOtherUserToken(wwid, idsid);
-            return new OpMsg("Role has been fetched");
-        }
-
         public List<ManageUsersInfo> GetManageUserData(int wwid)
         {
             //return new EmployeeDataLib().GetManageUserData(wwid).Where(e => e.ACTV_IND).OrderBy(e => e.LST_NM).ToList()
             return new EmployeeDataLib().GetManageUserData(wwid).ToList();
+        }
+
+        public List<CustomerDivision> GetManageUserDataGetCustomers()
+        {
+            return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM).OrderBy(c => c.CUST_NM).ToList();
+        }
+
+        public OpMsg SetManageUserData(EmployeeCustomers data)
+        {
+            new EmployeeDataLib().SetManageUserData(data);
+            return new OpMsg("Customers have been saved");
         }
 
     }

@@ -122,46 +122,6 @@ namespace Intel.MyDeals.BusinessLogic
 
         #endregion
 
-        #region SecurityActions
-
-        ////DEV_REBUILD_REMOVALS
-        //      public List<SecurityActions> GetSecurityActions()
-        //{
-        //	return _dataCollectionsDataLib.GetSecurityActions();
-        //}
-
-        //public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
-        //{
-        //	return _securityAttributesDataLib.ManageSecurityAction(action, state);
-        //}
-
-        //public bool DeleteSecurityAction(int id)
-        //{
-        //	return _securityAttributesDataLib.DeleteSecurityAction(id);
-        //}
-
-        #endregion SecurityActions
-
-        #region Admin Applications
-
-        ////DEV_REBUILD_REMOVALS
-        //public List<AdminApplications> GetAdminApplications()
-        //{
-        //	return _dataCollectionsDataLib.GetAdminApplications();
-        //}
-
-        //public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
-        //{
-        //	return _securityAttributesDataLib.ManageAdminApplication(app, state);
-        //}
-
-        //public bool DeleteAdminApplication(int id)
-        //{
-        //	return _securityAttributesDataLib.DeleteAdminApplication(id);
-        //}
-
-        #endregion Admin Applications
-
         #region Admin DealTypes
 
         public List<AdminDealType> GetAdminDealTypes()
@@ -181,24 +141,5 @@ namespace Intel.MyDeals.BusinessLogic
 
         #endregion Admin DealTypes
 
-        #region Admin RoleTypes
-
-        ////DEV_REBUILD_REMOVALS
-        //public List<AdminRoleType> GetAdminRoleTypes()
-        //{
-        //	return _dataCollectionsDataLib.GetAdminRoleTypes();
-        //}
-
-        //public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
-        //{
-        //	return _securityAttributesDataLib.ManageAdminRoleType(roleType, state);
-        //}
-
-        //public bool DeleteAdminRoleType(int id)
-        //{
-        //	return _securityAttributesDataLib.DeleteAdminRoleType(id);
-        //}
-
-        #endregion Admin RoleTypes
     }
 }

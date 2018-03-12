@@ -973,6 +973,21 @@ gridUtils.msgIcon = function (dataItem) {
     return dataItem.MsgType;
 }
 
+gridUtils.customersFormatting = function (passedData, field) {
+    var val = passedData[field];
+    // Pad en empty user with something to click from manage employee screen
+    if (val === "[Please Add Customers]")
+    {
+        return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>";
+    }
+    // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
+    else if (val === "All Customers") {
+        return "All Customers";
+    }
+    // All other people, just make their customers list clickable
+    return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>";
+}
+
 gridUtils.dialogShow = function () {
     dialog.open();
 }

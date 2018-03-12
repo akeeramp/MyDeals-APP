@@ -1,5 +1,4 @@
 ﻿using Intel.MyDeals.Entities;
-using Intel.RulesEngine;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -47,15 +46,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         #region Security Attributes
 
-        ////DEV_REBUILD_REMOVALS
-        //List<AdminApplications> GetAdminApplications();
-
         List<AdminDealType> GetAdminDealTypes();
-
-        ////DEV_REBUILD_REMOVALS
-        //List<AdminRoleType> GetAdminRoleTypes();
-
-        //List<SecurityActions> GetSecurityActions();
 
         #endregion Security Attributes
 

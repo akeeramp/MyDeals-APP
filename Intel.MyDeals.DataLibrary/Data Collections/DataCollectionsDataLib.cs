@@ -1,8 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
-using Intel.RulesEngine;
 using System.Collections.Generic;
-using System;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -126,27 +124,10 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetSecurityWrapper();
         }
 
-        ////DEV_REBUILD_REMOVALS
-        //public List<AdminApplications> GetAdminApplications()
-        //{
-        //    return DataCollections.GetAdminApplications();
-        //}
-
         public List<AdminDealType> GetAdminDealTypes()
         {
             return DataCollections.GetAdminDealTypes();
         }
-
-        ////DEV_REBUILD_REMOVALS
-        //public List<AdminRoleType> GetAdminRoleTypes()
-        //{
-        //    return DataCollections.GetAdminRoleTypes();
-        //}
-
-        //public List<SecurityActions> GetSecurityActions()
-        //{
-        //    return DataCollections.GetSecurityActions();
-        //}
 
         public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
         {

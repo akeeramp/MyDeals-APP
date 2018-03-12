@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
-using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -16,19 +15,6 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			_ecapTrackerLib = ecapTrackerLib;
 		}
-
-        ////DEV_REBUILD_REMOVALS
-        //[HttpPost]
-        //      [AntiForgeryValidate]
-        //      [Route("GetEcapTrackerList")]
-        //public IEnumerable<EcapTrackerResult> GetEcapTrackerList(EcapTrackerFilterData filterData)
-        //{
-        //	var result = SafeExecutor(() => _ecapTrackerLib.GetEcapTrackerList(filterData)
-        //		, $"Unable to get ECAP adjustment tracker list"
-        //	);
-
-        //	return result;
-        //}
 
         [HttpGet]
 		[Route("GetDealDataViaTrackerNumber/{trackerNumber}/{custId}")]

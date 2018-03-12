@@ -7,65 +7,32 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    manageEmployeeController.$inject = ['manageEmployeeService', '$scope', 'logger', 'gridConstants'];
+    manageEmployeeController.$inject = ['manageEmployeeService', '$scope', 'logger', 'gridConstants', '$uibModal'];
 
-    function manageEmployeeController(manageEmployeeService, $scope, logger, gridConstants) {
-        // Functions
-        //$scope.roleTypeId = window.usrRoleId;
-        //$scope.isDeveloper = window.isDeveloper;
-        //$scope.isTester = window.isTester;
-        //$scope.isSuper = window.isSuper;
-        //$scope.isAdmin = window.isAdmin;
-        //$scope.isFinanceAdmin = window.isFinanceAdmin;
+    function manageEmployeeController(manageEmployeeService, $scope, logger, gridConstants, $uibModal) {
+        $scope.isDropdownsLoaded = false;
 
-        $scope.isDropdownsLoaded = true;
-        $scope.tbWWID = "";
-        $scope.tbIDSID = "";
-        $scope.cbUser = "";
+        $scope.openEmployeeCustomers = function (dataItem) {
+            $scope.context = dataItem;
 
-        $scope.selectedUser = {};
-
-        $scope.getUserData = function()
-        {
-            debugger;
-            var wwid =  $scope.tbWWID ? $scope.tbWWID : "";
-            var idsid = $scope.tbIDSID ? $scope.tbIDSID : "";
-
-            //var data = {
-            //    "WWID": $scope.tbWWID ? $scope.tbWWID : "",
-            //    "IDSID": $scope.tbIDSID ? $scope.tbIDSID : "",
-            //    "USER": $scope.cbUser ? $scope.cbUser : ""
-            //}
-
-            manageEmployeeService.getEmployee(wwid, idsid)
-                .then(function (response) {
-                    debugger;
-                    logger.success("Role was changed", "Done");
-                }, function (response) {
-                    debugger;
-                    logger.error("Unable to get User Information.", response, response.statusText);
-                });
-        }
-
-        $scope.ds = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    url: "/api/Employees/GetUsrProfileRole",
-                    dataType: "json"
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'manageEmployeeModal',
+                controller: 'manageEmployeeModalCtrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
                 }
-            },
-        });
+            });
 
-        $scope.systemUsers = {
-            placeholder: "Pick a user",
-            autoBind: true,
-            dataTextField: "IDSID",
-            dataValueField: "EMP_WWID",
-            valueTemplate: '<span class="k-state-default">#: data.FRST_NM # #: data.LST_NM #</span>',
-            template: '<span class="k-state-default">#: data.FRST_NM # #: data.LST_NM #</span>',
-            dataSource: $scope.ds
-        };
-        //debugger;
+            modalInstance.result.then(function (returnData) {
+                $scope.context.USR_CUST = returnData;
+            }, function () { });
+        }
 
         $scope.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -73,7 +40,15 @@
                 read: function (e) {
                     manageEmployeeService.getEmployeeData()
                         .then(function (response) {
+                            for (var c = 0; c < response.data.length; c++)
+                            {
+                                if (response.data[c].USR_CUST === "")
+                                {
+                                    response.data[c].USR_CUST = "[Please Add Customers]";
+                                }
+                            }
                             e.success(response.data);
+                            $scope.isDropdownsLoaded = true;
                         }, function (response) {
                             logger.error("Unable to get User Data.", response, response.statusText);
                         });
@@ -139,6 +114,7 @@
             {
                 field: "USR_CUST",
                 title: "Customers",
+                template: "#=gridUtils.customersFormatting(data, 'USR_CUST')#",
                 width: "250px",
             },
             {

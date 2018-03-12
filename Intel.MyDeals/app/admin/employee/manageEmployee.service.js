@@ -14,27 +14,22 @@
 
         var service = {
             getEmployeeData: getEmployeeData,
+            getCustomers: getCustomers,
+            setEmployeeData: setEmployeeData,
         }
 
         return service;
 
-        //function getEmployee(wwid, idsid) {
-        //    // We do not want show Cached data in Admin screen, thus passing getCachedResults = 'false'
-        //    //return dataService.post(apiBaseUrl + 'SetOpUserToken', data);
-        //    debugger;
-        //    if (wwid !== "" && wwid !== 0)
-        //    {
-        //        return dataService.get(apiBaseUrl + 'GetOtherUserTokenByWWID/' + wwid);
-        //    }
-        //    else
-        //    {
-        //        return dataService.get(apiBaseUrl + 'GetOtherUserTokenByIDSID/' + idsid);
-        //    }
-        //}
-
         function getEmployeeData() {
-            debugger;
             return dataService.get(apiBaseUrl + 'GetManageUserData/' + 0); // Passing 0 as a WWID for all users, other services might pass WWID to get specific user records.
+        }
+
+        function getCustomers() {
+            return dataService.get(apiBaseUrl + 'GetManageUserDataGetCustomers/false');
+        }
+
+        function setEmployeeData(data) {
+            return dataService.post(apiBaseUrl + 'SetManageUserData', data);
         }
 
     }

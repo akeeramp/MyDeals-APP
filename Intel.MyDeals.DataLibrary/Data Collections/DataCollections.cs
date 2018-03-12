@@ -349,17 +349,6 @@ namespace Intel.MyDeals.DataLibrary
 
         #region Security Attributes
 
-        ////DEV_REBUILD_REMOVALS
-        //public static List<AdminApplications> GetAdminApplications()
-        //{
-        //    lock (LOCK_OBJECT ?? new object())
-        //    {
-        //        return _getAdminApplications ?? (_getAdminApplications = new SecurityAttributesDataLib().GetAdminApplications());
-        //    }
-        //}
-
-        //private static List<AdminApplications> _getAdminApplications;
-
         public static List<AdminDealType> GetAdminDealTypes()
         {
             lock (LOCK_OBJECT ?? new object())
@@ -369,27 +358,6 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<AdminDealType> _getAdminDealTypes;
-
-        ////DEV_REBUILD_REMOVALS
-        //public static List<AdminRoleType> GetAdminRoleTypes()
-        //{
-        //    lock (LOCK_OBJECT ?? new object())
-        //    {
-        //        return _getAdminRoleTypes ?? (_getAdminRoleTypes = new SecurityAttributesDataLib().GetAdminRoleTypes());
-        //    }
-        //}
-
-        //private static List<AdminRoleType> _getAdminRoleTypes;
-
-        //public static List<SecurityActions> GetSecurityActions()
-        //{
-        //    lock (LOCK_OBJECT ?? new object())
-        //    {
-        //        return _getSecurityActions ?? (_getSecurityActions = new SecurityAttributesDataLib().GetSecurityActions());
-        //    }
-        //}
-
-        //private static List<SecurityActions> _getSecurityActions;
 
         #endregion Security Attributes
 

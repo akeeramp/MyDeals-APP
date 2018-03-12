@@ -319,6 +319,8 @@
     <Content Include="app\admin\employee\employee.service.js" />
     <Content Include="app\admin\employee\manageEmployee.html" />
     <Content Include="app\admin\employee\manageEmployee.service.js" />
+    <Content Include="app\admin\employee\manageEmployeeModal.controller.js" />
+    <Content Include="app\admin\employee\manageEmployeeModal.html" />
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />
@@ -603,18 +605,9 @@
     <Content Include="app\dashboard\dashboard.module.js" />
     <Content Include="app\dashboard\dashboard.route.js" />
     <Content Include="app\layout\gridToolbar.html" />
-    <Content Include="app\admin\securityAttributes\adminApplications\adminApplications.controller.js" />
     <Content Include="app\admin\securityAttributes\adminDealTypes\adminDealTypes.controller.js" />
     <Content Include="app\admin\securityAttributes\adminDealTypes\adminDealTypes.manage.html" />
     <Content Include="app\admin\securityAttributes\adminDealTypes\adminDealTypes.service.js" />
-    <Content Include="app\admin\securityAttributes\adminApplications\adminApplications.manage.html" />
-    <Content Include="app\admin\securityAttributes\adminApplications\adminApplications.service.js" />
-    <Content Include="app\admin\securityAttributes\adminRoleTypes\adminRoleTypes.controller.js" />
-    <Content Include="app\admin\securityAttributes\adminRoleTypes\adminRoleTypes.manage.html" />
-    <Content Include="app\admin\securityAttributes\adminRoleTypes\adminRoleTypes.service.js" />
-    <Content Include="app\admin\securityAttributes\securityActions\securityActions.service.js" />
-    <Content Include="app\admin\securityAttributes\securityActions\securityActions.controller.js" />
-    <Content Include="app\admin\securityAttributes\securityActions\securityActions.manage.html" />
     <Content Include="app\testCases\grids\opGrid.controller.js" />
     <Content Include="app\testCases\grids\status.controller.js" />
     <Content Include="app\testCases\grids\basic.controller.js" />

@@ -1,0 +1,47 @@
+﻿<script type="text/ng-template" id="manageEmployeeModal">
+    <div class="modal-header modalBlueBody">
+        <h3 class="modal-title" id="modal-title">Customer Selection</h3>
+    </div>
+    <div class="modal-body modalBlueBody" id="modal-body">
+        <h5>View and select customers below</h5>
+        <!--{{selectedIds}}-->
+        <select kendo-multi-select k-options="selectOptions" id="selCustomers" class="selCustomers" k-ng-model="selectedIds"></select>
+
+        <div class="row">
+            <div class="col-md-6" style="text-align: center;">
+                <button class="btn btn-default" type="button" style="width: 90%;" ng-click="cancel()">Cancel</button>
+            </div>
+            <div class="col-md-6" style="text-align: center;">
+                <button class="btn btn-primary" type="button" style="width: 90%;" ng-click="ok()">Save and Close</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<style>
+    .gridProdExport.opUiContainer.md.k-grid .k-header a.k-grid-excel {
+    }
+
+    .excelText {
+        line-height: 1.2em;
+        font-size: 12px;
+        float: right;
+    }
+
+    .excelText span {
+        text-align: left;
+    }
+
+    .selCustomers {
+        margin-bottom: 330px !important; 
+        max-height: 150px; 
+        overflow: auto;
+    }
+
+    #selCustomers-list.k-list-container.k-popup.k-group.k-reset, 
+    #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller, 
+    #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul {
+        height: 300px !important;
+    }
+
+</style>

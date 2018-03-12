@@ -49,21 +49,9 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to set UserOpToken");
         }
 
-        [Authorize]
-        [Route("GetOtherUserTokenByWWID/{wwid}")]
-        public OpMsg GetOtherUserTokenByWWID(int wwid)
-        {
-            return SafeExecutor(() => new EmployeesLib().GetOtherUserToken(wwid, null)
-                , $"Unable to GetOtherUserToken");
-        }
+        #region Manager User Calls
 
-        [Authorize]
-        [Route("GetOtherUserTokenByIDSID/{idsid}")]
-        public OpMsg GetOtherUserTokenByIDSID(string idsid)
-        {
-            return SafeExecutor(() => new EmployeesLib().GetOtherUserToken(0, idsid)
-                , $"Unable to GetOtherUserToken");
-        }
+        private readonly ICustomerLib _customerLib;
 
         [Authorize]
         [Route("GetManageUserData/{wwid}")]
@@ -72,6 +60,28 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => new EmployeesLib().GetManageUserData(wwid)
                 , $"Unable to GetManageUserData");
         }
+
+        [Authorize]
+        [Route("GetManageUserDataGetCustomers/{getCachedResult:bool?}")]
+        public IEnumerable<CustomerDivision> GetManageUserDataGetCustomers(bool getCachedResult = true)
+        {
+            return SafeExecutor(() => new EmployeesLib().GetManageUserDataGetCustomers()
+                , "Unable to GetManageUserDataGetCustomers"
+            );
+        }
+
+        [Authorize]
+        [Route("SetManageUserData")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpMsg SetManageUserData(EmployeeCustomers data)
+        {
+            return SafeExecutor(() => new EmployeesLib().SetManageUserData(data)
+                , $"Unable to set ManageUserData");
+        }
+
+
+        #endregion
 
     }
 }

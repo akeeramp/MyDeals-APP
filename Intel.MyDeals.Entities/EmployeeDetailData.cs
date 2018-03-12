@@ -9,4 +9,11 @@ namespace Intel.MyDeals.Entities
         public List<EmployeeGeo> EmpGeo { get; set; }
         public List<EmployeeVertical> EmpVertical { get; set; }
     }
+
+    public class EmployeeCustomers
+    {
+        public int empWWID { get; set; }
+        public List<int> custIds { get; set; }
+    }
+
 }
