@@ -29,7 +29,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
-
+    $scope.pcCookUI = {};
 
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
@@ -2661,13 +2661,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
             var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
 
-            productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
+            productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType, $scope.contractData.DC_ID) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
+                    pcMt.addPerfTimes(response.data.PerformanceTimes);
                     $scope.pc.add(pcMt.stop());
                     topbar.hide();
                     if (response.statusText === "OK") {
-                        response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
-                        cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
+                        response.data.Data = buildTranslatorOutputObject(invalidProductJSONRows, response.data.Data);
+                        cookProducts(currentRowNumber, response.data.Data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
                     }
                 }, function (response) {
                     topbar.hide();
@@ -2709,6 +2710,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function cookProducts(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue) {
+        $scope.pcCookUI = new perfCacheBlock("Processing Cook Products", "UI");
         var data = root.spreadDs.data();
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
         // Process multiple match products
@@ -2831,6 +2833,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 $timeout(function () {
+                    $scope.pc.add($scope.pcCookUI.stop());
+
                     if (saveOnContinue) {
                         if (!publishWipDeals) {
                             root.validatePricingTable();

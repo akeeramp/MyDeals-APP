@@ -9,5 +9,7 @@ namespace Intel.MyDeals.IBusinessLogic
         LogConfig GetLogConfig();
 
         bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
+
+        bool UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes);
     }
 }

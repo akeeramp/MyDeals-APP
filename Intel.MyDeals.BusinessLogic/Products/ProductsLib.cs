@@ -235,8 +235,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="products"></param>
         /// <returns></returns>
 
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string DEAL_TYPE)
+        public ProductLookup TranslateProducts(ContractToken contractToken, List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string DEAL_TYPE)
         {
+            DateTime start = DateTime.Now;
             Stopwatch stopwatch = new Stopwatch();
             if (EN.GLOBAL.DEBUG >= 1)
             {
@@ -260,7 +261,11 @@ namespace Intel.MyDeals.BusinessLogic
             };
 
             //  Check if any product has alias mapping, this will call cache
+
+            start = DateTime.Now;
             var aliasMapping = GetProductsFromAlias();
+            contractToken.AddMark("GetProductsFromAlias - PR_MYDL_UPD_PRD_ALIAS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductsFromAlias", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
@@ -363,7 +368,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished foreach (var userProduct in prodNames)", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             //  Product match master list
+            start = DateTime.Now;
             var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, DEAL_TYPE);
+            contractToken.AddMark("GetProductDetails - PR_MYDL_TRANSLT_PRD_ENTRY", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductDetails", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 

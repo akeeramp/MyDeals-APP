@@ -80,10 +80,12 @@
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="Helpers\FixesHelpers.cs" />
+    <Compile Include="LogPerformanceTime.cs" />
     <Compile Include="OP ExtensionMethods\AvmforceMode.cs" />
     <Compile Include="OpDataCollectorFlattenedDictListPacket.cs" />
     <Compile Include="OverlappingListPacket.cs" />
     <Compile Include="PerformanceTime.cs" />
+    <Compile Include="ProductLookupPacket.cs" />
     <Compile Include="QuoteLetterSave.cs" />
     <Compile Include="QuoteLetterFile.cs" />
     <Compile Include="QuoteLetterData.cs" />
@@ -183,6 +185,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TableTypeParameters\t_db_log.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\t_ui_log.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="tempClasses\tempClass.cs" />

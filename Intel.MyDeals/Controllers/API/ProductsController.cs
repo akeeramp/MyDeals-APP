@@ -350,14 +350,28 @@ namespace Intel.MyDeals.Controllers.API
              );
         }
 
-        [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}")]
+        [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}/{contractId}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, string DEAL_TYPE)
+        public ProductLookupPacket TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, string DEAL_TYPE, int contractId)
         {
-            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, DEAL_TYPE)
-                , $"Unable to get product {"details"}"
+            DateTime start = DateTime.Now;
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+            {
+                CustId = CUST_MBR_SID,
+                ContractId = contractId
+            };
+
+            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, userInput, CUST_MBR_SID, DEAL_TYPE)
+                , $"Unable to translate products"
             );
+
+            return new ProductLookupPacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Translation of Products", contractToken.TimeFlow)
+            };
         }
 
         /// <summary>

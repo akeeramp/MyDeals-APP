@@ -1618,15 +1618,29 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
         executionMs: this.executionMs,
         data: this.getChartData()
     };
+
     perfCacheBlock.data = data;
 
     var totTimes = {};
 
+    var logData = [];
     for (var d = 0; d < data.data.length; d++) {
         var item = data.data[d];
         if (totTimes[item.name] === undefined) totTimes[item.name] = 0;
         totTimes[item.name] += item.data[0];
+        logData.push({
+            uid: util.generateUUID(),
+            title: this.title,
+            executionMs: this.executionMs,
+            start: this.start,
+            end: this.end,
+            mode: item.name,
+            task: item.title,
+            taskMs: item.data[0]
+        });
     }
+
+    op.ajaxPostAsync("/api/Logging/PerformanceTimes", logData, function () { }, function () { });
 
     var legend = "";
     var block = this;

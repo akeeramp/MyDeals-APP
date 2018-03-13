@@ -27,8 +27,8 @@
 
         return service;
 
-        function TranslateProducts(products, CUST_CD, DEAL_TYPE) {
-            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + DEAL_TYPE, products);
+        function TranslateProducts(products, CUST_CD, DEAL_TYPE, contractId) {
+            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId, products);
         }
 
         // This method skips all the translator logic (product split, duplicate and invalid etc etc..) and hits the database

@@ -2,7 +2,9 @@
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -86,6 +88,21 @@ namespace Intel.MyDeals.Controllers.API
                 return true;
             }
             catch { return false; }
+        }
+
+        [HttpPost]
+        [Route("PerformanceTimes")]
+        public bool PerformanceTimes([FromBody] IEnumerable<LogPerformanceTime> logPerformanceTimes)
+        {
+            try
+            {
+                _loggingLib.UploadUiPerfLogs(logPerformanceTimes);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

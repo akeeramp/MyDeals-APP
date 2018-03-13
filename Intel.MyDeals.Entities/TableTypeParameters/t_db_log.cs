@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Intel.MyDeals.Entities.Logging;
 
 namespace Intel.MyDeals.Entities
@@ -95,4 +92,5 @@ namespace Intel.MyDeals.Entities
 			}
 		}
 	}
+    
 }
