@@ -381,7 +381,9 @@
                                     }
                                 }
                                 //Holding expanded column
-                                expandSelected();
+                                if (selectedID == 'all') {
+                                    expandSelected();
+                                }
                             }
 
                             var addToUpdateList = function (dataItem, FIELD_NM) {
