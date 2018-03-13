@@ -249,15 +249,15 @@
         }
 
         $scope.needMct = function () {
-            if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false
+            if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false;
 
             for (var m = 0; m < $scope.contractData.PRC_ST.length; m++) {
-                var item = $scope.contractData.PRC_ST[m].MEETCOMP_TEST_RESULT;
-                if (item !== "" && item.toUpperCase() !== "INCOMPLETE") {
-                    return false;
+                var item = $scope.contractData.PRC_ST[m].COMP_MISSING_FLG;
+                if (item !== "" && (item === "1" || item === 1)) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         var updateDisplayTitle = function () {
