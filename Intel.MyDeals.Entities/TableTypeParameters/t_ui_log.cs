@@ -18,13 +18,13 @@ namespace Intel.MyDeals.Entities
             //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)
             this.Columns.Add("UID", typeof(string));
             this.Columns.Add("LOG_DTM", typeof(DateTime));
-            this.Columns.Add("TTL", typeof(string));
-            this.Columns.Add("EXEC_MS", typeof(int));
-            this.Columns.Add("STRT_DT", typeof(DateTime));
-            this.Columns.Add("END_DT", typeof(DateTime));
-            this.Columns.Add("MEDIA", typeof(string));
-            this.Columns.Add("TASK", typeof(string));
-            this.Columns.Add("TASK_MS", typeof(int));
+            this.Columns.Add("TTL_NM", typeof(string));
+            this.Columns.Add("TOT_EXEC_MS", typeof(int));
+            this.Columns.Add("STRT_DTM", typeof(DateTime));
+            this.Columns.Add("END_DTM", typeof(DateTime));
+            this.Columns.Add("MODE", typeof(string));
+            this.Columns.Add("TTL_TASK", typeof(string));
+            this.Columns.Add("TTL_TASK_MS", typeof(int));
             this.Columns.Add("REC_CNT", typeof(int));
         }
 
@@ -33,13 +33,13 @@ namespace Intel.MyDeals.Entities
             var r = NewRow();
             r["UID"] = itm.UID;
             r["LOG_DTM"] = DateTime.Now;
-            r["TTL"] = itm.Title;
-            r["EXEC_MS"] = itm.ExecutionMs;
-            r["STRT_DT"] = itm.Start;
-            r["END_DT"] = itm.End;
-            r["MEDIA"] = itm.Mode;
-            r["TASK"] = itm.Task;
-            r["TASK_MS"] = itm.TaskMs;
+            r["TTL_NM"] = itm.Title;
+            r["TOT_EXEC_MS"] = itm.ExecutionMs;
+            r["STRT_DTM"] = itm.Start;
+            r["END_DTM"] = itm.End;
+            r["MODE"] = itm.Mode;
+            r["TTL_TASK"] = itm.Task;
+            r["TTL_TASK_MS"] = itm.TaskMs;
             r["REC_CNT"] = itmCount;
             Rows.Add(r);
         }

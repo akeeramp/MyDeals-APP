@@ -43,6 +43,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.switchingTabs = false;
     var unlimitedVal = "Unlimited"; // TODO: Hook up to default from db maybe?
 
+
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
     var cellStyle = {
@@ -269,6 +270,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     // Generates options that kendo's html directives will use
     function generateKendoGridOptions() {
+
         wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
         gTools.assignColSettings();
@@ -1778,7 +1780,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //e.sender.activeSheet(e.sender.sheetByName("DropdownValuesSheet"));
 
             showHelp();
+
+            if ($scope.$root.pc !== null) {
+                $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                $scope.$root.pc = null;
+            }
         }
+
     }
 
     function showHelp() {
@@ -2650,7 +2658,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
         });
 
-        $scope.pc.add(pcUi.stop());
+        $scope.$root.pc.add(pcUi.stop());
 
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
@@ -2664,7 +2672,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType, $scope.contractData.DC_ID) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
                     pcMt.addPerfTimes(response.data.PerformanceTimes);
-                    $scope.pc.add(pcMt.stop());
+                    $scope.$root.pc.add(pcMt.stop());
                     topbar.hide();
                     if (response.statusText === "OK") {
                         response.data.Data = buildTranslatorOutputObject(invalidProductJSONRows, response.data.Data);
@@ -2690,7 +2698,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.publishWipDealsBase();
             }
         } else {
-            $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+            if ($scope.$root.pc !== null) $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+            $scope.$root.pc = null;
             kendo.alert("All of the products looks good.");
             root.setBusy("", "");
         }
@@ -2833,7 +2842,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 $timeout(function () {
-                    $scope.pc.add($scope.pcCookUI.stop());
+                    $scope.$root.pc.add($scope.pcCookUI.stop());
 
                     if (saveOnContinue) {
                         if (!publishWipDeals) {
@@ -2842,7 +2851,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             root.publishWipDealsBase();
                         } // Call Save and Validate API from Contract Manager
                     } else {
-                        $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc = null;
                         kendo.alert("All of the products looks good.");
                         root.setBusy("", "");
                     }
@@ -3009,7 +3019,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.publishWipDealsBase();
                                 } // Call Save and Validate API from Contract Manager
                             } else {
-                                $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                                $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                                $scope.$root.pc = null;
                                 kendo.alert("All of the products looks good.");
                                 root.setBusy("", "");
                             }
@@ -3190,13 +3201,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function validateOnlyProducts() {
-        $scope.root.pc = new perfCacheBlock("Pricing Table Product Validation", "UX");
+        if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Product Validation", "UX");
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false, false);
     }
 
     function validatePricingTableProducts() {
-        $scope.root.pc = new perfCacheBlock("Pricing Table Editor Save & Validate", "UX");
+        if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false, true);
     }

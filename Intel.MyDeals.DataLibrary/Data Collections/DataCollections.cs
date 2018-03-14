@@ -204,13 +204,9 @@ namespace Intel.MyDeals.DataLibrary
                         if (!_getSearchString.Keys.Contains(searchString.Name))
                             _getSearchString.Add(searchString.Name, searchString.Type);
                     }
+                }
 
-                    return _getSearchString;
-                }
-                else
-                {
-                    return _getSearchString;
-                }
+                return _getSearchString;
             }
         }
 

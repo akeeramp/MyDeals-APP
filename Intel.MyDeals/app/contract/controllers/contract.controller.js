@@ -33,7 +33,7 @@
         $scope.defCust = $localStorage.selectedCustomerIds !== undefined && $localStorage.selectedCustomerIds.length > 0 ? $localStorage.selectedCustomerIds[0] : undefined;
         $scope.switchingTabs = false;
         $scope.maxKITproducts = 10;
-        $scope.pc = new perfCacheBlock("Contract Controller", "");
+        $scope.$root.pc = null;
         $scope.delPtrIds = [];
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
@@ -2509,6 +2509,7 @@
         }
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract, callback) {
+            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Controller", "");
             var pc = new perfCacheBlock("Save Contract Root", "UX");
             var pcUi = new perfCacheBlock("Gather data to pass", "UI");
 
@@ -2668,11 +2669,12 @@
                     if (!!callback && typeof callback === "function") {
                         callback();
                         pc.add(pcUI.stop());
-                        $scope.pc.add(pc.stop());
+                        $scope.$root.pc.add(pc.stop());
                     } else {
                         pc.add(pcUI.stop());
-                        $scope.pc.add(pc.stop());
-                        $scope.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc.add(pc.stop());
+                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc = null;
                     }
 
                 },
@@ -3832,6 +3834,7 @@
 
         $scope.publishWipDealsFromTab = function () {
             if ($scope.enableDealEditorTab() === false) return;
+            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Editor Save, Validate & Tab Switch", "UX");
             $scope.publishWipDeals();
         }
 

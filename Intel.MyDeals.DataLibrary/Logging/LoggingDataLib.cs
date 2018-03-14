@@ -77,7 +77,7 @@ namespace Intel.MyDeals.DataLibrary
 
             t_ui_log dt = new t_ui_log();
 
-            dt.AddRows(performanceTimes, performanceTimes.Count());
+            dt.AddRows(performanceTimes, performanceTimes.Count);
 
             try
             {

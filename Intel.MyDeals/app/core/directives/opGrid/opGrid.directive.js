@@ -720,6 +720,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $scope.customLayout(false);
                         }, 10);
                     }
+
                 }
             };
 
@@ -2265,12 +2266,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                                 pcService.add(pcUi.stop());
 
-                                $scope.parentRoot.pc.add(pcService.stop());
+                                $scope.$root.pc.add(pcService.stop());
                                 $scope.$parent.$parent.setBusy("", "");
-                                $scope.parentRoot.pc.stop();
+                                $scope.$root.pc.stop();
                                 $timeout(function () {
-                                    if ($scope.parentRoot !== undefined && $scope.parentRoot !== null)
-                                        $scope.parentRoot.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                                    if ($scope.$roott !== undefined && $scope.$root !== null) {
+                                        $scope.$root.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                                        $scope.pc = null;
+                                    }
                                 },2000);
 
                             },
@@ -2279,16 +2282,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.$parent.$parent.setBusy("", "");
                             });
                 } else {
-                    $scope.parentRoot.pc.stop();
+                    $scope.$root.pc.stop();
                     $timeout(function () {
-                        $scope.parentRoot.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc.drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.pc = null;
                     }, 2000);
 
                 }
             }
 
             $scope.saveAndValidateGrid = function () {
-                $scope.parentRoot.pc = new perfCacheBlock("Deal Editor Save & Validate", "UX");
+                if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Deal Editor Save & Validate", "UX");
 
                 //procedures within sync and validate wip deals must complete before overlapping deals setup is run to ensure user changes are accounted for, thus we pass in overlappingDealsSetup as a callback function
                 $scope.syncAndValidateWipDeals($scope.overlappingDealsSetup);

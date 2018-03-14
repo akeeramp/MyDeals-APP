@@ -273,10 +273,10 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 var products = TransformProducts(userProduct.USR_INPUT);
 
-                var prodTemp = products;
-                foreach (var product in prodTemp.ToList())
+                var prodTemp = products.ToList();
+                foreach (var product in prodTemp)
                 {
-                    string productName = product.ToString().Trim();
+                    string productName = product.Trim();
                     if (productName.Contains(" "))//Checking for Long Text search like DT I3
                     {
                         string[] prodductSplit = productName.Split(' ');
@@ -296,11 +296,11 @@ namespace Intel.MyDeals.BusinessLogic
                                                    select new ProductEntryAttribute
                                                    {
                                                        USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
-                                                   }).Distinct();
+                                                   }).Distinct().ToList();
 
                         foreach (var pas in productAliasesSplit)
                         {
-                            finalProdName = finalProdName + ' ' + pas.USR_INPUT.ToString();
+                            finalProdName = finalProdName + ' ' + pas.USR_INPUT;
                         }
                         finalProdName = finalProdName.Remove(0, 1);
                         int index = products.IndexOf(productName);
@@ -313,15 +313,15 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (var product in products)
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
-                    var isEPMName = product.ToString().Contains("~~**~~**~~") == true ? true : false;
-                    string tempProdName = isEPMName ? product.ToString().Remove(product.ToString().IndexOf("~~**~~**~~"), 10) : product.ToString(); // unique combination checking
+                    bool isEPMName = product.Contains("~~**~~**~~");
+                    string tempProdName = isEPMName ? product.Remove(product.IndexOf("~~**~~**~~"), 10) : product; // unique combination checking
                     string afterMediaRemoval = RemoveVerticalAndMedia(tempProdName, mediaSubverticalResult, isEPMName);
                     string userInput = CheckBogusProduct(afterMediaRemoval, isEPMName);
                     pea.ROW_NUMBER = userProduct.ROW_NUMBER;
                     pea.USR_INPUT = afterMediaRemoval;
                     pea.MOD_USR_INPUT = userInput;
-                    pea.START_DATE = userProduct.START_DATE.ToString();
-                    pea.END_DATE = userProduct.END_DATE.ToString();
+                    pea.START_DATE = userProduct.START_DATE;
+                    pea.END_DATE = userProduct.END_DATE;
                     pea.EXCLUDE = userProduct.EXCLUDE;
                     pea.FILTER = userProduct.FILTER;
                     pea.GEO_COMBINED = userProduct.GEO_COMBINED;
@@ -346,7 +346,7 @@ namespace Intel.MyDeals.BusinessLogic
                                           GEO_COMBINED = p.GEO_COMBINED,
                                           PROGRAM_PAYMENT = p.PROGRAM_PAYMENT,
                                           COLUMN_TYPE = p.COLUMN_TYPE
-                                      }).Distinct();
+                                      }).Distinct().ToList();
 
                 productsTodb.AddRange(productAliases);
 
@@ -376,6 +376,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
+            contractToken.AddMark("ExtractValidandDuplicateProducts", TimeFlowMedia.MT, (DateTime.Now - start).TotalMilliseconds);
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished ExtractValidandDuplicateProducts", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
@@ -571,10 +572,10 @@ namespace Intel.MyDeals.BusinessLogic
                     var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.USR_INPUT)
                                                                 && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase))
                                                                 );
-                    var isConflictValid = from p in validProducts
+                    var isConflictValid = (from p in validProducts
                                           group p by p.USR_INPUT
                                             into d
-                                          select d.Key;
+                                          select d.Key).ToList();
 
                     if (isConflictValid.Any())
                     {
@@ -634,8 +635,15 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool IsProductNamePartiallyExists(string searchText, bool isEPMserach)
         {
-            var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
-            return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
+            bool test;
+            var searchStringData = GetSearchString();
+            return isEPMserach 
+                ? searchStringData.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower())) 
+                : searchStringData.Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).Select(k => k.Key).Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()));
+            //var searchString = isEPMserach == false ? searchStringData.Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
+            //test = searchString.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()));
+
+            return test;
         }
 
         /// <summary>

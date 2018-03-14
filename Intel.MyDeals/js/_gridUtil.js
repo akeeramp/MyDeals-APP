@@ -1622,6 +1622,7 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
     perfCacheBlock.data = data;
 
     var totTimes = {};
+    var uid = util.generateUUID();
 
     var logData = [];
     for (var d = 0; d < data.data.length; d++) {
@@ -1629,7 +1630,7 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
         if (totTimes[item.name] === undefined) totTimes[item.name] = 0;
         totTimes[item.name] += item.data[0];
         logData.push({
-            uid: util.generateUUID(),
+            uid: uid,
             title: this.title,
             executionMs: this.executionMs,
             start: this.start,
@@ -1649,7 +1650,7 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
         legend += "<div class='fl legData'>" + key + ": " + (this[key] / 1000).toFixed(4) + "s</div>";
     }, totTimes);
 
-    $("#" + legendId).html(legend + "<div class='clearcoth'></div>");
+    $("#" + legendId).html(legend + "<div class='clearboth'></div>");
     $("#" + titleId).html("Total Execution Time: <b>" + (data.executionMs / 1000) + "sec</b> <i class='intelicon-show-results-outlined showMore' onClick='gridUtils.showDetails(perfCacheBlock.data)'></i>");
     $("#" + chartId).kendoChart({
         legend: {
@@ -1681,7 +1682,6 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
             template: "#= series.name #: #= (value / 1000).toFixed(4) #s<br/><span style='color: \\#cccccc !important; font-size: 10px !important;'>#=series.title#</span>"
         }
     });
-
 };
 
 perfCacheBlock.prototype.addPerfTimes = function (performanceTimes) {
