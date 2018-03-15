@@ -201,13 +201,31 @@
 
         $scope.unLockedGroupData = {};
 
+        $scope.expColAll = function (id) {
+            var grid = $("#sumWipGrid_" + id + " .k-grid").data("kendoGrid");
+
+            if ($("#sumWipGrid_exp_" + id + " i").hasClass("k-i-expand")) {
+                $("#sumWipGrid_" + id + " .k-grid .k-grouping-row").each(function (index) {
+                    grid.expandRow(this);
+                });
+                $("#sumWipGrid_exp_" + id + " i").removeClass("k-i-expand");
+                $("#sumWipGrid_exp_" + id + " i").addClass("k-i-collapse");
+            } else {
+                $("#sumWipGrid_" + id + " .k-grid .k-grouping-row").each(function (index) {
+                    grid.collapseRow(this);
+                });
+                $("#sumWipGrid_exp_" + id + " i").removeClass("k-i-collapse");
+                $("#sumWipGrid_exp_" + id + " i").addClass("k-i-expand");
+            }
+        }
+
         $scope.togglePt = function (ps, pt) {
 
             if (!!!pt.isPtCollapsed) {
                 return;
             }
 
-            $("#sumWipGrid_" + pt.DC_ID).html("<div style='margin: 10px;'><ul class='fa-ul'><li><i class='fa-li fa fa-spinner fa-spin'></i>Loading...</li></ul></div>");
+            $("#sumWipGrid_" + pt.DC_ID).html("<div style='margin: 10px; position: relative; z-index: 4000; background-color: #ffffff;;'><ul class='fa-ul'><li><i class='fa-li fa fa-spinner fa-spin'></i>Loading...</li></ul></div>");
 
             objsetService.getPctDetails(pt.DC_ID).then(
                 function (e) {
@@ -390,6 +408,7 @@
                         var linkFunction = $compile(template);
                         linkFunction($scope);
 
+                        $("#sumWipGrid_exp" + pt.DC_ID).show();
                         $("#sumWipGrid_" + pt.DC_ID).html(template);
                     }
 
