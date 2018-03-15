@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dealId', 'cellCurrValues', 'cellCommentValue', 'colInfo'];
+ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dealId', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox'];
 
-function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dealId, cellCurrValues, cellCommentValue, colInfo) {
+function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dealId, cellCurrValues, cellCommentValue, colInfo, enableCheckbox) {
 	var vm = this;
 
 	var selectedGridDict = {};
@@ -19,6 +19,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	vm.isLoading = true;
 	vm.gridData = [];
 	vm.hasComment = false;
+	vm.hasCheckbox = enableCheckbox;
 
 	var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
@@ -101,7 +102,12 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			{ field: "OVLP_ADDITIVE", title: "Additive", width: "120px" },
             { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "180px" },
 			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" }
-		]
+		],
+		dataBound: function (e) {
+		    if (!vm.hasCheckbox) {
+		        $('#ExcldGrid :checkbox').prop("disabled", true);
+		    }
+		}
 	};
 
 	vm.selectProduct = function (dataItem) {

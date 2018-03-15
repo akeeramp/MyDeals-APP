@@ -326,6 +326,22 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="Readonly Exclude Group Based on Stage",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PS_WF_STG_CD) && (de.AtrbValue.ToString() == WorkFlowStages.Pending.ToString() || de.AtrbValue.ToString() == WorkFlowStages.Approved.ToString())).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.DEAL_GRP_EXCLDS, AttributeCodes.DEAL_GRP_CMNT}
+                        }
+                    }
+                },
                 new MyOpRule // DE30320 - Consumption Reason and Consumption Reason Comment fields should not be editable when Pay Out Based On = Billings : Error found in US53631: VOL TIER DEAL::Kendo Grid Validation + previous rule
                 {
                     Title="Readonly if Not Consumption",

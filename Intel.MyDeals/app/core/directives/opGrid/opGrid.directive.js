@@ -2532,13 +2532,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     resolve: {
                         dealId: angular.copy(containerDataItem["DC_ID"]),
                         cellCurrValues: function () {
-                            return angular.copy(containerDataItem["DEAL_GRP_EXCLDS"])
+                            return angular.copy(containerDataItem["DEAL_GRP_EXCLDS"]);
                         },
                         cellCommentValue: function () {
-                            return angular.copy(containerDataItem["DEAL_GRP_CMNT"])
+                            return angular.copy(containerDataItem["DEAL_GRP_CMNT"]);
                         },
                         colInfo: function () {
                             return col;
+                        },
+                        enableCheckbox: function () {
+                            return containerDataItem["PS_WF_STG_CD"] !== "Pending" && containerDataItem["PS_WF_STG_CD"] !== "Approved";
                         }
                     }
                 });
