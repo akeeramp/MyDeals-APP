@@ -2699,8 +2699,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.publishWipDealsBase();
             }
         } else {
-            if ($scope.$root.pc !== null) $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-            $scope.$root.pc = null;
+            if ($scope.$root.pc !== null) {
+                $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                $scope.$root.pc = null;
+            }
             kendo.alert("All of the products looks good.");
             root.setBusy("", "");
         }
@@ -2853,8 +2855,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             root.publishWipDealsBase();
                         } // Call Save and Validate API from Contract Manager
                     } else {
-                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                        $scope.$root.pc = null;
+                        if ($scope.$root.pc !== null) {
+                            $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                            $scope.$root.pc = null;
+                        }
                         kendo.alert("All of the products looks good.");
                         root.setBusy("", "");
                     }
@@ -3021,8 +3025,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.publishWipDealsBase();
                                 } // Call Save and Validate API from Contract Manager
                             } else {
-                                $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                                $scope.$root.pc = null;
+                                if ($scope.$root.pc !== null) {
+                                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                                    $scope.$root.pc = null;
+                                }
+                                
                                 root.setBusy("", "");
                             }
                         }, 20);

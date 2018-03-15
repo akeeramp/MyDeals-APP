@@ -129,23 +129,51 @@
 
 /* Fun fact styles */
 .ss-funfact-container {
-	background-color: #cceffc; 
-	border: 4px dotted #9bc7d8; 
+	background-color: #fcfcfc; 
 	padding: 20px; 
-	margin: 20px 0px 0px;
+	margin: 20px -10px -10px -10px;
+    border-top: 1px solid #eeeeee;
+        -webkit-animation: fadein 4s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 4s; /* Firefox < 16 */
+        -ms-animation: fadein 4s; /* Internet Explorer */
+         -o-animation: fadein 4s; /* Opera < 12.1 */
+            animation: fadein 4s;
 }
 
 .ss-funfact-title {
-	margin-bottom: 8px; 
-	color: #555; 
+	margin-bottom: 8px;
+	color: #FFA300; 
 	font-size:17px;
 }
 
 .ss-funfact-icon {
-	 font-size: 30px; 
-	 color: #88a7b3;
+	 font-size: 26px; 
+	 color: #0071C5;
+    margin-right: 10px;
 }
 
 .ss-funfact-description {
 	color: #555;
+}
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
