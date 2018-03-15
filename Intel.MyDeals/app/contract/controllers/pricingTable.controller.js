@@ -1419,13 +1419,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
                 var sheet = spreadsheet.activeSheet();
-				
-            	// Fix the topLeftRowIndex in case the user skips spaces otherwise we'll have tier-disabling bugs
+
+                // Fix the topLeftRowIndex in case the user skips spaces otherwise we'll have tier-disabling bugs
                 if ((topLeftRowIndex - 1) > data.length) {
-                	var difference =  topLeftRowIndex- data.length;
-                	topLeftRowIndex -= difference;
-				}
-				
+                    var difference = topLeftRowIndex - data.length;
+                    topLeftRowIndex -= difference;
+                }
+
                 // before we clean the data, need to check for offset to see if the top row needs updating
                 for (var k = 0; k < (topLeftRowIndex - 2) ; k++) {
                     if (data[k] !== undefined && data[k].PTR_USER_PRD === null) topLeftRowIndex -= 1;
@@ -1610,7 +1610,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     // check merge issues
                     var numPivotRows = root.numOfPivot(data[data.length - 1]);
-                    var offset = getOffsetByIndex(data, bottomRightRowIndex - 2); 
+                    var offset = getOffsetByIndex(data, bottomRightRowIndex - 2);
                     if (offset > 0) {
                         bottomRightRowIndex += numPivotRows - offset;
                     }
@@ -2432,6 +2432,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Runs the translation that eventually may open up corrector
                 // Send the whole data function is intelligent to handle single and multiple rows
                 var data = root.spreadDs.data();
+                if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Product Validation", "UX");
                 ValidateProducts(data, false, true, currentRow + 1);
             }
             else { // open the selector
@@ -2747,6 +2748,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
                     || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
                 root.setBusy("", "");
+                if ($scope.$root.pc !== null) $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                 vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue);
                 isAllValidated = false;
                 break;
@@ -3021,7 +3023,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             } else {
                                 $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                                 $scope.$root.pc = null;
-                                kendo.alert("All of the products looks good.");
                                 root.setBusy("", "");
                             }
                         }, 20);
