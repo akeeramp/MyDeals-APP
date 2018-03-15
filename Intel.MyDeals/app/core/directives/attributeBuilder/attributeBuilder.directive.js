@@ -318,7 +318,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             };
 
             $scope.closeField = function (e) {
-                setTimeout(() => { $(e.sender.element).focusout(); }, 0);
+                setTimeout(function () {
+                    $(e.sender.element).focusout();
+                }, 0);
             }
 
             $scope.addRow = function (dataItem) {
@@ -330,7 +332,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         operator: "",
                         value: ""
                     });
-                    setTimeout(() => {
+
+                    setTimeout(function () {
                         if ($(".filterRow")[index + 1] !== undefined)
                             $(".filterRow")[index + 1].scrollIntoView();
                     }, 0);
@@ -431,13 +434,12 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     item.operatorDataSource = $scope.getOperDatasource(item.field);
                 }
 
-                setTimeout(() => {
+                setTimeout(function () {
                     var els = $(".abValue");
                     for (var e = 0; e < els.length; e++) {
                         var scope = angular.element(els[e]).scope();
                         $scope.drawValueControl($(els[e]), scope);
                     }
-
                 }, 0);
             }
 
