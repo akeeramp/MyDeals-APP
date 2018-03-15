@@ -598,11 +598,11 @@ namespace Intel.MyDeals.BusinessLogic
                     var dcHasErrors = false;
 
                     OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave, null, dc, myDealsData);
-                    if (savePacket.ValidateIds.Any())
-                    {
+                    //if (savePacket.ValidateIds.Any())
+                    //{
                         dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
                         dc.ApplyRules(MyRulesTrigger.OnPostValidate);
-                    }
+                    //}
 
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
                     {

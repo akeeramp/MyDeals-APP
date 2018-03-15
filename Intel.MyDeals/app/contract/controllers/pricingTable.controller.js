@@ -3215,6 +3215,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function validatePricingTableProducts() {
+        if (!$scope._dirty) return;
+
         if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false, true);

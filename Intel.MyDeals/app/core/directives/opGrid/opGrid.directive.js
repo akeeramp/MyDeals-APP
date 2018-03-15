@@ -2294,6 +2294,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.saveAndValidateGrid = function () {
+                if (!$scope._dirty) return;
+
                 if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Deal Editor Save & Validate", "UX");
 
                 //procedures within sync and validate wip deals must complete before overlapping deals setup is run to ensure user changes are accounted for, thus we pass in overlappingDealsSetup as a callback function
