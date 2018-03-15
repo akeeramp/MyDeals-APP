@@ -174,11 +174,12 @@
                 $scope.context.saved = true;
                 $timeout(function () {
                     $scope.context.saved = false;
-                    kendo.confirm("Would you like to run Price Cost Test now?")
-                        .then(function () {
-                            $scope.$broadcast('runForcedPctMct', {});
-                        },
-                        function () { });
+                    op.notifyWarning("You have made a change that may affect Cost Test results.", "Please re-run Cost Test");
+                    //kendo.confirm("Would you like to run Price Cost Test now?")
+                    //    .then(function () {
+                    //        $scope.$broadcast('runForcedPctMct', {});
+                    //    },
+                    //    function () { });
                 }, 3000);
             }, function () { });
         }
@@ -479,11 +480,12 @@
                             dataItem.saved = false;
                         }, 3000);
 
-                        kendo.confirm("Would you like to run Price Cost Test now?")
-                            .then(function () {
-                                $scope.$broadcast('runForcedPctMct', {});
-                            },
-                            function () { });
+                        op.notifyWarning("You have made a change that may affect Cost Test results.", "Please re-run Cost Test");
+                        //kendo.confirm("Would you like to run Price Cost Test now?")
+                        //    .then(function () {
+                        //        $scope.$broadcast('runForcedPctMct', {});
+                        //    },
+                        //    function () { });
                     });
             }
         }
