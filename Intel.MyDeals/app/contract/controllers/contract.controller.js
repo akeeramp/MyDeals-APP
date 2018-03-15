@@ -2322,7 +2322,7 @@
                                 return x == sData[s].DC_ID;
                             }).length > 0;
 
-                            if (!isValidatedRow) {
+                            if (!isValidatedRow) { 
                                 validated_DC_Id.push(sData[s].DC_ID);
                                 if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "") ||
                                     (!(!sData[s].PTR_SYS_INVLD_PRD || sData[s].PTR_SYS_PRD === ""))) {
@@ -2423,12 +2423,22 @@
                 }
             }
 
+            var sDataSave = sData.filter(function (a) {
+            	var hasErrors = false;
+            	if (a._behaviors != null && a._behaviors !== undefined) {
+            		var errors = a._behaviors.isError;
+            		hasErrors = (errors !== null && errors !== undefined && Object.keys(errors).length !== 0 && errors.constructor === Object); // HACK: if a user doesn't change anything on an existing contract, but clicks "Save", then errors won't show up unless we include rows with errors. This can occur after user copies a PT.
+            	}
+            	var isPrdNeedsValidation = (a.PTR_SYS_PRD == null);
+            	return (a._dirty || hasErrors || isPrdNeedsValidation);
+            });
+
             //.filter(function (a) { return a._dirty })
             return {
                 "Contract": [],
                 "PricingStrategy": [],
                 "PricingTable": curPricingTableData,
-                "PricingTableRow": sData === undefined ? [] : sData.filter(function (a) { return a._dirty }),
+                "PricingTableRow": sData === undefined ? [] : sDataSave, //sData.filter(function (a) { return a._dirty }),
                 "WipDeals": gData === undefined ? [] : gData.filter(function (a) { return a._dirty }),
                 "EventSource": source,
                 "Errors": errs
@@ -3165,7 +3175,7 @@
                     var arItems = data;
                     for (var key in arItems) {
                         if (arItems.hasOwnProperty(key) && data[key] !== undefined)
-                            src[key] = data[key];
+                        	src[key] = data[key];
                     }
                 }
             }

@@ -604,6 +604,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (range._sheet._sheetName !== "Main" || range._ref.topLeft === undefined) {
             return;
         }
+        if (root.isBusy) { // HACK: to prevnt user from deleting via back button while loading, which might cause async problems
+        	return;
+        }
 
         var topLeftRowIndex = (range._ref.topLeft.row + 1);
         // THIS ASSUMES ALL PIVOTS ROWS ARE THE SAME NUMBER
@@ -914,7 +917,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
         //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
-        //}
+    	//}
 
         // VOL-TIER
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
@@ -945,10 +948,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
 
                             // Start vol, end vol, or rate changed
-                            if (!isEndVolUnlimited) {
+                            if (!isEndVolUnlimited ) {
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
-                                    value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                	if (value.value != null && value.value !== undefined) {
+                                		value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                	} else {
+                                		value.value = 0;
+                                	}
                                 }
                                 else if (colIndex === rateIndex) {
                                     value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -978,24 +985,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
                             }
 
-                            // Tracker number shenanigans
-                            // TODO: better shenanigan check
+
                             if (colIndex == productColIndex) {
-                                // Make sure that the user doesn't delete all products when we have a tracker number
-                                if (myRow.HAS_TRACKER == 1
-									&& (value.value == null || value.value.toString().replace(/\s/g, "").length === 0)
-								) {
-                                    if (myRow.TIER_NBR == 1) {
-                                        var modalOptions = {
-                                            closeButtonText: 'Close',
-                                            hasActionButton: false,
-                                            headerText: 'Cannot remove deal with tracker',
-                                            bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
-                                        };
-                                        confirmationModal.showModal({}, modalOptions);
-                                    }
-                                    value.value = myRow.PTR_USER_PRD; // revert
-                                }
+                            	shenaniganObj = trackerShenanigans(myRow, value.value);
+                            	if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
+                            		value.value = (shenaniganObj.value !== null &&  shenaniganObj.value !== undefined ) ? angular.copy(shenaniganObj.value) : "ERROR";
+                            	}
                             }
 
                             // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
@@ -1009,20 +1004,39 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
-
         var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
         var hasValueInAtLeastOneCell = false;
 
+        var shenaniganObj = null;
+
         range.forEachCell(
             function (rowIndex, colIndex, value) {
+            	var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
+            	var myRow = data[(rowIndex - 1)];
+
                 if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
                     hasValueInAtLeastOneCell = true;
+                }
+
+                if (colIndex == productColIndex) {
+                	if (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") { // NOTE: VOL_TIER does this too, but we can't put the vol_tier check here since vol_tier calls speadDs.sync() before this function and thus makes the previous value undefined.
+                		shenaniganObj = trackerShenanigans(myRow, value.value);
+                		if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
+                			value.value = angular.copy(shenaniganObj.value);
+                		}
+                	}
                 }
             }
 		);
 
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
+        	if (shenaniganObj.isNonDelete && root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
+        		// Revert value if not allowed to delete
+        		cleanupData(data);
+        		spreadDsSync();
+        		return;
+        	}
             var rowStart = topLeftRowIndex - 2;
             var rowStop = bottomRightRowIndex - 2;
             if (root.spreadDs !== undefined) {
@@ -1033,7 +1047,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
                         .then(function () {
-                            $timeout(function () {
+                        	$timeout(function () {
                                 if (root.spreadDs !== undefined) {
                                     // look for skipped lines
                                     var numToDel = rowStop + 1 - rowStart;
@@ -1070,7 +1084,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
-                    $timeout(function () {
+                	$timeout(function () {
                         var cnt = 0;
 
                         for (var c = 0; c < data.length; c++) {
@@ -1174,6 +1188,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
+    // TODO: better shenanigan check (business logic)
+    function trackerShenanigans(myRow, value) {
+    	var result = {
+    		value: null,
+    		isNonDelete: false
+    	};
+
+    	// Make sure that the user doesn't delete all products when we have a tracker number
+    	if (myRow === undefined || myRow === null) {
+    		return result;
+		}
+
+    	if (myRow.HAS_TRACKER == 1
+			&& (value == null || value.toString().replace(/\s/g, "").length === 0)
+		) {
+    		if (myRow.TIER_NBR === undefined || myRow.TIER_NBR == 1) {
+    			var modalOptions = {
+    				closeButtonText: 'Close',
+    				hasActionButton: false,
+    				headerText: 'Cannot remove deal with tracker',
+    				bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
+    			};
+    			confirmationModal.showModal({}, modalOptions);
+    		}
+    		result.value = myRow.PTR_USER_PRD; // revert
+    		result.isNonDelete = true;
+    	}
+
+    	return result;
+	}
 
     //// <summary>
     //// Formats a given dictionary key to a format that ignores spaces and capitalization for easier key comparisons.
