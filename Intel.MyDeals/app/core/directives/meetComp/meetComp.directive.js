@@ -201,9 +201,10 @@
 
                                     //COMP_SKU Checking.....
                                     var isCompSkuZero = false;
-                                    if (!isNaN(Math.abs(data[i].COMP_SKU))) {
-                                        isCompSkuZero = true;
-                                    }
+                                    // per DE36513 removed this check... but left it here in case the request comes back
+                                    //if (!isNaN(Math.abs(data[i].COMP_SKU))) {
+                                    //    isCompSkuZero = true;
+                                    //}
 
                                     if (isCompSkuZero && canUpdateMeetCompSKUPriceBench && data[i].MEET_COMP_STS.toLowerCase() != "na") {
                                         errorObj.COMP_SKU = true;
