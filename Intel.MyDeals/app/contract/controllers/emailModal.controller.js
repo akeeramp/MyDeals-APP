@@ -50,7 +50,7 @@ function emailModalCtrl($scope, $uibModalInstance, dataItem) {
                 // Example adding a new field to the received data
                 // that computes price as price times quantity.
                 $.each(data, function(idx, elem) {
-                    elem.searchText = elem.LST_NM + ", " + elem.FRST_NM;
+                    elem.searchText = elem.LST_NM + ", " + elem.FRST_NM + " " + elem.EMAIL_ADDR;
                 });
                 return data;
             }
