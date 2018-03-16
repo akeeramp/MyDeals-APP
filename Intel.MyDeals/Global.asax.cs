@@ -67,10 +67,11 @@ namespace Intel.MyDeals
 
             var controller = new ErrorController
             {
-                ViewData =
-                {
-                    Model = new HandleErrorInfo(ex, errCon.CurrentController, errCon.CurrentAction)
-                }
+                //TODO::TJE Temporarily comment out to investigate bug DE36930.
+                //ViewData =
+                //{
+                //    Model = new HandleErrorInfo(ex, errCon.CurrentController, errCon.CurrentAction)
+                //}
             };
 
             ((IController)controller).Execute(errCon.RequestContext);
