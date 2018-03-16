@@ -719,6 +719,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $timeout(function () {
                             $scope.customLayout(false);
                         }, 10);
+                        $timeout(function () {
+                            $scope.overlappingDealsSetup();
+                        }, 3000);
                     }
 
                 }
@@ -2266,9 +2269,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                                 pcService.add(pcUi.stop());
 
-                                $scope.$root.pc.add(pcService.stop());
+                                if ($scope.$root.pc !== null) {
+                                    $scope.$root.pc.add(pcService.stop());
+                                    $scope.$root.pc.stop();
+                                }
                                 $scope.$parent.$parent.setBusy("", "");
-                                $scope.$root.pc.stop();
                                 $timeout(function () {
                                     if ($scope.$root.pc !== null) {
                                         $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");

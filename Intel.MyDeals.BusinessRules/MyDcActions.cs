@@ -121,7 +121,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deStr = r.Dc.GetDataElement(AttributeCodes.START_DT); // R is From DB data - Items is from UI
             if (!string.IsNullOrEmpty(dcSt))
             {
-                string dcPrevSt = string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                string dcPrevSt = deStr.PrevAtrbValue == null || string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
                 // && dcPrevSt != dcItemSt  -- removed bacuse it was causing validation issues.
