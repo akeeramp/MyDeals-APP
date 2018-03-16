@@ -1109,11 +1109,13 @@ gridUtils.getBidActionsLabel = function (data) {
 
 gridUtils.getBidActionsList = function (data) {
     var bidActns = [];
-    for (var i = 0; i < data.BID_ACTNS.length; i++) {
-        bidActns.push({
-            "BidActnName": data.BID_ACTNS[i],
-            "BidActnValue": data.BID_ACTNS[i]
-        });
+    if (data.BID_ACTNS !== undefined) {
+        for (var i = 0; i < data.BID_ACTNS.length; i++) {
+            bidActns.push({
+                "BidActnName": data.BID_ACTNS[i],
+                "BidActnValue": data.BID_ACTNS[i]
+            });
+        }
     }
     return bidActns;
 }
