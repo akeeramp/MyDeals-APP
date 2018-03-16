@@ -39,5 +39,12 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _loggingDataLib.UploadUiPerfLogs(logPerformanceTimes).Result;
         }
+
+        public bool UploadUiPerfLogsSync(IEnumerable<LogPerformanceTime> logPerformanceTimes)
+        {
+            return _loggingDataLib.UploadUiPerfLogsSync(logPerformanceTimes);
+        }
+
+        
     }
 }

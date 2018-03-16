@@ -94,5 +94,30 @@ namespace Intel.MyDeals.DataLibrary
             }
             return true;
         }
+
+        public bool UploadUiPerfLogsSync(IEnumerable<LogPerformanceTime> logPerformanceTimes)
+        {
+            var performanceTimes = logPerformanceTimes as IList<LogPerformanceTime> ?? logPerformanceTimes.ToList();
+            if (!performanceTimes.Any()) { return false; }
+
+            t_ui_log dt = new t_ui_log();
+
+            dt.AddRows(performanceTimes, performanceTimes.Count);
+
+            try
+            {
+                Procs.dbo.PR_INS_UI_LOG_BULK cmd = new Procs.dbo.PR_INS_UI_LOG_BULK()
+                {
+                    in_ui_log = dt,
+                    in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
+                };
+                DataAccess.ExecuteReaderAsync(cmd);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return true;
+        }
     }
 }

@@ -96,7 +96,8 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                _loggingLib.UploadUiPerfLogs(logPerformanceTimes);
+                //_loggingLib.UploadUiPerfLogs(logPerformanceTimes);
+                _loggingLib.UploadUiPerfLogsSync(logPerformanceTimes);
                 return true;
             }
             catch (Exception ex)

@@ -12,5 +12,6 @@ namespace Intel.MyDeals.IDataLibrary
         Task<bool> UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
 
         Task<bool> UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes);
+        bool UploadUiPerfLogsSync(IEnumerable<LogPerformanceTime> logPerformanceTimes);
     }
 }

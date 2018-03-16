@@ -11,5 +11,6 @@ namespace Intel.MyDeals.IBusinessLogic
         bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
 
         bool UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes);
+        bool UploadUiPerfLogsSync(IEnumerable<LogPerformanceTime> logPerformanceTimes);
     }
 }
