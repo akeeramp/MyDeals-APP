@@ -33,7 +33,7 @@
             employeeService.setEmployees(data)
                 .then(function (response) {
                     logger.success("Role was changed", "Done");
-                    window.clearSessionData();
+                    window.clearSessionData('/error/ResetMyCache');
                     document.location.href = "/error/ResetMyCache";
                 }, function (response) {
                     logger.error("Unable to set User Roles.", response, response.statusText);

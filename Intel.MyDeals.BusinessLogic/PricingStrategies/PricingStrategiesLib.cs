@@ -152,8 +152,13 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-
+            DateTime start = DateTime.Now;
             MyDealsData myDealsData = OpDataElementType.PRC_ST.GetByIDs(ids, opDataElementTypes, atrbs);
+            contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+            List<int> needsPctMctDealIds = new List<int>();
+
+
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
             {
                 string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
@@ -194,24 +199,30 @@ namespace Intel.MyDeals.BusinessLogic
                 bool needToRunPct = actn == "Approve" && hasL1 && stageIn == WorkFlowStages.Submitted;
                 if (needToRunMct || needToRunPct)
                 {
-                    bool passMct, passPct;
-                    bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), new List<int> { dc.DcID }, out passMct, out passPct);
-                    if (!passed && (role == RoleTypes.DA)) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
-                    {
-                        string passMsg = !passMct && !passPct
-                            ? "Meet Comp and Cost Test"
-                            : !passMct ? "Meet Comp" : "Cost Test";
+                    needsPctMctDealIds.Add(dc.DcID);
 
-                        opMsgQueue.Messages.Add(new OpMsg
-                        {
-                            Message = $"Pricing Strategy did not pass {passMsg}.",
-                            MsgType = OpMsg.MessageType.Warning,
-                            ExtraDetails = dc.DcType,
-                            KeyIdentifiers = new[] { dc.DcID }
-                        });
-                        continue;
+                    //bool passMct, passPct;
 
-                    }
+                    //start = DateTime.Now;
+                    //bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), new List<int> { dc.DcID }, out passMct, out passPct);
+                    //contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+                    //if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
+                    //{
+                    //    string passMsg = !passMct && !passPct
+                    //        ? "Meet Comp and Cost Test"
+                    //        : !passMct ? "Meet Comp" : "Cost Test";
+
+                    //    opMsgQueue.Messages.Add(new OpMsg
+                    //    {
+                    //        Message = $"Pricing Strategy did not pass {passMsg}.",
+                    //        MsgType = OpMsg.MessageType.Warning,
+                    //        ExtraDetails = dc.DcType,
+                    //        KeyIdentifiers = new[] { dc.DcID }
+                    //    });
+                    //    continue;
+
+                    //}
                 }
 
 
@@ -241,6 +252,40 @@ namespace Intel.MyDeals.BusinessLogic
                 // This should probably be a rule item
             }
 
+
+            // Now let us test for PCT or MCT if needed
+            if (needsPctMctDealIds.Any())
+            {
+                bool passMct, passPct;
+
+                start = DateTime.Now;
+                bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
+                contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+                if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
+                {
+                    string passMsg = !passMct && !passPct
+                        ? "Meet Comp and Cost Test"
+                        : !passMct ? "Meet Comp" : "Cost Test";
+
+                    foreach (int dcId in needsPctMctDealIds)
+                    {
+                        opMsgQueue.Messages.Add(new OpMsg
+                        {
+                            Message = $"Pricing Strategy did not pass {passMsg}.",
+                            MsgType = OpMsg.MessageType.Warning,
+                            ExtraDetails = dcId,
+                            KeyIdentifiers = new[] { dcId }
+                        });
+                    }
+
+                    return opMsgQueue;
+                }
+
+            }
+
+
+
             List<int> dealIds = new List<int>();
             List<int> tenderDealIds = new List<int>();
             List<int> quotableDealIds = new List<int>();
@@ -259,7 +304,9 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID
                 };
 
+                start = DateTime.Now;
                 var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive, opDataElementTypesActive, atrbsActive);
+                contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
                 myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
                 List<OpDataElement> deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements

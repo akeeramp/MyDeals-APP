@@ -4,6 +4,13 @@
 <div ng-include="'app/contract/partials/ptModals/emailModal.html'"></div>
 <div ng-include="'app/contract/partials/ptModals/selectPricingTableModal.html'"></div>
 
+<div id="perfMs"></div>
+<div id="perfLegend"></div>
+<div id="perfDetails"></div>
+<div style="position: absolute; bottom: 0; right: 5px;">
+    <div id="perfChart" style="height: 40px; padding: 0;"></div>
+</div>
+
 <div style="font-size: 14px; line-height: 1.1em; text-align: center; position: absolute; top: 5px; right: 18px;"
      title="click to change Contract Acceptance Criteria">
     <span style="color: #0071C5;">Customer Acceptance</span>
@@ -844,5 +851,69 @@
     .contract-status-bar.valid_0, 
     .contract-status-bar.valid_Dirty {
         background: #ffffff;
+    }
+
+
+    #perfMs {
+        position: absolute;
+        bottom: 30px;
+        right: 10px;
+        color: #000000; 
+        font-family: verdana;
+        font-size: 10px; 
+        margin-top: 5px; 
+        z-index: 1000;
+    }
+    #perfLegend {
+        position: absolute;
+        bottom: 3px;
+        right: 1px;
+        font-family: verdana;
+        font-size: 9px;
+        z-index: 1000;
+        color: #666666;
+    }
+    #perfDetails {
+        position: absolute;
+        bottom: 50px;
+        right: 10px;
+        font-family: verdana;
+        font-size: 10px;
+        z-index: 1000;
+        background-color: #ffffff;
+    }
+    #perfDetails th {
+        padding: 2px 4px;
+        color: #0071C5;
+    }
+    #perfDetails td {
+        padding: 2px 4px;
+        color: #333333;
+    }
+    .closePerf {
+        color: #cccccc;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .closePerf:hover {
+        color: #FC4C02;
+    }
+    .legKey {
+        width: 10px;
+        height: 10px;
+        border: 1px solid #bebebe;
+    }
+    .legData {
+        margin-left: 4px;
+        margin-right: 10px;
+        margin-top: -2px;
+    }
+    .showMore {
+        font-size: 18px;
+        color: #00AEEF;
+        cursor: pointer;
+    }
+    .showMore:hover {
+        color: #0071C5;
     }
 </style>

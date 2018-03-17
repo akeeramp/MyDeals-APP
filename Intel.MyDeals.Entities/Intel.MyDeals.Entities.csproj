@@ -83,6 +83,7 @@
     <Compile Include="LogPerformanceTime.cs" />
     <Compile Include="OP ExtensionMethods\AvmforceMode.cs" />
     <Compile Include="OpDataCollectorFlattenedDictListPacket.cs" />
+    <Compile Include="OpMsgQueuePacket.cs" />
     <Compile Include="OverlappingListPacket.cs" />
     <Compile Include="PerformanceTime.cs" />
     <Compile Include="ProductLookupPacket.cs" />

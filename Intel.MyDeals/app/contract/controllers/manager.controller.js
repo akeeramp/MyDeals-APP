@@ -771,6 +771,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         }
     }
     $scope.actionItemsBase = function (approvePending) {
+        if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Manager", "");
+        var pcUi = new perfCacheBlock("Gather data to pass", "UI");
+
         var data = {};
         var dataItems = [];
 
@@ -801,6 +804,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.context = dataItems;
 
 
+        $scope.$root.pc.add(pcUi.stop());
+        var pcUser = new perfCacheBlock("User Modal", "UI");
+
         var modalInstance = $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
@@ -820,6 +826,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         });
 
         modalInstance.result.then(function (result) {
+            $scope.$root.pc.add(pcUser.stop());
             $scope.checkPctMctPriorToActioning(data, result);
             $scope.canBypassEmptyActions = false;
         }, function () { });
@@ -858,8 +865,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         if (ids.length > 0) {
             $(".iconRunPct").addClass("fa-spin grn");
             $scope.root.setBusy("Running PCT/MCT", "Running Price Cost Test and Meet Comp Test.", "Info", true);
+            var pcPct = new perfCacheBlock("Running PCT/MCT", "MT");
             objsetService.runPctContract($scope.root.contractData.DC_ID).then(
                 function (e) {
+                    $scope.$root.pc.add(pcPct.stop());
 
                     //TODO Look at PCT/MCT results and determine if we can proceed
                     //

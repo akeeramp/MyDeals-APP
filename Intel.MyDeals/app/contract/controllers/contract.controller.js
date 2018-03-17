@@ -1570,13 +1570,15 @@
         $scope.actionPricingStrategies = function (data, emailEnabled) {
         	$scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!", "Info", true);
 
+        	var pcActn = new perfCacheBlock("Action Pricing Strategies", "MT");
+
             $scope.emailData = data;
             $scope.pricingStrategyStatusUpdated = false;
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
-                function (data) {
-                    $scope.messages = data.data.Messages;
-
-
+                function (response) {
+                    pcActn.addPerfTimes(response.data.PerformanceTimes);
+                    $scope.$root.pc.add(pcActn.stop());
+                    $scope.messages = response.data.Data.Messages;
 
                     $timeout(function () {
                         $scope.$broadcast('refresh');
@@ -1586,6 +1588,10 @@
                     }, 50);
 
                     $scope.pricingStrategyStatusUpdated = true;
+
+                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                    $scope.$root.pc = null;
+
                 },
                 function (result) {
 

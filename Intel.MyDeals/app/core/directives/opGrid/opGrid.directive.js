@@ -2287,7 +2287,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.$parent.$parent.setBusy("", "");
                             });
                 } else {
-                    $scope.$root.pc.stop();
+                    if ($scope.$root.pc !== null) $scope.$root.pc.stop();
                     $timeout(function () {
                         if ($scope.$root.pc !== null) {
                             $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");

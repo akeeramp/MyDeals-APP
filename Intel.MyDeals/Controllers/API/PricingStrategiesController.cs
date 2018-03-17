@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
@@ -144,7 +145,7 @@ namespace Intel.MyDeals.Controllers.API
                 }).ToList()
             };
 
-            return SafeExecutor(() => ActionPricingStrategies(custId, contractId, contractCustAccpt, actnPs)
+            return SafeExecutor(() => ActionPricingStrategies(custId, contractId, contractCustAccpt, actnPs).Data
                 , "Unable to action the Pricing Strategy {id}"
             );
         }
@@ -153,16 +154,26 @@ namespace Intel.MyDeals.Controllers.API
         [Route("ActionPricingStrategies/{custId}/{contractId}/{contractCustAccpt}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public OpMsgQueue ActionPricingStrategies(int custId, int contractId, string contractCustAccpt, Dictionary<string, List<WfActnItem>> actnPs)
+        public OpMsgQueuePacket ActionPricingStrategies(int custId, int contractId, string contractCustAccpt, Dictionary<string, List<WfActnItem>> actnPs)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(new ContractToken("ContractToken Created - ActionPricingStrategies")
+            DateTime start = DateTime.Now;
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - ActionPricingStrategies")
             {
-                    CustId = custId,
-                    ContractId = contractId,
-                    CustAccpt = contractCustAccpt
-                } , actnPs)
+                CustId = custId,
+                ContractId = contractId,
+                CustAccpt = contractCustAccpt
+            };
+
+            OpMsgQueue result = SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs)
                 , "Unable to action the Pricing Strategy {id}"
             );
+
+            return new OpMsgQueuePacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Contract", contractToken.TimeFlow)
+            };
         }
 
         [Authorize]

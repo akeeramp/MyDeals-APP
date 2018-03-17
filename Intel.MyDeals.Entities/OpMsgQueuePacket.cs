@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.Entities
 {
-    public class OpDataCollectorFlattenedDictListPacket
+    public class OpMsgQueuePacket
     {
-        public OpDataCollectorFlattenedDictListPacket()
+        public OpMsgQueuePacket()
         {
-            Data = new OpDataCollectorFlattenedDictList();
+            Data = new OpMsgQueue();
             PerformanceTimes = new List<PerformanceTime>();
         }
 
-        public OpDataCollectorFlattenedDictList Data { get; set; }
+        public OpMsgQueue Data { get; set; }
         public List<PerformanceTime> PerformanceTimes { get; set; }
+
     }
 }
