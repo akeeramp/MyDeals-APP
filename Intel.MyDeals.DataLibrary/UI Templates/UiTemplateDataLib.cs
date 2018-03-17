@@ -1046,7 +1046,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiProductDimControlWrapper(data, 'kit')#",
                 Width = 140,
-                Label = "MyDeals Products",
+                Label = "My Deals Products",
                 IsDimKey = true,
                 IsReadOnly = true,
                 DataType = "string",
@@ -1070,10 +1070,11 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 33,
                 AtrbCd = AttributeCodes.TITLE,
-                Label = "MyDeals Product",
+                Label = "My Deals Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Template = "#=gridUtils.uiProductControlWrapper(data, 'TITLE')#",
+                ExcelTemplate = "#=TITLE#",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 150
@@ -1466,12 +1467,12 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "#=gridUtils.uiDimInfoControlWrapper(data, 'CAP')#",
+                ExcelTemplate = "#=gridUtils.uiDimInfoExcelControlWrapper(data, 'CAP')#",
                 Label = "CAP Info",
                 DataType = "object",
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
-                Editor = "multiDimEditor",
-                BypassExport = true
+                Editor = "multiDimEditor"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit, Tender types
             {
@@ -1520,7 +1521,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "YCS2 Info",
                 IsReadOnly = true,
                 Template = "#=gridUtils.uiDimInfoControlWrapper(data, 'YCS2')#",
-                BypassExport = true
+                ExcelTemplate = "#=gridUtils.uiDimInfoExcelControlWrapper(data, 'YCS2')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP ECAP types + Dimension by Prod Bucket
             {

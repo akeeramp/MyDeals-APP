@@ -387,6 +387,34 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
 
 }
 
+gridUtils.uiDimInfoExcelControlWrapper = function (passedData, field) {
+    var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
+
+    if (data === undefined || data === null) return "";
+
+    var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
+
+    var YCS2modifier = field === "YCS2" ? "_PRC_IRBT" : "";
+    var st = field === "YCS2" ? "_START_DT" : "_STRT_DT";
+    var en = "_END_DT";
+
+    var tmplt = '';
+    for (var index in sortedKeys) { //only looking for positive dim keys
+        dimkey = sortedKeys[index];
+        if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+
+            if (passedData[field + YCS2modifier][dimkey].indexOf("No") >= 0) {
+                tmplt += passedData[field + YCS2modifier][dimkey] + "<br/>";
+            } else {
+                tmplt += passedData[field + YCS2modifier][dimkey] + " : " + passedData[field + st][dimkey] + " - " + passedData[field + en][dimkey] + "<br/>";
+            }
+        }
+    }
+
+    return tmplt;
+
+}
+
 //this control wrapper to be used for displaying which product is associated with each dimention
 gridUtils.uiProductDimControlWrapper = function (passedData, type) {
     var data = passedData["PTR_USER_PRD"].split(',');
@@ -1025,7 +1053,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
         }
     }
 
-    var data = ds.data();
+    var data = onlyVisible ? ds.view() : ds.data();
     for (var i = 0; i < data.length; i++) {
         //push single row for every record
 
