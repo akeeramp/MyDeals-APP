@@ -127,6 +127,10 @@ function gridStatusBoard($compile, objsetService, $timeout) {
 
                     $scope.initDsLoaded = true;
                     $scope.isLoaded = true;
+
+                    $timeout(function () {
+                        $("#gridContractStatus .k-pager-info").html("Results limited to 100 most recently modified. Use Search for full list.");
+                    }, 200);
                 }
 
             });
