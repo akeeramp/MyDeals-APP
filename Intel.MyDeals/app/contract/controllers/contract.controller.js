@@ -1805,7 +1805,7 @@
                     objsetService.cancelPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps).then(
                         function (data) {
                             if (data.data.Messages[0].MsgType !== 1) {
-                                $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Strategy", "Error");
+                                $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Strategy with Deals having Trackers", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1929,7 +1929,7 @@
                     objsetService.cancelPricingTable($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, pt).then(
                         function (data) {
                             if (data.data.Messages[0].MsgType !== 1) {
-                                $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Table", "Error");
+                                $scope.setBusy("Cancel Failed", "Unable to Cancel the pricing Table with Deals having Trackers", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
