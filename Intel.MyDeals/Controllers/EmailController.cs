@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 using Intel.MyDeals.Entities;
 

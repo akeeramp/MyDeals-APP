@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Intel.MyDeals.BusinessLogic.Employees;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -39,6 +40,17 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsg SetManageUserData(EmployeeCustomers data)
         {
             new EmployeeDataLib().SetManageUserData(data);
+            return new OpMsg("Customers have been saved");
+        }
+
+        public OpMsg ApplyForCustomers(EmployeeEmailCustomers data)
+        {
+            EmployeeHelpers.SendEmailMessageOfNewCustomers(data);
+            new EmployeeDataLib().SetManageUserData(new EmployeeCustomers
+            {
+                empWWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                custIds = data.CustIds
+            });
             return new OpMsg("Customers have been saved");
         }
 

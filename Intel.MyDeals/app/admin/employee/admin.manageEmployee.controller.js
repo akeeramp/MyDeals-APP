@@ -7,9 +7,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    manageEmployeeController.$inject = ['manageEmployeeService', '$scope', 'logger', 'gridConstants', '$uibModal'];
+    manageEmployeeController.$inject = ['manageEmployeeService', '$scope', 'logger', 'gridConstants', '$uibModal', '$location', '$timeout'];
 
-    function manageEmployeeController(manageEmployeeService, $scope, logger, gridConstants, $uibModal) {
+    function manageEmployeeController(manageEmployeeService, $scope, logger, gridConstants, $uibModal, $location, $timeout) {
         $scope.isDropdownsLoaded = false;
 
         $scope.openEmployeeCustomers = function (dataItem) {
@@ -52,7 +52,7 @@
                         }, function (response) {
                             logger.error("Unable to get User Data.", response, response.statusText);
                         });
-                },
+                }
             },
             pageSize: 25,
             schema: {
@@ -87,7 +87,7 @@
             resizable: true,
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes,
+                pageSizes: gridConstants.pageSizes
             },
             columns: [
             {
@@ -168,5 +168,14 @@
             }]
         }
 
+        $timeout(function () {
+            if ($location.search().id !== undefined) {
+                $("#grdManageEmployee").data("kendoGrid").dataSource.filter({
+                    field: "EMP_WWID",
+                    operator: "eq",
+                    value: $location.search().id
+                });
+            }
+        }, 50);
     }
 })();

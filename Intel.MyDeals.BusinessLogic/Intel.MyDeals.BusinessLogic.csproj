@@ -84,6 +84,7 @@
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="Dashboard\DashboardLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerLib.cs" />
+    <Compile Include="Employees\EmployeeHelpers.cs" />
     <Compile Include="Files\FilesLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
     <Compile Include="OpDataCollectors\OpDataCollectorLib.cs" />

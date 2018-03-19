@@ -1,18 +1,34 @@
 ﻿@model HandleErrorInfo
 @{
     Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+
+    var usrFName = "UNKNOWN";
+    var usrLName = "UNKNOWN";
+    var usrEmail = "";
+    var usrWwid = 0;
+    try
+    {
+        usrFName = ViewBag.UserToken.Usr.FirstName;
+        usrLName = ViewBag.UserToken.Usr.LastName;
+        usrEmail = ViewBag.UserToken.Usr.Email;
+        usrWwid = ViewBag.UserToken.Usr.WWID;
+    }
+    catch (Exception)
+    {
+        // do some error catching or 404 error redirect here...
+    }
 }
 
 <div class="noaccess-header">
     <img src="/images/intel-logo-white-100.png" id="intelLogo" />
-    <span class="main-logo-title">My Deals</span>
+    <span class="main-logo-title">Deal Management Suite</span>
     <i class="fr intelicon-help-solid" style="color: #ffffff; font-size: 30px; margin-top: 5px;"></i>
 
 </div>
 
 <div class="container-fluid">
     <div class="row">
-        <h1>Welcome to My Deals.</h1><h2>  Looks like you do not have any customers assigned.</h2>
+        <h1>Welcome to My Deals, @usrFName.</h1><h2>  Looks like you do not have any customers assigned.</h2>
     </div>
     <div class="row">
         <div class="col-md-12 col-xs-12">
@@ -55,6 +71,36 @@
     </div>
 </div>
 
+<script id="applyForCustEmailTemplate" type="text/x-kendo-template">
+    <div style='font-family:sans-serif;'>
+        <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
+        <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:#= data.from #'>#= data.from #</a>.</span></p>
+        <br />
+        <p><span style='font-size:18px;'>Customer Account Request</span></p>
+        <p><span style='font-size: 12px;'>
+            #= data.name # has requested the following list of Customers Accounts which have automatically been granted. 
+            Please review the list.  
+            If customers need to be removed, please visit the <a href='#= data.url #?id=#= data.wwid #'>Manage Employees Admin Screen</a> in order to manage the user's accounts.</span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Geo</strong></th>
+                    <th style='text-align: left; width:600px; font-size: 12px; font-family: sans-serif;'><strong>Customers</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                # for (var i = 0; i < data.items.length; i++) { #
+                <tr>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].geo #</span> </td>
+                    <td style='width:600px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'>#= data.items[i].custs #</span> </td>
+                </tr>
+                # } #
+            </tbody>
+        </table>
+    </div>
+</script>
+
 <script>
 
     var geo = "WW";
@@ -76,7 +122,46 @@
             kendo.alert("Please select at least one customer account.");
             return;
         }
-        debugger;
+
+        var ids = [];
+        var geos = {};
+        var geoData = [];
+        for (var d = 0; d < dataItems.length; d++) {
+            ids.push(dataItems[d]["CUST_NM_SID"]);
+            if (geos[dataItems[d]["HOSTED_GEO"]] === undefined) geos[dataItems[d]["HOSTED_GEO"]] = [];
+            geos[dataItems[d]["HOSTED_GEO"]].push(dataItems[d]["CUST_NM"]);
+        }
+
+        for (var key in geos) {
+            if (geos.hasOwnProperty(key))
+                geoData.push({
+                    geo: key,
+                    custs: geos[key].join(", ")
+                });
+        }
+
+        var emailData = {
+            from: "@usrEmail",
+            name: "@usrFName @usrLName",
+            wwid: "@usrWwid",
+            url: window.location.protocol + "//" + window.location.host + "/Admin#/manageEmployee",
+            items: geoData
+        };
+
+        var template = kendo.template($("#applyForCustEmailTemplate").html());
+        var result = template(emailData); //Execute the template
+
+        var data = {
+            "custIds": ids,
+            "emailBody": result
+        }
+
+        op.ajaxPostAsync("/api/UserPreferences/ApplyForCustomers", data, function () {
+            document.location.href = '/Error/DirectUser';
+        }, function () {
+            kendo.alert("Unable to add the Customers");
+        });
+
     }
 
     $(document).ready(function () {

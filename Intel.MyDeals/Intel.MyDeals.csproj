@@ -1750,6 +1750,7 @@
     <Content Include="Views\CodingPractices\CodeQuality.cshtml" />
     <Content Include="Views\Dashboard\Snow.cshtml" />
     <Content Include="Views\Error\NeedCustomers.cshtml" />
+    <Content Include="Views\Error\DirectUser.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

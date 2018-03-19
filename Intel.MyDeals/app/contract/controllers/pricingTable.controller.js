@@ -1031,7 +1031,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		);
 
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
-        	if (shenaniganObj.isNonDelete && root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
+            if (shenaniganObj !== null && shenaniganObj.isNonDelete && root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
         		// Revert value if not allowed to delete
         		cleanupData(data);
         		spreadDsSync();

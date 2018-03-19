@@ -79,6 +79,8 @@
     <Compile Include="CacheItem.cs" />
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
+    <Compile Include="EmployeeCustomers.cs" />
+    <Compile Include="EmployeeEmailCustomers.cs" />
     <Compile Include="Helpers\FixesHelpers.cs" />
     <Compile Include="LogPerformanceTime.cs" />
     <Compile Include="OP ExtensionMethods\AvmforceMode.cs" />

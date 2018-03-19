@@ -82,6 +82,7 @@ op.ajaxPostWait = function (url, context, sucessFunc, errorFunc) {
 
 op.ajax = function (url, isAsync, ajaxType, context, sucessFunc, errorFunc) {
     var data = (context === null || context === undefined) ? "" : kendo.stringify(context);
+
     $.ajax({
         url: url,
         traditional: true,
@@ -91,7 +92,10 @@ op.ajax = function (url, isAsync, ajaxType, context, sucessFunc, errorFunc) {
         async: isAsync,
         contentType: "application/json; charset=utf-8",
         success: sucessFunc,
-        error: errorFunc
+        error: errorFunc,
+        headers: {
+            '__RequestVerificationToken': $("body").attr("csrfrequestverificationtoken")
+        }
     });
 }
 

@@ -80,6 +80,15 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to set ManageUserData");
         }
 
+        [Authorize]
+        [Route("ApplyForCustomers")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpMsg ApplyForCustomers(EmployeeEmailCustomers data)
+        {
+            return SafeExecutor(() => new EmployeesLib().ApplyForCustomers(data)
+                , $"Unable to Apply for Customer Accounts");
+        }
 
         #endregion
 

@@ -48,6 +48,18 @@ namespace Intel.MyDeals.Controllers
             return View();
         }
 
+        public ActionResult DirectUser()
+        {
+            Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
+
+            AppLib.InitAvm(OpAppConfig.Init(), AvmforceMode.User);
+
+            // Set the user details to view bag, these variables are available to all the views
+            ViewBag.UserToken = OpUserStack.MyOpUserToken;
+
+            return View();
+        }
+
         public ActionResult ResetAVM()
         {
             new CacheLib().ClearCache();
