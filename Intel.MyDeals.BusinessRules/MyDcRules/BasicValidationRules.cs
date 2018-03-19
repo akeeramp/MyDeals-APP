@@ -388,7 +388,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
-				new MyOpRule
+                new MyOpRule
+                {
+                    Title="Overarching Validation",
+                    ActionRule = MyDcActions.ValidateOverarching,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
 				{
 					Title="DropDown Value Validations",
 					ActionRule = MyDcActions.CheckDropDownValues,

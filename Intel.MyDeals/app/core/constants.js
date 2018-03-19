@@ -270,6 +270,30 @@
                     },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
+                    },
+                    "REBATE_DEAL_ID": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_VOL": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "BLLG_DT": {
+                        "Groups": ["All"]
                     }
                 },
                 "VOL_TIER": {
@@ -398,6 +422,30 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
+                    },
+                    "REBATE_DEAL_ID": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_VOL": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "BLLG_DT": {
+                        "Groups": ["All"]
                     }
                 },
                 "PROGRAM": {
@@ -595,6 +643,30 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
+                    },
+                    "REBATE_DEAL_ID": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_VOL": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "BLLG_DT": {
+                        "Groups": ["All"]
                     }
                 },
                 "KIT": {
@@ -804,6 +876,30 @@
                     },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
+                    },
+                    "REBATE_DEAL_ID": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_VOL": {
+                        "Groups": ["All"]
+                    },
+                    "REBATE_OA_MAX_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_VOLUME": {
+                        "Groups": ["All"]
+                    },
+                    "CREDIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "DEBIT_AMT": {
+                        "Groups": ["All"]
+                    },
+                    "BLLG_DT": {
+                        "Groups": ["All"]
                     }
                 }
             }

@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/12/2018 3:31:22 PM
-On: MHTIPPIN-MOBL
+File Updated: 3/14/2018 3:54:54 PM
+On: JJYEH-MOBL1
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -678,6 +678,24 @@ namespace Intel.MyDeals.Entities {
 		public const string DEVICE_TYPE = "DEVICE_TYPE";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 66
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DIV_APPROVED_BY = "DIV_APPROVED_BY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 67
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string DIV_APPROVED_DT = "DIV_APPROVED_DT";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7063
@@ -923,6 +941,24 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 70
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string FSE_APPROVED_BY = "FSE_APPROVED_BY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 71
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string FSE_APPROVED_DT = "FSE_APPROVED_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 10
 		/// TGT_COL_TYPE: MONEY
 		/// DOT_NET_DATA_TYPE: System.Double
@@ -1000,6 +1036,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string GEN_OVLP = "GEN_OVLP";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 68
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string GEO_APPROVED_BY = "GEO_APPROVED_BY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 69
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string GEO_APPROVED_DT = "GEO_APPROVED_DT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1909,6 +1963,33 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string REBATE_BILLING_START = "REBATE_BILLING_START";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3575
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string REBATE_DEAL_ID = "REBATE_DEAL_ID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3574
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string REBATE_OA_MAX_AMT = "REBATE_OA_MAX_AMT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3573
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string REBATE_OA_MAX_VOL = "REBATE_OA_MAX_VOL";
 
 		///<summary>
 		/// DIM_SID: 7

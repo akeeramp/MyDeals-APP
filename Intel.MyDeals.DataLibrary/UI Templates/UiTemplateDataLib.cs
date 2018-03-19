@@ -1954,7 +1954,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true
             });
-            items.Add(new UiTemplateContainerItem  // WIP All types
+            items.Add(new UiTemplateContainerItem  // WIP Program types
             {
                 Id = 22,
                 AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
@@ -1967,7 +1967,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true
             });
-            items.Add(new UiTemplateContainerItem  // WIP All types
+            items.Add(new UiTemplateContainerItem  // WIP Program types
             {
                 Id = 3560,
                 AtrbCd = AttributeCodes.ADJ_ECAP_UNIT,
@@ -1979,6 +1979,124 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'ADJ_ECAP_UNIT')#",
                 IsFilterable = true,
                 IsSortable = true
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3573,
+                AtrbCd = AttributeCodes.REBATE_OA_MAX_VOL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Overarching Max Volume",
+                Width = 140,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                UiType = "IntegerTextBox",
+                DataType = "number",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_VOL', 'number')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3574,
+                AtrbCd = AttributeCodes.REBATE_OA_MAX_AMT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Overarching Max Dollar",
+                Width = 140,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                UiType = "NumericTextBox",
+                DataType = "number",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3575,
+                AtrbCd = AttributeCodes.REBATE_DEAL_ID,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Overarching Deal IDs",
+                Width = 140,
+                //Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                //UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_DEAL_ID')#"
+            });
+            //items.Add(new UiTemplateContainerItem  // WIP All Types
+            //{
+            //    Id = 3348,
+            //    AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Label = "End Customer/Retail",
+            //    Width = 140,
+            //    //Format = "{0:d}",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#"
+            //});
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3488,
+                AtrbCd = AttributeCodes.CREDIT_VOLUME,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Credit Volume",
+                Width = 140,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                //UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_VOLUME', 'number')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3489,
+                AtrbCd = AttributeCodes.DEBIT_VOLUME,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Debit Volume",
+                Width = 140,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                //UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_VOLUME', 'number')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3510,
+                AtrbCd = AttributeCodes.CREDIT_AMT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Credit Dollar",
+                Width = 140,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                //UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_AMT', 'currency')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3511,
+                AtrbCd = AttributeCodes.DEBIT_AMT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Debit Dollar",
+                Width = 140,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                //UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_AMT', 'currency')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3521,
+                AtrbCd = AttributeCodes.BLLG_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Last Credit/Debit Payment Date",
+                Width = 150,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'BLLG_DT', \"date:'MM/dd/yyyy'\")#",
+                ExcelTemplate = "#=gridUtils.formatDate(BLLG_DT)#"
             });
 
             #endregion WIP DEAL
