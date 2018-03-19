@@ -1,30 +1,30 @@
 ﻿<!DOCTYPE html>
 <html ng-app="MyDealsApp">
 
-    <head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewBag.Title - MyDeals</title>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - MyDeals</title>
 
 
-        @Styles.Render("~/Content/css")
-        @Styles.Render("~/MyDeals/css")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/MyDeals/css")
 
-        @Scripts.Render("~/bundles/scripts")
-        @Scripts.Render("~/MyDeals/scripts")
-        @Scripts.Render("~/bundles/angular")
-       
-    </head>
+</head>
 
-    <body>
-        @Html.Partial("_Header")
+<body>
+    @Html.Partial("_Header")
 
-        <div id="modals"></div>
-        <div id="bodyContent" style="position: absolute; top: 78px; bottom: 0; left: 0; right: 0; overflow: auto;">
-            @RenderBody()
-        </div>
-    </body>
+    <div id="modals"></div>
+    <div id="bodyContent" style="position: absolute; top: 78px; bottom: 0; left: 0; right: 0; overflow: auto;">
+        @RenderBody()
+    </div>
+</body>
+
+@Scripts.Render("~/bundles/scripts")
+@Scripts.Render("~/MyDeals/scripts")
+@Scripts.Render("~/bundles/angular")
 
 </html>
 
