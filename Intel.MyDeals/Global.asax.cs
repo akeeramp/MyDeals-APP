@@ -56,6 +56,7 @@ namespace Intel.MyDeals
         private void Application_Error(Object sender, EventArgs e)
         {
             Exception ex = Server.GetLastError();
+            SendExceptionEmail(ex);
             ErrorControllerContent errCon = AppHelper.GenerateErrorContext(ex, ((WebApiApplication)sender).Context);
 
             if (ex.Message.Contains("You do not have access to this site"))
@@ -67,14 +68,59 @@ namespace Intel.MyDeals
 
             var controller = new ErrorController
             {
-                //TODO::TJE Temporarily comment out to investigate bug DE36930.
-                //ViewData =
-                //{
-                //    Model = new HandleErrorInfo(ex, errCon.CurrentController, errCon.CurrentAction)
-                //}
+                ViewData =
+                {
+                    Model = new HandleErrorInfo(ex, errCon.CurrentController, errCon.CurrentAction)
+                }
             };
 
             ((IController)controller).Execute(errCon.RequestContext);
+        }
+
+        // TODO::TJE for debugging
+        public static bool SendExceptionEmail(Exception ex)
+        {
+            // TODO Normally we would read config from env conscious config file... settly for hard codding until we can re-establish that
+            //string env = DataAccess.Config.CurrentDatabaseOpEnvironment.EnvLoc.EnvType.Name.ToUpper().Trim();
+            string mailToList = "Tory.J.Eneboe@intel.com";
+
+            System.Text.StringBuilder body = new System.Text.StringBuilder();
+            if (ex.InnerException != null && !string.IsNullOrWhiteSpace(ex.InnerException.Message))
+                body.Append(ex.InnerException.Message + "\n\n" + ex.InnerException.StackTrace);
+            else
+                body.Append(ex.Message + "\n\n" + ex.StackTrace);
+
+            // create mail message
+            var myMail = new System.Net.Mail.MailMessage
+            {
+                Subject = "Exception",
+                Body = body.ToString(),
+                From = new System.Net.Mail.MailAddress("Tory.J.Eneboe@intel.com"),
+                IsBodyHtml = true
+            };
+            myMail.To.Add(OpUtilities.ParseEmailList(mailToList, ","));
+
+            using (var client = new System.Net.Mail.SmtpClient())
+            {
+                if (string.IsNullOrEmpty(client.Host))
+                {
+                    // TODO: Remove later...
+                    // A bit hackish, but saves some troubleshooting...
+                    client.Host = "mail.intel.com";
+                }
+
+                try
+                {
+                    client.Send(myMail);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    // Not sure how to handle this.  Throwing errors from a log is not critical, but would be nice to know if it fails
+
+                    return false;
+                }
+            }
         }
 
         protected void Application_End()
