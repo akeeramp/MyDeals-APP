@@ -44,8 +44,7 @@
                 $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
                     $timeout(function () {
                     	var newState = msg != undefined && msg !== "";
-                    	if (isShowFunFact == null) { isShowFunFact = false; }
-
+                    	isShowFunFact = true; // Always show fun fact
                         // if no change in state, simple update the text
                         if ($scope.isBusy === newState) {
                             $scope.isBusyMsgTitle = msg;
@@ -91,7 +90,7 @@
 
                         var forceRun = $scope.$parent.forceRun();
 
-                        var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss"); 
+                        var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
                         var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                         var hh = Math.abs(timeDiff.asHours());
@@ -602,7 +601,7 @@
                                                             if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
                                                                 $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
                                                                 addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
-                                                            }                                                            
+                                                            }
                                                         }
                                                     }
                                                 }
