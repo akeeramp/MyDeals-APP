@@ -202,6 +202,16 @@ function loadingPanel() {
 					"Description": "The Apple 1 was the first computer developed by Apple and was nothing more than a bag of parts. The Apple II was the first finished product sold by the company.",
 					"FontAwesomeIcon": "fa-apple"
 				},
+                {
+                    "Title": "Random Fun Fact",
+                    "Description": "There are more airplanes in the oceans than submarines in the sky.",
+                    "FontAwesomeIcon": "fa-plane"
+                },
+                {
+                    "Title": "Random Fun Fact",
+                    "Description": "Each day we breathe about 20,000 times.",
+                    "FontAwesomeIcon": "fa-sun"
+                },
 				{
 					"Title": "Pro Tip",
 					"Description": "Fart when people hug you. It makes them feel stronger.",
@@ -287,6 +297,81 @@ function loadingPanel() {
 					"Description": "If we removed the free space between each particles inside the atom, all humankind would fit inside a berry.",
 					"FontAwesomeIcon": "fa-user"
 				},
+                {
+                    "Title": "Did You Know",
+                    "Description": "Otters hold hands while they sleep so they don't drift away.",
+                    "FontAwesomeIcon": "fa-handshake"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "How do snakes hear if they don't have ears? Snakes do not have eardrums, but their skins, muscles, and bones carry the sound waves to the inner ear.",
+                    "FontAwesomeIcon": "fa-headphones"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "The Great Pyramid of Giza is the only one of the Seven Wonders of the Ancient World still standing.",
+                    "FontAwesomeIcon": "fa-building"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "New York served as the capital of the United States from 1785 until 1790.  It has been the country's largest city since 1790.",
+                    "FontAwesomeIcon": "fa-building"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "By the time he was five years old, Mozart had complete mastery of keyboards and violin, and had written his first five compositions. At six, he toured Europe as a child prodigy; by 16, he'd already written three operas and 25 symphonies.",
+                    "FontAwesomeIcon": "fa-music"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "The wondrous smell you get while cutting grass is actually a chemical distress signal, you're smelling the silent screams of your lawn. As herbivores eat the grass, predators catch a whiff of the smell and eventually associate the smell with food.",
+                    "FontAwesomeIcon": "fa-pagelines"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "Roughly 40% of food produced in the United States is never eaten and goes to waste.",
+                    "FontAwesomeIcon": "fa-utensils"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "There are more trees on Earth than stars in the Milky Way.",
+                    "FontAwesomeIcon": "fa-tree"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "From when it was discovered to when it was declassified as a planet, Pluto did not make a full orbit around the sun.",
+                    "FontAwesomeIcon": "fa-space-shuttle"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "There are more permutations of a standard deck of 52 cards than there are seconds since the Big Bang.",
+                    "FontAwesomeIcon": "fa-clock"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "X% of Y = Y% of X. This means it might be easier to do mental math by flipping things around.  Example: 2% of 50 is the same thing as 50% of 2.",
+                    "FontAwesomeIcon": "fa-calculator"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "The dot over the 'i' and 'j' is called a tittle.",
+                    "FontAwesomeIcon": "fa-info"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "The word 'typewriter' can be typed just using the top rows of keys.  This was designed so early salesman of typewriters could demonstrate by typing this word fast since they had no training in how to type.",
+                    "FontAwesomeIcon": "fa-file-word"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "One of the most successful military campaigns in history was Liectenstein during the Austro-Prussian War. They didn't kill anybody, and sent 80 men. They returned with 81: as they befriended one of the people from the opposition.",
+                    "FontAwesomeIcon": "fa-utensils"
+                },
+                {
+                    "Title": "Knowledge Is Power",
+                    "Description": "We know more about the surface of the moon than we do the ocean floor.",
+                    "FontAwesomeIcon": "fa-moon"
+                },
 			]
 
 		}],
