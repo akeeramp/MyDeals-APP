@@ -2559,6 +2559,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                             return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                                 root.setBusy("", "");
+                                productSelectionLevels = response;
                                 return response;
                             }, function (response) {
                                 root.setBusy("", "");
