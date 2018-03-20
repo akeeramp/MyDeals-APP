@@ -1008,6 +1008,15 @@ namespace Intel.MyDeals.BusinessRules
                 deOAMaxVol.AddMessage("Overarching Max Volume is not a valid integer value.");
             }
 
+            if (numMaxVol < 0)
+            {
+                deOAMaxVol.AddMessage("Overarching Max Volume cannot be a negative value.");
+            }
+            if (numMaxAmt < 0)
+            {
+                deOAMaxAmt.AddMessage("Overarching Max Dollar Amount cannot be a negative value.");
+            }
+
             if (overarchingDealIds == "")
             {   //if user does not add an overarching deal id, then they should also not have an overarching max volume or dollar amt
                 if (deOAMaxAmt.AtrbValue.ToString() != "")
