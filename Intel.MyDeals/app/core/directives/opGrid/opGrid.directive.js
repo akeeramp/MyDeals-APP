@@ -461,12 +461,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     pageSize = Number(pageSizeArr[0].PRFR_VAL);
                 }
 
-                $scope.cloneWithOrder("custom");
-                $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                $scope.configureSortableTab();
-                $scope.selectFirstTab();
-                $scope.reorderGridColumns(customColumnOrderArr);
-                $scope.contractDs.pageSize(pageSize);
+                if (!$scope.opOptions["custom"] || $scope.opOptions["custom"].groups) {
+                    $scope.cloneWithOrder("custom");
+                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                    $scope.configureSortableTab();
+                    $scope.selectFirstTab();
+                    $scope.reorderGridColumns(customColumnOrderArr);
+                    $scope.contractDs.pageSize(pageSize);
+                }
 
                 // Apply the settings.
                 //$timeout(function () {
@@ -2224,17 +2226,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.opOptions.groups.splice(indx, 1);
                 }
 
-                var tabData = $scope.opOptions.groupColumns.tools.Groups;
-                var indxTab = tabData.indexOf('Overlapping');
-                if (indx > -1) {
-                    $scope.opOptions.groupColumns.tools.Groups.splice(indxTab, 1);
+                if ($scope.opOptions.groupColumns.tools !== undefined) {
+                    var tabData = $scope.opOptions.groupColumns.tools.Groups;
+                    var indxTab = tabData.indexOf('Overlapping');
+                    if (indx > -1) {
+                        $scope.opOptions.groupColumns.tools.Groups.splice(indxTab, 1);
 
-                    $scope.$applyAsync();
+                        $scope.$applyAsync();
 
-                    $timeout(function () {
-                        $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                        $scope.configureSortableTab();
-                    }, 100);
+                        $timeout(function() {
+                                $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                                $scope.configureSortableTab();
+                            },
+                            100);
+                    }
                 }
             }
 
