@@ -1,18 +1,6 @@
 ﻿@using Intel.MyDeals.App
 @{
-    // TODO::TJE for debugging
-    ApplicationViewModel avm = new ApplicationViewModel
-    {
-        AppName = "MyDeals",
-        AppDescShort = "My Deals Solutions tool for managing rebate deals",
-        AppDesc = "My Deals is the interface to help monitor and control the workflow for creating, maintaining and monitoring rebate deals through Contracts, Dashboards and Individual Deals.",
-        AppCopy = "© 2016 DEAL COMPLIANCE SOLUTIONS",
-        AppCopyShort = "© 2016 My Deals"
-    };
-    if (ViewData.Model is ApplicationViewModel)
-    {
-        avm = (ApplicationViewModel)ViewData.Model;
-    }
+    avm = (ApplicationViewModel)ViewData.Model;
 }
 
 <script>
