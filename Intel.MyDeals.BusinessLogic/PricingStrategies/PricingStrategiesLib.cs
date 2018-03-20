@@ -121,6 +121,8 @@ namespace Intel.MyDeals.BusinessLogic
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             List<int> psGoingActive = new List<int>();
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
+            int wwid = OpUserStack.MyOpUserToken.Usr.WWID;
+            List<int> auditableDealIds = new List<int>();
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
@@ -238,6 +240,15 @@ namespace Intel.MyDeals.BusinessLogic
                     psGoingActive.Add(dc.DcID);
                 }
 
+                if (targetStage != stageIn && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
+                {
+                    if ((role == RoleTypes.FSE && stageIn == WorkFlowStages.Draft) ||
+                        (role == RoleTypes.GA && stageIn == WorkFlowStages.Requested) ||
+                        (role == RoleTypes.DA && stageIn == WorkFlowStages.Submitted))
+                    {
+                        auditableDealIds.Add(dc.DcID);
+                    }
+                }
 
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
                 opMsgQueue.Messages.Add(new OpMsg
@@ -362,6 +373,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Tack on the save action call now
             myDealsData[OpDataElementType.PRC_ST].AddSaveActions();
             //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
+            myDealsData[OpDataElementType.PRC_ST].AddAuditActions(auditableDealIds);
 
             if (dealIds.Any())
             {

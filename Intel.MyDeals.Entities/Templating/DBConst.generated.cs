@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/14/2018 3:54:54 PM
-On: JJYEH-MOBL1
+File Updated: 3/20/2018 12:34:58 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -2402,6 +2402,14 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 237
+		/// SRT_ORD: 95
+		/// Approve Audit
+		///</summary>
+		public const string APRV_AUDIT = "APRV_AUDIT";
+
+
+		///<summary>
 		/// ACTN_SID: 195
 		/// SRT_ORD: 2000
 		/// DB Returned Action that a given attribute should be deleted
@@ -2558,6 +2566,11 @@ namespace Intel.MyDeals.Entities {
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
 		public const string LOCKED_OUT_ROLES = "LOCKED_OUT_ROLES";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
+		public const string NEW_ACCOUNT_REVIEWER_APAC = "NEW_ACCOUNT_REVIEWER_APAC";
+		public const string NEW_ACCOUNT_REVIEWER_ASMO = "NEW_ACCOUNT_REVIEWER_ASMO";
+		public const string NEW_ACCOUNT_REVIEWER_EMEA = "NEW_ACCOUNT_REVIEWER_EMEA";
+		public const string NEW_ACCOUNT_REVIEWER_IJKK = "NEW_ACCOUNT_REVIEWER_IJKK";
+		public const string NEW_ACCOUNT_REVIEWER_PRC = "NEW_ACCOUNT_REVIEWER_PRC";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
@@ -2673,6 +2686,7 @@ namespace Intel.MyDeals.Entities {
 		public const string C_CANCEL_DEAL = "C_CANCEL_DEAL";
 		public const string C_REVISE_DEAL = "C_REVISE_DEAL";
 		public const string C_EDIT_MEET_COMP_OVERRIDE = "C_EDIT_MEET_COMP_OVERRIDE";
+		public const string APRV_AUDIT = "APRV_AUDIT";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
 		public const string C_IS_DEV = "C_IS_DEV";
 	}

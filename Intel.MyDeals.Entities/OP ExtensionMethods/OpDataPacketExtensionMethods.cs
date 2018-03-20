@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 
@@ -94,6 +95,12 @@ namespace Intel.MyDeals.Entities
             {
                 packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, finalDeleteIds, 40));
             }
+        }
+
+        public static void AddAuditActions(this OpDataPacket<OpDataElementType> packet, List<int> ids)
+        {
+            if (!ids.Any()) return;
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.APRV_AUDIT, ids, 95));
         }
 
         public static void AddRollbackActions(this OpDataPacket<OpDataElementType> packet, List<int> rollbackIds)
