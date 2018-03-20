@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage) {
 
     return {
         scope: {
@@ -16,6 +16,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
         restrict: 'AE',
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
+            $scope.$storage = $localStorage;
+
+            $scope.$storage = $localStorage.$default({
+                CustomLayoutForECAP: undefined,
+                CustomLayoutForKIT: undefined,
+                CustomLayoutForPROGRAM: undefined,
+                CustomLayoutForVOL_TIER: undefined
+            });
 
             var depth = 5;
             var d = 0;
@@ -92,6 +100,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.numSoftWarn = $scope.opOptions.numSoftWarn;
             $scope.dealTypes = [];
             $scope.dealCnt = 0;
+            $scope.isGridDataLoaded = false;
 
             $scope.root = !!$scope.opOptions.rootScope ? $scope.opOptions.rootScope : $scope.$parent.$parent.$parent;
             if (!$scope.root || !$scope.root.saveCell) { // possible this directive is called from nested parent hierarchy
@@ -108,6 +117,32 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.showStage = function (dataItem) {
                 return gridUtils.stgFullTitleChar(dataItem);
             }
+
+            $scope.checkforCustomerLayout = function (dealType) {
+                var key = "CustomLayoutFor" + dealType;
+                if ($scope.$storage[key] !== undefined) {
+                    $timeout(function () {
+                        $scope.applyCustomLayoutToGrid($scope.$storage["CustomLayoutFor" + dealType]);
+                        $scope.contractDs.read();
+                    }, 10);
+                    return;
+                }
+
+                userPreferencesService.getActions("DealEditor", key)
+                    .then(function (response) {
+                        $scope.$storage[key] = response.data;
+                        $timeout(function () {
+                            $scope.applyCustomLayoutToGrid($scope.$storage["CustomLayoutFor" + dealType]);
+                            $scope.contractDs.read();
+                        }, 10);
+                    }, function (response) {
+                        $timeout(function () {
+                            $scope.contractDs.read();
+                        }, 10);
+                        logger.error("Unable to get Custom Layout.", response, response.statusText);
+                    });
+            }
+
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -192,6 +227,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 var newArray = [];
                 var grps = $scope.opOptions[source].groups;
+                if (grps === undefined || grps === null) grps = [];
                 for (var i = 0; i < grps.length; i++) {
                     newArray.push({ "name": grps[i].name, "order": grps[i].order, "isPinned": grps[i].isPinned, "isTabHidden": grps[i].isTabHidden });
                 }
@@ -364,56 +400,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.customLayout = function (reportError) {
                 reportError = typeof reportError === 'undefined' ? true : reportError;
                 // Get the persisted grid settings.
+
+                if ($scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]] !== undefined) {
+                    $scope.applyCustomLayoutToGrid($scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]]);
+                    return;
+                }
+
                 userPreferencesService.getActions("DealEditor", "CustomLayoutFor" + $scope.dealTypes[0])
                     .then(function (response) {
+                        $scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]] = response.data;
                         if (response.data && response.data.length > 0) {
-                            $scope.opOptions.groups = [];
-                            $scope.opOptions.custom = {};
-
-                            // 'Groups' (which tabs to show)
-                            var groupsSetting = response.data.filter(function (obj) {
-                                return obj.PRFR_KEY == "Groups";
-                            });
-                            if (groupsSetting && groupsSetting.length > 0) {
-                                $scope.opOptions.custom.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
-                            }
-
-                            // 'GroupColumns' (which columns to show for each of the tabs)
-                            var groupColumnsSetting = response.data.filter(function (obj) {
-                                return obj.PRFR_KEY == "GroupColumns";
-                            });
-                            if (groupColumnsSetting && groupColumnsSetting.length > 0) {
-                                $scope.opOptions.custom.groupColumns = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
-                            }
-
-                            // 'ColumnOrder' (the column order, remember that all tabs 'share' a single grid)
-                            var customColumnOrderArr = [];
-                            var columnOrderSetting = response.data.filter(function (obj) {
-                                return obj.PRFR_KEY == "ColumnOrder";
-                            });
-                            if (columnOrderSetting && columnOrderSetting.length > 0) {
-                                customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
-                            }
-
-                            // 'PageSize'
-                            var pageSize = 25;
-                            var pageSizeArr = response.data.filter(function (obj) {
-                                return obj.PRFR_KEY == "PageSize";
-                            });
-                            if (pageSizeArr && pageSizeArr.length > 0) {
-                                pageSize = Number(pageSizeArr[0].PRFR_VAL);
-                            }
-
-                            // Apply the settings.
-                            $timeout(function () {
-                                $scope.cloneWithOrder("custom");
-
-                                $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                                $scope.configureSortableTab();
-                                $scope.selectFirstTab();
-                                $scope.reorderGridColumns(customColumnOrderArr);
-                                $scope.grid.dataSource.pageSize(pageSize);
-                            }, 10);
+                            $scope.applyCustomLayoutToGrid(response.data);
                         } else {
                             if (reportError) {
                                 kendo.alert("You have not saved a custom layout yet.");
@@ -422,6 +419,65 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }, function (response) {
                         logger.error("Unable to get Custom Layout.", response, response.statusText);
                     });
+            }
+
+            $scope.applyCustomLayoutToGrid = function (data) {
+                $scope.defaultColumnOrderArr = $scope.getColumnOrder();
+
+                //$scope.opOptions.groups = [];
+                $scope.opOptions.custom = {};
+
+                // 'Groups' (which tabs to show)
+                var groupsSetting = data.filter(function (obj) {
+                    return obj.PRFR_KEY === "Groups";
+                });
+                if (groupsSetting && groupsSetting.length > 0) {
+                    $scope.opOptions.custom.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
+                }
+
+                // 'GroupColumns' (which columns to show for each of the tabs)
+                var groupColumnsSetting = data.filter(function (obj) {
+                    return obj.PRFR_KEY === "GroupColumns";
+                });
+                if (groupColumnsSetting && groupColumnsSetting.length > 0) {
+                    $scope.opOptions.custom.groupColumns = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
+                }
+
+                // 'ColumnOrder' (the column order, remember that all tabs 'share' a single grid)
+                var customColumnOrderArr = [];
+                var columnOrderSetting = data.filter(function (obj) {
+                    return obj.PRFR_KEY === "ColumnOrder";
+                });
+                if (columnOrderSetting && columnOrderSetting.length > 0) {
+                    customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
+                }
+
+                // 'PageSize'
+                var pageSize = 25;
+                var pageSizeArr = data.filter(function (obj) {
+                    return obj.PRFR_KEY === "PageSize";
+                });
+                if (pageSizeArr && pageSizeArr.length > 0) {
+                    pageSize = Number(pageSizeArr[0].PRFR_VAL);
+                }
+
+                $scope.cloneWithOrder("custom");
+                $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                $scope.configureSortableTab();
+                $scope.selectFirstTab();
+                $scope.reorderGridColumns(customColumnOrderArr);
+                $scope.contractDs.pageSize(pageSize);
+
+                // Apply the settings.
+                //$timeout(function () {
+                //    $scope.cloneWithOrder("custom");
+
+                //    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                //    $scope.configureSortableTab();
+                //    $scope.selectFirstTab();
+                //    $scope.reorderGridColumns(customColumnOrderArr);
+                //    $scope.grid.dataSource.pageSize(pageSize);
+                //}, 10);
             }
 
             $scope.reorderGridColumns = function (columnOrderArr) {
@@ -491,9 +547,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }, function (response) {
                         logger.error("Unable to save Custom Layout.", response, response.statusText);
                     });
+
+                // Clear out stored session... next time we will load it
+                $scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
             }
 
-            $scope.getColumnOrder = function (grid) {
+            $scope.getColumnOrder = function () {
+                var grid = $scope.grid;
                 var columnOrderArr = [];
 
                 for (var i = 0; i < grid.columns.length; i++) {
@@ -644,7 +704,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 pageSize: 25
             });
 
-
             var isDisableViaDealGrp = function (comparison) {
                 if (typeof comparison !== "string") {
                     return false;
@@ -666,7 +725,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //},
                 sortable: true,
                 editable: $scope.isEditable,
-                autoBind: true,
+                autoBind: false,
                 navigatable: true,
                 filterable: true,
                 resizable: $scope.resizable,
@@ -690,6 +749,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 },
                 dataBound: function (e) {
+                    if ($scope.isGridDataLoaded) return;
+                    $scope.isGridDataLoaded = true;
+
                     if ($scope.curGroup === "") {
                         $scope.selectFirstTab();
                         $scope.validateGrid();
@@ -710,20 +772,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
 
-                    if (!triedToApplyCustomLayout) {
-                        // Squirrel away the default column order, before we apply the custom layout.
-                        $scope.defaultColumnOrderArr = $scope.getColumnOrder(grid);
-
-                        // Apply the custom layout.
-                        triedToApplyCustomLayout = true;
-                        $timeout(function () {
-                            $scope.customLayout(false);
-                        }, 10);
-                        $timeout(function () {
-                            $scope.overlappingDealsSetup();
-                        }, 3000);
-                    }
-
+                    $timeout(function () {
+                        $scope.overlappingDealsSetup();
+                    }, 3000);
                 }
             };
 
@@ -738,6 +789,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.selectFirstTab = function () {
+                if ($scope.opOptions.groups[0] === undefined) return;
+
                 $scope.curGroup = $scope.opOptions.groups[0].name;
 
                 $timeout(function () {
@@ -2394,7 +2447,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return prd_mbr_sid;
             }
 
-
             function getPrductDetails(dataItem, priceCondition, dimkey) {
                 return [{
                     'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CUST_MBR_SID : $scope.$parent.$parent.getCustId(),
@@ -2568,6 +2620,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     },
                     function () {
                     });
+            }
+
+
+            if ($scope.opData.length > 0) {
+                $scope.checkforCustomerLayout($scope.opData[0].OBJ_SET_TYPE_CD);
             }
 
 
