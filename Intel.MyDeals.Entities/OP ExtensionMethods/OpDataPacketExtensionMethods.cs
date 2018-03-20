@@ -100,7 +100,7 @@ namespace Intel.MyDeals.Entities
         public static void AddAuditActions(this OpDataPacket<OpDataElementType> packet, List<int> ids)
         {
             if (!ids.Any()) return;
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.APRV_AUDIT, ids, 95));
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.APRV_AUDIT, ids, 75));
         }
 
         public static void AddRollbackActions(this OpDataPacket<OpDataElementType> packet, List<int> rollbackIds)
