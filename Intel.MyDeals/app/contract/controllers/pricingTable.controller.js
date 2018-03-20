@@ -355,6 +355,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return geos;
     }
 
+    var productSelectionLevels = null;
+    var ptrStartDate = null;
+    var ptrEndDate = null;
+    var ptrMedia = null;
+
     function openProductSelector(currentPricingTableRow, enableSplitProducts) {
         var contract = $scope.$parent.$parent.contractData;
 
@@ -374,6 +379,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'prodname': vm.productName
         };
 
+        var parametersNotChanged = (ptrStartDate !== null && moment(ptrStartDate).isSame(pricingTableRow.START_DT))
+            && (ptrEndDate !== null && moment(ptrEndDate).isSame(pricingTableRow.END_DT)) && ptrMedia === pricingTableRow.PROD_INCLDS;
+
+        ptrStartDate = pricingTableRow.START_DT;
+        ptrEndDate = pricingTableRow.END_DT;
+        ptrMedia = pricingTableRow.PROD_INCLDS;
+
         var modal = $uibModal.open({
             backdrop: 'static',
             templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -387,8 +399,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT, mediaCode: pricingTableRow.PROD_INCLDS
                     };
                     root.setBusy("Please wait...", "");
+                    if (parametersNotChanged && productSelectionLevels !== null) {
+                        root.setBusy("", "");
+                        return productSelectionLevels;
+                    }
+
                     return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         root.setBusy("", "");
+                        productSelectionLevels = response;
                         return response;
                     }, function (response) {
                         root.setBusy("", "");
@@ -2515,6 +2533,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     'prodname': ""
                 };
 
+                var parametersNotChanged = (ptrStartDate !== null && moment(ptrStartDate).isSame(pricingTableRow.START_DT))
+                     && (ptrEndDate !== null && moment(ptrEndDate).isSame(pricingTableRow.END_DT)) && ptrMedia === pricingTableRow.PROD_INCLDS;
+
+                ptrStartDate = pricingTableRow.START_DT;
+                ptrEndDate = pricingTableRow.END_DT;
+                ptrMedia = pricingTableRow.PROD_INCLDS;
+
                 var modal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -2528,6 +2553,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT, mediaCode: pricingTableRow.PROD_INCLDS
                             };
                             root.setBusy("Please wait...", "");
+                            if (parametersNotChanged && productSelectionLevels !== null) {
+                                root.setBusy("", "");
+                                return productSelectionLevels;
+                            }
                             return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                                 root.setBusy("", "");
                                 return response;
@@ -3073,7 +3102,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                                     $scope.$root.pc = null;
                                 }
-                                
+
                                 root.setBusy("", "");
                             }
                         }, 20);
