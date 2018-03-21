@@ -1556,7 +1556,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 if (!!row) data.splice(data.indexOf(row), 1);
                 if (data.length === 0) {
-                    $scope.parentRoot.$broadcast('refreshNoWipData', true);
+                    $scope.$root.$broadcast('refreshNoWipData', true);
                 } else {
                     scope.contractDs.sync();
                 }
@@ -2300,7 +2300,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         //Hiding Column Preference and Grid Preferences
                                         $scope.isLayoutConfigurable = false;
 
-                                        $scope.parentRoot.$broadcast('refreshContractData', true);
+                                        $scope.$root.$broadcast('refreshContractData', true);
                                     } else {
                                         //Remove overlapping tab
                                         util.console("Remove overlapping tab");
@@ -2314,13 +2314,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         }
 
                                         // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
-                                        var wips = $scope.parentRoot.pricingTableData
-                                            .WIP_DEAL;
+                                        var wips = $scope.parentRoot.pricingTableData.WIP_DEAL;
                                         for (var w = 0; w < wips.length; w++) {
                                             if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
                                         }
 
-                                        $scope.parentRoot.$broadcast('refreshContractData', false);
+                                        $scope.$root.$broadcast('refreshContractData', false);
 
                                         util.console("Remove overlapping tab DONE");
                                     }
