@@ -282,7 +282,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     } else if (grps[g].name === "CAP Info") {
                         grps[g].order = 98;
                     } else {
-                        grps[g].order = tabstrip.tabGroup.find(':contains("' + grps[g].name + '")').index();
+                        grps[g].order = tabstrip.tabGroup === undefined ? 50 : tabstrip.tabGroup.find(':contains("' + grps[g].name + '")').index();
                         // if we can't find the tab... it is probably a new one being added and not rendered yet.
                         if (grps[g].order === -1) grps[g].order = 50;
                     }
