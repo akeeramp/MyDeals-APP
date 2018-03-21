@@ -45,7 +45,6 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.END_CUSTOMER_RETAIL,
                                 AttributeCodes.DEAL_SOLD_TO_ID,
                                 AttributeCodes.PROGRAM_PAYMENT,
-                                AttributeCodes.DEAL_COMB_TYPE,
                                 AttributeCodes.PRD_EXCLDS,
                                 AttributeCodes.MRKT_SEG,
                                 AttributeCodes.PAYOUT_BASED_ON }
