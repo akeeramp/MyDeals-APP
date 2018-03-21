@@ -1025,6 +1025,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
                             myRow[colName] = value.value;
                             sourceData[(rowIndex - 1)][colName] = value.value;
+
+                            myRow._dirty = value.value;
+                            sourceData[(rowIndex - 1)]._dirty = true;
                         }
                     }
                 );
