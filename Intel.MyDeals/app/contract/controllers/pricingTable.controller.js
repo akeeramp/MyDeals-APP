@@ -188,6 +188,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
+        // if there are errors... make the row dirty
+        for (var r = 0; r < root.pricingTableData.PRC_TBL_ROW.length; r++) {
+            var item = root.pricingTableData.PRC_TBL_ROW[r];
+            if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
+                item.dirty = true;
+                root._dirty = true;
+            }
+        }
+
         root.syncCellValidationsOnAllRows(root.pricingTableData.PRC_TBL_ROW);
 
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
