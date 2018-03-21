@@ -754,6 +754,14 @@
                                         editor: meetCompPriceEditor
                                     },
                                     {
+                                        field: "CAP",
+                                        title: "CAP",
+                                        width: 120,
+                                        editable: function () { return false; },
+                                        filterable: { multi: true, search: true },
+                                        template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
+                                    },
+                                    {
                                         field: "IA_BNCH",
                                         title: "IA Bench",
                                         width: 120,
@@ -826,14 +834,6 @@
                                         editable: function () { return false; },
                                         filterable: { multi: true, search: true },
                                         template: "<div class='readOnlyCell'>#=MEET_COMP_ANALYSIS#</div>"
-                                    },
-                                    {
-                                        field: "CAP",
-                                        title: "CAP",
-                                        width: 120,
-                                        editable: function () { return false; },
-                                        filterable: { multi: true, search: true },
-                                        template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
                                     },
                                     {
                                         field: "",
@@ -1645,6 +1645,15 @@
                                             editor: meetCompPriceEditor
                                         },
                                         {
+                                            field: "CAP",
+                                            title: "CAP",
+                                            width: 120,
+                                            filterable: { multi: true, search: true },
+                                            editable: function () { return false; },
+                                            format: "{0:c}",
+                                            template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
+                                        },
+                                        {
                                             field: "IA_BNCH",
                                             title: "IA Bench",
                                             width: 120,
@@ -1717,15 +1726,6 @@
                                             filterable: { multi: true, search: true },
                                             editable: function () { return false; },
                                             template: "<div class='readOnlyCell'>#=MEET_COMP_ANALYSIS#</div>"
-                                        },
-                                        {
-                                            field: "CAP",
-                                            title: "CAP",
-                                            width: 120,
-                                            filterable: { multi: true, search: true },
-                                            editable: function () { return false; },
-                                            format: "{0:c}",
-                                            template: "<div title='#=CAP#' class='readOnlyCell'>#if(CAP == 0){## ##} else {#$#:CAP##}#</div>"
                                         },
                                         {
                                             field: "ECAP_PRC",
