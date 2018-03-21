@@ -101,6 +101,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.dealTypes = [];
             $scope.dealCnt = 0;
             $scope.isGridDataLoaded = false;
+            $scope.isLayoutConfigurablePrev = $scope.isLayoutConfigurable;
 
             $scope.root = !!$scope.opOptions.rootScope ? $scope.opOptions.rootScope : $scope.$parent.$parent.$parent;
             if (!$scope.root || !$scope.root.saveCell) { // possible this directive is called from nested parent hierarchy
@@ -384,7 +385,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.defaultColumnOrderArr = [];
             $scope.defaultLayout = function () {
                 $scope.opOptions.groups = [];
-
                 $timeout(function () {
                     $scope.cloneWithOrder("default");
 
@@ -422,6 +422,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.applyCustomLayoutToGrid = function (data) {
+                if (!$scope.isLayoutConfigurable) return;
+
                 $scope.defaultColumnOrderArr = $scope.getColumnOrder();
 
                 //$scope.opOptions.groups = [];
@@ -1235,11 +1237,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 if (grpName.toLowerCase() == "overlapping") {
                     $scope.isOverlapping = true;
+                    $scope.isLayoutConfigurablePrev = $scope.isLayoutConfigurable;
                     $scope.isLayoutConfigurable = false;
                 }
                 else {
                     $scope.isOverlapping = false;
-                    $scope.isLayoutConfigurable = true;
+                    $scope.isLayoutConfigurable = $scope.isLayoutConfigurablePrev;
                     $scope.ovlpDataSource.filter({});
                 }
 

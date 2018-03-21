@@ -1354,8 +1354,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber) {
         var row = angular.copy(row);
-        var buckProd = $filter('where')(pivottedRows,
-                        { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
+        var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
         if (buckProd.length === 0) {
             row.PRD_BCKT = productBcktName;
         } else {

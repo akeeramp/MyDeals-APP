@@ -44,7 +44,10 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		    var usedCols = [];
 		    var excludeCols = ["details", "tools"];
 
-		    root.wipOptions = {};
+		    root.wipOptions = {
+		        "isLayoutConfigurable": false,
+		        "isVisibleAdditionalDiscounts": false
+		    };
 		    root.wipOptions.isPinEnabled = false;
 		    root.wipOptions.default = {};
 		    root.wipOptions.default.groups = [];
