@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic.DataCollectors
 {
+
     public static class OpDataCollectorFlattenedItemExtensions
     {
         public static void ApplyMessages(this OpDataCollectorFlattenedItem data, MyDealsData myDealsData)
@@ -20,8 +21,30 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             if (!data.ContainsKey(AttributeCodes.DC_ID)) return;
             OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(data[AttributeCodes.dc_type]);
 
-            foreach (OpMsg msg in myDealsData[opDataElementType].Messages.Messages
-                .Where(m => (m.MsgType == OpMsg.MessageType.Error || m.MsgType == OpMsg.MessageType.Warning || m.MsgType == OpMsg.MessageType.Info) && (!myDealsData[opDataElementType].Messages.Messages[0].KeyIdentifiers.Any() || m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString())))))
+            var msgCol = myDealsData[opDataElementType].Messages.Messages.Where(m =>
+                (m.MsgType == OpMsg.MessageType.Error || m.MsgType == OpMsg.MessageType.Warning ||
+                m.MsgType == OpMsg.MessageType.Info) &&
+                (!myDealsData[opDataElementType].Messages.Messages[0].KeyIdentifiers.Any() ||
+                m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString())))).ToList();
+
+            if (!msgCol.Any())
+            {
+                foreach (var dc in myDealsData[opDataElementType].AllDataCollectors)
+                {
+                    foreach (var de in dc.DataElements.Where(d => d.ValidationMessage != string.Empty))
+                    {
+                        myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
+                    }
+                }
+            }
+
+            msgCol = myDealsData[opDataElementType].Messages.Messages.Where(m =>
+               (m.MsgType == OpMsg.MessageType.Error || m.MsgType == OpMsg.MessageType.Warning ||
+               m.MsgType == OpMsg.MessageType.Info) &&
+               (!myDealsData[opDataElementType].Messages.Messages[0].KeyIdentifiers.Any() ||
+               m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString())))).ToList();
+
+            foreach (OpMsg msg in msgCol)
             {
                 switch (msg.MsgType)
                 {

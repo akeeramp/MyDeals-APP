@@ -188,6 +188,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
+        root.syncCellValidationsOnAllRows(root.pricingTableData.PRC_TBL_ROW);
+
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
             // hide Cust Div
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;

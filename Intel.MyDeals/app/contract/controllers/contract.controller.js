@@ -2193,15 +2193,18 @@
 
                         if (!item[p]["PRC_TBL"]) item[p]["PRC_TBL"] = [];
                         var ptItem = item[p]["PRC_TBL"];
+
                         for (var t = 0; t < ptItem.length; t++) {
                             var mPt = {};
                             Object.keys(ptItem[t]).forEach(function (key, index) {
                                 if (key[0] !== '_') mPt[key] = this[key];
                             }, ptItem[t]);
-                            if (mPt.dirty !== undefined && mPt.dirty === true) {
+
+                            // Passing everything up again.  Thought about passing up dirty and isError, but appears we also have issues with tiers and kits...
+                            //if (mPt.dirty !== undefined && mPt.dirty === true) {
                                 modPt.push(mPt);
                                 mPt.dirty = false;
-                            }
+                            //}
                         }
                     }
                 }
