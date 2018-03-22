@@ -2436,22 +2436,25 @@
                 }
             }
 
-            var sDataSave = sData.filter(function (a) {
-            	var hasErrors = false;
-            	if (a._behaviors != null && a._behaviors !== undefined) {
-            		var errors = a._behaviors.isError;
-            		hasErrors = (errors !== null && errors !== undefined && Object.keys(errors).length !== 0 && errors.constructor === Object); // HACK: if a user doesn't change anything on an existing contract, but clicks "Save", then errors won't show up unless we include rows with errors. This can occur after user copies a PT.
-            	}
-            	var isPrdNeedsValidation = (a.PTR_SYS_PRD == null);
-            	return (a._dirty || hasErrors || isPrdNeedsValidation);
-            });
+            //
+            // REMOVED THIS BECAUSE PARTIAL SAVES ARE CAuSING HAVOC IN TRANSLATION... UNTIL WE HAVE A WORK AROUND, NEED TO PASS UP ENTIRE COLLECTION
+            //
+            //var sDataSave = sData.filter(function (a) {
+            //	var hasErrors = false;
+            //	if (a._behaviors != null && a._behaviors !== undefined) {
+            //		var errors = a._behaviors.isError;
+            //		hasErrors = (errors !== null && errors !== undefined && Object.keys(errors).length !== 0 && errors.constructor === Object); // HACK: if a user doesn't change anything on an existing contract, but clicks "Save", then errors won't show up unless we include rows with errors. This can occur after user copies a PT.
+            //	}
+            //	var isPrdNeedsValidation = (a.PTR_SYS_PRD == null);
+            //	return (a._dirty || hasErrors || isPrdNeedsValidation);
+            //});
 
             //.filter(function (a) { return a._dirty })
             return {
                 "Contract": [],
                 "PricingStrategy": [],
                 "PricingTable": curPricingTableData,
-                "PricingTableRow": sData === undefined ? [] : sDataSave, //sData.filter(function (a) { return a._dirty }),
+                "PricingTableRow": sData === undefined ? [] : sData, //sDataSave, //sData.filter(function (a) { return a._dirty }),
                 "WipDeals": gData === undefined ? [] : gData.filter(function (a) { return a._dirty }),
                 "EventSource": source,
                 "Errors": errs
