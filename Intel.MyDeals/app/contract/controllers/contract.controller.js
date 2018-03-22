@@ -41,7 +41,11 @@
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
-        if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.timeline") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.deals") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.export") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.pct") >= 0) $scope.flowMode = "Manage";
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
 

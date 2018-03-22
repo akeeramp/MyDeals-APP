@@ -14,7 +14,7 @@
             </td>
             <td style="width: 33%">
                 <div class="flowBtn" ng-attr-title="{{showManageTitle()}}"
-                     ng-class="{inactive: Manage != 'Compliance', disabled: enableFlowBtn() === false}" 
+                     ng-class="{inactive: flowMode != 'Manage', disabled: enableFlowBtn() === false}" 
                      ng-click="gotoManage()">Manage</div>
             </td>
         </tr>
