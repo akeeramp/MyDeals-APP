@@ -2204,11 +2204,10 @@
                                 if (key[0] !== '_') mPt[key] = this[key];
                             }, ptItem[t]);
 
-                            // Passing everything up again.  Thought about passing up dirty and isError, but appears we also have issues with tiers and kits...
-                            //if (mPt.dirty !== undefined && mPt.dirty === true) {
+                            if (mPt.dirty !== undefined && mPt.dirty === true) {
                                 modPt.push(mPt);
                                 mPt.dirty = false;
-                            //}
+                            }
                         }
                     }
                 }
