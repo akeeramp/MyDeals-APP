@@ -37,9 +37,11 @@
         var hasSpecialPricePermission = (hasPermissionPrice || (window.usrRole === "GA" && window.isSuper));
 
         $timeout(function () {
-            $("#dealTypeDiv").removeClass("active");
             $("#approvalDiv").removeClass("active");
             $("#pctDiv").addClass("active");
+            $("#contractReviewDiv").removeClass("active");
+            $("#dealReviewDiv").removeClass("active");
+            $("#historyDiv").removeClass("active");
             $scope.$apply();
         }, 50);
 

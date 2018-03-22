@@ -20,7 +20,10 @@ function managerDealTypeController($scope, $timeout) {
     $timeout(function () {
         $("#approvalDiv").removeClass("active");
         $("#pctDiv").removeClass("active");
+        $("#contractReviewDiv").removeClass("active");
+        $("#dealReviewDiv").removeClass("active");
         $("#dealTypeDiv").addClass("active");
+        $("#historyDiv").removeClass("active");
         $scope.selTab('ECAP');
         $scope.$apply();
     }, 50);

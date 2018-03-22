@@ -49,10 +49,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $timeout(function () {
-        $("#timelineDiv").removeClass("active");
-        $("#overlappingDiv").removeClass("active");
-        $("#pctDiv").removeClass("active");
         $("#approvalDiv").addClass("active");
+        $("#pctDiv").removeClass("active");
+        $("#contractReviewDiv").removeClass("active");
+        $("#dealReviewDiv").removeClass("active");
+        $("#historyDiv").removeClass("active");
         $scope.$apply();
     }, 50);
 

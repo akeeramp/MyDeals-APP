@@ -121,6 +121,14 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
         }
     });
 
-    
+    $timeout(function () {
+        $("#approvalDiv").removeClass("active");
+        $("#pctDiv").removeClass("active");
+        $("#contractReviewDiv").removeClass("active");
+        $("#dealReviewDiv").addClass("active");
+        $("#historyDiv").removeClass("active");
+        $scope.$apply();
+    }, 50);
+
 
 }

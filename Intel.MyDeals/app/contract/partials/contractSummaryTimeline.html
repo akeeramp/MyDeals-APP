@@ -1,15 +1,41 @@
-﻿
-<div id="sum-wrapper">
+﻿<div ng-if="loading" style="padding-top: 200px; width: 100%; text-align: center;">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+    <div style="font-size: 30px;" ng-bind="msg"></div>
+    <div class="ss-icon-lg" ng-if="msg == 'Done'">
+        <i class="intelicon-passed-completed-solid sky-blue"></i>
+    </div>
+
+</div>
+
+<div ng-if="!loading" id="sum-wrapper" style="padding: 20px;">
     <div id="sum-header">
         <div ui-view="summaryContentView"></div>
-        <h4>Timeline</h4>
+        <h4>Contract History</h4>
         <hr />
     </div>
 
     <div id="sum-container">
         <div class="sum-main-body">
             <div class="sum-main-container">
-                body info here
+                <div class="row" ng-repeat="tl in timelineData">
+                    <div class="col-md-4 timeDate">
+                        <div class="content">
+                            {{tl.HIST_EFF_FR_DTM}} | <span style="color: #0071C5;">{{tl.FRST_NM}} {{tl.LST_NM}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-8 timeDesc">
+                        <div class="content">
+                            <span style="color: #FFA300;">#{{tl.ATRB_SID}}</span> {{tl.ATRB_DESC}} | <span style="color: #00AEEF;">{{tl.FLAG}}</span> |
+                            <span style="color: #0071C5;">{{tl.ATRB_VAL}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -17,82 +43,144 @@
 </div>
 
 
-<style>
-    #sum-wrapper {
-        height: 100%;
-        padding: 50px 0 0 0;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
 
-    #sum-header {
-        height: 50px;
-        margin-top: -50px;
-        font-size: 14px;
+<style>
+    .titlePage {
+        text-align: center;
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-        padding-left: 10px;
-        padding-right: 10px;
+    }
+
+        .titlePage H1 {
+            text-align: center;
+            padding-top: 60px;
+            padding-bottom: 5px;
+            color: #0071C5;
+            font-size: 60px;
+        }
+
+            .titlePage H1 span {
+                color: #000000;
+                font-size: 24px;
+            }
+
+        .titlePage H2 {
+            text-align: center;
+            padding-top: 5px;
+            padding-bottom: 100px;
+            color: #aaaaaa;
+        }
+
+        .titlePage .dates {
+            font-size: 16px;
+            padding-top: 100px;
+        }
+
+        .titlePage .confidential {
+            font-size: 12px;
+            margin-top: 50px;
+            color: #666666;
+        }
+
+    .amendmentsPage {
         padding-top: 10px;
-        margin-left: 10px;
-        margin-right: 10px;
+        padding-bottom: 10px;
     }
 
-        #sum-header h4 {
-            margin: 0;
+    .psPage .subText, .ptPage .subText {
+        color: #aaaaaa;
+        font-size: 12px;
+    }
+
+    .psPage .subObj, .ptPage .subObj {
+        color: #FFA300;
+        font-size: 12px;
+        margin-left: 8px;
+    }
+
+    .psPage .subStatus, .ptPage .subStatus {
+        font-size: 12px;
+        margin-right: 4px;
+    }
+
+        .psPage .subStatus .stat, .ptPage .subStatus .stat {
+            color: #cccccc;
+            margin-left: 15px;
         }
 
-    #sum-container {
-        height: 100%;
-        overflow: auto;
+            .psPage .subStatus .stat span, .ptPage .subStatus .stat span {
+                color: #0071C5;
+            }
+
+    .ptPage {
+        margin-left: 30px;
     }
 
-    .sum-main-body {
-        margin: 5px 10px;
-        padding: 0 10px;
+    .psPage H1 {
+        color: #000000;
+        font-size: 24px;
     }
 
-    .sum-main-container {
-        height: 100%;
-        overflow: auto;
+        .psPage H1 span {
+            color: #cccccc;
+            font-size: 22px;
+        }
+
+    .psPage H2 {
+        color: #0071C5;
+        font-size: 18px;
     }
 
-    .sum-main-body .tbl-header {
-        margin-top: 6px;
-    }
+        .psPage H2 span {
+            color: #cccccc;
+            font-size: 16px;
+        }
 
-    #sum-header hr {
-        height: 1px;
-        margin: 6px 0;
-        color: #e4e4e4;
-    }
-
-    .sum-main-body .bold {
-        color: #00AEEF;
-        font-weight: bold;
-        font-size: 14px;
-        line-height: 1em;
-    }
-
-    .sum-main-body .bolder {
-        color: #00AEEF;
-        font-weight: bold;
+    .psPage .terms {
         font-size: 16px;
-        line-height: 1em;
+        margin: 30px;
     }
 
-    .sum-main-body label {
-        margin-bottom: 0;
+    hr.page-break {
+        margin: 80px 0;
+        border-top: 1px solid #FFA300;
+        height: 2px;
     }
 
-    .sum-main-body .stage {
-        text-align: center;
+    table.extract {
+        width: 100%;
+        border: 1px solid #00AEEF;
     }
 
-        .sum-main-body .stage div {
-            margin: 0 10px;
-            padding: 4px 4px;
+        table.extract th {
+            font-family: "Intel Clear";
+            font-weight: 600;
+            font-style: normal;
+            padding: 0 4px;
+            background-color: #eeeeee;
+            color: #0071C5;
         }
+
+        table.extract td {
+            font-family: "Intel Clear";
+            font-weight: 200;
+            font-style: normal;
+            padding: 0 4px;
+            border-top: 1px solid #eeeeee;
+        }
+
+    .timeDate div.content {
+        background-color: #f6f8f8;
+        border: 1px solid #eeeeee;
+        margin: 2px 1px;
+        padding: 0 6px;
+    }
+
+    .timeDesc div.content {
+        background-color: #f6f8f8;
+        border: 1px solid #eeeeee;
+        margin: 2px 1px;
+        padding: 0 6px;
+    }
 </style>

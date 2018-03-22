@@ -13,16 +13,42 @@
 
     function managerTimelineController($scope, $timeout) {
 
-        var root = $scope.$parent;	// Access to parent scope
+        kendo.culture("en-US");
 
-        $scope.pctFilter = "";
+        var root = $scope.$parent;	// Access to parent scope
+        $scope.root = root;
+        $scope.timelineData = [];
+        $scope.loading = true;
+        $scope.msg = "Loading Contract History";
         $scope.$parent.isSummaryHidden = false;
+
+
+        $scope.timelineDs = new kendo.data.DataSource({
+            type: "json",
+            transport: {
+                read: {
+                    url: "api/Timeline/GetTimelineDetails/" + $scope.root.contractData.DC_ID + "/1",
+                    type: "GET",
+                    dataType: "json"
+                }
+            },
+            requestEnd: function (e) {
+                $scope.msg = "Done";
+                $scope.timelineData = e.response;
+                $timeout(function () {
+                    $scope.loading = false;
+                }, 500);
+            }
+        });
+
+        $scope.timelineDs.read();
 
         $timeout(function () {
             $("#approvalDiv").removeClass("active");
             $("#pctDiv").removeClass("active");
-            $("#timelineDiv").addClass("active");
-            $("#overlappingDiv").removeClass("active");
+            $("#contractReviewDiv").removeClass("active");
+            $("#dealReviewDiv").removeClass("active");
+            $("#historyDiv").addClass("active");
             $scope.$apply();
         }, 50);
 

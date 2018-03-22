@@ -84,5 +84,14 @@ function exportController($scope, $state, objsetService, logger, $timeout, dataS
     $scope.timelineDs.read();
     $scope.exportDs.read();
 
+    $timeout(function () {
+        $("#approvalDiv").removeClass("active");
+        $("#pctDiv").removeClass("active");
+        $("#contractReviewDiv").addClass("active");
+        $("#dealReviewDiv").removeClass("active");
+        $("#historyDiv").removeClass("active");
+        $scope.$apply();
+    }, 50);
+
 }
 })();
