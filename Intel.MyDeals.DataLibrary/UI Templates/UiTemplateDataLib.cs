@@ -1357,7 +1357,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 10006,
                 AtrbCd = "KIT_REBATE_BUNDLE_DISCOUNT",
-                Label = "KIT Rebate /Bundle Discount",
+                Label = "Kit Discount (ECAP value only)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
@@ -1370,7 +1370,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 10006,
                 AtrbCd = "SUBKIT_REBATE_BUNDLE_DISCOUNT",
-                Label = "Sub KIT Rebate /Bundle Discount",
+                Label = "Sub Kit Discount (ECAP value only)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
