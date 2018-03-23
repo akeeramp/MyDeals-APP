@@ -81,14 +81,14 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}
                 },
-                new MyOpRule
-                {
-                    Title="Forecast Volume required if L1",
-                    ActionRule = MyDcActions.ForecastVolumeRequired,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() }
-                },                
+                //new MyOpRule
+                //{
+                //    Title="Forecast Volume required if L1",
+                //    ActionRule = MyDcActions.ForecastVolumeRequired,
+                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                //    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() }
+                //},                
                 new MyOpRule
                 {
                     Title="Required if User Defined RPU",
