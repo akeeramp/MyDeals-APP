@@ -1135,7 +1135,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 UiType = "EMBEDDEDMULTISELECT",
-                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_EXCLDS')#",
+                Template = "#=gridUtils.uiControlWrapperWithDefault(data, 'DEAL_GRP_EXCLDS')#",
                 Width = 140
             });
             items.Add(new UiTemplateContainerItem  // WIP All types

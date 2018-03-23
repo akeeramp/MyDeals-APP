@@ -35,6 +35,20 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiControlWrapperWithDefault = function (passedData, field, format) {
+    var defVal = "View";
+    if (passedData._behaviors !== undefined && passedData._behaviors.isReadOnly !== undefined && passedData._behaviors.isReadOnly[field] !== undefined && passedData._behaviors.isReadOnly[field] === true) {
+        defVal = "";
+    }
+    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    tmplt += '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+    tmplt += '    <div ng-if="dataItem.' + field + '" class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+    tmplt += '    <div ng-if="!dataItem.' + field + '" class="ng-binding vert-center" style="color: #0071C5; cursor: pointer; text-align: center;">' + defVal + '</div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
 }
