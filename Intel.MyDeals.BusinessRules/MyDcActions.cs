@@ -568,6 +568,27 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ValidateServerDealType(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deSDT = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
+            if (deSDT == null) return;
+
+            string usersdt = deSDT.AtrbValue.ToString();
+            if (usersdt == "") return;
+
+            string dealtype = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);0
+            List<BasicDropdown> validSDTs = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == "SERVER_DEAL_TYPE" && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtype || (d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS" || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_TYPES")) && d.ACTV_IND).ToList();
+            BasicDropdown match = validSDTs.FirstOrDefault(d => d.DROP_DOWN.ToUpper() == usersdt.ToUpper());
+
+            if (match == null)
+            {
+                deSDT.AddMessage(usersdt + " is not a valid Server Deal Type.");
+            }
+        }
+
         public static void ReadOnlyFrontendWithTracker(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

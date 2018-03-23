@@ -396,6 +396,13 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
                 new MyOpRule
+                {
+                    Title="Server Deal Type Validation",
+                    ActionRule = MyDcActions.ValidateServerDealType,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
 				{
 					Title="DropDown Value Validations",
 					ActionRule = MyDcActions.CheckDropDownValues,
