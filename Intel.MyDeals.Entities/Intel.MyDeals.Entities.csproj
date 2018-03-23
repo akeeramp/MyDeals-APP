@@ -224,6 +224,7 @@
     <Compile Include="Templating\TemplateExtensions\DcsDealProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DcsProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DealTemplateDataGram.cs" />
+    <Compile Include="TenderActionItem.cs" />
     <Compile Include="TimeFlowHelper.cs" />
     <Compile Include="TimeFlowItem.cs" />
     <Compile Include="TimeFlowMedia.cs" />

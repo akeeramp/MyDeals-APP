@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.OData;
 using System.Web.Http.OData.Extensions;
@@ -63,24 +64,28 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("ActionTender/{dcId}/{actn}")]
-        [HttpGet]
-        public OpMsgQueue ActionTender(int dcId, string actn)
+        [Route("ActionTenders/{actn}")]
+        [HttpPost]
+        public OpMsgQueuePacket ActionTenders(List<TenderActionItem> data, string actn)
         {
+            DateTime start = DateTime.Now;
 
-            return SafeExecutor(() => ActionTenders(dcId.ToString(), actn)
-                , "Unable to action the Tender Deal {dcId}"
-            );
-        }
+            ContractToken contractToken = new ContractToken("ContractToken Created - ActionTenders")
+            {
+                CustId = 0,
+                ContractId = 0,
+                NeedToCheckForDelete = false
+            };
 
-        [Authorize]
-        [Route("ActionTenders/{dcIds}/{actn}")]
-        [HttpGet]
-        public OpMsgQueue ActionTenders(string dcIds, string actn)
-        {
-            return SafeExecutor(() => _tenderLib.ActionTenders(dcIds, actn)
+            OpMsgQueue result = SafeExecutor(() => _tenderLib.ActionTenders(contractToken, data, actn)
                 , "Unable to action the Tenders"
             );
+
+            return new OpMsgQueuePacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Action Tender Deals", contractToken.TimeFlow)
+            };
         }
     }
 }

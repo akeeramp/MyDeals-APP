@@ -14,6 +14,19 @@
                k-ng-model="endDtObject"
                style="width: 110px;" />
 
+        <button class="btn btn-sm ssToolbarBtn" style="border: 1px solid \\#eeeeee; padding:0; margin-left: 10px;" ng-click="root.toggleActive()" ng-class="{'toggleSelect': root.activeOnlyEnabled}" title="select to view only the deals that can be actioned.">
+            <table>
+                <tr>
+                    <td style="border: 0 solid transparent !important;">
+                        <i class="intelicon-tap skyBlue" aria-hidden="true" style="font-size: 30px !important;"></i>
+                    </td>
+                    <td class="hidden-sm hidden-xs" style="padding-left: 0; text-align: left; color: \\#00AEEF; line-height: 1.1em; border: 0 solid transparent;">
+                        Actionable<br />Deals Only
+                    </td>
+                </tr>
+            </table>
+        </button>
+
         <span class="t-tip" kendo-tooltip k-position="'top'" k-content="'{{opOptions.messages.help}}'">
             <span class="k-textbox tenderSearchInput">
                 <input type="text" placeholder="enter search criteria" ng-model="root.searchText" ng-keypress="EnterPressed($event)" />
@@ -21,6 +34,8 @@
         </span>
         <i class="k-icon intelicon-search search-search" ng-click="loadData()" style="font-size: 26px !important;" title="Click to begin the Search"></i>
         
+
+
         <div class="fr dropdown clearfix" ng-hide="data[0].value === ''">
             <button class="btn btn-sm ssToolbarBtn dropdown-toggle" id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown" style="margin-top: -5px;">
                 <table>
@@ -97,6 +112,13 @@
     </div>
 </script>
 
+<div id="perfMs"></div>
+<div id="perfLegend"></div>
+<div id="perfDetails"></div>
+<div style="position: absolute; bottom: 0; right: 145px; z-index: 10;">
+    <div id="perfChart" style="height: 40px; padding: 0;"></div>
+</div>
+
 <div id="horizontal-search">
     <div attribute-search-grid
          id="attributeGrid"
@@ -151,5 +173,73 @@
         .tenderSearchInput {
             width: 180px; 
         }
+    }
+
+
+    #perfMs {
+        position: absolute;
+        bottom: 30px;
+        right: 150px;
+        color: #000000; 
+        font-family: verdana;
+        font-size: 10px; 
+        margin-top: 5px; 
+        z-index: 1000;
+    }
+    #perfLegend {
+        position: absolute;
+        bottom: 3px;
+        right: 141px;
+        font-family: verdana;
+        font-size: 9px;
+        z-index: 1000;
+        color: #666666;
+    }
+    #perfDetails {
+        position: absolute;
+        bottom: 50px;
+        right: 150px;
+        font-family: verdana;
+        font-size: 10px;
+        z-index: 1000;
+        background-color: #ffffff;
+    }
+    #perfDetails th {
+        padding: 2px 4px;
+        color: #0071C5;
+    }
+    #perfDetails td {
+        padding: 2px 4px;
+        color: #333333;
+    }
+    .closePerf {
+        color: #cccccc;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .closePerf:hover {
+        color: #FC4C02;
+    }
+    .legKey {
+        width: 10px;
+        height: 10px;
+        border: 1px solid #bebebe;
+    }
+    .legData {
+        margin-left: 4px;
+        margin-right: 10px;
+        margin-top: -2px;
+    }
+    .showMore {
+        font-size: 18px;
+        color: #00AEEF;
+        cursor: pointer;
+    }
+    .showMore:hover {
+        color: #0071C5;
+    }
+
+    .toggleSelect {
+        background-color: #eeeeee !important;
     }
 </style>

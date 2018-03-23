@@ -1155,10 +1155,10 @@ gridUtils.getBidActions = function (data) {
     data["orig_BID_STATUS"] = data.BID_STATUS;
     data.BID_ACTNS = bidActns;
 
-    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>{{dataItem.BID_STATUS}}<div style='color: #aaaaaa;' title='This deal is currently being negotiated and is not Active yet.  Once the deal gets approved, it will be availble to action.'>(<i>Not Actionable</i>)</div></div>";
+    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>{{dataItem.BID_STATUS}}<div style='color: #aaaaaa;' title='This deal is currently being negotiated and is not Active yet.  Once the deal gets approved, it will be available to action.'>(<i>Not Actionable</i>)</div></div>";
     if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.BID_STATUS}}</div>";
 
-    return '<select kendo-drop-down-list ng-model="(dataItem.BID_STATUS)" ' +
+    return '<select kendo-drop-down-list id="ddListStat_' + data.DC_ID + '" ng-model="(dataItem.BID_STATUS)" ' +
         'k-data-text-field="\'BidActnName\'" ' +
         'k-data-value-field="\'BidActnValue\'" ' +
         'k-data-source="dataItem.BID_ACTNS" ' +

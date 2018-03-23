@@ -13,7 +13,7 @@
             
         </div>
 
-        <h4><i class="intelicon-payment" style="color: #FFA300;"></i>Pricing Test Views</h4>
+        <h4 ng-if="CAN_VIEW_COST_TEST || CAN_VIEW_MEET_COMP"><i class="intelicon-payment" style="color: #FFA300;"></i>Pricing Test Views</h4>
 
         <div class="lnav-sum-menu-item">
             <a ui-sref="contract.pct" ui-sref-opts="{reload: true}" ng-if="CAN_VIEW_COST_TEST"><div id="pctDiv">Price Cost Test</div></a>

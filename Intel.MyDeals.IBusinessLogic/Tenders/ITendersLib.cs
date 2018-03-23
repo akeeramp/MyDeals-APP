@@ -1,4 +1,5 @@
-﻿using Intel.MyDeals.Entities;
+﻿using System.Collections.Generic;
+using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -11,6 +12,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         SearchResultPacket GetTenderList(SearchParams data);
 
-        OpMsgQueue ActionTenders(string dcIds, string actn);
+        OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn);
     }
 }

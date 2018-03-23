@@ -86,9 +86,9 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetTenderList/{st}/{en}/{searchText}")]
+        [Route("GetTenderList/{st}/{en}/{actv}/{searchText}")]
         [HttpGet]
-        public PageResult<OpDataCollectorFlattenedItem> GetTenderList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, string searchText)
+        public PageResult<OpDataCollectorFlattenedItem> GetTenderList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, int actv, string searchText)
         {
             int maxLength = 1000;
             if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
@@ -102,7 +102,7 @@ namespace Intel.MyDeals.Controllers.API
                 StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
                 Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
                 Take = options.RawValues.Top == null || options.RawValues.Top == "all" ? maxLength : int.Parse(options.RawValues.Top)
-            });
+            }, actv == 1);
 
             return new PageResult<OpDataCollectorFlattenedItem>(
                 rtn.SearchResults,

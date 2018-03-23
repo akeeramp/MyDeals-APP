@@ -13,6 +13,8 @@
 
     function tenderSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $location) {
 
+        $scope.$root.pc = null;
+
         $scope.operatorSettings = {
             "operators": [
                 {
@@ -113,7 +115,7 @@
                 width: 50,
                 filterable: false,
                 sortable: false,
-                template: "<deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools>",
+                template: "<span id='dealTool_#=data.DC_ID#'><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></span>",
                 excelTemplate: " ",
                 bypassExport: true
             }, {
@@ -166,7 +168,7 @@
                 width: 210,
                 dimKey: 20,
                 filterable: $scope.objFilter,
-                template: "#= gridUtils.tenderDim(data, 'TRKR_NBR') #"
+                template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
             }, {
                 field: "ECAP_PRICE",
                 title: "ECAP Price",
@@ -350,7 +352,7 @@
                 var st = $scope.startDt.replace(/\//g, '-');
                 var en = $scope.endDt.replace(/\//g, '-');
                 var searchText = $scope.searchText === null || $scope.searchText === undefined || $scope.searchText === "" ? "null" : $scope.searchText;
-                var url = "/api/Search/GetTenderList/" + st + "/" + en + "/" + searchText;
+                var url = "/api/Search/GetTenderList/" + st + "/" + en + "/" + ($scope.activeOnlyEnabled ? 1 : 0) + "/" + searchText;
                 $scope.savingToExcel = false;
                 return url;
             }
@@ -363,11 +365,16 @@
             endDate: moment().add(6, 'months').format("MM/DD/YYYY")
         });
 
+        $scope.toggleActive = function () {
+            $scope.activeOnlyEnabled = !$scope.activeOnlyEnabled;
+        }
+
         // init dashboard
         $scope.startDt = $scope.$storage.startDate;
         $scope.endDt = $scope.$storage.endDate;
         $scope.customers = [];
         $scope.searchText = $location.search().id;
+        $scope.activeOnlyEnabled = true;
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;
@@ -396,21 +403,29 @@
         $scope.changeBidAction = function (dataItem, scope) {
             var newVal = dataItem.BID_STATUS;
             var dsData = scope.ds.data();
-            var ids = [];
+            var tenders = [];
 
             // now update all checked items if the current one is checked
             if (dataItem.isLinked) {
                 for (var d = 0; d < dsData.length; d++) {
                     if (dsData[d].isLinked) {
                         dsData[d].BID_STATUS = newVal;
-                        ids.push(dsData[d].DC_ID);
+                        tenders.push({
+                            DC_ID: dsData[d].DC_ID,
+                            CNTRCT_OBJ_SID: dsData[d].CNTRCT_OBJ_SID,
+                            CUST_MBR_SID: dsData[d].CUST_MBR_SID
+                        });
                     }
                 }
             } else {
-                ids.push(dataItem.DC_ID);
+                tenders.push({
+                    DC_ID: dataItem.DC_ID,
+                    CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
+                    CUST_MBR_SID: dataItem.CUST_MBR_SID
+                });
             }
 
-            var plural = ids.length > 1 ? "s" : "";
+            var plural = tenders.length > 1 ? "s" : "";
             var msg = "";
             if (newVal === "Won") msg = "Would you like to mark the Tender Deal" + plural + " as 'Won'?  This will generate a Tracker Number.";
             if (newVal === "Lost") msg = "Would you like to mark the Tender Deal" + plural + " as 'Lost'?";
@@ -419,39 +434,88 @@
             kendo.confirm(msg)
                 .then(function () {
                     //Save the changes
-                    $scope.actionTenderDeals(ids.join(","), newVal, scope);
+                    $scope.actionTenderDeals(tenders, newVal, scope);
                 },
                 function () {
-                    dataItem["BID_STATUS"] = dataItem["orig_BID_STATUS"];
-                    scope.ds.read();
+                    var dropdownlist, indx, lis, i;
+
+                    if (dataItem.isLinked) {
+                        for (var d = 0; d < dsData.length; d++) {
+                            if (dsData[d].isLinked) {
+                                dsData[d].BID_STATUS = dataItem["orig_BID_STATUS"];
+                                dropdownlist = $("#ddListStat_" + dsData[d].DC_ID).data("kendoDropDownList");
+                                indx = 0;
+                                lis = dropdownlist.ul.children();
+                                for (i = 0; i < lis.length; i++) {
+                                    if (lis[i].textContent === dsData[d]["orig_BID_STATUS"]) indx = i;
+                                }
+                                dropdownlist.select(indx);
+                            }
+                        }
+                    } else {
+                        dropdownlist = $("#ddListStat_" + dataItem.DC_ID).data("kendoDropDownList");
+                        indx = 0;
+                        lis = dropdownlist.ul.children();
+                        for (i = 0; i < lis.length; i++) {
+                            if (lis[i].textContent === dataItem["orig_BID_STATUS"]) indx = i;
+                        }
+                        dropdownlist.select(indx);
+                    }
+
                 });
 
         }
 
-        $scope.actionTenderDeals = function (strIds, actn, scope) {
+        $scope.actionTenderDeals = function (tenders, actn, scope) {
+            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Action Tenders", "");
+            var pc = new perfCacheBlock("Action tenders", "UX");
+
             scope.setBusy("Updating Tender Bids...", "Please wait as we update the Tender Deals!");
-            objsetService.actionTenderDeals(strIds, actn).then(
-                function (data) {
+            var pcService = new perfCacheBlock("Update Actions to Tenders", "MT");
+            objsetService.actionTenderDeals(tenders, actn).then(
+                function (results) {
+                    pcService.addPerfTimes(results.data.PerformanceTimes);
+                    pc.add(pcService.stop());
+                    var pcUI = new perfCacheBlock("Processing returned data", "UI");
 
                     var foundIt = false;
                     var noDeals = [];
-                    scope.messages = data.data.Messages;
+                    scope.messages = results.data.Data.Messages;
 
+                    var dsData = scope.ds.data();
                     for (var m = 0; m < scope.messages.length; m++) {
                         if (scope.messages[m].Message === "Action List") {
                             foundIt = true;
+                            var details = scope.messages[m].ExtraDetails;
+                            for (var d = 0; d < dsData.length; d++) {
+                                if (details[dsData[d].DC_ID] !== undefined) {
+                                    $("#trk_" + dsData[d].DC_ID).html(details[dsData[d].DC_ID].join(", "));
+                                    $("#cb_actn_" + dsData[d].DC_ID).html('<div style="text-align: center; width: 100%;" class="ng-binding">Won</div>');
+                                    $("#dealTool_" + dsData[d].DC_ID).html('');
+                                    dsData[d].isLinked = false;
+                                }
+                            }
                         }
                         else if (scope.messages[m].Message === "No Deal") {
                             noDeals.push(scope.messages[m].ExtraDetails);
                         }
                     }
 
+                    pc.add(pcUI.stop());
+                    $scope.$root.pc.add(pc.stop());
+                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                    $scope.$root.pc = null;
+
+
                     if (noDeals.length > 0) {
                         kendo.alert("It looks like one or more deals were deleted.  We need to refresh the data.");
                         $scope.$broadcast('reload-search-dataSource');
                     } else if (foundIt) {
                         scope.curLinkedVal = "";
-                        scope.ds.read(); // we rely on the DS post load to close down the busy indicator
+                        $timeout(function () {
+                            scope.setBusy("", "");
+                        }, 50);
+                        //scope.ds.read(); // we rely on the DS post load to close down the busy indicator
                     } else {
                         $timeout(function () {
                             scope.setBusy("", "");

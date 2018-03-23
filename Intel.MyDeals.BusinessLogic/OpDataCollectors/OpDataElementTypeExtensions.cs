@@ -165,7 +165,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.WF_STG_CD.ATRB_SID
             };
 
+            DateTime start = DateTime.Now;
             MyDealsData myDealsData = opDataElementType.GetByIDs(ids, opDataElementTypes, atrbs);
+            contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
             List<OpDataCollector> allDcs = myDealsData[opDataElementType].AllDataCollectors.ToList();
 

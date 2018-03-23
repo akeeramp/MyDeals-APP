@@ -61,7 +61,6 @@ function objsetService($http, dataService, logger, $q, $location) {
         actionPricingStrategies: actionPricingStrategies,
         actionWipDeal: actionWipDeal,
         actionWipDeals: actionWipDeals,
-        actionTenderDeal: actionTenderDeal,
         actionTenderDeals: actionTenderDeals,
         getPctDetails: getPctDetails,
         setPctOverride: setPctOverride,
@@ -222,11 +221,8 @@ function objsetService($http, dataService, logger, $q, $location) {
         return dataService.post(apiBasePricingTableUrl + 'actionWipDeals/' + custId + '/' + contractId, data);
     }
 
-    function actionTenderDeal(dcId, actn) {
-        return dataService.get(apiBaseTenderUrl + 'ActionTenders/' + dcId + '/' + actn);
-    }
-    function actionTenderDeals(dcIds, actn) {
-        return dataService.get(apiBaseTenderUrl + 'ActionTenders/' + dcIds + '/' + actn);
+    function actionTenderDeals(tenders, actn) {
+        return dataService.post(apiBaseTenderUrl + 'ActionTenders/' + actn, tenders);
     }
 
 

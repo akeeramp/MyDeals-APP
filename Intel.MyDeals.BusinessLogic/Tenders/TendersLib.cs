@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
@@ -239,10 +240,53 @@ namespace Intel.MyDeals.BusinessLogic
             };
         }
 
-        public OpMsgQueue ActionTenders(string dcIds, string actn)
+        public OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
-            List<int> tenderIds = dcIds.Split(',').Select(d => int.Parse(d.Trim())).ToList();
+
+            Dictionary<int, List<TenderActionItem>> contractDecoder = new Dictionary<int, List<TenderActionItem>>();
+            Dictionary<int, TenderActionItem> tenderDecoder = new Dictionary<int, TenderActionItem>();
+            foreach (TenderActionItem item in data)
+            {
+                tenderDecoder[item.DC_ID] = item;
+                if (!contractDecoder.ContainsKey(item.CNTRCT_OBJ_SID)) contractDecoder[item.CNTRCT_OBJ_SID] = new List<TenderActionItem>();
+                contractDecoder[item.CNTRCT_OBJ_SID].Add(item);
+            }
+
+            foreach (List<TenderActionItem> item in contractDecoder.Values)
+            {
+                contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
+                contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
+                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.BID_STATUS, actn, actn == "Won");
+
+                // Get new Tender Action List
+                List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
+
+                List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
+
+                Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
+                foreach (OpDataElement de in trkrs)
+                {
+                    if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
+                    dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
+                }
+
+                // Apply messaging
+                opMsgQueue = retMyDealsData.GetAllMessages();
+                opMsgQueue.Messages.Add(new OpMsg
+                {
+                    MsgType = OpMsg.MessageType.Info,
+                    Message = "Action List",
+                    ExtraDetails = actn == "Won" ? (object) dictTrkrs : actions
+                });
+            }
+
+
+
+            // loop through all contracts and only do a save per contract
+
+
+            return opMsgQueue;
 
             // This is massively efficient, but we need to ensure we have the correct 
             // customer Id and contract Id since these span multiple contracts
@@ -250,61 +294,55 @@ namespace Intel.MyDeals.BusinessLogic
             //
             // The justification is most users will only update one at a time
             //
-            foreach (int id in tenderIds)
-            {
-                // YES... we are calling the DB once for Every Tender ID passed
-                // YES... this is inefficient... read above
+            //foreach (TenderActionItem item in data)
+            //{
+            //    // YES... we are calling the DB once for Every Tender ID passed
+            //    // YES... this is inefficient... read above
 
-                MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(
-                    new List<int> {id},
-                    new List<OpDataElementType> {OpDataElementType.CNTRCT},
-                    new List<int> {Attributes.CUST_MBR_SID.ATRB_SID}
-                );
+            //    start = DateTime.Now;
+            //    myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(
+            //        new List<int> {item.DC_ID},
+            //        new List<OpDataElementType> {OpDataElementType.CNTRCT},
+            //        new List<int> {Attributes.CUST_MBR_SID.ATRB_SID}
+            //    );
+            //    contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
-                if (!myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any())
-                {
-                    opMsgQueue.Messages.Add(new OpMsg
-                    {
-                        MsgType = OpMsg.MessageType.Warning,
-                        Message = "No Deal",
-                        ExtraDetails = $"Tender Deal {id} does not exist."
-                    });
-                }
-                else
-                {
-                    OpDataCollector dcCntrct = OpDataElementType.WIP_DEAL.GetByIDs(
-                        new List<int> { id },
-                        new List<OpDataElementType> { OpDataElementType.CNTRCT },
-                        new List<int> { Attributes.CUST_MBR_SID.ATRB_SID }
-                        )[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
+            //    if (!myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any())
+            //    {
+            //        opMsgQueue.Messages.Add(new OpMsg
+            //        {
+            //            MsgType = OpMsg.MessageType.Warning,
+            //            Message = "No Deal",
+            //            ExtraDetails = $"Tender Deal {item.DC_ID} does not exist."
+            //        });
+            //    }
+            //    else
+            //    {
+            //        OpDataCollector dcCntrct = myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
 
-                    // Build Contract Token based on Contract/Customer
-                    ContractToken contractToken = new ContractToken("ContractToken Created - ActionTenders")
-                    {
-                        ContractId = dcCntrct.DcID,
-                        CustId = int.Parse(dcCntrct.GetDataElementValue(AttributeCodes.CUST_MBR_SID)),
-                        NeedToCheckForDelete = false
-                    };
+            //        // Build Contract Token based on Contract/Customer
+            //        contractToken.ContractId = dcCntrct.DcID;
+            //        contractToken.CustId = int.Parse(dcCntrct.GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
-                    // YES... we are updating the DB once for Every Tender ID passed
-                    MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, new List<int> { id }, Attributes.BID_STATUS, actn, actn == "Won");
+            //        // YES... we are updating the DB once for Every Tender ID passed
+            //        MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, new List<int> { item.DC_ID }, Attributes.BID_STATUS, actn, actn == "Won");
 
-                    // Get new Tender Action List
-                    List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
+            //        // Get new Tender Action List
+            //        List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
 
-                    // Apply messaging
-                    opMsgQueue = retMyDealsData.GetAllMessages();
-                    opMsgQueue.Messages.Add(new OpMsg
-                    {
-                        MsgType = OpMsg.MessageType.Info,
-                        Message = "Action List",
-                        ExtraDetails = actions
-                    });
-                }
+            //        // Apply messaging
+            //        opMsgQueue = retMyDealsData.GetAllMessages();
+            //        opMsgQueue.Messages.Add(new OpMsg
+            //        {
+            //            MsgType = OpMsg.MessageType.Info,
+            //            Message = "Action List",
+            //            ExtraDetails = actions
+            //        });
+            //    }
 
-            }
+            //}
 
-            return opMsgQueue;
+            //return opMsgQueue;
 
         }
 

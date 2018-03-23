@@ -341,6 +341,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetNonTenderDealList(SearchParams data)
         {
+            //new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" },
             return GetDealList(data, new List<int>
             {
                 Attributes.CAP.ATRB_SID,
@@ -379,8 +380,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="data">SearchParams: Start/End Date, Search Text and Search conditions</param>
         /// <returns></returns>
-        public SearchResultPacket GetTenderDealList(SearchParams data)
+        public SearchResultPacket GetTenderDealList(SearchParams data, bool activeOnly)
         {
+            string actvstr = activeOnly ? " AND WIP_DEAL_WF_STG_CD = 'Active'" : "";
             return GetDealList(data, new List<int>
             {
                 Attributes.BID_STATUS.ATRB_SID,
@@ -405,7 +407,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.YCS2_PRC_IRBT.ATRB_SID
             },
-            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" },
+            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" + actvstr },
             null,
             MyRulesTrigger.OnDealListLoad);
         }
