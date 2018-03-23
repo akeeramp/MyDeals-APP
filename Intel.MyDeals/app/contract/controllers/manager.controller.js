@@ -704,6 +704,13 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         if (fromToggle === undefined || fromToggle === null) fromToggle = false;
         if (checkForRequirements === undefined || checkForRequirements === null) checkForRequirements = false;
 
+        var numCheckboxes = $(".sum-main-container input:visible").length;
+        var numChecked = $(".sum-main-container input:visible:checked").length;
+        if (numCheckboxes === 0 || numChecked === 0) {
+            kendo.alert("No items were selected to action.");
+            return;
+        }
+
         // look for checked ending
         var ps = root.contractData.PRC_ST;
         if (ps !== undefined) {
