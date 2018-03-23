@@ -1,6 +1,6 @@
 ﻿
 <div ng-show="show" class="ss-loading-overlay">
-	<div class="ss-loading-panel ss-{{msgType}}" style="text-align: center;">
+	<div class="ss-loading-panel ss-{{msgType}}" ng-show="show" style="text-align: center;">
 		<div ng-if="msgType != 'Success' && msgType != 'Error'" class="spinner">
 			<div class="rect1"></div>
 			<div class="rect2"></div>

@@ -26,6 +26,7 @@
 	border-radius: 5px;
 	padding: 10px;
 	border: 2px #0071C5 solid;
+	animation: sk-zoom 0.4s;
 }
 
 .ss-loading-panel h2 {
@@ -93,7 +94,6 @@
   0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
   20% { -webkit-transform: scaleY(1.0) }
 }
-
 @keyframes sk-stretchdelay {
   0%, 40%, 100% { 
     transform: scaleY(0.4);
@@ -120,10 +120,20 @@
 
 .ss-loading-overlay {
     -webkit-transition: all linear 0.5s;
-    transition: all linear 0.5s;
+    transition: all linear 0.5s;	
+        -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 0.5s; /* Firefox < 16 */
+        -ms-animation: fadein 0.5s; /* Internet Explorer */
+         -o-animation: fadein 0.5s; /* Opera < 12.1 */
+            animation: fadein 0.5s;
 }
-.ss-loading-overlay.ng-hide {
+.ss-loading-overlay.ng-hide, .ss-loading-overlay.ng-leave {
     opacity: 0;
+        -webkit-animation: fadeOut 0.5s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadeOut 0.5s; /* Firefox < 16 */
+        -ms-animation: fadeOut 0.5s; /* Internet Explorer */
+         -o-animation: fadeOut 0.5s; /* Opera < 12.1 */
+            animation: fadeOut 0.5s;
 }
 
 
@@ -155,6 +165,9 @@
 .ss-funfact-description {
 	color: #555;
 }
+
+
+/****** FADE IN *******/
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
@@ -176,4 +189,29 @@
 @-ms-keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+
+/****** FADE OUT *******/
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
 }
