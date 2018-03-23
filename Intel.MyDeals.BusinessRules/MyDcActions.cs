@@ -579,7 +579,7 @@ namespace Intel.MyDeals.BusinessRules
             string usersdt = deSDT.AtrbValue.ToString();
             if (usersdt == "") return;
 
-            string dealtype = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);0
+            string dealtype = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             List<BasicDropdown> validSDTs = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == "SERVER_DEAL_TYPE" && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtype || (d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS" || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_TYPES")) && d.ACTV_IND).ToList();
             BasicDropdown match = validSDTs.FirstOrDefault(d => d.DROP_DOWN.ToUpper() == usersdt.ToUpper());
 

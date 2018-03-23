@@ -198,6 +198,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_STATUS = DB.GetReaderOrdinal(rdr, "DEAL_STATUS");
                     int IDX_DEFAULT_FLAG = DB.GetReaderOrdinal(rdr, "DEFAULT_FLAG");
                     int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
+                    int IDX_END_CUST_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUST_RETAIL");
                     int IDX_GRP = DB.GetReaderOrdinal(rdr, "GRP");
                     int IDX_GRP_PRD_NM = DB.GetReaderOrdinal(rdr, "GRP_PRD_NM");
                     int IDX_GRP_PRD_SID = DB.GetReaderOrdinal(rdr, "GRP_PRD_SID");
@@ -207,6 +208,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MC_NULL = DB.GetReaderOrdinal(rdr, "MC_NULL");
                     int IDX_MEET_COMP_ANALYSIS = DB.GetReaderOrdinal(rdr, "MEET_COMP_ANALYSIS");
                     int IDX_MEET_COMP_FRMULA = DB.GetReaderOrdinal(rdr, "MEET_COMP_FRMULA");
+                    int IDX_MEET_COMP_OVERRIDE_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_OVERRIDE_UPD_FLG");
                     int IDX_MEET_COMP_STS = DB.GetReaderOrdinal(rdr, "MEET_COMP_STS");
                     int IDX_MEET_COMP_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_UPD_FLG");
                     int IDX_OBJ_SET_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE");
@@ -237,6 +239,7 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_STATUS = (IDX_DEAL_STATUS < 0 || rdr.IsDBNull(IDX_DEAL_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STATUS),
                             DEFAULT_FLAG = (IDX_DEFAULT_FLAG < 0 || rdr.IsDBNull(IDX_DEFAULT_FLAG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEFAULT_FLAG),
                             ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
+                            END_CUST_RETAIL = (IDX_END_CUST_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUST_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_RETAIL),
                             GRP = (IDX_GRP < 0 || rdr.IsDBNull(IDX_GRP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP),
                             GRP_PRD_NM = (IDX_GRP_PRD_NM < 0 || rdr.IsDBNull(IDX_GRP_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP_PRD_NM),
                             GRP_PRD_SID = (IDX_GRP_PRD_SID < 0 || rdr.IsDBNull(IDX_GRP_PRD_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_PRD_SID),
@@ -246,6 +249,7 @@ namespace Intel.MyDeals.DataLibrary
                             MC_NULL = (IDX_MC_NULL < 0 || rdr.IsDBNull(IDX_MC_NULL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MC_NULL),
                             MEET_COMP_ANALYSIS = (IDX_MEET_COMP_ANALYSIS < 0 || rdr.IsDBNull(IDX_MEET_COMP_ANALYSIS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_ANALYSIS),
                             MEET_COMP_FRMULA = (IDX_MEET_COMP_FRMULA < 0 || rdr.IsDBNull(IDX_MEET_COMP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_FRMULA),
+                            MEET_COMP_OVERRIDE_UPD_FLG = (IDX_MEET_COMP_OVERRIDE_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_OVERRIDE_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_OVERRIDE_UPD_FLG),
                             MEET_COMP_STS = (IDX_MEET_COMP_STS < 0 || rdr.IsDBNull(IDX_MEET_COMP_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_STS),
                             MEET_COMP_UPD_FLG = (IDX_MEET_COMP_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_UPD_FLG),
                             OBJ_SET_TYPE = (IDX_OBJ_SET_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE),
@@ -304,6 +308,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_STATUS = DB.GetReaderOrdinal(rdr, "DEAL_STATUS");
                     int IDX_DEFAULT_FLAG = DB.GetReaderOrdinal(rdr, "DEFAULT_FLAG");
                     int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
+                    int IDX_END_CUST_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUST_RETAIL");
                     int IDX_GRP = DB.GetReaderOrdinal(rdr, "GRP");
                     int IDX_GRP_PRD_NM = DB.GetReaderOrdinal(rdr, "GRP_PRD_NM");
                     int IDX_GRP_PRD_SID = DB.GetReaderOrdinal(rdr, "GRP_PRD_SID");
@@ -313,6 +318,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MC_NULL = DB.GetReaderOrdinal(rdr, "MC_NULL");
                     int IDX_MEET_COMP_ANALYSIS = DB.GetReaderOrdinal(rdr, "MEET_COMP_ANALYSIS");
                     int IDX_MEET_COMP_FRMULA = DB.GetReaderOrdinal(rdr, "MEET_COMP_FRMULA");
+                    int IDX_MEET_COMP_OVERRIDE_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_OVERRIDE_UPD_FLG");
                     int IDX_MEET_COMP_STS = DB.GetReaderOrdinal(rdr, "MEET_COMP_STS");
                     int IDX_MEET_COMP_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_UPD_FLG");
                     int IDX_OBJ_SET_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE");
@@ -343,6 +349,7 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_STATUS = (IDX_DEAL_STATUS < 0 || rdr.IsDBNull(IDX_DEAL_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STATUS),
                             DEFAULT_FLAG = (IDX_DEFAULT_FLAG < 0 || rdr.IsDBNull(IDX_DEFAULT_FLAG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEFAULT_FLAG),
                             ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
+                            END_CUST_RETAIL = (IDX_END_CUST_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUST_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_RETAIL),
                             GRP = (IDX_GRP < 0 || rdr.IsDBNull(IDX_GRP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP),
                             GRP_PRD_NM = (IDX_GRP_PRD_NM < 0 || rdr.IsDBNull(IDX_GRP_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP_PRD_NM),
                             GRP_PRD_SID = (IDX_GRP_PRD_SID < 0 || rdr.IsDBNull(IDX_GRP_PRD_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_PRD_SID),
@@ -352,6 +359,7 @@ namespace Intel.MyDeals.DataLibrary
                             MC_NULL = (IDX_MC_NULL < 0 || rdr.IsDBNull(IDX_MC_NULL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MC_NULL),
                             MEET_COMP_ANALYSIS = (IDX_MEET_COMP_ANALYSIS < 0 || rdr.IsDBNull(IDX_MEET_COMP_ANALYSIS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_ANALYSIS),
                             MEET_COMP_FRMULA = (IDX_MEET_COMP_FRMULA < 0 || rdr.IsDBNull(IDX_MEET_COMP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_FRMULA),
+                            MEET_COMP_OVERRIDE_UPD_FLG = (IDX_MEET_COMP_OVERRIDE_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_OVERRIDE_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_OVERRIDE_UPD_FLG),
                             MEET_COMP_STS = (IDX_MEET_COMP_STS < 0 || rdr.IsDBNull(IDX_MEET_COMP_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_STS),
                             MEET_COMP_UPD_FLG = (IDX_MEET_COMP_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_UPD_FLG),
                             OBJ_SET_TYPE = (IDX_OBJ_SET_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE),
