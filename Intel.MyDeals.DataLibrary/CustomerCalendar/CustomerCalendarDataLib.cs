@@ -3,7 +3,6 @@ using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-using Intel.Opaque.Tools;
 using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.DataLibrary
@@ -34,7 +33,7 @@ namespace Intel.MyDeals.DataLibrary
                 cmd.CUST_MBR_SID = (int)customerMemberSid;
             }
 
-            if (dayInQuarter != null && dayInQuarter > OpaqueConst.SQL_MIN_DATE)
+            if (dayInQuarter != null && dayInQuarter > Intel.Opaque.Tools.OpaqueConst.SQL_MIN_DATE)
             {
                 cmd.DTM = (DateTime)dayInQuarter;
             }

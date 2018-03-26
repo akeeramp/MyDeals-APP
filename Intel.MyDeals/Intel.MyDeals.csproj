@@ -74,6 +74,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.Templating.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.Opaque.Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Intel.Opaque.Tools.dll</HintPath>
+    </Reference>
     <Reference Include="Intel.RulesEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
@@ -253,6 +257,7 @@
     <Compile Include="Controllers\API\DropdownController.cs" />
     <Compile Include="Controllers\API\EmployeeController.cs" />
     <Compile Include="Controllers\API\FileAttachmentsController.cs" />
+    <Compile Include="Controllers\API\JMSQueueController.cs" />
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\QuoteLetterController.cs" />

@@ -185,7 +185,7 @@ namespace Intel.MyDeals.DataLibrary.JMS
         }
 
 
-        public string GetAllMessgae()
+        public string GetAllMessage()
         {
             QueueSession mySession = m_queueConnection.CreateQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -228,7 +228,7 @@ namespace Intel.MyDeals.DataLibrary.JMS
             return messageReceive ?? (messageReceive = "No message in the queue");
         }
 
-        public string RecieveMessage()
+        public string ReceiveMessage()
         {
             string messageReceive = string.Empty;
             QueueConnectionFactory factory = new TIBCO.EMS.QueueConnectionFactory(ServerUrl);

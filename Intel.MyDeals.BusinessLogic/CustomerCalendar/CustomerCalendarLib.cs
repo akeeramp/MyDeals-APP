@@ -1,6 +1,5 @@
 ﻿using System;
 using Intel.MyDeals.Entities;
-using Intel.Opaque.Tools;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 
@@ -33,7 +32,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                                 , short? year
                                                                 , short? quarterNo)
         {
-            if ((dayInQuarter == null || dayInQuarter <= OpaqueConst.SQL_MIN_DATE) && (year == null || quarterNo == null))
+            if ((dayInQuarter == null || dayInQuarter <= Intel.Opaque.Tools.OpaqueConst.SQL_MIN_DATE) && (year == null || quarterNo == null))
             {
                 throw new ArgumentException("You must pass a valid DayInQuarter or a valid QuarterNo and Year to resolve quarter dates.");
             }

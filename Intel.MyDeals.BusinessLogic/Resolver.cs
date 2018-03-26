@@ -38,6 +38,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IMeetCompLib, MeetCompLib>();
             registerService.RegisterType<IUserPreferencesLib, UserPreferencesLib>();
             registerService.RegisterType<IQuoteLetterLib, QuoteLetterLib>();
+            registerService.RegisterType<IJmsLib, JmsLib>();
 
         }
     }

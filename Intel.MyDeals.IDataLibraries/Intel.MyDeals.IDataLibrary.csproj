@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Intel.Opaque.Tools">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Tools.dll</HintPath>
+    </Reference>
     <Reference Include="Intel.RulesEngine">
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
     </Reference>
@@ -55,6 +58,7 @@
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />
+    <Compile Include="JMS\IJmsDataLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterDataLib.cs" />
     <Compile Include="Search\IAdvancedSearchDataLib.cs" />
     <Compile Include="UserPreferences\IUserPreferencesDataLib.cs" />

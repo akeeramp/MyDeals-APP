@@ -35,6 +35,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IMeetCompDataLib, MeetCompDataLib>();
             registerService.RegisterType<IUserPreferencesDataLib, UserPreferencesDataLib>();
             registerService.RegisterType<IQuoteLetterDataLib, QuoteLetterDataLib>();
+            registerService.RegisterType<IJmsDataLib, JmsDataLib>();
         }
     }
 }

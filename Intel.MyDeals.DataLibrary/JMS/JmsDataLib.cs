@@ -1,249 +1,475 @@
-﻿using System;
+﻿extern alias opaqueTools;
+
+using Apache.NMS;
+using Apache.NMS.ActiveMQ;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Xml.Linq;
-using Intel.MyDeals.DataLibrary.JMS;
+using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.Entities;
+using opaqueTools.Intel.Opaque.Tools;
+using Intel.MyDeals.DataAccessLib;
+using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+using System.Linq;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class JmsDataLib
+    public class JmsDataLib : IJmsDataLib
     {
         private string _mIdsid;
         private string jmsServer;
         private string jmsQueue;
         private string jmsUID;
         private string jmsPWD;
+        private Dictionary<string, string> jmsEnvs;
 
-        private JmsQueue _objJmsQueueRequest;
+        private IConnection connection;
+        private ISession session;
+        private IQueue destination;
 
         // This is all communications to our DB as well as SAP
         public JmsDataLib()
         {
             _mIdsid = OpUserStack.MyOpUserToken.Usr.Idsid;
 
-            Dictionary<string, string> jmsEnvs = DataLibrary.GetEnvConfigs();
+            jmsEnvs = DataLibrary.GetEnvConfigs();
             jmsServer = jmsEnvs.ContainsKey("jmsServer") ? jmsEnvs["jmsServer"] : "";
             jmsQueue = jmsEnvs.ContainsKey("jmsQueue") ? jmsEnvs["jmsQueue"] : "";
             jmsUID = jmsEnvs.ContainsKey("jmsUID") ? jmsEnvs["jmsUID"] : "";
             jmsPWD = jmsEnvs.ContainsKey("jmsPWD") ? jmsEnvs["jmsPWD"] : "";
         }
 
-        public string OpenConnectionToJmsQueue()
+        /// <summary>
+        /// Checks if the previous run is completed
+        /// </summary>
+        /// <param name="jobType">The job type</param>
+        public void CheckPreviousRunNotComplete(char jobType)
         {
-            string strError = "";
+            OpLog.Log("JMS - CheckPreviousRunNotComplete");
             try
             {
-                _objJmsQueueRequest = new JmsQueue(jmsServer, jmsUID, jmsPWD, jmsQueue);
-
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue - Opening connection", false);
-                _objJmsQueueRequest.OpenQueueConnection();
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue - Connection Opened", false);
-
+                DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_SAP_CHK_PENDING_JMS_DATA
+                {
+                    btch_upload_type = jobType.ToString()
+                });
             }
-            catch (Exception eX)
+            catch (Exception ex)
             {
-                strError = eX.Message;
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue Error Opening connection : " + strError, false);
+                OpLogPerf.Log(ex);
+                throw;
             }
-
-            return strError;
         }
 
-        public string ReadMessages()
+        /// <summary>
+        /// Creates the pricing records
+        /// </summary>
+        /// <param name="jobType">The job type</param>
+        /// <returns>The pricing records data table</returns>
+        public DataTable CreatePricingRecords(char jobType)
         {
+            OpLog.Log("JMS - CreatePricingRecords");
+            try
+            {
+                return DataAccess.ExecuteDataTable(new Procs.dbo.PR_MYDL_SAP_INS_JMS_DATA
+                {
+                    btch_upload_type = jobType.ToString()
+                });
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets the pricing records xml
+        /// </summary>
+        /// <param name="jmsId"></param>
+        /// <param name="groupId"></param>
+        /// <returns>The pricing records xml</returns>
+        public string GetPricingRecordsXml(int jmsId, int groupId)
+        {
+            OpLog.Log("JMS - GetPricingRecordsXml");
+
+            var xmlRecords = string.Empty;
+            var cmd = new Procs.dbo.PR_SAP_GET_RCDS_XML
+            {
+                jms_id = jmsId,
+                group_id = groupId
+            };
+            try
+            {
+                var ret = DataAccess.ExecuteScalar(cmd);
+                if (ret == null || ret == DBNull.Value)
+                {
+                    return String.Empty;
+                }
+                xmlRecords = ret.ToString();
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            if (!String.IsNullOrEmpty(xmlRecords))
+            {
+                xmlRecords = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + xmlRecords.Replace("dummytemp", "ns0:PricingData");
+            }
+
+            return xmlRecords;
+        }
+
+        /// <summary>
+        /// Gets the Group/JMS Id Pairs
+        /// </summary>
+        /// <returns>First = Group Id, Second = JMS Id</returns>
+        public string GetMaxGroupId()
+        {
+            OpLog.Log("JMS - GetMaxGroupId");
+            PairList<int> ret = new PairList<int>();
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_MAX_GRP_ID_SAP_JMS_MSTR()))
+                {
+                    int IDX_JMS_GRP_ID = rdr.GetOrdinal("JMS_GRP_ID");
+                    int IDX_JMS_ID = rdr.GetOrdinal("JMS_ID");
+
+                    while (rdr.Read())
+                    {
+                        int grp_id = 0;
+                        int jms_id = 0;
+
+                        if (
+                            Int32.TryParse(String.Format("{0}", rdr[IDX_JMS_GRP_ID]), out grp_id)
+                            &&
+                            Int32.TryParse(String.Format("{0}", rdr[IDX_JMS_ID]), out jms_id)
+                            )
+                        {
+                            if (grp_id > 0 && jms_id > 0)
+                            {
+                                ret.Add(grp_id, jms_id);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return String.Join("|", ret.Select(r => String.Format("{0};{1}", r.First, r.Second)));
+        }
+
+        /// <summary>
+        /// Sends the pricing records XML to JMS Queue
+        /// </summary>
+        /// <param name="strData">The pricing records XML</param>
+        /// <returns></returns>
+        public string SendDataToJmsQueue(string strData)
+        {
+            OpLog.Log("JMS - SendDataToJmsQueue");
             string strError = "";
             try
             {
-                return _objJmsQueueRequest.GetAllMessgae();
+                var data = new List<string>();
+                data.Add(strData);
+                Publish(jmsServer, jmsUID, jmsPWD, jmsQueue, data);
             }
             catch (Exception ex)
             {
                 strError = ex.Message;
+                OpLogPerf.Log(ex);
             }
             return strError;
         }
 
-        string SendDataToJmsQueue(string strData)
+        /// <summary>
+        /// Updates records and notifies the errors
+        /// </summary>
+        /// <param name="errorFlag">The errorFlag</param>
+        /// <param name="jobType">The jobType</param>
+        /// <param name="csvFilePath">The csvFilePath</param>
+        /// <param name="errorDetail">The error Detail</param>
+        public void UpdateRecordStagesAndNotifyErrors(int errorFlag, char jobType, string csvFilePath, string errorDetail)
         {
-            string strError = "";
+            OpLog.Log("JMS - UpdateRecordStagesAndNotifyErrors");
             try
             {
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue - Sending data to SAP", false);
-                _objJmsQueueRequest.SendData(strData);
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue - Completed sending data to SAP", false);
+                DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_SAP_UPLOAD_ERR
+                {
+                    btch_upload_type = jobType.ToString(),
+                    error_flag = errorFlag,
+                    error_detail = errorDetail
+                });
             }
             catch (Exception ex)
             {
-                strError = ex.Message;
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue Error Sending Data : " + strError, false);
+                OpLogPerf.Log(ex);
+                throw;
             }
-            return strError;
         }
 
-        public string CloseConnectionToJmsQueue()
+        /// <summary>
+        /// Inserts the Upload Errors
+        /// </summary>
+        /// <param name="groupLineItemPairs">The JMS Id and Group Id pairs</param>
+        public void InsertUploadErrorTable(Pair<int, int>[] pair)
         {
-            string strError = "";
+            OpLog.Log("JMS - InsertUploadErrorTable");
+            List<Exception> exes = new List<Exception>();
+
             try
             {
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue - Closing connection", false);
-                _objJmsQueueRequest.CloseQueueConnection();
+                foreach (var kvp in pair)
+                {
+                    try
+                    {
+                        DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_SAP_INS_UPLD_ERR
+                        {
+                            jms_grp_id = kvp.First,
+                            jms_grp_ln_itm_id = kvp.Second
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        exes.Add(ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                strError = ex.Message;
-                //clsUtility.LogSQL(m_Idsid, "JMSQueue Error Closing connection : " + strError, false);
+                OpLogPerf.Log(ex);
+                throw;
             }
-            return strError;
-        }
 
-        // TODO - add in DB side - gather data and load XML object.  Straight DB call here
-        // TODO - Add in build XML here
-
-        public DataTable GetData()
-        {
-            DataTable dt = new DataTable();
-            dt.Clear();
-            dt.Columns.Add("AMT"); //CHNL_CD, CLNT_CD, CRE_DT, CRE_IDSID, CUST_ID, DEAL_ID, EXPR_DT, JMS_GRP_ID, JMS_GRP_LN_ITM_ID, JMS_ID, JMS_LN_ITM_STS_CD, 
-            dt.Columns.Add("CUST_GRP_CD"); //LAST_MOD_DT, LAST_MOD_IDSID, 
-            dt.Columns.Add("DUTY_EXCLD_CD");
-            dt.Columns.Add("FR_DT");
-            dt.Columns.Add("TO_DT");
-            dt.Columns.Add("FRCST_ALTR_ID");
-            dt.Columns.Add("MTRL_ID");
-            dt.Columns.Add("SAP_ERR_MSG");
-            dt.Columns.Add("SAP_SLS_ORG");
-            dt.Columns.Add("SOLD_TO_ID");
-            dt.Columns.Add("SEQUENCE_NO");
-            DataRow ravi = dt.NewRow();
-            ravi["AMT"] = "314";
-            ravi["CUST_GRP_CD"] = "EZ";
-            ravi["SAP_SLS_ORG"] = "EU01";
-            ravi["FR_DT"] = "20170124"; // date format as SAP expects YYYMMDD
-            ravi["TO_DT"] = "20170125"; // date format as SAP expects YYYMMDD
-            ravi["DUTY_EXCLD_CD"] = "";
-            ravi["FRCST_ALTR_ID"] = "CM8064401831400";
-            ravi["SOLD_TO_ID"] = "";
-            ravi["SEQUENCE_NO"] = "DRQ00000083100020000000001"; // Known working sample DRQ00000031950010000000001 
-            dt.Rows.Add(ravi);
-
-            DataRow ravi2 = dt.NewRow();
-            ravi2["AMT"] = "108";
-            ravi2["CUST_GRP_CD"] = "EZ";
-            ravi2["SAP_SLS_ORG"] = "EU01";
-            ravi2["FR_DT"] = "20170110"; // date format as SAP expects YYYMMDD
-            ravi2["TO_DT"] = "20170116"; // date format as SAP expects YYYMMDD
-            ravi2["DUTY_EXCLD_CD"] = "Z";
-            ravi2["FRCST_ALTR_ID"] = "SSDSC2BB480G401";
-            ravi2["SOLD_TO_ID"] = "";
-            ravi2["SEQUENCE_NO"] = "DRQ00000083100020000000002"; // Known working sample DRQ00000031950010000000001 
-            dt.Rows.Add(ravi2);
-
-            return dt;
-        }
-
-        public string MakeXml(DataTable dt)
-        {
-            //XNamespace ns = "http://www.intel.com/xi/OrderToCash/Pricing1.1";
-            //XAttribute prefix = new XAttribute(XNamespace.Xmlns + "ns0", ns);
-            //XAttribute feedtype = new XAttribute("FeedType", "IDMS_Pricing_Uploads");
-            //XAttribute transactionGuid = new XAttribute("GUID", new Guid());
-            //XAttribute numRecords = new XAttribute("NumberOfRecords", 1);
-
-            //var doc = new XDocument(
-            //    new XDeclaration("1.0", "UTF-8", "yes"),
-            //    new XElement(ns + "PricingData", prefix, feedtype, transactionGuid));
-
-            // Build Pricing Data inner XML
-            XElement pricingData = new XElement("PricingData");
-
-            // Build Header
-            XElement header = new XElement("header",
-                new XElement("toolID", "DRQ"),
-                new XElement("conditionType", "YCS2"),
-                new XElement("operation", "U")
-                );
-
-            // Build Items
-            List<XElement> itemsList = new List<XElement>();
-            foreach (DataRow dataRow in dt.Rows)
+            if (exes != null && exes.Count > 0)
             {
-                XElement newItem = new XElement("item");
-
-                newItem.Add(new XElement("salesOrg", dataRow["SAP_SLS_ORG"]));
-                newItem.Add(new XElement("custGroup", dataRow["CUST_GRP_CD"]));
-                newItem.Add(new XElement("condValue", dataRow["AMT"]));
-                newItem.Add(new XElement("fromDate", dataRow["FR_DT"]));
-                newItem.Add(new XElement("toDate", dataRow["TO_DT"]));
-                newItem.Add(new XElement("exclusionInd", dataRow["DUTY_EXCLD_CD"]));
-                newItem.Add(new XElement("prodHier", dataRow["FRCST_ALTR_ID"]));
-                newItem.Add(new XElement("customer", dataRow["SOLD_TO_ID"]));
-                newItem.Add(new XElement("sequenceNo", dataRow["SEQUENCE_NO"]));
-
-                itemsList.Add(newItem);
+                var ae = new AggregateException(exes.ToArray());
+                throw ae;
             }
-
-            // Append to PricingData
-            pricingData.Add(header);
-            foreach (XElement xElement in itemsList)
-            {
-                pricingData.Add(xElement);
-            }
-
-            // Finalize the XML Package
-            XNamespace ns = "http://www.intel.com/xi/OrderToCash/Pricing1.1";
-            XAttribute prefix = new XAttribute(XNamespace.Xmlns + "ns0", ns);
-            XAttribute feedtype = new XAttribute("FeedType", "IDMS_Pricing_Uploads");
-            XAttribute transactionGuid = new XAttribute("GUID", new Guid());
-            XAttribute numRecords = new XAttribute("NumberOfRecords", dt.Rows.Count);
-
-            var doc = new XDocument(
-                new XDeclaration("1.0", "UTF-8", "yes"),
-                new XElement(ns + "PricingData", prefix, feedtype, transactionGuid, numRecords));
-
-            doc.Root?.Add(pricingData);
-
-            return doc.ToString(); // If you _must_ have a string
-
-            //< ns0 : PricingData xmlns: ns0 = "http://www.intel.com/xi/OrderToCash/Pricing1.1" >
-            //    < PricingData >
-            //    < header >
-            //    < toolID > TPM </ toolID >
-            //    < conditionType > YMS2 </ conditionType >
-            //    < operation > U </ operation >
-            //    </ header >
-            //    < item >
-            //    < sequenceNo > TPM00000082100020000000001 </ sequenceNo >
-            //    < materialNo />
-            //    < plant />
-            //    < salesOrg />
-            //    < custGroup />
-            //    < dChannel > 01 </ dChannel >
-            //    < customer />
-            //    < docCurrency />
-            //    < condValue > 65.00 </ condValue >
-            //    < fromDate > 20161108 </ fromDate >
-            //    < toDate > 99991231 </ toDate >
-            //    < exclusionInd > Y </ exclusionInd >
-            //    < prodHier > LAD201GLY2A </ prodHier >
-            //    < shipToParty />
-            //    < destCountry />
-            //    < materialGrp />
-            //    < incoterms />
-            //    < expirtyDate />
-            //    < soldToParty />
-            //    < materialType />
-            //    < paymentTerms />
-            //    < prodGroup />
-            //    < paymentTerms2 />
-            //    < depCountry />
-            //    < route />
-            //    </ item >
-            //    </ PricingData >
-            //    </ ns0:PricingData >
-
         }
 
+        /// <summary>
+        /// Deletes the upload errors
+        /// </summary>
+        public void DeleteUploadErrorTable()
+        {
+            OpLog.Log("JMS - DeleteUploadErrorTable");
+            try
+            {
+                DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_SAP_DEL_UPLD_ERR());
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
 
+        /// <summary>
+        /// /
+        /// </summary>
+        /// <param name="exceptionDatetime"></param>
+        /// <param name="exceptionType"></param>
+        /// <param name="exceptionMessage"></param>
+        /// <param name="exceptionSource"></param>
+        /// <param name="exceptionStackTrace"></param>
+        public void InsertExceptionData(
+             DateTime exceptionDatetime,
+             string exceptionType,
+             string exceptionMessage,
+             string exceptionSource,
+             string exceptionStackTrace)
+        {
+            OpLog.Log("JMS - InsertExceptionData");
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_SAP_INS_ERR_LOG_JMS_Q_SENDER
+                {
+                    excptn_stck_trce = (String.IsNullOrEmpty(exceptionStackTrace) ? "No trace information passed" : exceptionStackTrace),
+                    excptn_datetime = exceptionDatetime,
+                    excptn_typ = exceptionType,
+                    excptn_msg = exceptionMessage,
+                    excptn_src = exceptionSource
+                };
+                DataAccess.ExecuteNonQuery(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+        }
+
+        public void Publish(string brokerURI,
+                       string userName,
+                       string password,
+                       string queueName,
+                       List<string> data)
+        {
+            OpLog.Log("JMS - Publish");
+            AcknowledgementMode ackMode = AcknowledgementMode.ClientAcknowledge;
+            try
+            {
+                if (data.Count == 0)
+                {
+                    throw new Exception("Error: must specify at least one message text\n");
+                }
+
+                string providerUrl = ModifyURLForCertIgnore(brokerURI);
+
+                ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
+
+                // create the connection
+                connection = queueFactory.CreateConnection(userName, password);
+
+                // set the exception listener
+                connection.ExceptionListener += new ExceptionListener(OnException);
+
+                // create the session
+                session = connection.CreateSession(ackMode);
+
+                // create the destination
+                destination = session.GetQueue(queueName);
+
+                // create the producer
+                IMessageProducer msgProducer = session.CreateProducer(destination);
+
+                ITextMessage msg;
+
+                // publish messages
+                for (int i = 0; i < data.Count; i++)
+                {
+                    // create text message
+                    msg = session.CreateTextMessage();
+
+                    // set message text
+                    msg.Text = (String)data[i];
+
+                    // set/modify JMS Headers
+                    string correlationId = Guid.NewGuid().ToString();
+                    msg.NMSCorrelationID = correlationId;
+                    msg.NMSType = "Text";
+
+                    // publish message
+                    msgProducer.Send(msg);
+                }
+
+                // close the connection
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                OpLogPerf.Log(e);
+                throw new Exception("Exception in SAP queue sender: " + e.Message);
+            }
+        }
+
+        public void OnException(Exception e)
+        {
+            // print the connection exception status
+            OpLogPerf.Log("JMS - Connection Exception: " + e.Message);
+        }
+
+        /// <summary>
+        /// Test Connections
+        /// </summary>
+        /// <param name="brokerURI"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="queueName"></param>
+        /// <param name="data"></param>
+        public Dictionary<string, string> TestConnection(bool noSAP, string brokerURI,
+                       string userName,
+                       string password,
+                       string queueName)
+        {
+            OpLog.Log("JMS - TestConnection");
+            if (string.IsNullOrEmpty(brokerURI))
+            {
+                brokerURI = jmsServer;
+                userName = jmsUID;
+                password = jmsPWD;
+                queueName = jmsQueue;
+            }
+            if (noSAP)
+            {
+                return jmsEnvs;
+            }
+            AcknowledgementMode ackMode = AcknowledgementMode.ClientAcknowledge;
+            try
+            {
+                string providerUrl = ModifyURLForCertIgnore(brokerURI);
+
+                ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
+
+                // create the connection
+                connection = queueFactory.CreateConnection(userName, password);
+
+                // set the exception listener
+                connection.ExceptionListener += new ExceptionListener(OnException);
+
+                // create the session
+                ISession session = connection.CreateSession(ackMode);
+
+                IQueue destination = session.GetQueue(queueName);
+
+                IMessageProducer msgProducer = session.CreateProducer(destination);
+
+                msgProducer.Close();
+
+                session.Close();
+
+                connection.Close();
+
+                return jmsEnvs;
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Constructs the Fail over url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns>Failover url</returns>
+        private string ModifyURLForCertIgnore(string url)
+        {
+            string certIgnoreSuffix = "?transport.acceptInvalidBrokerCert=true";
+            string modifiedURL = "";
+            if (!String.IsNullOrEmpty(url))
+            {
+                if (url.ToLower().Contains("ssl://"))
+                {
+                    if (url.ToLower().Contains("failover"))
+                    {
+                        int indexofSeparator = url.IndexOf(',');
+                        modifiedURL = url.Insert(indexofSeparator, certIgnoreSuffix);
+                        modifiedURL = modifiedURL.Insert(modifiedURL.LastIndexOf(')'), certIgnoreSuffix);
+                    }
+                    else
+                    {
+                        //only one server name
+                        modifiedURL = url.Insert(url.Length, certIgnoreSuffix);
+                    }
+                }
+                else
+                    modifiedURL = url;
+            }
+            else
+            {
+                throw new Exception("URI is empty");
+            }
+
+            return modifiedURL;
+        }
     }
 }

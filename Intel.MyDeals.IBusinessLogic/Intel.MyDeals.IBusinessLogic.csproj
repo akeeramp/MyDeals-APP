@@ -34,10 +34,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'itt|AnyCPU'">
+    <OutputPath>bin\itt\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'utt|AnyCPU'">
+    <OutputPath>bin\utt\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Intel.Opaque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
+    </Reference>
+    <Reference Include="Intel.Opaque.Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Intel.Opaque.Tools.dll</HintPath>
     </Reference>
     <Reference Include="Intel.RulesEngine">
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
@@ -60,6 +70,7 @@
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />
+    <Compile Include="JMS\IJmsLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
     <Compile Include="Tenders\ITendersLib.cs" />
