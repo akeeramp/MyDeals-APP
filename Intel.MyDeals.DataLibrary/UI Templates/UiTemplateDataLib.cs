@@ -538,7 +538,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 100,
-                Label = "Net Kit Price *",
+                Label = "Net Kit Price (ECAP Price only)",
                 IsDimKey = false,
                 DataType = "number",
                 Format = "{0:c}"
@@ -1314,7 +1314,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 5,
                 AtrbCd = "KIT_ECAP",
-                Label = "Net KIT Price",
+                Label = "Net KIT Price (ECAP Price only)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
@@ -1329,7 +1329,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 5,
                 AtrbCd = "SUBKIT_ECAP",
-                Label = "Net Subkit Price",
+                Label = "Net Subkit Price (ECAP Price only)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
