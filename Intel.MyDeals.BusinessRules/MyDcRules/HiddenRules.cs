@@ -73,9 +73,6 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[]
                             {
                                 AttributeCodes.RETAIL_CYCLE,
-                                //AttributeCodes.RETAIL_PULL,
-                                //AttributeCodes.RETAIL_PULL_USR_DEF,
-                                //AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
                                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
                                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,
@@ -84,21 +81,11 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.COST_TEST_OVERRIDE,
                                 AttributeCodes.COST_TEST_RESULT,
                                 AttributeCodes.COST_TYPE_USED,
-                                //AttributeCodes.COMP_SKU,
-                                //AttributeCodes.COMP_SKU_OTHR,
-                                //AttributeCodes.COMPETITIVE_PRICE,
-                                //AttributeCodes.COMP_BENCH,
                                 AttributeCodes.IA_BENCH,
-                                //AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
-                                //AttributeCodes.PRD_COST,
-                                AttributeCodes.YCS2_OVERLAP_OVERRIDE,
                                 AttributeCodes.CUST_MBR_SID,
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.YCS2_OVERLAP_OVERRIDE,
-                                //AttributeCodes.PRD_COST,
-                                AttributeCodes.COST_TYPE_USED,
-                                //AttributeCodes.RETAIL_PULL,
-                                //AttributeCodes.RETAIL_PULL_USR_DEF
+                                AttributeCodes.COST_TYPE_USED
                             }
                         }
                     }
