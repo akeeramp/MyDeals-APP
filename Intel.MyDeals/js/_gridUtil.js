@@ -949,7 +949,6 @@ gridUtils.tenderDim = function (dataItem, field, format) {
     }
 
     function compare(a, b) {
-        debugger;
         if (a.last_nom < b.last_nom)
             return -1;
         if (a.last_nom > b.last_nom)

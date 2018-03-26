@@ -169,10 +169,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
 
-    $scope.refreshContractDataIfNeeded = function (e, executedFromBtn) {
+    $scope.$on('ExecutionPctMctComplete', function(event, executedFromBtn) {
         if (!!executedFromBtn && executedFromBtn === true) $scope.ranManuallySincePageLoaded = true;
 
-        objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
+        objsetService.readContract($scope.root.contractData.DC_ID).then(function(data) {
             var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
             var newContractData = $scope.root.initContract(data);
 
@@ -204,7 +204,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
             }
         });
-    }
+    });
 
     $scope.pendingChange = function (e) {
         $scope.togglePending(true);
@@ -225,7 +225,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.root.deleteContract();
 
         return;
-        debugger;
         // TODO need to check if there are any tracker numbers
 
         kendo.confirm("Are you sure that you want to delete this contract?").then(function () {

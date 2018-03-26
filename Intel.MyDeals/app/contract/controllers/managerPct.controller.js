@@ -117,7 +117,7 @@
             }
         }
 
-        $scope.refreshContractDataIfNeeded = function (e, executedFromBtn) {
+        $scope.$on('ExecutionPctMctComplete', function (event, executedFromBtn) {
             objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
                 var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
                 var newContractData = $scope.root.initContract(data);
@@ -144,7 +144,7 @@
 
                 }
             });
-        }
+        });
 
         $scope.gotoContractEditor = function (ps, pt) {
             root.gotoContractEditor(ps, pt);

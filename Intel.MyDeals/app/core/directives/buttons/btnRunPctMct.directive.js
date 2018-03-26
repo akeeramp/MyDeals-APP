@@ -2,16 +2,15 @@
     .module('app.core')
     .directive('btnRunPctMct', btnRunPctMct);
 
-btnRunPctMct.$inject = ['logger', 'objsetService', '$timeout'];
+btnRunPctMct.$inject = ['logger', 'objsetService', '$timeout', '$state'];
 
-function btnRunPctMct(logger, objsetService, $timeout) {
+function btnRunPctMct(logger, objsetService, $timeout, $state) {
     return {
         scope: {
             root: '=ngModel',
             btnStyle: '=?btnStyle',
             btnClass: '=?btnClass',
             contractId: '=contractId',
-            onComplete: '=?onComplete',
             lastRun: '=?lastRun',
             btnType: '=?btnType',
             enabled: '=?enabled',
@@ -68,7 +67,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                     var dsplNum = hh;
                     var dsplMsg = " hours ago";
                     $scope.needToRunPct = $scope.forceRun || ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
-
+                    
                     if (dsplNum < 1) {
                         dsplNum = mm;
                         dsplMsg = " mins ago";
@@ -89,7 +88,6 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 }
             }
 
-
             $timeout(function () {
                 if ($scope.needToRunPct && $scope.enabled) {
                     $scope.$broadcast('runPctMct', {});
@@ -105,12 +103,12 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 if (!$scope.enabled) return;
 
                 $(".iconRunPct").addClass("fa-spin grn");
-                if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctRunning', {});
+                if ($scope.runViaButton && $scope.curState === $state.current.name) $scope.root.$broadcast('btnPctMctRunning', {});
 
                 objsetService.runPctContract($scope.contractId).then(
                     function (e) {
                         if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
-                        if (!!$scope.onComplete) $scope.onComplete(e, $scope.runViaButton);
+                        $scope.root.$broadcast('ExecutionPctMctComplete', $scope.runViaButton);
 
                         $timeout(function () {
                             $scope.root.setBusy("", "");
@@ -122,6 +120,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                         if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
                         $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
                         logger.error("Could not run Cost Test.", response, response.statusText);
+
                         $timeout(function () {
                             $scope.root.setBusy("", "");
                             $(".iconRunPct").removeClass("fa-spin grn");

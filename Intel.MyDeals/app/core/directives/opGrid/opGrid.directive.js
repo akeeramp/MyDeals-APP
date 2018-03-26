@@ -1859,7 +1859,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                     .then(function (response) {
-                        debugger;
                         if (response.data[0].PRICING_TABLES > 0) {
                             // Change in Deal Editor
                             // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
