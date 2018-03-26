@@ -140,25 +140,36 @@
   </Target>
   -->
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
-  <Target Name="App_config_AfterCompile" AfterTargets="AfterCompile" Condition="Exists('App.$(Configuration).config')">
+  <Target Name="App_config_AfterCompile" AfterTargets="AfterBuild">
     <!--Generate transformed app config in the intermediate directory-->
-    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)$(TargetFileName).config" Transform="App.$(Configuration).config" />
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\Dev\" />
-
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\dev\$(TargetFileName).config" Transform="App.dev.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\itt\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\itt\$(TargetFileName).config" Transform="App.itt.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\utt\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\utt\$(TargetFileName).config" Transform="App.utt.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cons\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cons\$(TargetFileName).config" Transform="App.cons.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\perf\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\perf\$(TargetFileName).config" Transform="App.perf.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\ciar\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\ciar\$(TargetFileName).config" Transform="App.ciar.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cinr\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cinr\$(TargetFileName).config" Transform="App.cinr.config" />
     <!--Force build process to use the transformed configuration file from now on.-->
-    <ItemGroup>
+    <!--<ItemGroup>
       <AppConfigWithTargetPath Remove="App.config" />
       <AppConfigWithTargetPath Include="$(IntermediateOutputPath)$(TargetFileName).config">
         <TargetPath>$(TargetFileName).config</TargetPath>
       </AppConfigWithTargetPath>
-    </ItemGroup>
+    </ItemGroup>-->
   </Target>
   <!--Override After Publish to support ClickOnce AfterPublish. Target replaces the untransformed config file copied to the deployment directory with the transformed one.-->
-  <Target Name="App_config_AfterPublish" AfterTargets="AfterPublish" Condition="Exists('App.$(Configuration).config')">
+  <!--<Target Name="App_config_AfterPublish" AfterTargets="AfterPublish" Condition="Exists('App.$(Configuration).config')">
     <PropertyGroup>
       <DeployedConfig>$(_DeploymentApplicationDir)$(TargetName)$(TargetExt).config$(_DeploymentFileMappingExtension)</DeployedConfig>
     </PropertyGroup>
-    <!--Publish copies the untransformed App.config to deployment directory so overwrite it-->
+    --><!--Publish copies the untransformed App.config to deployment directory so overwrite it--><!--
     <Copy Condition="Exists('$(DeployedConfig)')" SourceFiles="$(IntermediateOutputPath)$(TargetFileName).config" DestinationFiles="$(DeployedConfig)" />
-  </Target>
+  </Target>-->
 </Project>
