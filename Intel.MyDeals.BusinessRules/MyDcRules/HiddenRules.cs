@@ -85,7 +85,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CUST_MBR_SID,
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.YCS2_OVERLAP_OVERRIDE,
-                                AttributeCodes.COST_TYPE_USED
+                                AttributeCodes.COST_TYPE_USED,
                             }
                         }
                     }
