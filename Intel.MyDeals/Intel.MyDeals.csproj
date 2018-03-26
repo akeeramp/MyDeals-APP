@@ -392,6 +392,7 @@
     <Content Include="app\contract\controllers\managerDealType.controller.js" />
     <Content Include="app\contract\controllers\manager.controller.js" />
     <Content Include="app\contract\controllers\datePickerModal.controller.js" />
+    <Content Include="app\contract\controllers\managerExcludeGroups.controller.js" />
     <Content Include="app\contract\controllers\managerTimeline.controller.js" />
     <Content Include="app\contract\controllers\excludeDealGroupMultiSelect.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModal.controller.js" />
@@ -409,6 +410,7 @@
     <Content Include="app\contract\partials\contractExportHeader.html" />
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
     <Content Include="app\contract\partials\contractSummaryOverlapping.html" />
+    <Content Include="app\contract\partials\contractSummaryExcludeGroups.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
     <Content Include="app\contract\partials\lnavFlowMini.html" />
     <Content Include="app\contract\partials\ptModals\datePickerModal.html" />

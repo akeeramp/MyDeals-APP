@@ -237,6 +237,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetWipExclusionFromContract/{id}")]
+        public OpDataCollectorFlattenedDictList GetWipExclusionFromContract(int id)
+        {
+            return SafeExecutor(() => _contractsLib.GetWipExclusionFromContract(id)
+                , $"Unable to get Exclusion Deals {id}"
+            );
+        }
 
         [Authorize]
         [Route("UpdateAtrbValue/{custId}/{contractId}")]

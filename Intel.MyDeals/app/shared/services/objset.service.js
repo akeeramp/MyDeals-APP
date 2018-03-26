@@ -42,6 +42,8 @@ function objsetService($http, dataService, logger, $q, $location) {
         rollBackPricingTable: rollBackPricingTable,
         cancelPricingTable: cancelPricingTable,
 
+        updateWipDeals: updateWipDeals,
+
         readTender: readTender,
         readTenderChildren: readTenderChildren,
 
@@ -54,6 +56,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
         readWipFromContract: readWipFromContract,
+        readWipExclusionFromContract: readWipExclusionFromContract,
         updateAtrbValue: updateAtrbValue,
 
         getWipDealsByPtr: getWipDealsByPtr,
@@ -142,7 +145,7 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function updatePricingTable(custId, contractId, pt) {
         return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId + '/' + contractId, [pt]);
-    }
+    }    
     function deletePricingTable(custId, contractId, pt) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId + '/' + contractId, [pt]);
     }
@@ -180,6 +183,12 @@ function objsetService($http, dataService, logger, $q, $location) {
         return dataService.post(apiBaseEmailUrl + 'ActionChanges', data);
     }
 
+
+    // #### WIP DEAL ####
+    function updateWipDeals(custId, contractId, wips) {
+        return dataService.post(apiBasePricingTableUrl + 'UpdateWipDeals/' + custId + '/' + contractId, wips);
+    }
+
     // #### CONTRACT CRUD ####
 
     function updateContractAndCurPricingTable(custId, contractId, data, forceValidation, forcePublish, delPtr) {
@@ -198,6 +207,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function readWipFromContract(id) {
         return dataService.get(apiBaseContractUrl + 'GetWipFromContract/' + id);
+    }
+    function readWipExclusionFromContract(id) {
+        return dataService.get(apiBaseContractUrl + 'GetWipExclusionFromContract/' + id);
     }
     function updateAtrbValue(custId, contractId, data) {
         return dataService.post(apiBaseContractUrl + "UpdateAtrbValue/" + custId + '/' + contractId, data);

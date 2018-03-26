@@ -42,6 +42,7 @@
             $("#contractReviewDiv").removeClass("active");
             $("#dealReviewDiv").removeClass("active");
             $("#historyDiv").removeClass("active");
+            $("#groupExclusionDiv").removeClass("active");
             $scope.$apply();
         }, 50);
 
@@ -515,6 +516,10 @@
             return gridPctUtils.getResultMapping(result, flg, '', className, style);
         }
 
+        $scope.gotoExclude = function() {
+            $state.go('contract.grouping');
+        }
+
         // Global Settings
         var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_FLG', '', 'font-size: 20px !important;', INCMPL_COST_TEST_RSN) #" : "&nbsp;";
         $scope.cellColumns = {
@@ -948,6 +953,15 @@
         }
 
         $scope.calcNeedToRunStatus();
+
+        $timeout(function () {
+            var html = '<li ng-click="gotoExclude()" class="k-item k-state-default"><span unselectable="on" class="k-link" style="width: 150px;" title="Click to Exclude Deals in Groupings">Grouping Exclusions</span></li>';
+            var template = angular.element(html);
+            var linkFunction = $compile(template);
+            linkFunction($scope);
+
+            $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
+        }, 500);
 
     }
 })();

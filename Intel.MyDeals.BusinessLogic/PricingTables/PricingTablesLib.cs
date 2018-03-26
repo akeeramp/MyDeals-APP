@@ -189,6 +189,19 @@ namespace Intel.MyDeals.BusinessLogic
             //if (data["DC_ID"])
             return _dataCollectorLib.SavePackets(dataDictList, savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
+        
+        public OpDataCollectorFlattenedDictList UpdateWipDeals(OpDataCollectorFlattenedList data, SavePacket savePacket)
+        {
+            List<int> dcIds = data.Select(opDataCollectorFlattenedItem => int.Parse(opDataCollectorFlattenedItem[AttributeCodes.DC_ID].ToString())).ToList();
+            OpDataCollectorFlattenedDictList dataDictList = new OpDataCollectorFlattenedDictList
+            {
+                [OpDataElementType.WIP_DEAL] = data
+            };
+            savePacket.ForcePublish = true;
+            savePacket.SourceEvent = OpDataElementType.WIP_DEAL.ToString();
+            savePacket.ValidateIds = dcIds;
+            return _dataCollectorLib.SavePackets(dataDictList, savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        }
 
         public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken)
         {

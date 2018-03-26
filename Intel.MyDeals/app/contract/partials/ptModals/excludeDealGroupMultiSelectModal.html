@@ -54,6 +54,7 @@
                     <div class="clearboth"></div>
                     <textarea ng-model="vm.returnVal.DEAL_GRP_CMNT"
                               rows="6"
+                              ng-disabled="!vm.hasCheckbox"
                               style="height: 100%; width: 100%"></textarea>
 				</div>
 			</div>
@@ -73,9 +74,19 @@
         height: calc(85vh - 400px) !important;
         overflow: auto;
     }    
+    .k-grid .k-alt {
+        background-color: #ffffff;
+    }
 
     #ExcldGrid.k-grid .k-grid-content {
         height: calc(85vh - 440px) !important;
     }    
+
+    #ExcldGrid tr.tr-disabled td span.ng-binding, #ExcldGrid tr.tr-disabled td {
+        color: #aaaaaa;
+    }
+    #ExcldGrid tr.tr-disabled {
+        background-color: #f4f4f4;
+    }
     
 </style>

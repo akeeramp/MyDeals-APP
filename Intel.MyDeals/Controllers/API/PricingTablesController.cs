@@ -297,6 +297,23 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("UpdateWipDeals/{custId}/{contractId}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedDictList UpdateWipDeals(int custId, int contractId, OpDataCollectorFlattenedList wipDeals)
+        {
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - UpdateWipDeals")
+            {
+                CustId = custId,
+                ContractId = contractId
+            });
+
+            return SafeExecutor(() => _pricingTablesLib.UpdateWipDeals(wipDeals, savePacket)
+                , "Unable to save the Pricing Table"
+            );
+        }
+        
     }
 
 }

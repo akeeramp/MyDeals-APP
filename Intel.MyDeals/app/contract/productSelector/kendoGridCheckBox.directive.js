@@ -78,7 +78,10 @@
             var items = query.filter(filters).data;
             items.forEach(function (item) {
                 // When select all clicked do not select the products with CAP range for ECAP deal
-                if ($scope.vm.dealType == 'ECAP' && (item.CAP !== undefined && item.CAP.indexOf('-') > -1)) { 
+                if ($scope.vm.dealType === 'ECAP' && (item.CAP !== undefined && item.CAP.indexOf('-') > -1)) {
+                    return;
+                }
+                if (item._disabled !== undefined && item._disabled !== null && item._disabled === true) {
                     return;
                 }
                 item.selected = ev.target.checked;

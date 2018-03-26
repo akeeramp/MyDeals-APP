@@ -8,9 +8,9 @@
 
 
     SetRequestVerificationToken.$inject = ['$http'];
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary'];
 
-    function ContractController($scope, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    function ContractController($scope, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary) {
         // store template information
         $scope.templates = $scope.templates || templateData.data;
         $scope.constants = contractManagerConstants;
@@ -46,6 +46,7 @@
         else if ($state.current.name.indexOf("contract.deals") >= 0) $scope.flowMode = "Manage";
         else if ($state.current.name.indexOf("contract.export") >= 0) $scope.flowMode = "Manage";
         else if ($state.current.name.indexOf("contract.pct") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.grouping") >= 0) $scope.flowMode = "Manage";
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
 
@@ -64,11 +65,12 @@
         $scope.C_HOLD_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA" || window.usrRole === "DA");
         $scope.C_DEL_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA");
         $scope.CAN_VIEW_EXPORT = (window.isDeveloper || window.isTester);
+        $scope.CAN_VIEW_EXCLUDE_GROUPS = (window.usrRole === "GA" && window.isSuper);
         $scope.CAN_VIEW_ALL_DEALS = (window.isDeveloper || window.isTester);
         $scope.canDeleteAttachment = function (wfStage) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
-
         }
+
         // Hard code for now until security is put in place
         if (window.usrRole === "Legal") {
             $scope.CAN_VIEW_COST_TEST = true;
@@ -422,7 +424,6 @@
             }
 
             $scope.updateCorpDivision = function (custId) {
-                //debugger;
                 if (custId === "" || custId == null) return;
                 dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
                     // only show if more than 1 result
@@ -3690,6 +3691,20 @@
                     $scope.setBusy("", "");
                 }
             );
+        }
+
+        $scope.getColorStyle = function (c) {
+            return { color: $scope.getColorPct(c) };
+        }
+        $scope.getColorPct = function (d) {
+            if (!d) d = "InComplete";
+            return $scope.getColor('pct', d);
+        }
+        $scope.getColor = function (k, c) {
+            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                return colorDictionary[k][c];
+            }
+            return "#aaaaaa";
         }
 
         $scope.customEditPtValidate = function () {

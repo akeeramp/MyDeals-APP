@@ -49,6 +49,33 @@ gridUtils.uiControlWrapperWithDefault = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiControlWrapperGrpWithDefault = function (passedData, field, format) {
+    var defVal = "View";
+    if (passedData._behaviors !== undefined && passedData._behaviors.isReadOnly !== undefined && passedData._behaviors.isReadOnly[field] !== undefined && passedData._behaviors.isReadOnly[field] === true) {
+        defVal = "";
+    }
+    var tmplt = '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + '}">';
+    tmplt += '    <div ng-click="broadcast(\'ManageExcludeGroups\', dataItem)" ng-if="dataItem.' + field + '" class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+    tmplt += '    <div ng-click="broadcast(\'ManageExcludeGroups\', dataItem)" ng-if="!dataItem.' + field + '" class="ng-binding vert-center" style="color: #0071C5; cursor: pointer; text-align: center;">' + defVal + '</div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
+gridUtils.uiControlWrapperDirtyIndicator = function (passedData, field) {
+    var tmplt = '<div class="dirtyIndicator">';
+    tmplt += '     <div class="isDirtyIndicatorCell" ng-if="dataItem.' + field + '" title="This row has changed.  To save, press the Save and Run Price Cost Test button."></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
+gridUtils.uiReadonlyControlWrapper = function (passedData, field, format) {
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
 }
@@ -1078,6 +1105,9 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
                 colHidden = onlyVisible && gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
                 if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
                     // get default value
+                    if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
+                        dataItem[gridColumns[c].field] = "";
+
                     var val = dataItem[gridColumns[c].field];
 
                     // now look for templates
@@ -1086,7 +1116,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
                             ? gridColumns[c].excelTemplate
                             : gridColumns[c].template;
 
-                        if (templateHtml.indexOf("gridUtils.uiControlWrapper") >= 0) {
+                        if (templateHtml.indexOf("gridUtils") >= 0 && templateHtml.indexOf("ControlWrapper") >= 0) {
                             templateHtml = "#=" + gridColumns[c].field + "#";
                         }
 
@@ -1520,8 +1550,10 @@ gridPctUtils.getResultSingleIcon = function (result, style) {
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
     return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
 }
-gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style, incompleteReason) {
-    var rtn = "<div style='text-align: center;'>";
+gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style, incompleteReason, isReadonly) {
+    if (isReadonly === undefined || isReadonly === null) isReadonly = false;
+    var readonlyClass = isReadonly ? "isReadOnlyCell" : "";
+    var rtn = "<div style='text-align: center;' class='uiControlDiv " + readonlyClass + "'>";
 
     if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-passed-completed-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Passed with Override Status"></i>';
 

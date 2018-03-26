@@ -54,6 +54,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $("#contractReviewDiv").removeClass("active");
         $("#dealReviewDiv").removeClass("active");
         $("#historyDiv").removeClass("active");
+        $("#groupExclusionDiv").removeClass("active");
         $scope.$apply();
     }, 50);
 

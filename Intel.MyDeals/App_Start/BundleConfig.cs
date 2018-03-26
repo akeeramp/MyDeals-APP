@@ -182,6 +182,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/export.controller.js"
                 , "~/app/contract/controllers/manager.controller.js"
                 , "~/app/contract/controllers/managerDealType.controller.js"
+                , "~/app/contract/controllers/managerExcludeGroups.controller.js"
                 , "~/app/contract/controllers/managerOverlapping.controller.js"
                 , "~/app/contract/controllers/managerPct.controller.js"
                 , "~/app/contract/controllers/managerTimeline.controller.js"

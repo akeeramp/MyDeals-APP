@@ -127,6 +127,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
         $("#contractReviewDiv").removeClass("active");
         $("#dealReviewDiv").addClass("active");
         $("#historyDiv").removeClass("active");
+        $("#groupExclusionDiv").removeClass("active");
         $scope.$apply();
     }, 50);
 

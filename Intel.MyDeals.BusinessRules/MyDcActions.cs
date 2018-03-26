@@ -43,6 +43,8 @@ namespace Intel.MyDeals.BusinessRules
             if (item == null) return;
             if (!r.Dc.DataElements.Any()) return;
 
+            if (!item.ContainsKey(AttributeCodes.PAYOUT_BASED_ON)) return;
+
             // Deal Dates
             string dcStStr = r.Dc.GetDataElementValue(AttributeCodes.START_DT);
             string dcEnStr = r.Dc.GetDataElementValue(AttributeCodes.END_DT);
@@ -50,10 +52,10 @@ namespace Intel.MyDeals.BusinessRules
             string dcEn = DateTime.Parse(dcEnStr == "" ? item[AttributeCodes.END_DT].ToString() : dcEnStr).ToString("MM/dd/yyyy");
             string dcItemSt = DateTime.Parse(item[AttributeCodes.START_DT].ToString()).ToString("MM/dd/yyyy");
             string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
-            string payoutBasedOn = (item[AttributeCodes.PAYOUT_BASED_ON] != null) ? item[AttributeCodes.PAYOUT_BASED_ON].ToString() : "";
-            string mrktSegValue = (item[AttributeCodes.MRKT_SEG] != null) ? item[AttributeCodes.MRKT_SEG].ToString() : "";
+            string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON]?.ToString() ?? "";
+            string mrktSegValue = item[AttributeCodes.MRKT_SEG]?.ToString() ?? "";
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
-            string dcRebateType = (item[AttributeCodes.REBATE_TYPE] != null) ? item[AttributeCodes.REBATE_TYPE].ToString() : "";
+            string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString() ?? "";
 
             // Billing Dates
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
@@ -1348,6 +1350,7 @@ namespace Intel.MyDeals.BusinessRules
 
         private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
         {
+            if (de == null) return;
             Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
 
             // Previous tier validations exist, so we need to append them together

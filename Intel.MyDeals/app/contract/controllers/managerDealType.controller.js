@@ -24,6 +24,7 @@ function managerDealTypeController($scope, $timeout) {
         $("#dealReviewDiv").removeClass("active");
         $("#dealTypeDiv").addClass("active");
         $("#historyDiv").removeClass("active");
+        $("#groupExclusionDiv").removeClass("active");
         $scope.selTab('ECAP');
         $scope.$apply();
     }, 50);

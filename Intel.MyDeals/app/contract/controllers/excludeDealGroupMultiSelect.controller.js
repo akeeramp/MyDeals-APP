@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dealId', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox'];
+ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dealId', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox', '$timeout'];
 
-function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dealId, cellCurrValues, cellCommentValue, colInfo, enableCheckbox) {
+function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dealId, cellCurrValues, cellCommentValue, colInfo, enableCheckbox, $timeout) {
 	var vm = this;
 
 	var selectedGridDict = {};
@@ -107,6 +107,18 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    if (!vm.hasCheckbox) {
 		        $('#ExcldGrid :checkbox').prop("disabled", true);
 		    }
+
+		    $timeout(function () {
+		        var data = e.sender.dataSource.data();
+		        for (var d = 0; d < data.length; d++) {
+                    if (d > 4) {
+                        data[d].set("_disabled", true);
+                        $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
+                        $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
+                        $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
+                    }
+		        }
+		    }, 50);
 		}
 	};
 
@@ -125,17 +137,17 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		// turn dictionary to csv string
 		vm.returnVal.DEAL_GRP_EXCLDS = Object.keys(selectedGridDict).map(function (key) {
 		    return key;
-		}).join(",").replace(/,\s*$/, "");
+		}).join(", ").replace(/,\s*$/, "");
 
 		if (vm.returnVal.DEAL_GRP_EXCLDS !== null && vm.returnVal.DEAL_GRP_EXCLDS !== "" && vm.returnVal.DEAL_GRP_CMNT === "") {
-		    kendo.alert("When excluding deals, a reason must be provied.");
+		    kendo.alert("When excluding deals, a reason must be provided.");
 		    return;
 		}
 
-		//// Remove comment if no selected exluded deal groups
-		//if (vm.returnVal.DEAL_GRP_EXCLDS === null || vm.returnVal.DEAL_GRP_EXCLDS === "") {
-		//	vm.returnVal.DEAL_GRP_CMNT = "";
-		//}
+		// Remove comment if no selected exluded deal groups
+		if (vm.returnVal.DEAL_GRP_CMNT !== "" && (vm.returnVal.DEAL_GRP_EXCLDS === null || vm.returnVal.DEAL_GRP_EXCLDS === "")) {
+			vm.returnVal.DEAL_GRP_CMNT = "";
+		}
 		$uibModalInstance.close(vm.returnVal);
 	};
 

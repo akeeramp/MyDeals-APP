@@ -421,6 +421,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
             }
 
+            $scope.getColorStyle = function (c) {
+                return $scope.root.getColorStyle(c);
+            }
+
+
             $scope.applyCustomLayoutToGrid = function (data) {
                 if (!$scope.isLayoutConfigurable) return;
 
@@ -727,6 +732,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //excel: {
                 //    allPages: true
                 //},
+                noRecords: {
+                    template: "<div style='padding: 50px;'>No data found.  Please check your filters.</div>"
+                },
                 sortable: true,
                 editable: $scope.isEditable,
                 autoBind: false,
@@ -775,6 +783,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $(colCells[c]).css("border-bottom", "3px solid #0071C5");
                         }
                     }
+
+                    $scope.$root.$broadcast("OpGridDataBound");
 
                     $timeout(function () {
                         $scope.overlappingDealsSetup();
@@ -1351,6 +1361,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return func(dataItem);
             }
 
+            $scope.broadcast = function (broadcastCommand, dataItem) {
+                $scope.$root.$broadcast(broadcastCommand, dataItem);
+            }
+
             $scope.saveFunctions = function (model, col, newVal) {
 
                 model.dirty = true;
@@ -1403,6 +1417,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.$on('refresh', function (event, args) {
+            });
+
+            $scope.$on('requestOpGridDirtyRows', function (event, args) {
+                var rows = [];
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {
+                    if (data[d]._dirty !== undefined && data[d]._dirty === true) rows.push(data[d]);
+                }
+                $scope.$root.$broadcast('receiveOpGridDirtyRows', rows);
+            });
+            
+            $scope.$on('resetOpGridDirtyRows', function (event, args) {
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {
+                    data[d].set("_dirty", false);
+                }
             });
 
             $scope.$on('refreshStage', function (event, args) {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.OpDataCollectors;
 using Intel.MyDeals.Entities;
@@ -364,6 +365,51 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return rtn;
+        }
+
+        public OpDataCollectorFlattenedDictList GetWipExclusionFromContract(int id)
+        {
+
+            MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(
+                new List<int> { id },
+                new List<OpDataElementType>
+                {
+                    OpDataElementType.WIP_DEAL
+                },
+                new List<int>
+                {
+                    Attributes.WF_STG_CD.ATRB_SID,
+                    Attributes.PS_WF_STG_CD.ATRB_SID,
+                    Attributes.DEAL_GRP_EXCLDS.ATRB_SID,
+                    Attributes.DEAL_GRP_CMNT.ATRB_SID,
+                    Attributes.TITLE.ATRB_SID,
+                    Attributes.COST_TEST_RESULT.ATRB_SID,
+                    Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                    Attributes.START_DT.ATRB_SID,
+                    Attributes.END_DT.ATRB_SID,
+                    Attributes.DEAL_COMB_TYPE.ATRB_SID,
+                    Attributes.MAX_RPU.ATRB_SID,
+                    Attributes.DEAL_DESC.ATRB_SID,
+                    Attributes.CONSUMPTION_REASON.ATRB_SID,
+                    Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID
+                });
+
+            //// Get all the products in a collection base on the PRODUCT_FILTER
+            //// Note: the first hit is a performance dog as the product cache builds for the first time
+            //List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+            //    .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
+            //    .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
+            //List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
+
+            //foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            //{
+            //    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, prods);
+            //}
+
+            OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false);
+
+            return data;
         }
 
         public OpDataCollectorFlattenedDictList GetWipFromContract(int id)

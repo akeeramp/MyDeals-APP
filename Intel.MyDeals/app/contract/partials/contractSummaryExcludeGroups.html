@@ -1,0 +1,105 @@
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
+<div ng-include="'app/contract/partials/ptModals/dealProductsModal.html'"></div>
+
+<div ng-if="loading" style="padding-top: 200px; width: 100%; text-align: center;">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+    <div style="font-size: 30px;" ng-bind="msg"></div>
+    <div class="ss-icon-lg" ng-if="msg == 'Done'">
+        <i class="intelicon-passed-completed-solid sky-blue"></i>
+    </div>
+
+</div>
+
+<div ng-if="!loading" style="padding: 21px 0 0 0; height: 100%;">
+    <div op-grid id="grdExcludeGroups" style="height: 100%;" op-data="wipData" op-options="wipOptions"></div>
+</div>
+
+<div ng-if="!loading" class="toolbar" style="position: absolute; left: 300px; top: 79px;">
+    <div class="fl">
+        <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="saveAndRunPct()" title="Save and Run Price Cost Test">
+            <table>
+                <tr>
+                    <td>
+                        <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        <span class="text">
+                            Save & Run<br/>Price Cost Test
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>
+    
+    <div ng-if="root.CAN_VIEW_COST_TEST" class="fl" style="margin-left: 8px;">
+        <button class="btn btn-sm ssToolbarBtn" ng-click="togglePctFilter()" ng-class="{'toggleSelect': pctFilterEnabled}" title="Show/Hide Only Price Cost Test Failures.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="intelicon-alert-solid" aria-hidden="true" style="font-size: 30px; color: #FC4C02;"></i>
+                    </td>
+                    <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        View Only Errors<br />(Cost Test Results)
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>
+</div>
+
+
+<style>
+    .dealTag {
+        top: 43px !important;
+        right: 10px !important;
+        background: linear-gradient(to bottom, transparent 0%,transparent 100%) !important;
+    }
+
+    .ssToolbarBtn.btn-save, .ssToolbarBtn {
+        background-color: transparent;
+	}
+
+    .ssToolbarBtn.btn-save table tr td span.text {
+        font-size: 14px !important;
+        font-weight: 600;
+        line-height: 1em;
+	}
+    .ssToolbarBtn.btn-save:hover {
+        background-color: #f2f2f2;
+	}
+    .ssToolbarBtn.btn-save.notdirty {
+        cursor: not-allowed;
+    }
+    .ssToolbarBtn.btn-save.notdirty table tr td span.text {
+        font-size: 11px !important;
+        font-weight: 200;
+        line-height: 1em;
+	}
+    .ssToolbarBtn.btn-save.notdirty table tr td, .ssToolbarBtn.notdirty table tr td i {
+        color: #ababab !important;
+    }
+    .ssToolbarBtn.btn-save.notdirty:hover {
+        background-color: transparent;
+	}
+
+    .dirtyIndicator {
+        width: 5px;
+        height: 100%;
+        background-color: transparent;
+        float: left;
+        margin-right: 5px;
+    }
+    .isDirtyIndicatorCell {
+        width: 5px;
+        height: 100%;
+        background-color: #FFA300;
+        width: 100%;
+    }
+</style>
