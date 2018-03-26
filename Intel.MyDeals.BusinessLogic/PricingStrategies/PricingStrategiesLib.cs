@@ -244,8 +244,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     if ((role == RoleTypes.FSE && stageIn == WorkFlowStages.Draft) ||
                         (role == RoleTypes.GA && stageIn == WorkFlowStages.Requested) ||
-                        (role == RoleTypes.DA && stageIn == WorkFlowStages.Submitted) ||
-                        (stageIn == WorkFlowStages.Pending))
+                        (role == RoleTypes.DA && stageIn == WorkFlowStages.Submitted))
                     {
                         auditableDealIds.Add(dc.DcID);
                     }
