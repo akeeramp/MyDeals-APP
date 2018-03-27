@@ -516,7 +516,7 @@
                     if (!vm.isCrossVerticalError) {
                         logger.stickyError(crossVertical.message);
                         product.selected = false;
-                        return;
+                        return false;
                     }
                 }
                 manageSelectedProducts('include', item);

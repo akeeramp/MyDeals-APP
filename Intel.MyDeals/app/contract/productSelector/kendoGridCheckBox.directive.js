@@ -20,7 +20,7 @@
 
         return directive;
 
-        function linkFunc(scope, element, attrs) { 
+        function linkFunc(scope, element, attrs) {
             var options = scope.$eval(attrs.kOptions);
             scope.vm.selectedItems = [];
             var checkBoxColumnExists = options.columns.filter(function (x) {
@@ -76,18 +76,20 @@
             var filters = grid.dataSource.filter();
             var query = new kendo.data.Query(data);
             var items = query.filter(filters).data;
-            items.forEach(function (item) {
-                // When select all clicked do not select the products with CAP range for ECAP deal
-                if ($scope.vm.dealType === 'ECAP' && (item.CAP !== undefined && item.CAP.indexOf('-') > -1)) {
-                    return;
+            for (var i = items.length - 1; i >= 0; i--) {
+                if ($scope.vm.dealType === 'ECAP' && (items[i].CAP !== undefined && items[i].CAP.indexOf('-') > -1)) {
+                    continue;
                 }
-                if (item._disabled !== undefined && item._disabled !== null && item._disabled === true) {
-                    return;
+                if (items[i]._disabled !== undefined && items[i]._disabled !== null && items[i]._disabled === true) {
+                    continue;
                 }
-                item.selected = ev.target.checked;
-                $scope.vm.selectProduct(item);
+                items[i].selected = ev.target.checked;
+                var isValid = $scope.vm.selectProduct(items[i]);
+                if (isValid === false) {
+                    break;
+                }
 
-            });
+            }
         };
     }
 })();
