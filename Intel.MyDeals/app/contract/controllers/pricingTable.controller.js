@@ -273,7 +273,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // TODO maybe we need to clean up items past data length to merge = 1
             //debugger;
-            sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge();
+            sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge(); 
 
         });
 
@@ -490,6 +490,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!productSelectorOutput.splitProducts) {
             var usrInput = updateUserInput(validatedSelectedProducts, productSelectorOutput.contractProduct);
             var contractProducts = usrInput.contractProducts;
+            var rowEnd = rowStart;
 
             //PTR_SYS_PRD
             sheet.range(root.colToLetter["PTR_SYS_PRD"] + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
@@ -516,14 +517,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(contractProducts);
                         systemModifiedProductInclude = false;
                     }
-                    rowStart = mergedRows - 1;
+                    rowEnd = mergedRows - 1;
                 }
             }
 
             systemModifiedProductInclude = false;
-            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowStart)).value("");
+            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowEnd)).value("");
 
-            syncSpreadRows(sheet, rowStart, rowStart);
+            syncSpreadRows(sheet, rowStart, rowEnd);
 
             root._dirty = true;
 
@@ -1674,7 +1675,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var numBlanks = en - st;
                     if (numBlanks > 0) {
                         stealthOnChangeMode = true;
-                        sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value("");
+                        sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value(""); 
                         topLeftRowIndex -= numBlanks;
                         if (topLeftRowIndex < 2) { // prevent topLeftRowIndex from becoming negative to prevent out of bounds errors. It is "2" to account for the headers.
                             topLeftRowIndex = 2;
@@ -1907,7 +1908,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         sheet.batch(function () {
             var row = 2;
             // reset row colors
-            sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71");
+            sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71"); 
 
             for (var key in data) {
                 if (data.hasOwnProperty(key) && !data[key]._actions) {
@@ -1950,7 +1951,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         }
                     } else {
-                        sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
+                        sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71"); 
                     }
                     row++;
                 }
@@ -2039,8 +2040,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.textAlign(headerStyle.textAlign);
             headerRange.verticalAlign(headerStyle.verticalAlign);
 
-            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).verticalAlign("center");
-            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).textAlign(cellStyle.textAlign);
+            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).verticalAlign("center");  
+            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).textAlign(cellStyle.textAlign); 
 
             // Add product selector editor on Product cells
             sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
