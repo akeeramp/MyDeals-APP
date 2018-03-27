@@ -59,6 +59,7 @@
         vm.isDeveloper = isDeveloper;
         vm.isTester = isTester;
         vm.ToggleShowTree = toggleShowTree;
+        vm.showDefault = true;
         vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
 
         function resetexcludeProductMessage() {
@@ -393,13 +394,27 @@
         }
 
         // When user clicks on the drill down levels
-        function selectItem(item) {
+        function selectItem(item, isDrilldown) {
             vm.selectedPathParts.push(item);
-            getItems(item);
+            // When toggle is level 4 show l4's under the high level products
+            if (!vm.showDefault && item.allowMultiple && vm.enableMultipleSelection && isDrilldown) {
+                var products = vm.productSelectionLevels.filter(function (x) {
+                    return x.PRD_MBR_SID == item.id;
+                })[0];
+                products['selected'] = item.selected;
+                products['parentSelected'] = item.parentSelected;
+                vm.items = [];
+                vm.gridData = [];
+                showLevle4(products);
+                dataSourceProduct.read();
+            } else {
+                getItems(item);
+            }
         }
 
         // Called when user clicks on grid column hyper links for drill down PCSR->L4->MM
         function gridSelectItem(dataItem) {
+            if (dataItem['noDrillDown'] === true) return;
             var item = newItem();
             item.name = dataItem.HIER_VAL_NM;
             item.path = dataItem.HIER_NM_HASH,
@@ -456,7 +471,15 @@
             pageSize: 10,
             schema: {
                 model: {
-                    id: "PROD_MBR_SID"
+                    id: "PROD_MBR_SID",
+                    fields: {
+                        "CAP": {
+                            type: "string"
+                        },
+                        "YCS2": {
+                            type: "string"
+                        }
+                    }
                 }
             },
         });
@@ -709,13 +732,14 @@
                     title: "CAP Info",
                     template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
                     width: "150px",
-                    filterable: false
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "YCS2",
                     title: "YCS2",
                     width: "150px",
-                    template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>"
+                    template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                    filterable: { multi: true, search: true },
                 },
                 {
                     field: "CPU_PROCESSOR_NUMBER",
@@ -1148,7 +1172,6 @@
         }
 
         function showLevle4(product) {
-            vm.excludeProductMessage = product.HIER_VAL_NM;
             // To get all the L4's under a higher product hierarchy for a program or voltier deal treat it as Front END YCS2 deal
             var data = [{
                 ROW_NUMBER: 1, // By default pass one as user will select only one value from popup
@@ -1166,8 +1189,9 @@
             productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, "ECAP").then(function (response) {
                 vm.gridData = response.data;
                 vm.gridData = response.data.map(function (x) {
-                    x['selected'] = true;
-                    x['parentSelected'] = true;
+                    x['selected'] = productExists(product, x.PRD_MBR_SID);
+                    x['parentSelected'] = product.selected;
+                    x['noDrillDown'] = true;
                     return x;
                 });
                 searchProcessed = true;
@@ -1181,10 +1205,6 @@
         }
 
         function showSingleProductHeirarchy(product) {
-            if (vm.showTree) {
-                showLevle4(product)
-                return false;
-            }
 
             var data = {
                 "searchHash": product.HIER_NM_HASH,
@@ -1477,7 +1497,10 @@
                             type: "string"
                         },
                         "CAP": {
-                            type: "object"
+                            type: "string"
+                        },
+                        "YCS2": {
+                            type: "string"
                         },
                         "EXCLUDE": {
                             type: "boolean"
@@ -1551,7 +1574,7 @@
                     title: "CAP Info",
                     template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
                     width: "150px",
-                    filterable: false
+                    filterable: { multi: true, search: true },
                 },
                 {
                     field: "MM_MEDIA_CD",
@@ -1563,7 +1586,7 @@
                     field: "YCS2",
                     title: "YCS2",
                     template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
-                    width: "120px",
+                    filterable: { multi: true, search: true },
                 },
                 {
                     field: "CPU_PROCESSOR_NUMBER",

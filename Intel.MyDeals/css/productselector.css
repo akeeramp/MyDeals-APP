@@ -605,3 +605,23 @@ input[type=checkbox].with-sm-font {
         transform-origin: 50% 50%;
         opacity: 0;
     }
+
+.toggle-accept .toggle .btn-success {
+    background-color: #C4D600;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1.2em;
+    font-family: 'Intel Clear';
+}
+
+.toggle-accept .toggle .btn-default {
+    background-color: #00AEEF;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1.2em;
+    font-family: 'Intel Clear';
+}
+
+.toggle-accept .toggle{
+    width:87px !important;
+}

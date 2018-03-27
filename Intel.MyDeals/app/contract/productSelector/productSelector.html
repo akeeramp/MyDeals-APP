@@ -5,7 +5,21 @@
             <div class="col-md-4 col-sm-4 col-xs-4">
                 <p class="prodHeader cursorArea">Product Selector <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></p>
             </div>
-            <div class="col-md-8 col-sm-8 col-xs-8 prodSelectorSearch">
+            <div class="col-md-2 col-sm-2 col-xs-2" style="padding-top:8px;">
+                <span ng-if="vm.enableMultipleSelection" style="color: #fff;">Toggle View by:</span>
+                <span id="toggle-container" style="width:87px !important">
+                    <toggle class="toggle-accept"
+                            ng-change="vm.showL4()"
+                            ng-model="vm.showDefault"
+                            on="Default"
+                            off="L4"
+                            ng-if="vm.enableMultipleSelection"
+                            onstyle="btn-success"
+                            size="btn-xs"
+                            style="width: 140px !important"></toggle>
+                </span>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 prodSelectorSearch">
                 <div class="modalCloseIcon fr">
                     <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
                 </div>
@@ -115,11 +129,11 @@
                                         <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
                                         <label style="margin-bottom:0px;" for="{{p.name}}"></label>
                                     </span>
-                                    <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                    <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p, true)" class="btn btn-default">
                                         {{::vm.checkForBlank(p.name)}}
                                     </button>
                                     <button ng-if="(vm.selectedPathParts.length < 2)" kendo-tooltip k-content="vm.getVerticalsUnderMarkLevel(p.name)"
-                                            type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                            type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p, true)" class="btn btn-default">
                                         {{::vm.checkForBlank(p.name)}}
                                     </button>
                                 </div>
@@ -135,7 +149,7 @@
                                         <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
                                         <label style="margin-bottom:0px;" for="{{p.name}}"></label>
                                     </span>
-                                    <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
+                                    <p role="button" ng-click="vm.selectItem(p. true)">{{::vm.checkForBlank(p.name)}}</p>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +191,7 @@
                             Selected Products
                             <span ng-class="{'animate':vm.animateInclude}" class="arcAnimate">
                                 <small role="button">&nbsp;({{vm.addedProducts.length}})</small>
-                                <i style="padding-left:10px;" role="button" ng-if="vm.enableMultipleSelection && (vm.isDeveloper || vm.isTester)" ng-class="{'heirSelected': vm.showTree }" class="fa fa-sitemap" ng-click="vm.ToggleShowTree()" title="Toggle show Deal Products(L4's)"></i>
+                                <!--<i style="padding-left:10px;" role="button" ng-if="vm.enableMultipleSelection && (vm.isDeveloper || vm.isTester)" ng-class="{'heirSelected': vm.showTree }" class="fa fa-sitemap" ng-click="vm.ToggleShowTree()" title="Toggle show Deal Products(L4's)"></i>-->
                             </span>
                         </span>
                     </span>
