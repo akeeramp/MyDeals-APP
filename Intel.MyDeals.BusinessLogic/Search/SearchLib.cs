@@ -341,13 +341,17 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetNonTenderDealList(SearchParams data)
         {
-            //new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" },
             return GetDealList(data, new List<int>
             {
+                Attributes.BLLG_DT.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
+                Attributes.CREDIT_AMT.ATRB_SID,
+                Attributes.CREDIT_VOLUME.ATRB_SID,
                 Attributes.CUST_ACCNT_DIV.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
                 Attributes.DEAL_GRP_NM.ATRB_SID,
+                Attributes.DEBIT_AMT.ATRB_SID,
+                Attributes.DEBIT_VOLUME.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
@@ -357,6 +361,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.NOTES.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.PAYOUT_BASED_ON.ATRB_SID,
+                Attributes.PRODUCT_CATEGORIES.ATRB_SID,
                 Attributes.PRODUCT_FILTER.ATRB_SID,
                 Attributes.PROGRAM_PAYMENT.ATRB_SID,
                 Attributes.PS_WF_STG_CD.ATRB_SID,
@@ -386,14 +391,20 @@ namespace Intel.MyDeals.BusinessLogic
             return GetDealList(data, new List<int>
             {
                 Attributes.BID_STATUS.ATRB_SID,
+                Attributes.BLLG_DT.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
+                Attributes.CREDIT_AMT.ATRB_SID,
+                Attributes.CREDIT_VOLUME.ATRB_SID,
                 Attributes.CUST_ACCNT_DIV.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.DEBIT_AMT.ATRB_SID,
+                Attributes.DEBIT_VOLUME.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
                 Attributes.GEO_COMBINED.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.PRODUCT_CATEGORIES.ATRB_SID,
                 Attributes.PRODUCT_FILTER.ATRB_SID,
                 Attributes.PS_WF_STG_CD.ATRB_SID,
                 Attributes.QLTR_BID_GEO.ATRB_SID,

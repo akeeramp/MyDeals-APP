@@ -13,6 +13,8 @@
 
     function attributeSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq) {
 
+        kendo.culture().numberFormat.currency.pattern[0] = "-$n";
+
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
 
@@ -251,6 +253,11 @@
                 template: "#= moment(END_DT).format('MM/DD/YYYY') #",
                 width: 130
             }, {
+                field: "PRODUCT_CATEGORIES",
+                title: "Product Categories",
+                type: "string",
+                width: 150
+            }, {
                 field: "PRODUCT_FILTER",
                 title: "Product",
                 type: "string",
@@ -427,6 +434,34 @@
                 width: 170,
                 format: "{0:c}",
                 filterable: "moneyObjFilter"
+            }, {
+                field: "CREDIT_VOLUME",
+                title: "Credit Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "DEBIT_VOLUME",
+                title: "Debit Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "CREDIT_AMT",
+                title: "Credit Amt",
+                type: "number",
+                format: "{0:c}",
+                width: 120
+            }, {
+                field: "DEBIT_AMT",
+                title: "Debit Amt",
+                type: "number",
+                format: "{0:c}",
+                width: 120
+            }, {
+                field: "BLLG_DT",
+                title: "Last Credit Date",
+                type: "string",
+                template: "#= moment(BLLG_DT).format('MM/DD/YYYY') #",
+                width: 140
             }, {
                 field: "END_CUSTOMER_RETAIL",
                 title: "End Customer",
