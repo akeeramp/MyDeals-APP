@@ -397,7 +397,7 @@
         function selectItem(item, isDrilldown) {
             vm.selectedPathParts.push(item);
             // When toggle is level 4 show l4's under the high level products
-            if (!vm.showDefault && item.allowMultiple && vm.enableMultipleSelection && isDrilldown) {
+            if (!vm.showDefault && (item.allowMultiple !== undefined && item.allowMultiple) && vm.enableMultipleSelection && isDrilldown) {
                 var products = vm.productSelectionLevels.filter(function (x) {
                     return x.PRD_MBR_SID == item.id;
                 })[0];
