@@ -595,12 +595,13 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
+            List<string> excludeAtrbs = new List<string> {AttributeCodes.EXPIRE_YCS2, AttributeCodes.NOTES};
 
             string deFrontendValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
             if (deFrontendValue == "Backend" || !r.Dc.HasTracker()) return;
 
-            foreach (OpDataElement de in r.Dc.DataElements.Where(d => d.AtrbCd != AttributeCodes.NOTES))
+            foreach (OpDataElement de in r.Dc.DataElements.Where(d => !excludeAtrbs.Contains(d.AtrbCd)))
             {
                 de.SetReadOnly();
             }
