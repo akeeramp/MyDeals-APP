@@ -213,7 +213,7 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			var ret = new List<OverlappingDeal>();
 			Procs.dbo.PR_MYDL_GET_OVLP_DEALS cmd = new Procs.dbo.PR_MYDL_GET_OVLP_DEALS() {
-				in_wip_deal_obj_sid = dealId
+				//in_wip_deal_obj_sid = dealId
 			};
 
 			try
