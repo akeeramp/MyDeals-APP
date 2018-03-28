@@ -380,8 +380,8 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     Attributes.WF_STG_CD.ATRB_SID,
                     Attributes.PS_WF_STG_CD.ATRB_SID,
-                    Attributes.DEAL_GRP_EXCLDS.ATRB_SID,
-                    Attributes.DEAL_GRP_CMNT.ATRB_SID,
+                    //Attributes.DEAL_GRP_EXCLDS.ATRB_SID,
+                    //Attributes.DEAL_GRP_CMNT.ATRB_SID,
                     Attributes.TITLE.ATRB_SID,
                     Attributes.COST_TEST_RESULT.ATRB_SID,
                     Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,

@@ -1124,31 +1124,31 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-            items.Add(new UiTemplateContainerItem  // WIP All types
-            {
-                Id = 90002,
-                AtrbCd = AttributeCodes.DEAL_GRP_EXCLDS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                DataType = "string",
-                Label = "Exclude Deal Group",
-                LookupUrl = "/api/Dropdown/GetDealGroupDropdown",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                UiType = "EMBEDDEDMULTISELECT",
-                Template = "#=gridUtils.uiControlWrapperWithDefault(data, 'DEAL_GRP_EXCLDS')#",
-                Width = 140
-            });
-            items.Add(new UiTemplateContainerItem  // WIP All types
-            {
-                Id = 90003,
-                AtrbCd = AttributeCodes.DEAL_GRP_CMNT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Deal Group Comment",
-                DataType = "string",
-                Width = 140,
-                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_CMNT')#",
-                IsHidden = true
-            });
+            //items.Add(new UiTemplateContainerItem  // WIP All types
+            //{
+            //    Id = 90002,
+            //    AtrbCd = AttributeCodes.DEAL_GRP_EXCLDS,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    DataType = "string",
+            //    Label = "Exclude Deal Group",
+            //    LookupUrl = "/api/Dropdown/GetDealGroupDropdown",
+            //    LookupText = "DROP_DOWN",
+            //    LookupValue = "DROP_DOWN",
+            //    UiType = "EMBEDDEDMULTISELECT",
+            //    Template = "#=gridUtils.uiControlWrapperWithDefault(data, 'DEAL_GRP_EXCLDS')#",
+            //    Width = 140
+            //});
+            //items.Add(new UiTemplateContainerItem  // WIP All types
+            //{
+            //    Id = 90003,
+            //    AtrbCd = AttributeCodes.DEAL_GRP_CMNT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Label = "Deal Group Comment",
+            //    DataType = "string",
+            //    Width = 140,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_CMNT')#",
+            //    IsHidden = true
+            //});
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3680,

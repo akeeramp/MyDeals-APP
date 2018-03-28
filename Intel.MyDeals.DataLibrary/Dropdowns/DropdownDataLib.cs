@@ -220,6 +220,7 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				using (var rdr = DataAccess.ExecuteReader(cmd))
 				{
+                    int IDX_CST_MCP_DEAL_FLAG = DB.GetReaderOrdinal(rdr, "CST_MCP_DEAL_FLAG");
                     int IDX_EXCLD_DEAL_FLAG = DB.GetReaderOrdinal(rdr, "EXCLD_DEAL_FLAG");
                     int IDX_OVLP_ADDITIVE = DB.GetReaderOrdinal(rdr, "OVLP_ADDITIVE");
                     int IDX_OVLP_CNSMPTN_RSN = DB.GetReaderOrdinal(rdr, "OVLP_CNSMPTN_RSN");
@@ -235,6 +236,7 @@ namespace Intel.MyDeals.DataLibrary
 					{
 						ret.Add(new OverlappingDeal
 						{
+                            CST_MCP_DEAL_FLAG = (IDX_CST_MCP_DEAL_FLAG < 0 || rdr.IsDBNull(IDX_CST_MCP_DEAL_FLAG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CST_MCP_DEAL_FLAG),
                             EXCLD_DEAL_FLAG = (IDX_EXCLD_DEAL_FLAG < 0 || rdr.IsDBNull(IDX_EXCLD_DEAL_FLAG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EXCLD_DEAL_FLAG),
                             OVLP_ADDITIVE = (IDX_OVLP_ADDITIVE < 0 || rdr.IsDBNull(IDX_OVLP_ADDITIVE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_ADDITIVE),
                             OVLP_CNSMPTN_RSN = (IDX_OVLP_CNSMPTN_RSN < 0 || rdr.IsDBNull(IDX_OVLP_CNSMPTN_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CNSMPTN_RSN),

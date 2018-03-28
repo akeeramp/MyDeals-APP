@@ -42,10 +42,12 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 				e.success(vm.gridData);
 			}
 		},
+		sort: { field: "CST_MCP_DEAL_FLAG", dir: "asc" },
 		schema: {
 			model: {
-				fields: {
-					EXCLD_DEAL_FLAG: {},
+			    fields: {
+			        CST_MCP_DEAL_FLAG: { type: "number"},
+			        EXCLD_DEAL_FLAG: {},
 					OVLP_ADDITIVE: {},
 					OVLP_CNSMPTN_RSN: {},
 					OVLP_CNTRCT_NM: {},
@@ -111,7 +113,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    $timeout(function () {
 		        var data = e.sender.dataSource.data();
 		        for (var d = 0; d < data.length; d++) {
-                    if (d > 4) {
+		            if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 1) {
                         data[d].set("_disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
