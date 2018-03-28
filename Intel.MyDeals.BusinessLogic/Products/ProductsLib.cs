@@ -7,6 +7,7 @@ using Intel.MyDeals.IBusinessLogic;
 using System.Text.RegularExpressions;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -269,48 +270,40 @@ namespace Intel.MyDeals.BusinessLogic
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductsFromAlias", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
-            foreach (var userProduct in prodNames)
+            Parallel.ForEach(prodNames, (userProduct) =>
             {
                 var products = TransformProducts(userProduct.USR_INPUT);
+                var aliasReplacedProducts = new List<string>();
 
                 var prodTemp = products.ToList();
                 foreach (var product in prodTemp)
                 {
                     string productName = product.Trim();
-                    if (productName.Contains(" "))//Checking for Long Text search like DT I3
+                    string[] prodductSplit = productName.Split(' ');
+                    string finalProdName = "";
+                    List<ProductEntryAttribute> prodNamesListSplit = new List<ProductEntryAttribute>();
+                    foreach (var ps in prodductSplit)
                     {
-                        string[] prodductSplit = productName.Split(' ');
-                        string finalProdName = "";
-                        List<ProductEntryAttribute> prodNamesListSplit = new List<ProductEntryAttribute>();
-                        foreach (var ps in prodductSplit)
-                        {
-                            ProductEntryAttribute peaSplitList = new ProductEntryAttribute();
-                            peaSplitList.USR_INPUT = ps.ToString();
-                            prodNamesListSplit.Add(peaSplitList);
-                        }
-
-                        var productAliasesSplit = (from p in prodNamesListSplit
-                                                   join a in aliasMapping
-                                                   on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
-                                                   from t in pa.DefaultIfEmpty()
-                                                   select new ProductEntryAttribute
-                                                   {
-                                                       USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
-                                                   }).Distinct().ToList();
-
-                        foreach (var pas in productAliasesSplit)
-                        {
-                            finalProdName = finalProdName + ' ' + pas.USR_INPUT;
-                        }
-                        finalProdName = finalProdName.Remove(0, 1);
-                        int index = products.IndexOf(productName);
-                        if (index != -1)
-                            products[index] = finalProdName;
+                        ProductEntryAttribute peaSplitList = new ProductEntryAttribute();
+                        peaSplitList.USR_INPUT = ps.ToString();
+                        prodNamesListSplit.Add(peaSplitList);
                     }
 
+                    var productAliasesSplit = (from p in prodNamesListSplit
+                                               join a in aliasMapping
+                                               on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
+                                               from t in pa.DefaultIfEmpty()
+                                               select new ProductEntryAttribute
+                                               {
+                                                   USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
+                                               }).Distinct().ToList();
+
+                    finalProdName = string.Join(" ", productAliasesSplit.Select(x => x.USR_INPUT));
+
+                    aliasReplacedProducts.Add(finalProdName);
                 }
                 List<ProductEntryAttribute> prodNamesList = new List<ProductEntryAttribute>();
-                foreach (var product in products)
+                foreach (var product in aliasReplacedProducts)
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
                     bool isEPMName = product.Contains("~~**~~**~~");
@@ -330,29 +323,13 @@ namespace Intel.MyDeals.BusinessLogic
 
                     prodNamesList.Add(pea);
                 }
-                var productAliases = (from p in prodNamesList
-                                      join a in aliasMapping
-                                      on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
-                                      from t in pa.DefaultIfEmpty()
-                                      select new ProductEntryAttribute
-                                      {
-                                          ROW_NUMBER = p.ROW_NUMBER,
-                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
-                                          MOD_USR_INPUT = p.MOD_USR_INPUT,
-                                          EXCLUDE = p.EXCLUDE,
-                                          FILTER = p.FILTER,
-                                          END_DATE = p.END_DATE,
-                                          START_DATE = p.START_DATE,
-                                          GEO_COMBINED = p.GEO_COMBINED,
-                                          PROGRAM_PAYMENT = p.PROGRAM_PAYMENT,
-                                          COLUMN_TYPE = p.COLUMN_TYPE
-                                      }).Distinct().ToList();
+                prodNamesList = prodNamesList.Distinct().ToList();
 
-                productsTodb.AddRange(productAliases);
+                productsTodb.AddRange(prodNamesList);
 
                 if (productLookup.ProdctTransformResults.ContainsKey(userProduct.ROW_NUMBER.ToString()))
                 {
-                    productAliases.ToList().ForEach(d =>
+                    prodNamesList.ForEach(d =>
                     productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()][d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
                 }
                 else
@@ -360,10 +337,10 @@ namespace Intel.MyDeals.BusinessLogic
                     var records = new Dictionary<string, List<string>>();
                     records.Add("E", new List<string>());
                     records.Add("I", new List<string>());
-                    productAliases.ToList().ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
+                    prodNamesList.ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
                     productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
                 }
-            }
+            });
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished foreach (var userProduct in prodNames)", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
@@ -573,9 +550,9 @@ namespace Intel.MyDeals.BusinessLogic
                                                                 && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase))
                                                                 );
                     var isConflictValid = (from p in validProducts
-                                          group p by p.USR_INPUT
+                                           group p by p.USR_INPUT
                                             into d
-                                          select d.Key).ToList();
+                                           select d.Key).ToList();
 
                     if (isConflictValid.Any())
                     {
@@ -637,8 +614,8 @@ namespace Intel.MyDeals.BusinessLogic
         {
             bool test;
             var searchStringData = GetSearchString();
-            return isEPMserach 
-                ? searchStringData.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower())) 
+            return isEPMserach
+                ? searchStringData.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()))
                 : searchStringData.Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).Select(k => k.Key).Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()));
             //var searchString = isEPMserach == false ? searchStringData.Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
             //test = searchString.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()));
@@ -910,7 +887,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{0:HH:mm:ss:fff}\t{0,10} (ms)\tStarted SetProductAlias", DateTime.Now);
-            
+
             // Before adding a Alias mapping for a product check if Mydeals has the product
             var product = new List<string>();
             product.Add(data.PRD_NM);
@@ -1007,8 +984,8 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             var result = new ProductSelectorWrapper();
-            result.ProductSelectionLevels = productSelectionLevels.ToList();
-            result.ProductSelectionLevelsAttributes = productSelectionLevelsAttributes.ToList();
+            result.ProductSelectionLevels = productSelectionLevels;
+            result.ProductSelectionLevelsAttributes = productSelectionLevelsAttributes;
             return result;
         }
 

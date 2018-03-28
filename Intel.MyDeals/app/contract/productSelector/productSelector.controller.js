@@ -1187,8 +1187,8 @@
             }];
 
             productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, "ECAP").then(function (response) {
-                vm.gridData = response.data;
-                vm.gridData = response.data.map(function (x) {
+                var data = $filter('unique')(response.data, 'PRD_MBR_SID');
+                vm.gridData = data.map(function (x) {
                     x['selected'] = productExists(product, x.PRD_MBR_SID);
                     x['parentSelected'] = product.selected;
                     x['noDrillDown'] = true;
