@@ -71,7 +71,8 @@
                             }, 100);
                         }
                     });
-                }
+                }                
+
                 $scope.lastMeetCompRunCalc = function () {
                     var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
                     if (!!LAST_MEET_COMP_RUN) {
@@ -102,7 +103,7 @@
                             if (!forceRun) $scope.needToRunPct = false;
                         }
 
-                        $scope.displayMessage = "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
+                        
 
                         if ($scope.needToRunPct) {
                             $scope.MC_MODE = "A";
@@ -115,6 +116,8 @@
                         $scope.MC_MODE = "A";
                         $scope.IsMeetCompRun = true;
                     }
+
+                    return "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
                 }
 
                 if (!!$scope.objSid) {
@@ -128,48 +131,7 @@
                     
                     $scope.$parent.IsFirstLoad = true;
                     $scope.IsMeetCompRun = false;
-                    $scope.lastMeetCompRunCalc();
-                    //if (!!LAST_MEET_COMP_RUN) {
-                    //    var localTime = gridUtils.convertLocalToPST(new Date());
-                    //    var lastruntime = moment(LAST_MEET_COMP_RUN);
-
-                    //    var forceRun = $scope.$parent.forceRun();
-
-                    //    var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
-
-                    //    var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
-                    //    var hh = Math.abs(timeDiff.asHours());
-                    //    var mm = Math.abs(timeDiff.asMinutes());
-                    //    var ss = Math.abs(timeDiff.asSeconds());
-
-                    //    var dsplNum = hh;
-                    //    var dsplMsg = " hours ago";
-                    //    $scope.needToRunPct = forceRun || ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
-
-                    //    if (dsplNum < 1) {
-                    //        dsplNum = mm;
-                    //        dsplMsg = " mins ago";
-                    //        if (!forceRun) $scope.needToRunPct = false;
-                    //    }
-                    //    if (dsplNum < 1) {
-                    //        dsplNum = ss;
-                    //        dsplMsg = " secs ago";
-                    //        if (!forceRun) $scope.needToRunPct = false;
-                    //    }
-
-                    //    $scope.displayMessage = "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
-
-                    //    if ($scope.needToRunPct) {
-                    //        $scope.MC_MODE = "A";
-                    //        $scope.IsMeetCompRun = true;
-                    //    } else {
-                    //        $scope.IsMeetCompRun = false;
-                    //    }
-
-                    //} else {
-                    //    $scope.MC_MODE = "A";
-                    //    $scope.IsMeetCompRun = true;
-                    //}
+                    $scope.lastMeetCompRunCalc();                    
 
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
                         $scope.$parent.refreshContractData();
@@ -1455,8 +1417,7 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-                                    $scope.$root.$broadcast('refreshContractData');
-                                    $scope.lastMeetCompRunCalc();
+                                    $scope.$root.$broadcast('refreshContractData');                                    
                                 },
                                 function (response) {
                                     logger.error("Unable to save data", response, response.statusText);
@@ -1475,8 +1436,7 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-                                    $scope.$root.$broadcast('refreshContractData');
-                                    $scope.lastMeetCompRunCalc();
+                                    $scope.$root.$broadcast('refreshContractData');                                    
                                 },
                                 function (response) {
                                     logger.error("Unable to get data", response, response.statusText);
@@ -1524,7 +1484,7 @@
                                         $scope.isBusy = false;
                                     });
                             }
-
+                            
                             function detailInit(e) {
                                 $scope.TEMP_GRP_PRD_SID = e.data.GRP_PRD_SID;
                                 $("<div class='childGrid' style=' margin-bottom: 5px !important;'/>").appendTo(e.detailCell).kendoGrid({
