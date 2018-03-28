@@ -15,6 +15,7 @@
         var service = {
             getEmployeeData: getEmployeeData,
             getCustomers: getCustomers,
+            getCustomersFromGeos: getCustomersFromGeos,
             setEmployeeData: setEmployeeData,
         }
 
@@ -26,6 +27,10 @@
 
         function getCustomers() {
             return dataService.get(apiBaseUrl + 'GetManageUserDataGetCustomers/false');
+        }
+
+        function getCustomersFromGeos(geos) {
+            return dataService.post(apiBaseUrl + 'GetManageUserDataGetCustomersInGeos', geos);
         }
 
         function setEmployeeData(data) {

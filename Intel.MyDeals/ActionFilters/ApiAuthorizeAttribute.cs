@@ -31,7 +31,7 @@ namespace Intel.MyDeals.ActionFilters
 
         }
 
-        //TODO: Add other authorization properties IsSuperSA, IsSuper etc. And check if we need to log these requests
+        //TODO: Add other authorization properties IsSuper etc. And check if we need to log these requests
         /// <summary>
         ///
         /// </summary>

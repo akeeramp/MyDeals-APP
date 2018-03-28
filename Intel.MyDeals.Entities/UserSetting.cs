@@ -17,7 +17,6 @@ namespace Intel.MyDeals.Entities
         }
 
         public OpUserToken UserToken { get; set; }
-        public bool SuperSa { get; set; }
 
         public DateTime DashboardStartDate { get; set; }
         public DateTime DashboardEndDate { get; set; }

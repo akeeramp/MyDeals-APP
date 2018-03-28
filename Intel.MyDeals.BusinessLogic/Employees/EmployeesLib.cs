@@ -37,6 +37,19 @@ namespace Intel.MyDeals.BusinessLogic
             return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM).OrderBy(c => c.CUST_NM).ToList();
         }
 
+        public List<CustomerDivision> GetManageUserDataGetCustomers(List<string> geos)
+        {
+            return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM && (geos.Contains("Worldwide") || geos.Contains(c.HOSTED_GEO))).OrderBy(c => c.CUST_NM).ToList();
+            //if (geos.Contains("Worldwide"))
+            //{
+            //    return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM).OrderBy(c => c.CUST_NM).ToList();
+            //}
+            //else // We are safe, it is all geos.  Cut the list down some.
+            //{
+            //    return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM && geos.Contains(c.HOSTED_GEO)).OrderBy(c => c.CUST_NM).ToList();
+            //}
+        }
+
         public OpMsg SetManageUserData(EmployeeCustomers data)
         {
             new EmployeeDataLib().SetManageUserData(data);

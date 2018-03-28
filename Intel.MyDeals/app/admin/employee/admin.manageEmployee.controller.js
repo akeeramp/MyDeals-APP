@@ -24,13 +24,16 @@
                 size: 'lg',
                 resolve: {
                     dataItem: function () {
-                        return dataItem;
+                        return angular.copy(dataItem);
                     }
                 }
             });
 
             modalInstance.result.then(function (returnData) {
-                $scope.context.USR_CUST = returnData;
+                if (returnData !== undefined && returnData !== null)
+                {
+                    $scope.context.USR_CUST = returnData;
+                }
             }, function () { });
         }
 
@@ -114,7 +117,7 @@
             {
                 field: "USR_CUST",
                 title: "Customers",
-                template: "#=gridUtils.customersFormatting(data, 'USR_CUST')#",
+                template: "#=gridUtils.customersFormatting(data, 'USR_CUST', 'USR_ROLE', 'USR_GEOS')#",
                 width: "250px",
             },
             {

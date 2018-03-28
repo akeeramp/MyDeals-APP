@@ -29,8 +29,6 @@
     bool isDeveloper = opUserToken.IsDeveloper();
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
-    bool isAdmin = opUserToken.IsAdmin();
-    bool isFinanceAdmin = opUserToken.IsFinanceAdmin();
 
     if (isSuper)
     {
@@ -39,11 +37,7 @@
     }
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("Tester User"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("Developer User"); }
-    if (isAdmin) { extraUserPrivs += "A"; extraUserPrivsDetail.Add("Admin User"); }
-    if (isFinanceAdmin) { extraUserPrivs += "F"; extraUserPrivsDetail.Add("Finance Admin User"); }
-    if (extraUserPrivs == "TDAF") { extraUserPrivs = "DAFT"; } // We are full on nuts on this project
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD"; } // We practice SAFE CODING on this project
-    if (extraUserPrivs == "STDA") { extraUserPrivs = "A STuD"; } // Is something special, and much safer.
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 
     var env = ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
@@ -123,7 +117,7 @@
             @if (isDeveloper)
             {
                 <li class="dropdown">
-                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
+                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
                     <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                         <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
                     </ul>
@@ -134,7 +128,7 @@
                 however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
+                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
                     <li class="dropdown-submenu">
@@ -148,7 +142,7 @@
                                 </div>
                                 <div class="clearboth"></div>
                             </a></li>
-                            @if (isDeveloper)
+                            @if (usrRole == "SA" || isDeveloper)
                             {
                                 <li class="menu-detailed">
                                     <a href="/error/ResetAVM" onclick="clearSessionData('/error/ResetAVM'); return false;">
@@ -173,14 +167,17 @@
                             }
                         </ul>
                     </li>
-                    <li><a href="Admin#/employee">Set Your Role</a></li>
+                    @if (1 == 1) // Update this with ENV not prod
+                    {
+                        <li><a href="Admin#/employee">Set Your Role</a></li>
+                    }
 
                     @if (isDeveloper)
                     {
                         <li><a href="Admin#/cache">Cache Manager</a></li>
                         <li><a href="Admin#/constants">Constants</a></li>
                     }
-                    @if (isAdmin || isTester || isDeveloper)
+                    @if (usrRole == "SA" || isTester || isDeveloper)
                     {
                         <li><a href="Admin#/customers">Customer</a></li>
                         <li><a href="Admin#/geo">Geo</a></li>
@@ -190,7 +187,7 @@
                         <li><a href="Admin#/meetcomp">Meet Comp</a></li>
                     }
 
-                    @if (isAdmin || isTester || isDeveloper)
+                    @if (usrRole == "SA" || isTester || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Products</a>
@@ -203,7 +200,7 @@
                             </ul>
                         </li>
                     }
-                    @if (usrRole == "Legal" || isFinanceAdmin || isTester || isDeveloper)
+                    @if (usrRole == "Legal" || usrRole == "SA" || isTester || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Legal Configurations</a>
@@ -215,7 +212,7 @@
                         </li>
                     }
 
-                    @if (isAdmin || isDeveloper)
+                    @if (usrRole == "SA" || isDeveloper)
                     {
                         <li><a href="Admin#/dropdowns">UI Control Values</a></li>
                     }
@@ -232,6 +229,10 @@
 
                         <li><a href="Admin#/workflow">WorkFlow</a></li>
                         <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
+                    }
+
+                    @if (usrRole == "SA" || isDeveloper)
+                    {
                         <li><a href="Admin#/manageEmployee">Manage Employees</a></li>
                     }
 
@@ -240,10 +241,10 @@
 
 
             <li>
-                <a href="/advancedSearch#/tenderSearch" title="Tender"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tenders</span></a>
+                <a href="/advancedSearch#/tenderSearch" title="Tender Manager"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tenders</span></a>
             </li>
             <li>
-                <a href="/advancedSearch#/attributeSearch" title="Tender"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
+                <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
             </li>
 
 
@@ -355,8 +356,6 @@
 
     window.isDeveloper = "@isDeveloper" === "True";
     window.isTester = "@isTester" === "True";
-    window.isAdmin = "@isAdmin" === "True";
-    window.isFinanceAdmin = "@isFinanceAdmin" === "True";
 
     window.env = "@env";
 </script>

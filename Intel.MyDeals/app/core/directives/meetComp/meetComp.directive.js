@@ -18,11 +18,10 @@
             templateUrl: '/app/core/directives/meetComp/meetComp.directive.html',
             controller: ['$scope', 'dataService', function ($scope, dataService) {
 
-                var isSuperSA = window.usrRole === "SA" && window.isSuper;
                 // TODO: Configure security mask, these all workflow stage sec setting, we need to define one more deal sec 'CAN_OVERRIDE_MEET_COMP'
                 var hideViewMeetCompResult = window.usrRole === "FSE";  //|| !$scope.root.CAN_VIEW_MEET_COMP;
-                var hideViewMeetCompOverride = !(window.usrRole === "DA" || isSuperSA || window.usrRole === "Legal"); //|| !$scope.root.CAN_VIEW_MEET_COMP;
-                var canUpdateMeetCompSKUPriceBench = (usrRole === "FSE" || usrRole === "GA" || isSuperSA);
+                var hideViewMeetCompOverride = !(window.usrRole === "DA" || window.usrRole === "Legal"); //|| !$scope.root.CAN_VIEW_MEET_COMP;
+                var canUpdateMeetCompSKUPriceBench = (usrRole === "FSE" || usrRole === "GA");
 
                 var columnIndex = {
                     COMP_SKU: 6,
@@ -232,28 +231,28 @@
                                     }
 
                                     //COMP_BNCH checking....
-                                    if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                                    if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
                                         errorObj.COMP_BNCH = true;
                                         errorObj.RW_NM = data[i].RW_NM;
                                         isError = true;
                                     }
 
                                     //IA_BNCH checking....
-                                    if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA" || isSuperSA) && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                                    if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (usrRole === "GA") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
                                         errorObj.IA_BNCH = true;
                                         errorObj.RW_NM = data[i].RW_NM;
                                         isError = true;
                                     }
 
                                     //COMP_OVRRD_FLG checking....
-                                    if (data[i].COMP_OVRRD_FLG <= 0 && (usrRole == "DA" || isSuperSA)) {
+                                    if (data[i].COMP_OVRRD_FLG <= 0 && (usrRole == "DA")) {
                                         errorObj.COMP_OVRRD_FLG = true;
                                         errorObj.RW_NM = data[i].RW_NM;
                                         isError = true;
                                     }
 
                                     //COMP_OVRRD_RSN checking....
-                                    if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA" || isSuperSA)) {
+                                    if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA" )) {
                                         errorObj.COMP_OVRRD_RSN = true;
                                         errorObj.RW_NM = data[i].RW_NM;
                                         isError = true;
@@ -1257,7 +1256,7 @@
                                 if (options.model.MEET_COMP_STS.toLowerCase() == "pass" || (options.model.MEET_COMP_STS.toLowerCase() == "overridden" && options.model.COMP_OVRRD_FLG.toLowerCase() == "yes")) {
 
                                 }
-                                else if ((usrRole == "DA" || isSuperSA) && options.model.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === "y") {
+                                else if ((usrRole == "DA") && options.model.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === "y") {
                                     var tempData = [
                                         {
                                             "COMP_OVRRD_FLG": "Yes"

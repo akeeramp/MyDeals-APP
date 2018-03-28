@@ -10,7 +10,6 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             var role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
-            var isSuperSA = role == "SA" && OpUserStack.MyOpUserToken.IsSuper();
 
             // For now... to show how this would apply to rules, we will make a logical condition.
             // In the future, we can replace with security key where the stages are managed in the DB
@@ -53,13 +52,6 @@ namespace Intel.MyDeals.BusinessRules
                 if (string.IsNullOrEmpty(item.PS_STATUS))
                 {
                     item.MEET_COMP_UPD_FLG = "Y"; // Product Line will always be editable TODO: Run it by Guru
-                    item.MEET_COMP_OVERRIDE_UPD_FLG = "Y";
-                }
-
-                // Super SA can edit on any stage
-                if (isSuperSA)
-                {
-                    item.MEET_COMP_UPD_FLG = "Y";
                     item.MEET_COMP_OVERRIDE_UPD_FLG = "Y";
                 }
 

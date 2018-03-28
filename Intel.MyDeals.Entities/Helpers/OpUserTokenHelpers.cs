@@ -35,14 +35,6 @@
         //    return IsPropertySet(opUserToken, EN.OPUSERTOKEN.IS_SUPER);
         //}
 
-        //public static bool IsSuperSa(OpUserToken opUserToken, List<AdminConstant> toolConstants)
-        //{
-        //    if (opUserToken.Role.RoleTypeCd == RoleTypes.SA)
-        //    {
-        //        return IsPropertySet(opUserToken, EN.OPUSERTOKEN.IS_SUPER);
-        //    }
-        //    return false;
-        //}
 
         //public static bool IsDeveloper(OpUserToken opUserToken, List<AdminConstant> toolConstants)
         //{

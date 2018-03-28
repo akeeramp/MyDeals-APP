@@ -1041,19 +1041,32 @@ gridUtils.msgIcon = function (dataItem) {
     return dataItem.MsgType;
 }
 
-gridUtils.customersFormatting = function (passedData, field) {
-    var val = passedData[field];
+gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos) {
+    var valCusts = passedData[usrCusts];
+    var valRoles = passedData[usrRole];
+    var valGeos = passedData[usrGeos];
     // Pad en empty user with something to click from manage employee screen
-    if (val === "[Please Add Customers]")
+    if (valCusts === "[Please Add Customers]")
     {
-        return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>";
+        if (valRoles !== "" && valGeos !== "")
+        {
+            return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>"; // Edit enabled
+        }
+        else
+        {
+            return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
+        }
     }
     // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
-    else if (val === "All Customers") {
-        return "All Customers";
+    else if (valCusts === "All Customers") {
+        return "All Customers"; // Edit turned off
+    }
+    if (valRoles === "" || valGeos === "")
+    {
+        return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
     }
     // All other people, just make their customers list clickable
-    return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>";
+    return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>"; // Edit enabled
 }
 
 gridUtils.dialogShow = function () {

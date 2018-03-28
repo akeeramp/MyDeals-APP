@@ -221,8 +221,6 @@ namespace Intel.MyDeals.DataLibrary
             opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] = tempUserVitalsRole.First().IS_SUPER == 1? true: false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] = tempUserVitalsRole.First().IS_TESTER == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = tempUserVitalsRole.First().IS_DEVELOPER == 1 ? true : false;
-            opUserToken.Properties[EN.OPUSERTOKEN.IS_ADMIN] = tempUserVitalsRole.First().IS_ADMIN == 1 ? true : false;
-            opUserToken.Properties[EN.OPUSERTOKEN.IS_FINANCE_ADMIN] = tempUserVitalsRole.First().IS_FINANCE_ADMIN == 1 ? true : false;
 
             opUserToken.Role = new OpRoleType
             {
@@ -261,9 +259,6 @@ namespace Intel.MyDeals.DataLibrary
                 if (sm.ACTN_NM != null) settings.SecurityMasks.Add(sm);
             }
 
-            // Set IsSuperSA here because you need to have a role to check against as well.
-            opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] = (tempUserVitalsRole.First().IS_SUPER == 1 && opUserToken.Role.RoleTypeCd == RoleTypes.SA) ? true : false;
-
             ////// Table 4 contains Verticals
             foreach (UserVitalsVerticals vitalsVertical in tempUserVitalsVerticals)
             {
@@ -275,9 +270,6 @@ namespace Intel.MyDeals.DataLibrary
 
                 if (vsi.Id != 0) settings.VerticalSecurity.Add(vsi);
             }
-
-            ////// Table 1 contains Super Record, to get SuperSA, must merge with Role = SA
-            settings.SuperSa = tempUserVitalsRole.First().IS_SUPER == 1 && opUserToken.Role.RoleTypeCd == RoleTypes.SA;
 
             return settings;
         }
@@ -293,9 +285,7 @@ namespace Intel.MyDeals.DataLibrary
                     RoleId = data.roleTypeId,
                     IsDeveloper = data.isDeveloper,
                     IsTester = data.isTester,
-                    IsSuper = data.isSuper,
-                    IsAdmin = data.isAdmin,
-                    IsFinanceAdmin = data.isFinanceAdmin
+                    IsSuper = data.isSuper
                 };
 
                 var rdr = DataAccess.ExecuteReader(cmd);

@@ -10,12 +10,15 @@ manageEmployeeModalCtrl.$inject = ['manageEmployeeService', '$scope', '$uibModal
 
 function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstance, dataItem, logger) {
 
+    var geosArray = dataItem["USR_GEOS"].split(', ');
+
     $scope.custdataSource = new kendo.data.DataSource({
         type: "json",
         transport: {
             read: function (e) {
-                manageEmployeeService.getCustomers()
+                manageEmployeeService.getCustomersFromGeos(geosArray)
                     .then(function (response) {
+                        debugger;
                         $scope.selectedIds = [];
                         var selectedCustomers = dataItem["USR_CUST"].replace(/, /g, ",").split(",");
                         for (var c = 0; c < response.data.length; c++)
@@ -41,7 +44,47 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
         autoClose: false,
         dataSource: $scope.custdataSource
     };
-    $scope.selectedIds = [];
+
+
+
+
+    $scope.geoAllOptions = [
+    {
+        "id": "Worldwide",
+    },
+    {
+        "id": "APAC",
+    },
+    {
+        "id": "ASMO",
+    },
+    {
+        "id": "EMEA",
+    },
+    {
+        "id": "IJKK",
+    },
+    {
+        "id": "PRC",
+    },
+    ];
+
+    $scope.geoData = [];
+    for (var i = 0; i < geosArray.length; i++)
+    {
+        $scope.geoData.push({ id: geosArray[i] })
+    }
+
+    $scope.isChecked = function (id) {
+        var match = false;
+        for (var i = 0 ; i < $scope.geoData.length; i++) {
+            if ($scope.geoData[i].id == id) {
+                match = true;
+            }
+        }
+        return match;
+    };
+
 
 
     $scope.ok = function () {
@@ -65,7 +108,7 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
                     if (saveNames.length === 0) {
                         saveNames.push("[Please Add Customers]");
                     }
-                    $uibModalInstance.close(saveNames.sort().join(", ")); // Pose back the results to parent screen.
+                    $uibModalInstance.close(saveNames.sort().join(", ")); // Post back the results to parent screen.
 
                     logger.success("User's Customers list was saved", "Done");
                 }, function (response) {

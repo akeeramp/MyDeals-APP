@@ -8,6 +8,20 @@
         <select kendo-multi-select k-options="selectOptions" id="selCustomers" class="selCustomers" k-ng-model="selectedIds"></select>
 
         <div class="row">
+            <div class="col-md-6" style="text-align: center;"></div>
+            <div class="col-md-6 info-container" style="padding: 5px; text-align: center">
+                <span class="desc role-title" style="width: 90%;">Current customer geograpy selections</span>
+                <div>
+                    <span ng-repeat="item in geoAllOptions" class="item" id="{{item.id}}">
+                        <label class="btn btn-default" ng-class="{active: isChecked(item.id)}">
+                            {{item.id}} <input disabled style="display: none" type="checkbox" ng-change="sync(bool, item)" ng-model="bool" ng-checked="isChecked(item.id)">
+                        </label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-6" style="text-align: center;">
                 <button class="btn btn-default" type="button" style="width: 90%;" ng-click="cancel()">Cancel</button>
             </div>
@@ -42,6 +56,33 @@
     #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller, 
     #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul {
         height: 300px !important;
+    }
+
+    .role-title {
+        font-family: "Intel Clear", "Arial";
+        font-size: 14px;
+        font-weight: bold;
+        font-weight: 600;
+        color: #000000;
+    }
+
+    .info-container {
+        text-align: center;
+    }
+
+    .info-box-container {
+        border: 1px solid #d7d7d7;
+        border-radius: 6px;
+        padding: 30px;
+        margin: 10px 50px;
+        text-align: left;
+    }
+
+    .filter-container {
+        margin-top: 10px;
+        text-align: right;
+        font-size: 12px;
+        color: #aaaaaa;
     }
 
 </style>

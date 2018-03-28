@@ -209,7 +209,7 @@ namespace Intel.MyDeals.BusinessLogic
                     if (!items.ContainsKey(de.AtrbCd)) continue;
 
                     if (de.DataType == "System.DateTime" && items[de.AtrbCd] != null &&
-                        !string.IsNullOrEmpty(items[de.AtrbCd].ToString().Replace("Invalid date", "")))
+                        !string.IsNullOrEmpty(items[de.AtrbCd].ToString().Replace("Invalid date", ""))) 
                     {
                         DateTime date = Convert.ToDateTime(items[de.AtrbCd]);
                         items[de.AtrbCd] = date;

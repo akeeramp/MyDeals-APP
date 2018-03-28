@@ -25,23 +25,6 @@ namespace Intel.MyDeals.BusinessLogic.Test
         }
 
         [TestMethod]
-        public void IsSuperSa()
-        {
-            Assert.IsFalse(_opUserToken.IsSuperSa());
-        }
-
-        [TestMethod]
-        public void IsAdmin()
-        {
-            Assert.IsFalse(_opUserToken.IsAdmin());
-        }
-
-        public void IsFinanceAdmin()
-        {
-            Assert.IsFalse(_opUserToken.IsFinanceAdmin());
-        }
-
-        [TestMethod]
         public void IsDeveloper()
         {
             Assert.IsFalse(_opUserToken.IsDeveloper());

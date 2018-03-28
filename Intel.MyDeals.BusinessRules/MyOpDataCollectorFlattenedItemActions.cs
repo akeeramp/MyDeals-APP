@@ -23,7 +23,6 @@ namespace Intel.MyDeals.BusinessRules
             //return new MyDealsActionItem();
             OpUserToken opUserToken = OpUserStack.MyOpUserToken;
 
-            bool isSuperSa = opUserToken.IsSuperSa();
             bool isSuper = opUserToken.IsSuper();
 
             string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);

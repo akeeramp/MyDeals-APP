@@ -15,12 +15,9 @@
 
         public static class OPUSERTOKEN
         {
-            public const string IS_ADMIN = "IsAdmin";
             public const string IS_SUPER = "IsSuper";
-            public const string IS_SUPER_SA = "IsSuperSa";
             public const string IS_DEVELOPER = "IsDeveloper";
             public const string IS_TESTER = "IsTester";
-            public const string IS_FINANCE_ADMIN = "IsFinanceAdmin";
 
             public const string SUPER_LIST = "UI_SUPER_ADMINISTRATOR_LIST";
             public const string DEVELOPER_LIST = "UI_Developers_List";

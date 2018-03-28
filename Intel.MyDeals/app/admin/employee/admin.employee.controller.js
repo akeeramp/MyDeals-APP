@@ -16,8 +16,6 @@
         $scope.isDeveloper = window.isDeveloper;
         $scope.isTester = window.isTester;
         $scope.isSuper = window.isSuper;
-        $scope.isAdmin = window.isAdmin;
-        $scope.isFinanceAdmin = window.isFinanceAdmin;
 
         $scope.save = function()
         {
@@ -25,9 +23,7 @@
                 "roleTypeId": $scope.roleTypeId,
                 "isDeveloper": $scope.isDeveloper? 1: 0,
                 "isTester": $scope.isTester ? 1 : 0,
-                "isSuper": $scope.isSuper ? 1 : 0,
-                "isAdmin": $scope.isAdmin ? 1 : 0,
-                "isFinanceAdmin": $scope.isFinanceAdmin ? 1 : 0
+                "isSuper": $scope.isSuper ? 1 : 0
             }
 
             employeeService.setEmployees(data)

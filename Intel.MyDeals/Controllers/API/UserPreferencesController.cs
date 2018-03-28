@@ -71,6 +71,18 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetManageUserDataGetCustomersInGeos")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public IEnumerable<CustomerDivision> GetManageUserDataGetCustomersInGeos(List<string> geos)
+        {
+            return SafeExecutor(() => new EmployeesLib().GetManageUserDataGetCustomers(geos)
+                , "Unable to GetManageUserDataGetCustomersInGeos"
+            );
+        }
+
+        [AntiForgeryValidate]
+        [Authorize]
         [Route("SetManageUserData")]
         [HttpPost]
         [AntiForgeryValidate]
