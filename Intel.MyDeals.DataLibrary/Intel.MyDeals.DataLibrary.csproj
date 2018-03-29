@@ -56,6 +56,9 @@
       <HintPath>..\Shared Libraries\Intel.Opaque.Tools.dll</HintPath>
       <Aliases>opaqueTools</Aliases>
     </Reference>
+    <Reference Include="Intel.Opaque.Utilities.Server">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Utilities.Server.dll</HintPath>
+    </Reference>
     <Reference Include="Intel.RulesEngine">
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
     </Reference>

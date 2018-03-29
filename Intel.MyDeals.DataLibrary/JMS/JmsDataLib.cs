@@ -12,6 +12,7 @@ using Intel.MyDeals.DataAccessLib;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using Intel.Opaque;
+using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -38,6 +39,7 @@ namespace Intel.MyDeals.DataLibrary
             jmsQueue = jmsEnvs.ContainsKey("jmsQueue") ? jmsEnvs["jmsQueue"] : "";
             jmsUID = jmsEnvs.ContainsKey("jmsUID") ? jmsEnvs["jmsUID"] : "";
             jmsPWD = jmsEnvs.ContainsKey("jmsPWD") ? jmsEnvs["jmsPWD"] : "";
+            jmsPWD = StringEncrypter.StringDecrypt(jmsPWD, "JMS_Password");
         }
 
         /// <summary>

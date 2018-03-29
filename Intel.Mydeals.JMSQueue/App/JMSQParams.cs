@@ -448,7 +448,7 @@ Supported command line options:
 /dir:<direction> = JMS Queue Mode Direction, where <direction> is:
    send (or sender) = Sender Mode.
    rec (or receiver) = Receiver Mode.
-   both (or receiver) = Receiver Mode.
+   both = Send and Receiver Mode.
 
 /log = Write details to output log file.
 /diag = Perform diagnostics.

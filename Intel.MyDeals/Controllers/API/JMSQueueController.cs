@@ -1,6 +1,7 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque.Tools;
+using Intel.Opaque.Utilities.Server;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -156,6 +157,20 @@ namespace Intel.MyDeals.Controllers.API
         public void Publish(JMS jms)
         {
             _jmsLib.Publish(jms.Url, jms.UserName, jms.Password, jms.QueueName, jms.Message);
+        }
+
+        [HttpGet]
+        [Route("EncryptString/{password}")]
+        public string EncryptString(string password)
+        {
+            return StringEncrypter.StringEncrypt(password, "JMS_Password");
+        }
+
+        [HttpGet]
+        [Route("DecryptString/{password}")]
+        public string DecryptString(string password)
+        {
+            return StringEncrypter.StringDecrypt(password, "JMS_Password");
         }
     }
 }
