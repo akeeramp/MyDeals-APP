@@ -2593,7 +2593,7 @@
             var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
-
+					
                     var data = results.data.Data;
 
                     pcService.addPerfTimes(results.data.PerformanceTimes);
@@ -2625,7 +2625,7 @@
                         }
                     }
 
-                    if (!!data.WIP_DEAL) {
+                    if (!!data.WIP_DEAL && stateName !== "contract.manager.strategy") { // Wip deal and Not in pricing table row tab // HACK: To prevent PTR from using WIP deal warnings
                         if (!$scope.switchingTabs) {
                             for (i = 0; i < data.WIP_DEAL.length; i++) {
                                 var dataItem = data.WIP_DEAL[i];
