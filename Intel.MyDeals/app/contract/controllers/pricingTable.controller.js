@@ -1306,7 +1306,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var rowAdded = offSetRows;
             var deleteRows = pivottedRows.length - numTier;
             var rowDeleted = 0;
-            var numExistingRows = pivottedRows.length;// Existing pivotted rows
+            var numExistingRows = pivottedRows.length;// Existing pivotted rows			
             for (var a = 0; a < pivottedRows.length - numTier; a++) {
                 //  Make following properties null, it will be picked up for deletion in next iteration
                 data[n - a].DC_ID = null;
@@ -1317,16 +1317,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // if row deleted count > 0  no need to add rows
             rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
-
+			
             for (var a = 0; a < numTier; a++) {
-                if (numTier == pivottedRows.length) {
+            	if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
+            		data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
                     continue;
                 }
                 // Update existing rows, offset number of deleted rows
-                if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
-                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
+                else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
+                	data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
                     numExistingRows--;
                 } else {
                     if (rowDeleted == 0 && offSetRows > 0) {
@@ -1336,11 +1336,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
                         // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
                         data[n + a - (offset - 1)].id = null;
-                        // Clear out any tiered values because this is a new row
-                        data[n + a - (offset - 1)]["ECAP_PRICE"] = 0;
-                        data[n + a - (offset - 1)]["DSCNT_PER_LN"] = 0;
-                        data[n + a - (offset - 1)]["QTY"] = 1;
-                        data[n + a - (offset - 1)]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
 
                         offSetRows--;
                     } else {
@@ -1352,12 +1347,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
     }
-
+	
     function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber) {
-        var row = angular.copy(row);
-        var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
-        if (buckProd.length === 0) {
-            row.PRD_BCKT = productBcktName;
+    	var row = angular.copy(row);
+    	var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
+        if (buckProd.length === 0) { // no corresponding row (essentially a new row)
+        	row.PRD_BCKT = productBcktName;			
+        	// Clear out any tiered values because this is an essentially new row
+        	row["ECAP_PRICE"] = 0;
+        	row["DSCNT_PER_LN"] = 0;
+        	row["QTY"] = 1;
+        	row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
         } else {
             row = buckProd[0]; //Select the first one even of there are duplicates
         }
