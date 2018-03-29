@@ -401,11 +401,12 @@
                 var products = vm.productSelectionLevels.filter(function (x) {
                     return x.PRD_MBR_SID == item.id;
                 })[0];
-                products['selected'] = item.selected;
-                products['parentSelected'] = item.parentSelected;
+                var product = angular.copy(products);
+                product['selected'] = item.selected;
+                product['parentSelected'] = item.parentSelected;
                 vm.items = [];
                 vm.gridData = [];
-                showLevle4(products);
+                showLevle4(product);
                 dataSourceProduct.read();
             } else {
                 getItems(item);
