@@ -1042,7 +1042,7 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new List<Overlapping>();
             var cmd = new Procs.dbo.PR_MYDL_UI_GET_OVRLP
             {
-                @ID = PRICING_TABLES_ID,
+                //@ID = PRICING_TABLES_ID,
                 @MODE = "SELECT",
             };
 
@@ -1129,7 +1129,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UI_GET_OVRLP
                 {
-                    @ID = PRICING_TABLES_ID,
+                    //@ID = PRICING_TABLES_ID,
                     @MODE = "UPDATE",
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     @FLAG = YCS2_OVERLAP_OVERRIDE
