@@ -81,11 +81,14 @@
                         var forceRun = $scope.$parent.forceRun();
 
                         var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+                        
 
                         var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                         var hh = Math.abs(timeDiff.asHours());
                         var mm = Math.abs(timeDiff.asMinutes());
                         var ss = Math.abs(timeDiff.asSeconds());
+                        var zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];                        
+                        $scope.lastMetCompRunLocalTime = moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")"; //lastruntime.format("MM/DD/YY HH:mm:ss");
 
                         var dsplNum = hh;
                         var dsplMsg = " hours ago";
@@ -100,9 +103,7 @@
                             dsplNum = ss;
                             dsplMsg = " secs ago";
                             if (!forceRun) $scope.needToRunPct = false;
-                        }
-
-                        
+                        }                        
 
                         if ($scope.needToRunPct) {
                             $scope.MC_MODE = "A";
@@ -866,17 +867,17 @@
                                         filterable: { multi: true, search: true },
                                         template: "<div class='readOnlyCell'></div>"
                                     },
-                                    {
-                                        field: "MC_LAST_RUN",
-                                        title: "Last Run",
-                                        template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(MC_LAST_RUN) #'>#= gridUtils.convertPstToLocal(MC_LAST_RUN) #</div>",
-                                        width: 170,
-                                        filterable: {
-                                            extra: false,
-                                            ui: "datepicker"
-                                        },
-                                        editable: function () { return false; }
-                                    }
+                                    //{
+                                    //    field: "MC_LAST_RUN",
+                                    //    title: "Last Run",
+                                    //    template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(MC_LAST_RUN) #'>#= gridUtils.convertPstToLocal(MC_LAST_RUN) #</div>",
+                                    //    width: 170,
+                                    //    filterable: {
+                                    //        extra: false,
+                                    //        ui: "datepicker"
+                                    //    },
+                                    //    editable: function () { return false; }
+                                    //}
                                 ]
                             };
 
@@ -1792,17 +1793,17 @@
                                             editable: function () { return false; },
                                             template: "<div title='#=YCS2#' class='readOnlyCell'>#if(YCS2 == 0){## ##} else {#$#:YCS2##}#</div>"
                                         },
-                                        {
-                                            field: "MC_LAST_RUN",
-                                            title: "Last Run",
-                                            template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(MC_LAST_RUN) #'>#= gridUtils.convertPstToLocal(MC_LAST_RUN) #</div>",
-                                            width: 150,
-                                            filterable: {
-                                                extra: false,
-                                                ui: "datepicker"
-                                            },
-                                            editable: function () { return false; },
-                                        }
+                                        //{
+                                        //    field: "MC_LAST_RUN",
+                                        //    title: "Last Run",
+                                        //    template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(MC_LAST_RUN) #'>#= gridUtils.convertPstToLocal(MC_LAST_RUN) #</div>",
+                                        //    width: 150,
+                                        //    filterable: {
+                                        //        extra: false,
+                                        //        ui: "datepicker"
+                                        //    },
+                                        //    editable: function () { return false; },
+                                        //}
                                     ]
                                 });
                             };
