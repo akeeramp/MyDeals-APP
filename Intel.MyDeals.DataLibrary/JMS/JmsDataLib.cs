@@ -94,7 +94,7 @@ namespace Intel.MyDeals.DataLibrary
             OpLog.Log("JMS - GetPricingRecordsXml");
 
             var xmlRecords = string.Empty;
-            var cmd = new Procs.dbo.PR_SAP_GET_RCDS_XML
+            var cmd = new Procs.dbo.PR_MYDL_SAP_GET_RCDS_XML
             {
                 jms_id = jmsId,
                 group_id = groupId
