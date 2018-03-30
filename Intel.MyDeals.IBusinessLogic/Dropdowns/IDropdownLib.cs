@@ -40,7 +40,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
 		List<Dropdown> GetSoldToIdDropdown(int custId, IEnumerable<string> geos, IEnumerable<string> custDivs);
 
-		List<OverlappingDeal> GetDealGroupDropdown(int dealId);
+		List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
 
 	}
 }

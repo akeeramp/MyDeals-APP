@@ -27,7 +27,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             if (!!$scope.isEditable) $scope.isEditable = false;
             $scope.fileUploading = false;
-            $scope.objTypeSid = 5 //WIP deals
+            $scope.objTypeSid = 5; //WIP deals
             $scope.assignVal = function (field, defval) {
                 var item = $scope[field];
                 return (item === undefined || item === null) ? defval : item;

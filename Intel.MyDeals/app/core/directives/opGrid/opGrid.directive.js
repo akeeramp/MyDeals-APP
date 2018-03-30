@@ -786,9 +786,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     $scope.$root.$broadcast("OpGridDataBound");
 
-                    $timeout(function () {
-                        $scope.overlappingDealsSetup();
-                    }, 3000);
+                    //$timeout(function () {
+                    //    $scope.overlappingDealsSetup();
+                    //}, 3000);
                 }
             };
 
@@ -2275,7 +2275,41 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
+
+            $scope.objSids = [];
+            $scope.objType = "PricingTable";
+            $scope.openOverlappingDealCheck = function () {
+
+                var pricingTableId = $scope.parentRoot.curPricingTable.DC_ID;
+                $scope.objSids = [pricingTableId];
+                $scope.objType = "PricingTable";
+                var html = "<overlapping-deals obj-sids='objSids' obj-type='objType' style='height: 100%;'></overlapping-deals>";
+                var template = angular.element(html);
+                $compile(template)($scope);
+
+                $("#smbWindow").html(template);
+
+                $("#smbWindow").kendoWindow({
+                    width: "800px",
+                    height: "500px",
+                    title: "Overlapping Deals",
+                    visible: false,
+                    actions: [
+                        "Minimize",
+                        "Maximize",
+                        "Close"
+                    ],
+                    close: function() {
+                        $("#smbWindow").html("");
+                    }
+                }).data("kendoWindow").center().open();
+            }
+
             $scope.overlappingDealsSetup = function () {
+                return;
+
+                // comment this out for now until we prove this works.
+
                 var dealType = $scope.dealTypes[0];
                 if (dealType.toUpperCase() === "ECAP" && $scope.isOverlapNeeded) {
                     var pcService = new perfCacheBlock("Overlapping Check", "MT");
@@ -2289,7 +2323,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var pricingTableID = $scope.parentRoot.curPricingTable.DC_ID;
 
                     //Calling WEBAPI
-                    objsetService.getOverlappingDeals(pricingTableID)
+                    objsetService.getOverlappingDealsFromPricingTable(pricingTableID)
                         .then(function(response) {
                                 pcService.addPerfTimes(response.data.PerformanceTimes);
 

@@ -8,9 +8,9 @@ SetRequestVerificationToken.$inject = ['$http'];
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', '$linq', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', '$linq', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal', '$compile'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, $linq, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, $linq, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal, $compile) {
     var vm = this;
 
     // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
@@ -82,6 +82,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
+
     // Hard-coded sadnesses, but are better than other hard-coded sadness solutions
     var productValidationDependencies = [
         "GEO_COMBINED",
@@ -126,6 +127,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             logger.error("Unable to locate Pricing Table " + $stateParams.pid);
             $state.go('contract.manager', { cid: root.contractData.DC_ID });
         }
+
+        $scope.$root.ovlapObjSids = [$scope.root.curPricingTable.DC_ID];
+        $scope.$root.ovlapObjType = "PricingTable";
 
         root.spreadNeedsInitialization = true;
 
@@ -3680,7 +3684,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     $scope.manageExludeGroups = function(dataItem) {
-        debugger;
     }
 
     $scope.customRedo = function () {
@@ -3688,6 +3691,35 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if ($scope.redoCounter > 0) {
             $(".k-button[title=Redo]").click();
         }
+    }
+
+    $scope.objSids = [];
+    $scope.objType = "PricingTable";
+    $scope.openOverlappingDealCheck = function () {
+
+        var pricingTableId = $scope.root.curPricingTable.DC_ID;
+        $scope.objSids = [pricingTableId];
+        $scope.objType = "PricingTable";
+        var html = "<overlapping-deals obj-sids='objSids' obj-type='objType' style='height: 100%;'></overlapping-deals>";
+        var template = angular.element(html);
+        $compile(template)($scope);
+
+        $("#smbWindow").html(template);
+
+        $("#smbWindow").kendoWindow({
+            width: "800px",
+            height: "500px",
+            title: "Overlapping Deals",
+            visible: false,
+            actions: [
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+            close: function () {
+                $("#smbWindow").html("");
+            }
+        }).data("kendoWindow").center().open();
     }
 
     // Reset the undo/redo counters. Doesn't actually clear Kendo's undo/redo stack

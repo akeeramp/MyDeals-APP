@@ -68,7 +68,9 @@ function objsetService($http, dataService, logger, $q, $location) {
         getPctDetails: getPctDetails,
         setPctOverride: setPctOverride,
         runPctContract: runPctContract,
-        getOverlappingDeals: getOverlappingDeals,
+        getOverlappingDealsFromContract: getOverlappingDealsFromContract,
+        getOverlappingDealsFromPricingStrategy: getOverlappingDealsFromPricingStrategy,
+        getOverlappingDealsFromPricingTable: getOverlappingDealsFromPricingTable,
         updateOverlappingDeals: updateOverlappingDeals
         //getDealQuoteLetter: getDealQuoteLetter,
     }
@@ -249,8 +251,15 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
 
     // #### Overlapping CRUD operation ####
-    function getOverlappingDeals(PRICING_TABLES_ID) {
-        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDeals/' + PRICING_TABLES_ID);
+
+    function getOverlappingDealsFromContract(id) {
+        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDealsFromContract/' + id);
+    }
+    function getOverlappingDealsFromPricingStrategy(ids) {
+        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDealsFromPricingStrategy/' + ids);
+    }
+    function getOverlappingDealsFromPricingTable(ids) {
+        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDealsFromPricingTable/' + ids);
     }
 
     function updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE) {

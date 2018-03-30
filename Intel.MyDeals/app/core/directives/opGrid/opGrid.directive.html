@@ -41,7 +41,7 @@
                             <td>
                                 <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                             </td>
-                            <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                            <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
                                 Show/Hide<br />Additional Discounts
                             </td>
                         </tr>
@@ -67,7 +67,7 @@
                                 <td style="border: 0 solid transparent;">
                                     <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                                 </td>
-                                <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent;">
+                                <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent;">
                                     Excel<br>Export
                                 </td>
                                 <td>
@@ -87,7 +87,7 @@
                 <ul kendo-menu>
                     <li>
                         <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                        <span class="fl hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
+                        <span class="fl hidden-md hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
                         <i style="font-size: 40px !important; width: 1px !important;"></i>
                         <ul>
                             <li ng-click="addTab()">
@@ -114,7 +114,7 @@
                 <ul kendo-menu k-options="columnMenu">
                     <li>
                         <i class="fl intelicon-view-by-columns" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                        <span class="fl hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                        <span class="fl hidden-md hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
                         <i style="font-size: 40px !important; width: 1px !important;"></i>
                         <ul>
                             <li>
@@ -141,13 +141,28 @@
             </div>
             
             <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                <button class="btn btn-sm ssToolbarBtn" ng-click="openOverlappingDealCheck()" title="check for overlapping Deals.">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                            </td>
+                            <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                Overlapping<br />Deals Check
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+            </div>
+
+            <div class="fr" style="margin-top: 2px; margin-left: 8px;">
                 <button class="btn btn-sm ssToolbarBtn" ng-click="toggleWrap()" ng-class="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap.">
                     <table>
                         <tr>
                             <td>
                                 <i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                             </td>
-                            <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                            <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
                                 Word<br />Wrap
                             </td>
                         </tr>
@@ -708,7 +723,7 @@
     }
 
     .opGridSearchInput {
-        width: 300px; 
+        width: 270px; 
         font-size: 16px
     }
     @media (max-width: 1180px) {

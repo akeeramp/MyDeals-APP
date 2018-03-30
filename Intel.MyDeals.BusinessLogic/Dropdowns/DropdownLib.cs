@@ -308,11 +308,10 @@ namespace Intel.MyDeals.BusinessLogic
 		/// <summary>
 		/// Gets a list of deal groups given a dealId
 		/// </summary>
-		/// <param name="id">A dealId</param>
 		/// <returns>a list of deal groups</returns>
-		public List<OverlappingDeal> GetDealGroupDropdown(int dealId)
+		public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds)
 		{
-			return _dropdownDataLib.GetDealGroupDropdown(dealId);
+			return _dropdownDataLib.GetDealGroupDropdown(opDataElementType, dealIds);
 		}
 	}
 }

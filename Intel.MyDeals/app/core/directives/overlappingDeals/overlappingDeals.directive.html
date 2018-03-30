@@ -1,0 +1,45 @@
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact" ng-show="isBusy"></loading-panel>
+
+<div style="height: 100%;">
+    <div ng-if="loading" style="padding-top: 140px; width: 100%; text-align: center;">
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <div style="font-size: 30px;" ng-bind="msg"></div>
+        <div class="ss-icon-lg" ng-if="msg == 'Done'">
+            <i class="intelicon-passed-completed-solid sky-blue"></i>
+        </div>
+    </div>
+
+    <div ng-show='!loading' style="height: 100%; overflow: hidden;">
+        <!--Remove refresh button for now.  Causing loss of scope as user navigates off page-->
+        <!--<button class='btn btn-primary ovlp-refresh-btn' type='button' ng-click='refreshOverlappingDeals()'>
+            <i class='fa fa-refresh' aria-hidden='true' title='Refresh overlapping deals'></i>
+        </button>-->
+        <kendo-grid options="gridOptions" class="opUiContainer dashboard op-grid sm" style="height: 100%;"></kendo-grid>
+    </div>    
+</div>
+
+
+<style>
+    .ovlp-refresh-btn {
+        padding: 7px 10px 3px 10px; 
+        position: absolute; 
+        z-index: 100; 
+        margin: -2px 2px; 
+        width: 51px;
+        background-color: #00AEEF;
+        border-color: #00AEEF;
+    }
+    .ovlp-refresh-btn:hover {
+        background-color: #0071C5;
+    }
+    .ovlp-refresh-btn i {
+        font-size: 22px;
+    }
+     
+</style>

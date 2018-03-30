@@ -31,6 +31,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.canBypassEmptyActions = false;
     $scope.ranManuallySincePageLoaded = false;
     root.enablePCT = false;
+    $scope.needToRunOverlaps = [];
 
     $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
 
@@ -54,6 +55,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $("#contractReviewDiv").removeClass("active");
         $("#dealReviewDiv").removeClass("active");
         $("#historyDiv").removeClass("active");
+        $("#overlapDiv").removeClass("active");
         $("#groupExclusionDiv").removeClass("active");
         $scope.$apply();
     }, 50);
@@ -694,6 +696,9 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                 var item = getItem(items[i], actnText);
                 ids.push(item);
                 dataItem.push(item);
+                if (item.WF_STG_CD === "Requested" && actn === "Approve" && window.usrRole === "GA") {
+                    $scope.needToRunOverlaps.push(item.DC_ID);
+                }
             }
         }
 
@@ -796,6 +801,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             }
         }
 
+        $scope.needToRunOverlaps = [];
+
         getActionItems(data, dataItems, "Approve", "Send for Approval");
         getActionItems(data, dataItems, "Revise", "Send for Revision");
         getActionItems(data, dataItems, "Cancel", "Send for Cancelling");
@@ -835,7 +842,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         modalInstance.result.then(function (result) {
             $scope.$root.pc.add(pcUser.stop());
-            $scope.checkPctMctPriorToActioning(data, result);
+            $scope.checkPriorToActioning(data, result);
             $scope.canBypassEmptyActions = false;
         }, function () { });
 
@@ -866,8 +873,62 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         }, function () { });
     }
 
-    $scope.checkPctMctPriorToActioning = function (data, result) {
+    $scope.openOverlappingDealCheck = function (ovrlpData) {
+        $scope.$root.ovrlpData = ovrlpData === undefined ? [] : ovrlpData;
 
+        var html = "<overlapping-deals obj-sids='[]' obj-type='\"local\"' style='height: 100%;'></overlapping-deals>";
+        var template = angular.element(html);
+        $compile(template)($scope);
+
+        $("#smbWindow").html(template);
+
+        $("#smbWindow").kendoWindow({
+            width: "800px",
+            height: "500px",
+            title: "Overlapping Deals - Please fix before you continue",
+            visible: false,
+            actions: [
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+            close: function () {
+                $("#smbWindow").html("");
+            }
+        }).data("kendoWindow").center().open();
+    }
+
+    $scope.checkPriorToActioning = function (data, result) {
+
+        if ($scope.needToRunOverlaps.length > 0) {
+            $scope.root.setBusy("Overlapping Deals Check", "Running Overlapping Deals Check.", "Info", true);
+            var pcPct = new perfCacheBlock("Running Overlapping check", "MT");
+            objsetService.getOverlappingDealsFromPricingStrategy($scope.needToRunOverlaps.join(',')).then(
+                function (e) {
+                    $scope.$root.pc.add(pcPct.stop());
+                    $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
+
+                    if (e.data.Data.length === 0) {
+                        $scope.checkPctMctPriorToActioning(data, result);
+                    } else {
+                        $scope.openOverlappingDealCheck(e.data.Data);
+                        $scope.root.setBusy("", "");
+                    }
+                },
+                function (response) {
+                    $scope.root.setBusy("Error", "Could not Run Overlapping Check.");
+                    logger.error("Could not run Overlapping Cheack.", response, response.statusText);
+                    $timeout(function () {
+                        $scope.root.setBusy("", "");
+                    }, 2000);
+                }
+            );
+        } else {
+            $scope.checkPctMctPriorToActioning(data, result);
+        }
+    }
+
+    $scope.checkPctMctPriorToActioning = function (data, result) {
         // check for running MCP or PCT
         var ids = $scope.getIdsToPctMct(data);
         if (ids.length > 0) {
@@ -899,7 +960,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         } else {
             root.actionPricingStrategies(data, result);
         }
-
     }
 
     $scope.getIdsToPctMct = function (data) {

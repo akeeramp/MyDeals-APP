@@ -8,6 +8,7 @@ using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using System.Data;
+using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -207,14 +208,21 @@ namespace Intel.MyDeals.DataLibrary
 		/// <summary>
 		/// Gets a list of deal groups given a dealId
 		/// </summary>
-		/// <param name="id">A dealId</param>
+		/// <param name="ids">A dealId</param>
 		/// <returns>a list of deal groups</returns>
-		public List<OverlappingDeal> GetDealGroupDropdown(int dealId)
+		public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> ids)
 		{
-			var ret = new List<OverlappingDeal>();
+		    type_int_pair opPair = new type_int_pair();
+            opPair.AddRows(ids.Select(id => new OpPair<int, int>
+            {
+                First = opDataElementType.ToId(),
+                Second = id
+            }));
+
+            var ret = new List<OverlappingDeal>();
 			Procs.dbo.PR_MYDL_GET_OVLP_DEALS cmd = new Procs.dbo.PR_MYDL_GET_OVLP_DEALS() {
-				//in_wip_deal_obj_sid = dealId
-			};
+                in_obj_keys = opPair
+            };
 
 			try
 			{
@@ -231,6 +239,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OVLP_DEAL_STRT_DT = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_STRT_DT");
                     int IDX_OVLP_DEAL_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_TYPE");
                     int IDX_OVLP_WF_STG_CD = DB.GetReaderOrdinal(rdr, "OVLP_WF_STG_CD");
+                    int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
 
                     while (rdr.Read())
 					{
@@ -246,7 +255,8 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_DEAL_ID = (IDX_OVLP_DEAL_ID < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OVLP_DEAL_ID),
                             OVLP_DEAL_STRT_DT = (IDX_OVLP_DEAL_STRT_DT < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_DEAL_STRT_DT),
                             OVLP_DEAL_TYPE = (IDX_OVLP_DEAL_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_DEAL_TYPE),
-                            OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD)
+                            OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD),
+                            WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)
                         });
 					}
 				}

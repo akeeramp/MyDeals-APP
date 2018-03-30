@@ -277,7 +277,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Overlapping
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UI_GET_OVRLP] @ID = 1, @MODE = 'SELECT', @USR_WWID = 11637989");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UI_GET_OVRLP] @MODE = 'SELECT', @USR_WWID = 11637989");
 	ds.Tables[0].TableName = "Overlapping";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -307,7 +307,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Overlapping Deal
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_OVLP_DEALS 0");
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_OVLP_DEALS");
 	ds.Tables[0].TableName = "OverlappingDeal";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

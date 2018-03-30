@@ -220,16 +220,51 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetOverlappingDeals/{PRICING_TABLES_ID}")]
-        public OverlappingListPacket GetOverlappingDeals(int PRICING_TABLES_ID)     //Get all Product with Alias from ProductAlias
+        [Route("getOverlappingDealsFromContract/{ids}")]
+        public OverlappingListPacket getOverlappingDealsFromContract(string ids)     //Get all Product with Alias from ProductAlias
         {
             DateTime start = DateTime.Now;
             List<TimeFlowItem> timeFlows = new List<TimeFlowItem>();
 
-            var results = SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(PRICING_TABLES_ID, timeFlows)
+            var results = SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(OpDataElementType.CNTRCT, ids.Split(',').Select(int.Parse).ToList(), timeFlows)
                 , $"Unable to get {"Overlapping Data"}"
              );
 
+            return new OverlappingListPacket
+            {
+                Data = results,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Overlap Check of Contract", timeFlows)
+            };
+        }
+
+        [Authorize]
+        [Route("getOverlappingDealsFromPricingStrategy/{ids}")]
+        public OverlappingListPacket getOverlappingDealsFromPricingStrategy(string ids)     //Get all Product with Alias from ProductAlias
+        {
+            DateTime start = DateTime.Now;
+            List<TimeFlowItem> timeFlows = new List<TimeFlowItem>();
+
+            var results = SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(OpDataElementType.PRC_ST, ids.Split(',').Select(int.Parse).ToList(), timeFlows)
+                , $"Unable to get {"Overlapping Data"}"
+             );
+
+            return new OverlappingListPacket
+            {
+                Data = results,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Overlap Check of Contract", timeFlows)
+            };
+        }
+
+        [Authorize]
+        [Route("getOverlappingDealsFromPricingTable/{ids}")]
+        public OverlappingListPacket getOverlappingDealsFromPricingTable(string ids)     //Get all Product with Alias from ProductAlias
+        {
+            DateTime start = DateTime.Now;
+            List<TimeFlowItem> timeFlows = new List<TimeFlowItem>();
+
+            var results = SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(OpDataElementType.PRC_TBL, ids.Split(',').Select(int.Parse).ToList(), timeFlows)
+                , $"Unable to get {"Overlapping Data"}"
+             );
 
             return new OverlappingListPacket
             {

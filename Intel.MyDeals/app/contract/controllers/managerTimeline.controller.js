@@ -92,6 +92,7 @@
             $("#contractReviewDiv").removeClass("active");
             $("#dealReviewDiv").removeClass("active");
             $("#historyDiv").addClass("active");
+            $("#overlapDiv").removeClass("active");
             $("#groupExclusionDiv").removeClass("active");
             $scope.$apply();
         }, 50);

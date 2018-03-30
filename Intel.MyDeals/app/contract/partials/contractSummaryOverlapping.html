@@ -1,15 +1,27 @@
-﻿
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
+
 <div id="sum-wrapper">
     <div id="sum-header">
         <div ui-view="summaryContentView"></div>
+        <div class="fr">
+            <button class="btn btn-primary" type="button" ng-click="refresh()">
+                <i class='fa fa-refresh' aria-hidden='true' title='Refresh overlapping deals' style="margin-right: 5px;"></i> Refresh
+            </button>
+        </div>
+        <div class="fr" style="margin-right: 20px;">
+            <button class="btn btn-primary" type="button" ng-click="openModal()">
+                <i class="fa fa-paste" aria-hidden="true" style="margin-right: 5px;"></i> Open in Window
+            </button>
+        </div>
         <h4>Overlapping Deals</h4>
+        <div class="clearboth"></div>
         <hr />
     </div>
 
     <div id="sum-container">
         <div class="sum-main-body">
             <div class="sum-main-container">
-                body info here
+                <overlapping-deals obj-sids="objSids" obj-type="objType" style="height: 100%;"></overlapping-deals>
             </div>
         </div>
     </div>
@@ -50,13 +62,16 @@
     }
 
     .sum-main-body {
+        height: 100%;
+        height: -webkit-calc(100% - 20px);
+        height: -moz-calc(100% - 20px);
+        height: calc(100% - 20px);
         margin: 5px 10px;
         padding: 0 10px;
     }
 
     .sum-main-container {
         height: 100%;
-        overflow: auto;
     }
 
     .sum-main-body .tbl-header {
@@ -91,8 +106,8 @@
         text-align: center;
     }
 
-        .sum-main-body .stage div {
-            margin: 0 10px;
-            padding: 4px 4px;
-        }
+    .sum-main-body .stage div {
+        margin: 0 10px;
+        padding: 4px 4px;
+    }
 </style>

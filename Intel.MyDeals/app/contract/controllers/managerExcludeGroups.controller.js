@@ -104,6 +104,11 @@
                                     field: "COST_TEST_RESULT",
                                     operator: "eq",
                                     value: "Fail"
+                                },
+                                {
+                                    field: "COST_TEST_RESULT",
+                                    operator: "eq",
+                                    value: "InComplete"
                                 }
                             ]
                         });
@@ -405,6 +410,7 @@
                 $("#contractReviewDiv").removeClass("active");
                 $("#dealReviewDiv").removeClass("active");
                 $("#historyDiv").removeClass("active");
+                $("#overlapDiv").removeClass("active");
                 $("#groupExclusionDiv").addClass("active");
                 $scope.$apply();
             },

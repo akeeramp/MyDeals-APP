@@ -547,6 +547,8 @@
     <Content Include="app\core\directives\meetComp\meetComp.directive.html" />
     <Content Include="app\core\directives\meetComp\meetComp.directive.js" />
     <Content Include="app\core\directives\opGrid\opGrid.directive.js" />
+    <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.html" />
+    <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\core\filters\kitCalculatedValues.filter.js" />

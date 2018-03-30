@@ -47,6 +47,8 @@
         else if ($state.current.name.indexOf("contract.export") >= 0) $scope.flowMode = "Manage";
         else if ($state.current.name.indexOf("contract.pct") >= 0) $scope.flowMode = "Manage";
         else if ($state.current.name.indexOf("contract.grouping") >= 0) $scope.flowMode = "Manage";
+        else if ($state.current.name.indexOf("contract.overlapping") >= 0) $scope.flowMode = "Manage";
+    
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
 

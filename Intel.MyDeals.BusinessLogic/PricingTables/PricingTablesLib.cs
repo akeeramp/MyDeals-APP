@@ -441,12 +441,12 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID, List<TimeFlowItem> timeFlows)
+        public List<Overlapping> GetOverlappingDeals(OpDataElementType opDataElementType, List<int> ids, List<TimeFlowItem> timeFlows)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
 
             DateTime start = DateTime.Now;
-            List<Overlapping> overlapps = OD.GetOverlappingDeals(PRICING_TABLES_ID);
+            List<Overlapping> overlapps = OD.GetOverlappingDeals(opDataElementType, ids);
             timeFlows.Add(new TimeFlowItem
             {
                 StepTitle = "Get Overlapping Deals",
@@ -455,11 +455,15 @@ namespace Intel.MyDeals.BusinessLogic
                 MsExecutionTiming = (DateTime.Now - start).TotalMilliseconds
             });
 
+            return overlapps;
+
+            // With new approach, we don't need to update the deal to set opverlap status or passed validation... time saving here!!!
+
             // Need to update
             List<int> wipIds = overlapps.Select(o => o.WIP_DEAL_OBJ_SID).Distinct().ToList();
 
-            MyDealsData myDealsData = OpDataElementType.PRC_TBL.GetByIDs(
-                new List<int> { PRICING_TABLES_ID},
+            MyDealsData myDealsData = opDataElementType.GetByIDs(
+                ids,
                 new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, 
                 new List<int>
                 {

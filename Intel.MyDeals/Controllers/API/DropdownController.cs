@@ -194,7 +194,7 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetDealGroupDropdown/{dealId}")]
 		public List<OverlappingDeal> GetDealGroupDropdown(int dealId)
 		{
-			return SafeExecutor(() => _dropdownLib.GetDealGroupDropdown(dealId)
+			return SafeExecutor(() => _dropdownLib.GetDealGroupDropdown(OpDataElementType.PRC_TBL, new List<int> { dealId })
 				, $"Unable to get deal groups"
 			);
 		}
