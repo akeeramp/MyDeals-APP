@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Telerik.Reporting.Processing;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
@@ -93,9 +94,14 @@ namespace Intel.MyDeals.DataLibrary
 
         public void GenerateBulkQuoteLetter(List<QuoteLetterData> quoteLetterDealInfoList)
         {
-            GetDealQuoteLetterData(quoteLetterDealInfoList, 2); 
+            GetDealQuoteLetterData(quoteLetterDealInfoList, 2);
             foreach (var qlData in quoteLetterDealInfoList)
-                GenerateQuoteLetterPDF(qlData, true);  // Force quote letter generation when a deal is approved (part of deal Approval flow)
+            {
+                Thread quoteLetterThread = new Thread(() => GenerateQuoteLetterPDF(qlData, true));
+                quoteLetterThread.Start();
+                //GenerateQuoteLetterPDF(qlData, true);  // Force quote letter generation when a deal is approved (part of deal Approval flow)
+
+            }
         }
 
         public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)

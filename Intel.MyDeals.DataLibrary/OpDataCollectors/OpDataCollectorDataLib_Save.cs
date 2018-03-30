@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
@@ -80,31 +81,30 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     var packetQuoteLetterAction = packet.Actions.FirstOrDefault(pktAction => pktAction.Action == DealSaveActionCodes.GENERATE_QUOTE);
 
-                    // Mike... I removed this because the log message is only eanbled in DEBUG mode.  When building to non debug, this variable isn't declared.
-                    // && LogMessages.Count == 0
-                    if (packetQuoteLetterAction != null && (ret != null && ret.Count > 0))
+                    if (packetQuoteLetterAction == null || (ret == null || ret.Count <= 0)) continue;
+
+                    var quoteLetterDataLib = new QuoteLetterDataLib();
+                    List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
+
+                    foreach (int dealId in packetQuoteLetterAction.TargetDcIDs)
                     {
-                        var quoteLetterDataLib = new QuoteLetterDataLib();
-                        List<QuoteLetterData> quoteLetterDataList = new List<QuoteLetterData>();
-
-                        foreach (int dealId in packetQuoteLetterAction.TargetDcIDs)
+                        var quoteLetterData = new QuoteLetterData
                         {
-                            var quoteLetterData = new QuoteLetterData();
-                            quoteLetterData.ObjectTypeId = OpDataElementType.WIP_DEAL.ToId().ToString();
-                            quoteLetterData.ObjectSid = dealId.ToString();
+                            ObjectTypeId = OpDataElementType.WIP_DEAL.ToId().ToString(),
+                            ObjectSid = dealId.ToString()
+                        };
 
-                            OpDataCollector dc = ret[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcID == dealId).FirstOrDefault();
-                            if (dc != null)
-                            {
-                                OpDataElement de =
-                                    dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).FirstOrDefault();
-                                quoteLetterData.CustomerId = de.AtrbValue.ToString();
+                        OpDataCollector dc = ret[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == dealId);
+                        if (dc != null)
+                        {
+                            OpDataElement de = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID);
+                            if (de != null) quoteLetterData.CustomerId = de.AtrbValue.ToString();
 
-                                quoteLetterDataList.Add(quoteLetterData);
-                            }
+                            quoteLetterDataList.Add(quoteLetterData);
                         }
-                        quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
                     }
+
+                    quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
                 }
 
 
