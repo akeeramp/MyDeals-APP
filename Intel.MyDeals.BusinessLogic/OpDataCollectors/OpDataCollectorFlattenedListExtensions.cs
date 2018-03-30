@@ -105,13 +105,16 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 foreach (OpDataCollectorFlattenedItem item in opFlatDictList[opDataElementType])
                 {
-                    foreach (OpDataAction opDataAction in (List<OpDataAction>) item["_actions"])
+                    if (item.ContainsKey("_actions"))
                     {
-                        int id = opDataAction.DcID ?? 0;
-                        if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
+                        foreach (OpDataAction opDataAction in (List<OpDataAction>) item["_actions"])
+                        {
+                            int id = opDataAction.DcID ?? 0;
+                            if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
 
-                        deleteIds.Remove(id);
-                        deletedIds.Add(id);
+                            deleteIds.Remove(id);
+                            deletedIds.Add(id);
+                        }
                     }
                 }
             }
