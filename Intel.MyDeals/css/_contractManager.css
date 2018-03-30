@@ -522,7 +522,6 @@
     }
     .psNav:hover .ptBtn, .ptNav:hover .ptBtn {
         display: inline;
-        font-size: 13px;
     }
     .psNav:hover .ptBtn:hover, .ptNav:hover .ptBtn:hover {
         color: #F3D54E;
