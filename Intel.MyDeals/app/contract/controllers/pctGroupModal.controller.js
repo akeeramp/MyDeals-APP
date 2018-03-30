@@ -6,12 +6,13 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-pctGroupModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem'];
+pctGroupModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'dealId'];
 
-function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
+function pctGroupModalCtrl($scope, $uibModalInstance, dataItems, dealId) {
 
     $scope.curData = dataItems;
     $scope.disabled = "disabled";
+    $scope.dealId = dealId;
     //$scope.disabled = window.usrRole === "DA" ? "disabled" : "";
 
     for (var d = 0; d < $scope.curData.length; d++) {
@@ -28,13 +29,13 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
         filterable: true,
         resizable: true,
         columns: [
-            {
-                field: "EXCLD_DEAL_FLAG",
-                title: "&nbsp;",
-                filterable: false,
-                template: "<div style='padding-left: 6px;'><input type='checkbox' " + $scope.disabled + " ng-model='dataItem.EXCLD_DEAL_FLAG' id='chkId_#=OVLP_DEAL_ID#' class='with-font'/><label for='chkId_#=OVLP_DEAL_ID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
-                width: "60px"
-            },
+            //{
+            //    field: "EXCLD_DEAL_FLAG",
+            //    title: "&nbsp;",
+            //    filterable: false,
+            //    template: "<div style='padding-left: 6px;'><input type='checkbox' " + $scope.disabled + " ng-model='dataItem.EXCLD_DEAL_FLAG' id='chkId_#=OVLP_DEAL_ID#' class='with-font'/><label for='chkId_#=OVLP_DEAL_ID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
+            //    width: "60px"
+            //},
             {
                 field: "OVLP_DEAL_ID",
                 title: "Deal #",

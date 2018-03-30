@@ -58,7 +58,7 @@
                     windowClass: '',
                     size: 'lg',
                     resolve: {
-                        dealId: angular.copy(dataItem["DC_ID"]),
+                        dataItem: angular.copy(dataItem),
                         cellCurrValues: function() {
                             return angular.copy(dataItem["DEAL_GRP_EXCLDS"]);
                         },

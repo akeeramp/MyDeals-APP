@@ -477,6 +477,9 @@
                 resolve: {
                     dataItem: function () {
                         return $scope.context;
+                    },
+                    dealId: function() {
+                        return dealId;
                     }
                 }
             });

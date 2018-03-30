@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dealId', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox', '$timeout'];
+ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dataItem', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox', '$timeout'];
 
-function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dealId, cellCurrValues, cellCommentValue, colInfo, enableCheckbox, $timeout) {
+function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dataItem, cellCurrValues, cellCommentValue, colInfo, enableCheckbox, $timeout) {
 	var vm = this;
 
 	var selectedGridDict = {};
@@ -20,12 +20,13 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	vm.gridData = [];
 	vm.hasComment = false;
 	vm.hasCheckbox = enableCheckbox;
+    vm.DC_ID = dataItem.DC_ID;
 
 	var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
 			read: function (e) {
 
-				var currValsArr = vm.cellCurrValues.split(',');
+				var currValsArr = vm.cellCurrValues.replace(/ /g,'').split(',');
 
 				// put in dictionary for easier lookup
 				for(var i=0; i<currValsArr.length; i++){
@@ -42,14 +43,17 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 				e.success(vm.gridData);
 			}
 		},
-		sort: { field: "CST_MCP_DEAL_FLAG", dir: "asc" },
+		sort: [
+            { field: "EXCLD_DEAL_FLAG", dir: "desc" },
+            { field: "CST_MCP_DEAL_FLAG", dir: "desc" }
+		],
 		schema: {
 			model: {
 			    fields: {
 			        CST_MCP_DEAL_FLAG: { type: "number"},
 			        EXCLD_DEAL_FLAG: {},
-					OVLP_ADDITIVE: {},
-					OVLP_CNSMPTN_RSN: {},
+			        OVLP_ADDITIVE: {},
+			        OVLP_CNSMPTN_RSN: {},
 					OVLP_CNTRCT_NM: {},
 				    OVLP_DEAL_DESC: {},
 				    OVLP_DEAL_END_DT: { type: "date" },
@@ -60,16 +64,27 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 					selected: {}
 				}
 			}
-		},
-		serverPaging: true,
-		serverSorting: true
+		}
 	});
 
 	function init() {
 
-		return dataService.get(colInfo.lookupUrl + "/" + dealId).then(
+	    return dataService.get(colInfo.lookupUrl + "/" + dataItem["DC_ID"]).then(
 			function (response) {
-				vm.gridData = response.data;
+			    vm.gridData = response.data;
+			    vm.gridData.unshift({
+			        CST_MCP_DEAL_FLAG: 2,
+			        EXCLD_DEAL_FLAG: 2,
+			        OVLP_ADDITIVE: dataItem["DEAL_COMB_TYPE"],
+			        OVLP_CNSMPTN_RSN: dataItem["CONSUMPTION_REASON"],
+			        OVLP_CNTRCT_NM: "Product: " + dataItem["TITLE"],
+			        OVLP_DEAL_DESC: dataItem["DEAL_DESC"],
+			        OVLP_DEAL_END_DT: dataItem["END_DT"],
+			        OVLP_DEAL_ID: dataItem["DC_ID"],
+			        OVLP_DEAL_STRT_DT: dataItem["START_DT"],
+			        OVLP_DEAL_TYPE: dataItem["OBJ_SET_TYPE_CD"],
+			        OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"]
+			    });
 				dataSourceSuggested.read();
 				vm.isLoading = false;
 			},
@@ -110,16 +125,39 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		        $('#ExcldGrid :checkbox').prop("disabled", true);
 		    }
 
+		    e.sender.element.find(".customHeaderRowStyles").remove();
+		    var items = e.sender.items();
+		    e.sender.element.height(e.sender.options.height);
+		    items.each(function () {
+		        var row = $(this);
+		        var dataItem = e.sender.dataItem(row);
+		        if (dataItem.OVLP_DEAL_ID === vm.DC_ID) {
+		            var item = row.clone();
+		            item.addClass("customHeaderRowStyles");
+		            var thead = e.sender.element.find(".k-grid-header table thead");
+		            thead.append(item);
+		            e.sender.element.height(e.sender.element.height() + row.height());
+		            row.hide();
+		        }
+		    });
+
 		    $timeout(function () {
 		        var data = e.sender.dataSource.data();
 		        for (var d = 0; d < data.length; d++) {
-		            if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 1) {
+		            if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 0 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
                         data[d].set("_disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
                         $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
                     }
-		        }
+		            else if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 2 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 2) {
+		                data[d].set("_disabled", true);
+		                $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
+		                $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-check-box' style='color: #FFFFFF; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This is the current deal and cannot be excluded.'></i>");
+		                $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-current");
+		            }
+                }
+
 		    }, 50);
 		}
 	};

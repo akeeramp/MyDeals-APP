@@ -1,6 +1,6 @@
 ﻿<link href="css/productselector.css" rel="stylesheet" />
 
-<div class="modal-content" style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden; border: 1px solid #1a3e6f;">
+<div class="modal-content" id="exclGrp" style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden; border: 1px solid #1a3e6f;">
 	<!--<div class="modal-header">
 		<div class="row">
 			<div class="col-md-11">
@@ -79,7 +79,7 @@
     }
 
     #ExcldGrid.k-grid .k-grid-content {
-        height: calc(85vh - 440px) !important;
+        height: calc(85vh - 475px) !important;
     }    
 
     #ExcldGrid tr.tr-disabled td span.ng-binding, #ExcldGrid tr.tr-disabled td {
@@ -87,6 +87,36 @@
     }
     #ExcldGrid tr.tr-disabled {
         background-color: #f4f4f4;
+    }
+    #ExcldGrid tr.tr-current td span.ng-binding, #ExcldGrid tr.tr-current td {
+        color: #FFFFFF;
+    }
+    #ExcldGrid tr.tr-current {
+        background-color: #00AEEF;
+    }
+
+    .checkbox-custom + .checkbox-custom-label:before {
+        content: '';
+        background: #fff;
+        border: 1.5px solid #eee;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px;
+        height: 14px;
+        padding: 2px;
+        text-align: center;
+    }
+
+    .checkbox-custom:checked + .checkbox-custom-label:before {
+        content: 'X';
+        color: #ffffff;
+        padding: 0 2px 4px 3px;
+        font-size: 14px;
+    }
+
+    .checkbox-custom:hover + .checkbox-custom-label:before {
+        border: 1.5px solid #01AEEF;
     }
     
 </style>
