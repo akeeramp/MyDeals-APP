@@ -1128,7 +1128,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
                             ? gridColumns[c].excelTemplate
                             : gridColumns[c].template;
 
-                        if (templateHtml.indexOf("gridUtils") >= 0 && templateHtml.indexOf("ControlWrapper") >= 0) {
+                        if (gridColumns[c].excelTemplate === undefined && templateHtml.indexOf("gridUtils") >= 0 && templateHtml.indexOf("ControlWrapper") >= 0) {
                             templateHtml = "#=" + gridColumns[c].field + "#";
                         }
 
