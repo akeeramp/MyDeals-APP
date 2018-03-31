@@ -709,15 +709,26 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         if (fromToggle === undefined || fromToggle === null) fromToggle = false;
         if (checkForRequirements === undefined || checkForRequirements === null) checkForRequirements = false;
 
+        var ps = root.contractData.PRC_ST;
+
         var numCheckboxes = $(".sum-main-container input:visible").length;
         var numChecked = $(".sum-main-container input:visible:checked").length;
-        if (numCheckboxes === 0 || numChecked === 0) {
-            kendo.alert("No items were selected to action.");
-            return;
+        var hasPendingCheck = false;
+        if (fromToggle && !$scope.isPending) {
+            for (var p = 0; p < ps.length; p++) {
+                if (ps[p].WF_STG_CD === "Pending") {
+                    hasPendingCheck = true;
+                }
+            }
+        }
+        if (!hasPendingCheck) {
+            if (numCheckboxes === 0 || numChecked === 0) {
+                kendo.alert("No items were selected to action.");
+                return;
+            }
         }
 
         // look for checked ending
-        var ps = root.contractData.PRC_ST;
         if (ps !== undefined) {
             for (var p = 0; p < ps.length; p++) {
                 if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {

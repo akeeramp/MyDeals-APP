@@ -133,6 +133,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.PASSED_VALIDATION.ATRB_SID,
                 Attributes.HAS_L1.ATRB_SID
             };
@@ -299,6 +300,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> dealIds = new List<int>();
             List<int> tenderDealIds = new List<int>();
+            List<int> tenderWonDealsIds = new List<int>();
             List<int> quotableDealIds = new List<int>();
             if (psGoingActive.Any())
             {
@@ -324,13 +326,22 @@ namespace Intel.MyDeals.BusinessLogic
                     .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
                 dealIds = deals.Select(d => d.DcID).ToList();
 
+                List<int> tenderPotentialIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                    .Where(d => d.AtrbHasValue(AttributeCodes.OBJ_SET_TYPE_CD, "ECAP") || d.AtrbHasValue(AttributeCodes.OBJ_SET_TYPE_CD, "KIT"))
+                    .Select(d => d.DcID).ToList();
+
                 List<OpDataElement> tenderDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
+                    .Where(d => dealIds.Contains(d.DcID) && tenderPotentialIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
                 tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
+
+                List<OpDataElement> tenderWonDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                    .Where(d => tenderDealIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.BID_STATUS, "Won")).ToList();
+                tenderWonDealsIds = tenderWonDeals.Select(d => d.DcID).ToList();
 
                 List<string> quotableTypes = new List<string> { "ECAP", "KIT"};
                 quotableDealIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString())).Select(d => d.DcID).ToList();
+                    .Where(d => dealIds.Contains(d.DcID) && d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString()))
+                    .Select(d => d.DcID).ToList();
 
                 foreach (OpDataElement de in deals)
                 {
@@ -339,11 +350,7 @@ namespace Intel.MyDeals.BusinessLogic
                     // If Tender... need to set the Bid Status
                     if (!tenderDealIds.Contains(de.DcID)) continue;
                     OpDataElement deBid = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.BID_STATUS).FirstOrDefault(d => d.DcID == de.DcID);
-                    if (deBid != null)
-                    {
-                        deBid.SetAtrbValue("Offer");
-                    }
-                    else
+                    if (deBid == null)
                     {
                         OpDataCollector dc = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == de.DcID);
                         dc?.DataElements.Add(new OpDataElement
@@ -386,8 +393,9 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Tack on the save action call now
                 List<int> nonTenderIds = dealIds.Where(d => !tenderDealIds.Contains(d)).ToList();
-                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, nonTenderIds);
-                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds); // not sure if we need it in both places or just the PS
+                List<int> possibleMajorIds = dealIds.Where(d => !tenderDealIds.Contains(d) || tenderWonDealsIds.Contains(d)).ToList();
+                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, possibleMajorIds);
+                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds.Union(tenderWonDealsIds).ToList()); // not sure if we need it in both places or just the PS
                 myDealsData[OpDataElementType.WIP_DEAL].AddQuoteLetterActions(quotableDealIds); // not sure if we need it in both places or just the PS
                 
             }

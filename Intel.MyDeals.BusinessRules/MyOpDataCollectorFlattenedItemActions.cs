@@ -191,8 +191,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string objType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
-            if (rebateType.ToUpper() != "TENDER") return;
+            if (rebateType.ToUpper() != "TENDER" || (objType != "ECAP" && objType != "KIT")) return;
 
             string bidValue = r.Dc.GetDataElementValue(AttributeCodes.BID_STATUS);
             string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);

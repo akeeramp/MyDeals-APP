@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Telerik.Reporting.Processing;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
@@ -314,7 +315,9 @@ namespace Intel.MyDeals.DataLibrary
 
                     // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
                     if (!inNegotiation || forceRegenerateQuoteLetter)
-                        SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
+                    {
+                        bool quoteResult = SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes).Result;
+                    }
                 }
             }
             else
@@ -331,59 +334,26 @@ namespace Intel.MyDeals.DataLibrary
 
         }
 
-        private void SaveQuotePDF(QuoteLetterData quoteLetterData, string trkrNumber, byte[] quoteLetterPdf)
+        private async Task<bool> SaveQuotePDF(QuoteLetterData quoteLetterData, string trkrNumber, byte[] quoteLetterPdf)
         {
-            Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA cmd = new Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA
-            {
-               CUST_MBR_SID = Convert.ToInt32(quoteLetterData.CustomerId),
-               OBJ_TYPE_SID = Convert.ToInt32(quoteLetterData.ObjectTypeId),
-               OBJ_SID = Convert.ToInt32(quoteLetterData.ObjectSid),
-               TRKR_NBR = trkrNumber,
-               FILE_DATA = quoteLetterPdf
-            };
-
             try
             {
-                using (var rdr = DataAccess.ExecuteDataSet(cmd))
+                Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA cmd = new Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA
                 {
-                }
+                    CUST_MBR_SID = Convert.ToInt32(quoteLetterData.CustomerId),
+                    OBJ_TYPE_SID = Convert.ToInt32(quoteLetterData.ObjectTypeId),
+                    OBJ_SID = Convert.ToInt32(quoteLetterData.ObjectSid),
+                    TRKR_NBR = trkrNumber,
+                    FILE_DATA = quoteLetterPdf
+                };
+                await DataAccess.ExecuteReaderAsync(cmd);
+                return true;
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
-
-            //return template;
-            //var timer = DateTime.Now;
-
-            ////TBD - VN
-            //var cmd = new PR_SAVE_QUOTE_LTTR_DATA
-            //{
-            //        (@CUST_MBR_SID INT,
-            //@OBJ_TYPE_SID INT,
-            //@OBJ_SID INT,
-
-            //      DEAL_MBR_SID = dealId,
-            //    TRKR_NBR = trkr,
-            //    FILE_DATA = pdfBody
-            //};
-
-            //try
-            //{
-            //    StartCmdLogMessage(null, "SaveQuotePDF", cmd, timer);
-
-            //    //string stringXML = DataAccess.ExecuteSpScalarProc(ConnectionString, LogLevel, cmd) as String;
-            //    DataAccess.ExecuteSpNonQuery(cmd);
-
-            //    EndCmdLogMessage(null, "SaveQuotePDF", cmd, "Returned Void", timer);
-            //}
-            //catch (Exception ex)
-            //{
-            //    //WriteToEventViewer("SaveQuotePDF", ex.Message, "IDMS", EventLogEntryType.Error, "CDMS");
-            //    //EndCmdLogMessage(null, "SaveQuotePDF", cmd, "SaveQuotePDF Failure : (" + ex.Message + ")", timer);
-            //    //throw MsgQueue.CreateFault(ex);
-            //}
         }
     }
 }
