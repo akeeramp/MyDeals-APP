@@ -17,11 +17,9 @@ namespace Intel.MyDeals.Entities
 
         public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null, List<int> dealIds = null)
         {
-            if (packet.Data.Count > 0) // if there are not any data elements to save, dno't make actions.
-            {
-                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 10)); // Set action - save it.
-                packet.AddSyncActions(fullPacket, dealIds);
-            }
+            if (packet.Data.Count <= 0) return;
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 10)); // Set action - save it.
+            if (dealIds == null || dealIds.Any()) packet.AddSyncActions(fullPacket, dealIds);
         }
 
         public static void AddCopyActions(this OpDataPacket<OpDataElementType> packet, ContractToken contractToken) // OBJ_COPY
