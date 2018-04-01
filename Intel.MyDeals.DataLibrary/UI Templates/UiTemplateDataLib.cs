@@ -1510,6 +1510,19 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'CAP_END_DT', 'date')#"
             });
+            items.Add(new UiTemplateContainerItem  // WIP Kit types
+            {
+                Id = 5,
+                AtrbCd = "CAP_KIT",
+                Label = "CAP Price Kit",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP', '20_____1', 'currency')#",
+                DataType = "object",
+                Format = "{0:c}",
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'CAP', '20_____1', 'currency')#"
+            });
 
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
@@ -1559,6 +1572,19 @@ namespace Intel.MyDeals.DataLibrary
                 IsHidden = true,
                 Width = 100,
                 ExcelTemplate = "#=gridUtils.exportPositiveDimControlWrapper(data, 'YCS2_END_DT', 'date')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP Kit types
+            {
+                Id = 5,
+                AtrbCd = "YCS2_KIT",
+                Label = "YCS2 Price Kit",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiDimControlWrapper(data, 'YCS2_PRC_IRBT', '20_____1', 'currency')#",
+                DataType = "object",
+                Format = "{0:c}",
+                ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'YCS2_PRC_IRBT', '20_____1', 'currency')#"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP ECAP types + Dimension by Prod Bucket

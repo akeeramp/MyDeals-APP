@@ -772,6 +772,9 @@
                     "CAP_END_DT": {
                         "Groups": ["All", "CAP Info"]
                     },
+                    "CAP_KIT": {
+                        "Groups": ["All", "CAP Info"]
+                    },
                     "YCS2_INFO": {
                         "Groups": ["Deal Info"]
                     },
@@ -782,6 +785,9 @@
                         "Groups": ["All"]
                     },
                     "YCS2_END_DT": {
+                        "Groups": ["All"]
+                    },
+                    "YCS2_KIT": {
                         "Groups": ["All"]
                     },
                     "YCS2_OVERLAP_OVERRIDE": {

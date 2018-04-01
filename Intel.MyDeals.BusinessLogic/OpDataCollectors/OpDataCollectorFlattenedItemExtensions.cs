@@ -422,6 +422,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         }
                     }
 
+                    double kitCap = 0;
+                    double kitYcs2 = 0;
+                    bool validKitCap = true;
+                    bool validkitYcs2 = true;
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
                         if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
@@ -434,6 +438,23 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                             opFlatItem[AttributeCodes.YCS2_START_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_START;
                             opFlatItem[AttributeCodes.YCS2_END_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_END;
 
+                            double tmpPrc;
+                            if (double.TryParse(opFlatItem[AttributeCodes.CAP + baseKitDimKey + dim].ToString(), out tmpPrc))
+                            {
+                                kitCap += tmpPrc;
+                            }
+                            else
+                            {
+                                validKitCap = false;
+                            }
+                            if (double.TryParse(opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + dim].ToString(), out tmpPrc))
+                            {
+                                kitYcs2 += tmpPrc;
+                            }
+                            else
+                            {
+                                validkitYcs2 = false;
+                            }
                             //if (pMap.PRD_CAT_NM == CHIPSET)
                             //{
                             //    chipsetEcapDims.Add("ECAP_PRICE" + baseKitDimKey + dim);
@@ -464,6 +485,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     //check if eligible to create subkits
                     if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
                     {
+
+                        opFlatItem[AttributeCodes.CAP + baseKitDimKey + "__1"] = validKitCap ? kitCap.ToString() : "";
+                        opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + "__1"] = validkitYcs2 ? kitYcs2.ToString() : "";
+
                         opFlatItem[AttributeCodes.HAS_SUBKIT] = 0;  //default to 0=false
                         if (pMaps.Count() > 2)
                         {
