@@ -24,12 +24,12 @@
                 var canUpdateMeetCompSKUPriceBench = (usrRole === "FSE" || usrRole === "GA");
 
                 var columnIndex = {
-                    COMP_SKU: 6,
-                    COMP_PRC: 6,
-                    IA_BNCH: 8,
-                    COMP_BNCH: 8,
-                    COMP_OVRRD_FLG: 12,
-                    COMP_OVRRD_RSN: 12
+                    COMP_SKU: 7,
+                    COMP_PRC: 7,
+                    IA_BNCH:  9,
+                    COMP_BNCH: 9,
+                    COMP_OVRRD_FLG: 13,
+                    COMP_OVRRD_RSN: 13
                 };
 
                 $scope.isVisible = true;
@@ -745,6 +745,14 @@
                                         editable: function () { return false; }
                                     },
                                     {
+                                        field: "END_CUST_RETAIL",
+                                        title: "End Customer/Retail",
+                                        width: 170,
+                                        filterable: { multi: true, search: true },
+                                        editable: function () { return false; },
+                                        template: "<div title='End Customer' class='readOnlyCell'></div>"
+                                    },
+                                    {
                                         field: "COMP_SKU",
                                         title: "Meet Comp SKU",
                                         width: 170,
@@ -826,15 +834,7 @@
                                         filterable: { multi: true, search: true },
                                         editable: function () { return false; },
                                         template: "<div title='#=BRND_FMLY#' class='readOnlyCell'>#=BRND_FMLY#</div>"
-                                    },
-                                    {
-                                        field: "END_CUST_RETAIL",
-                                        title: "End Customer/Retail",
-                                        width: 170,
-                                        filterable: { multi: true, search: true },
-                                        editable: function () { return false; },
-                                        template: "<div title='End Customer' class='readOnlyCell'></div>"
-                                    },
+                                    },                                    
                                     {
                                         field: "",
                                         title: "Group Deals",
@@ -1668,6 +1668,14 @@
                                             template: '<div class="readOnlyCell" title="#=DEAL_DESC#">#=DEAL_DESC#</div>'
                                         },
                                         {
+                                            field: "END_CUST_RETAIL",
+                                            title: "End Customer/Retail",
+                                            width: 170,
+                                            filterable: { multi: true, search: true },
+                                            editable: function () { return false; },
+                                            template: "<div title='#=END_CUST_RETAIL#' class='readOnlyCell'>#=END_CUST_RETAIL#</div>"
+                                        },
+                                        {
                                             field: "COMP_SKU",
                                             title: "Meet Comp SKU",
                                             width: 170,
@@ -1750,15 +1758,7 @@
                                             filterable: { multi: true, search: true },
                                             editable: function () { return false; },
                                             template: "<div title='#=BRND_FMLY#' class='readOnlyCell'>#=BRND_FMLY#</div>"
-                                        },
-                                        {
-                                            field: "END_CUST_RETAIL",
-                                            title: "End Customer/Retail",
-                                            width: 170,
-                                            filterable: { multi: true, search: true },
-                                            editable: function () { return false; },
-                                            template: "<div title='#=END_CUST_RETAIL#' class='readOnlyCell'>#=END_CUST_RETAIL#</div>"
-                                        },
+                                        },                                        
                                         {
                                             field: "",
                                             title: "Group Deals",
