@@ -436,14 +436,9 @@ JMS Queue Help ({0})
 This command line tool is part of the MyDeals framework for talking to SAP.
 Supported command line options:
 
-/env:(Environment Name) = Over-ride the default DCS environment setting.
-/sapenv:(Environment Name) = Over-ride the default SAP environment setting.
-
-/auto = Get steps to be run from the database.
-
 /mode:<mode> = JMS Queue Mode, where <mode> is:
    ul (or upload) = Upload data to SAP.
-   exp (or expire) = Expire Quotes Mode.
+   exp (or expire) = Expire Price.
 
 /dir:<direction> = JMS Queue Mode Direction, where <direction> is:
    send (or sender) = Sender Mode.
