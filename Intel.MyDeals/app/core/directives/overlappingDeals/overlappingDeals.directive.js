@@ -21,7 +21,11 @@
 
                 $scope.loading = true;
                 $scope.msg = "Looking for Overlapping Deals";
-
+                $scope.isOverlapping = false;
+                $scope.isOvlpAccess = false;
+                if (usrRole === "GA" || usrRole === "FSE") {
+                    $scope.isOvlpAccess = true;
+                }
                 $scope.isOverlapping = false;
                 $scope.ovlpData = [];
 
@@ -93,20 +97,21 @@
                     objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                         .then(function (response) {
                             if (response.data[0].PRICING_TABLES > 0) {
+                                //As we remove the triggering point from deal editor to manage tab. we don't need this commented lines.
                                 // Change in Deal Editor
                                 // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
-                                var indx = -1;
-                                $scope.opData.some(function (e, i) {
-                                    if (e.DC_ID === data) {
-                                        indx = i;
-                                        return true;
-                                    }
-                                });
+                                //var indx = -1;
+                                //$scope.$parent.opData.some(function (e, i) {
+                                //    if (e.DC_ID === data) {
+                                //        indx = i;
+                                //        return true;
+                                //    }
+                                //});
 
-                                if (indx > -1) {
-                                    $scope.opData[indx].YCS2_OVERLAP_OVERRIDE = YCS2_OVERLAP_OVERRIDE === 'Y' ? 'Y' : 'N';
-                                    $scope.contractDs.read();
-                                }
+                                //if (indx > -1) {
+                                //    $scope.$parent.opData[indx].YCS2_OVERLAP_OVERRIDE = YCS2_OVERLAP_OVERRIDE === 'Y' ? 'Y' : 'N';
+                                //    //$scope.$parentcontractDs.read();
+                                //}
 
                                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
                                     $scope.ovlpErrorCount.push(data);
@@ -124,12 +129,13 @@
                                 $scope.$root.$broadcast("overlappingDealUpdateFinished", null);
                                 return false;
                             }
+
                         });
                 }
 
                 //Reject
                 $scope.rejectOvlp = function (OVLP_DEAL_OBJ_SID) {
-                    kendo.alert("Please <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals");
+                    kendo.alert("Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.", "Overlapping Warning");
                 }
 
                 $scope.ovlpDataSource = new kendo.data.DataSource({
@@ -281,13 +287,13 @@
                                 }
 
                                 if (hasResolved && cnt > 0 && cnt === 1 && $scope.isOvlpAccess) {
-                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<span class='lnk btnYes' ng-click='acceptOvlp(" + e.value + ",\"Y\")' ><i class='intelicon-check' style='font-size: 12px !important;'></i> Yes </span > <span class='or'>&nbsp;OR&nbsp;</span> <span class='lnk btnNo' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-close-max' style='font-size: 10px !important;padding-right: 3px;'></i>&nbsp;No</span>";
+                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<a class='lnk btnYes' ng-click='acceptOvlp(" + e.value + ",\"Y\")' ><i class='intelicon-check' style='font-size: 12px !important;'></i> Yes </a > <span class='or'>&nbsp;OR&nbsp;</span> <a class='lnk btnNo' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-close-max' style='font-size: 10px !important;padding-right: 3px;'></i>&nbsp;No</a>";
                                 }
                                 else if (hasResolved && cnt > 1 && $scope.isOvlpAccess) {
-                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with another Draft deal, please correct and revalidate.</span>&nbsp;<span class='lnk btnYes' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</span>";
+                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with another Draft deal, please correct and revalidate.</span>&nbsp;<a class='lnk btnYes' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</a>";
                                 }
                                 else if (!hasResolved) {
-                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<span class='undolnk' ng-click='acceptOvlp(" + e.value + ", \"N\")'><i class='intelicon-home-outlined intelicon-undo' style='font-size: 10px !important;padding-right: 3px;'></i>Undo</span>";
+                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<a class='undolnk' ng-click='acceptOvlp(" + e.value + ", \"N\")'><i class='intelicon-home-outlined intelicon-undo' style='font-size: 10px !important;padding-right: 3px;'></i>Undo</a>";
                                 }
                                 else {
                                     return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span> <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;letter-spacing:0.07em '>Please correct and revalidate</span>";
@@ -420,7 +426,7 @@
 
                     //var dealType = $scope.dealTypes[0];
                     //if (dealType.toUpperCase() === "ECAP" && $scope.isOverlapNeeded) {
-                       
+
                     //    util.console("Overlapping Deals Started");
                     //    $scope.$parent.$parent.setBusy("Overlapping Deals...", "Looking for Overlapping Deals!");
                     //    if (usrRole === "GA" || usrRole === "FSE") {
@@ -446,7 +452,7 @@
                     //Calling WEBAPI
                     if (fn !== null && typeof fn === 'function') {
                         fn(params)
-                            .then(function(response) {
+                            .then(function (response) {
                                 $scope.msg = "Done";
                                 if (response.data) {
                                     var data = response.data.Data;
@@ -457,8 +463,8 @@
                                 $scope.$root.$broadcast("overlappingDealFinished", null);
                                 $timeout(function () {
                                     $scope.loading = false;
-                                },1000);
-                                
+                                }, 1000);
+
                             },
                             function (response) {
                                 $scope.$root.$broadcast("overlappingDealFailed", response);
@@ -471,7 +477,7 @@
 
                 }
 
-                $scope.drawGrid = function(ovData) {
+                $scope.drawGrid = function (ovData) {
                     $scope.isOverlapping = ovData.length > 0;
 
                     //Calculate Error count

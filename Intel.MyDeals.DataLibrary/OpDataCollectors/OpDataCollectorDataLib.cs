@@ -1147,7 +1147,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 new OpPair<int, int>
                 {
-                    First = OpDataElementType.PRC_TBL.ToId(),
+                    First = OpDataElementType.WIP_DEAL.ToId(),
                     Second = PRICING_TABLES_ID
                 }
             });
