@@ -1289,7 +1289,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
                 DataType = "object",
-                IsFilterable = true,
                 IsSortable = true,
                 Format = "{0:c}",
                 UiType = "NumericTextBox",
