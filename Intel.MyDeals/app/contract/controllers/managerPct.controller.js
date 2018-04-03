@@ -451,7 +451,6 @@
         }
 
         $scope.showGroups = function (isDealMode, dealId, dataItem) {
-
             if (isDealMode) {
                 $scope.context = $linq.Enumerable()
                     .From($scope.CostTestGroupDealDetails[$scope.dealPtIdDict[dealId]])
@@ -478,8 +477,8 @@
                     dataItem: function () {
                         return $scope.context;
                     },
-                    dealId: function() {
-                        return dealId;
+                    dealId: function () {
+                        return dataItem === undefined ? dealId : dataItem.DEAL_ID;
                     }
                 }
             });
