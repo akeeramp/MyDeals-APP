@@ -32,7 +32,7 @@ namespace Intel.MyDeals.DataAccessLib
             MessageWriter = Messages.GetMessageWriter();
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Message Management
 
@@ -48,14 +48,13 @@ namespace Intel.MyDeals.DataAccessLib
             MessageWriter?.Invoke(mt, msg, args);
         }
 
-        #endregion
+        #endregion Message Management
 
         /// <summary>
         /// On failed import, attempt to rollback inserts.
         /// </summary>
         private void AttemptRollbackOnFailedInsert(Guid uqId)
         {
-
             if (uqId == Guid.Empty)
             {
                 WriteMessage(OpMsg.MessageType.Error, "Error rolling back the transaction, invalid batch id.");
@@ -97,7 +96,7 @@ namespace Intel.MyDeals.DataAccessLib
         /// Bulk load the passed deal data set into the database, using a MT transaciton to check for
         /// deadlocks and rollback/retry on deadlock as needed.  This is roughly 2x slower than the other
         /// method, but, obviously, more sturdy.
-        /// 
+        ///
         /// This one also fires triggers after insert as needed.
         /// </summary>
         /// <param name="ds">DataSet containing deal import data</param>
@@ -144,7 +143,6 @@ namespace Intel.MyDeals.DataAccessLib
 
                                 retryCount = 0;
                                 trns.Commit();
-
                             }
                             catch (SqlException ex)
                             {
@@ -190,43 +188,40 @@ namespace Intel.MyDeals.DataAccessLib
             }
 
             // Since each table is distinct, we should be able to load in parallel.
-            OpParallelWait.ForEach<DataTable>(ds.Tables.Cast<DataTable>(), dt =>
+            Parallel.ForEach<DataTable>(ds.Tables.Cast<DataTable>(), dt =>
             {
                 using (SqlConnection conn = new SqlConnection(ConnectionString))
+                // note that this is not wired up to fire trigger, just FYI
+                using (var copy = new SqlBulkCopy(conn, SqlBulkCopyOptions.TableLock, null))
                 {
-                    conn.Open();
-                    // note that this is not wired up to fire trigger, just FYI
-                    using (var copy = new SqlBulkCopy(conn))
+                    foreach (DataColumn dc in dt.Columns.Cast<DataColumn>().Where(c => c.ColumnMapping != MappingType.Hidden))
                     {
-                        foreach (DataColumn dc in dt.Columns.Cast<DataColumn>().Where(c => c.ColumnMapping != MappingType.Hidden))
-                        {
-                            copy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(
-                                dc.ColumnName,
-                                dc.ColumnName
-                                ));
-                        }
-                        copy.DestinationTableName = dt.TableName;
-                        copy.BulkCopyTimeout = Int32.MaxValue;
-                        copy.WriteToServer(dt);
-
-                        /*
-                        // Useful for debugging...
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            try
-                            {
-                                var rows = new DataRow[] { row };
-                                copy.WriteToServer(rows);
-                            }
-                            catch (Exception ex)
-                            {
-                                throw;
-                            }
-                        }
-                        */
-
+                        copy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(
+                            dc.ColumnName,
+                            dc.ColumnName
+                            ));
                     }
-                    conn.Close(); // Remove sleeping DB processes
+                    copy.DestinationTableName = dt.TableName;
+                    copy.BulkCopyTimeout = 180;
+                    conn.Open();
+                    copy.WriteToServer(dt);
+                    copy.Close();
+
+                    /*
+                    // Useful for debugging...
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        try
+                        {
+                            var rows = new DataRow[] { row };
+                            copy.WriteToServer(rows);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    }
+                    */
                 }
             }
             );
@@ -260,7 +255,5 @@ namespace Intel.MyDeals.DataAccessLib
                 throw;
             }
         }
-
-
     }
 }
