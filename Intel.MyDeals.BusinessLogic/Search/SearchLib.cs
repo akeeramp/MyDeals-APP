@@ -190,6 +190,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // couple special cases here
             rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
+            rtn = rtn.Replace("WIP_DEAL_Customer.CUST_NM", "CUST_NM");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
             rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");

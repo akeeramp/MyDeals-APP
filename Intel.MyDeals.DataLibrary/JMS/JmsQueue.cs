@@ -70,21 +70,21 @@ namespace Intel.MyDeals.DataLibrary.JMS
             }
         }
 
-        public JmsQueue(string strServerUrl, string strUserId, string strPassword, string strQueueName)
-        {
-            try
-            {
-                m_strUrl = strServerUrl;
-                m_strUserId = strUserId;
-                m_strPassword = strPassword;
-                m_strQueueName = strQueueName;
+        //public JmsQueue(string strServerUrl, string strUserId, string strPassword, string strQueueName)
+        //{
+        //    try
+        //    {
+        //        m_strUrl = strServerUrl;
+        //        m_strUserId = strUserId;
+        //        m_strPassword = strPassword;
+        //        m_strQueueName = strQueueName;
 
-            }
-            catch (Exception)
-            {
+        //    }
+        //    catch (Exception)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         // --- Commands ----------------------------------------------------------------------------------------------
 
