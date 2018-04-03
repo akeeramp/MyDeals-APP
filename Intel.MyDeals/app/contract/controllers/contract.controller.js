@@ -2129,13 +2129,15 @@
                                 var dcPrdTitle = data.data.Messages[m].ExtraDetails[0];
                                 var dcKitName = data.data.Messages[m].ExtraDetails[1];
 
-                                for (var d = 0; d < $scope.wipData.length; d++) {
-                                    if ($scope.wipData[d].DC_ID === dcId) {
-                                        $scope.wipData[d].DC_PARENT_ID = dcParentId;
-                                        $scope.wipData[d]._parentCnt = 1;
-                                        $scope.wipData[d].PTR_USER_PRD = dcPrdTitle;
-                                        if (dcKitName != "") {
-                                            $scope.wipData[d].DEAL_GRP_NM = dcKitName;
+                                if ($scope.wipData !== undefined) {
+                                    for (var d = 0; d < $scope.wipData.length; d++) {
+                                        if ($scope.wipData[d].DC_ID === dcId) {
+                                            $scope.wipData[d].DC_PARENT_ID = dcParentId;
+                                            $scope.wipData[d]._parentCnt = 1;
+                                            $scope.wipData[d].PTR_USER_PRD = dcPrdTitle;
+                                            if (dcKitName !== "") {
+                                                $scope.wipData[d].DEAL_GRP_NM = dcKitName;
+                                            }
                                         }
                                     }
                                 }
