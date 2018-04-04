@@ -840,6 +840,7 @@ gridUtils.cancelChanges = function (e) {
 }
 
 gridUtils.clearAllFiltersAndSorts = function () {
+    $(".k-grid").data("kendoGrid").dataSource.cancelChanges();
     if ($(".k-grid").data("kendoGrid").dataSource.total() > 0) {
         gridUtils.clearAllFilters();
         gridUtils.clearAllSorts();
