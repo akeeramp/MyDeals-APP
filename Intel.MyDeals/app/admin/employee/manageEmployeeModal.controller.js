@@ -12,13 +12,15 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
 
     var geosArray = dataItem["USR_GEOS"].split(', ');
 
+    $scope.LST_NM = dataItem.LST_NM;
+    $scope.FRST_NM = dataItem.FRST_NM;
+
     $scope.custdataSource = new kendo.data.DataSource({
         type: "json",
         transport: {
             read: function (e) {
                 manageEmployeeService.getCustomersFromGeos(geosArray)
                     .then(function (response) {
-                        debugger;
                         $scope.selectedIds = [];
                         var selectedCustomers = dataItem["USR_CUST"].replace(/, /g, ",").split(",");
                         for (var c = 0; c < response.data.length; c++)
@@ -46,33 +48,30 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
     };
 
 
-
-
     $scope.geoAllOptions = [
     {
-        "id": "Worldwide",
+        "id": "Worldwide"
     },
     {
-        "id": "APAC",
+        "id": "APAC"
     },
     {
-        "id": "ASMO",
+        "id": "ASMO"
     },
     {
-        "id": "EMEA",
+        "id": "EMEA"
     },
     {
-        "id": "IJKK",
+        "id": "IJKK"
     },
     {
-        "id": "PRC",
+        "id": "PRC"
     },
     ];
 
     $scope.geoData = [];
-    for (var i = 0; i < geosArray.length; i++)
-    {
-        $scope.geoData.push({ id: geosArray[i] })
+    for (var i = 0; i < geosArray.length; i++) {
+        $scope.geoData.push({ id: geosArray[i] });
     }
 
     $scope.isChecked = function (id) {
