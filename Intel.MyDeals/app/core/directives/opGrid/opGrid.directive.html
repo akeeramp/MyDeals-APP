@@ -722,6 +722,9 @@
         background-color: #eeeeee !important;
     }
 
+    /*remove the "x" clear button pseudo element from text inputs that only appears in IE as it was causing some of our code to not execute if clicked*/
+    ::-ms-clear { display: none; }
+
     .opGridSearchInput {
         width: 270px; 
         font-size: 16px
