@@ -445,6 +445,13 @@
                 type: "number",
                 width: 120
             }, {
+                field: "NET_VOL_PAID",
+                title: "Net Credited Volume",
+                type: "number",
+                filterable: false,
+                sortable: false,
+                width: 120
+            }, {
                 field: "CREDIT_AMT",
                 title: "Credit Amt",
                 type: "number",
@@ -455,6 +462,14 @@
                 title: "Debit Amt",
                 type: "number",
                 format: "{0:c}",
+                width: 120
+            }, {
+                field: "TOT_QTY_PAID",
+                title: "Total Qty Paid",
+                type: "number",
+                format: "{0:c}",
+                filterable: false,
+                sortable: false,
                 width: 120
             }, {
                 field: "BLLG_DT",
@@ -562,6 +577,17 @@
             return $scope.customers.join(", ");
         }
 
+        $scope.$on('attribute-datasource-end', function (event, data) {
+            for (var d = 0; d < data.length; d++) {
+                var cVol = data[d]["CREDIT_VOLUME"] === undefined || data[d]["CREDIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["CREDIT_VOLUME"]);
+                var dVol = data[d]["DEBIT_VOLUME"] === undefined || data[d]["DEBIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["DEBIT_VOLUME"]);
+                var cAmt = data[d]["CREDIT_AMT"] === undefined || data[d]["CREDIT_AMT"] === "" ? 0 : parseFloat(data[d]["CREDIT_AMT"]);
+                var dAmt = data[d]["DEBIT_AMT"] === undefined || data[d]["DEBIT_AMT"] === "" ? 0 : parseFloat(data[d]["DEBIT_AMT"]);
+
+                data[d]["NET_VOL_PAID"] = cVol - dVol !== 0 ? cVol - dVol : "";
+                data[d]["TOT_QTY_PAID"] = cAmt + dAmt !== 0 ? cAmt + dAmt : "";
+            }
+        });
 
         $scope.$on('invoke-search-datasource', function (event, args) {
             $scope.ruleData = args.rule;

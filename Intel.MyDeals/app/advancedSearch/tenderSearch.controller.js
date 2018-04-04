@@ -327,8 +327,8 @@
                 field: "NET_VOL_PAID",
                 title: "Net Credited Volume",
                 type: "number",
-                isFilterable: false,
-                isSortable: false,
+                filterable: false,
+                sortable: false,
                 width: 120
             }, {
                 field: "CREDIT_AMT",
@@ -347,8 +347,8 @@
                 title: "Total Qty Paid",
                 type: "number",
                 format: "{0:c}",
-                isFilterable: false,
-                isSortable: false,
+                filterable: false,
+                sortable: false,
                 width: 120
             }, {
                 field: "BLLG_DT",
@@ -578,7 +578,6 @@
         }
 
         $scope.$on('attribute-datasource-end', function (event, data) {
-
             for (var d = 0; d < data.length; d++) {                
                 var cVol = data[d]["CREDIT_VOLUME"] === undefined || data[d]["CREDIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["CREDIT_VOLUME"]);
                 var dVol = data[d]["DEBIT_VOLUME"] === undefined || data[d]["DEBIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["DEBIT_VOLUME"]);
@@ -587,7 +586,6 @@
 
                 data[d]["NET_VOL_PAID"] = cVol - dVol !== 0 ? cVol - dVol : "";
                 data[d]["TOT_QTY_PAID"] = cAmt + dAmt !== 0 ? cAmt + dAmt : "";
-
             }
         });
 
