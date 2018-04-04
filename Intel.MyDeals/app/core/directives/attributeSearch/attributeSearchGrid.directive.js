@@ -195,6 +195,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                     },
                     requestEnd: function(e) {
                         $scope.setBusy("", "");
+                        $scope.root.$broadcast('attribute-datasource-end', e.response.Items);
                     }
                 }
             };
@@ -243,7 +244,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
             $scope.saveToExcel = function () {
                 var newDsOptions = $scope.getDsOptions();
                 newDsOptions.pageSize = 'all';
-                newDsOptions.requestStart = function(e) {
+                newDsOptions.requestStart = function (e) {
                     $scope.setBusy($scope.opOptions.busy.export.title, $scope.opOptions.busy.export.message);
                 };
 

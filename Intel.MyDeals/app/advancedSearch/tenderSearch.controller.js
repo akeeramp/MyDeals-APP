@@ -13,6 +13,8 @@
 
     function tenderSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $location) {
 
+        kendo.culture().numberFormat.currency.pattern[0] = "-$n";
+
         $scope.$root.pc = null;
 
         $scope.operatorSettings = {
@@ -108,186 +110,189 @@
         }
 
         $scope.attributeSettings = [
-            {
-                field: "DC_ID",
-                title: "&nbsp;",
-                type: "number",
-                width: 50,
-                filterable: false,
-                sortable: false,
-                template: "<span id='dealTool_#=data.DC_ID#'><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></span>",
-                excelTemplate: " ",
-                bypassExport: true
-            }, {
-                field: "BID_STATUS",
-                title: "Bid Action",
-                template: "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
-                excelTemplate: "#=gridUtils.getBidActionsLabel(data)#</div>",
-                type: "string",
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: {
-                                data: [
-                                    "Lost",
-                                    "Won",
-                                    "Offer"
-                                ]
-                            },
-                            optionLabel: "--Select Value--"
-                        });
-                    },
-                    extra: false
+        {
+            field: "DC_ID",
+            title: "&nbsp;",
+            type: "number",
+            width: 50,
+            filterable: false,
+            sortable: false,
+            template:
+                "<span id='dealTool_#=data.DC_ID#'><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></span>",
+            excelTemplate: " ",
+            bypassExport: true
+        }, {
+            field: "BID_STATUS",
+            title: "Bid Action",
+            template: "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
+            excelTemplate: "#=gridUtils.getBidActionsLabel(data)#</div>",
+            type: "string",
+            filterable: {
+                ui: function(element) {
+                    element.kendoDropDownList({
+                        dataSource: {
+                            data: [
+                                "Lost",
+                                "Won",
+                                "Offer"
+                            ]
+                        },
+                        optionLabel: "--Select Value--"
+                    });
                 },
-                width: 110
-            }, {
-                field: "DC_ID",
-                title: "Deal",
-                type: "number",
-                width: 100,
-                filterable: $scope.numObjFilter,
-                template: "<a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
-            }, {
-                field: "CNTRCT_TITLE",
-                title: "Contract Title",
-                type: "string",
-                width: 120,
-                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
-            }, {
-                field: "PRODUCT_FILTER",
-                title: "Product",
-                type: "string",
-                width: 250,
-                dimKey: 20,
-                filterable: $scope.objFilter,
-                template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
-            }, {
-                field: "TRKR_NBR",
-                title: "Tracker #",
-                type: "string",
-                width: 210,
-                dimKey: 20,
-                filterable: $scope.objFilter,
-                template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
-            }, {
-                field: "ECAP_PRICE",
-                title: "ECAP Price",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: $scope.moneyObjFilter,
-                template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
-            }, {
-                field: "CAP",
-                title: "CAP",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: $scope.moneyObjFilter,
-                template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
-            }, {
-                field: "YCS2_PRC_IRBT",
-                title: "YCS2",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: $scope.moneyObjFilter,
-                template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
-            }, {
-                field: "START_DT",
-                title: "Start Date",
-                type: "date",
-                template: "#= moment(START_DT).format('MM/DD/YYYY') #",
-                width: 130
-            }, {
-                field: "END_DT",
-                title: "End Date",
-                type: "date",
-                template: "#= moment(END_DT).format('MM/DD/YYYY') #",
-                width: 130
-            }, {
-                field: "VOLUME",
-                title: "Ceiling Vol",
-                type: "number",
-                width: 120
-            }, {
-                field: "OBJ_SET_TYPE_CD",
-                title: "Type",
-                type: "string",
-                width: 100,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: {
-                                data: [
-                                    "ECAP",
-                                    "KIT"
-                                ]
-                            },
-                            optionLabel: "--Select Value--"
-                        });
-                    },
-                    extra: false
-                }
-            }, {
-                field: "END_CUSTOMER_RETAIL",
-                title: "End Customer",
-                type: "string",
-                width: 140
-            }, {
-                field: "SERVER_DEAL_TYPE",
-                title: "SVR Deal Type",
-                type: "string",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
+                extra: false
+            },
+            width: 110
+        }, {
+            field: "DC_ID",
+            title: "Deal",
+            type: "number",
+            width: 100,
+            filterable: $scope.numObjFilter,
+            template:
+                "<a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
+        }, {
+            field: "CNTRCT_TITLE",
+            title: "Contract Title",
+            type: "string",
+            width: 120,
+            template:
+                "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
+        }, {
+            field: "PRODUCT_FILTER",
+            title: "Product",
+            type: "string",
+            width: 250,
+            dimKey: 20,
+            filterable: $scope.objFilter,
+            template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
+        }, {
+            field: "TRKR_NBR",
+            title: "Tracker #",
+            type: "string",
+            width: 210,
+            dimKey: 20,
+            filterable: $scope.objFilter,
+            template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
+        }, {
+            field: "ECAP_PRICE",
+            title: "ECAP Price",
+            type: "money",
+            width: 170,
+            dimKey: 20,
+            format: "{0:c}",
+            filterable: $scope.moneyObjFilter,
+            template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
+        }, {
+            field: "CAP",
+            title: "CAP",
+            type: "money",
+            width: 170,
+            dimKey: 20,
+            format: "{0:c}",
+            filterable: $scope.moneyObjFilter,
+            template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
+        }, {
+            field: "YCS2_PRC_IRBT",
+            title: "YCS2",
+            type: "money",
+            width: 170,
+            dimKey: 20,
+            format: "{0:c}",
+            filterable: $scope.moneyObjFilter,
+            template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
+        }, {
+            field: "START_DT",
+            title: "Start Date",
+            type: "date",
+            template: "#= moment(START_DT).format('MM/DD/YYYY') #",
+            width: 130
+        }, {
+            field: "END_DT",
+            title: "End Date",
+            type: "date",
+            template: "#= moment(END_DT).format('MM/DD/YYYY') #",
+            width: 130
+        }, {
+            field: "VOLUME",
+            title: "Ceiling Vol",
+            type: "number",
+            width: 120
+        }, {
+            field: "OBJ_SET_TYPE_CD",
+            title: "Type",
+            type: "string",
+            width: 100,
+            filterable: {
+                ui: function(element) {
+                    element.kendoDropDownList({
+                        dataSource: {
+                            data: [
+                                "ECAP",
+                                "KIT"
+                            ]
+                        },
+                        optionLabel: "--Select Value--"
+                    });
+                },
+                extra: false
+            }
+        }, {
+            field: "END_CUSTOMER_RETAIL",
+            title: "End Customer",
+            type: "string",
+            width: 140
+        }, {
+            field: "SERVER_DEAL_TYPE",
+            title: "SVR Deal Type",
+            type: "string",
+            width: 140,
+            filterable: {
+                ui: function(element) {
+                    element.kendoDropDownList({
+                        dataSource: new kendo.data.DataSource({
+                            type: 'json',
+                            transport: {
+                                read: {
+                                    url: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
+                                    type: "GET",
+                                    dataType: "json"
                                 }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                }
-            }, {
-                field: "Customer.CUST_NM",
-                title: "OEM",
-                type: "string",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoMultiSelect({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Customers/GetMyCustomersNameInfo",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
+                            }
+                        }),
+                        dataTextField: "DROP_DOWN",
+                        dataValueField: "DROP_DOWN",
+                        valuePrimitive: true
+                    });
+                },
+                extra: false
+            }
+        }, {
+            field: "Customer.CUST_NM",
+            title: "OEM",
+            type: "string",
+            width: 140,
+            filterable: {
+                ui: function(element) {
+                    element.kendoMultiSelect({
+                        dataSource: new kendo.data.DataSource({
+                            type: 'json',
+                            transport: {
+                                read: {
+                                    url: "/api/Customers/GetMyCustomersNameInfo",
+                                    type: "GET",
+                                    dataType: "json"
                                 }
-                            }),
-                            dataTextField: "CUST_NM",
-                            dataValueField: "CUST_NM",
-                            tagMode: "single",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                }
+                            }
+                        }),
+                        dataTextField: "CUST_NM",
+                        dataValueField: "CUST_NM",
+                        tagMode: "single",
+                        valuePrimitive: true
+                    });
+                },
+                extra: false
+            }
             }, {
                 field: "CUST_ACCNT_DIV",
                 title: "Cust Division",
@@ -308,6 +313,49 @@
                 title: "Geo",
                 type: "string",
                 width: 100
+            }, {
+                field: "CREDIT_VOLUME",
+                title: "Credit Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "DEBIT_VOLUME",
+                title: "Debit Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "NET_VOL_PAID",
+                title: "Net Credited Volume",
+                type: "number",
+                isFilterable: false,
+                isSortable: false,
+                width: 120
+            }, {
+                field: "CREDIT_AMT",
+                title: "Credit Amt",
+                type: "number",
+                format: "{0:c}",
+                width: 120
+            }, {
+                field: "DEBIT_AMT",
+                title: "Debit Amt",
+                type: "number",
+                format: "{0:c}",
+                width: 120
+            }, {
+                field: "TOT_QTY_PAID",
+                title: "Total Qty Paid",
+                type: "number",
+                format: "{0:c}",
+                isFilterable: false,
+                isSortable: false,
+                width: 120
+            }, {
+                field: "BLLG_DT",
+                title: "Last Credit Date",
+                type: "string",
+                template: "#= moment(BLLG_DT).format('MM/DD/YYYY') #",
+                width: 140
             }, {
                 field: "CRE_EMP_WWID",
                 title: "Created By",
@@ -529,7 +577,19 @@
             );
         }
 
+        $scope.$on('attribute-datasource-end', function (event, data) {
 
+            for (var d = 0; d < data.length; d++) {                
+                var cVol = data[d]["CREDIT_VOLUME"] === undefined || data[d]["CREDIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["CREDIT_VOLUME"]);
+                var dVol = data[d]["DEBIT_VOLUME"] === undefined || data[d]["DEBIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["DEBIT_VOLUME"]);
+                var cAmt = data[d]["CREDIT_AMT"] === undefined || data[d]["CREDIT_AMT"] === "" ? 0 : parseFloat(data[d]["CREDIT_AMT"]);
+                var dAmt = data[d]["DEBIT_AMT"] === undefined || data[d]["DEBIT_AMT"] === "" ? 0 : parseFloat(data[d]["DEBIT_AMT"]);
+
+                data[d]["NET_VOL_PAID"] = cVol - dVol !== 0 ? cVol - dVol : "";
+                data[d]["TOT_QTY_PAID"] = cAmt + dAmt !== 0 ? cAmt + dAmt : "";
+
+            }
+        });
 
         function resizeGrid() {
             var h = window.innerHeight - $(".navbar").height() - 15;
