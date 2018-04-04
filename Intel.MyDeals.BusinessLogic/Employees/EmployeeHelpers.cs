@@ -46,7 +46,7 @@ namespace Intel.MyDeals.BusinessLogic.Employees
             var message = new MailMessage
             {
                 From = new MailAddress("mydeals.notification@intel.com"),
-                Subject = "My Deals customer account request - Action Required",
+                Subject = "My Deals customer account access granted - Review Required",
                 Body = disclaimer + data.EmailBody,
                 IsBodyHtml = true,
                 Priority = MailPriority.High

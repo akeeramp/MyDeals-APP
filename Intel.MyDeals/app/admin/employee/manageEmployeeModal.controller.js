@@ -110,6 +110,7 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
                     $uibModalInstance.close(saveNames.sort().join(", ")); // Post back the results to parent screen.
 
                     logger.success("User's Customers list was saved", "Done");
+                    kendo.alert("<i class='fa fa-check' aria-hidden='true' style='margin-right: 10px;'></i> Your changes have been saved<div style='margin-top: 15px;'>Please ensure you notify the user you made changes.</div>");
                 }, function (response) {
                     logger.error("Unable to save this User's Customer Data.", response, response.statusText);
                 });
