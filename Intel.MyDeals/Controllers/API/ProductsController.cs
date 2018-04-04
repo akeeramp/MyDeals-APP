@@ -353,7 +353,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}/{contractId}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public ProductLookupPacket TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, string DEAL_TYPE, int contractId)
+        public ProductLookupPacket TranslateProducts(List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId)
         {
             DateTime start = DateTime.Now;
 
@@ -363,7 +363,7 @@ namespace Intel.MyDeals.Controllers.API
                 ContractId = contractId
             };
 
-            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, userInput, CUST_MBR_SID, DEAL_TYPE)
+            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, usrData, CUST_MBR_SID, DEAL_TYPE)
                 , $"Unable to translate products"
             );
 

@@ -97,7 +97,6 @@
     <Compile Include="FuzzySearch.cs" />
     <Compile Include="Helpers\CompressHelpers.cs" />
     <Compile Include="Logging\EmailExLogPerf.cs" />
-    <Compile Include="LZString.cs" />
     <Compile Include="MyCustomerDetailsWrapper.cs" />
     <Compile Include="EmployeeDetailData.cs" />
     <Compile Include="EN.cs" />

@@ -1241,9 +1241,6 @@
     <Content Include="Scripts\bootstrap-switch.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\d3\d3.js" />
-    <Content Include="Scripts\d3\d3.min.js" />
-    <Content Include="Scripts\excelFormulaUtilities-1.1.0.min.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -1415,7 +1412,6 @@
     <Content Include="app\core\directives\trashcan\trashcan.directive.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
-    <Content Include="Scripts\d3\LICENSE" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\intcAnalytics.js" />
@@ -1456,7 +1452,6 @@
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.gauge.min.js" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.map.min.js" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.min.js" />
-    <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.mobile.min.js" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.qrcode.min.js" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.sparkline.min.js" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.stock.min.js" />
@@ -1555,8 +1550,6 @@
     <Content Include="Scripts\lz-string.min.js" />
     <Content Include="Scripts\moment-timezone.js" />
     <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\nv.d3.js" />
-    <Content Include="Scripts\nv.d3.min.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -1588,8 +1581,6 @@
     <Content Include="Views\Error\Timeout.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Security.cshtml" />
-    <Content Include="Views\Docs\Flows.cshtml" />
-    <Content Include="Views\Docs\Formulas.cshtml" />
     <Content Include="Views\CodingPractices\Index.cshtml" />
     <Content Include="Views\CodingPractices\DataAccess.cshtml" />
     <Content Include="Views\CodingPractices\DataLibrary.cshtml" />
@@ -1610,7 +1601,6 @@
     <Content Include="Views\CodingPractices\BusinessDesign.cshtml" />
     <Content Include="Views\CodingPractices\Project.cshtml" />
     <Content Include="Views\CodingPractices\Flows.cshtml" />
-    <Content Include="Views\CodingPractices\Formulas.cshtml" />
     <Content Include="Views\CodingPractices\Examples.cshtml" />
     <Content Include="Views\CodingPractices\DataFromProcWithCache.cshtml" />
     <Content Include="Views\CodingPractices\BusinessLogicFunction.cshtml" />
@@ -1660,7 +1650,6 @@
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.gauge.min.js.map" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.map.min.js.map" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.min.js.map" />
-    <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.mobile.min.js.map" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.qrcode.min.js.map" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.sparkline.min.js.map" />
     <Content Include="Scripts\kendo\2017.R1\kendo.dataviz.stock.min.js.map" />

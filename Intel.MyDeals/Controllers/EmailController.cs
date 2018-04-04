@@ -85,7 +85,10 @@ namespace Intel.MyDeals.Controllers
                 //result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-outlook");
                 //result.Content.Headers.Add("Content-Disposition", $"MyDealsSubmissionNotification.eml");
                 //return result;
-                return File(fs, "application/vnd.ms-outlook", "MyDealsSubmissionNotification.eml");
+                ActionResult rtn = File(fs, "application/vnd.ms-outlook", "MyDealsSubmissionNotification.eml");
+                fs.Close();
+
+                return rtn;
             }
         }
 
