@@ -1,6 +1,5 @@
 ﻿<link href="css/timeline.css" rel="stylesheet" />
 <div ng-if="timelineData.length > 0" class="col-md-12 row row" style="height:430px;overflow:auto">     
-    <div class="timelineText">For more details visit the <a>Timeline</a> in the Contract Manager</div>
     <div ng-repeat="tm in selectedObj | limitTo : numberOfRecrods " class="item">        
         <div class="details">
             <div>
@@ -13,6 +12,7 @@
         <span>No data selected. Please choose other filter</span>
     </div>
     <a ng-if="selectedObj.length > 5" ng-click="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>{{btnText}} <i ng-if="btnText == 'Show more '" class="intelicon-down"></i> <i ng-if="btnText == 'Show less '" class="intelicon-up"></i></a>
+    <a ng-click="gotoHistory()" style="cursor: pointer;">view all contract history</a>
 </div>
 
 

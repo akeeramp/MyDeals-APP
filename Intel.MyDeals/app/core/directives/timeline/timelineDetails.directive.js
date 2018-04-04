@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('timelineDetails', timelineDetails);
 
-timelineDetails.$inject = ['$compile', 'dataService', '$timeout', 'logger', '$linq'];
+timelineDetails.$inject = ['$compile', 'dataService', '$timeout', 'logger', '$linq', '$state'];
 
-function timelineDetails($compile, dataService, $timeout, logger, $linq) {
+function timelineDetails($compile, dataService, $timeout, logger, $linq, $state) {
     kendo.culture("en-US");
 
     return {
@@ -50,6 +50,12 @@ function timelineDetails($compile, dataService, $timeout, logger, $linq) {
                
             }          
 
+            $scope.gotoHistory = function () {
+                $state.go('contract.timeline',
+                    {
+                        cid: $scope.opId
+                    }, { reload: true });
+            }
             
         }],
         link: function (scope, element, attrs) {
