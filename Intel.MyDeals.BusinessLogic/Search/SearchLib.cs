@@ -419,7 +419,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.YCS2_PRC_IRBT.ATRB_SID
             },
-            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER'" + actvstr },
+            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != '%PROGRAM%'" + actvstr },
             null,
             MyRulesTrigger.OnDealListLoad);
         }

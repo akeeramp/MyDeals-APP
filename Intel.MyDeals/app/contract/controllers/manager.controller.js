@@ -721,6 +721,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                 }
             }
         }
+
         if (!hasPendingCheck) {
             if (numCheckboxes === 0 || numChecked === 0) {
                 kendo.alert("No items were selected to action.");
@@ -769,9 +770,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.togglePending(true);
     }
 
-    $scope.closeDialog = function () {
-        $scope.togglePending(false);
-
+    $scope.resetToggle = function() {
         // This is pretty bad... please don't tell anyone I did this :)
         // The toggle is setup like Angular but really only one way binding.
         // Some... I redraw and rebind to scope to toggle it back.
@@ -780,7 +779,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         var linkFunction = $compile(template);
         linkFunction($scope);
         $("#toggle-container").html(template);
+    }
 
+    $scope.closeDialog = function () {
+        $scope.togglePending(false);
+        $scope.resetToggle();
         $scope.dialogPendingWarning.close();
     }
     $scope.continueAction = function (fromToggle, checkForRequirements) {

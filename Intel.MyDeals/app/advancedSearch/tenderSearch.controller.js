@@ -35,6 +35,11 @@
                     label: "not equal to"
                 },
                 {
+                    operator: "!=",
+                    operCode: "ne",
+                    label: "not equal to"
+                },
+                {
                     operator: "<",
                     operCode: "lt",
                     label: "less than"
