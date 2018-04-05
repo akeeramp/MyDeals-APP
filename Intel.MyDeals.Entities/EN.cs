@@ -39,7 +39,7 @@
             public const int FACT_15 = 15; // Product selection level
             public const int FACT_60 = 60; // Sub-vertical filter
             public const int FACT_72 = 72; // Exclusion filter
-            public const int FACT_80 = 80; // Product category filter
+            public const int FACT_80 = 80; // Product Vertical filter
             public const int FACT_128 = 128; // Media code filter
         }
 

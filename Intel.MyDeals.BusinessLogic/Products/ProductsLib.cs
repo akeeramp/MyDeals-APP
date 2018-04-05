@@ -86,10 +86,10 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Get All Products By Specified Product Category Name
+        /// Get All Products By Specified Product Vertical
         /// </summary>
         /// <input>string name which is what will be filtered against (example: 'NAND')</input>
-        /// <returns>list of Product data containing specified Product category name</returns>
+        /// <returns>list of Product data containing specified Product Vertical</returns>
         public List<Product> GetProductByCategoryName(string name, bool getCachedResult = true)
         {
             if (!getCachedResult)
@@ -100,10 +100,10 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Get All Products By Specified Product Category SID
+        /// Get All Products By Specified Product Vertical SID
         /// </summary>
         /// <input>int sid which is what will be filtered against (example: 9)</input>
-        /// <returns>list of Product data matching specified Product category sid</returns>
+        /// <returns>list of Product data matching specified Product Vertical sid</returns>
         public List<Product> GetProductByCategorySid(int sid)
         {
             return GetProducts().Where(c => c.PRD_CAT_NM_SID == sid).ToList();

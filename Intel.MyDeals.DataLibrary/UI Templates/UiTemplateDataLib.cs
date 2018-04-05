@@ -1018,7 +1018,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 3671,
                 AtrbCd = AttributeCodes.PRODUCT_CATEGORIES,
-                Label = "Product Category",
+                Label = "Product Vertical",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_CATEGORIES')#",

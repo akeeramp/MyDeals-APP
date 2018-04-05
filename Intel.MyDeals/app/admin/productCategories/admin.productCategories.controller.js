@@ -50,9 +50,9 @@
                 		productCategoryService.updateCategory(e.data.models)
 							.then(function (response) {
 								e.success(response.data);
-								logger.success("Product Categories were successfully updated.");
+								logger.success("Product Verticals were successfully updated.");
 							}, function (response) {
-								logger.error("Unable to update Product Category.", response, response.statusText);
+							    logger.error("Unable to update Product Vertical.", response, response.statusText);
 							});
                 	}
                 	else {
@@ -61,7 +61,7 @@
                 			closeButtonText: 'Okay',
                 			hasActionButton: false,
                 			headerText: 'Error',
-                			bodyText: 'Product Category Name and Deal Product Type are required when the Active Indicator is checked. Please check your input and try again.'
+                			bodyText: 'Product Vertical Name and Deal Product Type are required when the Active Indicator is checked. Please check your input and try again.'
                 		};
                 		confirmationModal.showModal({}, modalOptions);
 
@@ -239,7 +239,7 @@
         		options.model._behaviors.validMsg["DEAL_PRD_TYPE"] = "Deal Product Type is required when row is active";
         	}
         	if (options.model._behaviors.validMsg["PRD_CAT_NM"] === undefined) {
-        		options.model._behaviors.validMsg["PRD_CAT_NM"] = "Product Category Name is required when row is active";
+        	    options.model._behaviors.validMsg["PRD_CAT_NM"] = "Product Vertical is required when row is active";
         	}
         	if (options.model._behaviors['isError'] === undefined) {
         		options.model._behaviors['isError'] = {};
@@ -332,7 +332,7 @@
 				if (input.is("[name='DEAL_PRD_TYPE']")) {
 					flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", (input.val().toString().replace(/\s/g, "").length === 0));
 				}
-				// Product Category Name
+				    // Product Vertical
 				else if (input.is("[name='PRD_CAT_NM']")) {
 					flagBehavior(dataItem, "isError", "PRD_CAT_NM", (input.val().toString().replace(/\s/g, "").length === 0));
 				}

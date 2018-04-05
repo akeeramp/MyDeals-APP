@@ -68,7 +68,7 @@ namespace Intel.MyDeals.Entities
                 {
                     case LVL_ALL_PRD_NM: return "All";
                     case LVL_DEAL_PRD_TYPE: return "Deal Product Type";
-                    case LVL_PRD_CATGRY_NM: return "Product Category";
+                    case LVL_PRD_CATGRY_NM: return "Product Vertical";
                     case LVL_BRND_NM: return "Brand";
                     case LVL_FMLY_NM: return "Family";
                     case LVL_PRCSSR_NBR: return "Processor";

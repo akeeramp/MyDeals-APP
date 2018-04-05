@@ -74,9 +74,9 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			Assert.IsTrue(results.Any());
 		}
 
-		[TestCase(1)] 
-		//[TestCase(2)] // TODO: Test other counts once we are able to add new product categories and replace the hard cded Ids
-		public void ProductCategoriesUpdate(int count)
+		[TestCase(1)]
+        //[TestCase(2)] // TODO: Test other counts once we are able to add new product Verticals and replace the hard cded Ids
+        public void ProductCategoriesUpdate(int count)
 		{
 			// ARRANGE
 			List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);

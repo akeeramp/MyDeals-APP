@@ -129,7 +129,7 @@ namespace Intel.MyDeals.Entities
         [Description("Product Type")]
         DEAL_PRD_TYPE = 7002,
 
-        [Description("Product Category")]
+        [Description("Product Vertical")]
         PRD_CAT_NM = 7003,
 
         [Description("Brand")]

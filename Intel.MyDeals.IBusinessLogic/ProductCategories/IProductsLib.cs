@@ -7,7 +7,6 @@ namespace Intel.MyDeals.IBusinessLogic
 	{
 		List<ProductCategory> GetProductCategories();
 
-		//Product CreateProductCategory(Product category);
 		List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories);
 
 	}

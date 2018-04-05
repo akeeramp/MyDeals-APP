@@ -363,7 +363,7 @@ namespace Intel.MyDeals.BusinessRules
             var validContractProducts = new List<string>();
             foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
             {
-                // Get unique product categories for Contract products
+                // Get unique product Vertical for Contract products
                 foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
                 {
                     if (!validContractProducts.Contains(prodMapping.PRD_CAT_NM))

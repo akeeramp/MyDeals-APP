@@ -19,7 +19,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         /// <summary>
-        /// Get All Product Categories
+        /// Get All Product Verticals
         /// </summary>
         /// <returns>list of product data</returns>
         public List<ProductCategory> GetProductCategories()
@@ -79,7 +79,7 @@ namespace Intel.MyDeals.DataLibrary
         //}
 
         /// <summary>
-        /// Updates a Bulk List of Product Categories
+        /// Updates a Bulk List of Product Verticals
         /// </summary>
         /// <returns>True or exception depending on whether the SP fails or not</returns>
         public List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories)

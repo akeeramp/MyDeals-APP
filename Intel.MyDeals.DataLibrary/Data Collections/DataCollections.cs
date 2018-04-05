@@ -535,7 +535,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        #region Product Categories
+        #region Product Vertical
 
         public static List<ProductCategory> GetProductCategories()
         {
@@ -547,7 +547,7 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<ProductCategory> _getProductCategories;
 
-        #endregion Product Categories
+        #endregion Product Vertical
 
         #region Dropdowns
 

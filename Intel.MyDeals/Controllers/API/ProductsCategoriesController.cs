@@ -27,7 +27,7 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			return SafeExecutor(() => _productCategoriesLib
 				.GetProductCategories()
-				, $"Unable to get Product Categories"
+				, $"Unable to get Product Verticals"
 			);
 		}
 
@@ -62,7 +62,7 @@ namespace Intel.MyDeals.Controllers.API
 			categoriesList.Add(category);
 
 			return SafeExecutor(() => UpdateProductCategoryBulk(categoriesList).FirstOrDefault()
-				, $"Unable to get Product Categories"
+				, $"Unable to get Product Verticals"
 			);			
 		}
 				
@@ -81,7 +81,7 @@ namespace Intel.MyDeals.Controllers.API
 			
 			return SafeExecutor(() => _productCategoriesLib
 				.UpdateProductCategories(categoriesList)
-				, $"Unable to get Product Categories"
+				, $"Unable to get Product Verticals"
 			);
 		}
 	}

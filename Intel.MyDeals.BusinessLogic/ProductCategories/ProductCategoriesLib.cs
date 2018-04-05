@@ -27,26 +27,26 @@ namespace Intel.MyDeals.BusinessLogic
 		}
 
 
-		//public ProductCategory CreateProductCategory(ProductCategory category)
-		//{
-		//	return new ProductCategoriesDataLib().CreateProductCategory(category);
-		//}
+        //public ProductCategory CreateProductCategory(ProductCategory category)
+        //{
+        //	return new ProductCategoriesDataLib().CreateProductCategory(category);
+        //}
 
-		/// <summary>
-		/// Get All Product Categories
-		/// </summary>
-		/// <returns>list of Product Categories</returns>
-		public List<ProductCategory> GetProductCategories()
+        /// <summary>
+        /// Get All Product Verticals
+        /// </summary>
+        /// <returns>list of Product Verticals</returns>
+        public List<ProductCategory> GetProductCategories()
 		{
 			return _dataCollectionsDataLib.GetProductCategories();
 		}
 
-		/// <summary>
-		/// Updates a list of product categories
-		/// </summary>
-		/// <param name="categories">The list of changed products to be updated</param>
-		/// <returns>A boolean of whether the update successed or not</returns>
-		public List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories)
+        /// <summary>
+        /// Updates a list of product Verticals
+        /// </summary>
+        /// <param name="categories">The list of changed products to be updated</param>
+        /// <returns>A boolean of whether the update successed or not</returns>
+        public List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories)
 		{
 			return _productCategoriesDataLib.UpdateProductCategories(categories);
 		}

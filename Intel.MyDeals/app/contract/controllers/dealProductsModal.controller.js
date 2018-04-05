@@ -58,7 +58,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                 width: "110px"
             }, {
                 field: "PRD_CAT_NM",
-                title: "Product Category",
+                title: "Product Vertical",
                 width: "110px"
             }, {
                 field: "BRND_NM",

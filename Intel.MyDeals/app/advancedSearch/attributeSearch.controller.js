@@ -254,7 +254,7 @@
                 width: 130
             }, {
                 field: "PRODUCT_CATEGORIES",
-                title: "Product Categories",
+                title: "Product Verticals",
                 type: "string",
                 width: 150
             }, {

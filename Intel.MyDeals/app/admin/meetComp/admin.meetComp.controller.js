@@ -195,7 +195,7 @@
             });
 
             $scope.meetCompProdCatNameOptions = {
-                placeholder: "Select a Product Category...",
+                placeholder: "Select a Product Vertical...",
                 dataTextField: "PRD_CAT_NM",
                 dataValueField: "PRD_CAT_NM",
                 valuePrimitive: true,
@@ -399,7 +399,7 @@
                     resetGrid();
                 }
                 else if (vm.selectedProdCatName == -1) {
-                    logger.warning('Not a valid Product Category');
+                    logger.warning('Not a valid Product Vertical');
                     vm.isCatMissing = true;
                     //Reset grid to Blank
                     resetGrid();

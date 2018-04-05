@@ -108,7 +108,7 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "Product";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	// Product Category CPU
+	// Product Vertical CPU
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_MAP]");
 	ds.Tables[0].TableName = "ProductCategory";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
@@ -162,7 +162,7 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "ProductCostTestRules";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	// Product category to vertical Mapping
+	// Product Vertical to vertical Mapping
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_PCT]");
 	ds.Tables[0].TableName = "ProductTypeMappings";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));

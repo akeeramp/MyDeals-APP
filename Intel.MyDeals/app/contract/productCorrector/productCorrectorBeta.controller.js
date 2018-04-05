@@ -41,7 +41,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function prdLvlDecoder(indx) {
-        if (indx === 7003) return "Product Category";
+        if (indx === 7003) return "Product Vertical";
         if (indx === 7004) return "Brand";
         if (indx === 7005) return "Family";
         if (indx === 7006) return "Processor #";
@@ -474,7 +474,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             },
             {
                 field: "PRD_CAT_NM",
-                title: "Product Category",
+                title: "Product Vertical",
                 width: "80px",
                 groupHeaderTemplate: "#= value #",
                 filterable: { multi: true, search: true }
