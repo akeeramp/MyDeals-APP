@@ -56,7 +56,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.displayFrontEndDateMessage = function (dataItem) {
                 var today = new Date();
-                var isFrontendDeal = (dataItem.PROGRAM_PAYMENT.indexOf('Frontend') !== -1);
+                var isFrontendDeal = (dataItem.PROGRAM_PAYMENT === undefined ? false : dataItem.PROGRAM_PAYMENT.indexOf('Frontend') !== -1); // If not there, default to false, else check for front end
                 //var earlyDateRequested = (dataItem.START_DT < today);
                 var wipDealDraftStage = (dataItem.WF_STG_CD.indexOf('Draft') !== -1);
 

@@ -171,26 +171,28 @@ namespace Intel.MyDeals.BusinessLogic
             mydealsData.EnsureBatchIDs();
             MyDealsData responseData = mydealsData.Save(contractToken);
 
-            if (!responseData.Keys.Any())
-            {
-                return new OpMsg(OpMsg.MessageType.Info, "No Items needed to be Rolled Back.");
-            }
+            // Removed because DB no longer passes back response data for rollbacks.  When did this change??
+            //if (!responseData.Keys.Any())
+            //{
+            //    return new OpMsg(OpMsg.MessageType.Info, "No Items needed to be Rolled Back.");
+            //}
 
+            // now assume that a rollback is successful so long as no thrown errors, but if not objects are passed back, give generic success message because users/testers don't care otherwise.
             // Strategy level is just a save, PT is not detectable save, the rest are combination of DELETED_OBJ IDs at PTR or rollback IDs at WIP.  
             // Assume success unless things crashed, then outer messages will trigger instead.
             string retMsg = "Rollback Successful";
             foreach (OpDataAction action in mydealsData[OpDataElementType.WIP_DEAL].Actions)
             {
-                if (action.Value == "DEAL_ROLLBACK_TO_ACTIVE")
+                if (action.Action == "DEAL_ROLLBACK_TO_ACTIVE") // action.Value has the wrong info in it, use Action instead
                 {
-                    rolledbackIds = action.TargetDcIDs;
+                    rolledbackIds.AddRange(action.TargetDcIDs);
                 }
             }
             if (responseData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
             {
                 foreach (OpDataAction action in responseData[OpDataElementType.PRC_TBL_ROW].Actions)
                 {
-                    if (action.Value == "OBJ_DELETED")
+                    if (action.Action == "OBJ_DELETED")
                     {
                         deletedIds.Add(action.DcID ?? 0);
                     }
@@ -198,7 +200,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
             if (opDataElementType == OpDataElementType.PRC_ST)
             {
-                retMsg += Environment.NewLine + "Strategy rolled back to last Approved state.";
+                retMsg += Environment.NewLine + "Strategy rolled back to Approved state.";
             }
             else if (opDataElementType == OpDataElementType.PRC_TBL)
             {
@@ -206,15 +208,14 @@ namespace Intel.MyDeals.BusinessLogic
             }
             if (deletedIds.Any())
             {
-                retMsg += Environment.NewLine + "Table removed as part of rollback: " + string.Join(", ", deletedIds);
+                retMsg += Environment.NewLine + "Deals deleted: " + string.Join(", ", deletedIds);
             }
             if (rollbackIds.Any())
             {
-                retMsg += Environment.NewLine + "Deals returned to active as part of rollback: " + string.Join(", ", rolledbackIds);
+                retMsg += Environment.NewLine + "Deals returned to active: " + string.Join(", ", rolledbackIds);
             }
 
             return new OpMsg(OpMsg.MessageType.Info, retMsg);
-            //return new OpMsg(OpMsg.MessageType.Warning, "Unable to rollback Ids {0}.", string.Join(",", deleteIds));
         }
 
     }

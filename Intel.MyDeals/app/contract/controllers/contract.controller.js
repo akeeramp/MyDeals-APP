@@ -1785,6 +1785,7 @@
                                 return;
                             }
 
+                            logger.info(data.data.Message, data.data.Message, "Rollback Results");
                             $scope.setBusy("RollBack Successful", "RollBack the Pricing Strategy re-deal", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
