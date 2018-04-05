@@ -444,10 +444,13 @@ gridUtils.uiDimInfoExcelControlWrapper = function (passedData, field) {
         dimkey = sortedKeys[index];
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
 
-            if (passedData[field + YCS2modifier][dimkey].indexOf("No") >= 0) {
-                tmplt += passedData[field + YCS2modifier][dimkey] + "<br/>";
-            } else {
-                tmplt += passedData[field + YCS2modifier][dimkey] + " : " + passedData[field + st][dimkey] + " - " + passedData[field + en][dimkey] + "<br/>";
+            var ycs2Field = passedData[field + YCS2modifier][dimkey];
+            if (ycs2Field !== undefined && ycs2Field !== null) {
+                if (ycs2Field.indexOf("No") >= 0) {
+                    tmplt += ycs2Field + "<br/>";
+                } else {
+                    tmplt += ycs2Field + " : " + passedData[field + st][dimkey] + " - " + passedData[field + en][dimkey] + "<br/>";
+                }
             }
         }
     }
