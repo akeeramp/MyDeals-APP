@@ -160,14 +160,17 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             items[i].checked = false;
         }
 
-
+        var availChkbox = 0;
         items = document.getElementsByClassName(className);
         for (i = 0; i < items.length; i++) {
-            if (!$(items[i]).hasClass('disabled')) {
+            if (!$(items[i]).hasClass('disabled') && $(items[i]).is(':visible')) {
                 items[i].checked = e.target.checked;
+                availChkbox++;
             }
         }
-
+        if (availChkbox === 0) {
+            e.target.checked = false;
+        }
 
     }
 
@@ -711,23 +714,23 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         var ps = root.contractData.PRC_ST;
 
-        var numCheckboxes = $(".sum-main-container input:visible").length;
-        var numChecked = $(".sum-main-container input:visible:checked").length;
-        var hasPendingCheck = false;
-        if (fromToggle && !$scope.isPending) {
-            for (var p = 0; p < ps.length; p++) {
-                if (ps[p].WF_STG_CD === "Pending") {
-                    hasPendingCheck = true;
-                }
-            }
-        }
+        //var numCheckboxes = $(".sum-main-container input:visible").length;
+        //var numChecked = $(".sum-main-container input:visible:checked").length;
+        //var hasPendingCheck = false;
+        //if (fromToggle && !$scope.isPending) {
+        //    for (var p = 0; p < ps.length; p++) {
+        //        if (ps[p].WF_STG_CD === "Pending") {
+        //            hasPendingCheck = true;
+        //        }
+        //    }
+        //}
 
-        if (!hasPendingCheck) {
-            if (numCheckboxes === 0 || numChecked === 0) {
-                kendo.alert("No items were selected to action.");
-                return;
-            }
-        }
+        //if (!hasPendingCheck) {
+        //    if (numCheckboxes === 0 || numChecked === 0) {
+        //        kendo.alert("No items were selected to action.");
+        //        return;
+        //    }
+        //}
 
         // look for checked ending
         if (ps !== undefined) {
