@@ -35,7 +35,20 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 
 				// find all curr passed in values in our list and select them
 				for (var i = 0; i < vm.gridData.length; i++) {
-					if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
+				    var exChk = vm.gridData[i]["EXCLD_DEAL_FLAG"];
+				    var cstChk = vm.gridData[i]["CST_MCP_DEAL_FLAG"];
+
+				    if (cstChk === 1 || (cstChk === 0 && exChk === 1)) {
+				        vm.gridData[i]["GRP_BY"] = 0;
+				    } else if (cstChk === 0) {
+				        vm.gridData[i]["GRP_BY"] = 1;
+				    } else if (cstChk === 2) {
+				        vm.gridData[i]["GRP_BY"] = 1;
+				    } else {
+				        vm.gridData[i]["GRP_BY"] = 1;
+				    }
+
+				    if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
 						vm.gridData[i].selected = true;
 					}
 				}
@@ -47,6 +60,9 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             { field: "EXCLD_DEAL_FLAG", dir: "desc" },
             { field: "CST_MCP_DEAL_FLAG", dir: "desc" }
 		],
+        group: {
+            field: "GRP_BY"
+        },
 		schema: {
 			model: {
 			    fields: {
@@ -63,7 +79,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 					OVLP_WF_STG_CD: {},
 					selected: {}
 				}
-			}
+			} 
 		}
 	});
 
@@ -110,7 +126,11 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			template: "<div style='padding:40px;'>No overlapping deal groups were found.<div>"
 		},
 		columns: [
-			{ field: "OVLP_DEAL_ID", title: "Deal #", width: "120px" },
+		    {
+		        field: "GRP_BY",
+		        groupHeaderTemplate: "#= gridUtils.showGroupExcludeMsg(value) #",
+                hidden: true
+		    },
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
 			{ field: "OVLP_CNTRCT_NM", title: "Contract" },
 			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "120px" },

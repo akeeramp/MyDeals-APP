@@ -428,6 +428,16 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
 
 }
 
+gridUtils.showGroupExcludeMsg = function (field) {
+    if (field === 1) {
+        return "Deals shown in grey overlap but are NOT included as part of the Cost Test";
+    }
+    else if (field === 0) {
+        return "Deals below are included as part of the Cost Test";
+    }
+    return "";
+}
+
 gridUtils.uiDimInfoExcelControlWrapper = function (passedData, field) {
     var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
 
