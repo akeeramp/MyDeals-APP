@@ -2753,9 +2753,11 @@
 
         $scope.forceRun = function () {
             var data = $scope.contractData.PRC_ST;
-            for (var d = 0; d < data.length; d++) {
-                if (data[d].MEETCOMP_TEST_RESULT === "" || data[d].MEETCOMP_TEST_RESULT === "Not Run Yet") return true;
-                if (data[d].COST_TEST_RESULT === "" || data[d].COST_TEST_RESULT === "Not Run Yet") return true;
+            if (data !== undefined) {
+                for (var d = 0; d < data.length; d++) {
+                    if (data[d].MEETCOMP_TEST_RESULT === "" || data[d].MEETCOMP_TEST_RESULT === "Not Run Yet") return true;
+                    if (data[d].COST_TEST_RESULT === "" || data[d].COST_TEST_RESULT === "Not Run Yet") return true;
+                }
             }
             return false;
         }

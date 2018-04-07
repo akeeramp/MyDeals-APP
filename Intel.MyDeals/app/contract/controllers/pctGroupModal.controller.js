@@ -21,7 +21,15 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems, dealId) {
 
     $scope.gridOptions = {
         dataSource: {
-            data: $scope.curData
+            data: $scope.curData,
+            schema: {
+                model: {
+                    fields: {
+                        OVLP_ECAP_PRC: { type: "number" },
+                        OVLP_MAX_RPU: { type: "number" }
+                    }
+                }
+            }
         },
         height: 300,
         sortable: true,
@@ -58,6 +66,16 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems, dealId) {
             }, {
                 field: "OVLP_DEAL_DESC",
                 title: "Deal Description",
+                width: "120px"
+            }, {
+                field: "OVLP_ECAP_PRC",
+                title: "ECAP",
+                format: "{0:c}",
+                width: "120px"
+            }, {
+                field: "OVLP_MAX_RPU",
+                title: "Max RPU",
+                format: "{0:c}",
                 width: "120px"
             }, {
                 field: "OVLP_DEAL_STRT_DT",

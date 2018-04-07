@@ -38,7 +38,8 @@
         $scope._dirty = false;
 
         $scope.$on('ManageExcludeGroups',
-            function(event, dataItem) {
+            function (event, dataItem) {
+
                 var col = {
                     lookupUrl: "/api/Dropdown/GetDealGroupDropdown",
                     lookupText: "DROP_DOWN",
@@ -200,7 +201,6 @@
 
 
 
-
         $scope.columns = [
             {
                 field: "DC_ID",
@@ -259,9 +259,14 @@
                 filterable: { multi: true },
                 width: 120
             }, {
+                field: "ECAP_PRICE",
+                title: "ECAP Price",
+                template: "#=gridUtils.uiReadonlyDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
+                width: 120
+            }, {
                 field: "MAX_RPU",
                 title: "Max RPU",
-                template: "#=gridUtils.uiReadonlyControlWrapper(data, 'MAX_RPU')#",
+                template: "#=gridUtils.uiReadonlyControlWrapper(data, 'MAX_RPU', 'currency')#",
                 width: 120
             }, {
                 field: "DEAL_DESC",
@@ -292,9 +297,7 @@
         // Generates options that kendo's html directives will use
         // Generates options that kendo's html directives will use
         function initGrid(data) {
-
             $timeout(function() {
-
                     root.wipOptions = {
                         isLayoutConfigurable: false,
                         isVisibleAdditionalDiscounts: false,
@@ -313,6 +316,7 @@
                                 START_DT: { type: "date" },
                                 END_DT: { type: "date" },
                                 DEAL_COMB_TYPE: { type: "string" },
+                                ECAP_PRICE: { type: "object" }, 
                                 MAX_RPU: { type: "number" },
                                 DEAL_DESC: { type: "string" },
                                 CONSUMPTION_REASON: { type: "string" },
@@ -357,6 +361,9 @@
                                 "DEAL_COMB_TYPE": {
                                     "Groups": ["Grouping Exclusions"]
                                 },
+                                "ECAP_PRICE": {
+                                    "Groups": ["Grouping Exclusions"]
+                                },
                                 "MAX_RPU": {
                                     "Groups": ["Grouping Exclusions"]
                                 },
@@ -374,7 +381,6 @@
                     };
 
                     root.wipData = data;
-
                 },
                 10);
         }

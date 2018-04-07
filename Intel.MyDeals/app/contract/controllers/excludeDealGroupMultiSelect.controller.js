@@ -76,6 +76,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 					OVLP_DEAL_ID: {},
 					OVLP_DEAL_STRT_DT: { type: "date" },
 					OVLP_DEAL_TYPE: {},
+					OVLP_ECAP_PRC: { type: "number" },
+					OVLP_MAX_RPU: { type: "number" },
 					OVLP_WF_STG_CD: {},
 					selected: {}
 				}
@@ -88,6 +90,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	    return dataService.get(colInfo.lookupUrl + "/" + dataItem["DC_ID"]).then(
 			function (response) {
 			    vm.gridData = response.data;
+
 			    vm.gridData.unshift({
 			        CST_MCP_DEAL_FLAG: 2,
 			        EXCLD_DEAL_FLAG: 2,
@@ -99,6 +102,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			        OVLP_DEAL_ID: dataItem["DC_ID"],
 			        OVLP_DEAL_STRT_DT: dataItem["START_DT"],
 			        OVLP_DEAL_TYPE: dataItem["OBJ_SET_TYPE_CD"],
+			        OVLP_ECAP_PRC: dataItem["ECAP_PRICE"] === undefined ? "": dataItem["ECAP_PRICE"]["20___0"],
+			        OVLP_MAX_RPU: dataItem["MAX_RPU"],
 			        OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"]
 			    });
 				dataSourceSuggested.read();
@@ -138,6 +143,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			{ field: "OVLP_DEAL_END_DT", title: "Deal End", width: "120px", template: "#= moment(OVLP_DEAL_END_DT).format('MM/DD/YYYY') #" },
 			{ field: "OVLP_ADDITIVE", title: "Additive", width: "120px" },
             { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "180px" },
+            { field: "OVLP_ECAP_PRC", title: "ECAP", width: "180px", format: "{0:c}" },
+            { field: "OVLP_MAX_RPU", title: "Max RPU", width: "180px", format: "{0:c}" },
 			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" }
 		],
 		dataBound: function (e) {

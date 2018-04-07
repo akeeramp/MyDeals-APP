@@ -76,6 +76,23 @@ gridUtils.uiReadonlyControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiReadonlyDimControlWrapper = function (passedData, field, dim, format) {
+    var tmplt = '';
+    if (passedData[field] === undefined) return tmplt;
+
+    if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
+        //no subkit allowed case
+        tmplt += '<div class="uiControlDiv isReadOnlyCell">';
+        tmplt += '<div class="vert-center">No Sub KIT</div>';
+        tmplt += '</div>';
+    } else {
+        tmplt += '<div class="uiControlDiv isReadOnlyCell" >';
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
+        tmplt += '</div>';
+    }
+    return tmplt;
+}
+
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
 }
