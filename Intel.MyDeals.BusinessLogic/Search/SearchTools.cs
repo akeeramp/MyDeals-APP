@@ -109,6 +109,13 @@ namespace Intel.MyDeals.BusinessLogic
             List<string> arFilters = filters.Split(new[] { " and " }, StringSplitOptions.None).ToList();
             List<string> arFilterClauses = arFilters.Select(f => ParseFilter(f, opDataElementType)).ToList();
 
+            for (int f = 0; f < arFilterClauses.Count; f++)
+            {
+                if (arFilterClauses[f].IndexOf("WIP_DEAL_WF_STG_CD") >= 0)
+                {
+                    arFilterClauses[f] = $"({arFilterClauses[f]} OR {arFilterClauses[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")})";
+                }
+            }
             string rtn = string.Join(" and ", arFilterClauses);
 
             // Special columns... When we make the advanced search, need a better way than hard coding this

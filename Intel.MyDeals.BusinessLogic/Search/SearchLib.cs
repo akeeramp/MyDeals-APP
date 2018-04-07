@@ -182,6 +182,14 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            for (int f = 0; f < modifiedSearchList.Count; f++)
+            {
+                if (modifiedSearchList[f].IndexOf("WIP_DEAL_WF_STG_CD") >= 0)
+                {
+                    modifiedSearchList[f] = $"({modifiedSearchList[f]} OR {modifiedSearchList[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")})";
+                }
+            }
+
             // create the full string
             rtn += string.Join(" AND ", modifiedSearchList);
 
