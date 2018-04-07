@@ -65,12 +65,22 @@
 </div>
 
 <script>
-
     function clkLnk(appName) {
-        if (appName === "My Deals") {
-            document.location.href = '/';
-        } else {
-            kendo.alert("Sorry... I was never given the link so I can't redirect you to this application.");
+        switch(appName) {
+            case "My Deals":
+                document.location.href = '/';
+                break;
+            case "WRAP":
+                kendo.alert("Sorry... I was never given the link for WRAP so I can't redirect you to this application.");
+                break;
+            case "RFT":
+                kendo.alert("Sorry... I was never given the link for RFT so I can't redirect you to this application.");
+                break;
+            case "NETASP":
+                kendo.alert("Sorry... I was never given the link for NETASP so I can't redirect you to this application.");
+                break;
+            default:
+                kendo.alert("Sorry... I was never given the link so I can't redirect you to this application.");
         }
     }
 
