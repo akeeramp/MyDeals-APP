@@ -169,7 +169,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             }
         }
         if (availChkbox === 0) {
-            e.target.checked = false;
+            e.target.checked = false;   
         }
 
     }

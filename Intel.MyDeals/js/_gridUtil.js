@@ -1593,12 +1593,12 @@ gridPctUtils.getResultSingleIcon = function (result, style) {
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
     return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
 }
-gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style, incompleteReason, isReadonly) {
+gridPctUtils.getResultMapping = function (result, flg, overrideFlg, overrideFlgCmt, className, style, incompleteReason, isReadonly) {
     if (isReadonly === undefined || isReadonly === null) isReadonly = false;
     var readonlyClass = isReadonly ? "isReadOnlyCell" : "";
     var rtn = "<div style='text-align: center;' class='uiControlDiv " + readonlyClass + "'>";
-
-    if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-passed-completed-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Passed with Override Status"></i>';
+    
+    if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + ' && ' + overrideFlgCmt + ' != \'\'" class="intelicon-passed-completed-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Passed with Override Status"></i>';
 
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
     var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;

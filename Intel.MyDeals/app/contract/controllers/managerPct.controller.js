@@ -524,7 +524,7 @@
         }
 
         // Global Settings
-        var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_FLG', '', 'font-size: 20px !important;', INCMPL_COST_TEST_RSN) #" : "&nbsp;";
+        var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG || !dataItem.COST_TEST_OVRRD_CMT', 'dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_CMT', '', 'font-size: 20px !important;', INCMPL_COST_TEST_RSN) #" : "&nbsp;";
         $scope.cellColumns = {
             "PRC_CST_TST_STS": {
                 field: "PRC_CST_TST_STS",
