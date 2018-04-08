@@ -304,7 +304,7 @@
                                     DSPL_WF_STG_CD: item["WF_STG_CD"]
                                 };
 
-                                var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showDealGroups(" + item["DEAL_ID"] + ")'>View</div>" : "";
+                                var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showDealGroups(" + item["DEAL_ID"] + ", \"" + item["DEAL_GRP_CMNT"] + "\")'>View</div>" : "";
                                 val = "<div style='text-align: center;'>" + grp + "</div>";
                             }
 
@@ -510,7 +510,7 @@
             }, function () { });
         }
 
-        $scope.showDealGroups = function (dealId) {
+        $scope.showDealGroups = function (dealId, cmnt) {
             var dataItem = $scope.dataItemDict[dealId];
 
             var col = {
@@ -519,9 +519,9 @@
                 lookupValue: "DROP_DOWN"
             }
 
-            if (dataItem["DEAL_GRP_EXCLDS"] === undefined || dataItem["DEAL_GRP_EXCLDS"] === null) dataItem["DEAL_GRP_EXCLDS"] = "";
-            if (dataItem["DEAL_GRP_CMNT"] === undefined || dataItem["DEAL_GRP_CMNT"] === null) dataItem["DEAL_GRP_CMNT"] = "";
-
+            dataItem["DEAL_GRP_EXCLDS"] = "calc";
+            dataItem["DEAL_GRP_CMNT"] = cmnt;
+            
             var modal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: 'app/contract/partials/ptModals/excludeDealGroupMultiSelectModal.html',

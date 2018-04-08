@@ -30,7 +30,17 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		transport: {
 			read: function (e) {
 
-				var currValsArr = vm.cellCurrValues.replace(/ /g,'').split(',');
+			    var currValsArr = [];
+
+			    if (vm.cellCurrValues === "calc") {
+			        for (var i = 0; i < vm.gridData.length; i++) {
+			            if (vm.gridData[i]["EXCLD_DEAL_FLAG"] === 1) {
+			                currValsArr.push(vm.gridData[i]["OVLP_DEAL_ID"]);
+			            }
+			        }
+			    } else {
+			        currValsArr = vm.cellCurrValues.replace(/ /g, '').split(',');
+			    }
 
 				// put in dictionary for easier lookup
 				for(var i=0; i<currValsArr.length; i++){
