@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dataItem', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox', '$timeout'];
+ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dataItem', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox', 'excludeOutliers', '$timeout'];
 
-function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dataItem, cellCurrValues, cellCommentValue, colInfo, enableCheckbox, $timeout) {
+function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dataItem, cellCurrValues, cellCommentValue, colInfo, enableCheckbox, excludeOutliers, $timeout) {
 	var vm = this;
 
 	var selectedGridDict = {};
@@ -22,7 +22,11 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	vm.hasCheckbox = enableCheckbox;
     vm.DC_ID = dataItem.DC_ID;
 
-	var dataSourceSuggested = new kendo.data.DataSource({
+    var filter = {};
+    if (excludeOutliers) {
+        filter = { field: "GRP_BY", operator: "eq", value: 0 }
+    }
+    var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
 			read: function (e) {
 
@@ -43,7 +47,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 				    } else if (cstChk === 0) {
 				        vm.gridData[i]["GRP_BY"] = 1;
 				    } else if (cstChk === 2) {
-				        vm.gridData[i]["GRP_BY"] = 1;
+				        vm.gridData[i]["GRP_BY"] = 0;
 				    } else {
 				        vm.gridData[i]["GRP_BY"] = 1;
 				    }
@@ -63,6 +67,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
         group: {
             field: "GRP_BY"
         },
+        filter: filter,
 		schema: {
 			model: {
 			    fields: {
@@ -91,6 +96,12 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			function (response) {
 			    vm.gridData = response.data;
 
+			    var ecap = dataItem["ECAP_PRICE"] === undefined
+                    ? ""
+                    : dataItem["ECAP_PRICE"]["20___0"] === undefined
+			            ? dataItem["ECAP_PRICE"]
+			            : dataItem["ECAP_PRICE"]["20___0"];
+
 			    vm.gridData.unshift({
 			        CST_MCP_DEAL_FLAG: 2,
 			        EXCLD_DEAL_FLAG: 2,
@@ -102,7 +113,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			        OVLP_DEAL_ID: dataItem["DC_ID"],
 			        OVLP_DEAL_STRT_DT: dataItem["START_DT"],
 			        OVLP_DEAL_TYPE: dataItem["OBJ_SET_TYPE_CD"],
-			        OVLP_ECAP_PRC: dataItem["ECAP_PRICE"] === undefined ? "": dataItem["ECAP_PRICE"]["20___0"],
+			        OVLP_ECAP_PRC: ecap,
 			        OVLP_MAX_RPU: dataItem["MAX_RPU"],
 			        OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"]
 			    });
@@ -136,6 +147,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		        groupHeaderTemplate: "#= gridUtils.showGroupExcludeMsg(value) #",
                 hidden: true
 		    },
+			{ field: "OVLP_DEAL_ID", title: "Deal Id", width: "80px" },
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
 			{ field: "OVLP_CNTRCT_NM", title: "Contract" },
 			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "120px" },

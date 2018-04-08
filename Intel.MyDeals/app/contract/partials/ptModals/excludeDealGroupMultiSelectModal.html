@@ -27,9 +27,12 @@
 			</div>
 
 			<div ng-show="!vm.isLoading">
-				<div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
-					Select which deals you would like to exclude:
-				</div>
+                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" ng-if="vm.hasCheckbox">
+                    Select which deals you would like to exclude:
+                </div>
+                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" ng-if="!vm.hasCheckbox">
+                    Deals marked with "x" are excluded:
+                </div>
 				<div class="row" style="margin: 0px;">
 					<!-- Grid -->
                     <div id="ExcldGrid"
@@ -45,10 +48,13 @@
 				</div>
 
 				<div>
-				    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
-				        <b style="color: #f3D54E;">*</b> Provide reason for the exclusion(s):
-				    </div>
-				    <div class="fr" style="color: #f3D54E; font-weight: bold; margin-bottom: 5px; margin-top: 20px;" ng-show="!vm.returnVal.DEAL_GRP_CMNT">
+                    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" ng-if="vm.hasCheckbox">
+                        <b style="color: #f3D54E;">*</b> Provide reason for the exclusion(s):
+                    </div>
+                    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" ng-if="!vm.hasCheckbox">
+                        Reason for the exclusion(s):
+                    </div>
+				    <div class="fr" style="color: #f3D54E; font-weight: bold; margin-bottom: 5px; margin-top: 20px;" ng-show="!vm.returnVal.DEAL_GRP_CMNT" ng-if="vm.hasCheckbox">
 				        * Reason is Required
 				    </div>
                     <div class="clearboth"></div>
@@ -61,7 +67,7 @@
 		</div>
 		<div class="col-md-12" style="padding-bottom:20px;">
 			<div class="fr">
-				<button class="btn btn-warning prdBtn" type="button" ng-click="vm.cancel()">Cancel</button>
+				<button class="btn btn-warning prdBtn" type="button" ng-click="vm.cancel()" ng-if="vm.hasCheckbox">Cancel</button>
 				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()" ng-disabled="vm.hasComment" ng-disable style="margin-left: 10px;">Close</button>
 			</div>
 		</div>

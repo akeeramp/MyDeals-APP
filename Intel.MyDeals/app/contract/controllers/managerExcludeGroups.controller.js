@@ -71,6 +71,9 @@
                         },
                         enableCheckbox: function() {
                             return enabledList.indexOf(dataItem["PS_WF_STG_CD"]) < 0;
+                        },
+                        excludeOutliers: function () {
+                            return false;
                         }
                     }
                 });
@@ -87,7 +90,7 @@
             });
 
         var pctTemplate = root.CAN_VIEW_COST_TEST
-            ? "#= gridPctUtils.getResultMapping(data.COST_TEST_RESULT, 'true', '', '', 'font-size: 20px !important;', '', true) #"
+            ? "#= gridPctUtils.getResultMapping(data.COST_TEST_RESULT, 'true', '', '', '', 'font-size: 20px !important;', '', true) #"
             : "&nbsp;";
 
         $scope.togglePctFilter = function() {
