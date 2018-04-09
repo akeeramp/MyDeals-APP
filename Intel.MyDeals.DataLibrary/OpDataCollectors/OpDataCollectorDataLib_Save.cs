@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;

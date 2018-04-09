@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 
@@ -57,8 +56,9 @@ namespace Intel.MyDeals.Entities
 
             majorDealIds.AddRange(wonTenderIds);
 
+            // Gather items that are minor field changes, including deal being cancelled.
             List<int> minorDealIds = testPacket.AllDataElements
-                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged && !wonTenderIds.Contains(d.DcID) && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && ((d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged) || (d.AtrbValue.ToString() == WorkFlowStages.Cancelled && d.HasValueChanged)) && !wonTenderIds.Contains(d.DcID) && (!dealIds.Any() || dealIds.Contains(d.DcID)))
                 .Select(d => d.DcID).ToList();
 
             if (majorDealIds.Any()) // 
