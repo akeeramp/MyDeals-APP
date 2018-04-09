@@ -389,12 +389,16 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     title: "Notes",
                     closable: false,
                     modal: true,
+                    open: function(e) {
+                        
+                    },
                     actions: [
                         {
                             text: 'OK',
                             primary: true,
                             action: function () {
-                                if ($scope.dataItem._dirty) {
+                                if ($scope.dataItem.NOTES !== $scope.notes) {
+                                    $scope.dataItem.NOTES = angular.copy($scope.notes);
                                     $scope._dirty = true;
                                     rootScope.saveCell($scope.dataItem, "NOTES");
                                     $rootScope.$broadcast('data-item-changed', 'NOTES', $scope.dataItem, scope.el);
@@ -407,6 +411,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 $scope.dialog.data("kendoDialog").open();
                 $templateRequest("/app/core/directives/gridCell/_partials/notes.html").then(function (html) {
                     var template = angular.element(html);
+                    scope.notes = angular.copy($scope.dataItem.NOTES);
                     $compile(template)(scope);
                     $scope.dialog.data("kendoDialog").content(template);
                 });
