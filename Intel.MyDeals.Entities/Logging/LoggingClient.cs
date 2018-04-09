@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Intel.Opaque;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Intel.MyDeals.Entities.Logging
 {
@@ -63,22 +65,26 @@ namespace Intel.MyDeals.Entities.Logging
             return _InstanceOptimal;
         }
 
+        private static HttpClient MyDealsClient
+        {
+            get
+            {
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.UseDefaultCredentials = true;
+                HttpClient client = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(MyDealsWebApiUrl.ROOT_URL)
+                };
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                return client;
+            }
+        }
+
         public void UploadLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
         {
-            var onAsyncWait = MyDealsWebApiUrl.WebApi;
-            onAsyncWait.EnableLogging = false;
-
-            // Send data to Presentation Layer's API Controller because we can't reference DataLayer on Entity layer (circular reference error)
-            bool success = onAsyncWait.Post<bool>(
-                    MyDealsWebApiUrl.UploadLogPerfLogs,
-                    "",
-                    new
-                    {
-                        Messages = OpSerializeHelper.ToJsonString(messages, true)
-                    },
-                    false,
-                    false
-                    );
+            MyDealsClient.PostAsJsonAsync(MyDealsWebApiUrl.UploadLogPerfLogs, OpSerializeHelper.ToJsonString(messages, true));
         }
     }
 }

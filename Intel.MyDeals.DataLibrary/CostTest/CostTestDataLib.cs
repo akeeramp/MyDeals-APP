@@ -239,7 +239,9 @@ namespace Intel.MyDeals.DataLibrary
                     in_deal_ovrrd = dt,
                     in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
                 };
-                var rdr = DataAccess.ExecuteReader(cmd);
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -300,7 +302,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 contractLst = new type_int_list(contractLst.ToArray()),
             };
-            DataAccess.ExecuteDataSet(cmd);
+            using (DataAccess.ExecuteDataSet(cmd))
+            {
+            }
         }
     }
 }

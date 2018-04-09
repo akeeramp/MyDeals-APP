@@ -835,7 +835,7 @@ namespace Intel.MyDeals.BusinessLogic
                     if (elMapping.ParentOpDataElementSetType.ToString() == "KIT")
                     {
                         //TODO: need to check that the name we are setting it to does not already exist in the PT as this can still result in duplicate deal group names in VERY specific cases (ie. Split "KitName" but for some reason we already have a deal group named "KitName (Split 1)" which would result in a duplicate
-                        string splitName = dcSplit.GetDataElementValue(AttributeCodes.DEAL_GRP_NM) + " (Split " + splitCount + ")"; 
+                        string splitName = dcSplit.GetDataElementValue(AttributeCodes.DEAL_GRP_NM) + " (Split " + splitCount + ")";
                         dcSplit.SetAtrb(AttributeCodes.DEAL_GRP_NM, splitName);
                         dcSplit.SetModified(AttributeCodes.DEAL_GRP_NM);
                         dcWip.SetAtrb(AttributeCodes.DEAL_GRP_NM, splitName);

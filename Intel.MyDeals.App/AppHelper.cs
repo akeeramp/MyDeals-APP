@@ -9,6 +9,8 @@ namespace Intel.MyDeals.App
 {
     public static class AppHelper
     {
+        private static readonly string MachineName = Environment.MachineName.Replace(";", "");
+
         private static string GetSiteRoot()
         {
             string port = System.Web.HttpContext.Current.Request.ServerVariables["SERVER_PORT"];
@@ -35,7 +37,6 @@ namespace Intel.MyDeals.App
 
         public static ErrorControllerContent GenerateErrorContext(Exception ex, HttpContext httpContext)
         {
-
             var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
             var currentController = " ";
             var currentAction = " ";
@@ -52,10 +53,10 @@ namespace Intel.MyDeals.App
                     currentAction = currentRouteData.Values["action"].ToString();
                 }
             }
-			
-			OpLogPerf.Log(ex);
 
-			RouteData routeData = new RouteData();
+            OpLogPerf.Log(ex);
+
+            RouteData routeData = new RouteData();
             var action = "Index";
 
             if (ex is HttpException)
@@ -84,7 +85,6 @@ namespace Intel.MyDeals.App
                         break;
                 }
             }
-
 
             httpContext.ClearError();
             httpContext.Response.Clear();
@@ -130,7 +130,8 @@ namespace Intel.MyDeals.App
                 envConfigs.SetValue(rootWebConfig, jmsConfigItem);
             }
 
-            BusinessLogic.BusinessLogic.InitializeDataLibrary(connString.ConnectionString, env.Value, envConfigs);
+            var conn = $"{connString.ConnectionString}Application Name={MachineName}";
+            BusinessLogic.BusinessLogic.InitializeDataLibrary(conn, env.Value, envConfigs);
         }
 
         private static void SetValue(this Dictionary<string, string> envConfigs, Configuration rootWebConfig, string sKey)
@@ -139,6 +140,5 @@ namespace Intel.MyDeals.App
             if (jms == null) throw new MissingFieldException("WebConfig is missing the " + sKey + " entry.");
             envConfigs[sKey] = jms.Value;
         }
-
     }
 }

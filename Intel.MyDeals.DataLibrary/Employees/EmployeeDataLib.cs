@@ -56,7 +56,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 throw OpMsgQueue.CreateFault(ex);
             }
-            
+
             return rtn;
         }
 
@@ -218,7 +218,7 @@ namespace Intel.MyDeals.DataLibrary
                 AppId = tempUserVitalsRole.First().APP_SID
             };
             // Set Basic SuperBits here that aren't dependant upon roles.  Role based SuperBits are down a few lines.
-            opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] = tempUserVitalsRole.First().IS_SUPER == 1? true: false;
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] = tempUserVitalsRole.First().IS_SUPER == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] = tempUserVitalsRole.First().IS_TESTER == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = tempUserVitalsRole.First().IS_DEVELOPER == 1 ? true : false;
 
@@ -288,7 +288,9 @@ namespace Intel.MyDeals.DataLibrary
                     IsSuper = data.isSuper
                 };
 
-                var rdr = DataAccess.ExecuteReader(cmd);
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -305,7 +307,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 mode = "Select",
                 wwid = wwid
-            }; 
+            };
 
             try
             {
@@ -369,7 +371,9 @@ namespace Intel.MyDeals.DataLibrary
                     cust_ids = new type_int_list(data.custIds.ToArray())
                 };
 
-                var rdr = DataAccess.ExecuteReader(cmd);
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -377,6 +381,5 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
         }
-
     }
 }

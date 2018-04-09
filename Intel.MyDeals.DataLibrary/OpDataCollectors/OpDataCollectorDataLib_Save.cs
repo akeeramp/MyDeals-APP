@@ -16,7 +16,6 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class OpDataCollectorDataLib : IOpDataCollectorDataLib
     {
-
         private const string ATRB_SID = "ATRB_SID";
         private const string ATRB_VAL = "ATRB_VAL";
 
@@ -107,7 +106,6 @@ namespace Intel.MyDeals.DataLibrary
                     quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
                 }
 
-
 #if DEBUG
                 // Dump random debugging log messsage into the first returned packet.
                 if (ret != null && ret.Count > 0 && LogMessages.Count > 0)
@@ -116,7 +114,6 @@ namespace Intel.MyDeals.DataLibrary
                     firstPacket?.Messages.Merge(LogMessages);
                 }
 #endif
-
 
                 // POST SAVE AND ACTION Tasks - This is brought back in because it is needed for approval actions and redeal actions.  If we don't send it, UI gets out of whack (technical term).
                 if (contractToken.ContractId > 0 && packets.ContainsKey(OpDataElementType.PRC_ST))
@@ -182,7 +179,7 @@ namespace Intel.MyDeals.DataLibrary
                         // Removed... thinking is this is causeing blocks in concurency inports
                         //lock (dtData)
                         //{
-                            dtData.Merge(dt, true);
+                        dtData.Merge(dt, true);
                         //}
                     }
                 }
@@ -242,13 +239,13 @@ namespace Intel.MyDeals.DataLibrary
                     try
                     {
                         // Move the data from dbo.MYDL_CL_WIP_ATRB_TMP to dbo.MYDL_CL_WIP_ATRB
-                        DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_TMP_TO_WIP_ATRB()
+                        using (DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_TMP_TO_WIP_ATRB()
                         {
                             in_emp_wwid = wwid,
                             in_btch_ids =
                                 new type_guid_list(packets.Where(p => p.HasData(false)).Select(p => p.BatchID))
-                        }, null, out dsCheckConstraintErrors);
-
+                        }, null, out dsCheckConstraintErrors))
+                        { }
                     }
                     catch (Exception ex)
                     {
@@ -522,7 +519,11 @@ namespace Intel.MyDeals.DataLibrary
                 getActionCmd.in_after_srt_ord = (int)sort;
             }
 
-            var dtact = DataAccess.ExecuteDataTable(getActionCmd);
+            DataTable dtact;
+
+            using (dtact = DataAccess.ExecuteDataTable(getActionCmd))
+            {
+            }
 
             processedActions.Clear(); // The exec of PR_GET_WIP_ACTN would have deleted these actions from the DB...
 

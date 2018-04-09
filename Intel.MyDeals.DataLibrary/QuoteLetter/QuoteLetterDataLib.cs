@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using Telerik.Reporting.Processing;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
-
 namespace Intel.MyDeals.DataLibrary
 {
     public class QuoteLetterDataLib : IQuoteLetterDataLib
@@ -101,12 +100,11 @@ namespace Intel.MyDeals.DataLibrary
                 Thread quoteLetterThread = new Thread(() => GenerateQuoteLetterPDF(qlData, true));
                 quoteLetterThread.Start();
                 //GenerateQuoteLetterPDF(qlData, true);  // Force quote letter generation when a deal is approved (part of deal Approval flow)
-
             }
         }
 
         public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)
-        {                        
+        {
             QuoteLetterFile quoteLetterPdfBytes = new QuoteLetterFile();
             var quoteLetterDataList = new List<QuoteLetterData> { quoteLetterDealData };
 
@@ -114,15 +112,15 @@ namespace Intel.MyDeals.DataLibrary
             if (!string.IsNullOrEmpty(headerInfo) && !string.IsNullOrEmpty(bodyInfo))
                 SetDealQuoteLetterPreviewData(quoteLetterDataList[0], headerInfo, bodyInfo);
             else
-                GetDealQuoteLetterData(quoteLetterDataList, 2); 
+                GetDealQuoteLetterData(quoteLetterDataList, 2);
 
             quoteLetterPdfBytes = GenerateQuoteLetterPDF(quoteLetterDataList[0]);
             return quoteLetterPdfBytes;
         }
 
         private void SetDealQuoteLetterPreviewData(QuoteLetterData quoteLetterData, string headerInfo, string bodyInfo)
-        {            
-            var quoteLetterContentData = new QuoteLetterContentInfo();        
+        {
+            var quoteLetterContentData = new QuoteLetterContentInfo();
             var quoteLetterTemplateData = new QuoteLetterTemplateInfo();
 
             quoteLetterContentData.QUOTE_LETTER = @"<PARAMETERS>
@@ -147,10 +145,10 @@ namespace Intel.MyDeals.DataLibrary
             quoteLetterTemplateData.HDR_INFO = headerInfo;
 
             quoteLetterData.ContentInfo = quoteLetterContentData;
-            quoteLetterData.TemplateInfo = quoteLetterTemplateData;            
+            quoteLetterData.TemplateInfo = quoteLetterTemplateData;
         }
 
-        static string EscapeSpecialChars(string val)
+        private static string EscapeSpecialChars(string val)
         {
             val = val.Replace("&amp;", "and");
             val = val.Replace("&", "and");
@@ -169,10 +167,10 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <returns>QuoteLetterData with Content and Template data</returns>
         private List<QuoteLetterData> GetDealQuoteLetterData(List<QuoteLetterData> quoteLetterDealInfoList, int callMode)
-        {            
+        {
             string dealIds = string.Empty;
             dealIds = string.Join(",", quoteLetterDealInfoList.Select(dealInfo => dealInfo.ObjectSid).ToArray());
-            
+
             Procs.dbo.PR_MYDL_GET_QUOTE_INFO cmd = new Procs.dbo.PR_MYDL_GET_QUOTE_INFO()
             {
                 @ObjSidLst = dealIds, //String.Join(",", dealIds)
@@ -215,7 +213,6 @@ namespace Intel.MyDeals.DataLibrary
                         var quoteLetterData = quoteLetterDealInfoList.FirstOrDefault(qlData => qlData.ObjectSid == quoteLetterContentData.OBJ_SID.ToString());
                         if (quoteLetterData != null)
                             quoteLetterData.ContentInfo = quoteLetterContentData;
-                       
                     } // while
 
                     rdr.NextResult();
@@ -249,13 +246,10 @@ namespace Intel.MyDeals.DataLibrary
                             TMPLT_SID = (IDX_TMPLT_SID < 0 || rdr.IsDBNull(IDX_TMPLT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TMPLT_SID)
                         });
 
-                         
-
                         var quoteLetterDataList = quoteLetterDealInfoList.Where(qlData => qlData.ContentInfo.PROGRAM_PAYMENT.ToUpper() == quoteLetterTemplateData.PROGRAM_PAYMENT.ToUpper() &&
                                                                                                qlData.ContentInfo.OBJ_SET_TYPE_CD.ToUpper() == quoteLetterTemplateData.OBJ_SET_TYPE_CD.ToUpper());
-                        foreach(var qlData in quoteLetterDataList)
+                        foreach (var qlData in quoteLetterDataList)
                             qlData.TemplateInfo = quoteLetterTemplateData;
-
                     } // while
                 }
             }
@@ -268,7 +262,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private QuoteLetterFile GenerateQuoteLetterPDF(QuoteLetterData quoteLetterData, bool forceRegenerateQuoteLetter = false)
-        {            
+        {
             byte[] quoteLetterBytes;
             string dealId = quoteLetterData.ObjectSid;
 
@@ -286,30 +280,28 @@ namespace Intel.MyDeals.DataLibrary
                 var endcust = EscapeSpecialChars(quoteLetterData.ContentInfo.END_CUSTOMER);
                 var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.CONTRACT_PRODUCT).Split(',')[0];
                 var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
-                
+
                 fileName = $"{custNm} {(ecapType.ToUpper() == "TENDER" ? endcust : string.Empty)} {sku} {ecapType} {dealId}.pdf";
             }
 
             var inNegotiation = string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR) || quoteLetterData.ContentInfo.TRKR_NBR.IndexOf("*") >= 0;
 
-
             if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
             {
-
                 // If there is an existing PDF file exists in DB, use the existing one
-                if (!forceRegenerateQuoteLetter && 
+                if (!forceRegenerateQuoteLetter &&
                     quoteLetterData.ContentInfo.PDF_FILE != null && quoteLetterData.ContentInfo.PDF_FILE.Length > 0)
                 {
                     quoteLetterBytes = quoteLetterData.ContentInfo.PDF_FILE;
                 }
                 else
-                {               
+                {
                     // Generate new quote Letter PDf and Save to DB/Display to user
                     Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO, string.IsNullOrWhiteSpace(dealId) ? 0 : int.Parse(dealId));
                     ReportProcessor reportProcessor = new ReportProcessor();
                     Telerik.Reporting.InstanceReportSource instanceReportSource = new Telerik.Reporting.InstanceReportSource { ReportDocument = reportToExport };
                     RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
-                    
+
                     var ms = new MemoryStream(result.DocumentBytes) { Position = 0 };
                     quoteLetterBytes = ms.ToArray();
 
@@ -331,7 +323,6 @@ namespace Intel.MyDeals.DataLibrary
                 Content = quoteLetterBytes,
                 Name = fileName
             };
-
         }
 
         private async Task<bool> SaveQuotePDF(QuoteLetterData quoteLetterData, string trkrNumber, byte[] quoteLetterPdf)
@@ -346,7 +337,9 @@ namespace Intel.MyDeals.DataLibrary
                     TRKR_NBR = trkrNumber,
                     FILE_DATA = quoteLetterPdf
                 };
-                await DataAccess.ExecuteReaderAsync(cmd);
+                using (var async = await DataAccess.ExecuteReaderAsync(cmd))
+                {
+                }
                 return true;
             }
             catch (Exception ex)

@@ -68,7 +68,7 @@ namespace Intel.MyDeals.DataLibrary.Test
             msgList.Add(msg);
 
             // Act
-            bool insertResult = new LoggingDataLib().UploadDbLogPerfLogs(msgList).Result;
+            bool insertResult = new LoggingDataLib().UploadDbLogPerfLogs(msgList);
 
             // Assert
             Assert.IsTrue(

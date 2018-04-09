@@ -35,7 +35,9 @@ namespace Intel.MyDeals.DataLibrary
                     FILE_DATA = fileData
                 };
 
-                DataAccess.ExecuteDataSet(cmd);
+                using (DataAccess.ExecuteDataSet(cmd))
+                {
+                }
                 ret = true;
             }
             catch (Exception ex)
@@ -177,7 +179,8 @@ namespace Intel.MyDeals.DataLibrary
                     INCL_GRP = includeGroup
                 };
 
-                DataAccess.ExecuteDataSet(cmd);
+                using (DataAccess.ExecuteDataSet(cmd))
+                { }
                 ret = true;
             }
             catch (Exception ex)
@@ -187,7 +190,5 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
-
-
     }
 }

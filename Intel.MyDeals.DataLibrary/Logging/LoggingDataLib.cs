@@ -46,7 +46,7 @@ namespace Intel.MyDeals.DataLibrary
         /// Saves a List of log data to db,
         /// Called from DbLogPerf asynchronously
         /// </summary>
-        public async Task<bool> UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
+        public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
         {
             if (messages == null || !messages.Any()) { return false; }
 
@@ -61,7 +61,9 @@ namespace Intel.MyDeals.DataLibrary
                     in_db_log = dt,
                     in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
-                await DataAccess.ExecuteReaderAsync(cmd);
+                using (var q = DataAccess.ExecuteReaderAsync(cmd))
+                {
+                }
                 return true;
             }
             catch (Exception)
@@ -86,7 +88,9 @@ namespace Intel.MyDeals.DataLibrary
                     in_ui_log = dt,
                     in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
-                await DataAccess.ExecuteReaderAsync(cmd);
+                using (var async = await DataAccess.ExecuteReaderAsync(cmd))
+                {
+                }
             }
             catch (Exception)
             {
@@ -111,7 +115,9 @@ namespace Intel.MyDeals.DataLibrary
                     in_ui_log = dt,
                     in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
-                DataAccess.ExecuteReaderAsync(cmd);
+                using (var sync = DataAccess.ExecuteReaderAsync(cmd))
+                {
+                }
             }
             catch (Exception)
             {
