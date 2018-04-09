@@ -1158,12 +1158,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
-            for (var f = 0; f < flushSysPrdFields.length; f++) {
-                if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
-                    var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
-                    if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
-                        isPtrSysPrdFlushed = true;
-                        break;
+
+            // Don't flush priduct to revalidate if there is a tracker number
+            if (root.curPricingStrategy !== undefined && (root.curPricingStrategy.HAS_TRACKER == undefined || root.curPricingStrategy.HAS_TRACKER !== "1")) {
+                for (var f = 0; f < flushSysPrdFields.length; f++) {
+                    if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
+                        var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
+                        if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
+                            isPtrSysPrdFlushed = true;
+                            break;
+                        }
                     }
                 }
             }
