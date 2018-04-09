@@ -40,6 +40,9 @@
                           ng-click="setValue(item[opLookupText])"
                           ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
                         {{item[opLookupText]}}
+                        <span class="button-group-tooltip" ng-if="item[opLookupText]=='All' && opLabel=='Media'">
+                            (includes NA)   <!--note: this is as band-aid as it gets - if we rename "Media" or "All" OR if we move "All" out of the last position, we will no longer see this tip-->
+                        </span>
                     </span>
                 </label>
 
