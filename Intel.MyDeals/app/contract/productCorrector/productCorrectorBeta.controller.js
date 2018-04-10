@@ -374,7 +374,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                         type: "string"
                     },
                     "CAP": {
-                        type: "object"
+                        type: "string"
+                    },
+                    "YCS2": {
+                        type: "string"
                     },
                     "EXCLUDE": {
                         type: "boolean"
@@ -503,7 +506,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 field: "CAP",
                 title: "CAP Info",
                 template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
-                width: "150px"
+                width: "150px",
+                filterable: { multi: true, search: true }
             },
             {
                 field: "MM_MEDIA_CD",
@@ -515,7 +519,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 field: "YCS2",
                 title: "YCS2",
                 width: "150px",
-                template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>"
+                template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                filterable: { multi: true, search: true }
             },
             {
                 field: "GDM_FMLY_NM",

@@ -29,6 +29,7 @@ namespace Intel.MyDeals.JMSQueueApp
                 handler.UseDefaultCredentials = true;
                 HttpClient client = new HttpClient(handler);
                 client.BaseAddress = new Uri(jmsAPIbaseUrl);
+                client.Timeout = TimeSpan.FromMinutes(4);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
