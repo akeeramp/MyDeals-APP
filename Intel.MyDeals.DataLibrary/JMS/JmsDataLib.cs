@@ -413,6 +413,9 @@ namespace Intel.MyDeals.DataLibrary
                 // create the connection
                 connection = queueFactory.CreateConnection(userName, password);
 
+                // clear out password from memory (part of 5 Star - Security.  DO NOT REMOVE)
+                password = null;
+
                 // set the exception listener
                 connection.ExceptionListener += new ExceptionListener(OnException);
 
