@@ -172,5 +172,35 @@ namespace Intel.MyDeals.Controllers.API
         {
             return StringEncrypter.StringDecrypt(password, "JMS_Password");
         }
+
+        [HttpGet]
+        [Route("RunJMSBatch/{mode}")]
+        public string RunJMSBatch(char mode)
+        {
+            var fileName = string.Empty;
+            try
+            {
+                var useprocess = new System.Diagnostics.Process();
+                if (mode == 'U')
+                {
+                    fileName = @"D:\Mydeals_JMS\\RunCommands\JMSQUploadSendandRecieve.cmd";
+                }
+                else if (mode == 'E')
+                {
+                    fileName = @"D:\Mydeals_JMS\RunCommands\JMSQExpireSendandRecieve.cmd";
+                }
+                else
+                {
+                    return $"Invalid mode.";
+                }
+                useprocess.StartInfo.FileName = fileName;
+                useprocess.Start();
+                return $"JMS Batch started in mode : {mode}";
+            }
+            catch (Exception ex)
+            {
+                return $"File Name : {fileName} Message :{ex.Message}";
+            }
+        }
     }
 }
