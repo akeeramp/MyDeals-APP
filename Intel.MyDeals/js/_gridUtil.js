@@ -475,6 +475,8 @@ gridUtils.uiDimInfoExcelControlWrapper = function (passedData, field) {
             if (ycs2Field !== undefined && ycs2Field !== null) {
                 if (ycs2Field.indexOf("No") >= 0) {
                     tmplt += ycs2Field + "<br/>";
+                } else if (passedData[field + st] === undefined) {
+                    tmplt += ycs2Field + "<br/>";
                 } else {
                     tmplt += ycs2Field + " : " + passedData[field + st][dimkey] + " - " + passedData[field + en][dimkey] + "<br/>";
                 }
