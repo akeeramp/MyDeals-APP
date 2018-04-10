@@ -773,7 +773,7 @@
                         "Groups": ["All", "CAP Info"]
                     },
                     "CAP_KIT": {
-                        "Groups": ["All", "CAP Info"]
+                        "Groups": ["Deal Info", "CAP Info"]
                     },
                     "YCS2_INFO": {
                         "Groups": ["Deal Info"]
