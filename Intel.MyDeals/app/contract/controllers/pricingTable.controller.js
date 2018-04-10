@@ -1327,45 +1327,46 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
 			
             for (var a = 0; a < numTier; a++) {
-            	if (numTier == pivottedRows.length) {
+                if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-            		data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
-                    continue;
+            		data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
                 }
-                // Update existing rows, offset number of deleted rows
                 else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
-                	data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
+                    // Update existing rows, offset number of deleted rows
+                	data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, true);
                     numExistingRows--;
-                } else {
-                    if (rowDeleted == 0 && offSetRows > 0) {
-                        // adding products / new rows
-                        var copy = angular.copy(data[n - rowDeleted]);
-                        copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a);
-                        data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
-                        // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
-                        data[n + a - (offset - 1)].id = null;
-
-                        offSetRows--;
-                    } else {
-                        // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
-                        data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
-                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
-                    }
                 }
+                else if (rowDeleted == 0 && offSetRows > 0) {
+                    // adding products / new rows
+                    var copy = angular.copy(data[n - rowDeleted]);
+                    copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a, true);
+                    data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
+                    // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
+                    data[n + a - (offset - 1)].id = null;
+
+                    offSetRows--;
+                } else {
+                    // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
+                    data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
+                        updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
+                }
+
             }
         }
     }
 	
-    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber) {
+    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber, resetDim) {
     	var row = angular.copy(row);
     	var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
         if (buckProd.length === 0) { // no corresponding row (essentially a new row)
-        	row.PRD_BCKT = productBcktName;			
-        	// Clear out any tiered values because this is an essentially new row
-        	row["ECAP_PRICE"] = 0;
-        	row["DSCNT_PER_LN"] = 0;
-        	row["QTY"] = 1;
-        	row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
+            row.PRD_BCKT = productBcktName;
+            if (resetDim) {
+                // Clear out any tiered values because this is an essentially new row.  Do not clear out unless it comes from a relevant user action - we don't want this to happen when the product corrects in-place to what we have defined in the system (i.e. after user manual copy paste or typed entry).
+                row["ECAP_PRICE"] = 0;
+                row["DSCNT_PER_LN"] = 0;
+                row["QTY"] = 1;
+                row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
+            }
         } else {
             row = buckProd[0]; //Select the first one even of there are duplicates
         }
