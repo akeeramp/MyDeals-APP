@@ -202,7 +202,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		            else if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 2 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 2) {
 		                data[d].set("_disabled", true);
 		                $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
-		                $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-check-box' style='color: #FFFFFF; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This is the current deal and cannot be excluded.'></i>");
+		                $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html(" ");
 		                $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-current");
 		            }
                 }
