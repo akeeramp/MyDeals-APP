@@ -173,14 +173,14 @@ namespace Intel.MyDeals.BusinessLogic
             _jmsDataLib.InsertExceptionData(exceptionDatetime, exceptionType, exceptionMessage, exceptionSource, exceptionStackTrace);
         }
 
-        public Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string password, string queueName)
+        public Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName)
         {
-            return _jmsDataLib.TestConnection(noSAP, brokerURI, userName, password, queueName);
+            return _jmsDataLib.TestConnection(noSAP, brokerURI, userName, queueName);
         }
 
-        public void Publish(string brokerURI, string userName, string password, string queueName, List<string> data)
+        public void Publish(string brokerURI, string userName, string queueName, List<string> data)
         {
-            _jmsDataLib.Publish(brokerURI, userName, password, queueName, data);
+            _jmsDataLib.Publish(brokerURI, userName, queueName, data);
         }
     }
 }

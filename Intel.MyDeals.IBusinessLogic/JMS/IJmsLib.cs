@@ -37,12 +37,12 @@ namespace Intel.MyDeals.IBusinessLogic
 
         Dictionary<string, string> TestConnection(bool noSAP, string brokerURI,
                       string userName,
-                      string password,
+                      //string password,
                       string queueName);
 
         void Publish(string brokerURI,
                        string userName,
-                       string password,
+                       //string password,
                        string queueName,
                        List<string> data);
     }

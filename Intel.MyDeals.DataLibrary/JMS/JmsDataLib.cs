@@ -38,8 +38,6 @@ namespace Intel.MyDeals.DataLibrary
             jmsServer = jmsEnvs.ContainsKey("jmsServer") ? jmsEnvs["jmsServer"] : "";
             jmsQueue = jmsEnvs.ContainsKey("jmsQueue") ? jmsEnvs["jmsQueue"] : "";
             jmsUID = jmsEnvs.ContainsKey("jmsUID") ? jmsEnvs["jmsUID"] : "";
-            jmsPWD = jmsEnvs.ContainsKey("jmsPWD") ? jmsEnvs["jmsPWD"] : "";
-            jmsPWD = StringEncrypter.StringDecrypt(jmsPWD, "JMS_Password");
         }
 
         /// <summary>
@@ -181,7 +179,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 var data = new List<string>();
                 data.Add(strData);
-                Publish(jmsServer, jmsUID, jmsPWD, jmsQueue, data);
+                Publish(jmsServer, jmsUID, jmsQueue, data);
             }
             catch (Exception ex)
             {
@@ -310,7 +308,6 @@ namespace Intel.MyDeals.DataLibrary
 
         public void Publish(string brokerURI,
                        string userName,
-                       string password,
                        string queueName,
                        List<string> data)
         {
@@ -328,7 +325,7 @@ namespace Intel.MyDeals.DataLibrary
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
 
                 // create the connection
-                connection = queueFactory.CreateConnection(userName, password);
+                connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
 
                 // set the exception listener
                 connection.ExceptionListener += new ExceptionListener(OnException);
@@ -388,7 +385,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="data"></param>
         public Dictionary<string, string> TestConnection(bool noSAP, string brokerURI,
                        string userName,
-                       string password,
                        string queueName)
         {
             OpLog.Log("JMS - TestConnection");
@@ -396,7 +392,6 @@ namespace Intel.MyDeals.DataLibrary
             {
                 brokerURI = jmsServer;
                 userName = jmsUID;
-                password = jmsPWD;
                 queueName = jmsQueue;
             }
             if (noSAP)
@@ -411,10 +406,7 @@ namespace Intel.MyDeals.DataLibrary
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
 
                 // create the connection
-                connection = queueFactory.CreateConnection(userName, password);
-
-                // clear out password from memory (part of 5 Star - Security.  DO NOT REMOVE)
-                password = null;
+                connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
 
                 // set the exception listener
                 connection.ExceptionListener += new ExceptionListener(OnException);
@@ -456,9 +448,19 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     if (url.ToLower().Contains("failover"))
                     {
-                        int indexofSeparator = url.IndexOf(',');
-                        modifiedURL = url.Insert(indexofSeparator, certIgnoreSuffix);
-                        modifiedURL = modifiedURL.Insert(modifiedURL.LastIndexOf(')'), certIgnoreSuffix);
+                        String serversCSVList = url.Substring(url.IndexOf('('));
+                        serversCSVList = serversCSVList.Substring(1, serversCSVList.Length - 2);
+                        String[] servers = serversCSVList.Split(',');
+
+                        modifiedURL = "failover:(";
+                        foreach (String server in servers)
+                        {
+                            modifiedURL += server + certIgnoreSuffix + ",";
+                        }
+                        if (modifiedURL.LastIndexOf(',') == modifiedURL.Length - 1)
+                            modifiedURL = modifiedURL.Substring(0, modifiedURL.Length - 1);
+
+                        modifiedURL += ")";
                     }
                     else
                     {

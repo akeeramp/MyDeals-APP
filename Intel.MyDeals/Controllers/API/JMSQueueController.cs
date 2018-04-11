@@ -141,7 +141,8 @@ namespace Intel.MyDeals.Controllers.API
         public Dictionary<string, string> TestConnection(bool noSAP, JMS jms)
         {
             if (jms == null) jms = new JMS();
-            return _jmsLib.TestConnection(noSAP, jms.Url, jms.UserName, jms.Password, jms.QueueName);
+            //return _jmsLib.TestConnection(noSAP, jms.Url, jms.UserName, jms.Password, jms.QueueName);
+            return _jmsLib.TestConnection(noSAP, jms.Url, jms.UserName, jms.QueueName);
         }
 
         /// <summary>
@@ -156,7 +157,8 @@ namespace Intel.MyDeals.Controllers.API
         [Route("Publish")]
         public void Publish(JMS jms)
         {
-            _jmsLib.Publish(jms.Url, jms.UserName, jms.Password, jms.QueueName, jms.Message);
+            _jmsLib.Publish(jms.Url, jms.UserName, jms.QueueName, jms.Message);
+            //_jmsLib.Publish(jms.Url, jms.UserName, jms.Password, jms.QueueName, jms.Message);
         }
 
         [HttpGet]

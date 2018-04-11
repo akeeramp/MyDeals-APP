@@ -26,8 +26,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         void InsertExceptionData(DateTime exceptionDatetime, string exceptionType, string exceptionMessage, string exceptionSource, string exceptionStackTrace);
 
-        Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string password, string queueName);
+        Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
 
-        void Publish(string brokerURI, string userName, string password, string queueName, List<string> data);
+        void Publish(string brokerURI, string userName, string queueName, List<string> data);
     }
 }

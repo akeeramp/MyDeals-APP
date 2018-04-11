@@ -10,7 +10,7 @@ namespace Intel.MyDeals.Entities
 
         public string UserName { get; set; }
 
-        public string Password { get; set; }
+        //public string Password { get; set; }
 
         public List<string> Message { get; set; }
     }
