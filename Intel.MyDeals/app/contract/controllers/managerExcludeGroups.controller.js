@@ -211,6 +211,11 @@
                 template: "#=gridUtils.uiControlWrapperDirtyIndicator(data, '_dirty')# #=gridUtils.uiReadonlyControlWrapper(data, 'DC_ID')#",
                 width: 120
             }, {
+                field: "DEAL_DESC",
+                title: "Deal Description",
+                template: "#=gridUtils.uiReadonlyControlWrapper(data, 'DEAL_DESC')#",
+                width: 120
+            }, {
                 field: "DEAL_GRP_EXCLDS",
                 title: "Exclude Deal Group",
                 template: "#=gridUtils.uiControlWrapperGrpWithDefault(data, 'DEAL_GRP_EXCLDS')#",
@@ -270,11 +275,6 @@
                 field: "MAX_RPU",
                 title: "Max RPU",
                 template: "#=gridUtils.uiReadonlyControlWrapper(data, 'MAX_RPU', 'currency')#",
-                width: 120
-            }, {
-                field: "DEAL_DESC",
-                title: "Deal Description",
-                template: "#=gridUtils.uiReadonlyControlWrapper(data, 'DEAL_DESC')#",
                 width: 120
             }, {
                 field: "CONSUMPTION_REASON",
