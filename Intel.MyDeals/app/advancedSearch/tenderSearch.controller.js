@@ -453,6 +453,16 @@
             }
         }
 
+        $scope.uncheckAll = function() {
+            var dsData = scope.ds.data();
+            for (var d = 0; d < dsData.length; d++) {
+                if (dsData[d].isLinked) {
+                    dsData[d].set("isLinked", false);
+                }
+            }
+
+        }
+
         $scope.changeBidAction = function (dataItem, scope) {
             var newVal = dataItem.BID_STATUS;
             var dsData = scope.ds.data();
@@ -503,6 +513,7 @@
                                     if (lis[i].textContent === dsData[d]["orig_BID_STATUS"]) indx = i;
                                 }
                                 dropdownlist.select(indx);
+                                dsData[d].set("isLinked", false);
                             }
                         }
                     } else {
@@ -547,6 +558,13 @@
                                     $("#dealTool_" + dsData[d].DC_ID).html('');
                                     dsData[d].isLinked = false;
                                 }
+
+                                // if linked, clear out the check boxes
+                                if (dsData[d].isLinked) {
+                                    //dsData[d].isLinked = false;
+                                    dsData[d].set("isLinked", false);
+                                }
+
                             }
                         }
                         else if (scope.messages[m].Message === "No Deal") {
