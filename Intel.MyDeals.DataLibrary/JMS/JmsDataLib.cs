@@ -22,7 +22,6 @@ namespace Intel.MyDeals.DataLibrary
         private string jmsServer;
         private string jmsQueue;
         private string jmsUID;
-        private string jmsPWD;
         private Dictionary<string, string> jmsEnvs;
 
         private IConnection connection;
