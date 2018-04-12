@@ -504,6 +504,7 @@
                                                 editable: false, nullable: true
                                             },
                                             RW_NM: { validation: { required: true }, type: "string" },
+                                            CAP: { editable: true, validation: { required: true }, type: "number" },
                                             COMP_OVRRD_FLG: { validation: { required: true } },
                                             GRP: { validation: { required: true } },
                                             COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
@@ -1537,6 +1538,7 @@
                                                     PRC_TBL_OBJ_SID: { editable: false, validation: { required: true } },
                                                     WF_STG_CD: { editable: false, validation: { required: true } },
                                                     END_CUST_RETAIL: { editable: false, validation: { required: true } },
+                                                    CAP: { editable: true, validation: { required: true }, type: "number" },
                                                     "_behaviors": { type: "object" }
                                                 }
                                             }
