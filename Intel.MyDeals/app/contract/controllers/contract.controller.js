@@ -2169,7 +2169,6 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, bypassLowerContract) {
-
             var source = "";
             var modCt = [];
             var modPs = [];

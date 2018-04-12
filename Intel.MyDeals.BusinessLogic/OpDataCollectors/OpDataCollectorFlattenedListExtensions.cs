@@ -107,13 +107,20 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     if (item.ContainsKey("_actions"))
                     {
-                        foreach (OpDataAction opDataAction in (List<OpDataAction>) item["_actions"])
+                        try
                         {
-                            int id = opDataAction.DcID ?? 0;
-                            if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
+                            foreach (OpDataAction opDataAction in (List<OpDataAction>)item["_actions"])
+                            {
+                                int id = opDataAction.DcID ?? 0;
+                                if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
 
-                            deleteIds.Remove(id);
-                            deletedIds.Add(id);
+                                deleteIds.Remove(id);
+                                deletedIds.Add(id);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // _actions are not actually valid delete events... we can ignore these
                         }
                     }
                 }
