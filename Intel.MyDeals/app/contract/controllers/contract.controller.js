@@ -1339,36 +1339,38 @@
             $scope.toggleAddStrategy();
             $timeout(function () {
                 var inpt = $("#inptPrcTitle");
-                var t = inpt.position().top + inpt.height() + 4;
-                $("#divHelpAddPs").animate({
-                    opacity: 1,
-                    top: t
-                }, 2000, function () {
-                    $("#navIconAddPs").animate({
-                        backgroundColor: "#f3D54E"
-                    }, 500, function () {
+                if (inpt.length > 0) {
+                    var t = inpt.position().top + inpt.height() + 4;
+                    $("#divHelpAddPs").animate({
+                        opacity: 1,
+                        top: t
+                    }, 2000, function () {
                         $("#navIconAddPs").animate({
-                            backgroundColor: "#0071C5"
-                        }, 2000, function () {
-                            $("#inptPrcTitle").animate({
-                                backgroundColor: "#f3D54E"
-                            }, 500, function () {
+                            backgroundColor: "#f3D54E"
+                        }, 500, function () {
+                            $("#navIconAddPs").animate({
+                                backgroundColor: "#0071C5"
+                            }, 2000, function () {
                                 $("#inptPrcTitle").animate({
-                                    backgroundColor: "#ffffff"
-                                }, 2000);
+                                    backgroundColor: "#f3D54E"
+                                }, 500, function () {
+                                    $("#inptPrcTitle").animate({
+                                        backgroundColor: "#ffffff"
+                                    }, 2000);
+                                });
                             });
                         });
+                        $timeout(function () {
+                            $("#divHelpAddPs").animate({
+                                opacity: 0
+                            }, 2000, function () {
+                                $("#divHelpAddPs").css({
+                                    display: "none"
+                                });
+                            });
+                        }, 6000);
                     });
-                    $timeout(function () {
-                        $("#divHelpAddPs").animate({
-                            opacity: 0
-                        }, 2000, function () {
-                            $("#divHelpAddPs").css({
-                                display: "none"
-                            });
-                        });
-                    }, 6000);
-                });
+                }
             }, 2000);
         }
 

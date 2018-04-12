@@ -607,7 +607,8 @@
         function resizeGrid() {
             var h = window.innerHeight - $(".navbar").height() - $("#search-info-container").height() - 15;
             $("#attributeGrid").css("height", h);
-            $("#attributeGrid .k-grid").data("kendoGrid").resize();
+            var grid = $("#attributeGrid .k-grid").data("kendoGrid");
+            if (grid !== undefined && grid !== null) grid.resize();
         }
 
         $($window).resize(function () {

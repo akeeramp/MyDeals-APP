@@ -186,7 +186,7 @@ namespace Intel.MyDeals.DataLibrary
                 // Then Actions...
                 using (var dta = OpDataPacketToImportActionTable(odp, groupBatchId, wwid))
                 {
-                    if (dta != null && dta.Rows.Count > 0)
+                    if (dtAction != null && dta != null && dta.Rows.Count > 0)
                     {
                         // Removed... thinking is this is causeing blocks in concurency inports
                         //lock (dtAction)

@@ -1710,10 +1710,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.searchGrid = function () {
 
-                var tab = $("#tabstrip").kendoTabStrip().data("kendoTabStrip").select().text();
+                var tab = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                 var searchValue = $scope.searchFilter;
 
-                if (tab.indexOf('Overlapping') > -1) {
+                if (tab !== undefined && tab !== null && tab.select().text().indexOf('Overlapping') > -1) {
                     if (searchValue.length < 3) {
                         $scope.ovlpDataSource.filter({});
                         return;

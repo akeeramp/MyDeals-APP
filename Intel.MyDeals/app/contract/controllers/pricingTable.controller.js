@@ -833,7 +833,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 							    // Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
 							    for (var i = 0; i < data.length; i++) {
-							        if (originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) == 1 && data[i]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+							        if (data[i] !== undefined && originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) === 1 && data[i]["DC_ID"] === confirmationModPerDealGrp[result.key].existingDcID) {
 							            // get the original existing copy to merge everything into
 							            originalExistingCopy = angular.copy(data[i]);
 							            originalExistingIndex = i;
