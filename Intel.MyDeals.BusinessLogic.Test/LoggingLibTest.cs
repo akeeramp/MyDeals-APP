@@ -63,7 +63,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             mockLoggingDataLib.Setup(
                 x => x.UploadDbLogPerfLogs(
                     It.IsAny<List<DbLogPerfMessage>>()
-                    )
+                    ).Result
             ).Returns(new bool());
 
             // Arrange

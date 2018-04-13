@@ -46,7 +46,7 @@ namespace Intel.MyDeals.DataLibrary
         /// Saves a List of log data to db,
         /// Called from DbLogPerf asynchronously
         /// </summary>
-        public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
+        public async Task<bool> UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
         {
             if (messages == null || !messages.Any()) { return false; }
 
@@ -61,7 +61,7 @@ namespace Intel.MyDeals.DataLibrary
                     in_db_log = dt,
                     in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
-                using (var q = DataAccess.ExecuteReaderAsync(cmd))
+                using (var q = await DataAccess.ExecuteReaderAsync(cmd))
                 {
                 }
                 return true;

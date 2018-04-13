@@ -32,7 +32,8 @@ namespace Intel.MyDeals.BusinessLogic
 
         public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
         {
-            return _loggingDataLib.UploadDbLogPerfLogs(messages);
+            _loggingDataLib.UploadDbLogPerfLogs(messages);
+            return true;
         }
 
         public bool UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes)

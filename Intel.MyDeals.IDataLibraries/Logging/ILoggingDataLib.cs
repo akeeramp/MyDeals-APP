@@ -9,7 +9,7 @@ namespace Intel.MyDeals.IDataLibrary
     {
         LogConfig GetLogConfig();
 
-        bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
+        Task<bool> UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
 
         Task<bool> UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes);
 

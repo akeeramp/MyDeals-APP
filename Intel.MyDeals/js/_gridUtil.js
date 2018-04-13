@@ -1228,11 +1228,19 @@ gridUtils.getBidActionsList = function (data) {
     var bidActns = [];
     if (data.BID_ACTNS !== undefined) {
         for (var i = 0; i < data.BID_ACTNS.length; i++) {
-            bidActns.push({
-                "BidActnName": data.BID_ACTNS[i],
-                "BidActnValue": data.BID_ACTNS[i]
-            });
+            if (data.BID_ACTNS[i]['BidActnName'] === 'Offer' || data.BID_ACTNS[i]['BidActnName'] === 'Won'
+                || data.BID_ACTNS[i]['BidActnName'] === 'Lost') {
+
+            } else {
+                bidActns.push({
+                    "BidActnName": data.BID_ACTNS[i],
+                    "BidActnValue": data.BID_ACTNS[i]
+                });
+            }
         }
+    }
+    if (bidActns.length === 0) {
+        bidActns = data.BID_ACTNS;
     }
     return bidActns;
 }
@@ -1599,7 +1607,7 @@ gridPctUtils.getResultMapping = function (result, flg, overrideFlg, overrideFlgC
     if (isReadonly === undefined || isReadonly === null) isReadonly = false;
     var readonlyClass = isReadonly ? "isReadOnlyCell" : "";
     var rtn = "<div style='text-align: center;' class='uiControlDiv " + readonlyClass + "'>";
-    
+
     if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + ' && ' + overrideFlgCmt + ' != \'\'" class="intelicon-passed-completed-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Passed with Override Status"></i>';
 
     var iconNm = gridPctUtils.getResultMappingIconClass(result);

@@ -133,7 +133,7 @@
             excelTemplate: "#=gridUtils.getBidActionsLabel(data)#</div>",
             type: "string",
             filterable: {
-                ui: function(element) {
+                ui: function (element) {
                     element.kendoDropDownList({
                         dataSource: {
                             data: [
@@ -229,7 +229,7 @@
             type: "string",
             width: 100,
             filterable: {
-                ui: function(element) {
+                ui: function (element) {
                     element.kendoDropDownList({
                         dataSource: {
                             data: [
@@ -253,7 +253,7 @@
             type: "string",
             width: 140,
             filterable: {
-                ui: function(element) {
+                ui: function (element) {
                     element.kendoDropDownList({
                         dataSource: new kendo.data.DataSource({
                             type: 'json',
@@ -278,7 +278,7 @@
             type: "string",
             width: 140,
             filterable: {
-                ui: function(element) {
+                ui: function (element) {
                     element.kendoMultiSelect({
                         dataSource: new kendo.data.DataSource({
                             type: 'json',
@@ -298,92 +298,92 @@
                 },
                 extra: false
             }
-            }, {
-                field: "CUST_ACCNT_DIV",
-                title: "Cust Division",
-                type: "string",
-                width: 140
-            }, {
-                field: "QLTR_PROJECT",
-                title: "Project Name",
-                type: "string",
-                width: 140
-            }, {
-                field: "QLTR_BID_GEO",
-                title: "Bid Geo",
-                type: "string",
-                width: 100
-            }, {
-                field: "GEO_COMBINED",
-                title: "Geo",
-                type: "string",
-                width: 100
-            }, {
-                field: "CREDIT_VOLUME",
-                title: "Credit Vol",
-                type: "number",
-                width: 120
-            }, {
-                field: "DEBIT_VOLUME",
-                title: "Debit Vol",
-                type: "number",
-                width: 120
-            }, {
-                field: "NET_VOL_PAID",
-                title: "Net Credited Volume",
-                type: "number",
-                filterable: false,
-                sortable: false,
-                width: 120
-            }, {
-                field: "CREDIT_AMT",
-                title: "Credit Amt",
-                type: "number",
-                format: "{0:c}",
-                width: 120
-            }, {
-                field: "DEBIT_AMT",
-                title: "Debit Amt",
-                type: "number",
-                format: "{0:c}",
-                width: 120
-            }, {
-                field: "TOT_QTY_PAID",
-                title: "Total Qty Paid",
-                type: "number",
-                format: "{0:c}",
-                filterable: false,
-                sortable: false,
-                width: 120
-            }, {
-                field: "BLLG_DT",
-                title: "Last Credit Date",
-                type: "string",
-                template: "#= moment(BLLG_DT).format('MM/DD/YYYY') #",
-                width: 140
-            }, {
-                field: "CRE_EMP_WWID",
-                title: "Created By",
-                type: "string",
-                width: 120
-            }, {
-                field: "CRE_DTM",
-                title: "Created Time",
-                type: "string",
-                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
-                width: 140
-            }, {
-                field: "CHG_EMP_WWID",
-                title: "Last Update By",
-                type: "string",
-                width: 120
-            }, {
-                field: "CHG_DTM",
-                title: "Last Update Time",
-                type: "string",
-                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
-                width: 140
-            }
+        }, {
+            field: "CUST_ACCNT_DIV",
+            title: "Cust Division",
+            type: "string",
+            width: 140
+        }, {
+            field: "QLTR_PROJECT",
+            title: "Project Name",
+            type: "string",
+            width: 140
+        }, {
+            field: "QLTR_BID_GEO",
+            title: "Bid Geo",
+            type: "string",
+            width: 100
+        }, {
+            field: "GEO_COMBINED",
+            title: "Geo",
+            type: "string",
+            width: 100
+        }, {
+            field: "CREDIT_VOLUME",
+            title: "Credit Vol",
+            type: "number",
+            width: 120
+        }, {
+            field: "DEBIT_VOLUME",
+            title: "Debit Vol",
+            type: "number",
+            width: 120
+        }, {
+            field: "NET_VOL_PAID",
+            title: "Net Credited Volume",
+            type: "number",
+            filterable: false,
+            sortable: false,
+            width: 120
+        }, {
+            field: "CREDIT_AMT",
+            title: "Credit Amt",
+            type: "number",
+            format: "{0:c}",
+            width: 120
+        }, {
+            field: "DEBIT_AMT",
+            title: "Debit Amt",
+            type: "number",
+            format: "{0:c}",
+            width: 120
+        }, {
+            field: "TOT_QTY_PAID",
+            title: "Total Qty Paid",
+            type: "number",
+            format: "{0:c}",
+            filterable: false,
+            sortable: false,
+            width: 120
+        }, {
+            field: "BLLG_DT",
+            title: "Last Credit Date",
+            type: "string",
+            template: "#= moment(BLLG_DT).format('MM/DD/YYYY') #",
+            width: 140
+        }, {
+            field: "CRE_EMP_WWID",
+            title: "Created By",
+            type: "string",
+            width: 120
+        }, {
+            field: "CRE_DTM",
+            title: "Created Time",
+            type: "string",
+            template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+            width: 140
+        }, {
+            field: "CHG_EMP_WWID",
+            title: "Last Update By",
+            type: "string",
+            width: 120
+        }, {
+            field: "CHG_DTM",
+            title: "Last Update Time",
+            type: "string",
+            template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+            width: 140
+        }
         ];
 
         $scope.options = {
@@ -453,8 +453,8 @@
             }
         }
 
-        $scope.uncheckAll = function() {
-            var dsData = scope.ds.data();
+        $scope.uncheckAll = function () {
+            var dsData = $scope.ds.data();
             for (var d = 0; d < dsData.length; d++) {
                 if (dsData[d].isLinked) {
                     dsData[d].set("isLinked", false);
@@ -547,6 +547,11 @@
                     scope.messages = results.data.Data.Messages;
 
                     var dsData = scope.ds.data();
+                    var singleRowUpdate = [];
+                    if(tenders.length === 1){
+                        singleRowUpdate[tenders[0]["DC_ID"]] = tenders[0]["DC_ID"];
+                    }
+                    var updatedRowIndex = "";
                     for (var m = 0; m < scope.messages.length; m++) {
                         if (scope.messages[m].Message === "Action List") {
                             foundIt = true;
@@ -557,12 +562,17 @@
                                     $("#cb_actn_" + dsData[d].DC_ID).html('<div style="text-align: center; width: 100%;" class="ng-binding">Won</div>');
                                     $("#dealTool_" + dsData[d].DC_ID).html('');
                                     dsData[d].isLinked = false;
+                                } else if (singleRowUpdate[dsData[d].DC_ID] !== undefined) {
+                                    dsData[d].BID_ACTNS = details;
+                                    updatedRowIndex = d;
+                                    break;
                                 }
 
                                 // if linked, clear out the check boxes
                                 if (dsData[d].isLinked) {
                                     dsData[d].isLinked = false;
-                                    //dsData[d].set("isLinked", false);
+                                    dsData[d].BID_ACTNS = details;
+                                    updatedRowIndex = d;
                                 }
 
                             }
@@ -570,6 +580,11 @@
                         else if (scope.messages[m].Message === "No Deal") {
                             noDeals.push(scope.messages[m].ExtraDetails);
                         }
+                    }
+
+                    if (updatedRowIndex !== "") {
+                        dsData[updatedRowIndex]['isLinked'] = true;
+                        dsData[updatedRowIndex].set("isLinked", false);
                     }
 
                     pc.add(pcUI.stop());
@@ -601,7 +616,7 @@
         }
 
         $scope.$on('attribute-datasource-end', function (event, data) {
-            for (var d = 0; d < data.length; d++) {                
+            for (var d = 0; d < data.length; d++) {
                 var cVol = data[d]["CREDIT_VOLUME"] === undefined || data[d]["CREDIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["CREDIT_VOLUME"]);
                 var dVol = data[d]["DEBIT_VOLUME"] === undefined || data[d]["DEBIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["DEBIT_VOLUME"]);
                 var cAmt = data[d]["CREDIT_AMT"] === undefined || data[d]["CREDIT_AMT"] === "" ? 0 : parseFloat(data[d]["CREDIT_AMT"]);
