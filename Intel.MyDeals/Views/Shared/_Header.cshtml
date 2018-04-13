@@ -52,6 +52,7 @@
                 <td>
                     <div class="navbar-header">
                         <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
+                        <span class="navbar-security">Intel Confidential</span>
                         <a class="navbar-brand" href="@Url.Action("Index", "Home", new {Area = ""})">MyDeals</a>
                     </div>
                 </td>
@@ -314,6 +315,15 @@
     }
     .menu-detailed a div > div {
         font-size: 10px; color: #aaaaaa;
+    }
+    .navbar-security {
+        float: left;
+        padding: 20px 15px 14px 0;
+        font-size: 10px;
+        margin-left: -11px;
+        color: #ffffff;
+        line-height: 12px;
+        height: 50px;
     }
 </style>
 
