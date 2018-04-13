@@ -561,8 +561,8 @@
 
                                 // if linked, clear out the check boxes
                                 if (dsData[d].isLinked) {
-                                    //dsData[d].isLinked = false;
-                                    dsData[d].set("isLinked", false);
+                                    dsData[d].isLinked = false;
+                                    //dsData[d].set("isLinked", false);
                                 }
 
                             }

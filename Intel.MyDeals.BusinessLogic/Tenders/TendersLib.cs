@@ -223,7 +223,7 @@ namespace Intel.MyDeals.BusinessLogic
                 item["Customer"] = cust;
 
                 // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
-                if (!mtCustIds.Contains(cust.CUST_NM_SID))
+                if (cust != null && !mtCustIds.Contains(cust.CUST_NM_SID))
                 {
                     item["ECAP_PRICE"] = "no access";
                     item["CAP"] = "no access";
@@ -245,10 +245,8 @@ namespace Intel.MyDeals.BusinessLogic
             OpMsgQueue opMsgQueue = new OpMsgQueue();
 
             Dictionary<int, List<TenderActionItem>> contractDecoder = new Dictionary<int, List<TenderActionItem>>();
-            Dictionary<int, TenderActionItem> tenderDecoder = new Dictionary<int, TenderActionItem>();
             foreach (TenderActionItem item in data)
             {
-                tenderDecoder[item.DC_ID] = item;
                 if (!contractDecoder.ContainsKey(item.CNTRCT_OBJ_SID)) contractDecoder[item.CNTRCT_OBJ_SID] = new List<TenderActionItem>();
                 contractDecoder[item.CNTRCT_OBJ_SID].Add(item);
             }
@@ -272,7 +270,6 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 // Apply messaging
-                opMsgQueue = retMyDealsData.GetAllMessages();
                 opMsgQueue.Messages.Add(new OpMsg
                 {
                     MsgType = OpMsg.MessageType.Info,
@@ -281,69 +278,7 @@ namespace Intel.MyDeals.BusinessLogic
                 });
             }
 
-
-
-            // loop through all contracts and only do a save per contract
-
-
             return opMsgQueue;
-
-            // This is massively efficient, but we need to ensure we have the correct 
-            // customer Id and contract Id since these span multiple contracts
-            // This will not work in bulk... different contract id and customer #
-            //
-            // The justification is most users will only update one at a time
-            //
-            //foreach (TenderActionItem item in data)
-            //{
-            //    // YES... we are calling the DB once for Every Tender ID passed
-            //    // YES... this is inefficient... read above
-
-            //    start = DateTime.Now;
-            //    myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(
-            //        new List<int> {item.DC_ID},
-            //        new List<OpDataElementType> {OpDataElementType.CNTRCT},
-            //        new List<int> {Attributes.CUST_MBR_SID.ATRB_SID}
-            //    );
-            //    contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
-
-            //    if (!myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any())
-            //    {
-            //        opMsgQueue.Messages.Add(new OpMsg
-            //        {
-            //            MsgType = OpMsg.MessageType.Warning,
-            //            Message = "No Deal",
-            //            ExtraDetails = $"Tender Deal {item.DC_ID} does not exist."
-            //        });
-            //    }
-            //    else
-            //    {
-            //        OpDataCollector dcCntrct = myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
-
-            //        // Build Contract Token based on Contract/Customer
-            //        contractToken.ContractId = dcCntrct.DcID;
-            //        contractToken.CustId = int.Parse(dcCntrct.GetDataElementValue(AttributeCodes.CUST_MBR_SID));
-
-            //        // YES... we are updating the DB once for Every Tender ID passed
-            //        MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, new List<int> { item.DC_ID }, Attributes.BID_STATUS, actn, actn == "Won");
-
-            //        // Get new Tender Action List
-            //        List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
-
-            //        // Apply messaging
-            //        opMsgQueue = retMyDealsData.GetAllMessages();
-            //        opMsgQueue.Messages.Add(new OpMsg
-            //        {
-            //            MsgType = OpMsg.MessageType.Info,
-            //            Message = "Action List",
-            //            ExtraDetails = actions
-            //        });
-            //    }
-
-            //}
-
-            //return opMsgQueue;
-
         }
 
     }
