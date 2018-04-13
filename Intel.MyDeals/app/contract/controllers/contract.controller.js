@@ -73,6 +73,8 @@
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
         }
 
+        $scope.usrRole = window.usrRole;
+
         // Hard code for now until security is put in place
         if (window.usrRole === "Legal") {
             $scope.CAN_VIEW_COST_TEST = true;
