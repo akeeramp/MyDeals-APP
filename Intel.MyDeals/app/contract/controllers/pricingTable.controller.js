@@ -667,6 +667,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var data = root.spreadDs.data();
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
+        // Don't let DA edit product!!!
+        if (isProductColumnIncludedInChanges && window.usrRole === "DA") {
+            return;
+        }
 
         // KIT
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
