@@ -247,6 +247,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var sheet = spreadsheet.activeSheet();
         var numTiers = 2;
         var rowOffset = 2;
+        var rowOffsetConstant = 2;
         var data = root.spreadDs._data;
         var dcId = 0;
         nonMergedColIndexesDict = {};
@@ -264,7 +265,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // If there are more than 25 columns, 26th column letter name should be "AA", This will break again if we ahve more than 50 columns
                         var letter = (c > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 26) : String.fromCharCode(intA + c);
                         if (!ptTemplate.columns[c].isDimKey) {
-                            sheet.range(letter + rowOffset + ":" + letter + (rowOffset + numTiers - 1)).merge();
+                            if (ptTemplate.columns[c].field == "DEAL_GRP_NM" && rowOffset != rowOffset + numTiers - 1) {
+                                // For KIT deals, we need to ensure that deal grp names are null for all merged cells except for the first row of a merged set.
+                                // This is to keep it's behavior inline with kendo's after a user changes a non-dim merged cell
+                                // Ex: if a 3-tiered merged cell is given the value of "1" by the user, the first row will have the 1 but subsequent rows from the merged set (row 2&3) will have null values -> ["1", null, null]
+                                //     however when we load data from the db, we load PTRs in their unmerged state, so if we load what we save in the example above, the data would end up getting merged as ["1", "1", "1"] which is inconsistent with the ["1", null, null] state that we expect after a user's manual change event
+                                // Jeff Note: i dont think the rowOffset value check in the above if will ever be equal but we will check it just in case to avoid any array out of bounds errors as this is unfamiliar territory for me
+                                for (var i = rowOffset + 1 - rowOffsetConstant; i <= rowOffset + (numTiers - 1) - rowOffsetConstant; i++) {  //offset + 1 is our starting point as we do not want to override the first row's value
+                                    data[i]["DEAL_GRP_NM"] = null;
+                                }
+                            }
+                            sheet.range(letter + rowOffset + ":" + letter + (rowOffset + (numTiers - 1))).merge();  //-1 from end to account for first row
                         } else {
                             nonMergedColIndexesDict[c] = true;
                         }
@@ -824,7 +835,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         confirmationModal.showModal({}, modalOptions)
 							.then(function (result) { // Merge existing row with currently-changing row
 							    var originalExistingCopy = null;
-							    var originalExistingIndex = null;
+							    var originalExistingIndex = null;   //note: not zero-based - index X corresponds to the Xth kit grouping
 							    var prevValues = [];
 							    var root = $scope.$parent.$parent;	// Access to parent scope
 							    var sourceData = root.pricingTableData.PRC_TBL_ROW;
@@ -843,7 +854,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    // Find/get all occurances with deal-grp-nm
 							    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
 							        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
-							            for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM, so we want to backtrack to include the other tiers within that group
+							            for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM values (not null), so we want to backtrack to include the other tiers within that group.  The reason the other tiers are null is because when a user changes a merged cell, kendo will only update the first row and keep the others in the merge group null.  we need to remember this and thus also enforce this behavior in applySpreadsheetMerge to make sure the data source is consistent in reflecting kendo's behavior
 							                prevValues.push(angular.copy(data[j]));
 
 							                if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
@@ -858,7 +869,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							                }
 							                else {
 							                    if (j < originalExistingIndex) {
-							                        // the original index will change if the row is above the original and gets spliced
+							                        // the original index will decrease if the row we are currently examining is above the original and gets spliced out for merging
 							                        originalExistingIndex -= 1;
 							                    }
 							                    // "delete" the rows to merge
@@ -941,7 +952,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							}
 						);
                     }
-                }
+                }   //end kit deal group merging
 
                 // sync
                 spreadDsSync();
@@ -1159,7 +1170,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
 
-            // Don't flush priduct to revalidate if there is a tracker number
+            // Don't flush product to revalidate if there is a tracker number
             if (root.curPricingStrategy !== undefined && (root.curPricingStrategy.HAS_TRACKER == undefined || root.curPricingStrategy.HAS_TRACKER !== "1")) {
                 for (var f = 0; f < flushSysPrdFields.length; f++) {
                     if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
