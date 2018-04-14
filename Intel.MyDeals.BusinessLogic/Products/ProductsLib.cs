@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -252,7 +253,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetVerticalandMedia", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
-            var productsTodb = new List<ProductEntryAttribute>();
+            var productsTodbConcurrent = new ConcurrentBag<List<ProductEntryAttribute>>();
             var productLookup = new ProductLookup
             {
                 ProdctTransformResults = new Dictionary<string, Dictionary<string, List<string>>>(),
@@ -260,6 +261,8 @@ namespace Intel.MyDeals.BusinessLogic
                 ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
                 InValidProducts = new Dictionary<string, Dictionary<string, List<string>>>()
             };
+
+            var concurrentProdctTransformResults = new ConcurrentDictionary<string, Dictionary<string, List<string>>>();
 
             //  Check if any product has alias mapping, this will call cache
 
@@ -325,12 +328,12 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 prodNamesList = prodNamesList.Distinct().ToList();
 
-                productsTodb.AddRange(prodNamesList);
+                productsTodbConcurrent.Add(prodNamesList);
 
-                if (productLookup.ProdctTransformResults.ContainsKey(userProduct.ROW_NUMBER.ToString()))
+                if (concurrentProdctTransformResults.ContainsKey(userProduct.ROW_NUMBER.ToString()))
                 {
                     prodNamesList.ForEach(d =>
-                    productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()][d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
+                    concurrentProdctTransformResults[userProduct.ROW_NUMBER.ToString()][d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
                 }
                 else
                 {
@@ -338,7 +341,7 @@ namespace Intel.MyDeals.BusinessLogic
                     records.Add("E", new List<string>());
                     records.Add("I", new List<string>());
                     prodNamesList.ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
-                    productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
+                    concurrentProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
                 }
             });
             if (EN.GLOBAL.DEBUG >= 1)
@@ -346,11 +349,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             //  Product match master list
             start = DateTime.Now;
-            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, DEAL_TYPE);
+
+            var productsToDb = productsTodbConcurrent.SelectMany(x => x).ToList();
+            var productMatchResults = GetProductDetails(productsToDb, CUST_MBR_SID, DEAL_TYPE);
             contractToken.AddMark("GetProductDetails - PR_MYDL_TRANSLT_PRD_ENTRY", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductDetails", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
+            productLookup.ProdctTransformResults = concurrentProdctTransformResults.ToDictionary(kvp => kvp.Key,
+                                                          kvp => kvp.Value);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
             contractToken.AddMark("ExtractValidandDuplicateProducts", TimeFlowMedia.MT, (DateTime.Now - start).TotalMilliseconds);
