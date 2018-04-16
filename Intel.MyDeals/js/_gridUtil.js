@@ -661,9 +661,9 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     var dimKeyWrapper = dimKey === "" ? dimKey : "[\'" + dimKey + "\']";
 
     if (dimKey !== "" && !!passedData[field]) {
-        passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
+        if (passedData[field][dimKey]!== undefined) passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
     } else {
-        passedData[field] = passedData[field].replace(/$|,/g, '');
+        if (passedData[field] !== undefined) passedData[field] = passedData[field].replace(/$|,/g, '');
     }
 
     var fieldVal = (dimKey !== "")
