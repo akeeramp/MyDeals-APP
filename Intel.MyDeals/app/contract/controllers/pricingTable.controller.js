@@ -288,7 +288,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // TODO maybe we need to clean up items past data length to merge = 1
             //debugger;
-            sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge(); 
+            sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge();
 
         });
 
@@ -650,7 +650,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return;
         }
         if (root.isBusy) { // HACK: to prevnt user from deleting via back button while loading, which might cause async problems
-        	return;
+            return;
         }
 
         var topLeftRowIndex = (range._ref.topLeft.row + 1);
@@ -966,7 +966,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
         //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
-    	//}
+        //}
 
         // VOL-TIER
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
@@ -997,14 +997,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
 
                             // Start vol, end vol, or rate changed
-                            if (!isEndVolUnlimited ) {
+                            if (!isEndVolUnlimited) {
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
-                                	if (value.value != null && value.value !== undefined) {
-                                		value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
-                                	} else {
-                                		value.value = 0;
-                                	}
+                                    if (value.value != null && value.value !== undefined) {
+                                        value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                    } else {
+                                        value.value = 0;
+                                    }
                                 }
                                 else if (colIndex === rateIndex) {
                                     value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -1036,10 +1036,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
                             if (colIndex == productColIndex) {
-                            	shenaniganObj = trackerShenanigans(myRow, value.value);
-                            	if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
-                            		value.value = (shenaniganObj.value !== null &&  shenaniganObj.value !== undefined ) ? angular.copy(shenaniganObj.value) : "ERROR";
-                            	}
+                                shenaniganObj = trackerShenanigans(myRow, value.value);
+                                if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
+                                    value.value = (shenaniganObj.value !== null && shenaniganObj.value !== undefined) ? angular.copy(shenaniganObj.value) : "ERROR";
+                                }
                             }
 
                             // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
@@ -1064,31 +1064,31 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         range.forEachCell(
             function (rowIndex, colIndex, value) {
-            	var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
-            	var myRow = data[(rowIndex - 1)];
+                var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
+                var myRow = data[(rowIndex - 1)];
 
                 if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
                     hasValueInAtLeastOneCell = true;
                 }
 
                 if (colIndex == productColIndex) {
-                	if (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") { // NOTE: VOL_TIER does this too, but we can't put the vol_tier check here since vol_tier calls speadDs.sync() before this function and thus makes the previous value undefined.
-                		shenaniganObj = trackerShenanigans(myRow, value.value);
-                		if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
-                			value.value = angular.copy(shenaniganObj.value);
-                		}
-                	}
+                    if (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") { // NOTE: VOL_TIER does this too, but we can't put the vol_tier check here since vol_tier calls speadDs.sync() before this function and thus makes the previous value undefined.
+                        shenaniganObj = trackerShenanigans(myRow, value.value);
+                        if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
+                            value.value = angular.copy(shenaniganObj.value);
+                        }
+                    }
                 }
             }
 		);
 
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
             if (shenaniganObj !== null && shenaniganObj.isNonDelete && root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
-        		// Revert value if not allowed to delete
-        		cleanupData(data);
-        		spreadDsSync();
-        		return;
-        	}
+                // Revert value if not allowed to delete
+                cleanupData(data);
+                spreadDsSync();
+                return;
+            }
             var rowStart = topLeftRowIndex - 2;
             var rowStop = bottomRightRowIndex - 2;
             if (root.spreadDs !== undefined) {
@@ -1099,7 +1099,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
                         .then(function () {
-                        	$timeout(function () {
+                            $timeout(function () {
                                 if (root.spreadDs !== undefined) {
                                     // look for skipped lines
                                     var numToDel = rowStop + 1 - rowStart;
@@ -1136,7 +1136,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
-                	$timeout(function () {
+                    $timeout(function () {
                         var cnt = 0;
 
                         for (var c = 0; c < data.length; c++) {
@@ -1246,34 +1246,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     // TODO: better shenanigan check (business logic)
     function trackerShenanigans(myRow, value) {
-    	var result = {
-    		value: null,
-    		isNonDelete: false
-    	};
+        var result = {
+            value: null,
+            isNonDelete: false
+        };
 
-    	// Make sure that the user doesn't delete all products when we have a tracker number
-    	if (myRow === undefined || myRow === null) {
-    		return result;
-		}
+        // Make sure that the user doesn't delete all products when we have a tracker number
+        if (myRow === undefined || myRow === null) {
+            return result;
+        }
 
-    	if (myRow.HAS_TRACKER == 1
+        if (myRow.HAS_TRACKER == 1
 			&& (value == null || value.toString().replace(/\s/g, "").length === 0)
 		) {
-    		if (myRow.TIER_NBR === undefined || myRow.TIER_NBR == 1) {
-    			var modalOptions = {
-    				closeButtonText: 'Close',
-    				hasActionButton: false,
-    				headerText: 'Cannot remove deal with tracker',
-    				bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
-    			};
-    			confirmationModal.showModal({}, modalOptions);
-    		}
-    		result.value = myRow.PTR_USER_PRD; // revert
-    		result.isNonDelete = true;
-    	}
+            if (myRow.TIER_NBR === undefined || myRow.TIER_NBR == 1) {
+                var modalOptions = {
+                    closeButtonText: 'Close',
+                    hasActionButton: false,
+                    headerText: 'Cannot remove deal with tracker',
+                    bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
+                };
+                confirmationModal.showModal({}, modalOptions);
+            }
+            result.value = myRow.PTR_USER_PRD; // revert
+            result.isNonDelete = true;
+        }
 
-    	return result;
-	}
+        return result;
+    }
 
     //// <summary>
     //// Formats a given dictionary key to a format that ignores spaces and capitalization for easier key comparisons.
@@ -1329,7 +1329,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var rowAdded = offSetRows;
             var deleteRows = pivottedRows.length - numTier;
             var rowDeleted = 0;
-            var numExistingRows = pivottedRows.length;// Existing pivotted rows			
+            var numExistingRows = pivottedRows.length;// Existing pivotted rows
             for (var a = 0; a < pivottedRows.length - numTier; a++) {
                 //  Make following properties null, it will be picked up for deletion in next iteration
                 data[n - a].DC_ID = null;
@@ -1340,15 +1340,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // if row deleted count > 0  no need to add rows
             rowAdded = offSetRows = rowDeleted > 0 ? 0 : offSetRows;
-			
+
+            // Tier 1 row copy, see line 1373
+            var kitFirstTierValues = angular.copy(data[n - (numTier + rowDeleted - 1 - rowAdded)]);
+
             for (var a = 0; a < numTier; a++) {
                 if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-            		data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
+                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
                 }
                 else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
                     // Update existing rows, offset number of deleted rows
-                	data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, true);
+                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, true);
                     numExistingRows--;
                 }
                 else if (rowDeleted == 0 && offSetRows > 0) {
@@ -1365,14 +1368,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
                         updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
                 }
-
             }
+
+            // We are retaining the DEAL_GRP_NM, ECAP_PRICE_____20_____1, TEMP_KIT_REBATE for only first row(TIER_NBR = 1),
+            // when TIERS are changed due to kit product re order, new first row will not have all these attribute values, thus copy pld tier 1 old values to new tier 1 row.
+            updateKITTierOneValues(data[n - (numTier + rowDeleted - 1 - rowAdded)], kitFirstTierValues);
         }
     }
-	
+
+    // Copy old tier values to new tier values
+    function updateKITTierOneValues(newFirstTierRow, oldFirstTierRow) {
+        newFirstTierRow['DEAL_GRP_NM'] = oldFirstTierRow['DEAL_GRP_NM'];
+        newFirstTierRow['ECAP_PRICE_____20_____1'] = oldFirstTierRow['ECAP_PRICE_____20_____1'];
+        newFirstTierRow['TEMP_KIT_REBATE'] = oldFirstTierRow['TEMP_KIT_REBATE'];
+    }
+
     function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber, resetDim) {
-    	var row = angular.copy(row);
-    	var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
+        var row = angular.copy(row);
+        var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
         if (buckProd.length === 0) { // no corresponding row (essentially a new row)
             row.PRD_BCKT = productBcktName;
             if (resetDim) {
@@ -1699,7 +1712,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var numBlanks = en - st;
                     if (numBlanks > 0) {
                         stealthOnChangeMode = true;
-                        sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value(""); 
+                        sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value("");
                         topLeftRowIndex -= numBlanks;
                         if (topLeftRowIndex < 2) { // prevent topLeftRowIndex from becoming negative to prevent out of bounds errors. It is "2" to account for the headers.
                             topLeftRowIndex = 2;
@@ -1932,7 +1945,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         sheet.batch(function () {
             var row = 2;
             // reset row colors
-            sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71"); 
+            sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71");
 
             for (var key in data) {
                 if (data.hasOwnProperty(key) && !data[key]._actions) {
@@ -1975,7 +1988,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         }
                     } else {
-                        sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71"); 
+                        sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
                     }
                     row++;
                 }
@@ -2064,8 +2077,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.textAlign(headerStyle.textAlign);
             headerRange.verticalAlign(headerStyle.verticalAlign);
 
-            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).verticalAlign("center");  
-            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).textAlign(cellStyle.textAlign); 
+            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).verticalAlign("center");
+            sheet.range("A2:" + finalColLetter + $scope.root.ptRowCount).textAlign(cellStyle.textAlign);
 
             // Add product selector editor on Product cells
             sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
@@ -3703,7 +3716,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return gridUtils.showBidStatusWip(dataItem);
     }
 
-    $scope.manageExludeGroups = function(dataItem) {
+    $scope.manageExludeGroups = function (dataItem) {
     }
 
     $scope.customRedo = function () {
