@@ -106,9 +106,9 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			function (response) {
 			    vm.gridData = response.data;
 
-			    var ecap = dataItem["ECAP_PRICE"] === undefined
+			    var ecap = dataItem["ECAP_PRICE"] === undefined || dataItem["ECAP_PRICE"] === null
                     ? ""
-                    : dataItem["ECAP_PRICE"]["20___0"] === undefined
+                    : (dataItem["ECAP_PRICE"]["20___0"] === undefined || dataItem["ECAP_PRICE"]["20___0"] === null)
 			            ? dataItem["ECAP_PRICE"]
 			            : dataItem["ECAP_PRICE"]["20___0"];
 

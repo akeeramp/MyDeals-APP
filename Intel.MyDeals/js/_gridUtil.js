@@ -252,10 +252,10 @@ gridUtils.formatValue = function (val, format) {
         kendo.culture("en-US");
         if (format === "currency") {
             if (!isNaN(val))
-                val = kendo.toString(parseFloat(val), "c");
+                val = kendo.toString(parseFloat(val.replace(/,|$/g, '')), "c");
         } else if (format === "number") {
             if (!isNaN(val))
-                val = kendo.toString(parseFloat(val), "n");
+                val = kendo.toString(parseFloat(val.replace(/,|$/g, '')), "n");
         } else if (format === "date") {
             val = moment(val).format("MM/DD/YYYY");
         }
@@ -431,7 +431,7 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
             var fieldText = field + '_STRT_DT';
             // Special handling for YCS2, naming convention is not followed in defining start date attribute..
             if (field === "YCS2") {
-                fieldText = field + '_START_DT'
+                fieldText = field + '_START_DT';
             }
             tmplt += gridUtils.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, fieldText, field + '_END_DT', dimkey);
             tmplt += "</op-popover>";
@@ -660,6 +660,12 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     if (!dimKey) dimKey = "";
     var dimKeyWrapper = dimKey === "" ? dimKey : "[\'" + dimKey + "\']";
 
+    if (dimKey !== "" && !!passedData[field]) {
+        passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
+    } else {
+        passedData[field] = passedData[field].replace(/$|,/g, '');
+    }
+
     var fieldVal = (dimKey !== "")
         ? !!passedData[field] && !!passedData[field][dimKey] ? passedData[field][dimKey] : ""
         : !!passedData[field] && !!passedData[field] ? passedData[field] : "";
@@ -687,12 +693,12 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     } else {
         if (field === "CAP") {
             var cap = (dimKey !== "")
-                ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey]) : ""
-                : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP) : "";
+                ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey].replace(/,|$/g,'')) : ""
+                : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP.replace(/,|$/g, '')) : "";
 
             var ecap = (dimKey !== "")
-                ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey]) : ""
-                : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE) : "";
+                ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey].replace(/,|$/g, '')) : ""
+                : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE.replace(/,|$/g, '')) : "";
 
             if (ecap > cap) {
                 var dsplCap = cap === "" ? "No CAP" : cap.toFixed(2);
@@ -843,7 +849,7 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
                 subkitSumCounter--;
             }
             if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
-                total += parseFloat(items["ECAP_PRICE"][dimkey]);
+                total += parseFloat(items["ECAP_PRICE"][dimkey].replace(/,|$/g, ''));
             }
             if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
                 total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];

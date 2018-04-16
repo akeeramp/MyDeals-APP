@@ -342,7 +342,7 @@
                             document.location.href = "/Dashboard#/portal";
                         },
                         function (result) {
-                            logger.error("Could not delete the Contract.", result, result.statusText);
+                            logger.error("Could not delete Contract " + $scope.contractData.DC_ID, result, result.statusText);
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1764,7 +1764,7 @@
                             }
                         },
                         function (result) {
-                            logger.error("Could not delete the Pricing Strategy.", result, result.statusText, "Error");
+                            logger.error("Could not delete Pricing Strategy " + ps.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1800,7 +1800,7 @@
                             $scope.reloadPage();
                         },
                         function (result) {
-                            logger.error("Could not RollBack the Pricing Strategy.", result, result.statusText, "Error");
+                            logger.error("Could not RollBack the Pricing Strategy " + ps.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1835,7 +1835,7 @@
                             }, { reload: true });
                         },
                         function (result) {
-                            logger.error("Could not Cancel the Pricing Strategy.", result, result.statusText, "Error");
+                            logger.error("Could not Cancel the Pricing Strategy " + ps.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1886,7 +1886,7 @@
                             }
                         },
                         function (response) {
-                            logger.error("Could not delete the Pricing Table.", response, response.statusText, "Error");
+                            logger.error("Could not delete the Pricing Table " + pt.DC_ID, response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
                         }
@@ -1924,7 +1924,7 @@
                             $scope.reloadPage();
                         },
                         function (response) {
-                            logger.error("Could not RollBack the Pricing Table.", response, response.statusText, "Error");
+                            logger.error("Could not RollBack the Pricing Table " + pt.DC_ID, response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
                         }
@@ -1959,7 +1959,7 @@
                             }, { reload: true });
                         },
                         function (result) {
-                            logger.error("Could not Cancel the Pricing Table.", result, result.statusText, "Error");
+                            logger.error("Could not Cancel the Pricing Table " + pt.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1994,7 +1994,7 @@
 
                     },
                     function (response) {
-                        logger.error("Could not delete the Pricing Table.", response, response.statusText);
+                        logger.error("Could not delete the Pricing Table " + pt.DC_ID, response, response.statusText);
                         $scope.setBusy("", "");
                         topbar.hide();
                     }
@@ -2028,7 +2028,7 @@
                         $scope.reloadPage();
                     },
                     function (response) {
-                        logger.error("Could not Rollback the Pricing Table.", response, response.statusText);
+                        logger.error("Could not Rollback the Pricing Table " + pt.DC_ID, response, response.statusText);
                         $scope.setBusy("", "");
                         topbar.hide();
                     }
@@ -2714,7 +2714,7 @@
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not save the contract.", "Error");
-                    logger.error("Could not save the contract.", response, response.statusText);
+                    logger.error("Could not save contract " + $scope.contractData.DC_ID, response, response.statusText);
                     topbar.hide();
                     $timeout(function () {
                         $scope.setBusy("", "");
@@ -3696,7 +3696,7 @@
                 },
                 function (response) {
                     $scope.addTableDisabled = false;
-                    logger.error("Could not edit the pricing table.", response, response.statusText);
+                    logger.error("Could not edit the pricing table " + pt.DC_ID, response, response.statusText);
                     topbar.hide();
                     $scope.setBusy("", "");
                 }

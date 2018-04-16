@@ -1287,6 +1287,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return result;
     }
 
+    function isInt(value) {
+        return typeof value === 'number' && 
+          isFinite(value) && 
+          Math.floor(value) === value;
+    };
+
     function pivotKITDeals(data, n, dcIdDict, dictId, masterData, maxKITproducts) {
         // NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards
         if ((data[n]["PTR_USER_PRD"] === "" || data[n]["PTR_USER_PRD"] === null) && data[n]["DC_ID"] === null) {
@@ -1294,7 +1300,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         if (data[n]["PTR_USER_PRD"] !== null) {
             var products = data[n]["PTR_USER_PRD"].split(",");
-            if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && Number.isInteger(parseInt(masterData[n].DC_ID))) {
+            if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && isInt(parseInt(masterData[n].DC_ID))) {
                 // Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
                 // Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
                 var firstTierProds = $filter('where')(masterData, { 'DC_ID': data[n].DC_ID, 'TIER_NBR': 1 });
