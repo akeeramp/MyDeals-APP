@@ -175,11 +175,10 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     if (dt != null && dt.Rows.Count > 0)
                     {
-                        // Removed... thinking is this is causeing blocks in concurency inports
-                        //lock (dtData)
-                        //{
-                        dtData.Merge(dt, true);
-                        //}
+                        lock (dtData)
+                        {
+                            dtData.Merge(dt, true);
+                        }
                     }
                 }
 
@@ -188,11 +187,10 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     if (dtAction != null && dta != null && dta.Rows.Count > 0)
                     {
-                        // Removed... thinking is this is causeing blocks in concurency inports
-                        //lock (dtAction)
-                        //{
-                        dtAction.Merge(dta);
-                        //}
+                        lock (dtAction)
+                        {
+                            dtAction.Merge(dta);
+                        }
                     }
                 }
             });

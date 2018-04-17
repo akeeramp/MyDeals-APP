@@ -82,9 +82,16 @@ namespace Intel.MyDeals.Entities.Logging
             }
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="messages"></param>
         public void UploadLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
         {
-            MyDealsClient.PostAsJsonAsync(MyDealsWebApiUrl.UploadLogPerfLogs, OpSerializeHelper.ToJsonString(messages, true));
+            MyDealsClient.PostAsJsonAsync(MyDealsWebApiUrl.UploadLogPerfLogs, new
+            {
+                Messages = OpSerializeHelper.ToJsonString(messages, true),
+            });
         }
     }
 }
