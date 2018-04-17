@@ -2629,6 +2629,14 @@
 
                         if (!!$scope.spreadDs) {
                             $scope.spreadDs.read();
+
+                            for (var p = 0; p < $scope.pricingTableData.PRC_TBL_ROW.length; p++) {
+                                if (data.PRC_TBL_ROW[p] !== undefined && (data.PRC_TBL_ROW[p].DC_ID === $scope.pricingTableData.PRC_TBL_ROW[p].DC_ID ||
+                                    data.PRC_TBL_ROW[p].DC_ID === undefined)) {
+                                    $scope.pricingTableData.PRC_TBL_ROW[p]._behaviors = data.PRC_TBL_ROW[p]._behaviors;
+                                }
+                            }
+
                             $scope.syncCellValidationsOnAllRows($scope.pricingTableData.PRC_TBL_ROW);
                         }
                     }
@@ -2777,7 +2785,6 @@
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
-
 
                 // Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
                 for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
