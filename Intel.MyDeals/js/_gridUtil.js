@@ -252,10 +252,10 @@ gridUtils.formatValue = function (val, format) {
         kendo.culture("en-US");
         if (format === "currency") {
             if (!isNaN(val))
-                val = kendo.toString(parseFloat(val.replace(/,|$/g, '')), "c");
+                val = kendo.toString(parseFloat(val.toString().replace(/,|$/g, '')), "c");
         } else if (format === "number") {
             if (!isNaN(val))
-                val = kendo.toString(parseFloat(val.replace(/,|$/g, '')), "n");
+                val = kendo.toString(parseFloat(val.toString().replace(/,|$/g, '')), "n");
         } else if (format === "date") {
             val = moment(val).format("MM/DD/YYYY");
         }
@@ -693,12 +693,12 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     } else {
         if (field === "CAP") {
             var cap = (dimKey !== "")
-                ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey].replace(/,|$/g,'')) : ""
-                : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP.replace(/,|$/g, '')) : "";
+                ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey].toString().replace(/,|$/g, '')) : ""
+                : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP.toString().replace(/,|$/g, '')) : "";
 
             var ecap = (dimKey !== "")
-                ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey].replace(/,|$/g, '')) : ""
-                : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE.replace(/,|$/g, '')) : "";
+                ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey].toString().replace(/,|$/g, '')) : ""
+                : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE.toString().replace(/,|$/g, '')) : "";
 
             if (ecap > cap) {
                 var dsplCap = cap === "" ? "No CAP" : cap.toFixed(2);
@@ -849,7 +849,7 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
                 subkitSumCounter--;
             }
             if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
-                total += parseFloat(items["ECAP_PRICE"][dimkey].replace(/,|$/g, ''));
+                total += parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
             }
             if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
                 total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];
