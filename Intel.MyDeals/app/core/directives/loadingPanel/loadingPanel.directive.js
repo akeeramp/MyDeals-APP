@@ -372,6 +372,76 @@ function loadingPanel() {
                     "Description": "We know more about the surface of the moon than we do the ocean floor.",
                     "FontAwesomeIcon": "fa-moon"
                 },
+                {
+                    "Title": "Did You Know",
+                    "Description": "After refusing and being dragged to Rome, a hermit was elected as Pope Celestine V.  He spent the majority of his papacy writing the rule that popes were allowed to resign.  When he finished writing it, he resigned.",
+                    "FontAwesomeIcon": "fa-pencil"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "The reason vampires can't be seen in mirrors is because mirrors used to be made with a layer of silver inside. However modern mirrors aren't - meaning that modern vampires would appear in mirrors now.",
+                    "FontAwesomeIcon": "fa-desktop"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "The line between the two numbers in a fraction is called the vinculum.",
+                    "FontAwesomeIcon": "fa-percent"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "Bumblebees are the only kind of bees that can pollinate a potato.",
+                    "FontAwesomeIcon": "fa-leaf"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "In 2009, a British submarine and a French submarine, both carrying nuclear missiles, collided with each other because they couldn’t detect one another.",
+                    "FontAwesomeIcon": "fa-ship"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "More of the London Underground runs above ground than in tunnels.",
+                    "FontAwesomeIcon": "fa-subway"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "Puppies sneeze at each other to let them know that they're fighting for play, not for real.",
+                    "FontAwesomeIcon": "fa-paw"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "The national animal of Scotland is the unicorn.  The national animal of Wales is a dragon.",
+                    "FontAwesomeIcon": "fa-paw"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "Lollipop is the longest word in the English language that can be typed using just the right side of a keyboard.",
+                    "FontAwesomeIcon": "fa-keyboard"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "Dolphins will poke a puffer fish until it puffs up. Once it does, it will secrete their poison. The dolphins will lick it until they get high.",
+                    "FontAwesomeIcon": "fa-smoking"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "Most people know about Amazon Prime, but they don't know Amazon's went public in '97, which is a prime number. Write out the full year as 1997, and it's still a prime number. Specifically, the IPO was on May 15, 1997. 5,151,997 (5/15/1997) is also prime. For you non-Americans, 15/5/1997 and 15/05/1997 create two more prime numbers 1,551,997 and 15,051,997.",
+                    "FontAwesomeIcon": "fa-percent"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "There was a British submarine in WW2 named the HMS Trident. The crew was gifted a reindeer by the Russians. They named it Pollyanna and kept it on board the sub for 6 weeks. It eventually made it back to land to live in a zoo.",
+                    "FontAwesomeIcon": "fa-ship"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "At rest, some people keep their tongues at the top of their mouths and others keep it at the bottom. Where do you keep yours?",
+                    "FontAwesomeIcon": "fa-question"
+                },
+                {
+                    "Title": "Did You Know",
+                    "Description": "Sometimes sloths mistake their own arms for tree branches and fall.",
+                    "FontAwesomeIcon": "fa-tree"
+                },
 			]
 
 		}],
