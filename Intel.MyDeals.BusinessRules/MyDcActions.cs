@@ -149,7 +149,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
             // Frontend -> PROGRAM_PAYMENT
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON)) && item[AttributeCodes.PROGRAM_PAYMENT].ToString() != "Backend")
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON)) && item.ContainsKey(AttributeCodes.PROGRAM_PAYMENT) && item[AttributeCodes.PROGRAM_PAYMENT].ToString() != "Backend")
             {
                 item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
             }

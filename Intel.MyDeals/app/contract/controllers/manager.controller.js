@@ -835,8 +835,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         $scope.context = dataItems;
 
-
-        $scope.$root.pc.add(pcUi.stop());
+        if ($scope.$root.pc !== null) $scope.$root.pc.add(pcUi.stop());
         var pcUser = new perfCacheBlock("User Modal", "UI");
 
         var modalInstance = $uibModal.open({
@@ -858,7 +857,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         });
 
         modalInstance.result.then(function (result) {
-            $scope.$root.pc.add(pcUser.stop());
+            if ($scope.$root.pc !== null) $scope.$root.pc.add(pcUser.stop());
             $scope.checkPriorToActioning(data, result);
             $scope.canBypassEmptyActions = false;
         }, function () { });
