@@ -471,19 +471,19 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 						title: "CAP",
 						template: "#= gridUtils.getFormatedDim(data, 'CAP', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
 						width: "100px",
-						filterable: { multi: true, search: true }
+						filterable: false
 					}, {
 						field: "ECAP_PRICE",
 						title: "ECAP",
 						template: "#= gridUtils.getFormatedDim(data, 'ECAP_PRICE', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
 						width: "100px",
-						filterable: { multi: true, search: true }
+						filterable: false
 					}, {
 						field: "YCS2_PRC_IRBT",
 						title: "YCS2",
 						template: "#= gridUtils.getFormatedDim(data, 'YCS2_PRC_IRBT', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
 						width: "100px",
-						filterable: { multi: true, search: true }
+						filterable: false
 					}, {
 						field: "REBATE_TYPE",
 						title: "Rebate Type",

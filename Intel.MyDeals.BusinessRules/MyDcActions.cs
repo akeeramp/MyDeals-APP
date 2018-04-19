@@ -85,6 +85,12 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.CONSUMPTION_REASON] = "None";
             }
 
+            // Expire YCS2
+            if ((r.Dc.DcType == "ECAP" || r.Dc.DcType == "KIT") && string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_YCS2)))
+            {
+                item[AttributeCodes.EXPIRE_YCS2] = "No";
+            }
+
             //CS Ship ahead start date / end date
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CS_SHIP_AHEAD_STRT_DT)))
             {
