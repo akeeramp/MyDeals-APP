@@ -217,6 +217,26 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule // Set to read only if Expire YCS2 flag is Yes
+                {
+                    Title="Readonly if Expire YCS2 flag is Yes",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.EXPIRE_YCS2) && de.HasValue() && string.Equals(de.AtrbValue.ToString(), "Yes", StringComparison.OrdinalIgnoreCase)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[]
+                            {
+                                AttributeCodes.EXPIRE_YCS2
+                            } // Items to set readonly
+                        }
+                    }
+                },
                 new MyOpRule
                 {
                     Title="Readonly if no chipset",
