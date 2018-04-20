@@ -34,5 +34,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductCAPYCS2> GetCAPForProduct(List<ProductCAPYCS2Calc> product, string getAvailable, string priceCondition);
 
         List<ProductEngName> GetEngProducts(List<int> prds);
+
+        List<ProductSelectionResults> GetDealProducts(int dealId, int custId);
     }
 }

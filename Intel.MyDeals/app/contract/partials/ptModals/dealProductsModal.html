@@ -1,9 +1,9 @@
 ﻿<script type="text/ng-template" id="dealProductsModal">
     <div class="modal-header modalBlueBody">
-        <h5 class="modal-title" id="modal-title">Products for deal {{dataItem.DC_ID}}</h5>
+        <h5 class="modal-title" id="modal-title">Products for deal {{dataItem.DC_ID}} <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
-        
+
         <kendo-grid options="gridOptions" class="opUiContainer md gridProdExport" style="height: 300px; margin-bottom: 20px;"></kendo-grid>
 
         <div class="row">

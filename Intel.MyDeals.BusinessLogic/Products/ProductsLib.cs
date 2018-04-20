@@ -1351,6 +1351,16 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _productDataLib.GetEngProducts(prds);
         }
+
+        /// <summary>
+        /// Get deals products
+        /// </summary>
+        /// <param name="dealId"></param>
+        /// <returns></returns>
+        public List<ProductSelectionResults> GetDealProducts(int dealId, int custId)
+        {
+            return _productDataLib.GetDealProducts(dealId, custId);
+        }
     }
 
     public class NodeMatch

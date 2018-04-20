@@ -80,5 +80,7 @@ namespace Intel.MyDeals.IBusinessLogic
         bool IsProductExistsInMydeals(string filter);
 
         IList<SearchString> GetLegalExceptionProducts(string filter);
+
+        List<ProductSelectionResults> GetDealProducts(int dealId, int custId);
     }
 }

@@ -6,11 +6,13 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-dealProductsModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService'];
+dealProductsModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService', 'dataService'];
 
-function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetService) {
+function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetService, dataService) {
 
     $scope.dataItem = dataItem;
+
+    var showDealProducts = $scope.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || $scope.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM';
 
     var prdIds = [];
     var prods = $scope.dataItem.PRODUCT_FILTER;
@@ -22,19 +24,35 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         "PrdIds": prdIds
     }
 
+    // For VOL_TIER and product if Mydeals product is at higher level > 7007, actual products against which deal are created are in GRP PDL table
+    // From deal id get the product and CAP
+    function getProductDetailsFromDealId(e) {
+        return dataService.get('/api/Products/GetDealProducts/' + $scope.dataItem.DC_ID + '/' + $scope.dataItem.CUST_MBR_SID)
+                           .then(function (response) {
+                               e.success(response.data);
+                           }, function (response) {
+                               logger.error("Unable to get product details.", response, response.statusText);
+                           });
+    }
+
+    // For ECAP, KIT get product details based on product id
+    function getProductDetailsFromProductId(e) {
+        dataService.post('/api/Products/GetProductsByIds', prdData)
+                          .then(function (response) {
+                              e.success(response.data);
+                          }, function (response) {
+                              logger.error("Unable to get product details", response, response.statusText);
+                          });
+    }
+
     $scope.gridOptions = {
         dataSource: {
             transport: {
-                read: {
-                    url: "/api/Products/GetProductsByIds",
-                    dataType: "json",
-                    type: "POST",
-                    traditional: true
-                },
-                parameterMap: function (data, type) {
-
-                    if (type === "read") {
-                        return prdData;
+                read: function (e) {
+                    if (showDealProducts) {
+                        getProductDetailsFromDealId(e);
+                    } else {
+                        getProductDetailsFromProductId(e);
                     }
                 }
             }
@@ -51,7 +69,18 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
             {
                 field: "HIER_VAL_NM",
                 title: "Product",
-                width: "110px"
+                width: "160px"
+            }, {
+                field: "CAP",
+                title: "CAP",
+                width: "110px",
+                hidden: !showDealProducts,
+                template: function (dataItem) {
+                    if (dataItem.CAP == 'No CAP') {
+                        return '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;"><div style="font-family: arial; text-align: center;font-weight:600">No CAP</div></div>'
+                    }
+                    return '<div style="text-align: center;">' + dataItem.CAP + '</div>';
+                }
             }, {
                 field: "DEAL_PRD_TYPE",
                 title: "Product Type",
@@ -88,6 +117,17 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                 field: "PRD_END_DTM",
                 title: "Prod End Date",
                 width: "110px"
+            }, {
+                field: "YCS2",
+                title: "YCS2",
+                width: "110px",
+                hidden: !showDealProducts,
+                template: function (dataItem) {
+                    if (dataItem.YCS2 == 'No CAP') {
+                        return '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;"><div style="font-family: arial; text-align: center;font-weight:600">No YCS2</div></div>'
+                    }
+                    return '<div style="text-align: center;">' + dataItem.YCS2 + '</div>';
+                }
             }, {
                 field: "SKU_NM",
                 title: "Sku Name",

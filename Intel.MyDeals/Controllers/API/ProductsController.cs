@@ -557,5 +557,18 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Product details"
             );
         }
+
+        /// <summary>
+        /// Get deal product
+        /// </summary>
+        /// <param name="dealId"></param>
+        /// <returns></returns>
+        [Route("GetDealProducts/{dealId}/{custId}")]
+        public List<ProductSelectionResults> GetDealProducts(int dealId, int custId)
+        {
+            return SafeExecutor(() => _productsLib.GetDealProducts(dealId, custId)
+                , $"Unable to get Product details"
+            );
+        }
     }
 }
