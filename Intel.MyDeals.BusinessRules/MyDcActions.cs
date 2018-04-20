@@ -446,6 +446,8 @@ namespace Intel.MyDeals.BusinessRules
 
             //return
 
+            if (r.Dc.HasTracker()) return;
+
             IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
 
             int custId = (int)r.ExtraArgs[0];
