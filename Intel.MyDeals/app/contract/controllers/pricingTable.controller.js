@@ -272,7 +272,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 //     however when we load data from the db, we load PTRs in their unmerged state, so if we load what we save in the example above, the data would end up getting merged as ["1", "1", "1"] which is inconsistent with the ["1", null, null] state that we expect after a user's manual change event
                                 // Jeff Note: i dont think the rowOffset value check in the above if will ever be equal but we will check it just in case to avoid any array out of bounds errors as this is unfamiliar territory for me
                                 for (var i = rowOffset + 1 - rowOffsetConstant; i <= rowOffset + (numTiers - 1) - rowOffsetConstant; i++) {  //offset + 1 is our starting point as we do not want to override the first row's value
-                                    data[i]["DEAL_GRP_NM"] = null;
+                                    if (data[i] !== undefined) data[i]["DEAL_GRP_NM"] = null;
                                 }
                             }
                             sheet.range(letter + rowOffset + ":" + letter + (rowOffset + (numTiers - 1))).merge();  //-1 from end to account for first row
@@ -1366,7 +1366,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a, true);
                     data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
                     // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
-                    data[n + a - (offset - 1)].id = null;
+                    if (data[n + a - (offset - 1)] !== undefined) data[n + a - (offset - 1)].id = null;
 
                     offSetRows--;
                 } else {

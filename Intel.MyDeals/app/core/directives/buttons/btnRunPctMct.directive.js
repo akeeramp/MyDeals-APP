@@ -119,7 +119,7 @@ function btnRunPctMct(logger, objsetService, $timeout, $state) {
                     function (response) {
                         if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
                         $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
-                        logger.error("Could not run Cost Test.", response, response.statusText);
+                        logger.error("Could not run Cost Test for contract " + $scope.contractId, response, response.statusText);
 
                         $timeout(function () {
                             $scope.root.setBusy("", "");

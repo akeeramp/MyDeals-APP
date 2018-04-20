@@ -58,7 +58,7 @@ function opPopover($compile, dataService, $timeout, logger) {
                         return scope.gridData;
                     },
                      function (response) {
-                         logger.error("Unable to get data", response, response.statusText);
+                         logger.error("Unable to get GetProductCAPYCS2Data data", response, response.statusText);
                      });
                 }
             }

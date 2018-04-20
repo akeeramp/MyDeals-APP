@@ -966,7 +966,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                 },
                 function (response) {
                     $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
-                    logger.error("Could not run Cost Test.", response, response.statusText);
+                    logger.error("Could not run Cost Test in manager for contract " + $scope.root.contractData.DC_ID, response, response.statusText);
                     $timeout(function () {
                         $scope.root.setBusy("", "");
                         $(".iconRunPct").removeClass("fa-spin grn");

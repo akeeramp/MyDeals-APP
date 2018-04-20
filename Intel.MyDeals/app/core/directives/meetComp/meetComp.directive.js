@@ -1421,7 +1421,7 @@
                                     $scope.$root.$broadcast('refreshContractData');                                    
                                 },
                                 function (response) {
-                                    logger.error("Unable to save data", response, response.statusText);
+                                    logger.error("Unable to save UpdateMeetCompProductDetails data", response, response.statusText);
                                     $scope.isBusy = false;
                                 });
                             }
@@ -1440,7 +1440,7 @@
                                     $scope.$root.$broadcast('refreshContractData');                                    
                                 },
                                 function (response) {
-                                    logger.error("Unable to get data", response, response.statusText);
+                                    logger.error("Unable to get GetMeetCompProductDetails data", response, response.statusText);
                                     $scope.isBusy = false;
                                     });
                             }
@@ -1817,7 +1817,7 @@
                         }
                     },
                         function (response) {
-                            logger.error("Unable to get data", response, response.statusText);
+                            logger.error("Unable to get GetMeetCompProductDetails data", response, response.statusText);
                             $scope.isBusy = false;
                         });
                 }

@@ -34,7 +34,7 @@ function timelineDetails($compile, dataService, $timeout, logger, $linq, $state)
                     return response.data;
                 },
                     function (response) {
-                        logger.error("Unable to get data", response, response.statusText);
+                        logger.error("Unable to get GetTimelineDetails data", response, response.statusText);
                     });
             }
 
