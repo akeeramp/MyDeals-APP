@@ -446,8 +446,6 @@ namespace Intel.MyDeals.BusinessRules
 
             //return
 
-            if (r.Dc.HasTracker()) return;
-
             IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
 
             int custId = (int)r.ExtraArgs[0];
@@ -455,14 +453,18 @@ namespace Intel.MyDeals.BusinessRules
             if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "") return;
 
             //int custId = Convert.ToInt32(strCustId);
-            var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId && c.ACTV_IND).ToList();
+            var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId);
+            if (!r.Dc.HasTracker())
+            {
+                custs = custs.Where(c => c.ACTV_IND);
+            }
             List<string> matchedDivs = new List<string>();
             bool foundMisMatch = false;
 
             List<string> custList = deUserCustDivs.AtrbValue.ToString().Split(delim).ToList();
             foreach (string divNm in custList)
             {
-                string matchedValue = custs.Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM).FirstOrDefault();
+                string matchedValue = custs.ToList().Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM).FirstOrDefault();
                 if (string.IsNullOrEmpty(matchedValue))
                 {
                     foundMisMatch = true;
