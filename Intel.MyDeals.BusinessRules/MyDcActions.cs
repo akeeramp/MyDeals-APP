@@ -68,7 +68,8 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // On Ad Date
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ON_ADD_DT)))
+            var onAdDate = r.Dc.GetDataElementValue(AttributeCodes.ON_ADD_DT);
+            if (string.IsNullOrEmpty(onAdDate) || item[AttributeCodes.ON_ADD_DT].ToString() == "Invalid date")
             {
                 //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
                 // UPDATE!!! Per Trang... we can default this to the start date (10/20/2017) - Removed IF check to always default it as per Trang. (DE36799)
