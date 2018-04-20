@@ -2804,7 +2804,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType, $scope.contractData.DC_ID) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
                     pcMt.addPerfTimes(response.data.PerformanceTimes);
-                    $scope.$root.pc.add(pcMt.stop());
+                    if ($scope.$root.pc !== null) $scope.$root.pc.add(pcMt.stop());
                     topbar.hide();
                     if (response.statusText === "OK") {
                         response.data.Data = buildTranslatorOutputObject(invalidProductJSONRows, response.data.Data);

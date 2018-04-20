@@ -1588,7 +1588,7 @@
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
                 function (response) {
                     pcActn.addPerfTimes(response.data.PerformanceTimes);
-                    $scope.$root.pc.add(pcActn.stop());
+                    if ($scope.$root.pc !== null) $scope.$root.pc.add(pcActn.stop());
                     $scope.messages = response.data.Data.Messages;
 
                     $timeout(function () {
@@ -1600,8 +1600,10 @@
 
                     $scope.pricingStrategyStatusUpdated = true;
 
-                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                    $scope.$root.pc = null;
+                    if ($scope.$root.pc !== null) {
+                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc = null;
+                    }
 
                 },
                 function (result) {
@@ -2711,12 +2713,14 @@
                     if (!!callback && typeof callback === "function") {
                         callback();
                         pc.add(pcUI.stop());
-                        $scope.$root.pc.add(pc.stop());
+                        if ($scope.$root.pc !== null) $scope.$root.pc.add(pc.stop());
                     } else {
                         pc.add(pcUI.stop());
-                        $scope.$root.pc.add(pc.stop());
-                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                        $scope.$root.pc = null;
+                        if ($scope.$root.pc !== null) {
+                            $scope.$root.pc.add(pc.stop());
+                            $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                            $scope.$root.pc = null;
+                        }
                     }
 
                 },

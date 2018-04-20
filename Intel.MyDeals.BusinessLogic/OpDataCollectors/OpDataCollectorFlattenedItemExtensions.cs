@@ -218,7 +218,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             // Get Product string already approved by Product Entry.  We should be able to trust these values
             string products = opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString();
             var productDrawingOrder = new List<string>();
-            if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
+            if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT" && opFlatItem.ContainsKey(AttributeCodes.PRD_DRAWING_ORD))
             {
                 productDrawingOrder = opFlatItem[AttributeCodes.PRD_DRAWING_ORD].ToString().Split(',').ToList();
             }

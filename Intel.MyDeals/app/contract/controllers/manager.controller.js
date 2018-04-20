@@ -921,7 +921,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             var pcPct = new perfCacheBlock("Running Overlapping check", "MT");
             objsetService.getOverlappingDealsFromPricingStrategy($scope.needToRunOverlaps.join(',')).then(
                 function (e) {
-                    $scope.$root.pc.add(pcPct.stop());
+                    if ($scope.$root.pc !== null) $scope.$root.pc.add(pcPct.stop());
                     $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
 
                     if (e.data.Data.length === 0) {
@@ -953,14 +953,14 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             var pcPct = new perfCacheBlock("Running PCT/MCT", "MT");
             objsetService.runPctContract($scope.root.contractData.DC_ID).then(
                 function (e) {
-                    $scope.$root.pc.add(pcPct.stop());
+                    if ($scope.$root.pc !== null) $scope.$root.pc.add(pcPct.stop());
 
                     //TODO Look at PCT/MCT results and determine if we can proceed
                     //
                     var testType = window.usrRole === "GA" ? "MCT" : "PCT";
 
 
-                    $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
+                    if ($scope.$root.pc !== null) $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
                     $(".iconRunPct").removeClass("fa-spin grn");
                     root.actionPricingStrategies(data, result);
                 },

@@ -588,10 +588,11 @@
                     }
 
                     pc.add(pcUI.stop());
-                    $scope.$root.pc.add(pc.stop());
-                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                    $scope.$root.pc = null;
-
+                    if ($scope.$root.pc !== null) {
+                        $scope.$root.pc.add(pc.stop());
+                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc = null;
+                    }
 
                     if (noDeals.length > 0) {
                         kendo.alert("It looks like one or more deals were deleted.  We need to refresh the data.");
