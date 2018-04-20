@@ -899,6 +899,15 @@ gridUtils.inLineClearAllFiltersToolbar = function () {
     rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
     return rtn;
 }
+gridUtils.inLineClearAllFiltersToolbarRestricted = function (addRecordsNotAllowed) {
+    var rtn = '';
+    if (!addRecordsNotAllowed) {
+        rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#" onClick="gridUtils.clearAllFiltersAndSorts()"><span class="k-icon k-i-plus"></span>Add new record</a> ';
+    }
+    rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
+    return rtn;
+}
+
 
 gridUtils.boolViewer = function (field) {
     return "<toggle size='btn-sm' ng-model='dataItem." + field + "' ng-disabled='true'></toggle>";

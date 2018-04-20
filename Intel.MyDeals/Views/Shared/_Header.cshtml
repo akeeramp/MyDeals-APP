@@ -178,17 +178,17 @@
                         <li><a href="Admin#/cache">Cache Manager</a></li>
                         <li><a href="Admin#/constants">Constants</a></li>
                     }
-                    @if (usrRole == "SA" || isTester || isDeveloper)
+                    @if (usrRole == "SA" || isDeveloper)
                     {
                         <li><a href="Admin#/customers">Customer</a></li>
                         <li><a href="Admin#/geo">Geo</a></li>
                     }
-                    @if (usrRole == "Legal" || isTester || isDeveloper)
+                    @if (usrRole == "Legal" || usrRole == "SA" || (usrRole == "GA" && isSuper) || isDeveloper)
                     {
                         <li><a href="Admin#/meetcomp">Meet Comp</a></li>
                     }
 
-                    @if (usrRole == "SA" || isTester || isDeveloper)
+                    @if (usrRole == "SA" || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Products</a>
@@ -201,7 +201,7 @@
                             </ul>
                         </li>
                     }
-                    @if (usrRole == "Legal" || usrRole == "SA" || isTester || isDeveloper)
+                    @if (usrRole == "Legal" || usrRole == "SA" || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Legal Configurations</a>

@@ -179,6 +179,8 @@
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
 
+        var addRecordsNotAllowed = usrRole == "SA" ? 1 : 0;
+
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: true,
@@ -195,7 +197,7 @@
             columnMenu: false,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
-            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
+            toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(addRecordsNotAllowed),
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
