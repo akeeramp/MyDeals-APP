@@ -48,7 +48,7 @@
         else if ($state.current.name.indexOf("contract.pct") >= 0) $scope.flowMode = "Manage";
         else if ($state.current.name.indexOf("contract.grouping") >= 0) $scope.flowMode = "Manage";
         else if ($state.current.name.indexOf("contract.overlapping") >= 0) $scope.flowMode = "Manage";
-    
+
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
 
@@ -665,7 +665,7 @@
                 $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split('/');
                 $scope.updateCorpDivision($scope.copyContractData.CUST_MBR_SID);
 
-                // Check for Backdate Reason 
+                // Check for Backdate Reason
                 pastDateConfirm($scope.contractData.START_DT, $scope.contractData.START_DT);
             }
 
@@ -1188,7 +1188,7 @@
             $scope.isAddPricingTableHidden = true;
         }
 
-        $scope.showHelp = function() {
+        $scope.showHelp = function () {
             $timeout(function () {
                 $scope._dirty = false; // don't want to kick of listeners
                 $state.go('contract.manager', { cid: $scope.contractData.DC_ID }, { reload: true });
@@ -1441,7 +1441,7 @@
             if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
             if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
             if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
-                                                                     
+
             //not sure if necessary, javascript pass by value/reference always throwin' me off. :(
             $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
         }
@@ -1555,7 +1555,7 @@
         $scope.emailData = [];
 
         $scope.actionPricingStrategy = function (ps, actn) {
-        	$scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
+            $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
             objsetService.actionPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps, actn).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1579,9 +1579,9 @@
             });
 
         $scope.actionPricingStrategies = function (data, emailEnabled) {
-        	$scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!", "Info", true);
+            $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!", "Info", true);
 
-        	var pcActn = new perfCacheBlock("Action Pricing Strategies", "MT");
+            var pcActn = new perfCacheBlock("Action Pricing Strategies", "MT");
 
             $scope.emailData = data;
             $scope.pricingStrategyStatusUpdated = false;
@@ -1675,7 +1675,7 @@
             }
 
             dataItem.WF_STG_CD = $scope.messages[0].ShortMessage;
-            //PS moved to 
+            //PS moved to
             if ($scope.messages.length > 1) {
                 for (var i = 1; i < $scope.messages.length; i++) {
                     if ($scope.messages[i].Message.indexOf("PS moved to ") >= 0) {
@@ -1685,7 +1685,7 @@
             }
         }
 
-        $scope.chgTerms = function() {
+        $scope.chgTerms = function () {
             var dataItem = $scope.curPricingStrategy;
 
             var data = {
@@ -2278,12 +2278,12 @@
                     var validated_DC_Id = [];
                     for (var s = 0; s < sData.length; s++) {
 
-                    	if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
-                    		// HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
-                    		if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
-                    			sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
-                    		}
-                    	}
+                        if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                            // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
+                            if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
+                                sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
+                            }
+                        }
 
                         if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
                         sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
@@ -2345,7 +2345,7 @@
                                 return x == sData[s].DC_ID;
                             }).length > 0;
 
-                            if (!isValidatedRow) { 
+                            if (!isValidatedRow) {
                                 validated_DC_Id.push(sData[s].DC_ID);
                                 if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "") ||
                                     (!(!sData[s].PTR_SYS_INVLD_PRD || sData[s].PTR_SYS_PRD === ""))) {
@@ -2603,7 +2603,7 @@
             var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
-					
+
                     var data = results.data.Data;
 
                     pcService.addPerfTimes(results.data.PerformanceTimes);
@@ -3033,10 +3033,10 @@
 
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
 
-                    		// HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
-                            if (tieredItem === "END_VOL" && lData["END_VOL"]!== undefined && lData["END_VOL"].toString().toUpperCase() !== "UNLIMITED") {
-                        		lData["END_VOL"] = kendo.toString(parseInt(lData["END_VOL"] || 0), "n0");
-							}
+                            // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                            if (tieredItem === "END_VOL" && lData["END_VOL"] !== undefined && lData["END_VOL"].toString().toUpperCase() !== "UNLIMITED") {
+                                lData["END_VOL"] = kendo.toString(parseInt(lData["END_VOL"] || 0), "n0");
+                            }
                         }
                         // Disable all Start vols except the first
                         if (t !== 1 && !!data[d]._behaviors) {
@@ -3052,6 +3052,9 @@
                             lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
                             if (tieredItem == "TIER_NBR") {
                                 lData[tieredItem] = t; // KIT add tier number
+                                if (lData[tieredItem] != 1) {
+                                    lData['DEAL_GRP_NM'] = null;
+                                }
                             }
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1));
                         }
@@ -3212,7 +3215,7 @@
                     var arItems = data;
                     for (var key in arItems) {
                         if (arItems.hasOwnProperty(key) && data[key] !== undefined)
-                        	src[key] = data[key];
+                            src[key] = data[key];
                     }
                 }
             }
@@ -3586,7 +3589,7 @@
         });
 
         $scope.$on('btnPctMctRunning', function (event, args) {
-        	$scope.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
+            $scope.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
         });
 
         $scope.$on('btnPctMctComplete', function (event, args) {
@@ -4056,7 +4059,7 @@
                 }
             });
 
-            modalInstance.result.then(function () {}, function () { });
+            modalInstance.result.then(function () { }, function () { });
         }
 
         $scope.toggleTerms = function () {

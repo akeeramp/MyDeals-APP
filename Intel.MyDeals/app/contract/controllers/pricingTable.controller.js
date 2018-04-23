@@ -265,17 +265,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // If there are more than 25 columns, 26th column letter name should be "AA", This will break again if we ahve more than 50 columns
                         var letter = (c > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 26) : String.fromCharCode(intA + c);
                         if (!ptTemplate.columns[c].isDimKey) {
-                            if (ptTemplate.columns[c].field == "DEAL_GRP_NM" && rowOffset != rowOffset + numTiers - 1) {
-                                // For KIT deals, we need to ensure that deal grp names are null for all merged cells except for the first row of a merged set.
-                                // This is to keep it's behavior inline with kendo's after a user changes a non-dim merged cell
-                                // Ex: if a 3-tiered merged cell is given the value of "1" by the user, the first row will have the 1 but subsequent rows from the merged set (row 2&3) will have null values -> ["1", null, null]
-                                //     however when we load data from the db, we load PTRs in their unmerged state, so if we load what we save in the example above, the data would end up getting merged as ["1", "1", "1"] which is inconsistent with the ["1", null, null] state that we expect after a user's manual change event
-                                // Jeff Note: i dont think the rowOffset value check in the above if will ever be equal but we will check it just in case to avoid any array out of bounds errors as this is unfamiliar territory for me
-                                for (var i = rowOffset + 1 - rowOffsetConstant; i <= rowOffset + (numTiers - 1) - rowOffsetConstant; i++) {  //offset + 1 is our starting point as we do not want to override the first row's value
-                                    if (data[i] !== undefined) data[i]["DEAL_GRP_NM"] = null;
-                                }
-                            }
-                            sheet.range(letter + rowOffset + ":" + letter + (rowOffset + (numTiers - 1))).merge();  //-1 from end to account for first row
+                            sheet.range(letter + rowOffset + ":" + letter + (rowOffset + numTiers - 1)).merge();
                         } else {
                             nonMergedColIndexesDict[c] = true;
                         }
@@ -1288,8 +1278,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function isInt(value) {
-        return typeof value === 'number' && 
-          isFinite(value) && 
+        return typeof value === 'number' &&
+          isFinite(value) &&
           Math.floor(value) === value;
     };
 
@@ -1354,35 +1344,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
                     data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
+                    continue;
                 }
-                else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
                     // Update existing rows, offset number of deleted rows
+                else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
                     data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, true);
                     numExistingRows--;
-                }
-                else if (rowDeleted == 0 && offSetRows > 0) {
-                    // adding products / new rows
-                    var copy = angular.copy(data[n - rowDeleted]);
-                    copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a, true);
-                    data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
-                    // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
-                    if (data[n + a - (offset - 1)] !== undefined) data[n + a - (offset - 1)].id = null;
-
-                    offSetRows--;
                 } else {
-                    // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
-                    data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
-                        updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
+                    if (rowDeleted == 0 && offSetRows > 0) {
+                        // adding products / new rows
+                        var copy = angular.copy(data[n - rowDeleted]);
+                        copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a);
+                        data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
+                        // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
+                        data[n + a - (offset - 1)].id = null;
+
+                        offSetRows--;
+                    } else {
+                        // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
+                        data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
+                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, true);
+                    }
                 }
             }
-
             // We are retaining the DEAL_GRP_NM, ECAP_PRICE_____20_____1, TEMP_KIT_REBATE for only first row(TIER_NBR = 1),
             // when TIERS are changed due to kit product re order, new first row will not have all these attribute values, thus copy pld tier 1 old values to new tier 1 row.
-            updateKITTierOneValues(data[n - (numTier + rowDeleted - 1 - rowAdded)], kitFirstTierValues);
+            updateKITTierOneValues(data[n - (numTier + rowDeleted - 1 - rowAdded)], kitFirstTierValues, false);
         }
     }
 
-    // Copy old tier values to new tier values
+
+    // Copy old tier 1 values to new tier 1 values. For deal group merge to work only the Tier 1 needs to have deal group name
     function updateKITTierOneValues(newFirstTierRow, oldFirstTierRow) {
         newFirstTierRow['DEAL_GRP_NM'] = oldFirstTierRow['DEAL_GRP_NM'];
         newFirstTierRow['ECAP_PRICE_____20_____1'] = oldFirstTierRow['ECAP_PRICE_____20_____1'];
@@ -1391,7 +1383,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber, resetDim) {
         var row = angular.copy(row);
-        var buckProd = $filter('where')(pivottedRows, { 'DC_ID': row["DC_ID"], 'PRD_BCKT': productBcktName });
+
+        // Case
+        var buckProd = $filter('filter')(pivottedRows, function (item) {
+            return item['DC_ID'] == row['DC_ID'] && item['PRD_BCKT'].toLowerCase() == productBcktName.toLowerCase();
+        }, true);
+
         if (buckProd.length === 0) { // no corresponding row (essentially a new row)
             row.PRD_BCKT = productBcktName;
             if (resetDim) {
@@ -1406,6 +1403,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         row["NUM_OF_TIERS"] = numTier;
         row["TIER_NBR"] = tierNumber + 1;
+
+        // For deal group merge to work only the Tier 1 needs to have deal group name
+        if (row["TIER_NBR"] != 1) {
+            row['DEAL_GRP_NM'] = null;
+        }
         return row;
     }
 
