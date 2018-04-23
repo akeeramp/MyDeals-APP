@@ -33,7 +33,12 @@
         $scope.init = function () {
             quoteLetterService.adminGetTemplates()
                 .then(function (response) {
-                    vm.menuItems = response.data;
+                    vm.menuItems = [];
+                    for (var d = 0; d < response.data.length; d++) {
+                        if (response.data[d]["OBJ_SET_TYPE_CD"] !== "KIT" || response.data[d]["PROGRAM_PAYMENT"] !== "FRONTEND") {
+                            vm.menuItems.push(response.data[d]);
+                        }
+                    }
 
                     // For all menu items, set MenuText by concat OBJ_SET_TYPE_CD and PROGRAM_PAYMEN .
                     for (var i = 0; i < vm.menuItems.length; i++) {
