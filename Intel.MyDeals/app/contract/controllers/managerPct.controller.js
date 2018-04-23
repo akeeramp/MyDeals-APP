@@ -24,7 +24,6 @@
         $scope.needToRunPct = false;
         $scope.dealPtIdDict = {};
         $scope.CostTestGroupDetails = {};
-        $scope.CostTestGroupDealDetails = {};
         $scope.dataItemDict = {};
         root.enablePCT = false;
 
@@ -236,7 +235,7 @@
                 function (e) {
 
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
-                    $scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
+                    //$scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
 
                     var response = e.data["CostTestDetailItems"];
 
@@ -282,16 +281,9 @@
                             if (cols[c].field === "DEAL_ID") {
                                 val = "<b>" + val + "</b>";
                             } else if (cols[c].field === "GRP_DEALS") {
-                                //var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showGroups(true, " + item["DEAL_ID"] + ")'>View</div>" : "";
-
-                                var DEAL_COMB_TYPE = "";
-                                var dSet = $scope.CostTestGroupDealDetails[pt["DC_ID"]];
-                                for (var d = 0; d < dSet.length; d++) {
-                                    if (dSet[d].DEAL_ID === item["DEAL_ID"]) DEAL_COMB_TYPE = dSet[d].OVLP_ADDITIVE;
-                                }
 
                                 $scope.dataItemDict[item["DEAL_ID"]] = {
-                                    DEAL_COMB_TYPE: DEAL_COMB_TYPE,
+                                    DEAL_COMB_TYPE: "",
                                     CONSUMPTION_REASON: item["CNSMPTN_RSN"],
                                     TITLE: item["PRODUCT"],
                                     DEAL_DESC: item["DEAL_DESC"],
@@ -473,20 +465,12 @@
             });
         }
 
-        $scope.showGroups = function (isDealMode, dealId, dataItem) {
-            if (isDealMode) {
-                $scope.context = $linq.Enumerable()
-                    .From($scope.CostTestGroupDealDetails[$scope.dealPtIdDict[dealId]])
-                    .Where(function (x) {
-                        return x.DEAL_ID === dealId;
-                    }).ToArray();
-            } else {
-                $scope.context = $linq.Enumerable()
-                    .From($scope.CostTestGroupDetails[$scope.dealPtIdDict[dataItem.DEAL_ID]])
-                    .Where(function (x) {
-                        return x.DEAL_PRD_RNK === dealId;
-                    }).ToArray();
-            }
+        $scope.showGroups = function (dealId, dataItem) {
+            $scope.context = $linq.Enumerable()
+                .From($scope.CostTestGroupDetails[$scope.dealPtIdDict[dataItem.DEAL_ID]])
+                .Where(function (x) {
+                    return x.DEAL_PRD_RNK === dealId;
+                }).ToArray();
 
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -778,7 +762,7 @@
                 field: "GRP_DEALS",
                 title: "Group Deals",
                 width: "140px",
-                template: "<div style='text-align: center;' ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#, dataItem)'>View</div></div>",
+                template: "<div style='text-align: center;' ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'><div class='lnkBasic' ng-click='showGroups(#=DEAL_PRD_RNK#, dataItem)'>View</div></div>",
                 parent: true,
                 filterable: { multi: true, search: true },
             },
