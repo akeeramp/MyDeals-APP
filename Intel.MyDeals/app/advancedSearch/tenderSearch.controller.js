@@ -359,7 +359,7 @@
             field: "BLLG_DT",
             title: "Last Credit Date",
             type: "string",
-            template: "#= moment(BLLG_DT).format('MM/DD/YYYY') #",
+            template: "# if (BLLG_DT !== undefined) { # #=moment(BLLG_DT).format('MM/DD/YYYY')# # } #",
             width: 140
         }, {
             field: "CRE_EMP_WWID",

@@ -132,6 +132,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                         width: item.width,
                         format: item.format,
                         filterable: item.filterable,
+                        sortable: item.sortable,
                         template: item.template,
                         excelTemplate: item.excelTemplate,
                         bypassExport: item.bypassExport,
