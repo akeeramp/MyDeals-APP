@@ -600,8 +600,8 @@ namespace Intel.MyDeals.BusinessLogic
                     OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave, null, dc, myDealsData);
                     //if (savePacket.ValidateIds.Any())
                     //{
-                        dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
-                        dc.ApplyRules(MyRulesTrigger.OnPostValidate);
+                    dc.ApplyRules(MyRulesTrigger.OnValidate, null, savePacket.MyContractToken.CustId);
+                    dc.ApplyRules(MyRulesTrigger.OnPostValidate);
                     //}
 
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
@@ -813,10 +813,12 @@ namespace Intel.MyDeals.BusinessLogic
                                 foreach (ProdMapping item in pMaps)
                                 {
                                     if (item.HIER_VAL_NM != ttl || foundIt) continue;
-
+                                    // Add the item which matched, a new JSON
+                                    var prod = new List<ProdMapping>();
+                                    prod.Add(item);
                                     string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>>
                                     {
-                                        [prodTitle] = pMaps
+                                        [prodTitle] = prod
                                     });
                                     dcSplit.SetAtrb(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
                                     foundIt = true;
@@ -902,7 +904,7 @@ namespace Intel.MyDeals.BusinessLogic
                     kitName = res2[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(c => c.DcID == kvp.Key && c.DcParentID == kvp.Value).Select(c => c.GetDataElementValue(AttributeCodes.DEAL_GRP_NM)).FirstOrDefault();
                 }
 
-                    opMsgQueue.Messages.Add(new OpMsg
+                opMsgQueue.Messages.Add(new OpMsg
                 {
                     Message = $"Parent ID Changed from {childToOrigParentIdMapping[kvp.Key]} to {kvp.Value}",
                     MsgType = OpMsg.MessageType.Info,
