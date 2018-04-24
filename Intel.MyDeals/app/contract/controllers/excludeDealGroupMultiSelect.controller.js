@@ -180,6 +180,10 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    items.each(function () {
 		        var row = $(this);
 		        var dataItem = e.sender.dataItem(row);
+		        if (dataItem["OVLP_ECAP_PRC"] === 0) {
+		            dataItem["OVLP_ECAP_PRC"] = "";
+
+		        }
 		        if (dataItem.OVLP_DEAL_ID === vm.DC_ID) {
 		            var item = row.clone();
 		            item.addClass("customHeaderRowStyles");
