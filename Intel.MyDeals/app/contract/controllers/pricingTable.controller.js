@@ -668,7 +668,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (isProductColumnIncludedInChanges && window.usrRole === "DA") {
             return;
         }
-
         // KIT
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
@@ -1296,13 +1295,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return;
         }
         if (data[n]["PTR_USER_PRD"] !== null) {
-            var products = data[n]["PTR_USER_PRD"].split(",");
+            var products = data[n]["PTR_USER_PRD"].replace(/,,/g,',').split(",");
             if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && isInt(parseInt(masterData[n].DC_ID))) {
                 // Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
                 // Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
                 var firstTierProds = $filter('where')(masterData, { 'DC_ID': data[n].DC_ID, 'TIER_NBR': 1 });
                 if (firstTierProds.length > 0) {
-                    products = firstTierProds[0]["PTR_USER_PRD"].split(",");
+                    products = firstTierProds[0]["PTR_USER_PRD"].replace(/,,/g, ',').split(",");
                 }
             }
 
