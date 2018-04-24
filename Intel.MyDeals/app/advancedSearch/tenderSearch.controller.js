@@ -512,8 +512,8 @@
                                 for (i = 0; i < lis.length; i++) {
                                     if (lis[i].textContent === dsData[d]["orig_BID_STATUS"]) indx = i;
                                 }
+                                dsData[d]['isLinked'] = false;
                                 dropdownlist.select(indx);
-                                dsData[d].set("isLinked", false);
                             }
                         }
                     } else {
@@ -548,10 +548,9 @@
 
                     var dsData = scope.ds.data();
                     var singleRowUpdate = [];
-                    if(tenders.length === 1){
+                    if (tenders.length === 1) {
                         singleRowUpdate[tenders[0]["DC_ID"]] = tenders[0]["DC_ID"];
                     }
-                    var updatedRowIndex = "";
                     for (var m = 0; m < scope.messages.length; m++) {
                         if (scope.messages[m].Message === "Action List") {
                             foundIt = true;
@@ -561,18 +560,15 @@
                                     $("#trk_" + dsData[d].DC_ID).html(details[dsData[d].DC_ID].join(", "));
                                     $("#cb_actn_" + dsData[d].DC_ID).html('<div style="text-align: center; width: 100%;" class="ng-binding">Won</div>');
                                     $("#dealTool_" + dsData[d].DC_ID).html('');
-                                    dsData[d].isLinked = false;
+                                    dsData[d]['isLinked'] = false;
                                 } else if (singleRowUpdate[dsData[d].DC_ID] !== undefined) {
-                                    dsData[d].BID_ACTNS = details;
-                                    updatedRowIndex = d;
+                                    updateBidStatusDropDownSource(dsData[d]);
                                     break;
                                 }
 
                                 // if linked, clear out the check boxes
                                 if (dsData[d].isLinked) {
-                                    dsData[d].isLinked = false;
-                                    dsData[d].BID_ACTNS = details;
-                                    updatedRowIndex = d;
+                                    updateBidStatusDropDownSource(dsData[d]);
                                 }
 
                             }
@@ -580,11 +576,6 @@
                         else if (scope.messages[m].Message === "No Deal") {
                             noDeals.push(scope.messages[m].ExtraDetails);
                         }
-                    }
-
-                    if (updatedRowIndex !== "") {
-                        dsData[updatedRowIndex]['isLinked'] = true;
-                        dsData[updatedRowIndex].set("isLinked", false);
                     }
 
                     pc.add(pcUI.stop());
@@ -614,6 +605,30 @@
                     //debugger;
                 }
             );
+        }
+
+        // Adds or removes items from Bid Action dropdown
+        function updateBidStatusDropDownSource(dsData) {
+
+            // Uncheck row
+            dsData['isLinked'] = false;
+            var bidSatus = dsData.BID_STATUS;
+
+            var dropdownlist = $("#ddListStat_" + dsData.DC_ID).data("kendoDropDownList");
+            var oldData = dropdownlist.dataSource.data();
+
+            // When changed from "Lost" to "Offer" add "Won"
+            if (bidSatus === 'Offer') {
+                var actionToAdd = { "BidActnName": "Won", "BidActnValue": "Won" };
+                dropdownlist.dataSource.add(actionToAdd);
+            } else { // When changed from "Offer" to "Lost" remove "Won"
+                var actionToRemove = $filter('where')(oldData, { 'BidActnName': 'Won' });
+                dropdownlist.dataSource.remove(actionToRemove[0]);
+            }
+
+            dropdownlist.select(function (dataItem) {
+                return dataItem.BidActnValue == bidSatus
+            });
         }
 
         $scope.$on('attribute-datasource-end', function (event, data) {
