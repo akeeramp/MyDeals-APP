@@ -4,7 +4,7 @@
     <div ng-if="isBusy" class="ss-loading-overlay" style="z-index: 0"></div>
     <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
 
-        <div class="psNav" ng-class="{active: (curPricingStrategy.DC_ID == ps.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == false)}">
+        <div class="psNav" id="lnavPs_{{ ps.DC_ID }}" ng-class="{active: (curPricingStrategy.DC_ID == ps.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == false)}">
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
                 <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;" ng-class="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
             </div>
@@ -60,7 +60,7 @@
 
         <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
             <div ng-repeat="pt in ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
-                <div class="ptNav" ng-class="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
+                <div id="lnavPt_{{ pt.DC_ID }}" class="ptNav" ng-class="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
                     <div class="fl textCircle valid_{{ pt.PASSED_VALIDATION }}" title="{{ pt.PASSED_VALIDATION || 'Not validated yet' }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">
                         <div ng-if="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'"

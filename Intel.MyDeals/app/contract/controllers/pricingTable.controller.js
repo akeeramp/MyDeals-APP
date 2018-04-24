@@ -99,7 +99,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
-
     function init() {
         // force a resize event to format page
         //$scope.resizeEvent();
@@ -110,6 +109,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (root.curPricingStrategyId !== $stateParams.sid) {
             root.curPricingStrategyId = $stateParams.sid;
             root.curPricingStrategy = util.findInArray(root.contractData.PRC_ST, root.curPricingStrategyId);
+
+            // scroll left nav into view
+            $timeout(function () {
+                var distance = $("#lnavPt_" + $scope.curPricingTableId).position().top;
+                $("#lnavContainer").animate({
+                    scrollTop: distance
+                }, 2000);
+            }, 2000);
         }
         if (root.curPricingStrategy === null) {
             logger.error("Unable to locate Pricing Strategy " + $stateParams.sid);
