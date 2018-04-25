@@ -179,7 +179,7 @@
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
 
-        var addRecordsNotAllowed = usrRole == "SA" ? 1 : 0;
+        var editNotAllowed = usrRole == "SA" ? 1 : 0;
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
@@ -197,7 +197,7 @@
             columnMenu: false,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
-            toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(addRecordsNotAllowed),
+            toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(editNotAllowed),
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
@@ -213,8 +213,8 @@
             columns: [
             {
                 command: [
-                       { name: "edit", template: "<a ng-if='dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
-                       { name: "destroy", template: "<a ng-if='dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                       { name: "edit", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                       { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                 ],
                 width: 100,
             },
