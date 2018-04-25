@@ -40,7 +40,8 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public int CreatePricingRecords(char jobType)
         {
-            return _jmsLib.CreatePricingRecords(jobType).Rows.Count;
+            var records = _jmsLib.CreatePricingRecords(jobType);
+            return records == null ? 0 : records.Rows.Count;
         }
 
         /// <summary>

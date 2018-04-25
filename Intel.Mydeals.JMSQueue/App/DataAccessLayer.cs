@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
 using Intel.Opaque.Tools;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -29,7 +27,7 @@ namespace Intel.MyDeals.JMSQueueApp
                 handler.UseDefaultCredentials = true;
                 HttpClient client = new HttpClient(handler);
                 client.BaseAddress = new Uri(jmsAPIbaseUrl);
-                client.Timeout = TimeSpan.FromMinutes(4);
+                client.Timeout = TimeSpan.FromMinutes(6);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
