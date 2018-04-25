@@ -110,7 +110,7 @@ namespace Intel.MyDeals.BusinessRules
                         : "Meet Comp Data is missing.  Please go to the Meet Comp Screen to populate missing data.";
                 }
 
-                if (action == "Approve" && missingCap && stage == WorkFlowStages.Requested)
+                if (action == "Approve" && missingCap && stage == WorkFlowStages.Submitted)
                 {
                     objsetActionItem.Actions[action] = false;
                     objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
