@@ -24,25 +24,28 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.currentRuleColumns = "";
             $scope.lookupDs = {};
 
+            for (var i = 0; i < $scope.attributeSettings.length; i++) {
+                $scope.fieldDict[$scope.attributeSettings[i].field] = $scope.attributeSettings[i].type;
+            }
+
+            $scope.attributeSettingsCopy = angular.copy($scope.attributeSettings).sort(function (a, b) {
+                var x = a["title"];
+                var y = b["title"];
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            });
+
             if ($scope.data.length === 0) {
                 $scope.data = [
                     {
                         field: "",
                         operator: "",
-                        value: ""
+                        value: "",
+                        source: new kendo.data.DataSource({
+                            data: $scope.attributeSettingsCopy
+                        })
                     }
                 ];
             }
-
-            for (var i = 0; i < $scope.attributeSettings.length; i++) {
-                $scope.fieldDict[$scope.attributeSettings[i].field] = $scope.attributeSettings[i].type;
-            }
-           
-            $scope.attributeSettingsCopy = angular.copy($scope.attributeSettings).sort(function(a, b) {
-                var x = a["title"];
-                var y = b["title"];
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            });
 
             $scope.loadMyRules = function() {
                 userPreferencesService.getActions("DealSearch", "SearchRules")
@@ -330,7 +333,10 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     {
                         field: "",
                         operator: "",
-                        value: ""
+                        value: "",
+                        source: new kendo.data.DataSource({
+                            data: $scope.attributeSettingsCopy
+                        })
                     });
 
                     setTimeout(function () {
@@ -345,7 +351,10 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     $scope.data[0] = {
                         field: "",
                         operator: "",
-                        value: ""
+                        value: "",
+                        source: new kendo.data.DataSource({
+                            data: $scope.attributeSettingsCopy
+                        })
                     }
                     $scope.currentRule = "";
                     $scope.currentRuleColumns = [];
@@ -387,7 +396,10 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.data[0] = {
                     field: "",
                     operator: "",
-                    value: ""
+                    value: "",
+                    source: new kendo.data.DataSource({
+                        data: $scope.attributeSettingsCopy
+                    })
                 };
                 $scope.currentRule = "";
                 $scope.currentRuleColumns = [];

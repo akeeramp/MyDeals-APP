@@ -130,7 +130,7 @@ namespace Intel.MyDeals.BusinessLogic
             return $"{opDataElementType}_{field}";
         }
 
-        private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption)
+        private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd)
         {
             string rtn = string.Empty;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
@@ -148,10 +148,10 @@ namespace Intel.MyDeals.BusinessLogic
             // modifiedSearchList.Add($"{opDataElementType}_REBATE_TYPE = 'TENDER'");
 
             // Set Start Date
-            modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.START_DT} <= '{data.StrEnd:MM/dd/yyyy}'");
+            if (!userDefStart) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.START_DT} <= '{data.StrEnd:MM/dd/yyyy}'");
 
             // Set End Date
-            modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
+            if (!userDefEnd) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
 
             // Customers
             if (data.Customers.Any())
@@ -223,8 +223,12 @@ namespace Intel.MyDeals.BusinessLogic
                 ? new List<SearchFilter>()
                 : JsonConvert.DeserializeObject<IEnumerable<SearchFilter>>(customSearchOptionUserPref.PRFR_VAL).ToList();
 
+            // Check is user entered a date range
+            bool userDefStart = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("START_DT") >= 0;
+            bool userDefEnd = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("END_DT") >= 0;
+
             // Build where clause from start/end date and search text
-            string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL, initSearchCriteria, customSearchOption);
+            string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL, initSearchCriteria, customSearchOption, userDefStart, userDefEnd);
 
             // Build Order By
             string orderBy = string.IsNullOrEmpty(data.StrSorts) ? "" : $"{OpDataElementType.WIP_DEAL}_{data.StrSorts}";
