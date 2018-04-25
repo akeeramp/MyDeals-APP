@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/20/2018 12:34:58 PM
+File Updated: 4/24/2018 11:41:50 AM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -235,6 +235,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string CAP_END_DT = "CAP_END_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3705
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string CAP_MISSING_FLG = "CAP_MISSING_FLG";
 
 		///<summary>
 		/// DIM_SID: 999
@@ -2192,6 +2201,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3704
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SYS_COMMENTS = "SYS_COMMENTS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3569
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -2403,7 +2421,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 237
-		/// SRT_ORD: 95
+		/// SRT_ORD: 75
 		/// Approve Audit
 		///</summary>
 		public const string APRV_AUDIT = "APRV_AUDIT";
@@ -2542,6 +2560,7 @@ namespace Intel.MyDeals.Entities {
 	//-- ToolConstantName ---------------------------------------------------------------------------------
 
 	public static class ToolConstantName {
+		public const string AGS_PROVISIONING_MAILING_SUPPORT_LIST = "AGS_PROVISIONING_MAILING_SUPPORT_LIST";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
@@ -2558,23 +2577,32 @@ namespace Intel.MyDeals.Entities {
 		public const string ECAP_MIGRATION = "ECAP_MIGRATION";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
 		public const string ENV = "ENV";
+		public const string ESDR_STAGE_IMPORT_X_DAYS = "ESDR_STAGE_IMPORT_X_DAYS";
+		public const string ESDR_STAGE_PURGE_AFTER_X_DAYS = "ESDR_STAGE_PURGE_AFTER_X_DAYS";
 		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
+		public const string HRCDS_LINKED_SERVER_CONS = "HRCDS_LINKED_SERVER_CONS";
+		public const string HRCDS_LINKED_SERVER_PROD = "HRCDS_LINKED_SERVER_PROD";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
+		public const string JMSQ_ERROR_REPORT_DAYS_BACK = "JMSQ_ERROR_REPORT_DAYS_BACK";
+		public const string JMSQ_PROCESS_TIMEOUT = "JMSQ_PROCESS_TIMEOUT";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
 		public const string LOCKED_OUT_ROLES = "LOCKED_OUT_ROLES";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
+		public const string NASP_PTL_Deal_Dtl_Load_St_Dt = "NASP_PTL_Deal_Dtl_Load_St_Dt";
 		public const string NEW_ACCOUNT_REVIEWER_APAC = "NEW_ACCOUNT_REVIEWER_APAC";
 		public const string NEW_ACCOUNT_REVIEWER_ASMO = "NEW_ACCOUNT_REVIEWER_ASMO";
 		public const string NEW_ACCOUNT_REVIEWER_EMEA = "NEW_ACCOUNT_REVIEWER_EMEA";
 		public const string NEW_ACCOUNT_REVIEWER_IJKK = "NEW_ACCOUNT_REVIEWER_IJKK";
 		public const string NEW_ACCOUNT_REVIEWER_PRC = "NEW_ACCOUNT_REVIEWER_PRC";
+		public const string NON_PROD_EMAIL_DIST = "NON_PROD_EMAIL_DIST";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
+		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";

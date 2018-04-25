@@ -327,6 +327,11 @@ namespace Intel.MyDeals.Controllers.API
                 CopyFromObjType = OpDataElementType.PRC_TBL
             });
 
+            foreach (OpDataCollectorFlattenedItem item in data)
+            {
+                item[AttributeCodes.CAP_MISSING_FLG] = "0";
+            }
+
             return SafeExecutor(() => _pricingTablesLib.SavePricingTable(data, savePacket)
                 , "Unable to copy the Pricing Strategy"
             );

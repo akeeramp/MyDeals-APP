@@ -35,6 +35,7 @@ namespace Intel.MyDeals.BusinessRules
             bool mctMissing = r.Dc.GetDataElementValue(AttributeCodes.COMP_MISSING_FLG) == "1";
             bool hasL1 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1) != "0";
             bool hasL2 = r.Dc.GetDataElementValue(AttributeCodes.HAS_L2) != "0";
+            bool missingCap = r.Dc.GetDataElementValue(AttributeCodes.CAP_MISSING_FLG) == "1";
             string role = opUserToken.Role.RoleTypeCd;
             bool pctFailed = pct != "Pass" && pct != "NA";
             bool mctFailed = mct != "Pass" && mct != "NA";
@@ -96,25 +97,26 @@ namespace Intel.MyDeals.BusinessRules
                 if ((action == "Approve" || action == "Revise") && passedValidation != PassedValidation.Complete.ToString())
                 {
                     objsetActionItem.Actions[action] = false;
-                    objsetActionItem.ActionReasons[action] = "Pricing Strategy did not pass validation.";
+                    objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                        ? objsetActionItem.ActionReasons[action] += "\nPricing Strategy did not pass validation."
+                        : "Pricing Strategy did not pass validation.";
                 }
 
                 if (action == "Approve" && mctMissing && stage != WorkFlowStages.Draft)
                 {
                     objsetActionItem.Actions[action] = false;
-                    objsetActionItem.ActionReasons[action] = "Meet Comp Data is missing.  Please go to the Meet Comp Screen to populate missing data.";
+                    objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                        ? objsetActionItem.ActionReasons[action] += "\nMeet Comp Data is missing.  Please go to the Meet Comp Screen to populate missing data."
+                        : "Meet Comp Data is missing.  Please go to the Meet Comp Screen to populate missing data.";
                 }
 
-                // TODO when PCT and MCT is ready... remove the following lines
-                //pctFailed = false;
-                //mctFailed = false;
-                //mctIncomplete = false;
-
-                //if (action == "Cancel" && objsetActionItem.Actions[action])
-                //{
-                //    objsetActionItem.Actions[action] = false;
-                //    objsetActionItem.ActionReasons[action] = "Disabled for UFT3";
-                //}
+                if (action == "Approve" && missingCap && stage == WorkFlowStages.Requested)
+                {
+                    objsetActionItem.Actions[action] = false;
+                    objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                        ? objsetActionItem.ActionReasons[action] += "\nCAP missing from at least one of the deals in this Pricing Strategy."
+                        : "CAP missing from at least one of the deals in this Pricing Strategy.";
+                }
 
 
                 if (action == "Approve" && objsetActionItem.Actions[action] && hasL1)
@@ -134,7 +136,9 @@ namespace Intel.MyDeals.BusinessRules
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
                             {
                                 objsetActionItem.Actions[action] = false;
-                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                                objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                                    ? objsetActionItem.ActionReasons[action] += "\n" + reasonPctMct
+                                    : reasonPctMct;
                             }
                             break;
                         case RoleTypes.GA:
@@ -142,19 +146,25 @@ namespace Intel.MyDeals.BusinessRules
                             if (stage == WorkFlowStages.Requested && mctFailed && mctNotRun)
                             {
                                 objsetActionItem.Actions[action] = false;
-                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                                objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                                    ? objsetActionItem.ActionReasons[action] += "\n" + reasonPctMct
+                                    : reasonPctMct;
                             }
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
                             {
                                 objsetActionItem.Actions[action] = false;
-                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                                objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                                    ? objsetActionItem.ActionReasons[action] += "\n" + reasonPctMct
+                                    : reasonPctMct;
                             }
                             break;
                         case RoleTypes.FSE:
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
                             {
                                 objsetActionItem.Actions[action] = false;
-                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                                objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                                    ? objsetActionItem.ActionReasons[action] += "\n" + reasonPctMct
+                                    : reasonPctMct;
                             }
                             break;
                     }

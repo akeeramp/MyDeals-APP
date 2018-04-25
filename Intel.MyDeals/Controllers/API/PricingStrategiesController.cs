@@ -190,6 +190,11 @@ namespace Intel.MyDeals.Controllers.API
                 CopyFromObjType = OpDataElementType.PRC_ST
             });
 
+            foreach (OpDataCollectorFlattenedItem item in data)
+            {
+                item[AttributeCodes.CAP_MISSING_FLG] = "0";
+            }
+
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(data, savePacket)
                 , "Unable to copy the Pricing Strategy"
             );
