@@ -17,7 +17,7 @@
         <img src="/Images/docs/MyDeals Project Logic.png" />
     </div>
     <p>
-        The MyDeals project is a Visual Studio project backed by TFS source control.
+        The My Deals project is a Visual Studio project backed by TFS source control.
         The technologies consist of MS SQL 2014, C# .NET, T4 Templating, MVC, Web API, JQuery, Kendo UI, Angular and HTML5.
         This document will demonstate how data will logically flow through the technology as well as common practices that can be re-used for quicker and more reliable coding.
     </p>
@@ -64,7 +64,7 @@
                     <div style="font-size: 10px;">Intel.MyDeals.Entities</div>
                 </a>
             </td>
-            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer to hold common libraries/classes that can be consumed by all layers of the MyDeals Suite.</td>
+            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer to hold common libraries/classes that can be consumed by all layers of the My Deals Suite.</td>
             <td style="font-size: 11px;">
                 <div><a href="@Url.Action("SharedClasses", "CodingPractices", new {Area = ""})">Creating a shared class</a></div>
                 <div><a href="@Url.Action("ClassFromProcedure", "CodingPractices", new {Area = ""})">Creating a shared class from a procedure</a></div>
@@ -91,7 +91,7 @@
                     <div style="font-size: 10px;">Intel.MyDeals.BusinessLogic</div>
                 </a>
             </td>
-            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer dedicated to hold the business logic for MyDeals.  Most of the logic for the application should reside in this layer.  There should be NO data access from this layer. This layer implements contracts present in <i>Intel.MyDeals.IBusinessLogic</i>. There is no direct dependency between Api and Business Layer. <a target="_blank" href="https://msdn.microsoft.com/en-us/library/ff921087.aspx">IoC</a> used for loosely coupled code.</td>
+            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer dedicated to hold the business logic for My Deals.  Most of the logic for the application should reside in this layer.  There should be NO data access from this layer. This layer implements contracts present in <i>Intel.MyDeals.IBusinessLogic</i>. There is no direct dependency between Api and Business Layer. <a target="_blank" href="https://msdn.microsoft.com/en-us/library/ff921087.aspx">IoC</a> used for loosely coupled code.</td>
             <td style="font-size: 11px;">Recomended Links</td>
         </tr>
         <tr style="border-bottom: 1px solid #dddddd;">

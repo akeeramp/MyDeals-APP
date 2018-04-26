@@ -874,7 +874,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     sheets: [
                         {
                             //columns: widths,
-                            title: "MyDeals Data",
+                            title: "My Deals Data",
                             rows: rows
                         }
                     ]
@@ -2141,7 +2141,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     },
                     {
                         field: "PRODUCT_NM",
-                        title: "MyDeals Product",
+                        title: "My Deals Product",
                         width: "120px",
                         template: "<div class='ovlpCell' title='#= PRODUCT_NM #'>#= PRODUCT_NM #</div>",
                         filterable: { multi: true, search: true }

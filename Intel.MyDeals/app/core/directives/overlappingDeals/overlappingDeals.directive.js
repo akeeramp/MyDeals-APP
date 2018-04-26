@@ -347,7 +347,7 @@
                         },
                         {
                             field: "PRODUCT_NM",
-                            title: "MyDeals Product",
+                            title: "My Deals Product",
                             width: "120px",
                             template: "<div class='ovlpCell' title='#= PRODUCT_NM #'>#= PRODUCT_NM #</div>",
                             filterable: { multi: true, search: true }

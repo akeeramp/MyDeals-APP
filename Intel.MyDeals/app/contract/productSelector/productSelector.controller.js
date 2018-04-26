@@ -1071,7 +1071,7 @@
                             showAutocorrectedSuggestions(vm.userInput)
                         }
                     }, function (response) {
-                        logger.error("Unable to get check if product exists in MyDeals.", response, response.statusText);
+                        logger.error("Unable to get check if product exists in My Deals.", response, response.statusText);
                     });
                 }
             }
