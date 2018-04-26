@@ -184,9 +184,10 @@ namespace Intel.MyDeals.BusinessLogic
 
             for (int f = 0; f < modifiedSearchList.Count; f++)
             {
+                if (f == 0 && initSearchList.Any()) continue;
                 if (modifiedSearchList[f].IndexOf("WIP_DEAL_WF_STG_CD") >= 0)
                 {
-                    modifiedSearchList[f] = $"({modifiedSearchList[f]} OR {modifiedSearchList[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")})";
+                    modifiedSearchList[f] = $"(({modifiedSearchList[f]}) OR ({modifiedSearchList[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")}))";
                 }
             }
 
@@ -431,7 +432,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.YCS2_PRC_IRBT.ATRB_SID
             },
-            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != '%PROGRAM%'" + actvstr },
+            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" + actvstr },
             null,
             MyRulesTrigger.OnDealListLoad);
         }
