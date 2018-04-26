@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 4/24/2018 11:42:17 AM
-On: PWECKENR-MOBL
+File Updated: 4/26/2018 11:00:06 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -2249,6 +2249,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IN_REDEAL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IN_REDEAL",
+			ATRB_DESC = "Is In Redeal Flag",
+			ATRB_LBL = "In Redeal",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3706,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute INACTV_REV = new MyDealsAttribute()
 		{
