@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 4/24/2018 11:41:50 AM
-On: PWECKENR-MOBL
+File Updated: 4/26/2018 10:17:51 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1279,6 +1279,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string IGNR_COST_TST = "IGNR_COST_TST";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3706
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IN_REDEAL = "IN_REDEAL";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2561,6 +2570,7 @@ namespace Intel.MyDeals.Entities {
 
 	public static class ToolConstantName {
 		public const string AGS_PROVISIONING_MAILING_SUPPORT_LIST = "AGS_PROVISIONING_MAILING_SUPPORT_LIST";
+		public const string AjayTest = "AjayTest";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
@@ -2586,10 +2596,12 @@ namespace Intel.MyDeals.Entities {
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
+		public const string IDMS_DEAL_MIGRATION = "IDMS_DEAL_MIGRATION";
 		public const string JMSQ_ERROR_REPORT_DAYS_BACK = "JMSQ_ERROR_REPORT_DAYS_BACK";
 		public const string JMSQ_PROCESS_TIMEOUT = "JMSQ_PROCESS_TIMEOUT";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
 		public const string LOCKED_OUT_ROLES = "LOCKED_OUT_ROLES";
+		public const string MISC_MIGRATION = "MISC_MIGRATION";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
 		public const string NASP_PTL_Deal_Dtl_Load_St_Dt = "NASP_PTL_Deal_Dtl_Load_St_Dt";
 		public const string NEW_ACCOUNT_REVIEWER_APAC = "NEW_ACCOUNT_REVIEWER_APAC";
@@ -2599,6 +2611,7 @@ namespace Intel.MyDeals.Entities {
 		public const string NEW_ACCOUNT_REVIEWER_PRC = "NEW_ACCOUNT_REVIEWER_PRC";
 		public const string NON_PROD_EMAIL_DIST = "NON_PROD_EMAIL_DIST";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
+		public const string PeRF_MYDEALS_PRIMARY = "PeRF-MYDEALS-PRIMARY ";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
