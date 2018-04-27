@@ -715,14 +715,20 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 return;
             }
 
-            //Item added from the selected List
-            item.matchName.push(name);
-
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
 
             var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
             if (!foundItem) return;
+
+            if (checkForDuplicateProducts(foundItem, lookup)) {
+                event.target.checked = false;
+                return;
+            }
+
+
+            //Item added from the selected List
+            item.matchName.push(name);
 
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
@@ -770,6 +776,67 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
             });
         }
+    }
+
+    function checkForDuplicateProducts(item, lookup) {
+        var isDuplicate = false;
+        var validProducts = [];
+        for (var key in vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
+            if (vm.ProductCorrectorData.ValidProducts[vm.curRowId].hasOwnProperty(key)) {
+                angular.forEach(vm.ProductCorrectorData.ValidProducts[vm.curRowId][key], function (item) {
+                    validProducts.push(item);
+                });
+            }
+        }
+
+        duplicateProducts = $filter('where')(validProducts, { 'PRD_MBR_SID': item.PRD_MBR_SID, 'EXCLUDE': item.EXCLUDE });
+        isDuplicate = duplicateProducts.length > 0;
+        if (isDuplicate) {
+            var prodType = item.EXCLUDE ? 'E' : 'I';
+            var message = 'Found duplicate product for ' + item.HIER_VAL_NM + ', would you like to remove one ?';
+            kendo.confirm(message)
+                .then(function () {
+                    debugger;
+                    vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup] = vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup].filter(function (prod) {
+                        return prod.PRD_MBR_SID !== item.PRD_MBR_SID;
+                    });
+                    vm.curRowData = vm.curRowData.filter(function (prod) {
+                        return prod.PRD_MBR_SID !== item.PRD_MBR_SID;
+                    });
+                    vm.gridOptionsPotential.dataSource.read();
+                    var delProduct = false;
+                    if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
+                        if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup]) {
+                            if (vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup].length == 0) {
+                                var transItem = vm.ProductCorrectorData.ProdctTransformResults[vm.curRowId][prodType];
+                                for (var t = 0; t < transItem.length; t++) {
+                                    if (transItem[t] === lookup) {
+                                        transItem.splice(t, 1);
+                                        delProduct = true;
+                                        break;
+                                        //delete transItem[t];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (delProduct) {
+                        // Delete from Issue Key
+                        for (var r = 0; r < vm.curRowProds.length; r++) {
+                            if (!!vm.curRowProds[r] && vm.curRowProds[r].name === lookup && (vm.curRowProds[r].exclude === prodType)) {
+                                vm.curRowProds.splice(r, 1);
+                                break;
+                            }
+                        }
+                    }
+
+                },
+                function () {
+                    //Unchecked
+                });
+        }
+        return isDuplicate;
     }
 
     vm.removeAndFilter = function (prdName) {
