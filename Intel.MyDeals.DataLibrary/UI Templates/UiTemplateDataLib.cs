@@ -1988,7 +1988,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 DataType = "number",
                 Width = 100,
-                Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT', 'number')#",
                 IsFilterable = true,
                 IsSortable = true
             });
@@ -2001,7 +2001,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 DataType = "number",
                 Width = 100,
-                Template = "#=gridUtils.uiControlWrapper(data, 'ADJ_ECAP_UNIT')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'ADJ_ECAP_UNIT', 'number')#",
                 IsFilterable = true,
                 IsSortable = true
             });
