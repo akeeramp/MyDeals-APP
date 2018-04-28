@@ -18,8 +18,8 @@
 
 
         vm.ok = function () {
-            var returnVal = "";
-            if (vm.targetRegionData.TRGT_RGN !== undefined) {
+            var returnVal = [];
+            if (vm.targetRegionData.TRGT_RGN !== undefined && vm.targetRegionData.TRGT_RGN !== "") {
                 returnVal = vm.targetRegionData.TRGT_RGN;
             }
 
