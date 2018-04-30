@@ -1970,7 +1970,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (!!data[key]._behaviors) {
                             var errors = data[key]._behaviors.isError;
                             if (errors && Object.keys(errors).length !== 0) {
-                                // Put all validation errors as csv on the DC_ID (row A)
+                                // Put all validation errors as csv on the DC_ID (col A)
                                 sheet.range(root.colToLetter["DC_ID"] + row + ":" + root.colToLetter["DC_ID"] + row).background("#FC4C02").color("#FFFFFF");
                                 var myVal = "";
                                 var validMsg = data[key]._behaviors.validMsg;

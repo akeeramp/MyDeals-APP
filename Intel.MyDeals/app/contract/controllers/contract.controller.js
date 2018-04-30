@@ -2632,13 +2632,15 @@
                         if (!!$scope.spreadDs) {
                             $scope.spreadDs.read();
 
+                            var actionsOffset = data.PRC_TBL_ROW.length - $scope.pricingTableData.PRC_TBL_ROW.length;
+
                             for (var p = 0; p < $scope.pricingTableData.PRC_TBL_ROW.length; p++) {
                                 if (data.PRC_TBL_ROW[p] !== undefined && (data.PRC_TBL_ROW[p].DC_ID === $scope.pricingTableData.PRC_TBL_ROW[p].DC_ID ||
                                     data.PRC_TBL_ROW[p].DC_ID === undefined)) {
-                                    $scope.pricingTableData.PRC_TBL_ROW[p]._behaviors = data.PRC_TBL_ROW[p]._behaviors;
+                                    $scope.pricingTableData.PRC_TBL_ROW[p]._behaviors = data.PRC_TBL_ROW[p + actionsOffset]._behaviors;
                                 }
                             }
-
+                            
                             $scope.syncCellValidationsOnAllRows($scope.pricingTableData.PRC_TBL_ROW);
                         }
                     }
