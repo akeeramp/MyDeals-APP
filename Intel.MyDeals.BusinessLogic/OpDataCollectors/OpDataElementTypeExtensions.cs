@@ -163,7 +163,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
-                Attributes.WF_STG_CD.ATRB_SID
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.SYS_COMMENTS.ATRB_SID
             };
 
             DateTime start = DateTime.Now;
@@ -183,6 +184,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 IOpDataElement de = dc.GetDataElement(atrb.ATRB_COL_NM);
                 IOpDataElement deSource = dc.GetDataElement(AttributeCodes.CUST_MBR_SID) ?? dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+                string prevVal = string.Empty;
 
                 if (de == null)
                 {
@@ -200,8 +202,14 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else
                 {
+                    prevVal = de.AtrbValue.ToString();
                     de.SetAtrbValue(value);
-                    de.State = OpDataElementState.Modified;
+                    if (prevVal != value.ToString()) de.State = OpDataElementState.Modified;
+                }
+
+                if (atrb.ATRB_COL_NM == AttributeCodes.BID_STATUS && prevVal != value.ToString())
+                {
+                    dc.AddTimelineComment($"Bid Status changed from {prevVal} to {value}");
                 }
             }
 

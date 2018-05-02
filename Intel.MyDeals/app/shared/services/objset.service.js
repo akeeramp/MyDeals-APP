@@ -19,6 +19,7 @@ function objsetService($http, dataService, logger, $q, $location) {
     var service = {
         createContract: createContract,
         copyContract: copyContract,
+        copyContractPivot: copyContractPivot,
         readContract: readContract,
         readCopyContract:readCopyContract,
         updateContract: updateContract,
@@ -54,6 +55,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         emailActions: emailActions,
 
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
+        updateContractAndCurPricingTableInBulk: updateContractAndCurPricingTableInBulk,
         readContractStatus: readContractStatus,
         readWipFromContract: readWipFromContract,
         readWipExclusionFromContract: readWipExclusionFromContract,
@@ -84,6 +86,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function copyContract(custId, contractId, srcContractId, ct) {
         return dataService.post(apiBaseContractUrl + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId, [ct]);
+    }
+    function copyContractPivot(custId, contractId, srcContractId, ct) {
+        return dataService.post(apiBaseContractUrl + 'CopyContractPivot/' + custId + '/' + contractId + '/' + srcContractId, [ct]);
     }
     function readContract(id) {
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
@@ -203,6 +208,9 @@ function objsetService($http, dataService, logger, $q, $location) {
         } else {
             return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         }
+    }
+    function updateContractAndCurPricingTableInBulk(data) {
+        return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTableInBulk", data);
     }
     function readContractStatus(id) {
         return dataService.get(apiBaseContractUrl + 'GetContractStatus/' + id);

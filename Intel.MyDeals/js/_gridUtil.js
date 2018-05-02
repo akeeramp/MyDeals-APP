@@ -1294,6 +1294,8 @@ gridUtils.closeDetails = function () {
 }
 
 gridUtils.showDetails = function (data) {
+    $("#perfDetails").html("");
+
     var rtn = "<div style='border: 1px solid #666666; padding: 6px;'>";
     rtn += "<div class='fr'><i class='intelicon-close-solid closePerf' onClick='gridUtils.closeDetails()'></i></div>";
     rtn += "<div style='font-size: 16px; margin-left: 10px; font-weight: 200;'>Performance Times</div>";

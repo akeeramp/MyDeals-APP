@@ -554,6 +554,7 @@
     <Content Include="app\core\filters\kitCalculatedValues.filter.js" />
     <Content Include="app\core\filters\kitProducts.filter.js" />
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
+    <Content Include="app\shared\services\performanceTestingService.service.js" />
     <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />
     <Content Include="app\shared\services\userPreferences.service.js" />
@@ -562,6 +563,9 @@
     <Content Include="app\tenderManager\partials\tenderManager.html" />
     <Content Include="app\tenderManager\tenderManager.module.js" />
     <Content Include="app\tenderManager\tenderManager.route.js" />
+    <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
+    <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
+    <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
     <Content Include="Content\kendo\2018.R1\Bootstrap\editor.png" />
     <Content Include="Content\kendo\2018.R1\Bootstrap\imagebrowser.png" />
     <Content Include="Content\kendo\2018.R1\Bootstrap\indeterminate.gif" />

@@ -216,6 +216,7 @@ namespace Intel.MyDeals
                 , "~/app/shared/services/customerCalendar.service.js"
                 , "~/app/shared/services/objset.service.js"
                 , "~/app/shared/services/security.service.js"
+                , "~/app/shared/services/performanceTestingService.service.js"
                 , "~/app/shared/services/productSelector.service.js"
                 , "~/app/shared/services/templates.service.js"
                 , "~/app/shared/services/userPreferences.service.js"
@@ -227,6 +228,8 @@ namespace Intel.MyDeals
                 , "~/app/testCases/rules/businessRules.controller.js"
                 , "~/app/testCases/uiControls/uiControls.controller.js"
                 , "~/app/testCases/opMessages/opMessages.controller.js"
+                , "~/app/testCases/performanceTesting/performanceTesting.controller.js"
+                , "~/app/testCases/performanceTesting/performanceTesting.service.js"
                 , "~/app/testCases/suggestProduct/suggestProduct.controller.js"
                 , "~/app/testCases/suggestProduct/suggestProduct.service.js"
                 ));

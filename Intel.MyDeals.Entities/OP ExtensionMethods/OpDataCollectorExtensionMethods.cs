@@ -56,18 +56,18 @@ namespace Intel.MyDeals.Entities
             return de;
         }
 
-        public static void SetAtrb(this OpDataCollector dc, string atrbCd, object val)
+        public static void SetAtrb(this OpDataCollector dc, string atrbCd, object val, string timelineComment = null)
         {
             OpDataElementAtrb de = dc.GetAtrb(atrbCd);
-            if (de != null && (de.AtrbValue == null || val == null || de.AtrbValue.ToString() != val.ToString()))
-            {
-                if (de.AtrbValue != val)
-                {
-                    de.AtrbValue = val;
-                    de.State = OpDataElementState.Modified;
-                }
-            }
+            if (de == null || (de.AtrbValue != null && val != null && de.AtrbValue.ToString() == val.ToString())) return;
+            if (de.AtrbValue == val) return;
 
+            de.AtrbValue = val;
+            de.State = OpDataElementState.Modified;
+            if (!string.IsNullOrEmpty(timelineComment))
+            {
+                dc.AddTimelineComment(timelineComment);
+            }
         }
 
         public static void SetModified(this OpDataCollector dc, string atrbCd)
@@ -189,6 +189,38 @@ namespace Intel.MyDeals.Entities
             }
 
         }
+
+        public static void AddTimelineComment(this OpDataCollector dc, string message)
+        {
+            if (dc == null) return;
+
+            IOpDataElement deComment = (IOpDataElement)dc.GetAtrb(AttributeCodes.SYS_COMMENTS);
+            if (deComment == null)
+            {
+                dc.DataElements.Add(new OpDataElement
+                {
+                    DcID = dc.DcID,
+                    DcType = OpDataElementTypeConverter.StringToId(dc.DcType),
+                    DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType),
+                    DcParentID = dc.DcParentID,
+                    AtrbID = Attributes.SYS_COMMENTS.ATRB_SID,
+                    AtrbValue = message,
+                    OrigAtrbValue = string.Empty,
+                    PrevAtrbValue = string.Empty,
+                    AtrbCd = AttributeCodes.SYS_COMMENTS,
+                    State = OpDataElementState.Modified
+                });
+            }
+            else if (string.IsNullOrEmpty(deComment.AtrbValue.ToString()))
+            {
+                deComment.AtrbValue = message;
+            }
+            else 
+            {
+                deComment.AtrbValue += "/n" + message;
+            }
+        }
+
 
         /// <summary>
         /// Ensure each data collector has the DcAltId set when known, and has an OpDataElement for DEAL_SID.

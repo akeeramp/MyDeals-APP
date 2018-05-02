@@ -14,6 +14,8 @@
             GetProdDealType: GetProdDealType,
             GetProductSelectorWrapper: GetProductSelectorWrapper,
             TranslateProducts: TranslateProducts,
+            TranslateProductsWithMapping: TranslateProductsWithMapping,
+            TranslateProductsWithMappingInBulk: TranslateProductsWithMappingInBulk,
             GetProductDetails: GetProductDetails,
             GetProductSelectionResults: GetProductSelectionResults,
             GetProductSuggestions: GetProductSuggestions,
@@ -29,6 +31,13 @@
 
         function TranslateProducts(products, CUST_CD, DEAL_TYPE, contractId) {
             return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId, products);
+        }
+        function TranslateProductsWithMapping(products, CUST_CD, DEAL_TYPE, contractId, psId, ptId) {
+            return dataService.post(apiBaseUrl + 'TranslateProductsWithMapping/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId + "/" + psId + "/" + ptId, products);
+        }
+
+        function TranslateProductsWithMappingInBulk(data) {
+            return dataService.post(apiBaseUrl + 'TranslateProductsWithMappingInBulk', data);
         }
 
         // This method skips all the translator logic (product split, duplicate and invalid etc etc..) and hits the database

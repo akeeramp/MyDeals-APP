@@ -12,5 +12,8 @@ namespace Intel.MyDeals.Entities
 
         public ProductLookup Data { get; set; }
         public List<PerformanceTime> PerformanceTimes { get; set; }
+        public int ContractId { get; set; }
+        public int PricingStrategyId { get; set; }
+        public int PricingTableId { get; set; }
     }
 }

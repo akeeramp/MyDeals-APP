@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
+using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.MyDeals.Helpers;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -108,6 +112,26 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("CopyContractPivot/{custId}/{contractId}/{srcContractId}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedList CopyContractPivot(int custId, int contractId, int srcContractId, OpDataCollectorFlattenedList contracts)
+        {
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - OpDataCollectorFlattenedDictList")
+            {
+                CustId = custId,
+                ContractId = contractId,
+                CopyFromId = srcContractId,
+                CopyFromObjType = OpDataElementType.CNTRCT
+            });
+
+            return SafeExecutor(() => _contractsLib.SaveContract(contracts, savePacket)
+                .ToHierarchialList(OpDataElementType.CNTRCT)
+                , "Unable to copy the Contract"
+            );
+        }
+
+        [Authorize]
         [Route("SaveFullContract/{custId}/{contractId}")]
         [HttpPost]
         [AntiForgeryValidate]
@@ -191,6 +215,44 @@ namespace Intel.MyDeals.Controllers.API
                 Data = result,
                 PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Contract", contractToken.TimeFlow)
             };
+        }
+
+        [Authorize]
+        [Route("SaveAndValidateAndPublishContractAndPricingTableInBulk")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<OpDataCollectorFlattenedDictListPacket> SaveAndValidateAndPublishContractAndPricingTableInBulk(List<SaveAndValidatePacket> saveAndValidatePackets)
+        {
+            DateTime start = DateTime.Now;
+            List<OpDataCollectorFlattenedDictListPacket> rtn = new List<OpDataCollectorFlattenedDictListPacket>();
+
+            Parallel.ForEach(saveAndValidatePackets, item =>
+            {
+                ContractToken contractToken = new ContractToken("ContractToken Created - SaveAndValidateAndPublishContractAndPricingTable")
+                {
+                    CustId = item.custId,
+                    ContractId = item.contractId
+                };
+
+                OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(contractToken, item.contractAndPricingTable, forceValidation: true, forcePublish: true)
+                    , "Unable to save the Contract"
+                );
+
+
+                lock (rtn)
+                { // lock the list to avoid race conditions
+                    rtn.Add(new OpDataCollectorFlattenedDictListPacket
+                    {
+                        Data = result,
+                        cId = item.contractId,
+                        psId = item.psId,
+                        ptId = item.ptId,
+                        PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Contract", contractToken.TimeFlow)
+                    });
+                }
+            });
+
+            return rtn;
         }
 
         [Authorize]

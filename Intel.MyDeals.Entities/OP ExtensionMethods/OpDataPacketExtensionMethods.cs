@@ -123,6 +123,10 @@ namespace Intel.MyDeals.Entities
             if (!dealIds.Any()) return;
 
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 60));
+            foreach (OpDataCollector dc in packet.AllDataCollectors.Where(d => dealIds.Contains(d.DcID)))
+            {
+                dc.AddTimelineComment("Tracker number(s) generated");
+            }
         }
 
         public static void AddQuoteLetterActions(this OpDataPacket<OpDataElementType> packet, List<int> dealIds)
@@ -130,6 +134,10 @@ namespace Intel.MyDeals.Entities
             if (!dealIds.Any()) return;
 
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
+            foreach (OpDataCollector dc in packet.AllDataCollectors.Where(d => dealIds.Contains(d.DcID)))
+            {
+                dc.AddTimelineComment("Quote letter generated");
+            }
         }
 
 

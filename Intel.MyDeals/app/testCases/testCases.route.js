@@ -80,6 +80,14 @@
                     url: 'suggestProduct',
                     controller: 'suggestProductController'
                 }
+            },
+            {
+                state: 'testCases.performanceTesting',
+                config: {
+                    templateUrl: 'app/testCases/performanceTesting/performanceTesting.manage.html',
+                    url: 'performanceTesting',
+                    controller: 'performanceTestingController'
+                }
             }
         ];
     }

@@ -94,6 +94,7 @@
     <Compile Include="OverlappingListPacket.cs" />
     <Compile Include="PerformanceTime.cs" />
     <Compile Include="ProductLookupPacket.cs" />
+    <Compile Include="ProductTranslatePacket.cs" />
     <Compile Include="QuoteLetterSave.cs" />
     <Compile Include="QuoteLetterFile.cs" />
     <Compile Include="QuoteLetterData.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="ProductSelectorDrillDownLevels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailPullData.cs" />
+    <Compile Include="SaveAndValidatePacket.cs" />
     <Compile Include="SavePacket.cs" />
     <Compile Include="SearchFilter.cs" />
     <Compile Include="SearchPacket.cs" />

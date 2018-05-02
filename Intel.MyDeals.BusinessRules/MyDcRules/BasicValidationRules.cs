@@ -574,7 +574,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
+                {
+                    Title="Add Timeline Comments for New Items",
+                    ActionRule = MyDcActions.NewObjTimeLineComment,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
                 }
+
             };
         }
     }

@@ -121,7 +121,6 @@ namespace Intel.MyDeals.BusinessLogic
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             List<int> psGoingActive = new List<int>();
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
-            int wwid = OpUserStack.MyOpUserToken.Usr.WWID;
             List<int> auditableDealIds = new List<int>();
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
@@ -135,7 +134,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.PASSED_VALIDATION.ATRB_SID,
-                Attributes.HAS_L1.ATRB_SID
+                Attributes.HAS_L1.ATRB_SID,
+                Attributes.SYS_COMMENTS.ATRB_SID
             };
 
             Dictionary<int, string> id2actnMapping = new Dictionary<int, string>();
@@ -236,6 +236,7 @@ namespace Intel.MyDeals.BusinessLogic
                     ExtraDetails = dc.DcType,
                     KeyIdentifiers = new[] { dc.DcID }
                 });
+                dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
 
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item

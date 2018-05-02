@@ -1,0 +1,458 @@
+﻿<div class="alert alert-dismissable alert-warning" ng-show="populatingProducts">
+    <i class="alert-icon intelicon-alert-outlined"></i>
+    <p class="alert-text">Looks like the Product cache has not been populated.  I am populating it now and it could take a couple of minutes.  This message will close when the products are populated.</p>
+</div>
+
+<div style="margin-bottom: 20px;" class="perfContainer">
+
+    <div class="row wizard" style="margin-top: 15px;">
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel first complete" id="step1"><span class="badge wizard-step">1</span></div>
+            <div class="wizard-step-text">
+                <h4>Setup</h4>
+                <p>Define performance test</p>
+            </div>
+        </div>
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel" id="step2"><span class="badge wizard-step">2</span></div>
+            <div class="wizard-step-text">
+                <h4>Initialize</h4>
+                <p>Copy and Stage all contracts</p>
+            </div>
+        </div>
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel" id="step3"><span class="badge wizard-step">3</span></div>
+            <div class="wizard-step-text">
+                <h4>Save & Validate</h4>
+                <p>Perform the actual test</p>
+            </div>
+        </div>
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel last" id="step4"><span class="badge wizard-step">4</span></div>
+            <div class="wizard-step-text">
+                <h4>Results</h4>
+                <p>View detailed results</p>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div class="bs-callout bs-callout-info container-step1">
+        <h4><span class="lght">Performance Testing:</span> <span ng-bind="pageTitle"></span></h4>
+        <p style="margin-bottom: 20px;" ng-bind="pageDesc"></p>
+        
+        <form class="ng-pristine ng-valid" id="performanceForm">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6">
+                        
+                        <div class="form-group" id="fgTestRunName">
+                            <label for="testRunName">Performance Test Name</label><span ng-show="errTestRunName" class="err-msg"><i class="intelicon-alert-solid"></i> {{errTestRunName}}</span>
+                            <input class="form-control" id="testRunName" type="text" ng-model="testRunName" placeholder="Name of the Performance Test">
+                        </div>
+
+                        <div class="form-group" id="fgContract">
+                            <label for="contractIds">Test Contract Ids</label><span ng-show="errContracts" class="err-msg"><i class="intelicon-alert-solid"></i> {{errContracts}}</span>
+                            <input class="form-control" id="contractIds" type="text" ng-model="contractIds" placeholder="Contract Ids">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date Range</label> <span ng-show="errDateRange" class="err-msg"><i class="intelicon-alert-solid"></i> {{errDateRange}}</span>
+                            <div>
+                                <input kendo-date-picker
+                                       ng-model="startDate"
+                                       k-ng-model="startDtObject"
+                                       style="width: 110px;" />
+                                <span style="margin: 0 5px;">-</span>
+                                <input kendo-date-picker
+                                       ng-model="endDate"
+                                       k-ng-model="endDtObject"
+                                       style="width: 110px;" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numThreads">Number of Threads/Saves</label><span ng-show="errThreads" class="err-msg"><i class="intelicon-alert-solid"></i> {{errThreads}}</span>
+                            <div class="clearboth"></div>
+                            <div class="fl" kendo-slider k-min="0" k-max="100" k-ng-model="numThreads" k-small-step="1" k-large-step="25" style="width: calc(100% - 150px) !important; margin-top: 4px; margin-right: 10px;"></div>
+                            <input class="fl" id="numThreads" kendo-numeric-text-box k-options="threadOption" k-ng-model="numThreads" style="width: 100px;" />
+                            <div class="clearboth"></div>
+                        </div>
+
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6">
+
+                        <div class="form-group">
+                            <label>Default Customer</label><span ng-show="errDefCust" class="err-msg"><i class="intelicon-alert-solid"></i> {{errDefCust}}</span>
+                            <div>
+                                <select kendo-drop-down-list
+                                        k-data-text-field="'CUST_NM'"
+                                        k-data-value-field="'CUST_SID'"
+                                        k-filter="'contains'"
+                                        k-auto-bind="true"
+                                        k-value-primitive="true"
+                                        k-ng-model="defCustId"
+                                        k-data-source="customersDataSource"
+                                        style="width: 250px; margin-right: 7px;"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Customers</label>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="isMultipleCustomers"> Emulate multiple customers?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" ng-show="isMultipleCustomers" style="margin-left: 20px;">
+                            <div class="panel-body">
+                                <table>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <div ng-show="errCusts" class="err-msg" style="margin-left: 0; margin-bottom: 5px;"><i class="intelicon-alert-solid"></i> {{errCusts}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 130px;">
+                                            <label title="{{showCustomers()}}">Customers: <i class="intelicon-find-a-person-solid" style="font-size: 18px;"></i></label>
+                                        </td>
+                                        <td>
+                                            <select kendo-multi-select
+                                                    k-data-text-field="'CUST_NM'"
+                                                    k-data-value-field="'CUST_SID'"
+                                                    k-filter="'contains'"
+                                                    k-auto-bind="true"
+                                                    k-tag-mode="'single'"
+                                                    k-value-primitive="true"
+                                                    k-ng-model="customers"
+                                                    k-auto-close="false"
+                                                    k-data-source="customersDataSource"
+                                                    style="width: 250px; margin-right: 7px;"></select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Parallel Processing</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="threadMode" value="natural" ng-model="threadMode">
+                                    Natural - This will use the browser's natural TCP limitations
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="threadMode" value="emulate" ng-model="threadMode">
+                                    Emulate - This will use a single API to bypass TCP limitations
+                                </label>
+                            </div>
+                        </div>
+
+                        <!--
+                        <div class="form-group">
+                            <label>Users</label>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="isMultipleUsers"> Emulate multiple users?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" ng-show="isMultipleUsers" style="margin-left: 20px;">
+                            <div class="panel-body">
+                                <table>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <div ng-show="errUsers" class="err-msg" style="margin-left: 0; margin-bottom: 5px;"><i class="intelicon-alert-solid"></i> {{errUsers}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 80px;">
+                                            <label title="{{showUsers()}}">Users: <i class="intelicon-find-a-person-solid" style="font-size: 18px;"></i></label>
+                                        </td>
+                                        <td>
+                                            <select kendo-multi-select k-options="selectUserOptions" k-ng-model="users" style="width: 325px; margin-right: 7px; max-height: 110px; overflow: auto;"></select>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="padding-left: 80px; margin-top: 5px">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Role Filter">
+                                        <button ng-repeat="item in roles"
+                                                class="btn btn-default"
+                                                ng-class="{'btn-skyblue': applyRoleClass(item)}"
+                                                ng-click="selectRole(item)"
+                                                type="button">
+                                            {{item}}
+                                        </button>
+                                    </div>
+                                    <div style="font-size: 11px; line-height: 1.5em;"><i class="intelicon-filter-solid"></i> Filter by Role</div>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary" ng-click="gotoInit()">Start The Test <i class="intelicon-arrow-forward-right"></i></button>
+            </div>
+        </form>
+
+
+    </div>
+
+
+    <div class="bs-callout bs-callout-info container-step2" style="display: none;">
+        <h4><span class="lght">Performance Testing:</span> <span ng-bind="pageTitle"></span></h4>
+        <p style="margin-bottom: 20px;" ng-bind="pageDesc"></p>
+        
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Source #</th>
+                    <th>Copy Status</th>
+                    <th style="width: 80px;">Contract #</th>
+                    <th style="width: 80px;"># of PS</th>
+                    <th style="width: 80px;"># of PT</th>
+                    <th style="width: 80px;"># of PTR</th>
+                    <th>Product Validation Progress</th>
+                    <th>Save & Validate Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="contract in workingContracts">
+                    <td>{{contract.id}}</td>
+                    <td>
+                        <span ng-show="contract.running"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="font-size: 14px;"></i></span>
+                        <span ng-bind-html="contract.status"></span>
+                    </td>
+                    <td>{{contract.cntrctId}}</td>
+                    <td>{{contract.numPS}}</td>
+                    <td>{{contract.numPT}}</td>
+                    <td>{{contract.numPTR}}</td>
+                    <td>
+                        <div ng-repeat="ps in contract.data.PRC_ST">
+                            
+                            <div style="line-height: 0.3em; font-size: 12px; margin-top: 4px;">
+                                <span ng-show="ps.prdRunning"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="font-size: 14px;"></i></span>
+                                Pricing Strategy {{ps.DC_ID}} 
+                                <span>{{ps.prdRunTime}}</span>
+                            </div>
+                            <div kendo-progress-bar="progressBar" k-type="'chunk'" k-chunk-count="ps.maxProgress" k-min="0" k-max="ps.maxProgress" ng-model="ps.prdProgress" style="width: 200px; height: 10px;"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div ng-repeat="ps in contract.data.PRC_ST">
+                            <div style="line-height: 0.3em; font-size: 12px; margin-top: 4px;">
+                                <span ng-show="ps.saveRunning"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="font-size: 14px;"></i></span>
+                                Pricing Strategy {{ps.DC_ID}}
+                                <span>{{ps.saveRunTime}}</span>
+                            </div>
+                            <div kendo-progress-bar="progressBar" k-type="'chunk'" k-chunk-count="ps.maxProgress" k-min="0" k-max="ps.maxProgress" ng-model="ps.saveProgress" style="width: 200px; height: 10px;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button ng-show="testingDone" class="btn btn-default" ng-click="gotoSetup()" style="margin-right: 10px;"><i class="intelicon-arrow-back-left"></i> Start Over</button>
+        
+        <button ng-show="testingDone" class="btn btn-primary" ng-click="gotoResults()">View the results <i class="intelicon-arrow-forward-right"></i></button>
+
+    </div>
+
+
+    <div class="bs-callout bs-callout-info container-step3" style="display: none;">
+        <h4><span class="lght">Performance Testing:</span> <span ng-bind="pageTitle"></span></h4>
+        <p style="margin-bottom: 20px;" ng-bind="pageDesc"></p>
+
+        <button class="btn btn-default" ng-click="gotoResults()">Initialize Contracts <i class="intelicon-arrow-forward-right"></i></button>
+
+    </div>
+
+
+    <div class="bs-callout bs-callout-info container-step4" style="display: none;">
+        <h4><span class="lght">Performance Testing:</span> <span ng-bind="pageTitle"></span></h4>
+        <p style="margin-bottom: 20px;" ng-bind-html="pageDesc"></p>
+        
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Contract #</th>
+                    <th style="width: 60px;">PS #</th>
+                    <th style="width: 60px;">PT #</th>
+                    <th>Product Validation Results</th>
+                    <th>Save & Validate Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="result in testingResults">
+                    <td>{{result.cId}}</td>
+                    <td>{{result.psId}}</td>
+                    <td>{{result.ptId}}</td>
+                    <td>
+                        <div class="perfContainer">
+                            <div id="perfMs_prd_{{result.cId}}_{{result.psId}}_{{result.ptId}}" class="perfMs"></div>
+                            <div>
+                                <div id="perfChart_prd_{{result.cId}}_{{result.psId}}_{{result.ptId}}" style="height: 40px; padding: 0; width: 100px;"></div>
+                            </div>
+                            <div id="perfLegend_prd_{{result.cId}}_{{result.psId}}_{{result.ptId}}" class="perfLegend"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="perfContainer">
+                            <div id="perfMs_save_{{result.cId}}_{{result.psId}}_{{result.ptId}}" class="perfMs"></div>
+                            <div>
+                                <div id="perfChart_save_{{result.cId}}_{{result.psId}}_{{result.ptId}}" style="height: 40px; padding: 0; width: 100px;"></div>
+                            </div>
+                            <div id="perfLegend_save_{{result.cId}}_{{result.psId}}_{{result.ptId}}" class="perfLegend"></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div id="perfDetails"></div>
+        
+
+        <button class="btn btn-default" ng-click="gotoSetup()"><i class="intelicon-arrow-back-left"></i> Start Over</button>
+
+    </div>
+    
+    <div ng-show="testingDone">
+        Total testing time: <span ng-bind="testingLapseTime"></span>s
+    </div>
+
+</div>
+
+
+<style>
+    .lght {
+        font-weight: 200;
+        color: #0071C5;
+    }
+    .bs-callout p {
+        color: #999999;
+    }
+     .perfContainer {
+         font-size: 13px;
+     }
+    .btn-skyblue, .btn-skyblue:hover, .btn-skyblue:focus, .btn-skyblue.focus {
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+    .smTxt {
+        font-size: 10px;
+        line-height: 1em;
+    }
+    .tmpltItem {
+        width: 100%;
+    }
+    .tmpltIcn {
+        width: 35px;
+    }
+    .tmpltIcn i {
+        font-size: 26px;
+    }
+    .tmpltContract {
+    }
+    .tmpltRole {
+        font-size: 12px;
+    }
+    .tmpltPrimary {
+        font-size: 14px;
+        line-height: 1.1em;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .err-msg {
+        background-color: #FC4C02;
+        color: #ffffff;
+        border-radius: 4px;
+        padding: 2px 6px;
+        margin-left: 15px;
+    }
+
+    .k-progressbar .k-item {
+        border: 1px solid #dddddd;
+    }
+    .k-progressbar-horizontal .k-item.k-last {
+        border-right-width: 1px;
+    }
+
+    .perfContainer {
+        padding: 0 10px;
+        margin-top: -10px;
+    }
+
+    .perfMs .showMore {
+        display: none;
+    }
+    .perfMs {
+        color: #000000; 
+        font-family: verdana;
+        font-size: 10px; 
+        margin-top: 5px; 
+        z-index: 1000;
+        position: relative;
+        margin-bottom: -10px;
+    }
+    .perfLegend {
+        font-family: verdana;
+        font-size: 9px;
+        z-index: 1000;
+        color: #666666;
+        position: relative;
+        margin-top: -15px;
+    }
+    #perfDetails {
+        font-family: verdana;
+        font-size: 10px;
+        z-index: 1000;
+        background-color: #ffffff;
+    }
+    #perfDetails th {
+        padding: 2px 4px;
+        color: #0071C5;
+    }
+    #perfDetails td {
+        padding: 2px 4px;
+        color: #333333;
+    }
+    .closePerf {
+        color: #cccccc;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .closePerf:hover {
+        color: #FC4C02;
+    }
+    .legKey {
+        width: 10px;
+        height: 10px;
+        border: 1px solid #bebebe;
+    }
+    .legData {
+        margin-left: 4px;
+        margin-right: 10px;
+        margin-top: -2px;
+    }
+    .showMore {
+        font-size: 18px;
+        color: #00AEEF;
+        cursor: pointer;
+    }
+    .showMore:hover {
+        color: #0071C5;
+    }
+
+</style>

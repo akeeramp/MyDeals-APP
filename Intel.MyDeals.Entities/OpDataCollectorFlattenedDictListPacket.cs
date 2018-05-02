@@ -12,5 +12,9 @@ namespace Intel.MyDeals.Entities
 
         public OpDataCollectorFlattenedDictList Data { get; set; }
         public List<PerformanceTime> PerformanceTimes { get; set; }
+        public int cId { get; set; }
+        public int psId { get; set; }
+        public int ptId { get; set; }
+
     }
 }

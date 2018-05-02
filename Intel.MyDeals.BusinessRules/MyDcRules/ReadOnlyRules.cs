@@ -314,6 +314,23 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Readonly ALWAYS",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[]
+                            {
+                                AttributeCodes.SYS_COMMENTS
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Readonly PTR ALWAYS",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},

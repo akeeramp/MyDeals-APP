@@ -437,6 +437,31 @@ namespace Intel.MyDeals.BusinessRules
             deGeo?.CheckGeos(r.ExtraArgs);
         }
 
+        public static void NewObjTimeLineComment(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            if (r.Dc.DcID >= 0) return;
+
+            OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
+            string title = string.Empty;
+            switch (deType)
+            {
+                case OpDataElementType.CNTRCT:
+                case OpDataElementType.PRC_ST:
+                case OpDataElementType.PRC_TBL:
+                    title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
+                    break;
+                case OpDataElementType.PRC_TBL_ROW:
+                    title = r.Dc.GetDataElementValue(AttributeCodes.PTR_USER_PRD).Replace(",", ", ");
+                    break;
+                case OpDataElementType.WIP_DEAL:
+                    title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
+                    break;
+            }
+            r.Dc.AddTimelineComment($"Created {deType.ToDesc()}: {title}");
+        }
+
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -841,12 +866,12 @@ namespace Intel.MyDeals.BusinessRules
 
             if (dcEn > DateTime.Now.Date && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
-                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");
+                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0", "Deal is no longer expired");
             }
 
             if (dcEn < DateTime.Now.Date && (isExpired == "0" || isExpired == "")) // If there is an expired flag, reset it if it is set
             {
-                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "1");
+                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "1", "Deal is now expired");
             }
         }
 
@@ -907,28 +932,25 @@ namespace Intel.MyDeals.BusinessRules
 
             // TO DO: Fix this later
 
-            //var reason = "Redeal due to major change: \n";
-            //if (r.Dc.DcID > 0)
-            //{
-            //    foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes))
-            //    {
-            //        MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
-            //        if (atrb.DATA_TYPE_CD == "DATETIME")
-            //        {
-            //            reason += $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy} \n";
-            //        }
-            //        else
-            //        {
-            //            reason += $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue} \n";
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    reason += "New deal/s have been added to this strategy.";
-            //}
+            var reason = "Redeal due to major change: \n";
+            if (r.Dc.DcID > 0)
+            {
+                foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes).Union(changedDecreaseDes))
+                {
+                    MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                    if (atrb == null) continue;
+                    if (atrb.DATA_TYPE_CD == "DATETIME")
+                    {
+                        reason += $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy} \n";
+                    }
+                    else
+                    {
+                        reason += $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue} \n";
+                    }
+                }
+                r.Dc.AddTimelineComment(reason);
+            }
 
-            //myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.ADD_TO_TIMELINE, reason, 30));
 
             // NOTE: We need to set the WIP and the PS stage
             // WIP always is "Draft" and PS depends on the users workflow
@@ -967,15 +989,17 @@ namespace Intel.MyDeals.BusinessRules
                         : WorkFlowStages.Draft;
                 }
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
-                OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
+                int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL) 
+                    ? myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID].DcParentID
+                    : myDealsData[OpDataElementType.PRC_ST].Data.FirstOrDefault().Value.DcID;
                 if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
                 {
                     myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
-                        new List<int> { dcTbl.DcParentID },
+                        new List<int> { dcPs },
                         new List<OpDataElementType> { OpDataElementType.PRC_ST },
                         new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
                 }
-                OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
+                OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcPs];
                 dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
             }
 
@@ -983,7 +1007,7 @@ namespace Intel.MyDeals.BusinessRules
             string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
             if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
-                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");
+                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0", "Deal is no longer expired");
             }
         }
 

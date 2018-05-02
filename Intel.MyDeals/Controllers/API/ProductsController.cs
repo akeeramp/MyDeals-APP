@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Intel.MyDeals.DataLibrary;
 
@@ -36,6 +37,15 @@ namespace Intel.MyDeals.Controllers.API
                 OpLogPerf.Log(ex);
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
+        }
+
+        [Authorize]
+        [Route("GetFirstProduct")]
+        public Product GetFirstProduct()
+        {
+            return SafeExecutor(() => _productsLib.GetProducts().FirstOrDefault()
+                , $"GetFirstProduct failed"
+            );
         }
 
         [Authorize]
@@ -372,6 +382,72 @@ namespace Intel.MyDeals.Controllers.API
                 Data = result,
                 PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Translation of Products", contractToken.TimeFlow)
             };
+        }
+
+        [Route("TranslateProductsWithMapping/{CUST_MBR_SID}/{DEAL_TYPE}/{contractId}/{pricingStrategyId}/{pricingTableId}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public ProductLookupPacket TranslateProductsWithMapping(List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId, int pricingStrategyId, int pricingTableId)
+        {
+            DateTime start = DateTime.Now;
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+            {
+                CustId = CUST_MBR_SID,
+                ContractId = contractId
+            };
+
+            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, usrData, CUST_MBR_SID, DEAL_TYPE)
+                , $"Unable to translate products"
+            );
+
+            return new ProductLookupPacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Translation of Products", contractToken.TimeFlow),
+                ContractId = contractId,
+                PricingStrategyId = pricingStrategyId,
+                PricingTableId = pricingTableId
+            };
+        }
+
+        [Route("TranslateProductsWithMappingInBulk")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<ProductLookupPacket> TranslateProductsWithMappingInBulk(List<ProductTranslatePacket> data)
+        {
+            List<ProductLookupPacket> rtn = new List<ProductLookupPacket>();
+
+            //List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId, int pricingStrategyId, int pricingTableId
+            DateTime start = DateTime.Now;
+
+            Parallel.ForEach(data, item =>
+            {
+                ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+                {
+                    CustId = item.CUST_MBR_SID,
+                    ContractId = item.contractId
+                };
+
+                ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, item.usrData, item.CUST_MBR_SID, item.DEAL_TYPE)
+                    , $"Unable to translate products"
+                );
+
+
+                lock (rtn)
+                { // lock the list to avoid race conditions
+                    rtn.Add(new ProductLookupPacket
+                    {
+                        Data = result,
+                        PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Translation of Products", contractToken.TimeFlow),
+                        ContractId = item.contractId,
+                        PricingStrategyId = item.pricingStrategyId,
+                        PricingTableId = item.pricingTableId
+                    });
+                }
+            });
+
+            return rtn;
         }
 
         /// <summary>
