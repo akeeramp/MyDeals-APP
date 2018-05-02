@@ -127,6 +127,16 @@ namespace Intel.MyDeals.Entities
             {
                 dc.AddTimelineComment("Tracker number(s) generated");
             }
+
+            if (packet.PacketType == OpDataElementType.WIP_DEAL) packet.ResetRedealFlagsOnActive(dealIds);
+        }
+
+        public static void ResetRedealFlagsOnActive(this OpDataPacket<OpDataElementType> packet, List<int> dealIds)
+        {
+            foreach (IOpDataCollector dc in packet.AllDataCollectors.Where(c => dealIds.Contains(c.DcID)))
+            {
+                dc.SetDataElementValue(AttributeCodes.IN_REDEAL, 0);
+            }
         }
 
         public static void AddQuoteLetterActions(this OpDataPacket<OpDataElementType> packet, List<int> dealIds)

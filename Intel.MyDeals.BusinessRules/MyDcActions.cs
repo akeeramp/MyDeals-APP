@@ -967,6 +967,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
             {
+                bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date.ToString("MM/dd/yyyy"));
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
@@ -975,7 +976,32 @@ namespace Intel.MyDeals.BusinessRules
                     if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
                     {
                         de.AtrbValue = tracker + "*";
+                        setRedealFlag = true; // If there is a tracker change, this is hard redeal and subject to rollback
                     }
+                }
+
+                // If this is a hard rollback, set it so that Cancel/delete/rollback flags can be set in UI.  Rollup will set parents as needed.  Tenders in Offer will not have
+                // tracker and will be cancel in redeal states since the no longer have a level 6 object tied to them until they actually win.
+                IOpDataElement rde = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL); 
+                if (rde != null)
+                {
+                    rde.AtrbValue = setRedealFlag? 1: 0;
+                }
+                else // Safety in case for some reason we don't have an attribute - shouldn't hit this code though.
+                {
+                    r.Dc.DataElements.Add(new OpDataElement
+                    {
+                        DcID = r.Dc.DcID,
+                        DcType = OpDataElementTypeConverter.StringToId(r.Dc.DcType),
+                        DcParentType = OpDataElementTypeConverter.StringToId(r.Dc.DcParentType),
+                        DcParentID = r.Dc.DcParentID,
+                        AtrbID = 5,
+                        AtrbValue = setRedealFlag ? 1 : 0,
+                        OrigAtrbValue = !setRedealFlag ? 1 : 0,
+                        PrevAtrbValue = !setRedealFlag ? 1 : 0,
+                        AtrbCd = "IN_REDEAL",
+                        State = OpDataElementState.Modified
+                    });
                 }
             }
 
