@@ -72,7 +72,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                 width: "160px"
             }, {
                 field: "CAP",
-                title: "CAP",
+                title: "CAP-YCP1",
                 width: "110px",
                 hidden: !showDealProducts,
                 template: function (dataItem) {
