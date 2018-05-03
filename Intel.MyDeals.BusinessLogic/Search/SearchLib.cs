@@ -218,7 +218,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="data">SearchParams: Start/End Date, Search Text and Search conditions</param>
         /// <returns></returns>
-        public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, MyRulesTrigger? rulesTrigger)
+        public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, bool useCustSecurity, MyRulesTrigger? rulesTrigger)
         {
             List<SearchFilter> customSearchOption = customSearchOptionUserPref == null 
                 ? new List<SearchFilter>()
@@ -389,8 +389,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.VOLUME.ATRB_SID,
                 Attributes.WF_STG_CD.ATRB_SID
             },
-            new List<string> (),
+            new List<string> { SearchTools.BuildCustSecurityWhere() },
             new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
+            true,
             MyRulesTrigger.OnDealListLoad);
         }
 
@@ -434,6 +435,7 @@ namespace Intel.MyDeals.BusinessLogic
             },
             new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" + actvstr },
             null,
+            false,
             MyRulesTrigger.OnDealListLoad);
         }
 
@@ -456,13 +458,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (int.TryParse(data.StrSearch, out dcIdNum))
             {
-                whereClause = $"{deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
+                whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%')";
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }
             else
             {
-                whereClause = $"{deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
+                whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }

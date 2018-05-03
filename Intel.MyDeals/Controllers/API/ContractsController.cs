@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -43,9 +45,16 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUpperContract/{id}")]
         public OpDataCollectorFlattenedList GetUpperContract(int id)
         {
-            return SafeExecutor(() => _contractsLib.GetUpperContract(id)
+            OpDataCollectorFlattenedList rtn = SafeExecutor(() => _contractsLib.GetUpperContract(id)
                 , $"Unable to get Contract {id}"
             );
+
+            int custId = !rtn.Any() || rtn[0]["CUST_MBR_SID"] == null || rtn[0]["CUST_MBR_SID"].ToString() == string.Empty ? 0 : int.Parse(rtn[0]["CUST_MBR_SID"].ToString());
+            if (custId == 0 || DataCollections.GetMyCustomers().CustomerInfo.All(c => c.CUST_SID != custId))
+            {
+                return new OpDataCollectorFlattenedList();
+            }
+            return rtn;
         }
 
         [Authorize]

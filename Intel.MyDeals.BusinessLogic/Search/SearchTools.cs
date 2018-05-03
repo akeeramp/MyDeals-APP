@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -125,6 +126,12 @@ namespace Intel.MyDeals.BusinessLogic
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
 
             return rtn;
+        }
+
+        public static string BuildCustSecurityWhere()
+        {
+            string custIds = string.Join(",", DataCollections.GetMyCustomers().CustomerInfo.Select(s => s.CUST_SID));
+            return $"pst.CUST_MBR_SID IN ({custIds})";
         }
     }
 }
