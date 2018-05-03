@@ -113,10 +113,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // scroll left nav into view
             $timeout(function () {
                 if ($("#lnavPt_" + $scope.curPricingTableId).position() !== undefined) {
-                    var distance = $("#lnavPt_" + $scope.curPricingTableId).position().top;
-                    $("#lnavContainer").animate({
-                        scrollTop: distance
-                    }, 2000);
+                    document.getElementById("lnavPt_" + $scope.curPricingTableId).scrollIntoView({ block: 'end', behavior: 'smooth' });
                 }
             }, 2000);
         }
