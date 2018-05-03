@@ -334,6 +334,9 @@
                                 "DC_ID": {
                                     "Groups": ["Grouping Exclusions"]
                                 },
+                                "DEAL_DESC": {
+                                    "Groups": ["Grouping Exclusions"]
+                                },
                                 "DEAL_GRP_EXCLDS": {
                                     "Groups": ["Grouping Exclusions"]
                                 },
@@ -368,9 +371,6 @@
                                     "Groups": ["Grouping Exclusions"]
                                 },
                                 "MAX_RPU": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "DEAL_DESC": {
                                     "Groups": ["Grouping Exclusions"]
                                 },
                                 "CONSUMPTION_REASON": {
