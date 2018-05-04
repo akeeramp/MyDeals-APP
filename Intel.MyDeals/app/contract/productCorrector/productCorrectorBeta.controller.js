@@ -796,7 +796,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             var message = 'Found duplicate product for ' + item.HIER_VAL_NM + ', would you like to remove one ?';
             kendo.confirm(message)
                 .then(function () {
-                    debugger;
                     vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup] = vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup].filter(function (prod) {
                         return prod.PRD_MBR_SID !== item.PRD_MBR_SID;
                     });
@@ -1135,6 +1134,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         vm.curRowProds = [];
         GetProductCorrectorData.AutoValidatedProducts = util.deepClone(GetProductCorrectorData.ValidProducts);
         GetProductCorrectorData['AbortProgration'] = true;
+
         $uibModalInstance.close(GetProductCorrectorData);
     }
 
