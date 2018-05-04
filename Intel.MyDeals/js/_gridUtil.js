@@ -1315,8 +1315,18 @@ gridUtils.showDetails = function (data) {
     $("#perfDetails").html(rtn);
 }
 
+gridUtils.stripMilliseconds = function (dateTimeStr) {
+    // Strip milliseconds from the date/time str, since it is problematic for Internet Explorer.
+    // Assuming str looks something like this:
+    //      5/3/2018 5:10:10.20
+    // the ".20" will be stripped.
+    idx = dateTimeStr.search(/\.\d+$/)
+    if (idx != -1) {
+        return dateTimeStr.substring(0, idx);
+    }
 
-
+    return dateTimeStr;
+}
 
 function gridTools(model, cols) {
     this.model = model;

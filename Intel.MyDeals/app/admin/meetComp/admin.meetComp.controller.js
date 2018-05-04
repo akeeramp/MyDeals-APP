@@ -528,7 +528,7 @@
                     { field: "CRE_EMP_NM", title: "Created By", width: "11%", filterable: { multi: true, search: true }, groupable: false },
                     {
                         field: "CRE_DTM", title: "Created Date", width: "11%", type: "date",
-                        template: "#= kendo.toString(new Date(CRE_DTM), 'M/d/yyyy') #",
+                        template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CRE_DTM)), 'M/d/yyyy') #",
                         filterable: {
                             extra: false,
                             ui: "datepicker"
@@ -538,7 +538,7 @@
                     { field: "CHG_EMP_NM", title: "Last Modified By", width: "11%", filterable: { multi: true, search: true }, groupable: false },
                     {
                         field: "CHG_DTM", title: "Last Modified Date", width: "11%", type: "date",
-                        template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #",
+                        template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
                         filterable: {
                             extra: false,
                             ui: "datepicker"

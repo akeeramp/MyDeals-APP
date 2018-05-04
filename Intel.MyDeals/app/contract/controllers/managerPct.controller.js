@@ -777,7 +777,7 @@
                 field: "LAST_COST_TEST_RUN",
                 title: "Time / Date Last Cost Ran",
                 width: "160px",
-                template: "<span ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'>#= kendo.toString(new Date(LAST_COST_TEST_RUN), 'M/d/yyyy HH:mm:ss') #</span>",
+                template: "<span ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'>#= kendo.toString(new Date(gridUtils.stripMilliseconds(LAST_COST_TEST_RUN)), 'M/d/yyyy HH:mm:ss') #</span>",
                 parent: false,
                 filterable: { multi: true, search: true },
             },
