@@ -817,7 +817,10 @@ namespace Intel.MyDeals.DataLibrary
 
             // The table name must match 1:1 to the import table name...
             dt.TableName = TableName.MYDL_CL_WIP_ATRB_TMP;
-            List<string> varMaxAtrbs = new List<string> { AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD };
+
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            List<string> varMaxAtrbs = atrbMstr.All.Where(a => a.ATRB_MAX_LEN == -1).Select(a => a.ATRB_COL_NM).ToList();
+            //new List<string> { AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD, AttributeCodes.SYS_COMMENTS, AttributeCodes.NOTES };
 
             #region Get Ordinal Indexes
             int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.BTCH_ID, typeof(Guid)).Ordinal;

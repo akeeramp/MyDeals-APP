@@ -211,13 +211,13 @@ namespace Intel.MyDeals.Entities
                     State = OpDataElementState.Modified
                 });
             }
-            else if (string.IsNullOrEmpty(deComment.AtrbValue.ToString()))
+            else if (string.IsNullOrEmpty(deComment.AtrbValue.ToString()) || deComment.AtrbValue.ToString() == deComment.OrigAtrbValue.ToString())
             {
                 deComment.AtrbValue = message;
             }
-            else 
+            else if (deComment.AtrbValue.ToString().IndexOf(message, StringComparison.Ordinal) < 0)
             {
-                deComment.AtrbValue += "/n" + message;
+                deComment.AtrbValue += "; " + message;
             }
         }
 

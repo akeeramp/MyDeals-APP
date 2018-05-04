@@ -214,8 +214,15 @@ namespace Intel.MyDeals.BusinessRules
 				//			Args = new object[] {"{0} must be positive"},
 				//		}
 				//	}
-				//},
+				//}, 
 				new MyOpRule
+                {
+                    Title="Check for Atrb Changes for TimeLine",
+                    ActionRule = MyDcActions.TimelineAtrbChangeCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+                },
+                new MyOpRule
                 {
                     Title="Check for Major Changes",
                     ActionRule = MyDcActions.MajorChangeCheck,

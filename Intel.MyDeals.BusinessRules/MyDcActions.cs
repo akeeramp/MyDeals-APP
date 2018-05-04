@@ -899,6 +899,29 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void TimelineAtrbChangeCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> atrbs = new List<string> {AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD};
+
+            List<IOpDataElement> des = r.Dc.GetDataElementsIn(atrbs).Where(d => d.State != OpDataElementState.Unchanged).ToList();
+            if (!des.Any()) return;
+
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+
+            foreach (IOpDataElement de in des)
+            {
+                if (de.AtrbValue.ToString() == de.OrigAtrbValue.ToString()) continue;
+
+                MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                if (atrb == null) continue;
+
+                r.Dc.AddTimelineComment($"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+            }
+        }
+
         public static void MajorChangeCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -932,23 +955,20 @@ namespace Intel.MyDeals.BusinessRules
 
             // TO DO: Fix this later
 
-            var reason = "Redeal due to major change: \n";
+            var reason = "Redeal due to major change: ";
+            var reasonDetails = new List<string>();
             if (r.Dc.DcID > 0)
             {
                 foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes).Union(changedDecreaseDes))
                 {
                     MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                     if (atrb == null) continue;
-                    if (atrb.DATA_TYPE_CD == "DATETIME")
-                    {
-                        reason += $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy} \n";
-                    }
-                    else
-                    {
-                        reason += $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue} \n";
-                    }
+
+                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME"
+                        ? $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}"
+                        : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
                 }
-                r.Dc.AddTimelineComment(reason);
+                r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
 
 
