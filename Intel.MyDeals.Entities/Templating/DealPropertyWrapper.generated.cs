@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/4/2018 12:20:03 PM
+File Updated: 5/4/2018 1:02:21 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1007,7 +1007,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "DEAL_DESC",
 			ATRB_DESC = "Deal Description",
 			ATRB_LBL = "Deal Description",
-			ATRB_MAX_LEN = 500,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 3680,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3085,8 +3085,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute PRD_CAT_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRD_CAT_NM",
-			ATRB_DESC = "Product Category name",
-			ATRB_LBL = "Product Category name",
+			ATRB_DESC = "Product Vertical",
+			ATRB_LBL = "Product Vertical name",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7003,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3375,7 +3375,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "PTR_USER_PRD",
 			ATRB_DESC = "PTR User Product List",
 			ATRB_LBL = "PTR User Product List",
-			ATRB_MAX_LEN = 0,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 3658,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3967,7 +3967,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "TITLE",
 			ATRB_DESC = "Object Title",
 			ATRB_LBL = "Title",
-			ATRB_MAX_LEN = 500,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 33,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
