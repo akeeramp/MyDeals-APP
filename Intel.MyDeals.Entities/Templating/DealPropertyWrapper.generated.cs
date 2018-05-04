@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 4/26/2018 11:00:06 AM
+File Updated: 5/3/2018 8:11:35 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -3905,10 +3905,10 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "System Comments",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3704,
-			DATA_TYPE_CD = "VARCHAR",
+			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
+			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "NA",
 			TGT_COL_TYPE = "VARCHAR",

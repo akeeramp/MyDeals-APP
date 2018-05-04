@@ -294,8 +294,8 @@ using System.Collections.Generic;
 	ds.Tables[1].TableName = "CostTestGroupDetailItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
-	ds.Tables[2].TableName = "CostTestGroupDealDetailItem";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
+	//ds.Tables[2].TableName = "CostTestGroupDealDetailItem";
+	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 
 	ds = dbobjects.ExecuteDataSet("EXEC [DBO].[PR_MYDL_GET_MEET_COMP] @USR_WWID = 10505693, @Role= 'GA', @MODE = 'M', @OBJ_TYPE_ID = 1");
 	ds.Tables[0].TableName = "PctMctResult";

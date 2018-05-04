@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 4/26/2018 10:17:51 AM
+File Updated: 5/3/2018 8:10:04 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2212,7 +2212,7 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3704
 		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
+		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string SYS_COMMENTS = "SYS_COMMENTS";
 
