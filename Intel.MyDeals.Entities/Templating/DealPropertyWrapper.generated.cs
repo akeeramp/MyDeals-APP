@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/3/2018 8:11:35 PM
+File Updated: 5/4/2018 12:20:03 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2831,7 +2831,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "NOTES",
 			ATRB_DESC = "Notes",
 			ATRB_LBL = "Notes",
-			ATRB_MAX_LEN = 0,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 3661,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3343,7 +3343,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "PTR_SYS_INVLD_PRD",
 			ATRB_DESC = " UnProcessed Product List",
 			ATRB_LBL = "UnProcessed Product List",
-			ATRB_MAX_LEN = 0,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 7093,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3359,7 +3359,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "PTR_SYS_PRD",
 			ATRB_DESC = "Processed Product List",
 			ATRB_LBL = "Processed Product List",
-			ATRB_MAX_LEN = 0,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 3659,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3903,7 +3903,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "SYS_COMMENTS",
 			ATRB_DESC = "System Comments",
 			ATRB_LBL = "System Comments",
-			ATRB_MAX_LEN = 0,
+			ATRB_MAX_LEN = 9999,
 			ATRB_SID = 3704,
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "DEAL",

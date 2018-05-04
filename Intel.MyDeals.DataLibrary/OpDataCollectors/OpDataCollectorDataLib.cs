@@ -819,7 +819,7 @@ namespace Intel.MyDeals.DataLibrary
             dt.TableName = TableName.MYDL_CL_WIP_ATRB_TMP;
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
-            List<string> varMaxAtrbs = atrbMstr.All.Where(a => a.ATRB_MAX_LEN == -1).Select(a => a.ATRB_COL_NM).ToList();
+            List<string> varMaxAtrbs = atrbMstr.All.Where(a => a.ATRB_MAX_LEN > 8000).Select(a => a.ATRB_COL_NM).ToList(); // Had to go this way since length of -1 doesn't translate across in T4
             //new List<string> { AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD, AttributeCodes.SYS_COMMENTS, AttributeCodes.NOTES };
 
             #region Get Ordinal Indexes
