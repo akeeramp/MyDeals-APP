@@ -77,15 +77,15 @@
                                 var actvStartDate = new Date(tempdata[i].START_DT);
 
                                 //Pulling END Date condition 
-                                if (drftStartDate > actvStartDate) {
-                                    actvStartDate = new Date(drftStartDate - 1);
-                                    var tempEND_DT = actvStartDate.getMonth("MM") + "/" + actvStartDate.getDate() + "/" + actvStartDate.getFullYear();
+                                if (drftStartDate > actvStartDate) {                                    
+                                    drftStartDate.setDate(drftStartDate.getDate() - 1);                                    
+                                    var tempEND_DT = drftStartDate.getMonth("MM") + 1 + "/" + drftStartDate.getDate() + "/" + drftStartDate.getFullYear();
                                     $scope.ovlpData[i].END_DT = "<span title='END Date Pulling' style='color:red'> " + tempEND_DT + " - Pending </span>";
                                 }
                                 //Pushing END Date Condition
-                                else if (drftEndDate < actvEndDate) {
-                                    actvEndDate = new Date(drftEndDate + 1);
-                                    var tempSTART_DT = actvEndDate.getMonth("MM") + "/" + actvEndDate.getDate() + "/" + actvEndDate.getFullYear();
+                                else if (drftEndDate < actvEndDate) {                                    
+                                    drftEndDate.setDate(drftEndDate.getDate() + 1);                                    
+                                    var tempSTART_DT = drftEndDate.getMonth("MM") + 1 + "/" + drftEndDate.getDate() + "/" + drftEndDate.getFullYear();
                                     $scope.ovlpData[i].START_DT = "<span title='START Date Pushing' style='color:red'> " + tempSTART_DT + " - Pending </span>";
                                 }                             
                                 //Manual Overlap Resolution
