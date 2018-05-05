@@ -70,20 +70,28 @@
                     }
                     for (var i = 0; i < tempdata.length; i++) {
                         if (tempdata[i].WIP_DEAL_OBJ_SID === data && tempdata[i].WF_STG_CD === "Active" && tempdata[i].OVLP_CD === "FE_HARD_STOP") {
-                            if (YCS2_OVERLAP_OVERRIDE === 'Y') {
-                                var d = new Date(START_DT);
-                                dcID = tempdata[i].OVLP_DEAL_OBJ_SID;
-                                d.setDate(d.getDate() - 1);
-                                if (d >= new Date(tempdata[i].START_DT)) {
-                                    var tempEND_DT = d.getMonth("MM") + 1 + "/" + d.getDate() + "/" + d.getFullYear();
-                                    $scope.ovlpData[i].END_DT = "<span style='color:red'> " + tempEND_DT + " - Pending </span>";
+                            if (YCS2_OVERLAP_OVERRIDE === 'Y') {                                
+                                var drftStartDate = new Date(START_DT);
+                                var drftEndDate = new Date(END_DT);
+                                var actvEndDate = new Date(tempdata[i].END_DT);
+                                var actvStartDate = new Date(tempdata[i].START_DT);
+
+                                //Pulling END Date condition 
+                                if (drftStartDate > actvStartDate) {
+                                    actvStartDate = new Date(drftStartDate - 1);
+                                    var tempEND_DT = actvStartDate.getMonth("MM") + "/" + actvStartDate.getDate() + "/" + actvStartDate.getFullYear();
+                                    $scope.ovlpData[i].END_DT = "<span title='END Date Pulling' style='color:red'> " + tempEND_DT + " - Pending </span>";
                                 }
-                                else {
-                                    var dO = new Date(END_DT);
-                                    dO.setDate(dO.getDate() + 1);
-                                    var tempSTART_DT = dO.getMonth("MM") + 1 + "/" + dO.getDate() + "/" + dO.getFullYear();
-                                    $scope.ovlpData[i].START_DT = "<span style='color:red'> " + tempSTART_DT + " - Pending </span>";
-                                }
+                                //Pushing END Date Condition
+                                else if (drftEndDate < actvEndDate) {
+                                    actvEndDate = new Date(drftEndDate + 1);
+                                    var tempSTART_DT = actvEndDate.getMonth("MM") + "/" + actvEndDate.getDate() + "/" + actvEndDate.getFullYear();
+                                    $scope.ovlpData[i].START_DT = "<span title='START Date Pushing' style='color:red'> " + tempSTART_DT + " - Pending </span>";
+                                }                             
+                                //Manual Overlap Resolution
+                                //else {
+                                //    kendo.alert("Overlap can not be resolved sytematically");
+                                //}
                             }
                             else {
                                 $scope.ovlpData[i].START_DT = $scope.ovlpDataRep[i].START_DT;
@@ -92,26 +100,12 @@
 
                         }
                     }
+
                     $scope.ovlpDataSource.read();
 
                     objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                         .then(function (response) {
                             if (response.data[0].PRICING_TABLES > 0) {
-                                //As we remove the triggering point from deal editor to manage tab. we don't need this commented lines.
-                                // Change in Deal Editor
-                                // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
-                                //var indx = -1;
-                                //$scope.$parent.opData.some(function (e, i) {
-                                //    if (e.DC_ID === data) {
-                                //        indx = i;
-                                //        return true;
-                                //    }
-                                //});
-
-                                //if (indx > -1) {
-                                //    $scope.$parent.opData[indx].YCS2_OVERLAP_OVERRIDE = YCS2_OVERLAP_OVERRIDE === 'Y' ? 'Y' : 'N';
-                                //    //$scope.$parentcontractDs.read();
-                                //}
 
                                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
                                     $scope.ovlpErrorCount.push(data);
@@ -132,7 +126,10 @@
 
                         });
                 }
-
+                //Take first character of WF_STG_CD
+                $scope.stageOneChar = function (WF_STG_CD) {
+                    return WF_STG_CD === undefined ? "&nbsp;" : WF_STG_CD[0];
+                }
                 //Reject
                 $scope.rejectOvlp = function (OVLP_DEAL_OBJ_SID) {
                     kendo.alert("Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.", "Overlapping Warning");
@@ -218,7 +215,7 @@
                         }
                     },
                     pageSize: 50,
-                    group: [{ field: "PROGRAM_PAYMENT" }, { field: "WIP_DEAL_OBJ_SID", aggregates: [{ field: "WIP_DEAL_OBJ_SID", aggregate: "count" }] }]
+                    group: [{ field: "PROGRAM_PAYMENT" }, { field: "WIP_DEAL_OBJ_SID" }]
                 });
 
                 $scope.gridOptions = {
@@ -242,7 +239,7 @@
                         {
                             field: "WF_STG_CD",
                             filterable: false,
-                            template: "<div class='fl gridStatusMarker #=WF_STG_CD#' title='#=WF_STG_CD#'>{{stageOneChar(dataItem.WF_STG_CD)}}</div>",
+                            template: "<div class='fl gridStatusMarker centerText #=WF_STG_CD#' title='#=WF_STG_CD#'>{{stageOneChar(dataItem.WF_STG_CD)}}</div>",
                             title: " ",
                             width: "21px"
                         },
