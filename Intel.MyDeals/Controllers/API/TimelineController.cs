@@ -1,12 +1,7 @@
 ﻿using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
-using Intel.Opaque;
-using System.Net.Http.Formatting;
-using System.Net;
-using System.Net.Http;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -27,6 +22,16 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _timelineLib.GetTimelineDetails(ID, OBJ_TYPE)
                 , $"Unable to get Contract Timeline {ID}"
             );            
+        }
+
+
+        [HttpPost]
+        [Route("GetObjTimelineDetails")]
+        public List<TimelineItem> GetObjTimelineDetails(TimelinePacket timelinePacket)
+        {
+            return SafeExecutor(() => _timelineLib.GetObjTimelineDetails(timelinePacket)
+                , $"Unable to get Timeline"
+            );
         }
     }
 }

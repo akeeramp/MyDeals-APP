@@ -31,15 +31,19 @@
     <div class="amendmentsPage">
         <h1>Amendments</h1>
         <div class="row" ng-repeat="tl in timelineData">
-            <div class="col-md-4 timeDate">
+            <div class="col-md-3 timeDesc">
                 <div class="content">
-                    {{tl.HIST_EFF_FR_DTM}} | <span style="color: #0071C5;">{{tl.FRST_NM}} {{tl.LST_NM}}</span>
+                    <span style="color: #FFA300;">#{{tl.OBJ_SID}}</span> {{tl.OBJ_DESC}}
                 </div>
             </div>
-            <div class="col-md-8 timeDesc">
+            <div class="col-md-6 timeDesc">
                 <div class="content">
-                    <span style="color: #FFA300;">#{{tl.ATRB_SID}}</span> {{tl.ATRB_DESC}} | <span style="color: #00AEEF;">{{tl.FLAG}}</span> | 
                     <span style="color: #0071C5;">{{tl.ATRB_VAL}}</span>
+                </div>
+            </div>
+            <div class="col-md-3 timeDate">
+                <div class="content">
+                    {{tl.HIST_EFF_FR_DTM}} | <span style="color: #0071C5;">{{tl.FRST_NM}} {{tl.LST_NM}}</span>
                 </div>
             </div>
         </div>

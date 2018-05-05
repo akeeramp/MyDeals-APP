@@ -119,7 +119,7 @@
             field: "DC_ID",
             title: "&nbsp;",
             type: "number",
-            width: 50,
+            width: 70,
             filterable: false,
             sortable: false,
             template:

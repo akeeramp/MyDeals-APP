@@ -234,6 +234,7 @@
     <Compile Include="TimeFlowHelper.cs" />
     <Compile Include="TimeFlowItem.cs" />
     <Compile Include="TimeFlowMedia.cs" />
+    <Compile Include="TimelinePacket.cs" />
     <Compile Include="UI Templates\UiColumn.cs" />
     <Compile Include="UI Templates\UiAtrbs.cs" />
     <Compile Include="UI Templates\UiFieldItem.cs" />

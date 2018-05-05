@@ -392,6 +392,7 @@
     <Content Include="app\blocks\uiControls\partials\horizontalButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
+    <Content Include="app\contract\controllers\dealTimelineModal.controller.js" />
     <Content Include="app\contract\controllers\dropdownModal.controller.js" />
     <Content Include="app\contract\controllers\ecapTrackerAutoFillModal.controller.js" />
     <Content Include="app\contract\controllers\ecapTrackerModal.controller.js" />
@@ -452,6 +453,7 @@
     <Content Include="app\contract\partials\ptModals\selectPricingTableModal.html" />
     <Content Include="app\contract\partials\ptModals\renameTitleModal.html" />
     <Content Include="app\contract\partials\ptModals\pctOverrideReasonModal.html" />
+    <Content Include="app\contract\partials\ptModals\dealTimelineModal.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.controller.js" />

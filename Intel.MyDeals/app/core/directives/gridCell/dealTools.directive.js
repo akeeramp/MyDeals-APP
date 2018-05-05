@@ -2,15 +2,16 @@
     .module('app.core')
     .directive('dealTools', dealTools);
 
-dealTools.$inject = ['$timeout', 'logger', 'objsetService', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary'];
+dealTools.$inject = ['$timeout', 'logger', 'objsetService', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary', '$uibModal'];
 
-function dealTools($timeout, logger, objsetService, dataService, $rootScope, $compile, $templateRequest, colorDictionary) {
+function dealTools($timeout, logger, objsetService, dataService, $rootScope, $compile, $templateRequest, colorDictionary, $uibModal) {
     return {
         scope: {
             dataItem: '=ngModel',
             isEditable: '@isEditable',
             isCommentEnabled: '<?',
             isFileAttachmentEnabled: '<?',
+            isHistoryEnabled: '<?',
             isQuoteLetterEnabled: '<?',
             isDeleteEnabled: '<?'
         },
@@ -35,6 +36,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.isCommentEnabled = $scope.assignVal("isCommentEnabled", true);
             $scope.isFileAttachmentEnabled = $scope.assignVal("isFileAttachmentEnabled", true);
+            $scope.isHistoryEnabled = $scope.assignVal("isHistoryEnabled", true);
             $scope.isQuoteLetterEnabled = $scope.assignVal("isQuoteLetterEnabled", true);
             $scope.isDeleteEnabled = $scope.assignVal("isDeleteEnabled", true);
 
@@ -107,6 +109,28 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     // Notify that attachments were removed so that the state of the paper-clip icon can be updated accordingly.
                     $rootScope.$broadcast('attachments-changed');
                 }
+            }
+
+            // HISTORY Items
+            $scope.clkHistoryIcon = function (dataItem) {
+                $scope.context = dataItem;
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: 'dealTimelineModal',
+                    controller: 'dealTimelineModalCtrl',
+                    controllerAs: '$ctrl',
+                    size: 'lg',
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () { }, function () { });
             }
 
 

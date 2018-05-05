@@ -182,7 +182,7 @@
                 {
                     field: "DC_ID",
                     title: "&nbsp;",
-                    width: 50,
+                    width: 70,
                     filterable: false,
                     sortable: false,
                     template: "<deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='canShowCheckBox(dataItem)'></deal-tools>"

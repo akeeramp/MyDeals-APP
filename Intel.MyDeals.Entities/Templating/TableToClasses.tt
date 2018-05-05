@@ -344,6 +344,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "ManageUsersInfo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//TimeLine History
+	ds = dbobjects.ExecuteDataSet("DECLARE @obj_sid AS INT = 1; DECLARE @obj_type_sid AS INT = 1; DECLARE	@obj_type_sids AS [dbo].[type_int_list]; INSERT INTO @obj_type_sids VALUES (1); EXEC [dbo].[PR_MYDL_GET_CL_OBJ_HIST_DC]	@obj_sid,@obj_type_sid,@obj_type_sids");
+	ds.Tables[0].TableName = "TimelineItem";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

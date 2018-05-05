@@ -432,7 +432,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 					{
 						field: "NOTES",
 						title: "Tools",
-						width: "180px",
+						width: "200px",
 						locked: true,
 						template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
 						filterable: false
@@ -581,7 +581,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 					{
 						field: "NOTES",
 						title: "Tools",
-						width: "180px",
+						width: "200px",
 						locked: true,
 						template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
 						filterable: false

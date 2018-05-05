@@ -22,21 +22,43 @@
         $scope.msg = "Loading Contract History";
         $scope.$parent.isSummaryHidden = false;
 
-
         $scope.timelineDs = new kendo.data.DataSource({
             type: "json",
             transport: {
                 read: {
-                    url: "api/Timeline/GetTimelineDetails/" + $scope.root.contractData.DC_ID + "/1",
-                    type: "GET",
+                    url: "api/Timeline/GetObjTimelineDetails",
+                    type: "POST",
+                    data: {
+                        objSid: $scope.root.contractData.DC_ID,
+                        objTypeSid: 1,
+                        objTypeIds: [1,2,3,4,5]
+                    },
                     dataType: "json"
                 }
             },
+            schema: {
+                parse: function (data) {
+                    for (var d = 0; d < data.length; d++) {
+                        data[d]["user"] = data[d]["FRST_NM"] + " " + data[d]["LST_NM"];
+                        data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(/; /g, '<br/>');
+                    }
+                    return data;
+                },
+                model: {
+                    fields: {
+                        user: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 25,
             requestEnd: function (e) {
                 $scope.msg = "Done";
                 $scope.timelineData = e.response;
                 $timeout(function () {
                     $scope.loading = false;
+                    window.setTimeout(function () {
+                        resizeGrid();
+                    }, 100);
                 }, 500);
             }
         });
@@ -51,29 +73,21 @@
             columns: [{
                 field: "OBJ_DESC",
                 title: "Object Type",
-                width: "140px"
-            }, {
-                field: "OBJ_SID",
-                title: "Object Id",
-                width: "120px"
-            }, {
-                field: "FLAG",
-                title: "Flag",
-                width: "90px",
-                filterable: { multi: true, search: true }
-            }, {
-                field: "ATRB_DESC",
-                title: "Action Source",
                 width: "140px",
                 filterable: { multi: true, search: true }
             }, {
-                field: "ATRB_VAL",
-                title: "Action Value",
-                width: "200px"
+                field: "OBJ_SID",
+                title: "Object Id",
+                width: "120px",
+                filterable: { multi: true, search: true }
             }, {
-                field: "FRST_NM",
+                field: "ATRB_VAL",
+                title: "Comment Detail",
+                encoded: false
+            }, {
+                field: "user",
                 title: "Changed By",
-                template: "#= FRST_NM # #= LST_NM #",
+                template: "#= user # (#= USR_ROLES #)",
                 width: "200px",
                 filterable: { multi: true, search: true }
             }, {
@@ -85,6 +99,11 @@
         }
 
         $scope.timelineDs.read();
+
+        function resizeGrid() {
+            $("#grid-timeline").css("height", $(window).height() - 250);
+            $("#grid-timeline").data("kendoGrid").resize();
+        }
 
         $timeout(function () {
             $("#approvalDiv").removeClass("active");

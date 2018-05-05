@@ -23,16 +23,21 @@ function timelineDetails($compile, dataService, $timeout, logger, $linq, $state)
             $scope.numberOfRecrods = 5;
             if (!!$scope.opId) {
                 $scope.loading = true;
-                dataService.get("api/Timeline/GetTimelineDetails/" + $scope.opId + "/" + $scope.opObjType).then(function (response) {
-                    $scope.loading = false;
-                    response.data.forEach(function (obj) {
-                        obj.HIST_EFF_FR_DTM = new Date(obj.HIST_EFF_FR_DTM);
-                    });
-                    $scope.timelineData = response.data;
-                    $scope.selectedObj = response.data;
-                    $scope.isFilterApplied = false;
-                    return response.data;
-                },
+                dataService.post("api/Timeline/GetObjTimelineDetails",
+                    {
+                        objSid: $scope.opId,
+                        objTypeSid: $scope.opObjType,
+                        objTypeIds: [1, 2, 3]
+                    }).then(function (response) {
+                        $scope.loading = false;
+                        response.data.forEach(function (obj) {
+                            obj.HIST_EFF_FR_DTM = new Date(obj.HIST_EFF_FR_DTM);
+                        });
+                        $scope.timelineData = response.data;
+                        $scope.selectedObj = response.data;
+                        $scope.isFilterApplied = false;
+                        return response.data;
+                    },
                     function (response) {
                         logger.error("Unable to get GetTimelineDetails data", response, response.statusText);
                     });

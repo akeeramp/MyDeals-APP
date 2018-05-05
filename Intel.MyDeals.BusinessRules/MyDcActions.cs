@@ -916,7 +916,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (de.AtrbValue.ToString() == de.OrigAtrbValue.ToString()) continue;
 
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
-                if (atrb == null) continue;
+                if (atrb == null || de.OrigAtrbValue.ToString() == string.Empty) continue;
 
                 r.Dc.AddTimelineComment($"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
             }

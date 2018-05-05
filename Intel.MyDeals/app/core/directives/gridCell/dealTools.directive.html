@@ -28,6 +28,11 @@
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
     </div>
 
+    <!-- History icon -->
+    <div class='fl md-icon' ng-if="isHistoryEnabled">
+        <i class="intelicon-history" ng-attr-title="View Deal History" style="font-size: 20px !important;" ng-click="clkHistoryIcon(dataItem)"></i>
+    </div>
+
     <!-- Attachments icon -->
     <div class='fl md-icon' ng-if="isFileAttachmentEnabled">
         <i ng-class="getFileIcon(dataItem)" ng-style="getFileStyle(dataItem)" ng-attr-title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkFileIcon(dataItem)"></i>

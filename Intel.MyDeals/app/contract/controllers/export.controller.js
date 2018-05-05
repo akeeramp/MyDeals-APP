@@ -53,8 +53,13 @@ function exportController($scope, $state, objsetService, logger, $timeout, dataS
         type: "json",
         transport: {
             read: {
-                url: "api/Timeline/GetTimelineDetails/" + $scope.root.contractData.DC_ID + "/1",
-                type: "GET",
+                url: "api/Timeline/GetObjTimelineDetails",
+                type: "POST",
+                data: {
+                    objSid: $scope.root.contractData.DC_ID,
+                    objTypeSid: 1,
+                    objTypeIds: [1, 2, 3]
+                },
                 dataType: "json"
             }
         },

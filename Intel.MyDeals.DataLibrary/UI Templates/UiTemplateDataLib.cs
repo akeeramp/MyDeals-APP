@@ -853,7 +853,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 DataType = "object",
                 Label = "Deal Tools",
-                Width = 210,
+                Width = 230,
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,

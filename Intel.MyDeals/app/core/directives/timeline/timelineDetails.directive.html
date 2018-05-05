@@ -3,7 +3,7 @@
     <div ng-repeat="tm in selectedObj | limitTo : numberOfRecrods " class="item">        
         <div class="details">
             <div>
-                <h1>{{tm.ATRB_DESC + " | "}}<span class="capitalize">{{tm.FLAG | lowercase}}</span> </h1> <span class="updateBy" title="{{tm.FRST_NM + ' ' + tm.LST_NM + ' '}} ({{tm.USR_ROLES}})">updated by <span class="capitalize">{{tm.FRST_NM + ' ' + tm.LST_NM | lowercase}}</span> ({{tm.USR_ROLES}})</span>
+                <h1>{{tm.ATRB_DESC}}</h1> <span class="updateBy" title="{{tm.FRST_NM + ' ' + tm.LST_NM + ' '}} ({{tm.USR_ROLES}})">updated by <span class="capitalize">{{tm.FRST_NM + ' ' + tm.LST_NM | lowercase}}</span> ({{tm.USR_ROLES}})</span>
                 <p class="atbrDetails"><span ng-if="tm.FLAG != 'Pricing Strategy'">"</span>{{tm.ATRB_VAL}}<span ng-if="tm.FLAG != 'Pricing Strategy'">"</span></p><p class="atbrDate">{{tm.HIST_EFF_FR_DTM | date:'dd-MMM-yyyy @ h:mma'}}</p>
             </div>
         </div>
@@ -11,8 +11,10 @@
     <div ng-if="selectedObj.length == 0">
         <span>No data selected. Please choose other filter</span>
     </div>
-    <a ng-if="selectedObj.length > 5" ng-click="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>{{btnText}} <i ng-if="btnText == 'Show more '" class="intelicon-down"></i> <i ng-if="btnText == 'Show less '" class="intelicon-up"></i></a>
-    <a ng-click="gotoHistory()" style="cursor: pointer;">view all contract history</a>
+    <a ng-if="selectedObj.length > 5" ng-click="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>
+        {{btnText}} <i ng-if="btnText == 'Show more '" class="intelicon-down"></i> <i ng-if="btnText == 'Show less '" class="intelicon-up"></i>
+    </a>
+    <a ng-click="gotoHistory()" style="cursor: pointer; float: right;">view all contract history</a>
 </div>
 
 
