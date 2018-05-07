@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/4/2018 1:02:21 PM
+File Updated: 5/7/2018 12:22:07 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1007,7 +1007,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "DEAL_DESC",
 			ATRB_DESC = "Deal Description",
 			ATRB_LBL = "Deal Description",
-			ATRB_MAX_LEN = 9999,
+			ATRB_MAX_LEN = 2000,
 			ATRB_SID = 3680,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3967,7 +3967,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "TITLE",
 			ATRB_DESC = "Object Title",
 			ATRB_LBL = "Title",
-			ATRB_MAX_LEN = 9999,
+			ATRB_MAX_LEN = 7000,
 			ATRB_SID = 33,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
