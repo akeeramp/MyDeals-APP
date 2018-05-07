@@ -218,7 +218,7 @@
 				field: "filterable_CHG_DTM",
 				title: "Last Update Date",
 				type: "date",
-				template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy hh:mm tt') #",
+                template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy hh:mm tt') #",
 				filterable: {
                     extra: false,
 					ui: "datepicker"

@@ -905,7 +905,7 @@
                     field: "CHG_DTM",
                     title: "Date Added",
                     type: "date",
-                    template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #",
+                    template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
                     width: "25%"
                 }
             ]

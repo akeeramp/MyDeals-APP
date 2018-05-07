@@ -393,7 +393,7 @@
                 field: "CHG_DTM",
                 title: "Entered Date",
                 headerTemplate: "<div class='isRequired'> Entered Date </div>",
-                template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #",
+                template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
                 width: 150,
                 filterable: {
                     extra: false,
