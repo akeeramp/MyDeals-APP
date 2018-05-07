@@ -85,6 +85,14 @@
             }
         });
 
+        $scope.selAllCust = function() {
+            $scope.customers = [];
+            var data = $scope.customersDataSource.data();
+            for (var d = 0; d < data.length; d++) {
+                $scope.customers.push(data[d].CUST_SID);
+            }
+        }
+
         $scope.applyRoleClass = function (item) {
             return $scope.roleFilter === item;
         }

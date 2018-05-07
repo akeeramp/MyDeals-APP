@@ -682,6 +682,7 @@ namespace Intel.MyDeals.BusinessLogic
             var EPMList = new List<string>();
             string tempProdNM = userProduct;
 
+            if (tempProdNM == null) return new List<string>();
             tempProdNM = Regex.Replace(tempProdNM, " OR ", @"~", RegexOptions.IgnoreCase); // Replace OR with ~
             tempProdNM = tempProdNM.Replace("&", "~"); // Replace & with ~
 
