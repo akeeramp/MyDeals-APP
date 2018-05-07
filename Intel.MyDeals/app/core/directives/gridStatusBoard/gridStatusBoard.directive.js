@@ -123,10 +123,11 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     }, tmp);
 
                     $scope.stages = tmp;
-                    $scope.$apply();
 
                     $scope.initDsLoaded = true;
                     $scope.isLoaded = true;
+
+                    $scope.$apply();
 
                     //$timeout(function () {
                     //    $("#gridContractStatus .k-pager-info").html("Results limited to 100 most recently modified. Use Search for full list.");
