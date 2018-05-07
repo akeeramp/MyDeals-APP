@@ -14,12 +14,6 @@ namespace Intel.MyDeals.BusinessLogic
             _iTimelineDataLib = iTimelineDataLib;
         }
 
-        public List<Timeline> GetTimelineDetails(int ID, int OBJ_TYPE)
-        {
-            //TODO: OBJ_TYPE set type will determine the which DB proc to call. ie: 1 for Contact, 2 for Pricing table etc
-            return _iTimelineDataLib.GetTimelineDetails(ID);
-        }
-
         public List<TimelineItem> GetObjTimelineDetails(TimelinePacket timelinePacket)
         {
             return _iTimelineDataLib.GetObjTimelineDetails(timelinePacket);

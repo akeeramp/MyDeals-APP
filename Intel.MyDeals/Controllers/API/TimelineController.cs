@@ -16,14 +16,6 @@ namespace Intel.MyDeals.Controllers.API
             this._timelineLib = _timelineLib;
         }
 
-        [Route("GetTimelineDetails/{id}/{OBJ_TYPE}")]                 
-        public List<Timeline> GetTimelineDetails(int ID, int OBJ_TYPE)
-        {
-            return SafeExecutor(() => _timelineLib.GetTimelineDetails(ID, OBJ_TYPE)
-                , $"Unable to get Contract Timeline {ID}"
-            );            
-        }
-
 
         [HttpPost]
         [Route("GetObjTimelineDetails")]

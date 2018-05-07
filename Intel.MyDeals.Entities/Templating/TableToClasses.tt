@@ -261,11 +261,6 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "SoldToIds";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	// Contract Timeline
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_CL_OBJ_HIST");
-	ds.Tables[0].TableName = "Timeline";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
 	// Meet Comp data
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_UPD_MEET_COMP @MODE='SELECT', @MEET_COMP_SID = '6312'");
 	ds.Tables[0].TableName = "MeetComp";
