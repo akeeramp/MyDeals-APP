@@ -1294,7 +1294,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return;
         }
         if (data[n]["PTR_USER_PRD"] !== null) {
-            var products = data[n]["PTR_USER_PRD"].replace(/,,/g,',').split(",");
+            var products = data[n]["PTR_USER_PRD"].replace(/,,/g, ',').split(",");
             if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && isInt(parseInt(masterData[n].DC_ID))) {
                 // Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
                 // Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
@@ -1348,12 +1348,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             for (var a = 0; a < numTier; a++) {
                 if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, false);
+                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
                     continue;
                 }
                     // Update existing rows, offset number of deleted rows
                 else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
-                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, true);
+                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
                     numExistingRows--;
                 } else {
                     if (rowDeleted == 0 && offSetRows > 0) {
@@ -1368,7 +1368,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     } else {
                         // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
                         data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
-                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, true);
+                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
                     }
                 }
             }
@@ -1386,7 +1386,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         newFirstTierRow['TEMP_KIT_REBATE'] = oldFirstTierRow['TEMP_KIT_REBATE'];
     }
 
-    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber, resetDim) {
+    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber) {
         var row = angular.copy(row);
 
         // Case
@@ -1396,13 +1396,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (buckProd.length === 0) { // no corresponding row (essentially a new row)
             row.PRD_BCKT = productBcktName;
-            if (resetDim) {
-                // Clear out any tiered values because this is an essentially new row.  Do not clear out unless it comes from a relevant user action - we don't want this to happen when the product corrects in-place to what we have defined in the system (i.e. after user manual copy paste or typed entry).
-                row["ECAP_PRICE"] = 0;
-                row["DSCNT_PER_LN"] = 0;
-                row["QTY"] = 1;
-                row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
-            }
+            // Clear out any tiered values because this is an essentially new row.  Do not clear out unless it comes from a relevant user action - we don't want this to happen when the product corrects in-place to what we have defined in the system (i.e. after user manual copy paste or typed entry).
+            row["ECAP_PRICE"] = 0;
+            row["DSCNT_PER_LN"] = 0;
+            row["QTY"] = 1;
+            row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
         } else {
             row = buckProd[0]; //Select the first one even of there are duplicates
         }
@@ -1972,7 +1970,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 var myVal = "";
                                 var validMsg = data[key]._behaviors.validMsg;
                                 for (var myKey in validMsg) {
-                                    if (validMsg.hasOwnProperty(myKey) && ptTemplate.model.fields[myKey] !== undefined) {
+                                    // Do not copy the DC_ID error messages(DC_ID errors are concatenation of respective row column errors), as it will append duplicate error messages
+                                    if (myKey !== 'DC_ID' && validMsg.hasOwnProperty(myKey) && ptTemplate.model.fields[myKey] !== undefined) {
                                         myVal += ptTemplate.model.fields[myKey].label + ": " + validMsg[myKey];
                                     }
                                 }

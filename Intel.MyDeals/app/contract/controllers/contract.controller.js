@@ -2259,9 +2259,9 @@
                 // Pricing Table Row
                 if (curPricingTableData.length > 0 && sData != undefined) {
                     // Only save if a product has been filled out
-                    sData = sData.filter(function (obj) {
-                        return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
-                    });
+                    //sData = sData.filter(function (obj) {
+                    //    return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
+                    //});
 
                     // find all date fields
                     var dateFields = [];
@@ -2629,13 +2629,18 @@
 
                         $scope.updateResults(data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
 
+                        // When products(# of products are rows in KIT) are added or removed, _action will be first row, ignore this when copying _behaviours
+                        var actionOffeset = (data.PRC_TBL_ROW[0]["_actions"] !== undefined) ? 1 : 0;
+
                         if (!!$scope.spreadDs) {
                             $scope.spreadDs.read();
 
                             for (var p = 0; p < $scope.pricingTableData.PRC_TBL_ROW.length; p++) {
                                 if (data.PRC_TBL_ROW[p] !== undefined && (data.PRC_TBL_ROW[p].DC_ID === $scope.pricingTableData.PRC_TBL_ROW[p].DC_ID ||
                                     data.PRC_TBL_ROW[p].DC_ID === undefined)) {
-                                    $scope.pricingTableData.PRC_TBL_ROW[p]._behaviors = data.PRC_TBL_ROW[p]._behaviors;
+                                    if (data.PRC_TBL_ROW[p + actionOffeset] != undefined) {
+                                        $scope.pricingTableData.PRC_TBL_ROW[p]._behaviors = data.PRC_TBL_ROW[p + actionOffeset]._behaviors;
+                                    }
                                 }
                             }
 

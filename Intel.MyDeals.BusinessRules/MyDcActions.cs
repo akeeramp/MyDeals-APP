@@ -45,6 +45,17 @@ namespace Intel.MyDeals.BusinessRules
 
             if (!item.ContainsKey(AttributeCodes.PAYOUT_BASED_ON)) return;
 
+            //TODO: work around till JMSQ DB calls updates the PRC_TBL_ROW attributes, it updates WIP_DEAL and DEAL attrubutes alone when deal(price) is sent to SAP
+            var trackers = r.Dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
+            var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            if (trackers != null && trackers.Any() && dealType == "ECAP" && programPayment.Contains("YCS2"))
+            {
+                item[AttributeCodes.START_DT] = r.Dc.GetDataElementValue(AttributeCodes.START_DT);
+                item[AttributeCodes.END_DT] = r.Dc.GetDataElementValue(AttributeCodes.END_DT);
+                item[AttributeCodes.NOTES] = r.Dc.GetDataElementValue(AttributeCodes.NOTES);
+            }
+
             // Deal Dates
             string dcStStr = r.Dc.GetDataElementValue(AttributeCodes.START_DT);
             string dcEnStr = r.Dc.GetDataElementValue(AttributeCodes.END_DT);
@@ -58,11 +69,11 @@ namespace Intel.MyDeals.BusinessRules
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString() ?? "";
 
             // Billing Dates
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)))
             {
                 item[AttributeCodes.REBATE_BILLING_START] = dcItemSt;
             }
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)) || dcEn != dcItemEn)
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)))
             {
                 item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
             }
@@ -76,7 +87,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 //if (mrktSegValue.IndexOf("Consumer Retail Pull") >= 0 || mrktSegValue == "All Direct Market Segments")
                 //{
-                    item[AttributeCodes.ON_ADD_DT] = item[AttributeCodes.START_DT];
+                item[AttributeCodes.ON_ADD_DT] = item[AttributeCodes.START_DT];
                 //}
             }
 
@@ -452,9 +463,11 @@ namespace Intel.MyDeals.BusinessRules
                 case OpDataElementType.PRC_TBL:
                     title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
                     break;
+
                 case OpDataElementType.PRC_TBL_ROW:
                     title = r.Dc.GetDataElementValue(AttributeCodes.PTR_USER_PRD).Replace(",", ", ");
                     break;
+
                 case OpDataElementType.WIP_DEAL:
                     title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
                     break;
@@ -631,7 +644,7 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            List<string> excludeAtrbs = new List<string> {AttributeCodes.EXPIRE_YCS2, AttributeCodes.NOTES};
+            List<string> excludeAtrbs = new List<string> { AttributeCodes.EXPIRE_YCS2, AttributeCodes.NOTES };
 
             string deFrontendValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
@@ -704,6 +717,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            // Billing dates should be only for deals which have Payout Based on = Consumption ??
             IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
@@ -904,7 +918,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> atrbs = new List<string> {AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD};
+            List<string> atrbs = new List<string> { AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD };
 
             List<IOpDataElement> des = r.Dc.GetDataElementsIn(atrbs).Where(d => d.State != OpDataElementState.Unchanged).ToList();
             if (!des.Any()) return;
@@ -930,10 +944,14 @@ namespace Intel.MyDeals.BusinessRules
             string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string ptrStage = r.Dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), ptrStage, OpDataElementType.PRC_ST);
-
+            var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             // if there isn't a future stage, then it isn't redealable
             // TO DO - WE NEED TO ADD IN PARENT PS STAGE FOR THIS CHECK
             if (futureStage == null && wipStage != WorkFlowStages.Active) return;
+
+            // We should not call this function for ECAP Front End YCS2, if we are here then something went wrong. Correct it here(partially) do not redeal
+            if (wipStage == WorkFlowStages.Active && dealType == OpDataElementSetType.ECAP.ToString() && programPayment.Contains("Frontend YCS2")) return;
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
@@ -971,7 +989,6 @@ namespace Intel.MyDeals.BusinessRules
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
 
-
             // NOTE: We need to set the WIP and the PS stage
             // WIP always is "Draft" and PS depends on the users workflow
             // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
@@ -1002,10 +1019,10 @@ namespace Intel.MyDeals.BusinessRules
 
                 // If this is a hard rollback, set it so that Cancel/delete/rollback flags can be set in UI.  Rollup will set parents as needed.  Tenders in Offer will not have
                 // tracker and will be cancel in redeal states since the no longer have a level 6 object tied to them until they actually win.
-                IOpDataElement rde = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL); 
+                IOpDataElement rde = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
                 if (rde != null)
                 {
-                    rde.AtrbValue = setRedealFlag? 1: 0;
+                    rde.AtrbValue = setRedealFlag ? 1 : 0;
                 }
                 else // Safety in case for some reason we don't have an attribute - shouldn't hit this code though.
                 {
@@ -1035,7 +1052,7 @@ namespace Intel.MyDeals.BusinessRules
                         : WorkFlowStages.Draft;
                 }
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
-                int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL) 
+                int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL)
                     ? myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID].DcParentID
                     : myDealsData[OpDataElementType.PRC_ST].Data.FirstOrDefault().Value.DcID;
                 if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
@@ -1099,7 +1116,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deOADealId = r.Dc.GetDataElement(AttributeCodes.REBATE_DEAL_ID);
             IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
             IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
-            
+
             if (deOADealId == null || deOAMaxAmt == null || deOAMaxVol == null) return;
 
             string overarchingDealIds = deOADealId.AtrbValue.ToString();
@@ -1111,7 +1128,7 @@ namespace Intel.MyDeals.BusinessRules
 
             int numMaxVol;
             decimal numMaxAmt;
-            
+
             if (!decimal.TryParse(overarchingMaxAmt, out numMaxAmt) && overarchingMaxAmt != "")
             {   //Non decimal type input error
                 deOAMaxAmt.AddMessage("Overarching Max Dollar Amount is not a valid dollar amount.");
@@ -1304,10 +1321,10 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-			ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one rate must be greater than 0.");
-		}
+            ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one rate must be greater than 0.");
+        }
 
-		public static void ValidateTieredQty(params object[] args)
+        public static void ValidateTieredQty(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1364,7 +1381,7 @@ namespace Intel.MyDeals.BusinessRules
         }
 
         public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
-		{
+        {
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
             if (deNumTiers == null) return;
 
@@ -1380,14 +1397,13 @@ namespace Intel.MyDeals.BusinessRules
             IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
             IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
-			decimal totalOfAtrb = 0;
+            decimal totalOfAtrb = 0;
 
-			// Validate and set validation message if applicable on each tier
-			foreach (IOpDataElement atrb in atrbs)
+            // Validate and set validation message if applicable on each tier
+            foreach (IOpDataElement atrb in atrbs)
             {
                 if (atrb.DimKey.FirstOrDefault() != null)
                 {
-
                     int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
                     if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
@@ -1421,22 +1437,22 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-			// Validation of totals
-			if (isValidateAtrbTotal)
-			{
-				if (!totalValidationCondition(totalOfAtrb))
-				{
-					foreach (IOpDataElement tieredObj in atrbs)
-					{
-						int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
-						if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
-						{
-							AddTierValidationMessage(atrbWithValidation, totalValidationMessage, tier);
-						}
-					}
-				}
-			}
-		}
+            // Validation of totals
+            if (isValidateAtrbTotal)
+            {
+                if (!totalValidationCondition(totalOfAtrb))
+                {
+                    foreach (IOpDataElement tieredObj in atrbs)
+                    {
+                        int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
+                        if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, totalValidationMessage, tier);
+                        }
+                    }
+                }
+            }
+        }
 
         private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
         {
@@ -1507,13 +1523,13 @@ namespace Intel.MyDeals.BusinessRules
                         Decimal.TryParse(qty.AtrbValue.ToString(), out qtySafeParse);
                         Decimal.TryParse(discountPerLine.AtrbValue.ToString(), out discountSafeParse);
 
-						// Qty check
-						if (qtySafeParse > 1 && discountSafeParse == 0)
-						{
-							AddTierValidationMessage(qty, "Qty must be 1 if Discount per Line is $0.", tier);
-						}
+                        // Qty check
+                        if (qtySafeParse > 1 && discountSafeParse == 0)
+                        {
+                            AddTierValidationMessage(qty, "Qty must be 1 if Discount per Line is $0.", tier);
+                        }
 
-						// Kit ECAP
+                        // Kit ECAP
                         if (tier == -1)
                         {
                             // Only Kit Ecap is tier of -1
