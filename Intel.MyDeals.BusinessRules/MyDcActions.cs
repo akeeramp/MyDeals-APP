@@ -723,6 +723,12 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
 
+            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToString();
+            var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT).ToString();
+
+            // For front end YCS2 do not check for billing dates
+            if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase) && programPayment.Contains("YCS2")) return;
+
             if (string.IsNullOrEmpty(deStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deEnd?.AtrbValue.ToString())) return;
             if (string.IsNullOrEmpty(deBllgStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deBllgEnd?.AtrbValue.ToString())) return;
 
