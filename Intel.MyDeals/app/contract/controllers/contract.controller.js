@@ -2630,7 +2630,12 @@
                         $scope.updateResults(data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
 
                         // When products(# of products are rows in KIT) are added or removed, _action will be first row, ignore this when copying _behaviours
-                        var actionOffeset = (data.PRC_TBL_ROW[0]["_actions"] !== undefined) ? 1 : 0;
+                        var actionOffeset = 0;
+                        for (var i = 0; i < data.PRC_TBL_ROW.length; i++) {
+                            if (data.PRC_TBL_ROW[i]["_actions"] !== undefined) {
+                                actionOffeset++;
+                            }
+                        }
 
                         if (!!$scope.spreadDs) {
                             $scope.spreadDs.read();
