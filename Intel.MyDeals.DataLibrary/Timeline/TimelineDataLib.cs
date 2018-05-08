@@ -18,7 +18,7 @@ namespace Intel.MyDeals.DataLibrary
 
             try
             {
-                Procs.dbo.PR_MYDL_GET_CL_OBJ_HIST_DC cmd = new Procs.dbo.PR_MYDL_GET_CL_OBJ_HIST_DC
+                Procs.dbo.PR_MYDL_GET_CL_OBJ_HIST cmd = new Procs.dbo.PR_MYDL_GET_CL_OBJ_HIST
                 {
                     obj_sid = timelinePacket.ObjSid,
                     obj_type_sid = timelinePacket.ObjTypeSid,
