@@ -358,10 +358,10 @@
                             rows.each(function (index, row) {
                                 var dataItem = e.sender.dataItem(row);
 
-                                if (dataItem.COST_TEST_OVRRD_FLG !== "Yes" && dataItem.PRC_CST_TST_STS !== "NA") {
-                                    var validCost = false;
-                                    var validNet = false;
+                                var validCost = false;
+                                var validNet = false;
 
+                                if (dataItem.COST_TEST_OVRRD_FLG !== "Yes" && dataItem.PRC_CST_TST_STS !== "NA") {
                                     if (!dataItem.CAP || dataItem.CAP === "" || dataItem.CAP < 0) {
                                         $(row).children('td:eq(' + capIndex + ')').addClass('cell-warning');
                                     }
@@ -381,6 +381,28 @@
                                         $(row).children('td:eq(' + retailIndex + ')').addClass('cell-warning');
                                     }
                                 }
+                                else // In cases where lines are in Override or are simply Not Applicable for Cost Testing, Highlight missing with light grey as per Gaya (DE39032)
+                                {
+                                    if (!dataItem.CAP || dataItem.CAP === "" || dataItem.CAP < 0) {
+                                        $(row).children('td:eq(' + capIndex + ')').addClass('cell-information');
+                                    }
+                                    if (!dataItem.ECAP_PRC || dataItem.ECAP_PRC === "" || dataItem.ECAP_PRC < 0) {
+                                        $(row).children('td:eq(' + ecapIndex + ')').addClass('cell-information');
+                                    }
+                                    if (!dataItem.PRD_COST || dataItem.PRD_COST === "" || dataItem.PRD_COST < 0) {
+                                        $(row).children('td:eq(' + costIndex + ')').addClass('cell-information');
+                                    } else validCost = true;
+                                    if (!dataItem.LOW_NET_PRC || dataItem.LOW_NET_PRC === "" || dataItem.LOW_NET_PRC < dataItem.PRD_COST) {
+                                        $(row).children('td:eq(' + netIndex + ')').addClass('cell-information');
+                                    } else validNet = true;
+                                    if (validCost && validNet && dataItem.LOW_NET_PRC <= 0) {
+                                        $(row).children('td:eq(' + netIndex + ')').addClass('cell-information');
+                                    }
+                                    if (!dataItem.RTL_CYC_NM || dataItem.RTL_CYC_NM === "") {
+                                        $(row).children('td:eq(' + retailIndex + ')').addClass('cell-information');
+                                    }
+                                }
+
                             });
 
 
