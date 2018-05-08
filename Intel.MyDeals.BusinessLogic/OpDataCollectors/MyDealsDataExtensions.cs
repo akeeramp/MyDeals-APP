@@ -133,7 +133,6 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)
                     {
-                        string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
                         List<string> wipProdFilter = new List<string>();
 
                         var prds = items.Where(i => i.Key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0).ToList();
