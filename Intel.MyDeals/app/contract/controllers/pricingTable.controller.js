@@ -1169,24 +1169,33 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
 
-            // Don't flush product to revalidate if there is a tracker number
-            if (root.curPricingStrategy !== undefined && (root.curPricingStrategy.HAS_TRACKER == undefined || root.curPricingStrategy.HAS_TRACKER !== "1")) {
-                for (var f = 0; f < flushSysPrdFields.length; f++) {
-                    if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
-                        var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
-                        if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
-                            isPtrSysPrdFlushed = true;
-                            break;
-                        }
+            for (var f = 0; f < flushSysPrdFields.length; f++) {
+                if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
+                    var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
+                    if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
+                        isPtrSysPrdFlushed = true;
+                        break;
                     }
                 }
             }
 
+
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
-                    // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
                     // NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
-                    sheet.range(root.colToLetter["PTR_SYS_PRD"] + topLeftRowIndex + ":" + lastHiddenBeginningColLetter + bottomRightRowIndex).value("");
+                    for (var i = topLeftRowIndex; i <= bottomRightRowIndex; i++) {
+                        // Do not flush JSON when pricing table row HAS_TRACKER = 1
+                        var dcId = sheet.range(root.colToLetter["DC_ID"] + i).value();
+                        if (dcId !== undefined && dcId > 0) {
+                            var hasTracker = pricingTableData.data.PRC_TBL_ROW.filter(function (obj) {
+                                return obj.HAS_TRACKER === "1" && obj.DC_ID == dcId;
+                            });
+                            if (hasTracker.length > 0) {
+                                continue;
+                            }
+                        }
+                        sheet.range(root.colToLetter["PTR_SYS_PRD"] + i + ":" + lastHiddenBeginningColLetter + i).value("");
+                    }
 
                     range.forEachCell(
                         function (rowIndex, colIndex, value) {
