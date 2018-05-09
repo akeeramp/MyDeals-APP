@@ -20,7 +20,7 @@
 <body @Html.RequestVerificationToken()>
     @Html.Partial("_Header")
     <div id="modals"></div>
-    <div id="bodyContent" style="position: absolute; top: 84px; bottom: 15px; left: 0; right: 0; overflow: hidden;">
+    <div id="bodyContent" style="position: absolute; top: 84px; bottom: 15px; left: 0; right: 0; overflow: hidden !important;">
         @RenderBody()
     </div>
     @Html.Partial("_Footer")
