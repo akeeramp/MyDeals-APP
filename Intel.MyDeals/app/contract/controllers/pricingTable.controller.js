@@ -1190,7 +1190,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             var hasTracker = pricingTableData.data.PRC_TBL_ROW.filter(function (obj) {
                                 return obj.HAS_TRACKER === "1" && obj.DC_ID == dcId;
                             });
-                            if (hasTracker.length > 0) {
+                            if (isProductColumnIncludedInChanges === false && hasTracker.length > 0) {
                                 continue;
                             }
                         }
