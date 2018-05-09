@@ -661,7 +661,7 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     var dimKeyWrapper = dimKey === "" ? dimKey : "[\'" + dimKey + "\']";
 
     if (dimKey !== "" && !!passedData[field]) {
-        if (passedData[field][dimKey]!== undefined) passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
+        if (passedData[field][dimKey] !== undefined) passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
     } else {
         if (passedData[field] !== undefined) passedData[field] = passedData[field].replace(/$|,/g, '');
     }
@@ -1094,23 +1094,19 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
     var valRoles = passedData[usrRole];
     var valGeos = passedData[usrGeos];
     // Pad en empty user with something to click from manage employee screen
-    if (valCusts === "[Please Add Customers]")
-    {
-        if (valRoles !== "" && valGeos !== "")
-        {
+    if (valCusts === "[Please Add Customers]") {
+        if (valRoles !== "" && valGeos !== "") {
             return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>"; // Edit enabled
         }
-        else
-        {
+        else {
             return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
         }
     }
-    // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
+        // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
     else if (valCusts === "All Customers") {
         return "All Customers"; // Edit turned off
     }
-    if (valRoles === "" || valGeos === "")
-    {
+    if (valRoles === "" || valGeos === "") {
         return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
     }
     // All other people, just make their customers list clickable
@@ -1306,7 +1302,7 @@ gridUtils.showDetails = function (data) {
         rtn += "<td><i class='intelicon-information-solid' style='font-size: 14px; color: " + data.data[d].color + ";'></i></td>";
         rtn += "<td>" + data.data[d].name + "</td>";
         rtn += "<td>" + data.data[d].title + "</td>";
-        rtn += "<td style='text-align: right;'>" + (data.data[d].data[0]/1000).toFixed(4) + "s</td>";
+        rtn += "<td style='text-align: right;'>" + (data.data[d].data[0] / 1000).toFixed(4) + "s</td>";
         rtn += "</tr>";
     }
 
@@ -1320,6 +1316,9 @@ gridUtils.stripMilliseconds = function (dateTimeStr) {
     // Assuming str looks something like this:
     //      5/3/2018 5:10:10.20
     // the ".20" will be stripped.
+    if (typeof dateTimeStr === 'object') {
+        dateTimeStr = dateTimeStr.toDateString('M/d/yyyy hh:mm tt');
+    }
     idx = dateTimeStr.search(/\.\d+$/)
     if (idx != -1) {
         return dateTimeStr.substring(0, idx);
@@ -1747,7 +1746,7 @@ perfCacheBlock.prototype.getChartData = function () {
         }
         if (this.executionMs > totTime) {
             rtn.push({
-                name: "Unknown" ,
+                name: "Unknown",
                 title: this.title,
                 data: [this.executionMs - totTime],
                 color: "#dddddd"
