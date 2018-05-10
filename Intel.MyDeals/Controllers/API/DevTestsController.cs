@@ -41,12 +41,12 @@ namespace Intel.MyDeals.Controllers.API
         /// Recycles the app pool
         /// </summary>
         [HttpGet]
-        public void RecycleAppPool()
+        public string RecycleAppPool()
         {
             // Instead of clearing all cache recycle app pool, as some of our cache doesn't get refreshed even after cache clear(e.g. geo)
             // Recycle will keep our web servers healthy..
             System.Web.HttpRuntime.UnloadAppDomain();
-            _cacheLib.LoadCache();
+            return $"App pool recycled at - {DateTime.Now}";
         }
 
         [Authorize]
