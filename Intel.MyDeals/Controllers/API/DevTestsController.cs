@@ -9,12 +9,20 @@ using System.Net;
 using System.Web;
 using Intel.MyDeals.Entities.Logging;
 using Intel.RulesEngine;
+using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/DevTests")]
     public class DevTestsController : BaseApiController
     {
+        private readonly ICacheLib _cacheLib;
+
+        public DevTestsController(ICacheLib _cacheLib)
+        {
+            this._cacheLib = _cacheLib;
+        }
+
         [Authorize]
         [Route("GetDBTest")]
         public Dictionary<string, string> GetDBTest()
@@ -29,6 +37,18 @@ namespace Intel.MyDeals.Controllers.API
             return "string";
         }
 
+        /// <summary>
+        /// Recycles the app pool
+        /// </summary>
+        [HttpGet]
+        public void RecycleAppPool()
+        {
+            // Instead of clearing all cache recycle app pool, as some of our cache doesn't get refreshed even after cache clear(e.g. geo)
+            // Recycle will keep our web servers healthy..
+            System.Web.HttpRuntime.UnloadAppDomain();
+            _cacheLib.LoadCache();
+        }
+
         [Authorize]
         [Route("GetCSharpAPIException")]
         public string GetCSharpAPIException()
@@ -40,8 +60,8 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -55,10 +75,9 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
-
         }
 
         [Authorize]
@@ -71,8 +90,8 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -82,9 +101,8 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-
-				//t1-3 are HOST names for where we deploy the c# code
-				string t1 = System.Environment.MachineName;
+                //t1-3 are HOST names for where we deploy the c# code
+                string t1 = System.Environment.MachineName;
                 string t2 = HttpContext.Current.Server.MachineName;
                 string t3 = System.Net.Dns.GetHostName();
 
@@ -94,44 +112,44 @@ namespace Intel.MyDeals.Controllers.API
                 //misc other checks
                 //string t5 = "" + OpUserStack.MyOpUserToken.Usr.WWID;
                 string t6 = OpCurrentConfig.CurrentURL;
-	            string t7 = "JTEST";
+                string t7 = "JTEST";
 
-				foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
-				{
-					//var test = perf.GetLogStack();
-					t7 += "#" + perf + ": " + perf.LogStack.Count;
-					foreach (var l in perf.LogStack)
-					{
-						t7 += " ... " + l.MSG;
-					}
-				}
-	            string t8 = " " + OpLog.LogConfig.IsActive;
-				string t9 = OpLog.LogConfig.MsgSrc;
-	            var t10 = OpLogPerf.WiredIntoAppShutdown;
-				string t11 = MyDealsWebApiUrl.ROOT_URL;
-	            var t12 = HttpContext.Current.Session;
-	            OpFileLogPerf test = new OpFileLogPerf();
-				var t13 = test.GetFullFilePath();
-				List<string> ret = new List<string>();
+                foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
+                {
+                    //var test = perf.GetLogStack();
+                    t7 += "#" + perf + ": " + perf.LogStack.Count;
+                    foreach (var l in perf.LogStack)
+                    {
+                        t7 += " ... " + l.MSG;
+                    }
+                }
+                string t8 = " " + OpLog.LogConfig.IsActive;
+                string t9 = OpLog.LogConfig.MsgSrc;
+                var t10 = OpLogPerf.WiredIntoAppShutdown;
+                string t11 = MyDealsWebApiUrl.ROOT_URL;
+                var t12 = HttpContext.Current.Session;
+                OpFileLogPerf test = new OpFileLogPerf();
+                var t13 = test.GetFullFilePath();
+                List<string> ret = new List<string>();
                 ret.Add("System.Environment.MachineName: " + t1);
                 ret.Add("HttpContext.Current.Server.MachineName: " + t2);
                 ret.Add("System.Net.Dns.GetHostName(): " + t3);
                 ret.Add("Environment.GetEnvironmentVariable('CLIENTNAME'): " + t4);
                 //ret.Add("OpUserStack.MyOpUserToken.Usr.WWID: " + t5);
                 ret.Add("OpCurrentConfig.CurrentURL: " + t6);
-				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
-				ret.Add("Log config is active:  " + t8);
-				ret.Add("Log config src: " + t9);
-				ret.Add("WiredIntoAppShutdown: " + t10);
-				ret.Add("MyDealsWebApiUrl RootURL: " + t11);
-				ret.Add("FilePath: " + t13);
+                ret.Add("OpCurrentConfig.CurrentURL: " + t7);
+                ret.Add("Log config is active:  " + t8);
+                ret.Add("Log config src: " + t9);
+                ret.Add("WiredIntoAppShutdown: " + t10);
+                ret.Add("MyDealsWebApiUrl RootURL: " + t11);
+                ret.Add("FilePath: " + t13);
 
-				return ret;
+                return ret;
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -156,7 +174,6 @@ namespace Intel.MyDeals.Controllers.API
             RuleCondition rc4 = new RuleCondition();
             RuleCondition rc5 = new RuleCondition();
             RuleCondition rc6 = new RuleCondition();
-
 
             rs.Category = "TEST";
             rs.Description = "TEST";
