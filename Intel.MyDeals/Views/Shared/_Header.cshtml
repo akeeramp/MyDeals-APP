@@ -79,13 +79,13 @@
                                     </div>
                                     @*<div class="fl">
                                         <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
-                                    </div>
-                                    <div class="clearboth"></div>*@
+                                        </div>
+                                        <div class="clearboth"></div>*@
                                 </a>
                                 @*<ul class="dropdown-menu" role="menu">
-        <li><a href="#">User Preferences</a></li>
-        <li><a href="#">Some other stuff</a></li>
-    </ul>*@
+                                    <li><a href="#">User Preferences</a></li>
+                                    <li><a href="#">Some other stuff</a></li>
+                                    </ul>*@
                             </li>
                         </ul>
                         <div class="fr">
@@ -102,13 +102,12 @@
     <div class="menu-bar {}">
         <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
             @*<li class="dropdown">
-                    <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
-                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                        <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
-                        <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
-                    </ul>
+                <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
+                <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
+                </ul>
                 </li>*@
-
 
             <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
             @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
@@ -134,14 +133,16 @@
                     <li class="dropdown-submenu">
                         <a tabindex="-1">TroubleShooting</a>
                         <ul class="dropdown-menu" style="width: 300px;">
-                            <li class="menu-detailed"><a href="/error/ResetMyCache" onclick="clearSessionData('/error/ResetMyCache');return false;">
-                                <i class="fl fa fa-user-md"></i>
-                                <div class="fl">
-                                    Clear <b>My</b> View Model
-                                    <div>Clear only your settings</div>
-                                </div>
-                                <div class="clearboth"></div>
-                            </a></li>
+                            <li class="menu-detailed">
+                                <a href="/error/ResetMyCache" onclick="clearSessionData('/error/ResetMyCache');return false;">
+                                    <i class="fl fa fa-user-md"></i>
+                                    <div class="fl">
+                                        Clear <b>My</b> View Model
+                                        <div>Clear only your settings</div>
+                                    </div>
+                                    <div class="clearboth"></div>
+                                </a>
+                            </li>
                             @if (usrRole == "SA" || isDeveloper)
                             {
                                 <li class="menu-detailed">
@@ -246,30 +247,33 @@
             <li>
                 <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
             </li>
+            <li>
+                <a href="@Url.Action("Index", "Help", new { Area = "" })" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
+            </li>
 
 
             @*<li class="dropdown">
-                    <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>
-                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                        <li><a href="#">Some action</a></li>
-                        <li><a href="#">Some other action</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Hover me for more options</a>
-                            <ul class="dropdown-menu">
-                                <li><a tabindex="-1">Second level</a></li>
-                                <li class="dropdown-submenu">
-                                    <a href="#">Even More..</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">3rd level</a></li>
-                                        <li><a href="#">3rd level</a></li>
-                                    </ul>
-                                </li>
-                                <li><a>Second level</a></li>
-                                <li><a>Second level</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="#">Some action</a></li>
+                <li><a href="#">Some other action</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Hover me for more options</a>
+                <ul class="dropdown-menu">
+                <li><a tabindex="-1">Second level</a></li>
+                <li class="dropdown-submenu">
+                <a href="#">Even More..</a>
+                <ul class="dropdown-menu">
+                <li><a href="#">3rd level</a></li>
+                <li><a href="#">3rd level</a></li>
+                </ul>
+                </li>
+                <li><a>Second level</a></li>
+                <li><a>Second level</a></li>
+                </ul>
+                </li>
+                </ul>
                 </li>
                 <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
                 <li><a href="@Url.Action("Index", "Contract")">Contract</a></li>
@@ -289,32 +293,36 @@
         text-align: center;
     }
 
-    nav .hdrIcon a {
-        padding: 6px;
-    }
+        nav .hdrIcon a {
+            padding: 6px;
+        }
 
-    nav .hdrIcon a i {
-        line-height: .9em;
-        font-size: 20px;
-    }
+            nav .hdrIcon a i {
+                line-height: .9em;
+                font-size: 20px;
+            }
 
-    nav .hdrIcon a div {
-        font-size: 9px;
-        line-height: .9em;
-    }
+            nav .hdrIcon a div {
+                font-size: 9px;
+                line-height: .9em;
+            }
 
     .menu-detailed a i {
-        font-size: 28px !important; 
-        color: #00AEEF; 
+        font-size: 28px !important;
+        color: #00AEEF;
         margin: 2px 10px 0 0;
         width: 30px;
     }
+
     .menu-detailed a div {
         line-height: 1.2em;
     }
-    .menu-detailed a div > div {
-        font-size: 10px; color: #aaaaaa;
-    }
+
+        .menu-detailed a div > div {
+            font-size: 10px;
+            color: #aaaaaa;
+        }
+
     .navbar-security {
         float: left;
         padding: 20px 15px 14px 0;
@@ -328,8 +336,8 @@
 
 <script>
     topbar.config({
-        barColors: {
-            '0': 'rgba(196, 214, 0, 1)'
+    barColors: {
+        '0': 'rgba(196, 214, 0, 1)'
         }
     });
 

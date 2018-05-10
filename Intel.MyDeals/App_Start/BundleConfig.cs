@@ -253,7 +253,8 @@ namespace Intel.MyDeals
                 "~/css/select2.min.css",
                 "~/css/nv.d3.min.css",
                 "~/css/angular-gridster.css",
-                "~/css/bootstrap-switch.min.css"
+                "~/css/bootstrap-switch.min.css",
+                "~/css/simple-sidebar.css"
                 ));
 
             //"~/Content/kendo/2016.3.914/kendo.office365.min.css",
