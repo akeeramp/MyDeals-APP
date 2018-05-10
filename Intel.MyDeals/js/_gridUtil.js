@@ -490,7 +490,8 @@ gridUtils.uiDimInfoExcelControlWrapper = function (passedData, field) {
 
 //this control wrapper to be used for displaying which product is associated with each dimention
 gridUtils.uiProductDimControlWrapper = function (passedData, type) {
-    var data = passedData["PTR_USER_PRD"].split(',');
+    // We need to get the mydeals product, split them show them in prd_bckt split
+    var data = passedData["TITLE"].split(',');
     var tmplt = '';
     if (type == "kit") {
         tmplt += '<table>';
