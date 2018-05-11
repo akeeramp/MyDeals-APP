@@ -119,7 +119,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public void UpdateRecordStagesAndNotifyErrors([FromBody]dynamic errorObject)
         {
-            _jmsLib.UpdateRecordStagesAndNotifyErrors((int)errorObject.Flag, (char)errorObject.JobType, (string)errorObject.CSVFilePath, (string)errorObject.ErrorDetail);
+            _jmsLib.UpdateRecordStagesAndNotifyErrors((int)errorObject.Flag, (char)errorObject.JobType, (string)errorObject.CsvFilePath, (string)errorObject.ErrorDetails);
         }
 
         [Route("InsertExceptionData")]
