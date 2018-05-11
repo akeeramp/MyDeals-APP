@@ -21,6 +21,8 @@
         <div class="lnav-sum-menu-item">
             <a ui-sref="contract.pct" ui-sref-opts="{reload: true}" ng-if="CAN_VIEW_COST_TEST"><div id="pctDiv">Price Cost Test</div></a>
             <a ui-sref="contract.compliance" ui-sref-opts="{reload: true}" ng-if="CAN_VIEW_MEET_COMP"><div id="mctDiv">Meet Comp</div></a>
+            <a ng-if="CAN_VIEW_COST_TEST && (usrRole == 'DA')" onclick="showHelpTopic(HelpTopicEnum.CostTest_DA);"><div id="mctDiv">Help</div></a>
+            <a ng-if="CAN_VIEW_COST_TEST && (usrRole == 'GA' && isSuper)" onclick="showHelpTopic(HelpTopicEnum.CostTest_SuperGA);"><div id="mctDiv">Help</div></a>
         </div>
 
     </div>

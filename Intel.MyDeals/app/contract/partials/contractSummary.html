@@ -164,6 +164,11 @@
                         </div>
 
                     </td>
+                    <td>
+                        <div class="fl navIconLnk" title="Help" ng-click="showHelp()" style="background-color:transparent" id="helpButton">
+                            <i class="intelicon-help" style="padding:5px"></i>
+                        </div>
+                    </td>
                     <td style="width: 50px; text-align: center;"></td>
                     <td>
                         <span class="k-textbox k-space-left" style="width: 280px; margin-top: -4px;">
@@ -338,6 +343,10 @@
 
 
 <style>
+    #helpButton:hover i {
+        background-color: #0071C5;
+    }
+
     .k-dialog .k-content {
         margin-top: 0 !important;
     }

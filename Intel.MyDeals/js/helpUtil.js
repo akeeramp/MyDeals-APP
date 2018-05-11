@@ -1,9 +1,13 @@
-﻿var HelpTopicEnum = Object.freeze({
+﻿// NOTE: All values (right-hand column) must correspond to one of the href found in the Help\index.cshtml file.
+var HelpTopicEnum = Object.freeze({
     "MeetComp_AutoPopulation":          "meetauto",
     "DealManager_ContractNavigator":    "nav",
     "PriceTableEditor_Features":        "PTEFeatures",
     "DealEditor_Features":              "dealedit",
-    "Dashboard_Filtering":              "filterDashboard"
+    "Dashboard_Filtering":              "filterDashboard",
+    "ContractManager_Features":         "managefeatures",
+    "CostTest_DA":                      "costtestda",
+    "CostTest_SuperGA":                 "costtestga"
 });
 
 function openInNewTab(url) {
