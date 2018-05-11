@@ -24,7 +24,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     vm.getColumns = getColumns;
     vm.openProdCorrector = openProdCorrector;
     $scope.openProductSelector = openProductSelector;
-    $scope.openInfoDialog = openInfoDialog;
+    $scope.showHelp = showHelp;
     $scope.validateOnlyProducts = validateOnlyProducts;
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
@@ -589,14 +589,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-    function openInfoDialog() {
-        var modalOptions = {
-            closeButtonText: 'Close',
-            hasActionButton: false,
-            headerText: 'Info',
-            bodyText: 'TODO: Put info text and shortcuts here'
-        };
-        confirmationModal.showModal({}, modalOptions);
+    function showHelp() {
+        showHelpTopic(HelpTopicEnum.PriceTableEditor_Features);
     }
 
     function getColumns(ptTemplate) {
@@ -1912,7 +1906,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $scope.setRowIdStyle(root.pricingTableData.PRC_TBL_ROW);
             //e.sender.activeSheet(e.sender.sheetByName("DropdownValuesSheet"));
 
-            showHelp();
+            showAnimatedHelp();
 
             if ($scope.$root.pc !== null) {
                 $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
@@ -1922,7 +1916,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     }
 
-    function showHelp() {
+    function showAnimatedHelp() {
         $timeout(function () {
             if (!root.pricingTableData.PRC_TBL_ROW && root.pricingTableData.PRC_TBL_ROW.length > 0) return;
 

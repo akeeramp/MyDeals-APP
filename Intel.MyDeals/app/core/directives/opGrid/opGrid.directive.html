@@ -49,7 +49,7 @@
                 </button>
 
             </div>
-            
+
             <div class="fr" style="margin-top: 2px;">
                 <span class="k-textbox k-space-left opGridSearchInput">
                     <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search... (press enter to search)" ng-model="searchFilter" />
@@ -58,8 +58,14 @@
                     </a>
                 </span>
             </div>
-            
-            <div class="fr dropdown clearfix" style="margin-left: 4px; margin-right: 10px;" ng-hide="data[0].value === ''" ng-show="isExportable">
+
+            <div class="fr" style="margin-right: 10px">
+                <div class="fl navIconLnk" title="Help" ng-click="showHelp()" style="height:40px">
+                    <i class="intelicon-help" style="height: 40px; line-height: 40px; vertical-align: middle"></i>
+                </div>
+            </div>
+
+            <div class="fr dropdown clearfix" style="margin-right: 2px;" ng-hide="data[0].value === ''" ng-show="isExportable">
                 <button class="btn btn-sm ssToolbarBtn dropdown-toggle" id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
                     <table>
                         <tbody>
@@ -109,7 +115,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="fr" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                 <ul kendo-menu k-options="columnMenu">
                     <li>
@@ -139,7 +145,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="fr" style="margin-top: 2px; margin-left: 8px;">
                 <button class="btn btn-sm ssToolbarBtn" ng-click="openOverlappingDealCheck()" title="check for overlapping Deals.">
                     <table>
@@ -171,44 +177,43 @@
             </div>
 
             <!--<div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                <div class="btn-group btn-group-font">
-                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'sm'"><div style="font-size: 8px; margin-top: 9px;">A</div></label>
-                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'md'"><div style="font-size: 11px; margin-top: 6px;">A</div></label>
-                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'lg'"><div style="font-size: 14px; margin-top: 3px;">A</div></label>
-                </div>
-            </div>-->
-
+        <div class="btn-group btn-group-font">
+            <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'sm'"><div style="font-size: 8px; margin-top: 9px;">A</div></label>
+            <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'md'"><div style="font-size: 11px; margin-top: 6px;">A</div></label>
+            <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'lg'"><div style="font-size: 14px; margin-top: 3px;">A</div></label>
+        </div>
+    </div>-->
             <!--<div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
-                <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
-                    <table>
-                        <tr>
-                            <td>
-                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                            </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                Export to Excel<br />
-                                Custom Columns
-                            </td>
-                        </tr>
-                    </table>
-                </button>
-            </div>
+        <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        Export to Excel<br />
+                        Custom Columns
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>
 
-            <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
-                <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcel()" title="Export to Excel every column.">
-                    <table>
-                        <tr>
-                            <td>
-                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                            </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                Export to Excel<br />
-                                ALL Columns
-                            </td>
-                        </tr>
-                    </table>
-                </button>
-            </div>-->
+    <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
+        <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcel()" title="Export to Excel every column.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        Export to Excel<br />
+                        ALL Columns
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>-->
 
 
             <div class="clearboth"></div>

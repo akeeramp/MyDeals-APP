@@ -1189,10 +1189,7 @@
         }
 
         $scope.showHelp = function () {
-            $timeout(function () {
-                $scope._dirty = false; // don't want to kick of listeners
-                $state.go('contract.manager', { cid: $scope.contractData.DC_ID }, { reload: true });
-            });
+            showHelpTopic(HelpTopicEnum.DealManager_ContractNavigator);
         }
 
         $scope.gotoContractEditor = function (ps, pt) {

@@ -139,18 +139,11 @@
 		-->
 	</div>
 
-	<div style="position:absolute; float: right; right: 5px; z-index: 900;">
-		<!-- Info Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-click="openInfoDialog()" title="Info">
-			<table>
-				<tr>
-					<td>
-						<i class="fa fa-info-circle skyBlue" aria-hidden="true" style="font-size: 29px; margin-top: 2px;"></i>
-					</td>
-				</tr>
-			</table>
-		</button>
-	</div>
+    <div style="position:absolute; float: right; right: 5px; z-index: 900;">
+        <div class="fl navIconLnk" title="Help" ng-click="showHelp()" style="height:40px">
+            <i class="intelicon-help" style="height: 40px; line-height: 40px; vertical-align: middle"></i>
+        </div>
+    </div>
 
 	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%; margin-top: -3px; margin-left: -2px;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
 

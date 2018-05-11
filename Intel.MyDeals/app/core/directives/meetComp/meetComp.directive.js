@@ -72,6 +72,10 @@
                     });
                 }                
 
+                $scope.showHelp = function () {
+                    showHelpTopic(HelpTopicEnum.MeetComp_AutoPopulation);
+                }
+
                 $scope.lastMeetCompRunCalc = function () {
                     var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
                     if (!!LAST_MEET_COMP_RUN) {

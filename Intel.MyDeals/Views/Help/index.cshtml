@@ -1,10 +1,46 @@
 ﻿<link href="~/css/simple-sidebar.css" rel="stylesheet" />
 
 <script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
     function loadContent(content) {
         $('#page-content').load(content);
         return false;
     }
+
+    $(document).ready(function () {
+        if ((!String(window.location).includes("#")) && String(window.location).includes("?topic")) {
+            var topic = getUrlParameter('topic');
+            if (topic.length > 0) {
+                var matchStr = 'a[href$="#' + topic + '"]';
+                if ($(matchStr).length == 1) {
+                    $(matchStr).trigger('click');
+
+                    var divId = $(matchStr).closest('.panel-collapse').attr('id');
+                    var matchStr = 'a[href$="#' + divId + '"]';
+                    if ($(matchStr).length == 1) {
+                        $(matchStr).trigger('click');
+                    }
+                }
+            } else {
+                alert('Specified help topic ' + topic + ' not found.');
+            }
+        }
+    });
+
 </script>
 
 <div>
@@ -82,7 +118,7 @@
             </li>
             <div id="PTE" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <a class="link" href="#PTE" onclick="javascript:loadContent('/content/help/pte/pte.html')">
+                    <a class="link" href="#PTEFeatures" onclick="javascript:loadContent('/content/help/pte/pte.html')">
                         <li>Pricing Table Editor Features</li>
                     </a>
                     <a class="link" href="#enter" onclick="javascript:loadContent('/content/help/enter/enter.html')">
