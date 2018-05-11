@@ -709,6 +709,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
                     int IDX_TRAY_END_DT = DB.GetReaderOrdinal(rdr, "TRAY_END_DT");
                     int IDX_TRAY_STRT_DT = DB.GetReaderOrdinal(rdr, "TRAY_STRT_DT");
+                    int IDX_HAS_L1 = DB.GetReaderOrdinal(rdr, "HAS_L1");
+                    int IDX_HAS_L2 = DB.GetReaderOrdinal(rdr, "HAS_L2");
 
                     while (rdr.Read())
                     {
@@ -737,7 +739,9 @@ namespace Intel.MyDeals.DataLibrary
                             PRD_MRK_MBR_SID = (IDX_PRD_MRK_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MRK_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MRK_MBR_SID),
                             PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
                             TRAY_END_DT = (IDX_TRAY_END_DT < 0 || rdr.IsDBNull(IDX_TRAY_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_END_DT),
-                            TRAY_STRT_DT = (IDX_TRAY_STRT_DT < 0 || rdr.IsDBNull(IDX_TRAY_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_STRT_DT)
+                            TRAY_STRT_DT = (IDX_TRAY_STRT_DT < 0 || rdr.IsDBNull(IDX_TRAY_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_STRT_DT),
+                            HAS_L1 = (IDX_HAS_L1 < 0 || rdr.IsDBNull(IDX_HAS_L1)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_HAS_L1),
+                            HAS_L2 = (IDX_HAS_L2 < 0 || rdr.IsDBNull(IDX_HAS_L2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_HAS_L2),
                         });
                     } // while
 
