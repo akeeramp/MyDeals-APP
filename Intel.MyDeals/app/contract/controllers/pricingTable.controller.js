@@ -105,15 +105,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         topbar.hide();
 
-        // Set Pricing Strategy ID and Object
+        //// Set Pricing Strategy ID and Object
         if (root.curPricingStrategyId !== $stateParams.sid) {
             root.curPricingStrategyId = $stateParams.sid;
             root.curPricingStrategy = util.findInArray(root.contractData.PRC_ST, root.curPricingStrategyId);
 
-            // scroll left nav into view
+        //    // scroll left nav into view
             $timeout(function () {
                 if ($("#lnavPt_" + $scope.curPricingTableId).position() !== undefined) {
-                    document.getElementById("lnavPt_" + $scope.curPricingTableId).scrollIntoView({ block: 'end', behavior: 'smooth' });
+                    //document.getElementById("lnavPt_" + $scope.curPricingTableId).scrollIntoView({ block: 'end', behavior: 'smooth' });
+                    // scrollIntoView(false) is used as work around for scrollIntoView({ block: 'end', behavior: 'smooth' }) to fix IE related screen element disappearing issue.
+                    //This setting aligns the bottom the visible area and the element
+                    document.getElementById("lnavPt_" + $scope.curPricingTableId).scrollIntoView(false);
                 }
             }, 2000);
         }
@@ -122,7 +125,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $state.go('contract.manager', { cid: root.contractData.DC_ID });
         }
 
-        // Set Pricing Table ID and Object
+        //// Set Pricing Table ID and Object
         if (root.curPricingTableId !== $stateParams.pid) {
             root.curPricingTableId = $stateParams.pid;
             if (root.curPricingStrategy.PRC_TBL !== undefined)
@@ -142,7 +145,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         pricingTableData.data["PRC_ST"] = [];
         pricingTableData.data["PRC_TBL"] = [];
 
-        // Pricing Table data
+        //// Pricing Table data
         root.pricingTableData = pricingTableData.data;
 
         if (root.pricingTableData.PRC_TBL_ROW === undefined) {
