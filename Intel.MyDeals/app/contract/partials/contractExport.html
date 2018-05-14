@@ -13,8 +13,12 @@
     </div>
 </div>
 
+
 <div ng-if="!loading" style="padding: 0 20px; height: 100%;" class="contract-export">
-    
+    <div class="pull-right fl navIconLnk" title="Help" onclick="showHelpTopic(HelpTopicEnum.ContractManager_ContractAndDealViews);">
+        <i class="intelicon-help"></i>
+    </div>
+
     <div class="titlePage">
         <h1><span>Contract #{{data.DC_ID}}</span><br />{{data.TITLE}}</h1>
         <h2>
@@ -54,7 +58,7 @@
     <div class="psPage" ng-repeat="ps in data.PRC_ST">
         <h1>{{ps.TITLE}}</h1>
         <div class="subText">#{{ps.DC_ID}}</div>
-        
+
         <div class="ptPage" ng-repeat="pt in ps.PRC_TBL">
             <h2>{{pt.TITLE}}</h2>
             <div class="fl subText">#{{pt.DC_ID}}</div>
@@ -80,7 +84,7 @@
             </table>
 
         </div>
-        
+
         <div class="terms" ng-bind-html="ps.TERMS"></div>
         <hr class="page-break" />
     </div>

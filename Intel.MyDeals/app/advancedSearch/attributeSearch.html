@@ -15,7 +15,11 @@
                     k-data-source="rulesDataSource"
                     style="width: 250px;"></select>
         </div>
-        
+
+        <div class="fr navIconLnk" title="Help" onclick="showHelpTopic(HelpTopicEnum.Dashboard_AdvancedSearch);">
+            <i class="intelicon-help" style="font-size:30px !important"></i>
+        </div>
+
         <div class="fr dropdown clearfix" ng-hide="data[0].value === ''">
             <button class="btn btn-sm ssToolbarBtn dropdown-toggle" id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown" style="margin-top: -5px;">
                 <table>
@@ -57,7 +61,7 @@
                 </table>
             </button>
         </div>
-        
+
         <div class="fr attrbMenu" style="margin-left: 4px;">
             <ul kendo-menu k-options="columnMenu" style="margin-top: -3px;">
                 <li>
@@ -87,7 +91,7 @@
                 </li>
             </ul>
         </div>
-        
+
         <div class="fr">
             <button class="btn btn-sm ssToolbarBtn" ng-click="toggleWrap()" ng-class="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap." style="margin-top: -5px;">
                 <table>

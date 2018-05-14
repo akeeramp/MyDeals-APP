@@ -54,9 +54,16 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="col-md-12 row">
-                        <h6>Customer Acceptance of Contract is...<span kendo-tooltip k-content="constants.helptipMsgCustAccpt" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
+                    <div class="col-md-11 row">
+                        <h6>Customer Acceptance of Contract is...</h6>
                     </div>
+
+                    <div class="col-md-1 row">
+                        <div class="pull-right fl navIconLnk" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
+                            <i class="intelicon-help"></i>
+                        </div>
+                    </div>
+
                     <div class="col-md-11 row"
                          op-control-flat
                          ng-model="contractData"
@@ -70,7 +77,7 @@
                          op-extra="true"
                          op-ui-mode="'VERTICAL'"></div>
                 </div>
-            </div>
+                </div>
 
             <div class="row">
                 <div class="col-md-6">
