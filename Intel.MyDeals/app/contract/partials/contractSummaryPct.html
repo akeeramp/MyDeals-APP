@@ -27,11 +27,11 @@
                     </td>
                     <td style="width: 110px; height: 40px;"></td>
                     <td style="width:40px">
-                        <div class="fl navIconLnk" title="Help" ng-if="CAN_VIEW_COST_TEST && (usrRole == 'DA')" onclick="showHelpTopic(HelpTopicEnum.CostTest_DA);" style="background-color:transparent" id="helpButton">
-                            <i class="intelicon-help" style="padding:5px"></i>
+                        <div class="fr helpBtn" title="Help" ng-if="CAN_VIEW_COST_TEST && (usrRole == 'DA')" onclick="showHelpTopic(HelpTopicEnum.CostTest_DA);">
+                            <i class="intelicon-help" style="font-size:30px !important"></i>
                         </div>
-                        <div class="fl navIconLnk" title="Help"ng-if="CAN_VIEW_COST_TEST && (usrRole == 'GA' && isSuper)" onclick="showHelpTopic(HelpTopicEnum.CostTest_SuperGA);" style="background-color:transparent" id="helpButton">
-                            <i class="intelicon-help" style="padding:5px"></i>
+                        <div class="fr helpBtn" title="Help" ng-if="CAN_VIEW_COST_TEST && (usrRole == 'GA' && isSuper)" onclick="showHelpTopic(HelpTopicEnum.CostTest_SuperGA);" >
+                            <i class="intelicon-help" style="font-size:30px !important"></i>
                         </div>
                     </td>
                     <td>
@@ -125,10 +125,6 @@
 
 <style>
     /*Added the below style to get past price cost test button removing height and breaking scroll bars*/
-    #helpButton:hover i {
-        background-color: #0071C5;
-    }
-
     .k-grid-content.k-auto-scrollable
     {
         height: 215px;

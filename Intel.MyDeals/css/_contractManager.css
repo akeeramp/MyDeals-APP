@@ -236,6 +236,16 @@
         color: #ffffff;
     }
 
+    .helpBtn {
+        cursor: pointer;
+        background-color: transparent;
+        color: #00AEEF;
+    }
+
+        .helpBtn:hover {
+            color: #0071C5;
+        }
+
     .navIconLghtLnk {
         font-size: 22px;
         cursor: pointer;

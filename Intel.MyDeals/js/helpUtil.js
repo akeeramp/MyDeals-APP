@@ -9,9 +9,10 @@ var HelpTopicEnum = Object.freeze({
     "CostTest_DA":                      "costtestda",
     "CostTest_SuperGA":                 "costtestga",
     "ContractManager_OverlappingDealsCheck": "overlap",
-    "ContractManager_ContractAndDealViews": "contractdeal",
-    "CreateContract_ContractDetails": "details",
-    "Dashboard_AdvancedSearch": "advsearch"
+    "ContractManager_ContractAndDealViews":  "contractdeal",
+    "CreateContract_ContractDetails":   "details",
+    "Dashboard_AdvancedSearch":         "advsearch",
+    "Tenders_ManagingTenders":          "tendersmanage"
 });
 
 function openInNewTab(url) {
