@@ -11,7 +11,7 @@ namespace Intel.MyDeals.Controllers
         public ActionResult Index()
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
-            return View(AppLib.AVM);
+            return View();
         }
 
         public ActionResult Access()
@@ -23,19 +23,19 @@ namespace Intel.MyDeals.Controllers
         public ActionResult Timeout()
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
-            return View(AppLib.AVM);
+            return View();
         }
 
         public ActionResult NotFound()
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
-            return View(AppLib.AVM);
+            return View();
         }
 
         public ActionResult Security()
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
-            return View(AppLib.AVM);
+            return View();
         }
 
         public ActionResult NeedCustomers()
