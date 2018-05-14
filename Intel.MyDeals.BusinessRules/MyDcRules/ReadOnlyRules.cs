@@ -34,7 +34,6 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.CUST_ACCNT_DIV,
                                 AttributeCodes.PRD_LEVEL,
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.TRGT_RGN,
