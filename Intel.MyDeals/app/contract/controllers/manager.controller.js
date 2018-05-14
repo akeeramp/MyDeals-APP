@@ -174,10 +174,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
 
-    $scope.showHelp = function () {
-        showHelpTopic(HelpTopicEnum.ContractManager_Features);
-    }
-
     $scope.$on('ExecutionPctMctComplete', function(event, executedFromBtn) {
         if (!!executedFromBtn && executedFromBtn === true) $scope.ranManuallySincePageLoaded = true;
 

@@ -25,15 +25,22 @@
                             <i class="chevron linkable intelicon-fast-forward"></i>
                         </div>
                     </td>
-                    <td style="width: 130px; height: 40px;"></td>
+                    <td style="width: 110px; height: 40px;"></td>
+                    <td style="width:40px">
+                        <div class="fl navIconLnk" title="Help" ng-if="CAN_VIEW_COST_TEST && (usrRole == 'DA')" onclick="showHelpTopic(HelpTopicEnum.CostTest_DA);" style="background-color:transparent" id="helpButton">
+                            <i class="intelicon-help" style="padding:5px"></i>
+                        </div>
+                        <div class="fl navIconLnk" title="Help"ng-if="CAN_VIEW_COST_TEST && (usrRole == 'GA' && isSuper)" onclick="showHelpTopic(HelpTopicEnum.CostTest_SuperGA);" style="background-color:transparent" id="helpButton">
+                            <i class="intelicon-help" style="padding:5px"></i>
+                        </div>
+                    </td>
                     <td>
                         <span class="k-textbox k-space-left" style="width: 330px; margin-top: -1px; margin-left: 15px;">
                             <input type="text" placeholder="Search for pricing strategies, tables or names" ng-model="titleFilter" />
                             <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
                         </span>
                     </td>
-                    <td style="text-align: right;">
-                    </td>
+                    <td style="text-align: right;"></td>
                 </tr>
             </table>
         </div>
@@ -118,6 +125,10 @@
 
 <style>
     /*Added the below style to get past price cost test button removing height and breaking scroll bars*/
+    #helpButton:hover i {
+        background-color: #0071C5;
+    }
+
     .k-grid-content.k-auto-scrollable
     {
         height: 215px;

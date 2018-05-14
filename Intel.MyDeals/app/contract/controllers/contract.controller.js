@@ -1188,10 +1188,6 @@
             $scope.isAddPricingTableHidden = true;
         }
 
-        $scope.showHelp = function () {
-            showHelpTopic(HelpTopicEnum.DealManager_ContractNavigator);
-        }
-
         $scope.gotoContractEditor = function (ps, pt) {
             $scope.isPtr = false;
             $scope.isWip = false;

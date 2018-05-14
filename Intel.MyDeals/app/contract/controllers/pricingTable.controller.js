@@ -24,7 +24,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     vm.getColumns = getColumns;
     vm.openProdCorrector = openProdCorrector;
     $scope.openProductSelector = openProductSelector;
-    $scope.showHelp = showHelp;
     $scope.validateOnlyProducts = validateOnlyProducts;
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
@@ -590,10 +589,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             syncSpreadRows(sheet, initRow, row - 1);
         }
-    }
-
-    function showHelp() {
-        showHelpTopic(HelpTopicEnum.PriceTableEditor_Features);
     }
 
     function getColumns(ptTemplate) {

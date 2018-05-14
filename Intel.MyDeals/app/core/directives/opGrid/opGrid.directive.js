@@ -1708,10 +1708,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.searchGrid();
             }
 
-            $scope.showHelp = function () {
-                showHelpTopic(HelpTopicEnum.DealEditor_Features);
-            }
-
             $scope.searchGrid = function () {
 
                 var tab = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");

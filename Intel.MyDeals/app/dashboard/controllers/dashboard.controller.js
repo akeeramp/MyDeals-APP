@@ -228,10 +228,6 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         }
     }
 
-    $scope.showHelp = function () {
-        showHelpTopic(HelpTopicEnum.Dashboard_Filtering);
-    }
-
     $scope.broadcastRefresh = function (scope) {
         $timeout(function () {
             // Save settings to local storage
