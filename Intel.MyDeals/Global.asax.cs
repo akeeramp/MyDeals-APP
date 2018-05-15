@@ -65,15 +65,19 @@ namespace Intel.MyDeals
                 errCon.RequestContext.RouteData.Values["action"] = "Access";
             }
 
-            var controller = new ErrorController
+            // Do not redirect for any other fatal erros a
+            if (errCon.CurrentAction == "Access" || errCon.CurrentAction == "NotFound")
             {
-                ViewData =
+                var controller = new ErrorController
+                {
+                    ViewData =
                 {
                     Model = new HandleErrorInfo(ex, errCon.CurrentController, errCon.CurrentAction)
                 }
-            };
+                };
 
-            ((IController)controller).Execute(errCon.RequestContext);
+                ((IController)controller).Execute(errCon.RequestContext);
+            }
         }
 
         protected void Application_End()
