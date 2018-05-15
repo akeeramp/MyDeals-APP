@@ -1,6 +1,23 @@
 ﻿<script type="text/ng-template" id="dealProductsModal">
     <div class="modal-header modalBlueBody">
-        <h5 class="modal-title" id="modal-title">Products for deal {{dataItem.DC_ID}} <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+        <div class="row">
+            <h5 class="modal-title col-md-9" id="modal-title">Products for deal {{dataItem.DC_ID}} <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+            <div ng-if="showDealProducts" class="dropdown col-md-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                    Copy to clip board
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li role="button" ngclipboard data-clipboard-text="{{copyNoCAPProudcts('HIER_VAL_NM')}}">
+                        <a>L4's (with No CAP)</a>
+
+                    </li>
+                    <li role="button" ngclipboard data-clipboard-text="{{copyNoCAPProudcts('PCSR_NBR')}}">
+                        <a>Processor's (with No CAP)</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
 
@@ -17,12 +34,14 @@
 <style>
     .gridProdExport.opUiContainer.md.k-grid .k-header a.k-grid-excel {
     }
+
     .excelText {
         line-height: 1.2em;
         font-size: 12px;
         float: right;
     }
-    .excelText span {
-        text-align: left;
-    }
+
+        .excelText span {
+            text-align: left;
+        }
 </style>

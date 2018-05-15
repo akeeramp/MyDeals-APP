@@ -16,6 +16,7 @@
         , 'angular-linq'
         , 'angular.filter'
         , 'intcAnalytics'
+        , 'ngclipboard'
         /*
          * Our reusable cross app code modules
          */

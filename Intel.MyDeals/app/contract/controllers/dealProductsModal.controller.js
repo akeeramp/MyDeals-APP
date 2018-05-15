@@ -6,13 +6,13 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-dealProductsModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService', 'dataService'];
+dealProductsModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService', 'dataService', '$filter'];
 
-function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetService, dataService) {
+function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetService, dataService, $filter) {
 
     $scope.dataItem = dataItem;
 
-    var showDealProducts = $scope.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || $scope.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM';
+    $scope.showDealProducts = $scope.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || $scope.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM';
 
     var prdIds = [];
     var prods = $scope.dataItem.PRODUCT_FILTER;
@@ -24,11 +24,14 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         "PrdIds": prdIds
     }
 
+    var copyOfData = [];
+
     // For VOL_TIER and product if Mydeals product is at higher level > 7007, actual products against which deal are created are in GRP PDL table
     // From deal id get the product and CAP
     function getProductDetailsFromDealId(e) {
         return dataService.get('/api/Products/GetDealProducts/' + $scope.dataItem.DC_ID + '/' + $scope.dataItem.CUST_MBR_SID)
                            .then(function (response) {
+                               copyOfData = response.data;
                                e.success(response.data);
                            }, function (response) {
                                logger.error("Unable to get product details.", response, response.statusText);
@@ -49,7 +52,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         dataSource: {
             transport: {
                 read: function (e) {
-                    if (showDealProducts) {
+                    if ($scope.showDealProducts) {
                         getProductDetailsFromDealId(e);
                     } else {
                         getProductDetailsFromProductId(e);
@@ -74,7 +77,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                 field: "CAP",
                 title: "CAP-YCP1",
                 width: "110px",
-                hidden: !showDealProducts,
+                hidden: !$scope.showDealProducts,
                 template: function (dataItem) {
                     if (dataItem.CAP == 'No CAP') {
                         return '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;"><div style="font-family: arial; text-align: center;font-weight:600">No CAP</div></div>'
@@ -121,7 +124,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                 field: "YCS2",
                 title: "YCS2",
                 width: "110px",
-                hidden: !showDealProducts,
+                hidden: !$scope.showDealProducts,
                 template: function (dataItem) {
                     if (dataItem.YCS2 == 'No CAP') {
                         return '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;"><div style="font-family: arial; text-align: center;font-weight:600">No YCS2</div></div>'
@@ -155,6 +158,22 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
             }
         ]
     };
+
+    $scope.copyNoCAPProudcts = function (columnValue) {
+        if (copyOfData.length == 0) return "";
+        var noCAPProducts = copyOfData.filter(function (x) {
+            return x.CAP === null || x.CAP == "No CAP";
+        });
+        if (noCAPProducts.length == 0) {
+            return "No prodcuts were found without CAP";
+        }
+        noCAPProducts = $filter('unique')(noCAPProducts, columnValue)
+        var noCAPProdNames = noCAPProducts.map(function (x) {
+            return x[columnValue];
+        }).join(',');
+
+        return noCAPProdNames;
+    }
 
     $scope.ok = function () {
         $uibModalInstance.close();
