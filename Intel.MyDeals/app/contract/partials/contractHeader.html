@@ -5,8 +5,8 @@
         <div class="fl">{{ pageTitle }}</div>
         <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
     </div>-->
-    <div class="pricing-strategy-status-bar" ng-if="!('contract.details' | isState)">
-        <div class="fr valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 0 5px;"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
+    <div class="pricing-strategy-status-bar fr" ng-if="!('contract.details' | isState)">
+        <div class="valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 5px 8px;"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
     </div>
 
     <div ng-if="isPtr || isWip">

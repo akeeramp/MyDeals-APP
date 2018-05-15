@@ -40,6 +40,10 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         overflow: hidden;
+		width: 300px;
+		box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+		position: absolute;
+		z-index: 1000;
     }
     #lnavHeader {
         height: 112px;
@@ -49,8 +53,10 @@
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-        background-color: #f5f5f5;
-        color: #00AEEF;
+		background-color: #01335f;
+		color: #00AEEF;
+		box-shadow: 0 2px 4px rgba(0,0,0,.3);
+		position: absolute;
     }
     #lnavMenuContainer {
         color: #ffffff;
@@ -227,7 +233,7 @@
         font-size: 22px;
         cursor: pointer;
         padding: 0 8px;
-        background-color: #f5f5f5;
+        background-color: #01335f;
         color: #00AEEF;
     }
     .navIconLnk.active {
@@ -1044,10 +1050,11 @@
         font-size:14px;
     }
     .contract-title-container A {
-        color:#003C71;
+        text-decoration: none;
+        color:#ffffff;
+		font-weight: bold;
     }
     .contract-title-container A:hover {
-        text-decoration: none;
         color:#00aeef;
     }
     .contractHeaderId{
