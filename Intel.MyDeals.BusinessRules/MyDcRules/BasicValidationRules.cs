@@ -572,7 +572,7 @@ namespace Intel.MyDeals.BusinessRules
 					ActionRule = MyDcActions.ValidateKitRebateBundleDiscount,
 					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate, MyRulesTrigger.OnLoad }
 				},
                 new MyOpRule
                 {
@@ -580,7 +580,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ValidateSubKitRebateBundleDiscount,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.KIT.ToString()},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate, MyRulesTrigger.OnLoad}
                 },
                 new MyOpRule
                 {

@@ -40,6 +40,7 @@ gridUtils.uiControlWrapperWithDefault = function (passedData, field, format) {
     if (passedData._behaviors !== undefined && passedData._behaviors.isReadOnly !== undefined && passedData._behaviors.isReadOnly[field] !== undefined && passedData._behaviors.isReadOnly[field] === true) {
         defVal = "";
     }
+
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
@@ -126,6 +127,7 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     var tmplt = '';
+
     if (passedData[field] === undefined) return tmplt;
 
     if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
@@ -367,7 +369,7 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
             tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-            tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '_' + dimkey + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + field + '_' + dimkey + '" style="" data-role="tooltip"></div>';
+            tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '_' + dimkey + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + field + '_' + dimkey + '" style="margin-top: -7px" data-role="tooltip"></div>';
             tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, "") + ')"></span>';
             tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, format) + ')"></span>';
             tmplt += '</td>';

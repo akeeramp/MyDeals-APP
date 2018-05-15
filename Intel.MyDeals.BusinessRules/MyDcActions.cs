@@ -1493,9 +1493,6 @@ namespace Intel.MyDeals.BusinessRules
             if (deNumTiers == null) return;
             int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;      //TODO: Investigate - isn't it possible for the user to use separators other than ","?
 
-            numOfTiers += 1; // Note that KIT ECAP is ECAP of tier -1
-            int tierOffset = 2; // Note that the offset is now 2 to account for KIT ECAPs at tier -1
-
             IEnumerable<IOpDataElement> tieredObjs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString());
             IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
@@ -1509,7 +1506,8 @@ namespace Intel.MyDeals.BusinessRules
                 if (tieredObj.DimKey.Count > 0)
                 {
                     int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
-                    if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+
+                    if (tier >= -1 && tier <= numOfTiers) // Only do this for kit level and used tier levels, exclude others
                     {
                         IOpDataElement ecapPrice = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE && de.DimKey.FirstOrDefault() != null && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
                         IOpDataElement qty = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString() && de.DimKey.FirstOrDefault() != null && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
@@ -1558,8 +1556,7 @@ namespace Intel.MyDeals.BusinessRules
                 foreach (IOpDataElement tieredObj in tieredObjs)
                 {
                     int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
-                    var excludingKitOffset = tierOffset - 1; // Kit offset, but not including "-1" for KIT ecap rows
-                    if (tier >= (1 - excludingKitOffset) && tier <= (numOfTiers - excludingKitOffset))
+                    if (tier >= 0 && tier < numOfTiers) // Because tiers are 0 based
                     {
                         AddTierValidationMessage(atrbWithValidation, "KIT Rebate must be equal to KIT sum of total discount per line.", tier);
                     }
@@ -1575,7 +1572,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement hasSubkitDe = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.HAS_SUBKIT.ToString()).FirstOrDefault();
             string hasSubkit = hasSubkitDe?.AtrbValue.ToString();
 
-            if (hasSubkit == "0" || hasSubkit == null) return;
+            if (hasSubkit == "0" || hasSubkit == null || hasSubkit == "") return;
 
             IEnumerable<IOpDataElement> tieredObjs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString());
             IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
