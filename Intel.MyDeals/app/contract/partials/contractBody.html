@@ -17,7 +17,7 @@
         <div style="position: absolute; top: 70px; right: 5px;">
             <div id="perfChart" style="height: 40px; padding: 0;"></div>
         </div>
-        <div style="height: 37px; padding-left: 10px; border-bottom: 2px solid #bcbcbc;" ng-if="isPtr || isWip">
+        <div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip">
             <div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
             <div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}" 
                  title="Save, validate, and finalize your deals in the Deal Editor. *Additional deal information may be required" 
