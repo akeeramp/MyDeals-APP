@@ -1,1 +1,200 @@
-/*!* Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)* Copyright 2013-2017 Start Bootstrap* Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)*//*body {overflow-x: hidden;font: "IntelClear Light";font-weight: lighter;}*/#handbook-sidebar-wrapper {    z-index: 1000;    position: fixed;    left: 250px;    width: 0;    height: 100%;    margin-left: -250px;    overflow-y: auto;    background: #0071c5;    -webkit-transition: all 0.5s ease;    -moz-transition: all 0.5s ease;    -o-transition: all 0.5s ease;    transition: all 0.5s ease;}#handbook-wrapper.toggled #handbook-sidebar-wrapper {    width: 250px;}#handbook-page-content-wrapper {    width: 100%;    position: absolute;}#handbook-wrapper.toggled #handbook-page-content-wrapper {    position: absolute;    margin-right: -250px;}#handbook-header {    padding: 10px;    font-weight: 100;    background-color: #0071c5;    color: #FFFFFF;    margin-bottom: -1px;}.tip {    background-color: #DCCB47;    display: inline-block;    padding-top: 20px;    padding-right: 10px;    padding-left: 10px;    margin-bottom: 10px;}.tipimg {    float: left;    margin-right: 5px;}.ptip {    float: right;}/* Sidebar Styles */.handbook-sidebar-nav {    position: absolute;    top: 0;    width: 250px;    margin: 0;    padding: 0;    list-style: none;}    .handbook-sidebar-nav li {        text-indent: 20px;        line-height: 40px;    }        .handbook-sidebar-nav li a {            display: block;            text-decoration: none;            color: #FFFFFF;        }            .handbook-sidebar-nav li a:hover {                text-decoration: none;                color: #fff;                background: rgba(255, 255, 255, 0.2);            }            .handbook-sidebar-nav li a:active, .handbook-sidebar-nav li a:focus {                text-decoration: none;            }/* tweaks to bootstrap custom containers for content*//*.col-xs-6 {padding: 20px;width: 40%;}*/.expansion-indicator {    margin-right: 50px;    margin-top: 10px;}.labelhighlights {    color: #0071c5;    font-weight: bolder;    font-size: 20px;}/*.btn {background-color: #00AEEF;margin-right: 20px;color: white;}*//*.btn-primary.focus, .btn-primary:focus {background-color: #0071c5;}*//*list in sidebar styles*/.handbook-panel-body li {    list-style: none;    color: #706A6A;    font-size: 12px;    padding-left: 10px;    background-color: #FFFFFF;}/*end panel*/.handbook-sidebar-nav > .sidebar-brand {    height: 65px;    font-size: 18px;    line-height: 60px;}    .handbook-sidebar-nav > .sidebar-brand a {        color: #FFFFFF;    }        .handbook-sidebar-nav > .sidebar-brand a:hover {            color: #fff;            background: none;        }/*iframe*/iframe:focus {    outline: none;}iframe[seamless] {    display: block;}@media(min-width:768px) {    #handbook-wrapper {        padding-left: 0;    }        #handbook-wrapper.toggled {            padding-left: 250px;        }    #handbook-sidebar-wrapper {        width: 0;    }    #handbook-wrapper.toggled #handbook-sidebar-wrapper {        width: 250px;    }    #handbook-page-content-wrapper {        padding: 20px;        position: relative;    }    #handbook-wrapper.toggled #handbook-page-content-wrapper {        position: relative;        margin-right: 0;    }}
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+/*body {
+    overflow-x: hidden;
+    font: "IntelClear Light";
+    font-weight: lighter;
+}*/
+
+#handbook-wrapper {
+    padding: 0 20px 0 200px;
+    height: calc(100% - 45px);
+    overflow: auto !important;
+}
+
+#handbook-sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #0071c5;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#handbook-wrapper.toggled #handbook-sidebar-wrapper {
+    width: 250px;
+    height: calc(100% - 144px);
+    overflow-x: hidden;
+}
+
+#handbook-page-content-wrapper {
+    width: 100%;
+    position: absolute;
+}
+
+#handbook-wrapper.toggled #handbook-page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+#handbook-header {
+    padding: 10px;
+    font-weight: 100;
+    background-color: #0071c5;
+    color: #FFFFFF;
+    margin-bottom: -1px;
+    margin-top: 0;
+}
+
+.tip {
+    background-color: #DCCB47;
+    display: inline-block;
+    padding-top: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.tipimg {
+    float: left;
+    margin-right: 5px;
+}
+
+
+.ptip {
+    float: right;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .sidebar-nav li {
+        text-indent: 20px;
+        line-height: 40px;
+    }
+
+        .sidebar-nav li a {
+            display: block;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+            .sidebar-nav li a:hover {
+                text-decoration: none;
+                color: #fff;
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            .sidebar-nav li a:active, .sidebar-nav li a:focus {
+                text-decoration: none;
+            }
+
+/* tweaks to bootstrap custom containers for content*/
+/*.col-xs-6 {
+    padding: 20px;
+    width: 40%;
+}*/
+
+.expansion-indicator {
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
+.labelhighlights {
+    color: #0071c5;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+/*.btn {
+	background-color:#00AEEF;
+	margin-right: 20px;
+	color:white;
+}*/
+
+/*.btn-primary.focus, .btn-primary:focus {
+    background-color: #0071c5;
+}*/
+
+/*list in sidebar styles*/
+
+.handbook-panel-body li {
+    list-style: none;
+    color: #706A6A;
+    font-size: 12px;
+    padding-left: 10px;
+    background-color: #FFFFFF;
+}
+
+/*end panel*/
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+
+    .sidebar-nav > .sidebar-brand a {
+        color: #FFFFFF;
+    }
+
+        .sidebar-nav > .sidebar-brand a:hover {
+            color: #fff;
+            background: none;
+        }
+
+/*iframe*/
+iframe:focus {
+    outline: none;
+}
+
+iframe[seamless] {
+    display: block;
+}
+
+@media(min-width:768px) {
+    #handbook-wrapper {
+        padding-left: 0;
+    }
+
+        #handbook-wrapper.toggled {
+            padding-left: 250px;
+        }
+
+    #handbook-sidebar-wrapper {
+        width: 0;
+    }
+
+    #handbook-wrapper.toggled #handbook-sidebar-wrapper {
+        width: 250px;
+    }
+
+    #handbook-page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #handbook-wrapper.toggled #handbook-page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
