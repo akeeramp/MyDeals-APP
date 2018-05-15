@@ -1611,7 +1611,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // Defaulted row values for specific SET TYPEs
                         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                             data[r]["DSCNT_PER_LN"] = 0;
-                            data[r]["DSCNT_PER_LN"] = 0;
                             data[r]["QTY"] = 1;
                             data[r]["ECAP_PRICE"] = 0;
                             data[r]["ECAP_PRICE_____20_____1"] = 0; // KIT ECAP
