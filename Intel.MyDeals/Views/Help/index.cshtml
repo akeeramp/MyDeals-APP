@@ -22,6 +22,7 @@
     }
 
     $(document).ready(function () {
+        // When a top menu item is selected, toggle the chevron icon.
         $('a[data-toggle]').click(function (event) {
             var clickedLink = $(this);
             if ($(clickedLink).find('i').hasClass('fa-chevron-down')) {
@@ -32,6 +33,14 @@
             }
         });
 
+        // When a sub menu item is selected, add class that will allow the style to be
+        // changed.
+        $('.handbook-link').click(function (event) {
+            var clickedLink = $(this);
+            $(".handbook-link").removeClass('selected-link');
+            clickedLink.addClass('selected-link');
+        });
+       
         if ((!String(window.location).includes("#")) && String(window.location).includes("?topic")) {
             var topic = getUrlParameter('topic');
             if (topic.length > 0) {
@@ -68,19 +77,19 @@
             </li>
             <div id="Dashboard" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#filterDashboard" onclick="javascript:loadContent('/content/help/filterdash/filterdash.html')">
+                    <a class="handbook-link" href="#filterDashboard" onclick="javascript:loadContent('/content/help/filterdash/filterdash.html')">
                         <li>Filtering Dashboard</li>
                     </a>
-                    <a class="link" href="#widgets" onclick="javascript:loadContent('/content/help/widgets/widgets.html')">
+                    <a class="handbook-link" href="#widgets" onclick="javascript:loadContent('/content/help/widgets/widgets.html')">
                         <li>Widgets</li>
                     </a>
-                    <a class="link" href="#widgets" onclick="javascript:loadContent('/content/help/search/search.html')">
+                    <a class="handbook-link" href="#widgets" onclick="javascript:loadContent('/content/help/search/search.html')">
                         <li>Search</li>
                     </a>
-                    <a class="link" href="#dealdesk" onclick="javascript:loadContent('/content/help/dealdesk/dealdesk.html')">
+                    <a class="handbook-link" href="#dealdesk" onclick="javascript:loadContent('/content/help/dealdesk/dealdesk.html')">
                         <li>Deal Desk</li>
                     </a>
-                    <a class="link" href="#advsearch" onclick="javascript:loadContent('/content/help/advsearch/advsearch.html')">
+                    <a class="handbook-link" href="#advsearch" onclick="javascript:loadContent('/content/help/advsearch/advsearch.html')">
                         <li>Advanced Search</li>
                     </a>
                 </div>
@@ -91,13 +100,13 @@
             </li>
             <div id="createcontract" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#new" onclick="javascript:loadContent('/content/help/new/new.html')">
+                    <a class="handbook-link" href="#new" onclick="javascript:loadContent('/content/help/new/new.html')">
                         <li>Brand New</li>
                     </a>
-                    <a class="link" href="#contractcopy" onclick="javascript:loadContent('/content/help/contractcopy/contractcopy.html')">
+                    <a class="handbook-link" href="#contractcopy" onclick="javascript:loadContent('/content/help/contractcopy/contractcopy.html')">
                         <li>From Copy</li>
                     </a>
-                    <a class="link" href="#details" onclick="javascript:loadContent('/content/help/details/details.html')">
+                    <a class="handbook-link" href="#details" onclick="javascript:loadContent('/content/help/details/details.html')">
                         <li>Contract Details</li>
                     </a>
                 </div>
@@ -108,16 +117,16 @@
             </li>
             <div id="DealManager" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#nav" onclick="javascript:loadContent('/content/help/nav/nav.html')">
+                    <a class="handbook-link" href="#nav" onclick="javascript:loadContent('/content/help/nav/nav.html')">
                         <li>Contract Navigator</li>
                     </a>
-                    <a class="link" href="#managestra" onclick="javascript:loadContent('/content/help/managestra/managestra.html')">
+                    <a class="handbook-link" href="#managestra" onclick="javascript:loadContent('/content/help/managestra/managestra.html')">
                         <li>Creating/Managing Pricing Strategies</li>
                     </a>
-                    <a class="link" href="#managetab" onclick="javascript:loadContent('/content/help/managetab/managetab.html')">
+                    <a class="handbook-link" href="#managetab" onclick="javascript:loadContent('/content/help/managetab/managetab.html')">
                         <li>Creating/Managing Pricing Tables</li>
                     </a>
-                    <a class="link" href="#autofill" onclick="javascript:loadContent('/content/help/autofill/autofill.html')">
+                    <a class="handbook-link" href="#autofill" onclick="javascript:loadContent('/content/help/autofill/autofill.html')">
                         <li>Autofill Defaults</li>
                     </a>
                 </div>
@@ -128,23 +137,23 @@
             </li>
             <div id="PTE" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#PTEFeatures" onclick="javascript:loadContent('/content/help/pte/pte.html')">
+                    <a class="handbook-link" href="#PTEFeatures" onclick="javascript:loadContent('/content/help/pte/pte.html')">
                         <li>Pricing Table Editor Features</li>
                     </a>
-                    <a class="link" href="#enter" onclick="javascript:loadContent('/content/help/enter/enter.html')">
+                    <a class="handbook-link" href="#enter" onclick="javascript:loadContent('/content/help/enter/enter.html')">
                         <li>Entering Products</li>
                     </a>
-                    <a class="link" href="#prodexclude" onclick="javascript:loadContent('/content/help/prodexclude/prodexclude.html')">
+                    <a class="handbook-link" href="#prodexclude" onclick="javascript:loadContent('/content/help/prodexclude/prodexclude.html')">
                         <li>Excluding Products</li>
                     </a>
 
-                    <a class="link" href="#correct" onclick="javascript:loadContent('/content/help/correct/correct.html')">
+                    <a class="handbook-link" href="#correct" onclick="javascript:loadContent('/content/help/correct/correct.html')">
                         <li>Product Corrector</li>
                     </a>
-                    <a class="link" href="#save" onclick="javascript:loadContent('/content/help/save/save.html')">
+                    <a class="handbook-link" href="#save" onclick="javascript:loadContent('/content/help/save/save.html')">
                         <li>Save & Validate</li>
                     </a>
-                    <a class="link" href="#addreq" onclick="javascript:loadContent('/content/help/addreq/addreq.html')">
+                    <a class="handbook-link" href="#addreq" onclick="javascript:loadContent('/content/help/addreq/addreq.html')">
                         <li>Additional Discounts & Requirements</li>
                     </a>
                 </div>
@@ -156,13 +165,13 @@
             </li>
             <div id="DealEditor" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#dealedit" onclick="javascript:loadContent('/content/help/dealedit/dealedit.html')">
+                    <a class="handbook-link" href="#dealedit" onclick="javascript:loadContent('/content/help/dealedit/dealedit.html')">
                         <li>Deal Editor Features</li>
                     </a>
-                    <a class="link" href="#dealtools" onclick="javascript:loadContent('/content/help/dealtools/dealtools.html')">
+                    <a class="handbook-link" href="#dealtools" onclick="javascript:loadContent('/content/help/dealtools/dealtools.html')">
                         <li>Deal Tools</li>
                     </a>
-                    <a class="link" href="#customedit" onclick="javascript:loadContent('/content/help/customedit/customedit.html')">
+                    <a class="handbook-link" href="#customedit" onclick="javascript:loadContent('/content/help/customedit/customedit.html')">
                         <li>Customizing the Deal Editor</li>
                     </a>
                 </div>
@@ -174,10 +183,10 @@
             </li>
             <div id="Tenders" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#tenders" onclick="javascript:loadContent('/content/help/tenders/tenders.html')">
+                    <a class="handbook-link" href="#tenders" onclick="javascript:loadContent('/content/help/tenders/tenders.html')">
                         <li>Entering Tenders</li>
                     </a>
-                    <a class="link" href="#tendersmanage" onclick="javascript:loadContent('/content/help/tendersmanage/tendersmanage.html')">
+                    <a class="handbook-link" href="#tendersmanage" onclick="javascript:loadContent('/content/help/tendersmanage/tendersmanage.html')">
                         <li>Managing Tenders</li>
                     </a>
                 </div>
@@ -190,10 +199,10 @@
             </li>
             <div id="MeetComp" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#meetauto" onclick="javascript:loadContent('/content/help/meetauto/meetauto.html')">
+                    <a class="handbook-link" href="#meetauto" onclick="javascript:loadContent('/content/help/meetauto/meetauto.html')">
                         <li>Auto Population</li>
                     </a>
-                    <a class="link" href="#meetedit" onclick="javascript:loadContent('/content/help/meetedit/meetedit.html')">
+                    <a class="handbook-link" href="#meetedit" onclick="javascript:loadContent('/content/help/meetedit/meetedit.html')">
                         <li>Editing / Adding</li>
                     </a>
                 </div>
@@ -204,25 +213,25 @@
             </li>
             <div id="Manage" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#managefeatures" onclick="javascript:loadContent('/content/help/managefeatures/managefeatures.html')">
+                    <a class="handbook-link" href="#managefeatures" onclick="javascript:loadContent('/content/help/managefeatures/managefeatures.html')">
                         <li>Features</li>
                     </a>
-                    <a class="link" href="#actions" onclick="javascript:loadContent('/content/help/actions/actions.html')">
+                    <a class="handbook-link" href="#actions" onclick="javascript:loadContent('/content/help/actions/actions.html')">
                         <li>Actions (submit and delete)</li>
                     </a>
-                    <a class="link" href="#approve" onclick="javascript:loadContent('/content/help/approve/approve.html')">
+                    <a class="handbook-link" href="#approve" onclick="javascript:loadContent('/content/help/approve/approve.html')">
                         <li>Approve and Revise</li>
                     </a>
-                    <a class="link" href="#overlap" onclick="javascript:loadContent('/content/help/overlap/overlap.html')">
+                    <a class="handbook-link" href="#overlap" onclick="javascript:loadContent('/content/help/overlap/overlap.html')">
                         <li>Overlapping Deals Check</li>
                     </a>
-                    <a class="link" href="#exclude" onclick="javascript:loadContent('/content/help/exclude/exclude.html')">
+                    <a class="handbook-link" href="#exclude" onclick="javascript:loadContent('/content/help/exclude/exclude.html')">
                         <li>Grouping Exclusions</li>
                     </a>
-                    <a class="link" href="#history" onclick="javascript:loadContent('/content/help/history/history.html')">
+                    <a class="handbook-link" href="#history" onclick="javascript:loadContent('/content/help/history/history.html')">
                         <li>History</li>
                     </a>
-                    <a class="link" href="#contractdeal" onclick="javascript:loadContent('/content/help/contractdeal/contractdeal.html')">
+                    <a class="handbook-link" href="#contractdeal" onclick="javascript:loadContent('/content/help/contractdeal/contractdeal.html')">
                         <li>Contract and Deals Views</li>
                     </a>
                 </div>
@@ -234,10 +243,10 @@
             </li>
             <div id="CostTest" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#costtestda" onclick="javascript:loadContent('/content/help/costtestda/costtestda.html')">
+                    <a class="handbook-link" href="#costtestda" onclick="javascript:loadContent('/content/help/costtestda/costtestda.html')">
                         <li>For DA's</li>
                     </a>
-                    <a class="link" href="#costtestga" onclick="javascript:loadContent('/content/help/costtestga/costtestga.html')">
+                    <a class="handbook-link" href="#costtestga" onclick="javascript:loadContent('/content/help/costtestga/costtestga.html')">
                         <li>For Super GA's</li>
                     </a>
                     <!--<a href="#">
@@ -251,37 +260,37 @@
             </li>
             <div id="Admin" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="link" href="#customer" onclick="javascript:loadContent('/content/help/customer/customer.html')">
+                    <a class="handbook-link" href="#customer" onclick="javascript:loadContent('/content/help/customer/customer.html')">
                         <li>Customer</li>
                     </a>
-                    <a class="link" href="#geo" onclick="javascript:loadContent('/content/help/geo/geo.html')">
+                    <a class="handbook-link" href="#geo" onclick="javascript:loadContent('/content/help/geo/geo.html')">
                         <li>Geo</li>
                     </a>
-                    <a class="link" href="#legalclass" onclick="javascript:loadContent('/content/help/legalclass/legalclass.html')">
+                    <a class="handbook-link" href="#legalclass" onclick="javascript:loadContent('/content/help/legalclass/legalclass.html')">
                         <li>Legal Classification</li>
                     </a>
-                    <a class="link" href="#legalrules" onclick="javascript:loadContent('/content/help/legalrules/legalrules.html')">
+                    <a class="handbook-link" href="#legalrules" onclick="javascript:loadContent('/content/help/legalrules/legalrules.html')">
                         <li>Legal Rules</li>
                     </a>
-                    <a class="link" href="#meetcompad" onclick="javascript:loadContent('/content/help/meetcompad/meetcompad.html')">
+                    <a class="handbook-link" href="#meetcompad" onclick="javascript:loadContent('/content/help/meetcompad/meetcompad.html')">
                         <li>Meet Comp</li>
                     </a>
-                    <a class="link" href="#prodalias" onclick="javascript:loadContent('/content/help/prodalias/prodalias.html')">
+                    <a class="handbook-link" href="#prodalias" onclick="javascript:loadContent('/content/help/prodalias/prodalias.html')">
                         <li>Product Alias</li>
                     </a>
-                    <a class="link" href="#prodhier" onclick="javascript:loadContent('/content/help/prodhier/prodhier.html')">
+                    <a class="handbook-link" href="#prodhier" onclick="javascript:loadContent('/content/help/prodhier/prodhier.html')">
                         <li>Product Hierarchy</li>
                     </a>
-                    <a class="link" href="#prodvert" onclick="javascript:loadContent('/content/help/prodvert/prodvert.html')">
+                    <a class="handbook-link" href="#prodvert" onclick="javascript:loadContent('/content/help/prodvert/prodvert.html')">
                         <li>Product Vertical Rules</li>
                     </a>
-                    <a class="link" href="#quote" onclick="javascript:loadContent('/content/help/quote/quote.html')">
+                    <a class="handbook-link" href="#quote" onclick="javascript:loadContent('/content/help/quote/quote.html')">
                         <li>Quote Letter</li>
                     </a>
-                    <a class="link" href="#trouble" onclick="javascript:loadContent('/content/help/trouble/trouble.html')">
+                    <a class="handbook-link" href="#trouble" onclick="javascript:loadContent('/content/help/trouble/trouble.html')">
                         <li>Troubleshooting</li>
                     </a>
-                    <a class="link" href="#custassign" onclick="javascript:loadContent('/content/help/custassign/custassign.html')">
+                    <a class="handbook-link" href="#custassign" onclick="javascript:loadContent('/content/help/custassign/custassign.html')">
                         <li>User Customer Assignments</li>
                     </a>
                 </div>

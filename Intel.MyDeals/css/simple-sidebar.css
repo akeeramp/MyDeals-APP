@@ -1,13 +1,13 @@
 /*!
- * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
- * Copyright 2013-2017 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
- */
+* Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+* Copyright 2013-2017 Start Bootstrap
+* Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+*/
 
 /*body {
-    overflow-x: hidden;
-    font: "IntelClear Light";
-    font-weight: lighter;
+overflow-x: hidden;
+font: "IntelClear Light";
+font-weight: lighter;
 }*/
 
 #handbook-wrapper {
@@ -109,8 +109,8 @@
 
 /* tweaks to bootstrap custom containers for content*/
 /*.col-xs-6 {
-    padding: 20px;
-    width: 40%;
+padding: 20px;
+width: 40%;
 }*/
 
 .expansion-indicator {
@@ -125,13 +125,13 @@
 }
 
 /*.btn {
-	background-color:#00AEEF;
-	margin-right: 20px;
-	color:white;
+background-color:#00AEEF;
+margin-right: 20px;
+color:white;
 }*/
 
 /*.btn-primary.focus, .btn-primary:focus {
-    background-color: #0071c5;
+background-color: #0071c5;
 }*/
 
 /*list in sidebar styles*/
@@ -142,6 +142,20 @@
     font-size: 12px;
     padding-left: 10px;
     background-color: #FFFFFF;
+}
+
+.handbook-panel-body a {
+    text-decoration: none;
+}
+
+.selected-link > li {
+    color: white;
+    background-color: #4ACDFF;
+}
+
+.handbook-link > li:hover {
+    color: black;
+    background-color: #EDEFF0;
 }
 
 /*end panel*/
