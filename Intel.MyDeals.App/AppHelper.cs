@@ -97,7 +97,7 @@ namespace Intel.MyDeals.App
             return new ErrorControllerContent
             {
                 CurrentController = currentController,
-                CurrentAction = currentAction,
+                CurrentAction = action,
                 RequestContext = new RequestContext(new HttpContextWrapper(httpContext), routeData)
             };
         }
