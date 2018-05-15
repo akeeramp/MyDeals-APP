@@ -17,7 +17,7 @@
     };
 
     function loadContent(content) {
-        $('#page-content').load(content);
+        $('#handbook-page-content').load(content);
         return false;
     }
 
@@ -45,19 +45,19 @@
 
 <div>
     <a href="#intro" onclick="javascript:loadContent('/content/help/intro/intro.html')" style="color: #FFF;">
-        <h4> My Deals Handbook</h4>
+        <h4 id="handbook-header"> My Deals Handbook</h4>
     </a>
 </div>
-<div id="wrapper" class="toggled">
+<div id="handbook-wrapper" class="toggled">
     <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
+    <div id="handbook-sidebar-wrapper">
+        <ul class="handbook-sidebar-nav">
             <!--/*dashboard menu*/-->
             <li>
                 <a data-toggle="collapse" href="#Dashboard">Dashboard</a>
             </li>
             <div id="Dashboard" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#filterDashboard" onclick="javascript:loadContent('/content/help/filterdash/filterdash.html')">
                         <li>Filtering Dashboard</li>
                     </a>
@@ -80,7 +80,7 @@
                 <a data-toggle="collapse" href="#createcontract">Create Contract</a>
             </li>
             <div id="createcontract" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#new" onclick="javascript:loadContent('/content/help/new/new.html')">
                         <li>Brand New</li>
                     </a>
@@ -97,7 +97,7 @@
                 <a data-toggle="collapse" href="#DealManager">Deal Manager</a>
             </li>
             <div id="DealManager" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#nav" onclick="javascript:loadContent('/content/help/nav/nav.html')">
                         <li>Contract Navigator</li>
                     </a>
@@ -117,7 +117,7 @@
                 <a data-toggle="collapse" href="#PTE">Pricing Table Editor</a>
             </li>
             <div id="PTE" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#PTEFeatures" onclick="javascript:loadContent('/content/help/pte/pte.html')">
                         <li>Pricing Table Editor Features</li>
                     </a>
@@ -145,7 +145,7 @@
                 <a data-toggle="collapse" href="#DealEditor">Deal Editor</a>
             </li>
             <div id="DealEditor" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#dealedit" onclick="javascript:loadContent('/content/help/dealedit/dealedit.html')">
                         <li>Deal Editor Features</li>
                     </a>
@@ -163,7 +163,7 @@
                 <a data-toggle="collapse" href="#Tenders">Tenders</a>
             </li>
             <div id="Tenders" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#tenders" onclick="javascript:loadContent('/content/help/tenders/tenders.html')">
                         <li>Entering Tenders</li>
                     </a>
@@ -179,7 +179,7 @@
                 <a data-toggle="collapse" href="#MeetComp">Meet Comp</a>
             </li>
             <div id="MeetComp" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#meetauto" onclick="javascript:loadContent('/content/help/meetauto/meetauto.html')">
                         <li>Auto Population</li>
                     </a>
@@ -193,7 +193,7 @@
                 <a data-toggle="collapse" href="#Manage">Contract Manager</a>
             </li>
             <div id="Manage" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#managefeatures" onclick="javascript:loadContent('/content/help/managefeatures/managefeatures.html')">
                         <li>Features</li>
                     </a>
@@ -223,7 +223,7 @@
                 <a data-toggle="collapse" href="#CostTest">Cost Test</a>
             </li>
             <div id="CostTest" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#costtestda" onclick="javascript:loadContent('/content/help/costtestda/costtestda.html')">
                         <li>For DA's</li>
                     </a>
@@ -240,7 +240,7 @@
                 <a data-toggle="collapse" href="#Admin">Admin</a>
             </li>
             <div id="Admin" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="handbook-panel-body">
                     <a class="link" href="#customer" onclick="javascript:loadContent('/content/help/customer/customer.html')">
                         <li>Customer</li>
                     </a>
@@ -281,12 +281,12 @@
 
     <!-- /#sidebar-wrapper -->
     <!-- My Deals Handbook Content Content -->
-    <div id="page-content-wrapper">
-        <div id="page-content" class="container-fluid">
+    <div id="handbook-page-content-wrapper">
+        <div id="handbook-page-content" class="container-fluid">
             <!--This is where the content will be inserted. -->
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
+    <!-- /#handbook-page-content-wrapper -->
 </div>
 
 <!-- #wrapper -->
