@@ -40,10 +40,6 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         overflow: hidden;
-		width: 300px;
-		box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
-		position: absolute;
-		z-index: 1000;
     }
     #lnavHeader {
         height: 112px;
@@ -53,10 +49,8 @@
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-		background-color: #01335f;
-		color: #00AEEF;
-		box-shadow: 0 2px 4px rgba(0,0,0,.3);
-		position: absolute;
+        background-color: #ffffff;
+        color: #00AEEF;
     }
     #lnavMenuContainer {
         color: #ffffff;
@@ -155,7 +149,7 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
-    #secHeader {
+     #secHeader {
         height: 68px;
         margin-top: -68px;
         font-size: 14px;
@@ -233,7 +227,7 @@
         font-size: 22px;
         cursor: pointer;
         padding: 0 8px;
-        background-color: #01335f;
+        background-color: #ffffff;
         color: #00AEEF;
     }
     .navIconLnk.active {
@@ -1051,8 +1045,7 @@
     }
     .contract-title-container A {
         text-decoration: none;
-        color:#ffffff;
-		font-weight: bold;
+        color:#003C71;
     }
     .contract-title-container A:hover {
         color:#00aeef;
