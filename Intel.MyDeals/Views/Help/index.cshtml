@@ -22,6 +22,16 @@
     }
 
     $(document).ready(function () {
+        $('a[data-toggle]').click(function (event) {
+            var clickedLink = $(this);
+            if ($(clickedLink).find('i').hasClass('fa-chevron-down')) {
+                $(clickedLink).find('i').addClass('fa-chevron-up').removeClass('fa-chevron-down');
+            }
+            else {
+                $(clickedLink).find('i').addClass('fa-chevron-down').removeClass('fa-chevron-up');
+            }
+        });
+
         if ((!String(window.location).includes("#")) && String(window.location).includes("?topic")) {
             var topic = getUrlParameter('topic');
             if (topic.length > 0) {
@@ -54,7 +64,7 @@
         <ul class="handbook-sidebar-nav">
             <!--/*dashboard menu*/-->
             <li>
-                <a data-toggle="collapse" href="#Dashboard">Dashboard</a>
+                <a data-toggle="collapse" href="#Dashboard">Dashboard <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="Dashboard" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -77,7 +87,7 @@
             </div>
             <!--/*contract create menu*/-->
             <li>
-                <a data-toggle="collapse" href="#createcontract">Create Contract</a>
+                <a data-toggle="collapse" href="#createcontract">Create Contract <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="createcontract" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -94,7 +104,7 @@
             </div>
             <!--/*Deal Manager*/-->
             <li>
-                <a data-toggle="collapse" href="#DealManager">Deal Manager</a>
+                <a data-toggle="collapse" href="#DealManager">Deal Manager <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="DealManager" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -114,7 +124,7 @@
             </div>
             <!--/*Pricing Table Editor*/-->
             <li>
-                <a data-toggle="collapse" href="#PTE">Pricing Table Editor</a>
+                <a data-toggle="collapse" href="#PTE">Pricing Table Editor <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="PTE" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -142,7 +152,7 @@
 
             <!--/*Deal Editor*/-->
             <li>
-                <a data-toggle="collapse" href="#DealEditor">Deal Editor</a>
+                <a data-toggle="collapse" href="#DealEditor">Deal Editor <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="DealEditor" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -160,7 +170,7 @@
 
             <!--/*Tenders*/-->
             <li>
-                <a data-toggle="collapse" href="#Tenders">Tenders</a>
+                <a data-toggle="collapse" href="#Tenders">Tenders <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="Tenders" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -176,7 +186,7 @@
 
             <!--/*Meet Comp*/-->
             <li>
-                <a data-toggle="collapse" href="#MeetComp">Meet Comp</a>
+                <a data-toggle="collapse" href="#MeetComp">Meet Comp <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="MeetComp" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -190,7 +200,7 @@
             </div>
             <!--/*Manage*/-->
             <li>
-                <a data-toggle="collapse" href="#Manage">Contract Manager</a>
+                <a data-toggle="collapse" href="#Manage">Contract Manager <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="Manage" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -220,7 +230,7 @@
 
             <!--/*Cost Test*/-->
             <li>
-                <a data-toggle="collapse" href="#CostTest">Cost Test</a>
+                <a data-toggle="collapse" href="#CostTest">Cost Test <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="CostTest" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
@@ -237,7 +247,7 @@
             </div>
 
             <li>
-                <a data-toggle="collapse" href="#Admin">Admin</a>
+                <a data-toggle="collapse" href="#Admin">Admin <i class="fa fa-chevron-down expansion-indicator pull-right"></i></a>
             </li>
             <div id="Admin" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
