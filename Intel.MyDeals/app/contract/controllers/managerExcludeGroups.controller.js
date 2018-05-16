@@ -163,10 +163,17 @@
                     return;
                 }
 
+                // Date object value will be pulled in by a day when it binds to api parameter. Due to timezone offset value present on it
+                // Hence convert it to string before sending to API
+                for (var i = 0; i < data.length; i++) {
+                    data[i]['START_DT'] = kendo.toString(new Date(data[i]['START_DT']), 'M/d/yyyy hh:mm');
+                    data[i]['END_DT'] = kendo.toString(new Date(data[i]['END_DT']), 'M/d/yyyy hh:mm');
+                }
+
                 topbar.show();
                 root.setBusy("Saving Groupings", "Please wait while we exclude the deals from the groups");
                 objsetService.updateWipDeals($scope.contractData.CUST_MBR_SID, $scope.contractData.DC_ID, data).then(
-                    function(results) {
+                    function (results) {
                         topbar.hide();
                         $scope._dirty = false;
                         $scope.$broadcast('resetOpGridDirtyRows');
@@ -319,7 +326,7 @@
                                 START_DT: { type: "date" },
                                 END_DT: { type: "date" },
                                 DEAL_COMB_TYPE: { type: "string" },
-                                ECAP_PRICE: { type: "object" }, 
+                                ECAP_PRICE: { type: "object" },
                                 MAX_RPU: { type: "number" },
                                 DEAL_DESC: { type: "string" },
                                 CONSUMPTION_REASON: { type: "string" },
