@@ -1,11 +1,12 @@
 ﻿@using Intel.MyDeals.App
 @{
     ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
-    var environment = avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
+    var environment = avm == null ? "??" : avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
+    var appVer = avm == null ? "??" : avm.AppVer;
 }
 
 <div class="footer-bar">
-    <div class="fl">@avm.AppVer</div>
+    <div class="fl">@appVer</div>
     <div class="fl env">@environment</div>
 
     <div class="fl pull-right">Intel Confidential</div>
