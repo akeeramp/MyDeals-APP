@@ -7,9 +7,19 @@
             <h3>Loading grid data... </h3>
         </div>
 
-        <div ng-show="isDropdownsLoaded" class="col-md-12">
+        <div class="col-md-12">
             <h3>User Customer Assignments</h3>
-            <p style="color: #FC4C02">This screen allows the assigning of users to customers</p>
+        </div>
+        <div class="row" style="padding: 0px 40px 5px 40px;">
+            <div class="col-md-6" style="text-align: left;">
+                <p style="color: #FC4C02">This screen allows the assigning of users to customers</p>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <button class="btn btn-primary" type="button" style="width: 200px;" ng-click="clearFilters()">Clear All Filters</button>
+            </div>
+        </div>
+
+        <div ng-show="isDropdownsLoaded" class="col-md-12">
             <div kendo-grid="grid" id="grdManageEmployee" class="table" expand-k-grid options="gridOptions"></div>
         </div>
 

@@ -84,6 +84,10 @@
             }
         });
 
+        $scope.clearFilters = function () {
+            $("form.k-filter-menu button[type='reset']").trigger("click");
+        };
+
         $scope.gridOptions = {
             dataSource: $scope.dataSource,
             filterable: true, //gridConstants.filterable,
@@ -95,7 +99,14 @@
                 pageSizes: gridConstants.pageSizes
             },
             filter: function (e) {
-                if (e.field == "USR_ROLE" || e.field == "USR_GEOS") {
+                if (e.field == "USR_ROLE") {
+                    if (e.filter !== undefined && e.filter !== null) { // Safety check for clearing out set.
+                        e.filter.filters.forEach(function (f) {
+                            f.operator = "eq";
+                        })
+                    }
+                }
+                if (e.field == "USR_GEOS") {
                     if (e.filter !== undefined && e.filter !== null) { // Safety check for clearing out set.
                         e.filter.filters.forEach(function (f) {
                             f.operator = "contains";

@@ -39,6 +39,23 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
     });
 
     $scope.selectOptions = {
+        change: function() {
+            $scope.$apply(function () {
+                if ($scope.selectedIds.length > 0) { // Safety check for empty list
+                    var lastSelected = $scope.selectedIds[$scope.selectedIds.length - 1];
+                    if (lastSelected.CUST_NM === 'All Customers') // If they just selected All Custs, clear out their list and leave only this one.
+                    {
+                        $scope.selectedIds = [];
+                        $scope.selectedIds.push(lastSelected);
+                    }
+                    else if ($scope.selectedIds[0].CUST_NM === 'All Customers')
+                    {
+                        $scope.selectedIds = [];
+                        $scope.selectedIds.push(lastSelected);
+                    }
+                }
+            });
+        },
         placeholder: "Select customers...",
         dataTextField: "CUST_NM",
         dataValueField: "CUST_NM_SID",
@@ -46,7 +63,6 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
         autoClose: false,
         dataSource: $scope.custdataSource
     };
-
 
     $scope.geoAllOptions = [
     {
@@ -74,7 +90,7 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
         $scope.geoData.push({ id: geosArray[i] });
     }
 
-    $scope.isChecked = function (id) {
+    $scope.isChecked = function (id) { // Set which geos this user has checked at dialog open
         var match = false;
         for (var i = 0 ; i < $scope.geoData.length; i++) {
             if ($scope.geoData[i].id == id) {
@@ -83,8 +99,6 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
         }
         return match;
     };
-
-
 
     $scope.ok = function () {
         // Save the selected customers list here.
@@ -114,6 +128,10 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
                 }, function (response) {
                     logger.error("Unable to save this User's Customer Data.", response, response.statusText);
                 });
+    };
+
+    $scope.clear = function () {
+        $scope.selectedIds = [];
     };
 
     $scope.cancel = function () {

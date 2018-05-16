@@ -39,7 +39,25 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<CustomerDivision> GetManageUserDataGetCustomers(List<string> geos)
         {
-            return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM && (geos.Contains("Worldwide") || geos.Contains(c.HOSTED_GEO))).OrderBy(c => c.CUST_NM).ToList();
+            // This is very hackish, but I didn't want to wreck any code that actually depended upon special division data for an admin screen,
+            // so all customers is added on for this manage list to pre-pend "all customers" as a selection. Thank me now, shoot me later.  :)
+            CustomerDivision allCusts = new CustomerDivision
+            {
+                ACTV_IND = true,
+                CUST_CAT = "",
+                CUST_DIV_NM = "All Customers",
+                CUST_DIV_NM_SID = 1,
+                CUST_MBR_SID = 1,
+                CUST_NM = "All Customers",
+                CUST_NM_SID = 1,
+                CUST_TYPE = "",
+                HOSTED_GEO = "",
+                PRC_GRP_CD = ""
+            };
+            List<CustomerDivision> customersList = new List<CustomerDivision>();
+            customersList.Add(allCusts);
+            customersList.AddRange(new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM && (geos.Contains("Worldwide") || geos.Contains(c.HOSTED_GEO))).OrderBy(c => c.CUST_NM).ToList()); // 142
+            return customersList;
             //if (geos.Contains("Worldwide"))
             //{
             //    return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM).OrderBy(c => c.CUST_NM).ToList();

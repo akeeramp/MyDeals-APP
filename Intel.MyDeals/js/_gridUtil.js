@@ -1107,7 +1107,14 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
     }
         // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
     else if (valCusts === "All Customers") {
-        return "All Customers"; // Edit turned off
+        if (valRoles === "CBA" || valRoles === "FSE" || valRoles === "GA" || valRoles === "RA") // If customer based role, allow them to short cut to all cuatomers to default to geo filters
+        {
+            return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>"; // Edit enabled
+        }
+        else
+        {
+            return "All Customers"; // Edit turned off
+        }
     }
     if (valRoles === "" || valGeos === "") {
         return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
