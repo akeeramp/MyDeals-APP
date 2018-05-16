@@ -408,36 +408,7 @@
 
 
                             $timeout(function () {
-                                var grid = $("#detailGrid_" + pt.DC_ID).data("kendoGrid");
-                                if (grid === undefined || grid === null) return;
-
-                                grid.resize();
-
-                                if (grid.dataSource.group().length > 0) {
-                                    $("#detailGrid_" + pt.DC_ID).find('.k-icon.k-i-collapse').trigger('click');
-                                }
-
-                                // lame workaround.  checkboxes were not binding properly, so wait for them to load and set them.  True will pickup and check checkboxes
-                                var data = grid.dataSource.data();
-                                for (var d = 0; d < data.length; d++) {
-                                    data[d]["COST_TEST_OVRRD_FLG"] = data[d]["COST_TEST_OVRRD_FLG"] === "Yes";
-                                    if (data[d]["COST_TEST_OVRRD_FLG"] === "") data[d]["COST_TEST_OVRRD_FLG"] = "No";
-                                    if (data[d]["PRC_CST_TST_STS"] === "") data[d]["PRC_CST_TST_STS"] = "InComplete";
-
-                                    data[d]["_readonly"] = ps.WF_STG_CD !== "Submitted";
-                                }
-
-                                $("#detailGrid_" + pt.DC_ID + " .k-grouping-row .k-icon").on("click", function (e) {
-
-                                    var row = $(e.currentTarget).closest("tr");
-                                    var distance = $(row).position().top;
-
-                                    $(e.currentTarget).parent().closest(".k-grid-content-locked").parent().find(".k-grid-content").animate({
-                                        scrollTop: distance
-                                    }, 400);
-
-                                });
-
+                                $scope.setOverrideMarkup(ps,pt);
                             }, 100);
 
                         }
@@ -464,6 +435,38 @@
             );
 
 
+        }
+
+        $scope.setOverrideMarkup = function(ps,pt) {
+            var grid = $("#detailGrid_" + pt.DC_ID).data("kendoGrid");
+            if (grid === undefined || grid === null) return;
+
+            grid.resize();
+
+            if (grid.dataSource.group().length > 0) {
+                $("#detailGrid_" + pt.DC_ID).find('.k-icon.k-i-collapse').trigger('click');
+            }
+
+            // lame workaround.  checkboxes were not binding properly, so wait for them to load and set them.  True will pickup and check checkboxes
+            var data = grid.dataSource.data();
+            for (var d = 0; d < data.length; d++) {
+                data[d]["COST_TEST_OVRRD_FLG"] = data[d]["COST_TEST_OVRRD_FLG"] === "Yes" || data[d]["COST_TEST_OVRRD_FLG"] === true;
+                if (data[d]["COST_TEST_OVRRD_FLG"] === "") data[d]["COST_TEST_OVRRD_FLG"] = "No";
+                if (data[d]["PRC_CST_TST_STS"] === "") data[d]["PRC_CST_TST_STS"] = "InComplete";
+
+                data[d]["_readonly"] = ps.WF_STG_CD !== "Submitted";
+            }
+
+            $("#detailGrid_" + pt.DC_ID + " .k-grouping-row .k-icon").on("click", function (e) {
+
+                var row = $(e.currentTarget).closest("tr");
+                var distance = $(row).position().top;
+
+                $(e.currentTarget).parent().closest(".k-grid-content-locked").parent().find(".k-grid-content").animate({
+                    scrollTop: distance
+                }, 400);
+
+            });
         }
 
         $scope.gotoDealDetails = function (dcid) {
