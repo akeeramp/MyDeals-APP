@@ -38,7 +38,7 @@
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD"; } // We practice SAFE CODING on this project
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 
-    var env = ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
+    var env = ViewBag.AppToken == null ? "UNKNOWN" : ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
 }
 
 <div id="smbWindow" style="padding: 0; overflow: hidden !important;"></div>

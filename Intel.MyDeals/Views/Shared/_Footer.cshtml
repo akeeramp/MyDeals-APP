@@ -1,8 +1,8 @@
 ﻿@using Intel.MyDeals.App
 @{
     ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
-    var environment = avm == null ? "??" : avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
-    var appVer = avm == null ? "??" : avm.AppVer;
+    var environment = avm == null ? "UNKNOWN" : avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
+    var appVer = avm == null ? "UNKNOWN" : avm.AppVer;
 }
 
 <div class="footer-bar">
