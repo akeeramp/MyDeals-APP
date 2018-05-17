@@ -851,11 +851,15 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
             if (kittype == "subkit") {
                 subkitSumCounter--;
             }
+            var qty = 1;
+            if (items["QTY"] && items["QTY"] != null) {
+            	qty = parseInt(items["QTY"][dimkey] || 0);
+            }
             if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
-            	total += items["QTY"][dimkey] * parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
+            	total += qty * parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
             }
             if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
-                total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];
+                total += qty * items["DSCNT_PER_LN"][dimkey];
             }
         }
     }
