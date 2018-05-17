@@ -538,9 +538,9 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
-                    //"PAYOUT_BASED_ON": {
-                    //    "Groups": ["Deal Info", "Consumption"]
-                    //},
+                    "PAYOUT_BASED_ON": {
+                        "Groups": ["Deal Info", "Consumption"]
+                    },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
