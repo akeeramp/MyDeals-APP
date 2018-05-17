@@ -164,6 +164,11 @@ namespace Intel.MyDeals.Entities.Logging
                     LogStack = new List<DbLogPerfMessage>();
                 }
 
+                if (!tb.Any())
+                {
+                    return; // Only upload if we have log entries.
+                }
+
                 // Create a delegate to fire off the upload request. Brad: (my hope in the dynamic delegate was
                 // that .net would stay alive as long at the delegates were in memory.  Didn't work out to be
                 // the case, oh well.
