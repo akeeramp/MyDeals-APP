@@ -4,6 +4,9 @@ using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
+using Intel.MyDeals.DataLibrary;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals
 {
@@ -16,7 +19,12 @@ namespace Intel.MyDeals
                 // Logging
                 OpLog.LogConfig = new LoggingLib().GetLogConfig();
                 OpLogPerf.Enabled = OpLog.LogConfig.IsActive;
-
+                var temp_VERBOSE_LOG_TO_DB = DataCollections.GetAdminConstants().Where(c => c.CNST_NM == "VERBOSE_LOG_TO_DB").FirstOrDefault();
+                if (temp_VERBOSE_LOG_TO_DB != null && temp_VERBOSE_LOG_TO_DB.CNST_VAL_TXT.ToLower() == "true")
+                {
+                    EN.GLOBAL.VERBOSE_LOG_TO_DB = true;
+                }
+                
                 // Entities' web API
                 MyDealsWebApiUrl.ROOT_URL = OpCurrentConfig.CurrentURL;
                 // TODO josiTODO: remove after localhost test is done

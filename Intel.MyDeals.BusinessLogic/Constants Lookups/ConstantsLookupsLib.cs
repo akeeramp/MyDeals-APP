@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
@@ -85,8 +86,13 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         public AdminConstant UpdateAdminConstant(AdminConstant data)
-        {
-            return data == null ? null : _constantLookupDataLib.SetAdminConstants(CrudModes.Update, data);
+        {      
+            var result = _constantLookupDataLib.SetAdminConstants(CrudModes.Update, data);
+            if (data.CNST_NM == "VERBOSE_LOG_TO_DB")
+            {
+                EN.GLOBAL.VERBOSE_LOG_TO_DB = data.CNST_VAL_TXT.ToLower() == "true" ? true : false;
+            }
+            return result;
         }
 
         public void DeleteAdminConstant(AdminConstant data)

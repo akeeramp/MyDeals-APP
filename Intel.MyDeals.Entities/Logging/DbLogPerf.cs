@@ -152,9 +152,13 @@ namespace Intel.MyDeals.Entities.Logging
                     {
                         return; // Only upload if we have log entries.
                     }
-
+                    var logStack = LogStack;
+                    if (!EN.GLOBAL.VERBOSE_LOG_TO_DB)
+                    {
+                        logStack = logStack.Where(x => x.ERR_MSG).ToList();
+                    }
                     // Make a copy of the data w/i the lock for use out side of the lock
-                    tb = LogStack.ToArray();
+                    tb = logStack.ToArray();
 
                     // Then reset the Log Stack for the next message.
                     LogStack = new List<DbLogPerfMessage>();

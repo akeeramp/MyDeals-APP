@@ -5,6 +5,7 @@
         public static class GLOBAL
         {
             public static int DEBUG = 0;
+            public static bool VERBOSE_LOG_TO_DB = false;
         }
 
         public static class VARIABLES
