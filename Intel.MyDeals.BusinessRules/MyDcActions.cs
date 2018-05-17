@@ -69,11 +69,11 @@ namespace Intel.MyDeals.BusinessRules
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString() ?? "";
 
             // Billing Dates
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)))
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
             {
                 item[AttributeCodes.REBATE_BILLING_START] = dcItemSt;
             }
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)))
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)) || dcEn != dcItemEn)
             {
                 item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
             }
