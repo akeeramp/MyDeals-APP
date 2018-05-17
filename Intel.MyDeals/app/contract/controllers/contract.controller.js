@@ -3083,7 +3083,7 @@
                     kitRebateTotalVal += (qty * parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
         		} else if (i < data.length) {
         			var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
-        			kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);                    
+        			kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
                 }
             }
             var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
@@ -3447,7 +3447,7 @@
             }
         }
 
-        $scope.quickSaveContract = function (rtnFunc, param) {
+        $scope.quickSaveContract = function (rtnFunc, param, param2) {
             topbar.show();
             $scope.setBusy("Saving Contract", "Saving the Contract Information");
 
@@ -3456,11 +3456,13 @@
 
             objsetService.createContract($scope.getCustId(), $scope.contractData.DC_ID, ct).then(
                 function (data) {
-                    if (!!rtnFunc) rtnFunc(param);
                     $scope.updateResults(data.data.CNTRCT, ct);
                     $scope.setBusy("Save Successful", "Saved the contract", "Success");
                     topbar.hide();
-
+                    if (!!rtnFunc) {
+                        rtnFunc(param, param2);
+                        return;
+                    };
                     $scope.setBusy("", "");
                 },
                 function (result) {
