@@ -7,7 +7,6 @@ using WebApi.OutputCache.V2;
 
 namespace Intel.MyDeals.Controllers.API
 {
-    [AutoInvalidateCacheOutput]
     public class AdminConstantsController : BaseApiController
     {
         private readonly IConstantsLookupsLib _constantsLookupsLib;
@@ -20,7 +19,6 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpGet]
         [Route("api/AdminConstants/v1/GetConstants/{getCachedResult:bool?}")]
-        [CacheOutput(ServerTimeSpan = 50000)]
         public IQueryable<AdminConstant> GetConstants(bool getCachedResult = true)
         {
             return _constantsLookupsLib.GetAdminConstants(getCachedResult).AsQueryable();
@@ -37,7 +35,6 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [AntiForgeryValidate]
-        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
         [Route("api/AdminConstants/v1/CreateConstant")]
         public AdminConstant CreateConstant(AdminConstant adminConstant)
         {
@@ -47,7 +44,6 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [AntiForgeryValidate]
-        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
         [Route("api/AdminConstants/v1/UpdateConstant")]
         public AdminConstant UpdateConstant(AdminConstant adminConstant)
         {
@@ -57,7 +53,6 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [AntiForgeryValidate]
-        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
         [Route("api/AdminConstants/v1/DeleteConstant")]
         public void DeleteConstant(AdminConstant adminConstant)
         {

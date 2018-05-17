@@ -75,7 +75,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (!getCachedResult)
             {
-                _constantLookupDataLib.GetAdminConstants();
+                return _constantLookupDataLib.GetAdminConstants();
             }
             return _dataCollectionsDataLib.GetToolConstants();
         }
