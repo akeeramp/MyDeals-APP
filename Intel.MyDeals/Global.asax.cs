@@ -55,7 +55,6 @@ namespace Intel.MyDeals
 
         private void Application_Error(Object sender, EventArgs e)
         {
-            return;
             Exception ex = Server.GetLastError();
             ErrorControllerContent errCon = AppHelper.GenerateErrorContext(ex, ((WebApiApplication)sender).Context);
 
