@@ -318,6 +318,7 @@ namespace Intel.MyDeals.BusinessLogic
                         item["Customer"] = new Dictionary<string,object>();
                         item["ECAP_PRICE"] = "no access";
                         item["CAP"] = "no access";
+                        item["BID_STATUS"] = "no access";
                     }
                     else
                     {
@@ -328,6 +329,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             item["ECAP_PRICE"] = "no access";
                             item["CAP"] = "no access";
+                            item["BID_STATUS"] = "no access";
                         }
 
                     }

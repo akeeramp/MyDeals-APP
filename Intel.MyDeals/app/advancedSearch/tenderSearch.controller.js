@@ -154,15 +154,13 @@
             type: "number",
             width: 100,
             filterable: $scope.numObjFilter,
-            template:
-                "<a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
+            template: "#= gridUtils.goToObject(data, 'BID_STATUS', 'DC_ID') #"
         }, {
             field: "CNTRCT_TITLE",
             title: "Contract Title",
             type: "string",
             width: 120,
-            template:
-                "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
+            template: "#= gridUtils.goToObject(data, 'BID_STATUS', 'CNTRCT_OBJ_SID', 'CNTRCT_TITLE') #"
         }, {
             field: "PRODUCT_FILTER",
             title: "Product",
@@ -436,6 +434,12 @@
 
         $scope.canShowCheckBox = function (dataItem, scope) {
             if (dataItem.BID_ACTNS === undefined) return "";
+
+            var ar = dataItem["BID_STATUS"];
+            if (ar !== undefined && ar !== null && ar === "no access") {
+                return false;
+            }
+
             return dataItem.BID_ACTNS.length > 1 && (scope.curLinkedVal === "" || scope.curLinkedVal === dataItem.BID_STATUS);
         }
 

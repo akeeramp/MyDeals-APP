@@ -1266,8 +1266,44 @@ gridUtils.getBidActionsList = function (data) {
     return bidActns;
 }
 
+gridUtils.goToObject = function (data, accessCheckField, field, title) {
+    var titleLbl = title === undefined ? field : title; // if no title, use field
+    var hasAccess = true;
+
+    var ar = data[accessCheckField];
+    if (ar !== undefined && ar !== null && ar === "no access") {
+        hasAccess = false;
+    }
+
+    if (field === "DC_ID") {
+        if (hasAccess) {
+            //    "<a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
+            return "<a href='/advancedSearch#/gotoDeal/" + data[field] + "' target='_blank' class='objDealId'>" + data[titleLbl] + "</a>"
+        }
+        else {
+            return "<div class='noaccess'>" + data[titleLbl] + "</div>"
+        }
+    }
+    if (field === "CNTRCT_OBJ_SID") {
+        if (hasAccess) {
+            //    "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
+            return "<a href='/Contract#/manager/" + data[field] + "' target='_blank' class='objDealId'>" + data[titleLbl] + "</a>"
+        }
+        else {
+            return "<div class='noaccess'>" + data[titleLbl] + "</div>"
+        }
+    }
+
+    return ""; // Fail case just in case, shouldn't make it here if you actually set the above up with the correct FIELD
+}
+
 gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined) return "";
+
+    var ar = data["BID_STATUS"];
+    if (ar !== undefined && ar !== null && ar === "no access") {
+        return "<div class='noaccess'>no access</div>";
+    }
 
     var bidActns = gridUtils.getBidActionsList(data);
     data["orig_BID_STATUS"] = data.BID_STATUS;
