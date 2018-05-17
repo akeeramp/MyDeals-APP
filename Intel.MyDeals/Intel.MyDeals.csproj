@@ -288,6 +288,7 @@
     <Compile Include="Controllers\API\SecurityAttributesController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\PingController.cs" />
     <Compile Include="Controllers\TenderManagerController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CostTestController.cs" />
@@ -552,6 +553,8 @@
     <Content Include="app\core\directives\opGrid\opGrid.directive.js" />
     <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.html" />
     <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.js" />
+    <Content Include="app\core\directives\ping\ping.directive.html" />
+    <Content Include="app\core\directives\ping\ping.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\core\filters\kitCalculatedValues.filter.js" />
@@ -1730,6 +1733,7 @@
     <Content Include="Views\Dashboard\Snow.cshtml" />
     <Content Include="Views\Error\NeedCustomers.cshtml" />
     <Content Include="Views\Error\DirectUser.cshtml" />
+    <Content Include="Views\Ping\Index.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

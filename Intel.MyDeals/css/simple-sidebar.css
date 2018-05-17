@@ -33,7 +33,7 @@ font-weight: lighter;
 
 #handbook-wrapper.toggled #handbook-sidebar-wrapper {
     width: 250px;
-    height: calc(100% - 144px);
+    height: calc(100% - 45px);
     overflow-x: hidden;
 }
 

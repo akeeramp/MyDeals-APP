@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+
+    Dictionary<string, string> pingResults = ViewBag.PingResults;
+    var results = pingResults == null ? "" : "Server time: " + pingResults["DB UTC Time"];
+}
+
+<div style="padding: 0 50px;">
+    
+    <h2>Ping Test</h2>
+
+    <p>@results</p>
+
+</div>
