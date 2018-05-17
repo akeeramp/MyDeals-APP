@@ -852,7 +852,7 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
                 subkitSumCounter--;
             }
             if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
-                total += parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
+            	total += items["QTY"][dimkey] * parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
             }
             if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
                 total += items["QTY"][dimkey] * items["DSCNT_PER_LN"][dimkey];

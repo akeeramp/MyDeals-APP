@@ -769,10 +769,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        var firstTierRow = data[firstTierRowIndex];
 
 					        // Update Kit Rebate / Bundle Discount if DSCNT_PER_LN or QTY are changed
-					        if (colIndex == ecapIndex || colIndex == kitEcapIndex) {
+					        if (colIndex == ecapIndex || colIndex == kitEcapIndex || colIndex == qtyIndex) {
 
 					            // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-					            firstTierRow["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, firstTierRowIndex, numOfTiers, false); //kitRebateTotalVal;
+					        	firstTierRow["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, firstTierRowIndex, numOfTiers, false); //kitRebateTotalVal;
 					        }
 
 					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.

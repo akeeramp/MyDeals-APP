@@ -3076,14 +3076,14 @@
         }
 
         $scope.calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
-            var kitRebateTotalVal = 0;
-            for (var i = 0; i < numOfTiers; i++) {
-                if (isDataPivoted) {
-                    kitRebateTotalVal += (parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
-                } else {
-                    if (i < data.length) {
-                        kitRebateTotalVal += (parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
-                    }
+        	var kitRebateTotalVal = 0;
+        	for (var i = 0; i < numOfTiers; i++) {
+        		if (isDataPivoted) {
+        			var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
+                    kitRebateTotalVal += (qty * parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
+        		} else if (i < data.length) {
+        			var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
+        			kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);                    
                 }
             }
             var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
