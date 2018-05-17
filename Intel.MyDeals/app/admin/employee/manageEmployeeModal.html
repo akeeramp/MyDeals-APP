@@ -10,11 +10,12 @@
                 <div class="nm">{{LST_NM}}, {{FRST_NM}}</div>
             </div>
             <div class="col-md-6">
-                <div class="desc role-title">AGS geography selection:</div>
+                <div class="desc role-title">AGS selected geographies:</div>
                 <span ng-repeat="item in geoAllOptions" class="item" id="{{item.id}}">
-                    <label class="btn btn-sm btn-default" ng-class="{active: isChecked(item.id)}">
+                    <span ng-if="isChecked(item.id)" style="margin-right: 7px">{{item.id}}</span>
+                    <!--<label class="btn btn-sm btn-default" ng-class="{active: isChecked(item.id)}">
                         {{item.id}} <input disabled style="display: none" type="checkbox" ng-change="sync(bool, item)" ng-model="bool" ng-checked="isChecked(item.id)">
-                    </label>
+                    </label>-->
                 </span>
             </div>
         </div>
