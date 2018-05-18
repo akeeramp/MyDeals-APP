@@ -8,7 +8,7 @@ namespace Intel.MyDeals.Controllers
     {
         public ActionResult Index()
         {
-            return View( new ApplicationViewModel
+            return View("index", new ApplicationViewModel
             {
                 AppName = "aaa",
                 AppDescShort = "bbb",
