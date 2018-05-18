@@ -71,7 +71,25 @@ namespace Intel.MyDeals.BusinessRules
 						}
 					}
 				},
-				new MyOpRule
+                new MyOpRule
+                {
+                    Title="Readonly if contract # is positive",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    AtrbCondIf = dc => dc.DcID > 0,
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.CUST_ACCPT
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
                 {
                     Title="Readonly for Frontend With Tracker",
                     ActionRule = MyDcActions.ReadOnlyFrontendWithTracker,

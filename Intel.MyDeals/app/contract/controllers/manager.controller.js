@@ -795,7 +795,7 @@
             $scope.dialogPendingWarning.close();
 
             if (!checkForRequirements) {
-                $scope.canBypassEmptyActions = fromToggle;
+                $scope.canBypassEmptyActions = fromToggle && root.contractData.CUST_ACCPT === "Accepted";
                 $scope.actionItemsBase(true, true);
             } else {
                 $scope.actionItemsBase(true);
