@@ -675,6 +675,25 @@
             return date;
         }
 
+        function getFullPathOfProduct(item) {
+            // When a product belongs to two different family, get the full path
+            if (item.PRD_ATRB_SID == 7006) {
+                return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM)
+                    + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM) + " " + (item.PCSR_NBR === 'NA' ? "" : item.PCSR_NBR)).trim();
+            }
+            if (item.PRD_ATRB_SID == 7007) {
+                return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM)
+                    + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM) + " " + (item.PCSR_NBR === 'NA' ? "" : item.PCSR_NBR) + " " + item.DEAL_PRD_NM).trim();
+            }
+            if (item.PRD_ATRB_SID == 7008) {
+                return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM)
+                    + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM) + " " + (item.PCSR_NBR === 'NA' ? "" : item.PCSR_NBR) + " " + item.DEAL_PRD_NM
+                    + " " + item.MTRL_ID).trim();
+            }
+            if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
+            return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
+        }
+
         vm.gridOptionsProduct = {
             dataSource: dataSourceProduct,
             filterable: gridConstants.filterable,
@@ -964,16 +983,17 @@
                 prdDrawingOrd = vm.addedProducts.map(function (p) {
                     return p.PRD_MBR_SID;
                 }).join(',');
-
-                contractProduct = vm.addedProducts.map(function (p) {
-                    return p.DERIVED_USR_INPUT;
-                }).join(',');
             }
 
             var pricingTableSysProducts = {};
 
             angular.forEach(vm.addedProducts, function (item, key) {
                 if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
+                    pricingTableSysProducts[item.USR_INPUT] = [item];
+                } else if (vm.dealType === "KIT") {
+                    //  KIT cannot really have duplicate product name, if we find such update full path
+                    item.USR_INPUT = getFullPathOfProduct(item);
+                    item.DERIVED_USR_INPUT = item.USR_INPUT;
                     pricingTableSysProducts[item.USR_INPUT] = [item];
                 } else {
                     pricingTableSysProducts[item.USR_INPUT].push(item);
@@ -987,6 +1007,12 @@
                     pricingTableSysProducts[item.USR_INPUT].push(item);
                 }
             });
+
+            if (vm.dealType === "KIT") {
+                contractProduct = Object.keys(pricingTableSysProducts).map(function (x) {
+                    return x;
+                }).join(',');
+            }
 
             //Only for kit prdDrawingOrd will be populated
             var productSelectorOutput = {
@@ -1453,8 +1479,9 @@
             vm.showTree = !vm.showTree;
         }
 
+        // TODO: Cleanup these as we are not using heirarrchy anymore
         vm.treeData = {
-            data: getProductHeirarrchy(vm.addedProducts),
+            data: [],//getProductHeirarrchy(vm.addedProducts),
             schema: {
                 model: {
                     children: "items",

@@ -109,7 +109,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.curPricingStrategyId = $stateParams.sid;
             root.curPricingStrategy = util.findInArray(root.contractData.PRC_ST, root.curPricingStrategyId);
 
-        //    // scroll left nav into view
+            //    // scroll left nav into view
             $timeout(function () {
                 if ($("#lnavPt_" + $scope.curPricingTableId).position() !== undefined) {
                     //document.getElementById("lnavPt_" + $scope.curPricingTableId).scrollIntoView({ block: 'end', behavior: 'smooth' });
@@ -550,9 +550,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var singleProductJSON = {}
             for (var key in validatedSelectedProducts) {
                 if (validatedSelectedProducts[key].length > 1) {
+                    var cnt = 0;
                     angular.forEach(validatedSelectedProducts[key], function (value, i) {
                         if (!value.EXCLUDE) {
-                            singleProductJSON[value.HIER_VAL_NM] = value;
+                            // If the selected products have similar HIER_VAL_NM insert with temp string to make it unique in dictionary
+                            // when adding it to new row replace the temp string
+                            if (singleProductJSON[value.HIER_VAL_NM] === undefined) {
+                                singleProductJSON[value.HIER_VAL_NM] = [];
+                                singleProductJSON[value.HIER_VAL_NM].push(value);
+                            } else {
+                                var newKey = value.HIER_VAL_NM + '##' + cnt;
+                                singleProductJSON[newKey] = [];
+                                singleProductJSON[newKey].push(value);
+                                cnt++;
+                            }
                         }
                     });
                 } else {
@@ -567,20 +578,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var mergedRows = parseInt(row) + root.numOfPivot();
                         for (var a = row; a < mergedRows ; a++) {
                             var validJSON = {};
-                            validJSON[key] = singleProductJSON[key];
+                            var newKey = key.toString().split("##")[0];
+                            validJSON[newKey] = singleProductJSON[key];
                             sheet.range(root.colToLetter["PTR_SYS_PRD"] + (a)).value(JSON.stringify(validJSON));
                             systemModifiedProductInclude = true;
-                            sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(key);
+                            sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(newKey);
                             systemModifiedProductInclude = false;
                             sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (a)).value("");
                         }
                         row = mergedRows - 1;
                     } else {
                         var validJSON = {};
-                        validJSON[key] = singleProductJSON[key];
+                        var newKey = key.toString().split("##")[0];
+                        validJSON[newKey] = singleProductJSON[key];
                         sheet.range(root.colToLetter["PTR_SYS_PRD"] + (row)).value(JSON.stringify(validJSON));
                         systemModifiedProductInclude = true;
-                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
+                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(newKey);
                         systemModifiedProductInclude = false;
                         sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (row)).value("");
                     }
@@ -772,7 +785,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        if (colIndex == ecapIndex || colIndex == kitEcapIndex || colIndex == qtyIndex) {
 
 					            // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-					        	firstTierRow["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, firstTierRowIndex, numOfTiers, false); //kitRebateTotalVal;
+					            firstTierRow["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, firstTierRowIndex, numOfTiers, false); //kitRebateTotalVal;
 					        }
 
 					        myRow["dirty"] = true; // NOTE: this is needed to have sourceData sync correctly with data.
