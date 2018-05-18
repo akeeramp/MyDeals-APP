@@ -1651,7 +1651,7 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\tooltipster.bundle.min.js" />
     <Content Include="Scripts\topbar.min.js" />
-    <None Include="Views\Help\index.cshtml" />
+    <None Include="Views\Help\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
