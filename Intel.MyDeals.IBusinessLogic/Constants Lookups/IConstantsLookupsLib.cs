@@ -21,5 +21,9 @@ namespace Intel.MyDeals.IBusinessLogic
         IQueryable<LookupItem> GetLookups(string cd);
 
         AdminConstant GetConstantsByName(string constant);
+
+        AdminConstant GetConstantsByName(string constant, bool nonCachedData);
+
+        void UpdateRecycleCacheConstants(string cnstName, string cnstVal);
     }
 }

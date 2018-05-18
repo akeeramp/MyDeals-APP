@@ -169,6 +169,25 @@ namespace Intel.MyDeals.DataLibrary
             return ret.FirstOrDefault();
         }
 
+        public void UpdateRecycleCacheConstants(string cnstName, string cnstVal)
+        {
+            OpLog.Log("UpdateRecycleCacheConstants");
+            try
+            {
+                DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_UPD_CACHE_CNST
+                {
+                   CNST_NM = cnstName,
+                   CNST_VAL = cnstVal,
+                   USR_WWID = 999999
+                });
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
         #endregion Constants Admin
     }
 }

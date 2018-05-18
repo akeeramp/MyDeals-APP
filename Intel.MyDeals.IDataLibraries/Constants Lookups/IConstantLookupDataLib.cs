@@ -8,5 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
         List<AdminConstant> GetAdminConstants();
 
         AdminConstant SetAdminConstants(CrudModes mode, AdminConstant adminValues);
+        void UpdateRecycleCacheConstants(string cnstName, string cnstVal);
     }
 }

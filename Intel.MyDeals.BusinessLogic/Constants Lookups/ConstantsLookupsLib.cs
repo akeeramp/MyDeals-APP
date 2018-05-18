@@ -5,6 +5,7 @@ using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.IBusinessLogic;
+using System;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -32,6 +33,11 @@ namespace Intel.MyDeals.BusinessLogic
         public AdminConstant GetConstantsByName(string constant)
         {
             return GetAdminConstants().FirstOrDefault(c => c.CNST_NM == constant);
+        }
+
+        public AdminConstant GetConstantsByName(string constant, bool nonCachedData)
+        {
+            return _constantLookupDataLib.GetAdminConstants().FirstOrDefault(c => c.CNST_NM == constant);
         }
 
         public string GetToolConstantValue(string constant)
@@ -93,6 +99,11 @@ namespace Intel.MyDeals.BusinessLogic
                 EN.GLOBAL.VERBOSE_LOG_TO_DB = data.CNST_VAL_TXT.ToLower() == "true" ? true : false;
             }
             return result;
+        }
+
+        public void UpdateRecycleCacheConstants(string cnstName, string cnstVal)
+        {
+            _constantLookupDataLib.UpdateRecycleCacheConstants(cnstName, cnstVal);
         }
 
         public void DeleteAdminConstant(AdminConstant data)

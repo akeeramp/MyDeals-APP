@@ -32,6 +32,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Route("api/AdminConstants/v1/GetConstantsByNameNonCached/{name}")]
+        public AdminConstant GetConstantsByNameNonCached(string name)
+        {
+            return SafeExecutor(() => _constantsLookupsLib.GetConstantsByName(name, true)
+                , $"Unable to find constant with name {name}"
+            );
+        }
+
         [Authorize]
         [HttpPost]
         [AntiForgeryValidate]
@@ -48,6 +56,15 @@ namespace Intel.MyDeals.Controllers.API
         public AdminConstant UpdateConstant(AdminConstant adminConstant)
         {
             return _constantsLookupsLib.UpdateAdminConstant(adminConstant);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
+        [Route("api/AdminConstants/v1/UpdateRecycleCacheConstants/{CNST_NM}/{CNST_VAL}")]
+        public void UpdateRecycleCacheConstants(string CNST_NM, string CNST_VAL)
+        {
+           _constantsLookupsLib.UpdateRecycleCacheConstants(CNST_NM, CNST_VAL);
         }
 
         [Authorize]
