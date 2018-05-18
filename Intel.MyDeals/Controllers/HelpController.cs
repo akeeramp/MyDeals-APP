@@ -1,7 +1,5 @@
-﻿using System.Web.Mvc;
-using Intel.MyDeals.App;
-using Intel.MyDeals.Entities;
-using Intel.Opaque;
+﻿using Intel.MyDeals.App;
+using System.Web.Mvc;
 
 namespace Intel.MyDeals.Controllers
 {
