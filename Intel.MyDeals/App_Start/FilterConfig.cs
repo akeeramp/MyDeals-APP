@@ -7,7 +7,8 @@ namespace Intel.MyDeals
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            // TODO::TJE temporary checkin to debug 500 error
+            //filters.Add(new HandleErrorAttribute());
         }
     }
 }
