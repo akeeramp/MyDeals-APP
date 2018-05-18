@@ -8,7 +8,14 @@ namespace Intel.MyDeals.Controllers
     {
         public ActionResult Index()
         {
-            return View(AppLib.AVM);
+            return View( new ApplicationViewModel
+            {
+                AppName = "aaa",
+                AppDescShort = "bbb",
+                AppDesc = "ccc",
+                AppCopy = "ddd",
+                AppCopyShort = "eee"                
+            });
         }
 	}
 }
