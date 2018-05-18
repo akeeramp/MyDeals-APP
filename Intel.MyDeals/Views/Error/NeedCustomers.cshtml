@@ -36,31 +36,10 @@
                 <div class="customers-container">
                     Select Customers <span class="desc">Select all of the customer account that pertain to your job role</span>
                     <select id="customers"></select>
-                    <div class="filter-container">
-                        <div class="btn-group btn-group-sm" data-toggle="buttons">
-                            <label class="btn btn-default active">
-                                <input name="options" id="WW" type="radio" checked="" autocomplete="off"> WW
-                            </label>
-                            <label class="btn btn-default">
-                                <input name="options" id="ASMO" type="radio" autocomplete="off"> ASMO
-                            </label>
-                            <label class="btn btn-default">
-                                <input name="options" id="APAC" type="radio" autocomplete="off"> APAC
-                            </label>
-                            <label class="btn btn-default">
-                                <input name="options" id="EMEA" type="radio" autocomplete="off"> EMEA
-                            </label>
-                            <label class="btn btn-default">
-                                <input name="options" id="IJKK" type="radio" autocomplete="off"> IJKK
-                            </label>
-                            <label class="btn btn-default">
-                                <input name="options" id="PRC" type="radio" autocomplete="off"> PRC
-                            </label>
-                        </div>
-                        <div>Filter account by geo</div>
-                        
-                    </div>
-                </div>
+					
+					Filter account by Geo:
+					<select id="geoMultiSelect"></select>
+				</div>
             </div>
         </div>
     </div>
@@ -101,18 +80,40 @@
 </script>
 
 <script>
-
-    var geo = "WW";
     var ds = new kendo.data.DataSource({
         type: "json",
         transport: {
             read: {
-                url: function () {
-                    return "/api/Customers/GetActiveCustomersByGeo/" + geo;
+            	url: function () {
+            		var geoFilter = "";
+            		var geoMultiSelect = $("#geoMultiSelect").data("kendoMultiSelect");
+            		if (geoMultiSelect !== undefined) {
+            			geoFilter = geoMultiSelect.value().join(",");
+            			geoFilter = geoFilter.replace("Worldwide", "WW");
+            		}
+            		if (geoFilter == "") {
+            			geoFilter = "WW"; // default value
+            		}
+            		return "/api/Customers/GetActiveCustomersByGeo/" + geoFilter;
                 }
             }
         }
     });
+
+    var geoDs = new kendo.data.DataSource({
+    	type: "json",
+    	serverFiltering: true,
+    	transport: {
+    		read: {
+    			url: function () {
+    				return "/api/Dropdown/GetGeosDropdowns";
+    			}
+    		}
+    	}
+    });
+
+    var datatest =
+			//List<ManageUsersInfo> test = new EmployeesLib().GetManageUserData(wwid);
 
     function clkSubmit() {
         var multiselect = $("#customers").data("kendoMultiSelect");
@@ -164,20 +165,26 @@
     }
 
     $(document).ready(function () {
-
-        $('.btn-group .btn').on('click',
-            function () {
-                geo = $(this).text().trim();
-                ds.read();
-            });
-
+		
         $("#customers").kendoMultiSelect({
             placeholder: "Select customers...",
             dataTextField: "CUST_DIV_NM",
             dataValueField: "CUST_MBR_SID",
             autoBind: true,
             autoClose: false,
-            dataSource: ds
+            dataSource: ds,
+        	open: function(e) {
+        		ds.read();
+        	}
+        });
+		
+        $("#geoMultiSelect").kendoMultiSelect({
+        	placeholder: "Select geos...",
+        	dataTextField: "dropdownName",
+        	dataValueField: "dropdownName",
+        	autoBind: true,
+        	autoClose: false,
+        	dataSource: geoDs
         });
     });
 
@@ -203,13 +210,6 @@
 
     .k-window-titlebar.k-dialog-titlebar.k-header {
         display: none;
-    }
-
-    .filter-container {
-        margin-top: 10px;
-        text-align: right;
-        font-size: 12px;
-        color: #aaaaaa;
     }
 
     .skyblue {
