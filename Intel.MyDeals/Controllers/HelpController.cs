@@ -9,10 +9,7 @@ namespace Intel.MyDeals.Controllers
     {
         public ActionResult Index()
         {
-            AppLib.InitAvm(OpAppConfig.Init(), AvmforceMode.User);
-            return RedirectToAction("Index", "Home");
-
-            //return View(AppLib.AVM);
+            return View(AppLib.AVM);
         }
 	}
 }
