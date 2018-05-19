@@ -2265,9 +2265,9 @@ tr.k-detail-row:hover {
 }
 
 .nav-tabs-intel-blocks.nav {
-	background-color: #ffffff;
+	background-color: #0071C5;
     font-size: 14px;
-    border-bottom: 1px solid #00AEEF;
+    border-bottom: none;
     margin: 0;
 }
 
@@ -2280,17 +2280,26 @@ tr.k-detail-row:hover {
 }
 
 .nav-tabs-intel-blocks.nav li a {
-	background-color: #ffffff;
-	color: #0071C5;
+	background-color: #0071C5;
+	color: #ffffff;
 	border-right: 0 solid transparent;
     padding: 5px 10px;
 }
 
 .nav-tabs-intel-blocks.nav li a:hover, .nav-tabs-intel-blocks.nav li a:focus {
-	background-color: #eeeeee;
+	background-color: #003C71;
 	border-right: 0 solid transparent;
+	border-radius: 3px;
 }
 
+.nav-tabs-intel-blocks.nav .dropdown-search li a {	
+	background-color: #fff;
+	color: #0071C5;
+}
+.nav-tabs-intel-blocks.nav .dropdown-search li a:hover {	
+	background-color: #eeeeee;
+	color: #0071C5;
+}
 .navbar-default .search {
 	color: #0071C5;
 }
@@ -6042,21 +6051,6 @@ div.k-scheduler-marquee:after {
 .k-grid .k-grouping-row {
     background-color: red;
 }
-
-.nav-tabs-intel-blocks.nav {
-    background-color: #fff;
-    font-size: 14px;
-    border-bottom: 1px solid #b1babf;
-    margin: 0;
-}
-
-.nav-tabs-intel-blocks.nav {
-    background-color: #fff;
-    font-size: 14px;
-    border-bottom: 1px solid #b1babf;
-    margin: 0;
-}
-
 h2, .h2 {
     font-size: 26px;
 }
