@@ -27,27 +27,36 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row">
-        <h1>Welcome to My Deals, @usrFName.</h1><h2>  Looks like you do not have any customers assigned.</h2>
-    </div>
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="info-container">
-                <div class="customers-container">
-                    Select Customers <span class="desc">Select all of the customer account that pertain to your job role</span>
-                    <select id="customers"></select>
-					
-					Filter account by Geo:
-					<select id="geoMultiSelect"></select>
+	<div class="row">
+		<h1>Welcome to My Deals, @usrFName.</h1><h2>  Looks like you do not have any customers assigned.</h2>
+	</div>
+	<div class="need-customers-container">
+		<div class="row">
+			<div class="col-md-12 user-details">
+				<div class="desc role-title">Update selections for:</div>
+				<div class="defaults">@usrFName @usrLName</div>
+			</div>
+
+			<div class="col-md-12 user-details">
+				<div class="desc role-title">AGS selected geographies:</div>
+				<div id="customerGeos" class="defaults">...</div>
+			</div>
+
+			<div class="col-md-12 col-xs-12">
+				<div class="info-container">
+					<div class="customers-container">
+						<div class="role-title"> Select Customers <span class="desc">Select all of the customer account that pertain to your job role</span></div>
+						<select id="customers"></select>
+					</div>
 				</div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div style="text-align: center; margin-top: 40px;">
-            <button class="btn btn-primary skyblue" type="button" onClick="clkSubmit()">Submit Request</button>
-        </div>
-    </div>
+			</div>
+		</div>
+		<div class="row">
+			<div style="text-align: center; margin-top: 40px;">
+				<button class="btn btn-primary skyblue" type="button" onClick="clkSubmit()">Submit Request</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script id="applyForCustEmailTemplate" type="text/x-kendo-template">
@@ -80,40 +89,21 @@
 </script>
 
 <script>
+	var myGeos = "";
+
     var ds = new kendo.data.DataSource({
         type: "json",
         transport: {
             read: {
             	url: function () {
-            		var geoFilter = "";
-            		var geoMultiSelect = $("#geoMultiSelect").data("kendoMultiSelect");
-            		if (geoMultiSelect !== undefined) {
-            			geoFilter = geoMultiSelect.value().join(",");
-            			geoFilter = geoFilter.replace("Worldwide", "WW");
+            		if (myGeos == "") {
+            			myGeos = "WW"; // default value
             		}
-            		if (geoFilter == "") {
-            			geoFilter = "WW"; // default value
-            		}
-            		return "/api/Customers/GetActiveCustomersByGeo/" + geoFilter;
+            		return "/api/Customers/GetActiveCustomersByGeo/" + myGeos;
                 }
             }
         }
     });
-
-    var geoDs = new kendo.data.DataSource({
-    	type: "json",
-    	serverFiltering: true,
-    	transport: {
-    		read: {
-    			url: function () {
-    				return "/api/Dropdown/GetGeosDropdowns";
-    			}
-    		}
-    	}
-    });
-
-    var datatest =
-			//List<ManageUsersInfo> test = new EmployeesLib().GetManageUserData(wwid);
 
     function clkSubmit() {
         var multiselect = $("#customers").data("kendoMultiSelect");
@@ -172,19 +162,12 @@
             dataValueField: "CUST_MBR_SID",
             autoBind: true,
             autoClose: false,
-            dataSource: ds,
-        	open: function(e) {
-        		ds.read();
-        	}
+            dataSource: ds
         });
 		
-        $("#geoMultiSelect").kendoMultiSelect({
-        	placeholder: "Select geos...",
-        	dataTextField: "dropdownName",
-        	dataValueField: "dropdownName",
-        	autoBind: true,
-        	autoClose: false,
-        	dataSource: geoDs
+        $.get("/api/UserPreferences/GetManageUserGeos/" + @usrWwid, function (data) {
+        	myGeos = data.join(",");
+        	$("#customerGeos").html(myGeos);
         });
     });
 
@@ -198,6 +181,11 @@
         font-family: "Intel Clear", "Arial";
         font-size: 16px;
     }
+
+	.need-customers-container{
+		max-width:1000px;
+		margin:0 auto;
+	}
 
     #intelLogo {
         width: 50px;
@@ -224,18 +212,11 @@
     .customers-container .desc {
         color: #aaaaaa;
         font-size: 12px;
-        margin-left: 20px;
+		margin-left: 20px;
     }
 
     .customers-container {
-        margin: 20px 60px;
         text-align: left;
-    }
-    .customers-container .k-multiselect-wrap {
-        font-size: 12px;
-    }
-    #customers_listbox li {
-        font-size: 12px;
     }
 
     .lnk {
@@ -256,6 +237,7 @@
     }
 
     .info-container {
+		margin-top: 25px;
         text-align: center;
     }
 
@@ -316,4 +298,10 @@
         color: #000000;
         margin: 10px 10px 20px 20px;
     }
+	.user-details {
+		margin: 15px 0;
+	}
+	.defaults {
+		color: #939598;
+	}
 </style>

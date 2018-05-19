@@ -2,6 +2,7 @@
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.BusinessLogic;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Intel.Opaque;
 using Intel.MyDeals.Helpers;
@@ -53,15 +54,23 @@ namespace Intel.MyDeals.Controllers.API
 
         private readonly ICustomerLib _customerLib;
 
-        [Authorize]
-        [Route("GetManageUserData/{wwid}")]
-        public List<ManageUsersInfo> GetManageUserData(int wwid)
-        {
-            return SafeExecutor(() => new EmployeesLib().GetManageUserData(wwid)
-                , $"Unable to GetManageUserData");
-        }
+		[Authorize]
+		[Route("GetManageUserData/{wwid}")]
+		public List<ManageUsersInfo> GetManageUserData(int wwid)
+		{
+			return SafeExecutor(() => new EmployeesLib().GetManageUserData(wwid)
+				, $"Unable to GetManageUserData");
+		}
 
-        [Authorize]
+		[Authorize]
+		[Route("GetManageUserGeos/{wwid}")]
+		public List<string> GetManageUserGeos(int wwid)
+		{
+			return SafeExecutor(() =>  new EmployeesLib().GetManageUserData(wwid).Where(x => x.EMP_WWID == wwid).FirstOrDefault().USR_GEOS.Split(',').ToList()				
+				, $"Unable to GetManageUserGeos");
+		}
+
+		[Authorize]
         [Route("GetManageUserDataGetCustomers/{getCachedResult:bool?}")]
         public IEnumerable<CustomerDivision> GetManageUserDataGetCustomers(bool getCachedResult = true)
         {
