@@ -162,9 +162,11 @@
             dataValueField: "CUST_MBR_SID",
             autoBind: true,
             autoClose: false,
-            dataSource: ds
+            dataSource: ds,
+            itemTemplate: "<div>#: data.CUST_DIV_NM # <div class='fr hosted_geo'> #: data.HOSTED_GEO #</div></div>" 
         });
 		
+		// Get geos to filter customer list with
         $.get("/api/UserPreferences/GetManageUserGeos/" + @usrWwid, function (data) {
         	myGeos = data.join(",");
         	$("#customerGeos").html(myGeos);
@@ -298,10 +300,18 @@
         color: #000000;
         margin: 10px 10px 20px 20px;
     }
+
 	.user-details {
 		margin: 15px 0;
 	}
+
 	.defaults {
 		color: #939598;
+	}
+
+	.hosted_geo {
+		color: #b1babf;
+		font-weight: bold;
+		font-size: 12px;
 	}
 </style>
