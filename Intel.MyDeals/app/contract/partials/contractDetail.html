@@ -53,31 +53,41 @@
                          op-ui-mode="'VERTICAL'"></div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="col-md-11 row">
-                        <h6>Customer Acceptance of Contract is...</h6>
-                    </div>
+				<div class="col-md-6">
+					<div class="col-md-11 row">
+						<h6>Customer Acceptance of Contract is...</h6>
+					</div>
 
-                    <div class="col-md-1">
-                        <div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
-                            <i class="intelicon-help" style="font-size:30px !important"></i>
-                        </div>
-                    </div>
-
-                    <div class="col-md-11 row"
-                         op-control-flat
-                         ng-model="contractData"
-                         op-cd="'CUST_ACCPT'"
-                         op-type="'RADIOBUTTONGROUP'"
-                         op-label="''"
-                         op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
-                         op-lookup-text="'DROP_DOWN'"
-                         op-lookup-value="'DROP_DOWN'"
-                         op-is-form="true"
-                         op-extra="true"
-                         op-ui-mode="'VERTICAL'"></div>
-                </div>
-                </div>
+					<div class="col-md-1">
+						<div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
+							<i class="intelicon-help" style="font-size:30px !important"></i>
+						</div>
+					</div>
+					<div class="row">
+						<div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
+							<div class="col-md-1">
+								<i class="fa fa-info-circle fa-2x" style="color:#FFA300"></i>
+							</div>
+							<div class="col-md-11">
+								In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
+							</div>
+						</div>
+						<div class="col-md-11"
+							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT}"
+							 op-control-flat
+							 ng-model="contractData"
+							 op-cd="'CUST_ACCPT'"
+							 op-type="'RADIOBUTTONGROUP'"
+							 op-label="''"
+							 op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
+							 op-lookup-text="'DROP_DOWN'"
+							 op-lookup-value="'DROP_DOWN'"
+							 op-is-form="true"
+							 op-extra="true"
+							 op-ui-mode="'VERTICAL'"></div>
+						</div>
+					</div>
+            </div>
 
             <div class="row">
                 <div class="col-md-6">
@@ -357,4 +367,7 @@
             display: none;
         }
     }
+	.disabled-section {
+		background-color: #f2f2f2;
+	}
 </style>
