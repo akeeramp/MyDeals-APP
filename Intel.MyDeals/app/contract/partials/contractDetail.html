@@ -64,7 +64,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
+						<div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
 							<div class="col-md-1">
 								<i class="fa fa-info-circle fa-2x" style="color:#FFA300"></i>
 							</div>
@@ -72,7 +72,8 @@
 								In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
 							</div>
 						</div>
-						<div class="col-md-11"
+					    <div class="col-md-11"
+                             id="radCustAccpt"
 							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT}"
 							 op-control-flat
 							 ng-model="contractData"

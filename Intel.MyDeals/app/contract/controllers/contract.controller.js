@@ -684,6 +684,12 @@
                     ? $scope.status = { 'isOpen': true }
                     : setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
             }, 300);
+
+            if (!$scope.isNewContract) {
+                $timeout(function () {
+                    $("#radCustAccpt input[type=radio]").attr('disabled', true);
+                }, 300);
+            }
         }
 
         // File save methods and variable
