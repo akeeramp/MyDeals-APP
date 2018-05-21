@@ -10,6 +10,7 @@
 
         $scope.data = [];
         $scope.options = {};
+        $scope.helpTopic = HelpTopicEnum.DealEditor_Features;
 
         $q.all([templatesService.readTemplates(), objsetService.readPricingTable(1011)])
             .then(function (responses) {

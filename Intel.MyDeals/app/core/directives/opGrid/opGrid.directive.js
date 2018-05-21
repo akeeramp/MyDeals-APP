@@ -10,6 +10,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
         scope: {
             opData: '=',
             opOptions: '=',
+            opHelp: '=',
             opRootScope: '=',
             opRootParentScope: '='
         },
@@ -114,6 +115,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             // change from the below to allow this to work from all scopes applied.  It will need to be tested from all pages that use opGrid
             $scope.parentRoot = $scope.root;
             //$scope.parentRoot = !!$scope.opOptions.rootParentScope ? $scope.opOptions.rootParentScope : $scope.$parent.$parent.$parent.$parent.$parent;
+
+            $scope.showHelpTopicHelper = function (dataItem) {
+                showHelpTopic($scope.opHelp);
+            }
 
             $scope.showStage = function (dataItem) {
                 return gridUtils.stgFullTitleChar(dataItem);

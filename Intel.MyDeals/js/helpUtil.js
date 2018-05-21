@@ -12,7 +12,8 @@ var HelpTopicEnum = Object.freeze({
     "ContractManager_ContractAndDealViews":  "contractdeal",
     "CreateContract_ContractDetails":   "details",
     "Dashboard_AdvancedSearch":         "advsearch",
-    "Tenders_ManagingTenders":          "tendersmanage"
+    "Tenders_ManagingTenders":          "tendersmanage",
+    "ContractManager_GroupingExclusions":    "exclude"
 });
 
 function openInNewTab(url) {
