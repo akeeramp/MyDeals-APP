@@ -98,10 +98,15 @@
                             <!-- If PT has no trackers under it and you can add one, you can remove it -->
                             <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && pt.HAS_TRACKER !== '1'"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
                             <!-- If PT has trackers under it and it is in play and you can add one, you can roll it back -->
-                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && pt.HAS_TRACKER === '1' && (pt.PS_WF_STG_CD !== 'Cancelled' || pt.PS_WF_STG_CD !== 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingTable(ps, pt)"><i class="fa fa-undo"></i> Undo Pricing Table Re-deal</a></li> 
+                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && pt.HAS_TRACKER === '1'&& pt.REBATE_TYPE !== 'TENDER' && (pt.PS_WF_STG_CD !== 'Cancelled' || pt.PS_WF_STG_CD !== 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingTable(ps, pt)"><i class="fa fa-undo"></i> Undo Pricing Table Re-deal</a></li> 
                             <!-- If PT has a tracker and is not currently in redeal (it must be active) and you are allowed to cancel -->
-                            <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && pt.HAS_TRACKER === '1' && pt.IN_REDEAL === '0' && pt.PS_WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingTable(ps, pt)"><i class="fa fa-undo"></i> Cancel Entire Pricing Table</a></li> 
+                            <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && pt.HAS_TRACKER === '1' && pt.IN_REDEAL === '0' && pt.REBATE_TYPE !== 'TENDER' && pt.PS_WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingTable(ps, pt)"><i class="fa fa-undo"></i> Cancel Entire Pricing Table</a></li> 
 
+                            <!-- Tender Deal Lines -->
+                            <!-- If PT has trackers under it and it is in play and you can add one, you can roll it back -->
+                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE && pt.HAS_TRACKER === '1' && pt.IN_REDEAL === '1' && pt.REBATE_TYPE === 'TENDER' && (pt.PS_WF_STG_CD !== 'Cancelled' || pt.PS_WF_STG_CD !== 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingTable(ps, pt)"><i class="fa fa-undo"></i> Undo Pricing Table Re-deal</a></li>
+                            <!-- If PT has a tracker and is not currently in redeal (it must be active) and you are allowed to cancel -->
+                            <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && pt.HAS_TRACKER === '1' && pt.IN_REDEAL === '0' && pt.REBATE_TYPE === 'TENDER'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingTable(ps, pt)"><i class="fa fa-undo"></i> Cancel Entire Pricing Table</a></li> 
                         </ul>
                     </div>
 
