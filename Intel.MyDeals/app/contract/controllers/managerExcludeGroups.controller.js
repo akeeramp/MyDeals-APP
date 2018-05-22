@@ -70,7 +70,7 @@
                             return col;
                         },
                         enableCheckbox: function() {
-                            return enabledList.indexOf(dataItem["PS_WF_STG_CD"]) < 0;
+                            return enabledList.indexOf(dataItem["PS_WF_STG_CD"]) < 0 && (window.usrRole !== "DA");
                         },
                         excludeOutliers: function () {
                             return false;
