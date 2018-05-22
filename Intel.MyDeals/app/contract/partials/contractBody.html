@@ -5,233 +5,254 @@
 <div ng-include="'app/contract/partials/ptModals/dealTimelineModal.html'"></div>
 
 <div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
-    <div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
-        <div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
-            <div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
-            <div class="fl fntLg col-md-11" style="color: #000000; margin: 0 6px 2px 10px;">{{ curPricingTable.TITLE }}</div>
-            <div class="clearboth"></div>
-        </div>
-        <div id="perfMs"></div>
-        <div id="perfLegend"></div>
-        <div id="perfDetails"></div>
-        <div style="position: absolute; top: 70px; right: 5px;">
-            <div id="perfChart" style="height: 40px; padding: 0;"></div>
-        </div>
-        <div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip">
-            <div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
-            <div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}" 
-                 title="Save, validate, and finalize your deals in the Deal Editor. *Additional deal information may be required" 
-                 ng-click="publishWipDealsFromTab()">Deal Editor</div>
-            <div class="clearboth"></div>
-        </div>
-    </div>
+	<div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
+		<div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
+			<div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
+			<div class="col-md-11"
+				 ng-class="{'fntLg-toggle': isOverCharacterLimit(curPricingTable.TITLE, contractHeaderMaxCharWidth)}"
+				 style="margin: 0 6px 0px 10px;">
+				<div class="fntLg" ng-class="{'fntLg-dots': isOverCharacterLimit(curPricingTable.TITLE, contractHeaderMaxCharWidth)}" style="color: #000000;">
+					<b style="color:#123b70">#{{ curPricingTable.DC_ID }}</b> {{ curPricingTable.TITLE }}
+				</div>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div id="perfMs"></div>
+		<div id="perfLegend"></div>
+		<div id="perfDetails"></div>
+		<div style="position: absolute; top: 70px; right: 5px;">
+			<div id="perfChart" style="height: 40px; padding: 0;"></div>
+		</div>
+		<div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip">
+			<div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
+			<div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}"
+				 title="Save, validate, and finalize your deals in the Deal Editor. *Additional deal information may be required"
+				 ng-click="publishWipDealsFromTab()">Deal Editor</div>
+			<div class="clearboth"></div>
+		</div>
+	</div>
 
-    <div id="secContainer">
-        <div kendo-splitter
-             k-panes="[null, { collapsible: true, collapsed: true, min: '235px', size: '235px' }]"
-             k-orientation="'vertical'"
-             id="k-splitter"
-             style="height: 100%; border: 0 solid transparent;">
+	<div id="secContainer">
+		<div kendo-splitter
+			 k-panes="[null, { collapsible: true, collapsed: true, min: '235px', size: '235px' }]"
+			 k-orientation="'vertical'"
+			 id="k-splitter"
+			 style="height: 100%; border: 0 solid transparent;">
 
-            <div>
-                <div ui-view="pricingTableView" class="fullHeight">
-                    <div ng-include="'app/contract/partials/info.html'" style="overflow: auto !important; height: 100%;"></div>
-                </div>
-            </div>
+			<div>
+				<div ui-view="pricingTableView" class="fullHeight">
+					<div ng-include="'app/contract/partials/info.html'" style="overflow: auto !important; height: 100%;"></div>
+				</div>
+			</div>
 
-            <div style="overflow: hidden;" class="wide noborder">
-                <div id="subContainerWrapper">
-                    <div id="subHeader">
-                        <div class="fl" style="padding: 4px 10px;">
-                            <i class="intelicon-pin-solid ssmIconBtn" onclick="closeSplitter()"></i>
-                        </div>
-                        <div class="fl" style="padding: 4px 0;">Additional Discounts & Requirements</div>
-                        <div class="fl" style="padding: 6px 10px 0 10px; color: #aaaaaa; font-style: italic; font-size: 12px;">**Note that any updates made here are copied on all tables under this Pricing Strategy</div>
-                        <div class="fr" style="border-radius: 4px; background-color: #C4D600; color: #ffffff; font-size: 11px; padding: 2px 6px; margin: 6px 10px 0 0; display: none;" id="termSave">Saved</div>
-                        <div class="clearboth"></div>
-                    </div>
-                    <div id="subContainer">
-                        <textarea kendo-editor
-                                  k-ng-model="curPricingStrategy.TERMS"
-                                  k-change="chgTerms"
-                                  k-tools="['fontSize','bold','italic','underline','strikeThrough','justifyLeft','justifyCenter','justifyRight','justifyFull', 'insertUnorderedList','insertOrderedList','indent','outdent']"
-                                  style="height: 100%;" class="noborderEditor"></textarea>
-                    </div>
-                </div>
-            </div>
+			<div style="overflow: hidden;" class="wide noborder">
+				<div id="subContainerWrapper">
+					<div id="subHeader">
+						<div class="fl" style="padding: 4px 10px;">
+							<i class="intelicon-pin-solid ssmIconBtn" onclick="closeSplitter()"></i>
+						</div>
+						<div class="fl" style="padding: 4px 0;">Additional Discounts & Requirements</div>
+						<div class="fl" style="padding: 6px 10px 0 10px; color: #aaaaaa; font-style: italic; font-size: 12px;">**Note that any updates made here are copied on all tables under this Pricing Strategy</div>
+						<div class="fr" style="border-radius: 4px; background-color: #C4D600; color: #ffffff; font-size: 11px; padding: 2px 6px; margin: 6px 10px 0 0; display: none;" id="termSave">Saved</div>
+						<div class="clearboth"></div>
+					</div>
+					<div id="subContainer">
+						<textarea kendo-editor
+								  k-ng-model="curPricingStrategy.TERMS"
+								  k-change="chgTerms"
+								  k-tools="['fontSize','bold','italic','underline','strikeThrough','justifyLeft','justifyCenter','justifyRight','justifyFull', 'insertUnorderedList','insertOrderedList','indent','outdent']"
+								  style="height: 100%;" class="noborderEditor"></textarea>
+					</div>
+				</div>
+			</div>
 
-        </div>
-    </div>
+		</div>
+	</div>
 
 </div>
 
 <div ng-show="!(isAddStrategyHidden && isAddPricingTableHidden)">
-    <div ng-include="'app/contract/partials/help.html'"></div>
+	<div ng-include="'app/contract/partials/help.html'"></div>
 </div>
 
 
 <style>
-    .contractStratHeader .isReadOnly {
-        background-color: #ffffff !important;
-    }
+	.contractStratHeader .isReadOnly {
+		background-color: #ffffff !important;
+	}
 
-    .contractStratHeader {
-        float: none !important;
-    }
+	.contractStratHeader {
+		float: none !important;
+	}
 
-    .contractStratHeader .opUiContainer input.k-textbox, .contractStratHeader .opUiContainer input.k-textbox:hover {
-        border-color: transparent;
-        height: 30px;
-        width: 100%;
-    }
+		.contractStratHeader .opUiContainer input.k-textbox, .contractStratHeader .opUiContainer input.k-textbox:hover {
+			border-color: transparent;
+			height: 30px;
+			width: 100%;
+		}
 
-    .contractStratHeader .opUiContainer input.k-textbox:hover {
-    }
+			.contractStratHeader .opUiContainer input.k-textbox:hover {
+			}
 
-    .contractStratHeader .myDealsControl {
-        margin: -3px -50px 0 -10px;
-        float: left;
-        width: 100%;
-    }
+		.contractStratHeader .myDealsControl {
+			margin: -3px -50px 0 -10px;
+			float: left;
+			width: 100%;
+		}
 
-    .editorTab {
-        border-top: 1px solid #0071C5;
-        border-left: 1px solid #0071C5;
-        border-right: 1px solid #0071C5;
-        margin-right: 5px;
-        color: #FFFFFF;
-        height: 36px;
-        padding: 6px 15px;
-        background-color: #003C71;
-        cursor: default;
-    }
-    .editorTab.inactive {
-        color: #ffffff;
-        background-color: #00AEEF;
-        cursor: pointer;
-    }
-    .editorTab.inactive:hover {
-        background-color: #0071C5;
-    }
-    .editorTab.disabled, .editorTab.disabled:hover {
-        background: #fdfdfd; /* Old browsers */
-        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
-        color: #003C71;
-        border-bottom: 2px solid #bcbcbc;
-        cursor: default;
-    }
+	.editorTab {
+		border-top: 1px solid #0071C5;
+		border-left: 1px solid #0071C5;
+		border-right: 1px solid #0071C5;
+		margin-right: 5px;
+		color: #FFFFFF;
+		height: 36px;
+		padding: 6px 15px;
+		background-color: #003C71;
+		cursor: default;
+	}
 
-    .noborders {
-        border: 0 solid transparent !important;
-    }
+		.editorTab.inactive {
+			color: #ffffff;
+			background-color: #00AEEF;
+			cursor: pointer;
+		}
 
-    #secContainerWrapper .disabled {
-        cursor: not-allowed;
-    }
+			.editorTab.inactive:hover {
+				background-color: #0071C5;
+			}
 
-    #perfMs {
-        position: absolute;
-        top: 56px;
-        right: 10px;
-        color: #000000; 
-        font-family: verdana;
-        font-size: 10px; 
-        margin-top: 5px; 
-        z-index: 1000;
-    }
-    #perfLegend {
-        position: absolute;
-        top: 95px;
-        right: 5px;
-        font-family: verdana;
-        font-size: 9px;
-        z-index: 1000;
-        color: #666666;
-    }
-    #perfDetails {
-        position: absolute;
-        top: 110px;
-        right: 5px;
-        font-family: verdana;
-        font-size: 10px;
-        z-index: 1000;
-        background-color: #ffffff;
-    }
-    #perfDetails th {
-        padding: 2px 4px;
-        color: #0071C5;
-    }
-    #perfDetails td {
-        padding: 2px 4px;
-        color: #333333;
-    }
-    .closePerf {
-        color: #cccccc;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    .closePerf:hover {
-        color: #FC4C02;
-    }
-    .legKey {
-        width: 10px;
-        height: 10px;
-        border: 1px solid #bebebe;
-    }
-    .legData {
-        margin-left: 4px;
-        margin-right: 10px;
-        margin-top: -2px;
-    }
-    .showMore {
-        font-size: 18px;
-        color: #00AEEF;
-        cursor: pointer;
-    }
-    .showMore:hover {
-        color: #0071C5;
-    }
+		.editorTab.disabled, .editorTab.disabled:hover {
+			background: #fdfdfd; /* Old browsers */
+			background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+			background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+			background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+			color: #003C71;
+			border-bottom: 2px solid #bcbcbc;
+			cursor: default;
+		}
 
-    .hint-collapse {
-        display: none;
-    }
-    @media (max-width: 1000px) {
-        .hint-collapse {
-            background-color: #f3D54E;
-            color: #ffffff;
-            display: inherit;
-        }
-        .no-hint-collapse {
-            display: none;
-        }
-    }
+	.noborders {
+		border: 0 solid transparent !important;
+	}
+
+	#secContainerWrapper .disabled {
+		cursor: not-allowed;
+	}
+
+	#perfMs {
+		position: absolute;
+		top: 56px;
+		right: 10px;
+		color: #000000;
+		font-family: verdana;
+		font-size: 10px;
+		margin-top: 5px;
+		z-index: 1000;
+	}
+
+	#perfLegend {
+		position: absolute;
+		top: 95px;
+		right: 5px;
+		font-family: verdana;
+		font-size: 9px;
+		z-index: 1000;
+		color: #666666;
+	}
+
+	#perfDetails {
+		position: absolute;
+		top: 110px;
+		right: 5px;
+		font-family: verdana;
+		font-size: 10px;
+		z-index: 1000;
+		background-color: #ffffff;
+	}
+
+		#perfDetails th {
+			padding: 2px 4px;
+			color: #0071C5;
+		}
+
+		#perfDetails td {
+			padding: 2px 4px;
+			color: #333333;
+		}
+
+	.closePerf {
+		color: #cccccc;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+		.closePerf:hover {
+			color: #FC4C02;
+		}
+
+	.legKey {
+		width: 10px;
+		height: 10px;
+		border: 1px solid #bebebe;
+	}
+
+	.legData {
+		margin-left: 4px;
+		margin-right: 10px;
+		margin-top: -2px;
+	}
+
+	.showMore {
+		font-size: 18px;
+		color: #00AEEF;
+		cursor: pointer;
+	}
+
+		.showMore:hover {
+			color: #0071C5;
+		}
+
+	.hint-collapse {
+		display: none;
+	}
+
+	@media (max-width: 1000px) {
+		.hint-collapse {
+			background-color: #f3D54E;
+			color: #ffffff;
+			display: inherit;
+		}
+
+		.no-hint-collapse {
+			display: none;
+		}
+	}
 </style>
 
 <script>
-    function closeSplitter() {
-        var splitter = $("#k-splitter").data("kendoSplitter");
-        if (!splitter) return;
+	function closeSplitter() {
+		var splitter = $("#k-splitter").data("kendoSplitter");
+		if (!splitter) return;
 
-        splitter.collapse(".k-pane:last");
-        splitter.resize();
-    }
-    function openSplitter() {
-        var splitter = $("#k-splitter").data("kendoSplitter");
-        if (!splitter) return;
+		splitter.collapse(".k-pane:last");
+		splitter.resize();
+	}
+	function openSplitter() {
+		var splitter = $("#k-splitter").data("kendoSplitter");
+		if (!splitter) return;
 
-        splitter.expand(".k-pane:last");
-        splitter.resize();
-    }
+		splitter.expand(".k-pane:last");
+		splitter.resize();
+	}
 
-    setTimeout(function () {
-        var splitter = $("#k-splitter").data("kendoSplitter");
-        if (!splitter) return;
+	setTimeout(function () {
+		var splitter = $("#k-splitter").data("kendoSplitter");
+		if (!splitter) return;
 
-        splitter.resize();
-    }, 2000);
+		splitter.resize();
+	}, 2000);
 
 
 </script>

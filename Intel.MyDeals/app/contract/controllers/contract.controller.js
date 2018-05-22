@@ -38,6 +38,7 @@
         $scope.helpTopicDealEditorFeatures = HelpTopicEnum.DealEditor_Features;
         $scope.helpTopicContractAndDealViews = HelpTopicEnum.ContractManager_ContractAndDealViews;
         $scope.helpTopicGroupingExclusions = HelpTopicEnum.ContractManager_GroupingExclusions;
+        $scope.contractHeaderMaxCharWidth = 55;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -4158,6 +4159,13 @@
                 }
             }
             return data;
+        }
+
+        $scope.isOverCharacterLimit = function (str, limit) {
+        	if (typeof str !== 'string') {
+        		return false;
+        	}
+        	return (str.length >= limit);
         }
 
     }

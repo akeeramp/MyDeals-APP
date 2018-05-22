@@ -22,9 +22,16 @@
                             <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION !== 'Valid' && curPricingStrategy.PASSED_VALIDATION !== 'Dirty' && curPricingStrategy.PASSED_VALIDATION !== 'Complete' && curPricingStrategy.PASSED_VALIDATION !== 'Finalizing'" title="{{curPricingStrategy.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                         </div>
                     </td>
-                    <td style="width: 100%;">
-                        <div class="fntLg col-md-11" style="color: #000000; margin: 2px 6px 2px 0; font-size: 20px;">{{ curPricingStrategy.TITLE }}</div>
-                    </td>
+					<td style="width: 100%;">
+						<div class="col-md-11" ng-class="{'fntLg-toggle': isOverCharacterLimit(curPricingStrategy.TITLE, contractHeaderMaxCharWidth)}">
+							<div class="fntLg"
+								 ng-class="{'fntLg-dots': isOverCharacterLimit(curPricingStrategy.TITLE, contractHeaderMaxCharWidth)}" 
+								 style="color: #000000; margin: 2px 6px 2px 0; font-size: 20px;"
+								 >
+								<b style="color:#123b70">#{{ curPricingStrategy.DC_ID }}</b>  {{ curPricingStrategy.TITLE }}
+							</div>
+						</div>
+					</td>
                 </tr>
             </table>
         </div>

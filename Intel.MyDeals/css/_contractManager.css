@@ -603,13 +603,40 @@
         line-height: 1em;
         background-color: transparent;
         border: 0 solid transparent;
-        color: #939598;
+    }
+	.fntLg-toggle {
+		transition: 0.5s;
+		-webkit-transition: 0.5s;
+		white-space: nowrap;
+		overflow: hidden;
+		max-width: 600px;	
+		min-height: 24px;
+		height: 1.1em;
+	}
+	.fntLg-dots:after {
+		background-color: #ffffff;
+		font-weight: bold;
+		right: 0px;
+		position:absolute;
+		padding:1px 8px;
+		font-size: 16px;
+		content: "...";
+	}
+	.fntLg-toggle:hover {
+		max-width: 91.66667%;
+		background-color:#efefef;
+		/*white-space: normal;
+		overflow: auto;
+		height: auto;*/
+    }
+	.fntLg-toggle:hover > .fntLg-dots:after{
+		visibility: hidden;
     }
     .fntLg {
         font-family: 'Intel Clear';
         font-weight: 200;
         font-style: normal;
-        font-size: 16px;
+        font-size: 16px;	
     }
     .fntXlg{
         font-family: 'Intel Clear';
