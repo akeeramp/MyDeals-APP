@@ -185,7 +185,9 @@
 		// Get geos to filter customer list with
         $.get("/api/UserPreferences/GetManageUserGeos/" + @usrWwid, function (data) {
         	myGeos = data.join(",");
+        	myGeos = myGeos.replace(' ', '');
         	$("#customerGeos").html(myGeos);
+        	ds.read();
         });
     });
 
