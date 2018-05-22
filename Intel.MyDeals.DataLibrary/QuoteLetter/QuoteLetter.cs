@@ -168,7 +168,7 @@ namespace Intel.MyDeals.DataLibrary
                 lblBlankS1.Visible = false;
             }
 
-            if (string.IsNullOrEmpty(txtK1ProdName.Value))
+            if (GetValue("KitCheck") == "N") //string.IsNullOrEmpty(txtK1ProdName.Value)
             {
                 lblK1.Visible = false;
                 txtK1Ecap.Visible = false;
