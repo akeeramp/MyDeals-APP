@@ -30,7 +30,7 @@
         }
 
         function getCustomersFromGeos(geos) {
-            return dataService.post(apiBaseUrl + 'GetManageUserDataGetCustomersInGeos', geos);
+            return dataService.get(apiBaseUrl + 'GetManageUserDataGetCustomersInGeos/' + geos);
         }
 
         function setEmployeeData(data) {

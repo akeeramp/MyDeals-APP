@@ -37,10 +37,13 @@ namespace Intel.MyDeals.BusinessLogic
             return new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM).OrderBy(c => c.CUST_NM).ToList();
         }
 
-        public List<CustomerDivision> GetManageUserDataGetCustomers(List<string> geos)
+        public List<CustomerDivision> GetManageUserDataGetCustomers(string geos)
         {
+            // TODO: future clean up this should probably be moved to CustomerLib rather than be kept here in EmployeeLib
+
             // This is very hackish, but I didn't want to wreck any code that actually depended upon special division data for an admin screen,
             // so all customers is added on for this manage list to pre-pend "all customers" as a selection. Thank me now, shoot me later.  :)
+            List<string> arGeos = geos.Split(',').ToList();
             CustomerDivision allCusts = new CustomerDivision
             {
                 ACTV_IND = true,
@@ -56,7 +59,7 @@ namespace Intel.MyDeals.BusinessLogic
             };
             List<CustomerDivision> customersList = new List<CustomerDivision>();
             customersList.Add(allCusts);
-            customersList.AddRange(new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM && (geos.Contains("Worldwide") || geos.Contains(c.HOSTED_GEO))).OrderBy(c => c.CUST_NM).ToList()); // 142
+            customersList.AddRange(new CustomerLib().GetCustomerDivisions().Where(c => c.CUST_DIV_NM == c.CUST_NM && (arGeos.Contains("WW") || arGeos.Contains("Worldwide") || arGeos.Contains(c.HOSTED_GEO))).OrderBy(c => c.CUST_NM).ToList()); // 142
             return customersList;
             //if (geos.Contains("Worldwide"))
             //{

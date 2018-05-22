@@ -19,7 +19,7 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
         type: "json",
         transport: {
             read: function (e) {
-                manageEmployeeService.getCustomersFromGeos(geosArray)
+                manageEmployeeService.getCustomersFromGeos(geosArray.join())
                     .then(function (response) {
                         $scope.selectedIds = [];
                         var selectedCustomers = dataItem["USR_CUST"].replace(/, /g, ",").split(",");

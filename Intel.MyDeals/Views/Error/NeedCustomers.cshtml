@@ -99,7 +99,7 @@
             		if (myGeos == "") {
             			myGeos = "WW"; // default value
             		}
-            		return "/api/Customers/GetActiveCustomersByGeo/" + myGeos;
+            		return "/api/UserPreferences/GetManageUserDataGetCustomersInGeos/" + myGeos; //note: we switched to this api call instead of the previous /api/Customers/GetActiveCustomersByGeo/ as this one band-aids on "All Customers" and also pulls inactive customers as well which a user may wish to monitor
                 }
             }
         }
@@ -155,7 +155,22 @@
     }
 
     $(document).ready(function () {
-		
+        function custChange() {
+            var custmultiselect = $("#customers").data("kendoMultiSelect");
+            var selected = custmultiselect.dataItems();
+            var lastSelected = null;
+            if (selected.length != 0) {
+                lastSelected = selected[selected.length - 1];
+            } 
+            else {
+                lastSelected = null;
+            }
+
+            if (lastSelected != null && (lastSelected["CUST_NM"] == "All Customers" || selected[0]["CUST_NM"] == "All Customers")) { //if there was a last selected and the last or the first item is "All Customers", then we would want the list to become only the last selected item.
+                custmultiselect.value([lastSelected["CUST_MBR_SID"]])
+            } 
+        }
+
         $("#customers").kendoMultiSelect({
             placeholder: "Select customers...",
             dataTextField: "CUST_DIV_NM",
@@ -163,7 +178,8 @@
             autoBind: true,
             autoClose: false,
             dataSource: ds,
-            itemTemplate: "<div>#: data.CUST_DIV_NM # <div class='fr hosted_geo'> #: data.HOSTED_GEO #</div></div>" 
+            itemTemplate: "<div>#: data.CUST_DIV_NM # <div class='fr hosted_geo'> #: data.HOSTED_GEO #</div></div>" ,
+            change: custChange
         });
 		
 		// Get geos to filter customer list with
