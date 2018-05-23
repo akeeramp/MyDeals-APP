@@ -13,6 +13,7 @@ namespace Intel.MyDeals.Controllers.API
     public class RebateTablesController : BaseApiController
     {
         private readonly IPricingTablesLib _pricingTablesLib;
+
         public RebateTablesController(IPricingTablesLib pricingTablesLib)
         {
             _pricingTablesLib = pricingTablesLib;
@@ -168,7 +169,6 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
         [Authorize]
         [Route("GetWipDealsByPtr/{id}")]
         public OpDataCollectorFlattenedDictList GetWipDealsByPtr(int id)
@@ -177,7 +177,6 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Wip Deals {id}"
             );
         }
-
 
         [Authorize]
         [Route("ActionWipDeal/{custId}/{contractId}/{actn}")]
@@ -346,14 +345,13 @@ namespace Intel.MyDeals.Controllers.API
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - UpdateWipDeals")
             {
                 CustId = custId,
-                ContractId = contractId
+                ContractId = contractId,
+                NeedToCheckForDelete = false
             });
 
             return SafeExecutor(() => _pricingTablesLib.UpdateWipDeals(wipDeals, savePacket)
                 , "Unable to save the Pricing Table"
             );
         }
-        
     }
-
 }

@@ -196,89 +196,14 @@ namespace Intel.MyDeals.BusinessLogic
         public OpDataCollectorFlattenedDictList UpdateWipDeals(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             List<int> dcIds = data.Select(opDataCollectorFlattenedItem => int.Parse(opDataCollectorFlattenedItem[AttributeCodes.DC_ID].ToString())).ToList();
-
-            // List of attributes to get
-            List<int> atrbs = new List<int>
+            OpDataCollectorFlattenedDictList dataDictList = new OpDataCollectorFlattenedDictList
             {
-                Attributes.DEAL_GRP_EXCLDS.ATRB_SID,
-                Attributes.DEAL_GRP_CMNT.ATRB_SID,
-                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                Attributes.CUST_MBR_SID.ATRB_SID
+                [OpDataElementType.WIP_DEAL] = data
             };
-
-            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
-            {
-                OpDataElementType.WIP_DEAL
-            };
-
-            var id2DealGroupExclusion = new Dictionary<int, string>();
-            var id2DealGroupExclusionComments = new Dictionary<int, string>();
-            foreach (var flatItem in data)
-            {
-                id2DealGroupExclusion[int.Parse(flatItem[AttributeCodes.DC_ID].ToString())] = flatItem[AttributeCodes.DEAL_GRP_EXCLDS].ToString();
-                id2DealGroupExclusionComments[int.Parse(flatItem[AttributeCodes.DC_ID].ToString())] = flatItem[AttributeCodes.DEAL_GRP_CMNT].ToString();
-            }
-
-            // Get WIP deal by Id
-            var myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds, opDataElementTypes, atrbs);
-
-            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
-            {
-                var dcId = dc.DcID;
-                IOpDataElement deDefault = dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
-
-                // Deal group exclude
-                var deDealGroupExclude = dc.GetDataElement(AttributeCodes.DEAL_GRP_EXCLDS);
-                if (deDealGroupExclude == null)
-                {
-                    dc.DataElements.Add(new OpDataElement
-                    {
-                        DcID = deDefault.DcID,
-                        DcType = deDefault.DcType,
-                        DcParentType = deDefault.DcParentType,
-                        DcParentID = deDefault.DcParentID,
-                        AtrbID = Attributes.DEAL_GRP_EXCLDS.ATRB_SID,
-                        AtrbCd = Attributes.DEAL_GRP_EXCLDS.ATRB_COL_NM,
-                        AtrbValue = id2DealGroupExclusion[dcId],
-                        State = OpDataElementState.Modified
-                    });
-                }
-                else
-                {
-                    deDealGroupExclude.SetAtrbValue(id2DealGroupExclusion[dcId]);
-                    if (deDealGroupExclude.AtrbValue.ToString() != deDealGroupExclude.OrigAtrbValue.ToString()) deDealGroupExclude.State = OpDataElementState.Modified;
-                }
-
-                // Deal group comments
-                var deDealGroupExcludeComments = dc.GetDataElement(AttributeCodes.DEAL_GRP_CMNT);
-                if (deDealGroupExcludeComments == null)
-                {
-                    dc.DataElements.Add(new OpDataElement
-                    {
-                        DcID = deDefault.DcID,
-                        DcType = deDefault.DcType,
-                        DcParentType = deDefault.DcParentType,
-                        DcParentID = deDefault.DcParentID,
-                        AtrbID = Attributes.DEAL_GRP_CMNT.ATRB_SID,
-                        AtrbCd = Attributes.DEAL_GRP_CMNT.ATRB_COL_NM,
-                        AtrbValue = id2DealGroupExclusionComments[dcId],
-                        State = OpDataElementState.Modified
-                    });
-                }
-                else
-                {
-                    deDealGroupExcludeComments.SetAtrbValue(id2DealGroupExclusion[dcId]);
-                    if (deDealGroupExcludeComments.AtrbValue.ToString() != deDealGroupExcludeComments.OrigAtrbValue.ToString()) deDealGroupExcludeComments.State = OpDataElementState.Modified;
-                }
-            }
-            if (myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Any(d => d.State != OpDataElementState.Unchanged))
-            {
-                myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
-                myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
-                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
-                myDealsData.EnsureBatchIDs();
-            }
-            return myDealsData.Save(savePacket.MyContractToken).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            savePacket.ForcePublish = true;
+            savePacket.SourceEvent = OpDataElementType.WIP_DEAL.ToString();
+            savePacket.ValidateIds = dcIds;
+            return _dataCollectorLib.SavePackets(dataDictList, savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken)
