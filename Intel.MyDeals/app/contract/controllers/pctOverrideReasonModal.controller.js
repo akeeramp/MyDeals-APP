@@ -57,7 +57,14 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                 field: "isSelected",
                 title: "&nbsp;",
                 filterable: false,
-                template: "<div style='padding-left: 6px;'><input type='checkbox' " + $scope.disabled + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font'/><label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
+                template: "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# == -1' style='padding-left: 6px;'>"                                //if legal exception sid is -1, aka "See DCS...", we need to disable the checkbox to prevent users from changing it from its' current state.
+                        +   "<input type='checkbox' " + 'disabled' + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font disabled'/>"
+                        +   "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
+                        + "</div>"
+                        + "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# != -1' style='padding-left: 6px;'>"                                //all other legal exceptions get an ordinary checkbox
+                        +   "<input type='checkbox' " + $scope.disabled + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font' ng-class='disabled'/>"
+                        +   "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
+                        + "</div>",
                 width: "60px",
                 locked:true
             },

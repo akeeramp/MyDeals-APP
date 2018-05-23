@@ -107,6 +107,12 @@
             margin-left: 10px;
         }
 
+        input[type=radio].with-font.disabled:checked + label:before,
+        input[type=checkbox].with-font.disabled:checked + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
         input[type=radio].with-font:focus + label:before,
         input[type=checkbox].with-font:focus + label:before {
             font-weight: bold;
