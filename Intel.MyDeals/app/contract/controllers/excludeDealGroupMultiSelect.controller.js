@@ -112,12 +112,14 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			            ? dataItem["ECAP_PRICE"]
 			            : dataItem["ECAP_PRICE"]["20___0"];
 
+			    var cntrctTtl = "Product: " + ((dataItem["TITLE"].length > 100) ? dataItem["TITLE"].substr(0, 100) + "..." : dataItem["TITLE"]);
+
 			    vm.gridData.unshift({
 			        CST_MCP_DEAL_FLAG: 2,
 			        EXCLD_DEAL_FLAG: 2,
 			        OVLP_ADDITIVE: dataItem["DEAL_COMB_TYPE"],
 			        OVLP_CNSMPTN_RSN: dataItem["CONSUMPTION_REASON"],
-			        OVLP_CNTRCT_NM: "Product: " + dataItem["TITLE"],
+			        OVLP_CNTRCT_NM: cntrctTtl,
 			        OVLP_DEAL_DESC: dataItem["DEAL_DESC"],
 			        OVLP_DEAL_END_DT: dataItem["END_DT"],
 			        OVLP_DEAL_ID: dataItem["DC_ID"],
@@ -155,11 +157,11 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    {
 		        field: "GRP_BY",
 		        groupHeaderTemplate: "#= gridUtils.showGroupExcludeMsg(value) #",
-                hidden: true
+		        hidden: true
 		    },
 			{ field: "OVLP_DEAL_ID", title: "Deal Id", width: "80px" },
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
-			{ field: "OVLP_CNTRCT_NM", title: "Contract", width: "140px" },
+			{ field: "OVLP_CNTRCT_NM", title: "Contract", width: "200px" },
 			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "120px" },
 			{ field: "OVLP_DEAL_STRT_DT", title: "Deal Start", width: "120px", template: "#= moment(OVLP_DEAL_STRT_DT).format('MM/DD/YYYY') #" },
 			{ field: "OVLP_DEAL_END_DT", title: "Deal End", width: "120px", template: "#= moment(OVLP_DEAL_END_DT).format('MM/DD/YYYY') #" },
