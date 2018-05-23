@@ -328,6 +328,50 @@ namespace Intel.MyDeals.Entities
         }
 
 
+        public static bool IsValueDifferentFromOrig(this IOpDataElement obj, AttributeCollection attributeCollection)
+        {
+            if (obj == null) { return false; }
+
+            object testValue = obj.AtrbValue;
+            var oav = obj.OrigAtrbValue;
+
+            if (oav == null || testValue == null)
+            {
+                return false;
+            }
+
+            var atrb = ((OpDataElement)obj).GetAttribute(attributeCollection);
+
+            try
+            {
+                switch (atrb.DATA_TYPE_CD)
+                {
+                    case "MONEY":
+                    case "INT":
+                        return Math.Abs(float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) - float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString())) > 0;
+                    case "DATE":
+                    case "DATETIME":
+                        return (DateTime)atrb.GetValueStronglyTyped(testValue, false) == (DateTime)atrb.GetValueStronglyTyped(oav, false);
+                    case "VARCHAR":
+                    case "BIT":
+                        return false;
+                    case "STRING":
+                        return !string.Equals(
+                            testValue.ToString().Replace(" ",""), 
+                            oav.ToString().Replace(" ", ""), 
+                            StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                OpLogPerf.Log(ex);
+#endif
+            }
+
+            return false;
+        }
+
         public static bool IsValueIncreasedFromOrig(this IOpDataElement obj, AttributeCollection attributeCollection)
         {
             if (obj == null) { return false; }

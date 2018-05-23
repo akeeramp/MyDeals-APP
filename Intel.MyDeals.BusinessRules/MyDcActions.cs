@@ -66,7 +66,7 @@ namespace Intel.MyDeals.BusinessRules
             string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON]?.ToString() ?? "";
             string mrktSegValue = item[AttributeCodes.MRKT_SEG]?.ToString() ?? "";
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
-            string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString() ?? "";
+            string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString().ToUpper() ?? "";
 
             // Billing Dates
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
@@ -968,7 +968,7 @@ namespace Intel.MyDeals.BusinessRules
 
             var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
-            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
+            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDifferentFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedDecreaseDes = r.Dc.GetDataElementsWhere(d => onChangeDecreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDecreasedFromOrig(atrbMstr)).ToList();
 
