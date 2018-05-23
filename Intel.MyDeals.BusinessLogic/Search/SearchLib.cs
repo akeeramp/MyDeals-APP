@@ -187,7 +187,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (f == 0 && initSearchList.Any()) continue;
                 if (modifiedSearchList[f].IndexOf("WIP_DEAL_WF_STG_CD") >= 0)
                 {
-                    modifiedSearchList[f] = $"(({modifiedSearchList[f]}) OR ({modifiedSearchList[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")}))";
+                    modifiedSearchList[f] = $"(({modifiedSearchList[f]}) OR (WIP_DEAL_WF_STG_CD = 'Draft' AND {modifiedSearchList[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")}))";
                 }
             }
 
