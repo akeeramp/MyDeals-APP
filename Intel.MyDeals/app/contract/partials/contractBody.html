@@ -9,9 +9,8 @@
 		<div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
 			<div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
 			<div class="col-md-11"
-				 ng-class="{'fntLg-toggle': isOverCharacterLimit(curPricingTable.TITLE, contractHeaderMaxCharWidth)}"
 				 style="margin: 0 6px 0px 10px;">
-				<div class="fntLg" ng-class="{'fntLg-dots': isOverCharacterLimit(curPricingTable.TITLE, contractHeaderMaxCharWidth)}" style="color: #000000;">
+				<div class="fntLg" ng-class="{'fntLg-toggle': isOverCharacterLimit(curPricingTable.TITLE, contractHeaderMaxCharWidth)}" style="color: #000000;">
 					<b style="color:#123b70">#{{ curPricingTable.DC_ID }}</b> {{ curPricingTable.TITLE }}
 				</div>
 			</div>

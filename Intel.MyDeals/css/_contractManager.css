@@ -609,18 +609,10 @@
 		-webkit-transition: 0.5s;
 		white-space: nowrap;
 		overflow: hidden;
+		text-overflow: ellipsis;
 		max-width: 600px;	
 		min-height: 24px;
 		height: 1.1em;
-	}
-	.fntLg-dots:after {
-		background-color: #ffffff;
-		font-weight: bold;
-		right: 0px;
-		position:absolute;
-		padding:1px 8px;
-		font-size: 16px;
-		content: "...";
 	}
 	.fntLg-toggle:hover {
 		max-width: 91.66667%;
