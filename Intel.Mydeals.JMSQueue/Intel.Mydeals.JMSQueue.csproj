@@ -152,6 +152,7 @@
     <None Include="RunCommands\JMSQUploadSendandRecieve.cmd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TaskDeploymentScripts\JMSQTaskCreator.ps1" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
