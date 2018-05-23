@@ -85,6 +85,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 7 JMSQueue Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.Mydeals.JMSQueue", "Intel.Mydeals.JMSQueue\Intel.Mydeals.JMSQueue.csproj", "{CDBA81B2-F2C2-4ABE-93F6-394B4472B3DA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 8 Utilities", "Intel MyDeals 8 Utilities", "{731204FA-2896-4FC7-85FA-C27BE5BDBE7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.CacheRecycle", "Intel.MyDeals.Utilities\Intel.MyDeals.CacheRecycle\Intel.MyDeals.CacheRecycle.csproj", "{A6EACEAB-4733-42D0-B649-8CD282917574}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -254,6 +258,16 @@ Global
 		{CDBA81B2-F2C2-4ABE-93F6-394B4472B3DA}.perf|Any CPU.Build.0 = Release|Any CPU
 		{CDBA81B2-F2C2-4ABE-93F6-394B4472B3DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDBA81B2-F2C2-4ABE-93F6-394B4472B3DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.itt|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.itt|Any CPU.Build.0 = Release|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.perf|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.perf|Any CPU.Build.0 = Release|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EACEAB-4733-42D0-B649-8CD282917574}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -273,14 +287,15 @@ Global
 		{BBC3062A-64DD-4C91-BF41-24046A9F1009} = {D4550934-4B65-4F13-A51A-5873792838C1}
 		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
 		{CDBA81B2-F2C2-4ABE-93F6-394B4472B3DA} = {6C43C3EB-57A7-475A-AF9C-871FA9B1BE93}
+		{A6EACEAB-4733-42D0-B649-8CD282917574} = {731204FA-2896-4FC7-85FA-C27BE5BDBE7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://source.intel.com/tfs/defaultcollection_tfs04
+		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection_tfs04
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
 		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
@@ -344,5 +359,9 @@ Global
 		SccProjectTopLevelParentUniqueName16 = Intel.Mydeals.sln
 		SccProjectName16 = Intel.Mydeals.JMSQueue
 		SccLocalPath16 = Intel.Mydeals.JMSQueue
+		SccProjectUniqueName17 = Intel.MyDeals.Utilities\\Intel.MyDeals.CacheRecycle\\Intel.MyDeals.CacheRecycle.csproj
+		SccProjectTopLevelParentUniqueName17 = Intel.Mydeals.sln
+		SccProjectName17 = Intel.MyDeals.Utilities/Intel.MyDeals.CacheRecycle
+		SccLocalPath17 = Intel.MyDeals.Utilities\\Intel.MyDeals.CacheRecycle
 	EndGlobalSection
 EndGlobal
