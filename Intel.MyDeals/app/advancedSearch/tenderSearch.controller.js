@@ -170,6 +170,11 @@
             filterable: $scope.objFilter,
             template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
         }, {
+            field: "END_CUSTOMER_RETAIL",
+            title: "End Customer",
+            type: "string",
+            width: 140
+        }, {
             field: "TRKR_NBR",
             title: "Tracker #",
             type: "string",
@@ -240,11 +245,6 @@
                 },
                 extra: false
             }
-        }, {
-            field: "END_CUSTOMER_RETAIL",
-            title: "End Customer",
-            type: "string",
-            width: 140
         }, {
             field: "SERVER_DEAL_TYPE",
             title: "SVR Deal Type",
