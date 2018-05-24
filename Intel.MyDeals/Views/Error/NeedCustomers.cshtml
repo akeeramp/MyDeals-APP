@@ -32,20 +32,16 @@
 	</div>
 	<div class="need-customers-container">
 		<div class="row">
-			<div class="col-md-12 user-details">
-				<div class="desc role-title">Update selections for:</div>
-				<div class="defaults">@usrFName @usrLName</div>
-			</div>
 
 			<div class="col-md-12 user-details">
-				<div class="desc role-title">AGS selected geographies:</div>
+				<div class="desc role-title">Your AGS selected geographies:</div>
 				<div id="customerGeos" class="defaults">...</div>
 			</div>
 
 			<div class="col-md-12 col-xs-12">
 				<div class="info-container">
 					<div class="customers-container">
-						<div class="role-title"> Select Customers <span class="desc">Select all of the customer account that pertain to your job role</span></div>
+						<div class="role-title"> Select Customers <span class="desc">Select all of the customer accounts that pertain to your job role</span></div>
 						<select id="customers"></select>
 					</div>
 				</div>
@@ -200,6 +196,20 @@
         color: #000000;
         font-family: "Intel Clear", "Arial";
         font-size: 16px;
+    }
+
+    .k-item.k-state-selected {
+        background-color: #00AEEF !important;
+        color: #FFFFFF;
+    }
+
+    .k-item.k-state-focused {
+        background-color: #00AEEF !important;
+        color: #F3D54E !important;
+    }
+
+    .k-item.k-state-selected .hosted_geo {
+        color: #FFFFFF;
     }
 
 	.need-customers-container{
