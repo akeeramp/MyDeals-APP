@@ -8,9 +8,9 @@ SetRequestVerificationToken.$inject = ['$http'];
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', '$linq', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal', '$compile'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', '$linq', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal', '$compile', '$location'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, $linq, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal, $compile) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, $linq, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal, $compile, $location) {
     var vm = this;
 
     // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
@@ -97,6 +97,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // Performance and UX... removed this.  We will need to handle these in the MT rules
     var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
+
+    var initSearchValue = "";
+
+    var s = $location.search();
+    if (s["searchTxt"] !== undefined) {
+        initSearchValue = s["searchTxt"];
+    }
+
 
     function init() {
         // force a resize event to format page
@@ -306,6 +314,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             "isVisibleAdditionalDiscounts": true,
             "isExportable": true,
             "isEditable": true,
+            "initSearchStr": initSearchValue,
             "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
         };
         root.wipOptions.columns = wipTemplate.columns;

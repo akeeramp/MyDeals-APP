@@ -1245,9 +1245,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.showCols = function (grpName) {
 
                 if ($scope.contractDs.filter() !== undefined) $scope.contractDs.filter({});
-                $scope.searchFilter = "";
+                $scope.searchFilter = $scope.opOptions["initSearchStr"] === undefined ? "" : $scope.opOptions["initSearchStr"];
 
-                if ($scope.curGroup == grpName) {
+                if ($scope.curGroup === grpName) {
                     $scope.ovlpDataSource.filter({});
                 }
                 if (grpName.toLowerCase() == "overlapping") {
@@ -1637,6 +1637,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 event.currentScope.contractDs.sync();
             });
 
+            $scope.$on('searchOpGrid', function (event, searchStr) {
+                $scope.searchFilter = searchStr;
+                $scope.searchGrid();
+            });
+
             $scope.cleanFlags = function () {
                 $scope.clearBadges();
 
@@ -1932,7 +1937,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $timeout(function () { $scope.searchGrid(); });
                 }
                 else {
-                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip", '_blank');
+                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip?searchTxt=" + dataItem.WIP_DEAL_OBJ_SID, '_blank');
                     win.focus();
                 }
 

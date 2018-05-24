@@ -1660,7 +1660,7 @@
                                             title: "Deal ID",
                                             width: 120,
                                             filterable: { multi: true, search: true },
-                                            template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal' title='Click to go to the Deal Editor'> #= DEAL_OBJ_SID # </a></div>"
+                                            template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID #, #=DEAL_OBJ_SID# )' class='btnDeal' title='Click to go to the Deal Editor'> #= DEAL_OBJ_SID # </a></div>"
                                         },
                                         {
                                             field: "DEAL_DESC",

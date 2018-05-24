@@ -49,7 +49,7 @@
                 }
 
                 $scope.gotoDealDetails = function (dataItem) {
-                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip", '_blank');
+                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip?searchTxt=" + dataItem.WIP_DEAL_OBJ_SID, '_blank');
                     win.focus();
                 }
 

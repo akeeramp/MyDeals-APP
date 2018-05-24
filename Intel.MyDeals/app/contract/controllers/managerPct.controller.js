@@ -479,7 +479,7 @@
                 if (response.data.PricingStrategyId > 0 && response.data.PricingTableId > 0) {
                     url += "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId;
                 }
-                if (response.data.WipDealId > 0) url += "/wip";
+                if (response.data.WipDealId > 0) url += "/wip?searchTxt=" + response.data.WipDealId;
                 win.location.href = url;
                 win.focus();
             }, function (response) {
