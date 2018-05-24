@@ -55,8 +55,12 @@
     }
     #lnavMenuContainer {
         color: #ffffff;
-        background-color: #0071C5;
+        /*background-color: #0071C5;*/
     }
+	.lnavMenuOption{
+		background-color: #0071C5;
+		padding: 6px;
+	}
     #lnavContainer {
         height: 100%;
         overflow: auto;

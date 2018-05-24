@@ -4103,14 +4103,18 @@
             $scope.goto('Compliance', 'contract.compliance');
         }
         $scope.gotoManage = function () {
-            if (!$scope.enableFlowBtn()) return;
-            $scope.goto('Manage', 'contract.summary');
+        	if (!$scope.enableFlowBtn()) return;
+        	$scope.isAddPricingTableHidden = true;
+        	$scope.isAddStrategyHidden = true;
+        	$scope.isAddStrategyBtnHidden = true;
+        	$scope.isSearchHidden = true;
+
+        	$scope.goto('Manage', 'contract.summary');
         }
         $scope.goto = function (mode, state) {
-            //if ($scope.flowMode === mode) return;
-
-            $scope.flowMode = mode;
-            $state.go(state, { cid: $scope.contractData.DC_ID });
+        	//if ($scope.flowMode === mode) return;
+        	$scope.flowMode = mode;
+        	$state.go(state, { cid: $scope.contractData.DC_ID });
         }
 
         $scope.downloadQuoteLetter = function (customerSid, objTypeSid, objSid) {

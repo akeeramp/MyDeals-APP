@@ -364,13 +364,55 @@
 .scaleTopAnim.ng-enter,
 .scaleTopAnim.ng-active
  {
-	transform-origin:top; 
-	animation-name: scaleInYAnim;
+	-webkit-animation-name: scaleInYAnim; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation-name: scaleInYAnim; /* Firefox < 16 */
+        -ms-animation-name: scaleInYAnim; /* Internet Explorer */
+         -o-animation-name: scaleInYAnim; /* Opera < 12.1 */
+            animation-name: scaleInYAnim;
     animation-duration: 0.3s;
+	transform-origin:top; 
 }
+
 .scaleTopAnim.ng-hide,
 .scaleTopAnim.ng-leave,
 .scaleTopAnim.ng-inactive  {	
-	animation-name: scaleOutYAnim;
+	-webkit-animation-name: scaleOutYAnim; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation-name: scaleOutYAnim; /* Firefox < 16 */
+        -ms-animation-name: scaleOutYAnim; /* Internet Explorer */
+         -o-animation-name: scaleOutYAnim; /* Opera < 12.1 */
+            animation-name: scaleOutYAnim;
     animation-duration: 0.2s;
+}
+
+.fadeInAnim {
+	-webkit-animation-name: fadein; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation-name: fadein; /* Firefox < 16 */
+        -ms-animation-name: fadein; /* Internet Explorer */
+         -o-animation-name: fadein; /* Opera < 12.1 */
+            animation-name: fadein;
+	 animation-duration: 0.4s;
+}
+
+/****** FADE IN *******/
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
