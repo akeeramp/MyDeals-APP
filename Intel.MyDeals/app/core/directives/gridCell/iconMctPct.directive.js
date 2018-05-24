@@ -10,6 +10,7 @@ function iconMctPct(colorDictionary) {
             dataValue: '=ngModel',
             overrideValue: '=?overrideValue',
             canView: '=?canView',
+            canEdit: '=?canEdit',
             iconStyle: '=?iconStyle',
             iconClass: '=?iconClass',
             notRunMsg: '=?notRunMsg'
@@ -18,6 +19,7 @@ function iconMctPct(colorDictionary) {
         templateUrl: '/app/core/directives/gridCell/iconMctPct.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
+            if ($scope.canEdit === undefined) $scope.canEdit = false;
             if (!$scope.canView) $scope.canView = true;
             if (!$scope.notRunMsg) $scope.notRunMsg = "Not Run Yet";
 
@@ -29,8 +31,9 @@ function iconMctPct(colorDictionary) {
                 return str.toLowerCase().replace(firstLetterRx, upperCase);
             }
 
-            $scope.showTitle = function() {
-                return $scope.dataValue === "Not Run Yet" ? $scope.notRunMsg : $scope.dataValue;
+            $scope.showTitle = function () {
+                var postMsg = $scope.canEdit ? "\nCtrl-Click to open in a new tab" : "";
+                return $scope.dataValue === "Not Run Yet" ? $scope.notRunMsg : $scope.dataValue + postMsg;
             }
 
             $scope.getIconClass = function () {

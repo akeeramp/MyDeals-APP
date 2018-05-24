@@ -287,12 +287,12 @@
                             </td>-->
                             <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                 <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
-                                    <icon-mct-pct ng-model="ps.COST_TEST_RESULT" icon-class="'bigIcon'"></icon-mct-pct>
+                                    <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-edit="CAN_EDIT_COST_TEST" icon-class="'bigIcon'"></icon-mct-pct>
                                 </a>
                             </td>
                             <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_MEET_COMP">
                                 <a ui-sref="{{ CAN_EDIT_MEET_COMP ? 'contract.compliance({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_MEET_COMP}">
-                                    <icon-mct-pct ng-model="ps.MEETCOMP_TEST_RESULT" icon-class="'bigIcon'"></icon-mct-pct>
+                                    <icon-mct-pct ng-model="ps.MEETCOMP_TEST_RESULT" can-edit="CAN_EDIT_MEET_COMP" icon-class="'bigIcon'"></icon-mct-pct>
                                 </a>
                             </td>
                         </tr>
