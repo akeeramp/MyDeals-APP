@@ -334,6 +334,7 @@
                         scrollable: true,
                         height: 250,
                         filterable: true,
+                        resizable: true,
                         columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
                         dataBound: function (e) {
 
@@ -686,7 +687,7 @@
                 field: "ECAP_PRC",
                 title: "ECAP Price",
                 template: "#= (ECAP_PRC == null) ? ' ' : kendo.toString(ECAP_PRC, 'c') #",
-                width: "100px",
+                width: "120px",
                 filterable: { multi: true, search: true },
                 parent: false
             },
@@ -694,7 +695,7 @@
                 field: "ECAP_FLR",
                 title: "ECAP Floor",
                 template: "#= (ECAP_FLR == null) ? ' ' : kendo.toString(ECAP_FLR, 'c') #",
-                width: "100px",
+                width: "120px",
                 hidden: !hasPermissionPrice,
                 parent: false,
                 filterable: { multi: true, search: true },
@@ -729,7 +730,7 @@
             "COST_TEST_OVRRD_FLG": {
                 field: "COST_TEST_OVRRD_FLG",
                 title: "Cost Test Analysis<br\>Override",
-                width: "140px",
+                width: "150px",
                 template: '#= gridPctUtils.getPctFlag("dataItem.COST_TEST_OVRRD_FLG", "dataItem.PRC_CST_TST_STS", "dataItem._readonly", ' + hasNoPermission + ') #',
                 hidden: hasNoPermissionOvr,
                 parent: false,
@@ -738,7 +739,7 @@
             "COST_TEST_OVRRD_CMT": {
                 field: "COST_TEST_OVRRD_CMT",
                 title: "Cost Test Analysis<br\>Override Comments",
-                width: "140px",
+                width: "150px",
                 template: '<button class="btn btn-sm btn-skyblue" ng-if="dataItem.COST_TEST_OVRRD_FLG === \'Yes\' || dataItem.COST_TEST_OVRRD_FLG === true" ng-click="openReason(dataItem)" type="button" style="width: 100px;" title="Save and Validate"><span style="color: \\#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>',
                 hidden: hasNoPermissionOvr,
                 parent: false,
@@ -794,14 +795,14 @@
             "DEAL_GRP_CMNT": {
                 field: "DEAL_GRP_CMNT",
                 title: "Deal Group Comments",
-                width: "140px",
+                width: "160px",
                 parent: false,
                 filterable: { multi: true, search: true },
             },
             "LAST_COST_TEST_RUN": {
                 field: "LAST_COST_TEST_RUN",
                 title: "Time / Date Last Cost Ran",
-                width: "160px",
+                width: "180px",
                 template: "<span ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'>#= kendo.toString(new Date(gridUtils.stripMilliseconds(LAST_COST_TEST_RUN)), 'M/d/yyyy HH:mm:ss') #</span>",
                 parent: false,
                 filterable: { multi: true, search: true },
@@ -809,14 +810,14 @@
             "CNSMPTN_RSN": {
                 field: "CNSMPTN_RSN",
                 title: "Consumption Reason",
-                width: "140px",
+                width: "160px",
                 parent: true,
                 filterable: { multi: true, search: true },
             },
             "PROG_PMT": {
                 field: "PROG_PMT",
                 title: "Program Payment",
-                width: "140px",
+                width: "150px",
                 parent: true,
                 filterable: { multi: true, search: true },
             }
