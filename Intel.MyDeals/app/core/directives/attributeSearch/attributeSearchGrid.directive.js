@@ -196,7 +196,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                     },
                     requestEnd: function(e) {
                         $scope.setBusy("", "");
-                        $scope.root.$broadcast('attribute-datasource-end', e.response.Items);
+                        $scope.root.$broadcast('attribute-datasource-end', e.response === undefined ? [] : e.response.Items);
                     }
                 }
             };

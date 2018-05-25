@@ -65,24 +65,30 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public PageResult<OpDataCollectorFlattenedItem> GetDealList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, string searchText)
         {
-            int maxLength = 1000;
-            if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
-
-            SearchResultPacket rtn = _searchLib.GetNonTenderDealList(new SearchParams
+            return SafeExecutor(() =>
             {
-                StrStart = st,
-                StrEnd = en,
-                Customers = string.IsNullOrEmpty(searchText) ? new List<string>() : searchText.Split(',').ToList(),
-                StrSorts = options.RawValues.OrderBy ?? "",
-                StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
-                Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
-                Take = options.RawValues.Top == null || options.RawValues.Top == "all" ? maxLength : int.Parse(options.RawValues.Top)
-            });
+                int maxLength = 1000;
+                if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
 
-            return new PageResult<OpDataCollectorFlattenedItem>(
-                rtn.SearchResults,
-                Request.ODataProperties().NextLink,
-                rtn.SearchCount);
+                SearchResultPacket rtn = _searchLib.GetNonTenderDealList(new SearchParams
+                {
+                    StrStart = st,
+                    StrEnd = en,
+                    Customers = string.IsNullOrEmpty(searchText) ? new List<string>() : searchText.Split(',').ToList(),
+                    StrSorts = options.RawValues.OrderBy ?? "",
+                    StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
+                    Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
+                    Take = options.RawValues.Top == null || options.RawValues.Top == "all" ? maxLength : int.Parse(options.RawValues.Top)
+                });
+
+                return new PageResult<OpDataCollectorFlattenedItem>(
+                    rtn.SearchResults,
+                    Request.ODataProperties().NextLink,
+                    rtn.SearchCount);
+            }
+                , $"Unable to get Search Results"
+            );
+
         }
 
         [Authorize]
@@ -90,24 +96,29 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public PageResult<OpDataCollectorFlattenedItem> GetTenderList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, int actv, string searchText)
         {
-            int maxLength = 1000;
-            if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
-
-            SearchResultPacket rtn = _searchLib.GetTenderDealList(new SearchParams
+            return SafeExecutor(() =>
             {
-                StrStart = st,
-                StrEnd = en,
-                StrSearch = searchText,
-                StrSorts = options.RawValues.OrderBy ?? "",
-                StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
-                Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
-                Take = options.RawValues.Top == null || options.RawValues.Top == "all" ? maxLength : int.Parse(options.RawValues.Top)
-            }, actv == 1);
+                int maxLength = 1000;
+                if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
 
-            return new PageResult<OpDataCollectorFlattenedItem>(
-                rtn.SearchResults,
-                Request.ODataProperties().NextLink,
-                rtn.SearchCount);
+                SearchResultPacket rtn = _searchLib.GetTenderDealList(new SearchParams
+                {
+                    StrStart = st,
+                    StrEnd = en,
+                    StrSearch = searchText,
+                    StrSorts = options.RawValues.OrderBy ?? "",
+                    StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
+                    Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
+                    Take = options.RawValues.Top == null || options.RawValues.Top == "all" ? maxLength : int.Parse(options.RawValues.Top)
+                }, actv == 1);
+
+                return new PageResult<OpDataCollectorFlattenedItem>(
+                    rtn.SearchResults,
+                    Request.ODataProperties().NextLink,
+                    rtn.SearchCount);
+            }
+                , $"Unable to get Search Results"
+            );
         }
 
         [Authorize]
@@ -115,18 +126,23 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpDataCollectorFlattenedList GetGlobalSearchList(string opType, int take, string searchText)
         {
-            if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
-
-            return _searchLib.GetGlobalList(new SearchParams
+            return SafeExecutor(() =>
             {
-                StrStart = DateTime.MinValue,
-                StrEnd = DateTime.MaxValue,
-                StrSearch = searchText,
-                StrFilters = "",
-                Skip = 0,
-                Take = take <= 1 ? 1 : take - 1
-            }, OpDataElementTypeConverter.FromString(opType));
+                if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
+
+                return _searchLib.GetGlobalList(new SearchParams
+                {
+                    StrStart = DateTime.MinValue,
+                    StrEnd = DateTime.MaxValue,
+                    StrSearch = searchText,
+                    StrFilters = "",
+                    Skip = 0,
+                    Take = take <= 1 ? 1 : take - 1
+                }, OpDataElementTypeConverter.FromString(opType));
+            }
+                , $"Unable to get Search Results"
+            );
         }
 
-    }
+}
 }

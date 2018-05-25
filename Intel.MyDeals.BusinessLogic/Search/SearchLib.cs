@@ -156,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Customers
             if (data.Customers.Any())
             {
-                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers)}')");
+                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;",".")}')");
             }
 
             // Add Custom Search

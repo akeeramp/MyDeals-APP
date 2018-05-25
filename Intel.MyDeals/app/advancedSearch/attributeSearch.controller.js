@@ -526,7 +526,8 @@
                 var en = $scope.endDt.replace(/\//g, '-');
                 var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
 
-                var url = "/api/Search/GetDealList/" + st + "/" + en + "/" + searchText;
+                var url = "/api/Search/GetDealList/" + st + "/" + en + "/" + searchText.replace(/\./g, '&per;');
+                
                 $scope.savingToExcel = false;
                 return url;
             }
