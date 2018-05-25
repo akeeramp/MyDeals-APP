@@ -2314,8 +2314,8 @@
                             } else {
                                 // check dates against contract
                                 if (dateFields[d] === "START_DT") {
-                                    var tblStartDate = sData[s][dateFields[d]];
-                                    var endDate = $scope.contractData.END_DT;
+                                    var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
                                     if (moment(tblStartDate).isAfter(endDate)) {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
@@ -2327,8 +2327,8 @@
                                     }
                                 }
                                 if (dateFields[d] === "END_DT") {
-                                    var tblEndDate = sData[s][dateFields[d]];
-                                    var startDate = $scope.contractData.START_DT;
+                                    var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");;
                                     if (moment(tblEndDate).isBefore(startDate)) {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
