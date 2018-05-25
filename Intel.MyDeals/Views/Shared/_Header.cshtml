@@ -1,6 +1,10 @@
 ﻿@using Intel.MyDeals.Entities
 @using Intel.Opaque
+@using Intel.MyDeals.App
 @{
+    ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
+    var environment = avm == null ? "UNKNOWN" : avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "PROD" : avm.AppEnv;
+
     var usrName = "UNKNOWN";
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
@@ -166,9 +170,9 @@
                             }
                         </ul>
                     </li>
-                    @if (1 == 1) // Update this with ENV not prod
+                    @if (environment != "PROD") // Update this with ENV not prod
                     {
-                        <li><a href="Admin#/employee">Set Your Role</a></li>
+                        <li><a href="Admin#/employee">Set Your Role (Pre-prod Only)</a></li>
                     }
 
                     @if (isDeveloper)
