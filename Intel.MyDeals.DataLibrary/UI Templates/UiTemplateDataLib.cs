@@ -910,6 +910,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CUST_MBR_SID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiCustomerControlWrapper(data, 'CUST_MBR_SID')#",
+                HeaderTemplate = "<span title='Customer (or Division if present)'>Customer</span>",
                 Label = "Customer",
                 IsFilterable = true,
                 IsSortable = true,
