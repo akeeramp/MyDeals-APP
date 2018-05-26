@@ -613,6 +613,7 @@
         }
 
         $($window).resize(function () {
+            document.title = "Advanced Search - My Deals";
             resizeGrid();
         });
 

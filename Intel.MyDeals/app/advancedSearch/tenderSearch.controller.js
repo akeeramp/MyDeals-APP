@@ -631,7 +631,7 @@
             }
 
             dropdownlist.select(function (dataItem) {
-                return dataItem.BidActnValue == bidSatus
+                return dataItem.BidActnValue === bidSatus;
             });
         }
 
@@ -659,6 +659,7 @@
         });
 
         $timeout(function () {
+            document.title = "Tender Manager - My Deals";
             resizeGrid();
         }, 500);
 
