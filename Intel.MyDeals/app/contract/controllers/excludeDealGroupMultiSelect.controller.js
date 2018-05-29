@@ -21,10 +21,23 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	vm.hasComment = false;
 	vm.hasCheckbox = enableCheckbox;
     vm.DC_ID = dataItem.DC_ID;
+    vm.delCounter = 0;
+    vm.IS_EXCLUDED = [];
 
     var filter = {};
     if (excludeOutliers) {
         filter = { field: "GRP_BY", operator: "eq", value: 0 }
+    }
+    vm.filterData = function (e) {
+        if (e) {
+            dataSourceSuggested.filter({ field: "IS_TOUCHED", operator: "eq", value: 1 });
+        }
+        else {
+            vm.delCounter = 0;
+            dataSourceSuggested.filter({});
+            dataSourceSuggested.read();
+        }
+        
     }
     var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
@@ -51,23 +64,30 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 				for (var i = 0; i < vm.gridData.length; i++) {
 				    var exChk = vm.gridData[i]["EXCLD_DEAL_FLAG"];
 				    var cstChk = vm.gridData[i]["CST_MCP_DEAL_FLAG"];
-
-				    if (cstChk === 1 || (cstChk === 0 && exChk === 1)) {
-				        vm.gridData[i]["GRP_BY"] = 0;
-				    } else if (cstChk === 0) {
-				        vm.gridData[i]["GRP_BY"] = 1;
-				    } else if (cstChk === 2) {
-				        vm.gridData[i]["GRP_BY"] = 0;
-				    } else {
-				        vm.gridData[i]["GRP_BY"] = 1;
-				    }
+                    if (vm.gridData[i]["SELF_OVLP"] !== 1) {
+                        if (cstChk === 1 || (cstChk === 0 && exChk === 1)) {
+                            vm.gridData[i]["GRP_BY"] = 0;
+                        } else if (cstChk === 0) {
+                            vm.gridData[i]["GRP_BY"] = 1;
+                        } else if (cstChk === 2) {
+                            vm.gridData[i]["GRP_BY"] = 0;
+                        } else {
+                            vm.gridData[i]["GRP_BY"] = 1;
+                        }
+                    }
 
 				    if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
 						vm.gridData[i].selected = true;
-					}
-				}
+                    }
 
-				e.success(vm.gridData);
+                    if (vm.IS_EXCLUDED.indexOf(vm.gridData[i]["OVLP_DEAL_ID"]) > -1) {
+                        vm.gridData[i]["IS_TOUCHED"] = 1;
+                    }
+
+                }               
+
+                e.success(vm.gridData);
+
 			}
 		},
 		sort: [
@@ -94,7 +114,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 					OVLP_ECAP_PRC: { type: "number" },
 					OVLP_MAX_RPU: { type: "number" },
 					OVLP_WF_STG_CD: {},
-					selected: {}
+					selected: {type:"boolean"}
 				}
 			} 
 		}
@@ -127,8 +147,11 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			        OVLP_DEAL_TYPE: dataItem["OBJ_SET_TYPE_CD"],
 			        OVLP_ECAP_PRC: ecap,
 			        OVLP_MAX_RPU: dataItem["MAX_RPU"],
-			        OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"]
-			    });
+                    OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"],
+                    GRP_BY: 'SELF',
+                    SELF_OVLP: 1
+                });
+                
 				dataSourceSuggested.read();
 				vm.isLoading = false;
 			},
@@ -171,7 +194,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             { field: "OVLP_MAX_RPU", title: "Max RPU", width: "180px", format: "{0:c}" },
 			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" }
 		],
-		dataBound: function (e) {
+        dataBound: function (e) {
+            
 		    if (!vm.hasCheckbox) {
 		        $('#ExcldGrid :checkbox').prop("disabled", true);
 		    }
@@ -197,23 +221,33 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    });
 
 		    $timeout(function () {
-		        var data = e.sender.dataSource.data();
+                var data = e.sender.dataSource.data();                
 		        for (var d = 0; d < data.length; d++) {
 		            if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 0 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
-                        data[d].set("_disabled", true);
+                        //data[d].set("_disabled", true); // Commented due to PERF hike
                         $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
                         $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
                     }
 		            else if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 2 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 2) {
-		                data[d].set("_disabled", true);
+                        data[d].set("_disabled", true);
 		                $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
 		                $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html(" ");
 		                $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-current");
 		            }
+
+                }
+                if (data.length > 0) {
+                    //Remove the Dummy Group which is created beacuse we added dummy record at the top 
+                    if (vm.delCounter === 0) {
+                        $("#ExcldGrid .k-grid-content table tbody tr").slice(-2).remove();
+                        vm.delCounter = 1;
+                    }
                 }
 
-		    }, 50);
+            }, 50);
+            
+            
 		}
 	};
 
@@ -224,7 +258,21 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		} else {
 			// unchecked
 			delete selectedGridDict[dataItem.OVLP_DEAL_ID];
-		}
+        }
+        var indx = -1;
+        vm.gridData.some(function (e, i) {
+            if (e.OVLP_DEAL_ID == dataItem.OVLP_DEAL_ID) {
+                indx = i;
+                return true;
+            }
+        });
+        if (indx > -1) {
+            vm.gridData[indx]["selected"] = dataItem.selected;
+        }
+        if (vm.IS_EXCLUDED.indexOf(dataItem.OVLP_DEAL_ID) == -1) {
+            vm.IS_EXCLUDED.push(dataItem.OVLP_DEAL_ID);
+        }
+        dataItem.IS_TOUCHED = true;
 	}
 
 	vm.ok = function () {

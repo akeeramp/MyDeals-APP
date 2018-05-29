@@ -27,19 +27,26 @@
 			</div>
 
 			<div ng-show="!vm.isLoading">
-                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" ng-if="vm.hasCheckbox">
+			    <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left" ng-if="vm.hasCheckbox">
                     Select which deals you would like to exclude:
                 </div>
-                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" ng-if="!vm.hasCheckbox">
-                    Deals marked with "x" are excluded:
+                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left" ng-if="!vm.hasCheckbox">
+                    Deals marked with "x" are excluded: 
                 </div>
-				<div class="row" style="margin: 0px;">
+				<div style='color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left' >
+					<label class="switch" title='Excluded/Included by USER'>
+					  <input type="checkbox" ng-click="vm.filterData(IS_SELECTED)" ng-model='IS_SELECTED' checked>
+					  <span class="slider"></span>
+					</label>
+					<!--<toggle size='btn-sm' ng-click="vm.filterData(IS_SELECTED)" ng-model='IS_SELECTED'></toggle>-->
+				</div>
+				<div class="row" style="margin: 0px;width:100%">
 					<!-- Grid -->
                     <div id="ExcldGrid"
                          kendo-grid="grid"
                          kendo-grid-check-box
                          k-grid-checkbox="vm"
-                         checkbox-is-generic="true"
+                         checkbox-is-generic="true"                         
                          checkbox-attr="'OVLP_DEAL_ID'"
                          class="opUiContainer md k-grid"
                          k-on-change="vm.addChange(data, dataItem, columns)"
@@ -65,7 +72,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-12" style="padding-bottom:20px;">
+		<div class="col-md-12" style="padding-bottom:20px;">			
 			<div class="fr">
 				<button class="btn btn-warning prdBtn" type="button" ng-click="vm.cancel()" ng-if="vm.hasCheckbox">Cancel</button>
 				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()" ng-disabled="vm.hasComment" ng-disable style="margin-left: 10px;">Close</button>
@@ -76,16 +83,67 @@
 <!--<div class="modal-footer">	</div>-->
 
 <style>
+.switch {
+     position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+    border: 1px solid #e7e7e8;
+    margin-left: 05px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1a3e6f;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+      position: absolute;
+    content: "";
+    height: 14px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #e7e7e8;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #00AEEF;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #00AEEF;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+  background-color: #ffffff;
+}
+table tobody tr:last-child { display:none !important}
     #ExcldGrid.k-grid {
-        height: calc(85vh - 400px) !important;
+        height: calc(85vh - 250px) !important;
         overflow: hidden;
+		width:100%;
     }    
     .k-grid .k-alt {
         background-color: #ffffff;
     }
 
     #ExcldGrid.k-grid .k-grid-content {
-        height: calc(85vh - 475px) !important;
+        height: calc(85vh - 325px) !important;
     }    
 
     #ExcldGrid tr.tr-disabled td span.ng-binding, #ExcldGrid tr.tr-disabled td {
