@@ -5,9 +5,9 @@
         .module('app.admin')
         .directive('pctQueryBuilder', pctQueryBuilder);
 
-    pctQueryBuilder.$inject = ['$compile'];
+    pctQueryBuilder.$inject = ['$compile', '$filter'];
 
-    function pctQueryBuilder($compile) {
+    function pctQueryBuilder($compile, $filter) {
         return {
             restrict: 'E',
             scope: {
@@ -26,6 +26,13 @@
                         { name: 'AND' },
                         { name: 'OR' }
                     ];
+
+                    scope['limitResultsTo'] = undefined;
+
+                    // When ng-model binds, selected value must be there in dropwdown source, thus applying limit after the directive load
+                    scope.$on('applyLimitTo', function (event, args) {
+                        scope['limitResultsTo'] = 20;
+                    });
 
                     scope.qb = {};
 
@@ -68,6 +75,13 @@
                         }, true
                     );
 
+                    scope.getRightValues = function (rule) {
+                        var filtered = $filter('where')(scope.leftValues, { 'ATRB_COL_NM': rule.criteria })
+                        filtered = $filter('orderBy')(filtered, 'VALUE');
+                        rule['$$rightValues'] = filtered;
+                        return filtered;
+                    }
+
                     scope.$watch('qb.form.$invalid',
                         function (newValue, oldValue, el) {
                             scope.form.isValid = !newValue;
@@ -76,6 +90,8 @@
 
                     scope.resetRightValues = function (rule) {
                         rule.data = '';
+                        scope['limitResultsTo'] = 20;
+                        scope.getRightValues(rule);
                     }
 
                     directive || (directive = $compile(content));

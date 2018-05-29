@@ -18,7 +18,7 @@
                             <div>
                                 <ui-select name="attribute" ng-model="rule.criteria" ng-required="true" theme="select2" class="qb-field-core" ng-change="resetRightValues(rule)" title="Choose a attribute">
                                     <ui-select-match placeholder="Select a attribute">{{$select.selected.DISPLAYNAME}}</ui-select-match>
-                                    <ui-select-choices repeat="t.ATRB_COL_NM as t in leftValues | unique:'ATRB_COL_NM' | orderBy:'ATRB_COL_NM' | filter: $select.search">
+                                    <ui-select-choices repeat="t.ATRB_COL_NM as t in leftValues | unique:'ATRB_COL_NM' | orderBy:'ATRB_COL_NM' | filter: $select.search track by $index">
                                         <div ng-bind-html="t.DISPLAYNAME | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
@@ -30,7 +30,7 @@
                                     <span ng-switch-default="ng-switch-default">
                                         <ui-select name="value" ng-model="rule.data" ng-required="true" class="qb-field-core" theme="select2" title="Choose a value">
                                             <ui-select-match placeholder="Select a value">{{$select.selected.VALUE}}</ui-select-match>
-                                            <ui-select-choices repeat="t.VALUE as t in leftValues | filter: rule.criteria | orderBy:'VALUE'| filter: $select.search | limitTo:100">
+                                            <ui-select-choices repeat="t.VALUE as t in rt = rule.$$rightValues === undefined ? getRightValues(rule) : rule.$$rightValues | filter: $select.search | limitTo: limitResultsTo track by t.idx ">
                                                 <span ng-bind-html="t.VALUE | highlight: $select.search"></span>
                                             </ui-select-choices>
                                         </ui-select>

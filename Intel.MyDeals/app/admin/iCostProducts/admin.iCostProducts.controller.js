@@ -7,9 +7,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope', 'gridConstants', '$state', '$linq', 'pctRulesDrpDownValues', 'confirmationModal', '$filter'];
+    iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope', 'gridConstants', '$state', '$linq', 'pctRulesDrpDownValues', 'confirmationModal', '$filter', '$timeout'];
 
-    function iCostProductsController(iCostProductService, logger, $scope, gridConstants, $state, $linq, pctRulesDrpDownValues, confirmationModal, $filter) {
+    function iCostProductsController(iCostProductService, logger, $scope, gridConstants, $state, $linq, pctRulesDrpDownValues, confirmationModal, $filter, $timeout) {
         var vm = this;
 
         vm.updateItem = updateItem;
@@ -185,6 +185,9 @@
 
         function getProductAttributeValues(verticalId) {
             iCostProductService.getProductAttributeValues(verticalId).then(function (response) {
+                for (var i = 0; i < response.data.length; i++) {
+                    response.data[i]['idx'] = i;
+                }
                 vm.leftValues = response.data;
                 if (!isEditLoading) {
                     initQueryBuilder(true);
@@ -193,6 +196,10 @@
                 }
                 // edit loading is finished reset the flag
                 isEditLoading = false;
+                //
+                $timeout(function () {
+                    $scope.$broadcast('applyLimitTo');
+                }, 500);
             });
         }
 
@@ -246,8 +253,8 @@
 
         function savePCTRules() {
             if (isRuleExistForVertical()) return;
-
-            vm.pctRule.JSON_TXT = JSON.stringify(vm.filter);
+            //  angular.toJson strips down all the properties trailing with '$$', like $$hashkey
+            vm.pctRule.JSON_TXT = angular.toJson(vm.filter);
 
             if (!isEditMode) {
                 iCostProductService.createPCTRules(vm.pctRule).then(function (response) {
