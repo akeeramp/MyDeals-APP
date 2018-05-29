@@ -301,7 +301,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     // Generates options that kendo's html directives will use
-    function generateKendoGridOptions() {
+    function generateKendoGridOptions() { 
 
         wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
@@ -723,13 +723,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            myRow[colName] = value.value;
 					        }
 
-					        // Update Total Discount per line if DSCNT_PER_LN or QTY are changed
+					    	// Update Total Discount per line if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
-					            // Transform negative numbers into positive
-					            if (colIndex == qtyIndex) {
-					                myRow["QTY"] = (Math.abs(parseInt(value.value) || 0) || 0);
-					            }
-					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
+					        	// Transform negative numbers into positive
+					        	if (colIndex == qtyIndex) {
+					        		var intVal = parseInt(value.value);
+					        		myRow["QTY"] = (isNaN(intVal) ? 1 : Math.abs(intVal));
+					        	}
+					        	if (colIndex == dscntPerLnIndex) {
+					        		myRow["DSCNT_PER_LN"] = (Math.abs(parseInt(value.value) || 0) || 0);
+					        	}
+					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
 
 					        // Logic to apply to merge cells (multiple tiers)
