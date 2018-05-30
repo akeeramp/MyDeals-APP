@@ -99,6 +99,7 @@ namespace Intel.MyDeals.DataLibrary
             this.lblS7 = new Telerik.Reporting.HtmlTextBox();
             this.txtS6ProdName = new Telerik.Reporting.HtmlTextBox();
             this.lblS8 = new Telerik.Reporting.HtmlTextBox();
+            this.lblS9 = new Telerik.Reporting.HtmlTextBox();
             this.txtS6Ecap = new Telerik.Reporting.HtmlTextBox();
             this.txtS6ProdSeg = new Telerik.Reporting.HtmlTextBox();
             this.txtS7ProdName = new Telerik.Reporting.HtmlTextBox();
@@ -106,9 +107,12 @@ namespace Intel.MyDeals.DataLibrary
             this.txtS7Ecap = new Telerik.Reporting.HtmlTextBox();
             this.txtS7ProdSeg = new Telerik.Reporting.HtmlTextBox();
             this.txtS8ProdName = new Telerik.Reporting.HtmlTextBox();
+            this.txtS9ProdName = new Telerik.Reporting.HtmlTextBox();
             this.lblK2 = new Telerik.Reporting.HtmlTextBox();
             this.txtS8Ecap = new Telerik.Reporting.HtmlTextBox();
+            this.txtS9Ecap = new Telerik.Reporting.HtmlTextBox();
             this.txtS8ProdSeg = new Telerik.Reporting.HtmlTextBox();
+            this.txtS9ProdSeg = new Telerik.Reporting.HtmlTextBox();
             this.htmlTextBox2 = new Telerik.Reporting.HtmlTextBox();
             this.htmlTextBox12 = new Telerik.Reporting.HtmlTextBox();
             this.txtStatus = new Telerik.Reporting.HtmlTextBox();
@@ -118,6 +122,7 @@ namespace Intel.MyDeals.DataLibrary
             this.lblBlankS6 = new Telerik.Reporting.HtmlTextBox();
             this.lblBlankS7 = new Telerik.Reporting.HtmlTextBox();
             this.lblBlankS8 = new Telerik.Reporting.HtmlTextBox();
+            this.lblBlankS9 = new Telerik.Reporting.HtmlTextBox();
             this.MainContent = new Telerik.Reporting.HtmlTextBox();
             this.pageFooter = new Telerik.Reporting.PageFooterSection();
             this.htmlTextBox18 = new Telerik.Reporting.HtmlTextBox();
@@ -243,6 +248,7 @@ namespace Intel.MyDeals.DataLibrary
             this.lblS7,
             this.txtS6ProdName,
             this.lblS8,
+            this.lblS9,
             this.txtS6Ecap,
             this.txtS6ProdSeg,
             this.txtS7ProdName,
@@ -250,9 +256,12 @@ namespace Intel.MyDeals.DataLibrary
             this.txtS7Ecap,
             this.txtS7ProdSeg,
             this.txtS8ProdName,
+            this.txtS9ProdName,
             this.lblK2,
             this.txtS8Ecap,
+            this.txtS9Ecap,
             this.txtS8ProdSeg,
+            this.txtS9ProdSeg,
             this.htmlTextBox2,
             this.htmlTextBox12,
             this.txtStatus,
@@ -262,6 +271,7 @@ namespace Intel.MyDeals.DataLibrary
             this.lblBlankS6,
             this.lblBlankS7,
             this.lblBlankS8,
+            this.lblBlankS9,
             this.lblBlankK1,
             this.lblBlankK2,
             this.lblBlankS2,
@@ -1134,7 +1144,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtK1ProdName
             // 
-            this.txtK1ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
+            this.txtK1ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
             this.txtK1ProdName.Name = "txtK1ProdName";
             this.txtK1ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtK1ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1163,7 +1173,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS2
             // 
-            this.lblS2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
+            this.lblS2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
             this.lblS2.Name = "lblS2";
             this.lblS2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500775337219238D), Telerik.Reporting.Drawing.Unit.Inch(0.19952535629272461D));
             this.lblS2.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1194,7 +1204,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtK1Ecap
             // 
-            this.txtK1Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
+            this.txtK1Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
             this.txtK1Ecap.Name = "txtK1Ecap";
             this.txtK1Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtK1Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1224,7 +1234,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtK1ProdSeg
             // 
-            this.txtK1ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
+            this.txtK1ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
             this.txtK1ProdSeg.Name = "txtK1ProdSeg";
             this.txtK1ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtK1ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1253,7 +1263,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtK2ProdName
             // 
-            this.txtK2ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
+            this.txtK2ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.7593360900978906D));
             this.txtK2ProdName.Name = "txtK2ProdName";
             this.txtK2ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtK2ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1282,7 +1292,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS3
             // 
-            this.lblS3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
+            this.lblS3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
             this.lblS3.Name = "lblS3";
             this.lblS3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblS3.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1313,7 +1323,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtK2Ecap
             // 
-            this.txtK2Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(1.9843360185623169D));
+            this.txtK2Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.7593360900978906D));
             this.txtK2Ecap.Name = "txtK2Ecap";
             this.txtK2Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtK2Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1343,7 +1353,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtK2ProdSeg
             // 
-            this.txtK2ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(1.9843355417251587D));
+            this.txtK2ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.7593360900978906D));
             this.txtK2ProdSeg.Name = "txtK2ProdSeg";
             this.txtK2ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtK2ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1372,7 +1382,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS2ProdName
             // 
-            this.txtS2ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
+            this.txtS2ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
             this.txtS2ProdName.Name = "txtS2ProdName";
             this.txtS2ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS2ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1401,7 +1411,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS4
             // 
-            this.lblS4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
+            this.lblS4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
             this.lblS4.Name = "lblS4";
             this.lblS4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblS4.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1432,7 +1442,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS2Ecap
             // 
-            this.txtS2Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.2093362808227539D));
+            this.txtS2Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
             this.txtS2Ecap.Name = "txtS2Ecap";
             this.txtS2Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS2Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1462,7 +1472,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS2ProdSeg
             // 
-            this.txtS2ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.2093358039855957D));
+            this.txtS2ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
             this.txtS2ProdSeg.Name = "txtS2ProdSeg";
             this.txtS2ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS2ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1491,7 +1501,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS3ProdName
             // 
-            this.txtS3ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
+            this.txtS3ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
             this.txtS3ProdName.Name = "txtS3ProdName";
             this.txtS3ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS3ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1520,7 +1530,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS5
             // 
-            this.lblS5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
+            this.lblS5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
             this.lblS5.Name = "lblS5";
             this.lblS5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblS5.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1551,7 +1561,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS3Ecap
             // 
-            this.txtS3Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
+            this.txtS3Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
             this.txtS3Ecap.Name = "txtS3Ecap";
             this.txtS3Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS3Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1581,7 +1591,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS3ProdSeg
             // 
-            this.txtS3ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
+            this.txtS3ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
             this.txtS3ProdSeg.Name = "txtS3ProdSeg";
             this.txtS3ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS3ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1610,7 +1620,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS4ProdName
             // 
-            this.txtS4ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
+            this.txtS4ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
             this.txtS4ProdName.Name = "txtS4ProdName";
             this.txtS4ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS4ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1639,7 +1649,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS6
             // 
-            this.lblS6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
+            this.lblS6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
             this.lblS6.Name = "lblS6";
             this.lblS6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblS6.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1670,7 +1680,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS4Ecap
             // 
-            this.txtS4Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
+            this.txtS4Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
             this.txtS4Ecap.Name = "txtS4Ecap";
             this.txtS4Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS4Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1700,7 +1710,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS4ProdSeg
             // 
-            this.txtS4ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.6593356132507324D));
+            this.txtS4ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
             this.txtS4ProdSeg.Name = "txtS4ProdSeg";
             this.txtS4ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS4ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1729,7 +1739,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS5ProdName
             // 
-            this.txtS5ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
+            this.txtS5ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
             this.txtS5ProdName.Name = "txtS5ProdName";
             this.txtS5ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS5ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1758,7 +1768,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS5ProdSeg
             // 
-            this.txtS5ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.8843362331390381D));
+            this.txtS5ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
             this.txtS5ProdSeg.Name = "txtS5ProdSeg";
             this.txtS5ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS5ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1787,7 +1797,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS5Ecap
             // 
-            this.txtS5Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.8843379020690918D));
+            this.txtS5Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
             this.txtS5Ecap.Name = "txtS5Ecap";
             this.txtS5Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS5Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1817,7 +1827,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS7
             // 
-            this.lblS7.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.lblS7.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
             this.lblS7.Name = "lblS7";
             this.lblS7.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblS7.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1848,7 +1858,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS6ProdName
             // 
-            this.txtS6ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
+            this.txtS6ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
             this.txtS6ProdName.Name = "txtS6ProdName";
             this.txtS6ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS6ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1877,7 +1887,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblS8
             // 
-            this.lblS8.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
+            this.lblS8.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
             this.lblS8.Name = "lblS8";
             this.lblS8.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500775337219238D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblS8.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1906,9 +1916,40 @@ namespace Intel.MyDeals.DataLibrary
             this.lblS8.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><span style=\"color: #0" +
     "00000\">Component 9&nbsp;&nbsp; </span></span>";
             // 
+            // lblS9
+            // 
+            this.lblS9.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.lblS9.Name = "lblS9";
+            this.lblS9.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500775337219238D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblS9.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblS9.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblS9.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblS9.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblS9.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblS9.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblS9.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblS9.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblS9.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblS9.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblS9.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblS9.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblS9.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblS9.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblS9.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblS9.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblS9.Style.Font.Bold = true;
+            this.lblS9.Style.Font.Name = "Intel Clear";
+            this.lblS9.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
+            this.lblS9.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblS9.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblS9.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
+            this.lblS9.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblS9.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><span style=\"color: #0" +
+    "00000\">Component 10&nbsp;&nbsp; </span></span>";
+            // 
             // txtS6Ecap
             // 
-            this.txtS6Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.1093358993530273D));
+            this.txtS6Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
             this.txtS6Ecap.Name = "txtS6Ecap";
             this.txtS6Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS6Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1938,7 +1979,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS6ProdSeg
             // 
-            this.txtS6ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.1093356609344482D));
+            this.txtS6ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
             this.txtS6ProdSeg.Name = "txtS6ProdSeg";
             this.txtS6ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS6ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1967,7 +2008,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS7ProdName
             // 
-            this.txtS7ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.txtS7ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
             this.txtS7ProdName.Name = "txtS7ProdName";
             this.txtS7ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS7ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -1996,7 +2037,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblK1
             // 
-            this.lblK1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
+            this.lblK1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
             this.lblK1.Name = "lblK1";
             this.lblK1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19960355758666992D));
             this.lblK1.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2027,7 +2068,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS7Ecap
             // 
-            this.txtS7Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.3093359470367432D));
+            this.txtS7Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
             this.txtS7Ecap.Name = "txtS7Ecap";
             this.txtS7Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS7Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2057,7 +2098,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS7ProdSeg
             // 
-            this.txtS7ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.3093359470367432D));
+            this.txtS7ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
             this.txtS7ProdSeg.Name = "txtS7ProdSeg";
             this.txtS7ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS7ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2086,7 +2127,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS8ProdName
             // 
-            this.txtS8ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
+            this.txtS8ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
             this.txtS8ProdName.Name = "txtS8ProdName";
             this.txtS8ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS8ProdName.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2113,9 +2154,38 @@ namespace Intel.MyDeals.DataLibrary
             this.txtS8ProdName.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.txtS8ProdName.Value = "";
             // 
+            // txtS9ProdName
+            // 
+            this.txtS9ProdName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.0000394582748413D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.txtS9ProdName.Name = "txtS9ProdName";
+            this.txtS9ProdName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.9999213218688965D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.txtS9ProdName.Style.BackgroundColor = System.Drawing.Color.White;
+            this.txtS9ProdName.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9ProdName.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9ProdName.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.txtS9ProdName.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.txtS9ProdName.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9ProdName.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtS9ProdName.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9ProdName.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9ProdName.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9ProdName.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtS9ProdName.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.txtS9ProdName.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdName.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdName.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdName.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdName.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtS9ProdName.Style.Font.Name = "Intel Clear";
+            this.txtS9ProdName.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.txtS9ProdName.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.txtS9ProdName.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.txtS9ProdName.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.txtS9ProdName.Value = "";
+            // 
             // lblK2
             // 
-            this.lblK2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
+            this.lblK2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.0049527883529663086D), Telerik.Reporting.Drawing.Unit.Inch(3.7593360900978906D));
             this.lblK2.Name = "lblK2";
             this.lblK2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.99500793218612671D), Telerik.Reporting.Drawing.Unit.Inch(0.19999901950359345D));
             this.lblK2.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2146,7 +2216,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS8Ecap
             // 
-            this.txtS8Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
+            this.txtS8Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
             this.txtS8Ecap.Name = "txtS8Ecap";
             this.txtS8Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS8Ecap.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2176,7 +2246,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // txtS8ProdSeg
             // 
-            this.txtS8ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.5343351364135742D));
+            this.txtS8ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
             this.txtS8ProdSeg.Name = "txtS8ProdSeg";
             this.txtS8ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.txtS8ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2202,6 +2272,65 @@ namespace Intel.MyDeals.DataLibrary
             this.txtS8ProdSeg.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.txtS8ProdSeg.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.txtS8ProdSeg.Value = "";
+            // 
+            // txtS9Ecap
+            // 
+            this.txtS9Ecap.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(5.2000393867492676D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.txtS9Ecap.Name = "txtS9Ecap";
+            this.txtS9Ecap.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.0998424291610718D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.txtS9Ecap.Style.BackgroundColor = System.Drawing.Color.White;
+            this.txtS9Ecap.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9Ecap.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9Ecap.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.txtS9Ecap.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.txtS9Ecap.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9Ecap.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtS9Ecap.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9Ecap.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9Ecap.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9Ecap.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtS9Ecap.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.txtS9Ecap.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9Ecap.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9Ecap.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9Ecap.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9Ecap.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtS9Ecap.Style.Font.Name = "Intel Clear";
+            this.txtS9Ecap.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.txtS9Ecap.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.txtS9Ecap.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.txtS9Ecap.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
+            this.txtS9Ecap.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.txtS9Ecap.Value = "";
+            // 
+            // txtS9ProdSeg
+            // 
+            this.txtS9ProdSeg.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.0000395774841309D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.txtS9ProdSeg.Name = "txtS9ProdSeg";
+            this.txtS9ProdSeg.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1999211311340332D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.txtS9ProdSeg.Style.BackgroundColor = System.Drawing.Color.White;
+            this.txtS9ProdSeg.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9ProdSeg.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9ProdSeg.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.txtS9ProdSeg.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.txtS9ProdSeg.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtS9ProdSeg.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtS9ProdSeg.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9ProdSeg.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9ProdSeg.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtS9ProdSeg.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtS9ProdSeg.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.txtS9ProdSeg.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdSeg.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdSeg.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdSeg.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtS9ProdSeg.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtS9ProdSeg.Style.Font.Name = "Intel Clear";
+            this.txtS9ProdSeg.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.txtS9ProdSeg.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.txtS9ProdSeg.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.txtS9ProdSeg.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.txtS9ProdSeg.Value = "";
             // 
             // htmlTextBox2
             // 
@@ -2323,7 +2452,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS4
             // 
-            this.lblBlankS4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
+            this.lblBlankS4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.2093360424041748D));
             this.lblBlankS4.Name = "lblBlankS4";
             this.lblBlankS4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1988999843597412D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS4.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2352,7 +2481,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS5
             // 
-            this.lblBlankS5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.8843379020690918D));
+            this.lblBlankS5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.4343359470367432D));
             this.lblBlankS5.Name = "lblBlankS5";
             this.lblBlankS5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1989004611968994D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS5.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2381,7 +2510,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS6
             // 
-            this.lblBlankS6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(3.1093356609344482D));
+            this.lblBlankS6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.6593360900878906D));
             this.lblBlankS6.Name = "lblBlankS6";
             this.lblBlankS6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1989004611968994D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS6.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2410,7 +2539,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS7
             // 
-            this.lblBlankS7.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(3.3094143867492676D));
+            this.lblBlankS7.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.88433575630188D));
             this.lblBlankS7.Name = "lblBlankS7";
             this.lblBlankS7.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1989004611968994D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS7.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2439,7 +2568,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS8
             // 
-            this.lblBlankS8.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
+            this.lblBlankS8.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(3.1093361377716064D));
             this.lblBlankS8.Name = "lblBlankS8";
             this.lblBlankS8.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1989004611968994D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS8.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2465,6 +2594,35 @@ namespace Intel.MyDeals.DataLibrary
             this.lblBlankS8.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.lblBlankS8.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.lblBlankS8.Value = "&nbsp;";
+            // 
+            // lblBlankS9
+            // 
+            this.lblBlankS9.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(3.3093357086181641D));
+            this.lblBlankS9.Name = "lblBlankS9";
+            this.lblBlankS9.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1989004611968994D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+            this.lblBlankS9.Style.BackgroundColor = System.Drawing.Color.White;
+            this.lblBlankS9.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlankS9.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlankS9.Style.BorderColor.Left = System.Drawing.Color.White;
+            this.lblBlankS9.Style.BorderColor.Right = System.Drawing.Color.White;
+            this.lblBlankS9.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblBlankS9.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlankS9.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlankS9.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlankS9.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblBlankS9.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblBlankS9.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlankS9.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlankS9.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlankS9.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlankS9.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblBlankS9.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlankS9.Style.Font.Name = "Intel Clear";
+            this.lblBlankS9.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.lblBlankS9.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(2D);
+            this.lblBlankS9.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblBlankS9.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblBlankS9.Value = "&nbsp;";
             // 
             // MainContent
             // 
@@ -2515,7 +2673,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankK1
             // 
-            this.lblBlankK1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999610900878906D), Telerik.Reporting.Drawing.Unit.Inch(1.7589391469955444D));
+            this.lblBlankK1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999610900878906D), Telerik.Reporting.Drawing.Unit.Inch(3.5343360900878906D));
             this.lblBlankK1.Name = "lblBlankK1";
             this.lblBlankK1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1988993883132935D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankK1.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2544,7 +2702,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankK2
             // 
-            this.lblBlankK2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999610900878906D), Telerik.Reporting.Drawing.Unit.Inch(1.984336256980896D));
+            this.lblBlankK2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999610900878906D), Telerik.Reporting.Drawing.Unit.Inch(3.7593360900978906D));
             this.lblBlankK2.Name = "lblBlankK2";
             this.lblBlankK2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1988993883132935D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankK2.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2573,7 +2731,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS2
             // 
-            this.lblBlankS2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999610900878906D), Telerik.Reporting.Drawing.Unit.Inch(2.2093362808227539D));
+            this.lblBlankS2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999610900878906D), Telerik.Reporting.Drawing.Unit.Inch(1.7593358755111694D));
             this.lblBlankS2.Name = "lblBlankS2";
             this.lblBlankS2.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1988999843597412D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS2.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2602,7 +2760,7 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // lblBlankS3
             // 
-            this.lblBlankS3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(2.4343357086181641D));
+            this.lblBlankS3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(6.2999606132507324D), Telerik.Reporting.Drawing.Unit.Inch(1.9843358993530273D));
             this.lblBlankS3.Name = "lblBlankS3";
             this.lblBlankS3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.1988999843597412D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
             this.lblBlankS3.Style.BackgroundColor = System.Drawing.Color.White;
@@ -2783,6 +2941,7 @@ namespace Intel.MyDeals.DataLibrary
         private HtmlTextBox lblS7;
         private HtmlTextBox txtS6ProdName;
         private HtmlTextBox lblS8;
+        private HtmlTextBox lblS9;
         private HtmlTextBox txtS6Ecap;
         private HtmlTextBox txtS6ProdSeg;
         private HtmlTextBox txtS7ProdName;
@@ -2790,9 +2949,12 @@ namespace Intel.MyDeals.DataLibrary
         private HtmlTextBox txtS7Ecap;
         private HtmlTextBox txtS7ProdSeg;
         private HtmlTextBox txtS8ProdName;
+        private HtmlTextBox txtS9ProdName;
         private HtmlTextBox lblK2;
         private HtmlTextBox txtS8Ecap;
         private HtmlTextBox txtS8ProdSeg;
+        private HtmlTextBox txtS9Ecap;
+        private HtmlTextBox txtS9ProdSeg;
         private HtmlTextBox htmlTextBox2;
         private HtmlTextBox htmlTextBox12;
         private HtmlTextBox txtStatus;
@@ -2802,6 +2964,7 @@ namespace Intel.MyDeals.DataLibrary
         private HtmlTextBox lblBlankS6;
         private HtmlTextBox lblBlankS7;
         private HtmlTextBox lblBlankS8;
+        private HtmlTextBox lblBlankS9;
         private HtmlTextBox lblBlankK1;
         private HtmlTextBox lblBlankK2;
         private HtmlTextBox lblBlankS2;

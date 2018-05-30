@@ -121,7 +121,10 @@ namespace Intel.MyDeals.DataLibrary
             txtS8Ecap.Value = GetMoneyValue("S8ECAPPrice");
             txtS8ProdName.Value = GetValue("S8ProdDesc");
             txtS8ProdSeg.Value = GetValue("S8ProdCat");
-            
+
+            txtS9Ecap.Value = GetMoneyValue("S9ECAPPrice");
+            txtS9ProdName.Value = GetValue("S9ProdDesc");
+            txtS9ProdSeg.Value = GetValue("S9ProdCat");
 
 
             // T's and C's
@@ -177,6 +180,7 @@ namespace Intel.MyDeals.DataLibrary
                 lblBlankK1.Visible = false;
             }
 
+            //if (GetValue("SubKitCheck") == "N")  //TODO: need to implement a sub kit check  //string.IsNullOrEmpty(txtK2ProdName.Value)
             if (string.IsNullOrEmpty(txtK2ProdName.Value))
             {
                 lblK2.Visible = false;
@@ -247,6 +251,15 @@ namespace Intel.MyDeals.DataLibrary
                 txtS8ProdName.Visible = false;
                 txtS8ProdSeg.Visible = false;
                 lblBlankS8.Visible = false;
+            }
+
+            if (string.IsNullOrEmpty(txtS9ProdName.Value))
+            {
+                lblS9.Visible = false;
+                txtS9Ecap.Visible = false;
+                txtS9ProdName.Visible = false;
+                txtS9ProdSeg.Visible = false;
+                lblBlankS9.Visible = false;
             }
 
 
