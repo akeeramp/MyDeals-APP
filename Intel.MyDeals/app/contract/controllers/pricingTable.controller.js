@@ -301,7 +301,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     // Generates options that kendo's html directives will use
-    function generateKendoGridOptions() { 
+    function generateKendoGridOptions() {
 
         wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
@@ -1524,6 +1524,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function sanitizeAndResizeRow(stringToSanitize, sheet, sheetRowIndex) {
         var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g); // NOTE: put this before the sanitize!
         stringToSanitize = sanitizeString(stringToSanitize, ", ")
+        if (stringToSanitize != null) stringToSanitize = stringToSanitize.replace(/,\s*$/, "");
 
         if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
             var rowSizeHeight = 150;
@@ -1616,13 +1617,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                             }
 
+                            if (data[r]["PRD_EXCLDS"] !== undefined && data[r]["PRD_EXCLDS"] !== null) {
+                                data[r]["PRD_EXCLDS"] = sanitizeAndResizeRow(data[r]["PRD_EXCLDS"].toString(), sheet, (r + 1));
+                            }
+
                             // This is an existing row. Don't do anything else
                             continue;
                         }
-
                         // Sanitize data. // HACK: if the user were to double click onto a cell, our customPaste code is not hit, so we need to sanitize here
                         data[r]["PTR_USER_PRD"] = sanitizeAndResizeRow(data[r]["PTR_USER_PRD"].toString(), sheet, (r + 1));
-
 
                         newItems++;
                         var numPivotRows = root.numOfPivot(data[r]);
