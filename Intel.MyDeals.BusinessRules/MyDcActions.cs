@@ -1271,6 +1271,20 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ClearSysComments(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement sysComment = r.Dc.GetDataElement(AttributeCodes.SYS_COMMENTS);
+            if (sysComment == null || sysComment.AtrbValue.ToString() == "") return;
+
+            sysComment.AtrbValue = "";
+            sysComment.PrevAtrbValue = "";
+            sysComment.OrigAtrbValue = "";
+            sysComment.State = OpDataElementState.Unchanged;
+        }
+
         public static void CompareStartEndVol(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

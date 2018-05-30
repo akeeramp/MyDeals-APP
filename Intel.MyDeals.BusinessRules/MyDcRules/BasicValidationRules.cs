@@ -199,6 +199,12 @@ namespace Intel.MyDeals.BusinessRules
 					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
 				},
+                new MyOpRule
+                {
+                    Title="Clear SYS_COMMENTS filed upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
+                    ActionRule = MyDcActions.ClearSysComments,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
+                },
 				//new MyOpRule
 				//{
 				//	Title="End Volume must be greater than Start volume",
