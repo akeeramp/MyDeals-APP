@@ -14,11 +14,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             _dataCollectionsDataLib = dataCollectionsDataLib;
         }
+
         public CacheLib()
         {
             _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
-
 
         /// <summary>
         /// Check the Cache Sotores for status
@@ -36,6 +36,14 @@ namespace Intel.MyDeals.BusinessLogic
         public bool ClearCache()
         {
             return _dataCollectionsDataLib.ClearCache();
+        }
+
+        /// <summary>
+        /// Clear my customer cache
+        /// </summary>
+        public void ClearMyCustomerCache()
+        {
+            _dataCollectionsDataLib.ClearMyCustomerCache();
         }
 
         /// <summary>
@@ -77,14 +85,14 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.ViewCache(cacheName);
         }
 
-		/// <summary>
-		/// Gets the random hash we generate each time we have cached data. 
-		/// We use this to check against whether or not to refresh the javascript sessionStorage.
-		/// </summary>
-		/// <returns>A random hash</returns>
-		public int GetSessionComparisonHash() // TODO: rename this maybe because I'm really bad at naming
-		{
-			return _dataCollectionsDataLib.GetSessionComparisonHash();
-		}
-	}
+        /// <summary>
+        /// Gets the random hash we generate each time we have cached data.
+        /// We use this to check against whether or not to refresh the javascript sessionStorage.
+        /// </summary>
+        /// <returns>A random hash</returns>
+        public int GetSessionComparisonHash() // TODO: rename this maybe because I'm really bad at naming
+        {
+            return _dataCollectionsDataLib.GetSessionComparisonHash();
+        }
+    }
 }

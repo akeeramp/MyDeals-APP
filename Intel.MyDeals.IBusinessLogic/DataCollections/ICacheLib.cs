@@ -11,6 +11,8 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         bool ClearCache();
 
+        void ClearMyCustomerCache();
+
         IEnumerable<CacheItem> CheckCache();
 
         bool ClearCache(string fieldName);
@@ -21,6 +23,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         object ViewCache(string fieldName);
 
-		int GetSessionComparisonHash();
-	}
+        int GetSessionComparisonHash();
+    }
 }

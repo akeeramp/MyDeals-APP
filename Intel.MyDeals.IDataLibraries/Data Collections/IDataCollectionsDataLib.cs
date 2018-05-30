@@ -11,6 +11,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         bool ClearCache(string fieldName);
 
+        void ClearMyCustomerCache();
+
         bool LoadCache();
 
         bool LoadCache(string fieldName);
@@ -22,8 +24,8 @@ namespace Intel.MyDeals.IDataLibrary
         List<CustomerDivision> GetCustomerDivisions();
 
         List<GeoDimension> GetGeoData();
-		
-		UiTemplates GetUiTemplates();
+
+        UiTemplates GetUiTemplates();
 
         List<Product> GetProductData();
 
@@ -33,14 +35,14 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<BasicDropdown> GetBasicDropdowns();
 
-		Dictionary<string, string> GetDropdownDict(string lookupText);
+        Dictionary<string, string> GetDropdownDict(string lookupText);
 
-		Dictionary<string, string> GetBasicDropdownDict(string atrbCd);
+        Dictionary<string, string> GetBasicDropdownDict(string atrbCd);
 
-		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-		//List<RetailPull> GetRetailPullSDMList();
+        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+        //List<RetailPull> GetRetailPullSDMList();
 
-		List<SoldToIds> GetSoldToIdList();
+        List<SoldToIds> GetSoldToIdList();
 
         List<Dropdown> GetDropdowns();
 
@@ -56,7 +58,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         Dictionary<string, string> GetSearchString();
 
-		int GetSessionComparisonHash();
-
-	}
+        int GetSessionComparisonHash();
+    }
 }

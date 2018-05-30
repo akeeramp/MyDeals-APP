@@ -21,6 +21,11 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.ClearCache();
         }
 
+        public void ClearMyCustomerCache()
+        {
+            DataCollections.ClearMyCustomerCache();
+        }
+
         /// <summary>
         /// Check cache status
         /// </summary>
@@ -69,20 +74,20 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.ViewCache(fieldName);
         }
 
-		/// <summary>
-		/// Gets the random hash we generate each time we have cached data. 
-		/// We use this to check against whether or not to refresh the javascript sessionStorage.
-		/// </summary>
-		/// <param name="cacheKey"></param>
-		/// <returns>A random hash</returns>
-		public int GetSessionComparisonHash()
-		{
-			return DataCollections.GetSessionComparisonHash();
-		}
+        /// <summary>
+        /// Gets the random hash we generate each time we have cached data.
+        /// We use this to check against whether or not to refresh the javascript sessionStorage.
+        /// </summary>
+        /// <param name="cacheKey"></param>
+        /// <returns>A random hash</returns>
+        public int GetSessionComparisonHash()
+        {
+            return DataCollections.GetSessionComparisonHash();
+        }
 
-		#endregion Cache Functions
+        #endregion Cache Functions
 
-		public List<AdminConstant> GetToolConstants()
+        public List<AdminConstant> GetToolConstants()
         {
             return DataCollections.GetToolConstants();
         }
@@ -103,11 +108,11 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         public List<GeoDimension> GetGeoData()
-		{
-			return DataCollections.GetGeoData();
-		}
-		
-		public UiTemplates GetUiTemplates()
+        {
+            return DataCollections.GetGeoData();
+        }
+
+        public UiTemplates GetUiTemplates()
         {
             return DataCollections.GetUiTemplates();
         }
@@ -156,17 +161,17 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetBasicDropdowns();
         }
 
-		public Dictionary<string, string> GetDropdownDict(string lookupText)
-		{
-			return DataCollections.GetDropdownDict(lookupText);
-		}
+        public Dictionary<string, string> GetDropdownDict(string lookupText)
+        {
+            return DataCollections.GetDropdownDict(lookupText);
+        }
 
-		public Dictionary<string, string> GetBasicDropdownDict(string atrbcd)
-		{
-			return DataCollections.GetBasicDropdownDict(atrbcd);
-		}
+        public Dictionary<string, string> GetBasicDropdownDict(string atrbcd)
+        {
+            return DataCollections.GetBasicDropdownDict(atrbcd);
+        }
 
-		public List<Dropdown> GetDropdowns()
+        public List<Dropdown> GetDropdowns()
         {
             return DataCollections.GetDropdowns();
         }

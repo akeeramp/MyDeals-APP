@@ -69,7 +69,7 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult ResetMyCache()
         {
-            new CacheLib().ClearCache("_getMyCustomers");
+            new CacheLib().ClearMyCustomerCache();
             AppLib.InitAvm(OpAppConfig.Init(), AvmforceMode.User);
             return RedirectToAction("Index", "Home");
         }

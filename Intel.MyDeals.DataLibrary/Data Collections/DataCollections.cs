@@ -106,6 +106,15 @@ namespace Intel.MyDeals.DataLibrary
             return false;
         }
 
+        public static void ClearMyCustomerCache()
+        {
+            string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\", "");
+            if (_getMyCustomers.ContainsKey(authenticatedName))
+            {
+                _getMyCustomers.Remove(authenticatedName);
+            }
+        }
+
         private static bool LoadCacheFile(string fieldName)
         {
             FieldInfo field = typeof(DataCollections).GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic);
@@ -261,7 +270,6 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<UsrProfileRole> _getUsrProfileRole;
-
 
         public static List<GeoDimension> GetGeoData()
         {
