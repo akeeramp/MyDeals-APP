@@ -23,6 +23,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     vm.DC_ID = dataItem.DC_ID;
     vm.delCounter = 0;
     vm.IS_EXCLUDED = [];
+    vm.toggleMessage = 'Off';
+    vm.toggleClass = 'txtOff';
 
     var filter = {};
     if (excludeOutliers) {
@@ -31,11 +33,15 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     vm.filterData = function (e) {
         if (e) {
             dataSourceSuggested.filter({ field: "IS_TOUCHED", operator: "eq", value: 1 });
+            vm.toggleMessage = 'On';
+            vm.toggleClass = 'txtOn';
         }
         else {
             vm.delCounter = 0;
+            vm.toggleMessage = 'Off';
+            vm.toggleClass = 'txtOff';
             dataSourceSuggested.filter({});
-            dataSourceSuggested.read();
+            dataSourceSuggested.read();            
         }
         
     }

@@ -35,8 +35,8 @@
                 </div>
 				<div style='color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left' >
 					<label class="switch" title='Excluded/Included by USER'>
-					  <input type="checkbox" ng-click="vm.filterData(IS_SELECTED)" ng-model='IS_SELECTED' checked>
-					  <span class="slider"></span>
+					  <input type="checkbox" ng-click="vm.filterData(IS_SELECTED)" ng-model='IS_SELECTED' title='Click to see Excluded/Included by USER' checked>
+					  <span class="slider" title='Click to see Excluded/Included by USER'><p class={{vm.toggleClass}}>{{vm.toggleMessage}}</p></span>
 					</label>
 					<!--<toggle size='btn-sm' ng-click="vm.filterData(IS_SELECTED)" ng-model='IS_SELECTED'></toggle>-->
 				</div>
@@ -83,6 +83,11 @@
 <!--<div class="modal-footer">	</div>-->
 
 <style>
+.txtOff {     
+	text-align: right !important;
+    padding-right: 3px;    
+	}
+.txtOn{ text_align: left; padding-left:2px}
 .switch {
      position: relative;
     display: inline-block;
@@ -132,7 +137,7 @@ input:checked + .slider:before {
   transform: translateX(26px);
   background-color: #ffffff;
 }
-table tobody tr:last-child { display:none !important}
+table tbody tr:last-child { display:none !important}
     #ExcldGrid.k-grid {
         height: calc(85vh - 250px) !important;
         overflow: hidden;
