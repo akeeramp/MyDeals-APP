@@ -35,24 +35,10 @@
                     <!-- If PS has no trackers under it and you can add one, you can remove it -->
                     <!-- Sorry Phil, but there is a case where the PS is in ReDeal due to adding a new deal, but IN_REDEAL is not set because effectively, do deals are being re-dealed. Stages got to stay for now. -->
                     <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER !== '1'"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
-                    <!-- If PS has trackers under it and it is in play and you can add one, you can roll it back -->
-                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER === '1' && !(ps.WF_STG_CD === 'Cancelled' || ps.WF_STG_CD === 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingStrategy(ps)"><i class="fa fa-undo"></i> Undo Pricing Strategy Re-deal</a></li>
+                    <!-- If PS has trackers under it and it is in play and you can add one, you can roll it back // REMOVED THIS UNTIL ROLLBACK STORY CAN BE FIXED PROPERLY - US106967 Remove Rollback option for Pricing Strategies --> 
+                    <!--<li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.HAS_TRACKER === '1' && !(ps.WF_STG_CD === 'Cancelled' || ps.WF_STG_CD === 'Approved')"><a tabindex="-1" role="menuitem" ng-click="rollBackPricingStrategy(ps)"><i class="fa fa-undo"></i> Undo Pricing Strategy Re-deal</a></li>-->
                     <!-- If PS is active and you are allowed to cancel -->
                     <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps.WF_STG_CD === 'Approved'"><a tabindex="-1" role="menuitem" ng-click="cancelPricingStrategy(ps)"><i class="intelicon-no-access"></i> Cancel Entire Pricing Strategy</a></li>
-
-                    <!-- TODO need to check for valid pricing strategy before actions -->
-                    <!--<li role="presentation" ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
-                        <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Approve')"><i class="intelicon-arrow-forward-right"></i> Approve</a>
-                    </li>
-                    <li role="presentation" ng-show="ps._actions['Reject'] !== undefined && ps._actions['Reject'] === true">
-                        <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Reject')"><i class="intelicon-arrow-back-left"></i> Reject</a>
-                    </li>
-                    <li role="presentation" ng-show="ps._actions['Revise'] !== undefined && ps._actions['Revise'] === true">
-                        <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Revise')"><i class="intelicon-arrow-back-left"></i> Revise</a>
-                    </li>
-                    <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps._actions['Cancel'] === true">
-                        <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Cancel')"><i class="intelicon-arrow-down"></i> Cancel</a>
-                    </li>-->
 
                 </ul>
             </div>
