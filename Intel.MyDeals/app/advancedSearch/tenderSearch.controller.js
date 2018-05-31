@@ -225,6 +225,7 @@
             field: "VOLUME",
             title: "Ceiling Vol",
             type: "number",
+            template: "#= gridUtils.tender(data, 'VOLUME') #",
             width: 120
         }, {
             field: "OBJ_SET_TYPE_CD",
@@ -320,11 +321,13 @@
             field: "CREDIT_VOLUME",
             title: "Credit Vol",
             type: "number",
+            template: "#= gridUtils.tender(data, 'CREDIT_VOLUME') #",
             width: 120
         }, {
             field: "DEBIT_VOLUME",
             title: "Debit Vol",
             type: "number",
+            template: "#= gridUtils.tender(data, 'DEBIT_VOLUME') #",
             width: 120
         }, {
             field: "NET_VOL_PAID",
@@ -332,18 +335,21 @@
             type: "number",
             filterable: false,
             sortable: false,
+            template: "#= gridUtils.tender(data, 'NET_VOL_PAID') #",
             width: 120
         }, {
             field: "CREDIT_AMT",
             title: "Credit Amt",
             type: "number",
             format: "{0:c}",
+            template: "#= gridUtils.tender(data, 'CREDIT_AMT', 'c') #",
             width: 120
         }, {
             field: "DEBIT_AMT",
             title: "Debit Amt",
             type: "number",
             format: "{0:c}",
+            template: "#= gridUtils.tender(data, 'DEBIT_AMT', 'c') #",
             width: 120
         }, {
             field: "TOT_QTY_PAID",
@@ -352,6 +358,7 @@
             format: "{0:c}",
             filterable: false,
             sortable: false,
+            template: "#= gridUtils.tender(data, 'TOT_QTY_PAID', 'c') #",
             width: 120
         }, {
             field: "BLLG_DT",

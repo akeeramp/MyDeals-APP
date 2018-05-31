@@ -143,7 +143,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Build Order By
             string orderBy = string.IsNullOrEmpty(data.StrSorts) ? "" : $"{OpDataElementType.WIP_DEAL}_{data.StrSorts}";
             // Special case = DC_ID... need to replace
-            orderBy = orderBy.Replace("DC_ID", "OBJ_SID");
+            orderBy = orderBy.Replace(AttributeCodes.DC_ID, "OBJ_SID");
             if (string.IsNullOrEmpty(orderBy)) orderBy = "WIP_DEAL_OBJ_SID desc";
 
             // Build Search Packet from DB... will return a list of dc_ids and count
@@ -225,8 +225,19 @@ namespace Intel.MyDeals.BusinessLogic
                 // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
                 if (cust != null && !mtCustIds.Contains(cust.CUST_NM_SID))
                 {
-                    item["ECAP_PRICE"] = "no access";
-                    item["CAP"] = "no access";
+                    item[AttributeCodes.ECAP_PRICE] = "no access";
+                    item[AttributeCodes.CAP] = "no access";
+                    item[AttributeCodes.BID_STATUS] = "no access";
+                    item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
+                    item[AttributeCodes.VOLUME] = "no access";
+                    item[AttributeCodes.CREDIT_VOLUME] = "no access";
+                    item[AttributeCodes.CREDIT_AMT] = "no access";
+                    item[AttributeCodes.DEBIT_VOLUME] = "no access";
+                    item[AttributeCodes.DEBIT_AMT] = "no access";
+                    item["TOT_QTY_PAID"] = "no access";
+                    item["NET_VOL_PAID"] = "no access";
+                    item[AttributeCodes.DEAL_MSP_PRC] = "no access";
+                    //item[AttributeCodes.BLLG_DT] = "no access";
                 }
             }
 

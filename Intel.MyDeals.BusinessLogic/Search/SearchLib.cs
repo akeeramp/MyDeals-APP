@@ -5,11 +5,9 @@ using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using System;
-using System.Collections;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.Opaque.Data;
-using Kendo.Mvc.UI;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -198,8 +196,8 @@ namespace Intel.MyDeals.BusinessLogic
             string strFilters = SearchTools.BuildFilterClause(data.StrFilters, opDataElementType);
 
             // couple special cases here
-            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
-            rtn = rtn.Replace("WIP_DEAL_Customer.CUST_NM", "CUST_NM");
+            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", AttributeCodes.CUST_NM);
+            rtn = rtn.Replace("WIP_DEAL_Customer.CUST_NM", AttributeCodes.CUST_NM);
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
             rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
@@ -225,8 +223,8 @@ namespace Intel.MyDeals.BusinessLogic
                 : JsonConvert.DeserializeObject<IEnumerable<SearchFilter>>(customSearchOptionUserPref.PRFR_VAL).ToList();
 
             // Check is user entered a date range
-            bool userDefStart = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("START_DT") >= 0;
-            bool userDefEnd = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("END_DT") >= 0;
+            bool userDefStart = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf(AttributeCodes.START_DT) >= 0;
+            bool userDefEnd = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf(AttributeCodes.END_DT) >= 0;
 
             // Build where clause from start/end date and search text
             string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL, initSearchCriteria, customSearchOption, userDefStart, userDefEnd);
@@ -235,7 +233,7 @@ namespace Intel.MyDeals.BusinessLogic
             string orderBy = string.IsNullOrEmpty(data.StrSorts) ? "" : $"{OpDataElementType.WIP_DEAL}_{data.StrSorts}";
 
             // Special case = DC_ID... need to replace
-            orderBy = orderBy.Replace("DC_ID", "OBJ_SID");
+            orderBy = orderBy.Replace(AttributeCodes.DC_ID, "OBJ_SID");
             if (string.IsNullOrEmpty(orderBy)) orderBy = "WIP_DEAL_OBJ_SID desc";
 
             // Build Search Packet from DB... will return a list of dc_ids and count
@@ -296,7 +294,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 int dcId = int.Parse(item[AttributeCodes.DC_ID].ToString());
                 item["SortOrder"] = idSort[dcId];
-
+                
                 item["CNTRCT_OBJ_SID"] = decoderById[dcId].CNTRCT_OBJ_SID;
                 item["CNTRCT_TITLE"] = decoderById[dcId].CNTRCT_TITLE;
                 item["CNTRCT_C2A_DATA_C2A_ID"] = decoderById[dcId].CNTRCT_C2A_DATA_C2A_ID;
@@ -316,9 +314,19 @@ namespace Intel.MyDeals.BusinessLogic
                     if (cust == null)
                     {
                         item["Customer"] = new Dictionary<string,object>();
-                        item["ECAP_PRICE"] = "no access";
-                        item["CAP"] = "no access";
-                        item["BID_STATUS"] = "no access";
+                        item[AttributeCodes.ECAP_PRICE] = "no access";
+                        item[AttributeCodes.CAP] = "no access";
+                        item[AttributeCodes.BID_STATUS] = "no access";
+                        item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
+                        item[AttributeCodes.VOLUME] = "no access";
+                        item[AttributeCodes.CREDIT_VOLUME] = "no access";
+                        item[AttributeCodes.CREDIT_AMT] = "no access";
+                        item[AttributeCodes.DEBIT_VOLUME] = "no access";
+                        item[AttributeCodes.DEBIT_AMT] = "no access";
+                        item["TOT_QTY_PAID"] = "no access";
+                        item["NET_VOL_PAID"] = "no access";
+                        item[AttributeCodes.DEAL_MSP_PRC] = "no access";
+                        //item[AttributeCodes.BLLG_DT] = "no access";
                     }
                     else
                     {
@@ -327,9 +335,19 @@ namespace Intel.MyDeals.BusinessLogic
                         // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
                         if (!mtCustIds.Contains(cust.CUST_NM_SID))
                         {
-                            item["ECAP_PRICE"] = "no access";
-                            item["CAP"] = "no access";
-                            item["BID_STATUS"] = "no access";
+                            item[AttributeCodes.ECAP_PRICE] = "no access";
+                            item[AttributeCodes.CAP] = "no access";
+                            item[AttributeCodes.BID_STATUS] = "no access";
+                            item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
+                            item[AttributeCodes.VOLUME] = "no access";
+                            item[AttributeCodes.CREDIT_VOLUME] = "no access";
+                            item[AttributeCodes.CREDIT_AMT] = "no access";
+                            item[AttributeCodes.DEBIT_VOLUME] = "no access";
+                            item[AttributeCodes.DEBIT_AMT] = "no access";
+                            item["TOT_QTY_PAID"] = "no access";
+                            item["NET_VOL_PAID"] = "no access";
+                            item[AttributeCodes.DEAL_MSP_PRC] = "no access";
+                            //item[AttributeCodes.BLLG_DT] = "no access";
                         }
 
                     }

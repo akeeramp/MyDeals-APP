@@ -994,6 +994,29 @@ gridUtils.getDimLabel = function (key) {
     return dim;
 }
 
+gridUtils.tender = function (dataItem, field, format) {
+    var ar = dataItem[field];
+    
+    if (ar !== undefined && ar !== null && ar === "no access") {
+        return "<div class='noaccess'>no access</div>";
+    }
+    if (ar === undefined || ar === null)
+    {
+        return dataItem["BID_STATUS"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
+    }
+
+
+    if (format !== undefined) {
+        if (format === "c" && !isNaN(ar)) {
+            ar = kendo.toString(parseFloat(ar), format);
+        } else {
+            ar = kendo.toString(ar, format);
+        }
+    }
+
+    return ar;
+}
+
 gridUtils.tenderDim = function (dataItem, field, format) {
     var rtn = [];
     var rtnKit = [];
