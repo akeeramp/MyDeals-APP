@@ -201,7 +201,7 @@ namespace Intel.MyDeals.BusinessRules
 				},
                 new MyOpRule
                 {
-                    Title="Clear SYS_COMMENTS filed upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
+                    Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
                     ActionRule = MyDcActions.ClearSysComments,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
                 },
