@@ -17,8 +17,7 @@
             restrict: 'AE',
             transclude: true,
             templateUrl: '/app/core/directives/overlappingDeals/overlappingDeals.directive.html',
-            controller: ['$scope', 'dataService', function ($scope, dataService) {
-
+            controller: ['$scope', 'dataService', function ($scope, dataService) {                
                 $scope.loading = true;
                 $scope.msg = "Looking for Overlapping Deals";
                 $scope.isOverlapping = false;
@@ -48,8 +47,8 @@
                     }
                 }
 
-                $scope.gotoDealDetails = function (dataItem) {
-                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip?searchTxt=" + dataItem.WIP_DEAL_OBJ_SID, '_blank');
+                $scope.gotoDealDetails = function (dataItem, dcID) {
+                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip?searchTxt=" + dcID, '_blank');
                     win.focus();
                 }
 
@@ -88,10 +87,7 @@
                                     var tempSTART_DT = drftEndDate.getMonth("MM") + 1 + "/" + drftEndDate.getDate() + "/" + drftEndDate.getFullYear();
                                     $scope.ovlpData[i].START_DT = "<span title='START Date Pushing' style='color:red'> " + tempSTART_DT + " - Pending </span>";
                                 }                             
-                                //Manual Overlap Resolution
-                                //else {
-                                //    kendo.alert("Overlap can not be resolved sytematically");
-                                //}
+                                
                             }
                             else {
                                 $scope.ovlpData[i].START_DT = $scope.ovlpDataRep[i].START_DT;
@@ -304,7 +300,7 @@
                             field: "OVLP_DEAL_OBJ_SID",
                             title: "Deal #",
                             width: "80px",
-                            template: "<div class='ovlpCell'><a ng-click='gotoDealDetails(dataItem)' class='btnDeal' style='cursor: pointer;'> #= OVLP_DEAL_OBJ_SID # </a></div>",
+                            template: "<div class='ovlpCell'><a ng-click='gotoDealDetails(dataItem,#=OVLP_DEAL_OBJ_SID#)' class='btnDeal' style='cursor: pointer;'> #= OVLP_DEAL_OBJ_SID # </a></div>",
                             filterable: { multi: true, search: true }
                         },
                         {
