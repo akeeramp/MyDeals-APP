@@ -1093,6 +1093,39 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.updateDirty = function (dataItem, field) {
+
+            	// default QTY value
+            	if (field == "QTY") {
+            		var test = dataItem[field];
+            		for (var i = 0; i < 10; i++) {
+            			var key = "20___" + i;
+            			if (!dataItem[field].hasOwnProperty(key)) {
+            				break;
+            			}
+            			else {
+            				if (dataItem[field][key] === null) {
+            					dataItem[field][key] = 1;
+            				}
+            			}
+            		}
+            	}
+            	// default DSCNT_PER_LN value
+            	if (field == "DSCNT_PER_LN") {
+            		var test = dataItem[field];
+            		for (var i = 0; i < 10; i++) {
+            			var key = "20___" + i;
+            			if (!dataItem[field].hasOwnProperty(key)) {
+            				break;
+            			}
+            			else {
+            				if (dataItem[field][key] === null) {
+            					dataItem[field][key] = 0;
+            				}
+            			}
+            		}
+            	}
+
+				// update
                 $scope.saveFunctions(dataItem, field, dataItem[field])
             }
 
