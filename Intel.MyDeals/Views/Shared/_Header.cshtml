@@ -2,25 +2,26 @@
 @using Intel.Opaque
 @using Intel.MyDeals.App
 @{
-    ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
-    var environment = avm == null ? "UNKNOWN" : avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "PROD" : avm.AppEnv;
-
-    var usrName = "UNKNOWN";
-    var usrWwid = 0;
-    var usrRole = "UNKNOWN";
-    var usrRoleId = 0;
-    var usrEmail = "";
     try
     {
+        ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
+        var environment = avm == null ? "UNKNOWN" : avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "PROD" : avm.AppEnv;
+
+        var usrName = "UNKNOWN";
+        var usrWwid = 0;
+        var usrRole = "UNKNOWN";
+        var usrRoleId = 0;
+        var usrEmail = "";
+
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
         usrWwid = ViewBag.UserToken.Usr.WWID;
         usrEmail = ViewBag.UserToken.Usr.Email;
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
         usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
     }
-    catch (Exception)
+    catch (Exception ex)
     {
-        // do some error catching or 404 error redirect here...
+        OpLogPerf.Log(ex);
     }
 
     OpUserToken opUserToken = (OpUserToken)ViewBag.UserToken;
@@ -338,8 +339,8 @@
 
 <script>
     topbar.config({
-    barColors: {
-        '0': 'rgba(196, 214, 0, 1)'
+        barColors: {
+            '0': 'rgba(196, 214, 0, 1)'
         }
     });
 
