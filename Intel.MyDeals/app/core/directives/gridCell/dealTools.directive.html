@@ -52,10 +52,18 @@
            title="Unable to delete this deal at this stage"></i>
         <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER !== '1'" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
            title="Click to delete this deal" ng-click="openDeleteDialog()"></i>
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Active' && dataItem.HAS_TRACKER === '1'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
+        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Active' && dataItem.HAS_TRACKER === '1' && dataItem.REBATE_TYPE !== 'TENDER'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
            title="Click to Cancel this deal" ng-click="openCancelDialog()"></i>
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Draft' && dataItem.HAS_TRACKER === '1'" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
+        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.HAS_TRACKER === '1' && dataItem.REBATE_TYPE !== 'TENDER' && dataItem.WF_STG_CD === 'Draft'" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
            title="Click to Rollback this deal" ng-click="openRollBackDialog()"></i>
+        <!-- Tender Deal Lines -->
+        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.HAS_TRACKER === '1' && dataItem.REBATE_TYPE === 'TENDER' && dataItem.BID_STATUS !== 'Won'" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
+           title="Click to delete this deal" ng-click="openDeleteDialog()"></i>
+        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Active' && dataItem.HAS_TRACKER === '1' && dataItem.REBATE_TYPE === 'TENDER' && dataItem.BID_STATUS === 'Won'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
+           title="Click to Cancel this deal" ng-click="openCancelDialog()"></i>
+        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1' && dataItem.REBATE_TYPE === 'TENDER' && dataItem.WF_STG_CD === 'Draft'" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
+           title="Click to Rollback this deal" ng-click="openRollBackDialog()"></i>
+
     </div>
     <div class='fl md-icon-disabled' ng-if="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"

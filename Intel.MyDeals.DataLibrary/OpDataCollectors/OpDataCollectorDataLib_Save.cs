@@ -686,37 +686,8 @@ namespace Intel.MyDeals.DataLibrary
                     MessageCode = OpMsg.MessageType.Info
                 });
             }
-
-            //return newId;
-
-            //var intIds = OpTypeConverter.StringToIntList($"{record[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID]}");
-            //if (!intIds.Any()) { return; }
-
-            //var oda = new OpDataAction
-            //{
-            //    Action = actnNm,
-            //    MessageCode = msgType,
-            //    TargetDcIDs = intIds.ToList()
-            //};
-
-            //int idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID);
-
-            //if (idx > -1 && !record.IsDBNull(idx))
-            //{
-            //    oda.DcID = record.GetInt32(idx);
-            //}
-            //idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.OLD_OBJ_SID);
-            //if (idx > -1 && !record.IsDBNull(idx))
-            //{
-            //    oda.AltID = record.GetInt32(idx);
-            //}
-            //idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST);
-            //if (idx > -1 && !record.IsDBNull(idx))
-            //{
-            //    oda.Value = record.GetString(idx);
-            //}
-
-            //odp.Actions.Add(oda);
         }
+
+
     }
 }
