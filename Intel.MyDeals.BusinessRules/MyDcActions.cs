@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
-using Intel.Opaque.Rules;
 using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 
@@ -472,7 +470,7 @@ namespace Intel.MyDeals.BusinessRules
                     title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
                     break;
             }
-            r.Dc.AddTimelineComment($"Created {deType.ToDesc()}: {title}");
+            r.Dc.AddTimelineComment($"Created { deType.ToDesc() }: { title }");
         }
 
         public static void CheckCustDivValues(params object[] args)
@@ -651,6 +649,22 @@ namespace Intel.MyDeals.BusinessRules
             if (deFrontendValue == "Backend" || !r.Dc.HasTracker()) return;
 
             foreach (OpDataElement de in r.Dc.DataElements.Where(d => !excludeAtrbs.Contains(d.AtrbCd)))
+            {
+                de.SetReadOnly();
+            }
+        }
+
+        public static void ReadOnlyFrontendWithNoTracker(params object[] args) // Set to read only if there is not a tracker and deal is frontend (DE38457)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            List<string> readonlyAtrbs = new List<string> { AttributeCodes.EXPIRE_YCS2 };
+
+            string deFrontendValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (deFrontendValue == "Backend" || r.Dc.HasTracker()) return; // If it is backend deal or has a tracker, leave
+
+            foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
             {
                 de.SetReadOnly();
             }
@@ -938,7 +952,7 @@ namespace Intel.MyDeals.BusinessRules
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                 if (atrb == null || de.OrigAtrbValue.ToString() == string.Empty) continue;
 
-                r.Dc.AddTimelineComment($"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                r.Dc.AddTimelineComment($"{ atrb.ATRB_LBL } changed from {de.OrigAtrbValue} to { de.AtrbValue }");
             }
         }
 
