@@ -30,8 +30,8 @@
                 //env: '' //not required- but good if you have it.
             },
             googleAnalytics: {
-                //id: 'UA-XXXXXXX-X',
-                //url: '//www.google-analytics.com/analytics.js'
+                id: 'UA-47054404-41',
+                url: '//www.google-analytics.com/analytics.js'
                 //beforePageview: function() { // example: set any custom dimensions here }
             },
         };
