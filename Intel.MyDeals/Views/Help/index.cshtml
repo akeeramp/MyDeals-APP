@@ -1,7 +1,21 @@
-﻿@{
+﻿@using Intel.MyDeals.Entities
+@using Intel.Opaque
+@using Intel.MyDeals.App
+@{
     Layout = "~/Views/Shared/_LayoutBlank.cshtml";
-}
 
+    var usrRole = "UNKNOWN";
+    try
+    {
+        usrRole = ViewBag.UserToken.Role.RoleTypeCd;
+    }
+    catch (Exception ex)
+    {
+    }
+
+    OpUserToken opUserToken = (OpUserToken)ViewBag.UserToken;
+    bool isSuper = opUserToken.IsSuper();
+}
 <link href="~/css/simple-sidebar.css" rel="stylesheet" />
 
 <script>
@@ -247,12 +261,18 @@
             </li>
             <div id="CostTest" class="panel-collapse collapse">
                 <div class="handbook-panel-body">
-                    <a class="handbook-link" href="#costtestda" onclick="javascript:loadContent('/content/help/costtestda/costtestda.html')">
-                        <li>For DA's</li>
-                    </a>
-                    <a class="handbook-link" href="#costtestga" onclick="javascript:loadContent('/content/help/costtestga/costtestga.html')">
-                        <li>For Super GA's</li>
-                    </a>
+                    @if (usrRole == "DA")
+                    {
+                        <a class="handbook-link" href="#costtestda" onclick="javascript:loadContent('/content/help/costtestda/costtestda.html')">
+                            <li>For DA's</li>
+                        </a>
+                    }
+                    @if (usrRole == "GA" && isSuper)
+                    {
+                        <a class="handbook-link" href="#costtestga" onclick="javascript:loadContent('/content/help/costtestga/costtestga.html')">
+                            <li>For Super GA's</li>
+                        </a>
+                    }
                     <!--<a href="#">
                         <li>Deal Exclusions</li>
                     </a>-->
