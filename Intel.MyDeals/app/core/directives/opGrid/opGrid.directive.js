@@ -1073,10 +1073,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                         } else if (f === fields.length - 1) { //rate
-                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                         } else {
                             if (f === 2 || d === 1) {   //if end vol or if it is the very first tier, allow editable
-                                tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="1" k-max="999999999" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                                tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="1" k-max="999999999" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                             } else { //else disabled
                                 tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                             }
@@ -1394,9 +1394,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             }
 
-            $scope.passThoughFunc = function (func, dataItem) {
+            $scope.passThoughFunc = function (func, dataItem, arg1, arg2) {
                 if (func === undefined || func === null) return null;
-                return func(dataItem);
+                return func(dataItem, arg1, arg2);
             }
 
             $scope.broadcast = function (broadcastCommand, dataItem) {

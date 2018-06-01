@@ -3753,6 +3753,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
+    $scope.clickSchedDim = function (dataItem, field, dim) {
+        $timeout(function () {
+            var el = $("#sched_contrl_" + field + "_" + dim).data("kendoNumericTextBox");
+            if (el !== undefined && el !== null) el.focus();
+        }, 300);
+    }
+
     $scope.showBidStatusWip = function (dataItem) {
         return gridUtils.showBidStatusWip(dataItem);
     }
