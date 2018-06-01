@@ -39,6 +39,7 @@
         $scope.helpTopicContractAndDealViews = HelpTopicEnum.ContractManager_ContractAndDealViews;
         $scope.helpTopicGroupingExclusions = HelpTopicEnum.ContractManager_GroupingExclusions;
         $scope.contractHeaderMaxCharWidth = 55;
+        $scope.isSuper = window.isSuper;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
