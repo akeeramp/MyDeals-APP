@@ -29,6 +29,7 @@
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
 
+
     if (isSuper)
     {
         superPrefix = "SUPER ";
@@ -40,7 +41,18 @@
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 
     var env = ViewBag.AppToken == null || ViewBag.AppToken.OpEnvironment == null || ViewBag.AppToken.OpEnvironment.EnvLoc == null ? "UNKNOWN" : ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
+    //TODO: Fetch it from DB 
+    var GAID = env == "CONS" ? "UA-47054404-40" : "UA-47054404-41";
 }
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=@GAID"></script>
+<script>    
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '@GAID');
+</script>
 
 <div id="smbWindow" style="padding: 0; overflow: hidden !important;"></div>
 <nav class="navbar navbar-default navbar-fixed-top">
