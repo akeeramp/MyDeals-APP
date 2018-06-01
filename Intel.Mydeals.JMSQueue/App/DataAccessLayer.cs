@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Intel.MyDeals.JMSQueueApp
 {
@@ -23,8 +24,10 @@ namespace Intel.MyDeals.JMSQueueApp
         {
             get
             {
-                HttpClientHandler handler = new HttpClientHandler();
-                handler.UseDefaultCredentials = true;
+                HttpClientHandler handler = new HttpClientHandler()
+                {
+                    Credentials = CredentialCache.DefaultNetworkCredentials
+                };
                 HttpClient client = new HttpClient(handler);
                 client.BaseAddress = new Uri(jmsAPIbaseUrl);
                 client.Timeout = TimeSpan.FromMinutes(6);
