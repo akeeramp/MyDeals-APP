@@ -2279,7 +2279,38 @@
                     }
 
 
+                    // 
+                    // This is a temporary fix to mock-stop users from mixing Tender with non-Tender deals.  Once the Stablization release happens, we can remove this check.
+                    //
+                    var hasTender = false;
+                    var hasNonTender = false;
+                    var errDeals = [];
+                    if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT") {
+                        for (var s = 0; s < sData.length; s++) {
+                            if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
+                            if (sData[s]["REBATE_TYPE"] === "TENDER") {
+                                hasTender = true;
+                            } else {
+                                hasNonTender = true;
+                            }
+                        }
+                        if (errDeals.length > 0 && hasTender && hasNonTender) {
+                            for (var t = 0; t < errDeals.length; t++) {
+                                var el = sData[errDeals[t]];
+                                    if (!el._behaviors) el._behaviors = {};
+                                if (!el._behaviors.isError) el._behaviors.isError = {};
+                                if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
+                                el._behaviors.isError["REBATE_TYPE"] = true;
+                                el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same Pricing Table";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Cannot mix Tender and Non-Tender deals in the same Pricing Table.");
+                            }
+                        }
+                    }
+
+
                     var validated_DC_Id = [];
+
                     for (var s = 0; s < sData.length; s++) {
 
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
