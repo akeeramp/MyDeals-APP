@@ -1200,7 +1200,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.createEditEl = function (field, type, dimKey, format) {
                 var el = '<div class="dimKey">' + $scope.translateDimKey(dimKey) + ':</div>';
                 if (type === "TextBox") {
-                    el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="width: 100%;" />';
+                    el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" id="dim_contrl_' + field + '_' + dimKey + '" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="width: 100%;" />';
 
                 } else if (type === "ComboBox") {
 
@@ -1213,11 +1213,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 } else if (type === "CheckBox") {
 
                 } else if (type === "NumericTextBox") { //2 decimal places used for money
-                    el += '<input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
+                    el += '<input kendo-numeric-text-box id="dim_contrl_' + field + '_' + dimKey + '" k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
                 } else if (type === "IntegerTextBox") { //0 decimal places used for item counts
-                    el += '<input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
+                    el += '<input kendo-numeric-text-box id="dim_contrl_' + field + '_' + dimKey + '" k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
                 } else {
-                    el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="width: 100%;" />';
+                    el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" id="dim_contrl_' + field + '_' + dimKey + '" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="width: 100%;" />';
                 }
 
                 return el;

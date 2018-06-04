@@ -3760,6 +3760,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }, 300);
     }
 
+    $scope.clickCellDim = function (dataItem, field, dim) {
+        $timeout(function () {
+            var el = $("#dim_contrl_" + field + "_" + dim).data("kendoNumericTextBox");
+            if (el !== undefined && el !== null) {
+                el.focus();
+            } else {
+                el = $("#dim_contrl_" + field + "_" + dim);
+                if (el !== undefined && el !== null) el.focus();
+            }
+        }, 300);
+    }
+
     $scope.showBidStatusWip = function (dataItem) {
         return gridUtils.showBidStatusWip(dataItem);
     }

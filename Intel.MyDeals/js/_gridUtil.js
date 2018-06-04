@@ -369,6 +369,7 @@ gridUtils.uiPositiveDimControlWrapper = function (passedData, field, format) {
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-click="passThoughFunc(root.clickCellDim, dataItem, \'' + field + '\', \'' + dimkey + '\')"';
             tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
             tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '_' + dimkey + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + field + '_' + dimkey + '" style="margin-top: -7px" data-role="tooltip"></div>';
             tmplt += '<span class="ng-binding" ng-if="dataItem.' + field + '[\'' + dimkey + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + field + '[\'' + dimkey + '\'] ' + gridUtils.getFormat(field, "") + ')"></span>';
@@ -607,6 +608,7 @@ gridUtils.uiTotalDiscountPerLineControlWrapper = function (passedData, format) {
         if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
             tmplt += '<tr style="height: 25px;">';
             tmplt += '<td style="text-align:right;"';
+            tmplt += ' ng-click="passThoughFunc(root.clickCellDim, dataItem, \'QTY\', \'' + dimkey + '\')"';
             tmplt += ' ng-class="{isReadOnlyCell:true}">';
             tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="((dataItem.QTY[\'' + dimkey + '\'] * dataItem.DSCNT_PER_LN[\'' + dimkey + '\']) ' + gridUtils.getFormat("", format) + ')"></span>';
             tmplt += '</td>';
