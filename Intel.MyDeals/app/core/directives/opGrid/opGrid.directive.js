@@ -492,6 +492,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //    $scope.reorderGridColumns(customColumnOrderArr);
                 //    $scope.grid.dataSource.pageSize(pageSize);
                 //}, 10);
+               //Apply the settings.
+                $timeout(function () {
+                    $scope.validateGrid();
+                }, 10);
             }
 
             $scope.reorderGridColumns = function (columnOrderArr) {
