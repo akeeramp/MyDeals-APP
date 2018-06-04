@@ -1026,6 +1026,9 @@ gridUtils.tenderDim = function (dataItem, field, format) {
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
+    if (ar === undefined || ar === null) {
+        return dataItem["BID_STATUS"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
+    }
 
     function compare(a, b) {
         if (a.last_nom < b.last_nom)

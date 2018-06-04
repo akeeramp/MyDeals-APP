@@ -234,6 +234,8 @@ namespace Intel.MyDeals.BusinessLogic
                     item[AttributeCodes.CREDIT_AMT] = "no access";
                     item[AttributeCodes.DEBIT_VOLUME] = "no access";
                     item[AttributeCodes.DEBIT_AMT] = "no access";
+                    item[AttributeCodes.YCS2_PRC_IRBT] = "no access";
+                    item[AttributeCodes.TRKR_NBR] = "no access";
                     item["TOT_QTY_PAID"] = "no access";
                     item["NET_VOL_PAID"] = "no access";
                     item[AttributeCodes.DEAL_MSP_PRC] = "no access";
