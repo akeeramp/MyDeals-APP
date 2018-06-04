@@ -14,16 +14,16 @@ namespace Intel.MyDeals.Entities
         /// <param name="src">Source element.</param>
         /// <param name="other">Compare element.</param>
         /// <returns>True if items match, else false.</returns>
-        public static bool IsKeyMatch(this OpDataElementAtrb src,  OpDataElementAtrb other)
+        public static bool IsKeyMatch(this OpDataElementAtrb src, OpDataElementAtrb other)
         {
             if (other == null || src == null) { return false; }
 
             // Attributes must match
-            if(src.AtrbID != other.AtrbID)
+            if (src.AtrbID != other.AtrbID)
             {
                 return false;
             }
-            
+
             // And hashes must match
             if (!(
                 (src.DimID == other.DimID && src.DimID > 0 && other.DimID > 0)
@@ -35,14 +35,13 @@ namespace Intel.MyDeals.Entities
             }
 
             // If we have DC IDs, check them, else use alt ID.
-            if(src.DcID <= 0 && other.DcID <= 0)
+            if (src.DcID <= 0 && other.DcID <= 0)
             {
                 return (src.DcParentID == other.DcParentID); // Was return (src.DcAltID == other.DcAltID);
-            } 
+            }
 
             return (src.DcID == other.DcID);
         }
-
 
         public static void SetAtrbValue(this OpDataElement de, object val, AttributeCollection attributeCollection)
         {
@@ -54,7 +53,6 @@ namespace Intel.MyDeals.Entities
             de.AtrbValue = val;
             de.State = OpDataElementState.Modified;
         }
-
 
         /// <summary>
         /// Get first matching attribute
@@ -105,13 +103,12 @@ namespace Intel.MyDeals.Entities
             }
 
             if (sourceData == null) { return null; }
-            
+
             MyDealsAttribute atrb;
             if (!sourceData.TryGetValue(ode.AtrbID, out atrb)) return null;
             ode._AttributeCache = atrb;
             return atrb;
         }
-
 
         /// <summary>
         /// Get AtrbValue strongly typed to the set DOT_NET_DATA_TYPE for the given attribute.
@@ -139,7 +136,7 @@ namespace Intel.MyDeals.Entities
             {
                 return ode._AtrbValueTypedCache;
             }
-            
+
             var atrb = GetAttribute(ode, sourceData);
             if (atrb == null) { return ode.AtrbValue; } // Not sure what to do here....
 
@@ -158,12 +155,12 @@ namespace Intel.MyDeals.Entities
         /// <returns>True if values are equal, else false.</returns>
         public static bool IsValueEqual(this OpDataElementAtrb obj, object testValue, AttributeCollection attributeCollection, bool errorIsFalse = true)
         {
-            if(obj == null){ return false; }
+            if (obj == null) { return false; }
 
             var oav = obj.AtrbValue;
 
-            string val1  = $"{oav}";
-            string val2  = $"{testValue}";
+            string val1 = $"{oav}";
+            string val2 = $"{testValue}";
 
             bool isnulloremptyval1 = string.IsNullOrEmpty(val1);
             bool isnulloremptyval2 = string.IsNullOrEmpty(val2);
@@ -183,13 +180,13 @@ namespace Intel.MyDeals.Entities
                     $"{atrb.GetValueStronglyTyped(oav, false)}"
                     ==
                     $"{atrb.GetValueStronglyTyped(testValue, false)}";
-            } 
+            }
             catch (Exception ex)
             {
 #if DEBUG
                 OpLogPerf.Log(ex);
 #endif
-                if(!errorIsFalse)
+                if (!errorIsFalse)
                 {
                     throw;
                 }
@@ -327,7 +324,6 @@ namespace Intel.MyDeals.Entities
             return false;
         }
 
-
         public static bool IsValueDifferentFromOrig(this IOpDataElement obj, AttributeCollection attributeCollection)
         {
             if (obj == null) { return false; }
@@ -349,16 +345,19 @@ namespace Intel.MyDeals.Entities
                     case "MONEY":
                     case "INT":
                         return Math.Abs(float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) - float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString())) > 0;
+
                     case "DATE":
                     case "DATETIME":
                         return (DateTime)atrb.GetValueStronglyTyped(testValue, false) == (DateTime)atrb.GetValueStronglyTyped(oav, false);
-                    case "VARCHAR":
+
                     case "BIT":
                         return false;
+
+                    case "VARCHAR":
                     case "STRING":
                         return !string.Equals(
-                            testValue.ToString().Replace(" ",""), 
-                            oav.ToString().Replace(" ", ""), 
+                            testValue.ToString().Replace(" ", ""),
+                            oav.ToString().Replace(" ", ""),
                             StringComparison.OrdinalIgnoreCase);
                 }
             }
@@ -393,9 +392,11 @@ namespace Intel.MyDeals.Entities
                     case "MONEY":
                     case "INT":
                         return float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) > float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString());
+
                     case "DATE":
                     case "DATETIME":
                         return (DateTime)atrb.GetValueStronglyTyped(testValue, false) > (DateTime)atrb.GetValueStronglyTyped(oav, false);
+
                     case "VARCHAR":
                     case "BIT":
                         return false;
@@ -410,7 +411,6 @@ namespace Intel.MyDeals.Entities
 
             return false;
         }
-
 
         public static bool IsValueDecreasedFromOrig(this IOpDataElement obj, AttributeCollection attributeCollection)
         {
@@ -433,9 +433,11 @@ namespace Intel.MyDeals.Entities
                     case "MONEY":
                     case "INT":
                         return float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) < float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString());
+
                     case "DATE":
                     case "DATETIME":
                         return (DateTime)atrb.GetValueStronglyTyped(testValue, false) < (DateTime)atrb.GetValueStronglyTyped(oav, false);
+
                     case "VARCHAR":
                     case "BIT":
                         return false;
@@ -451,7 +453,6 @@ namespace Intel.MyDeals.Entities
             return false;
         }
 
-
         /// <summary>
         /// Get the Attribue Value as a specific type.
         /// Returns default(t) on error.
@@ -464,7 +465,6 @@ namespace Intel.MyDeals.Entities
         {
             return AtrbValue<T>(ode, default(T), false, sourceData);
         }
-
 
         /// <summary>
         /// Get the Attribue Value as a specific type
@@ -481,7 +481,7 @@ namespace Intel.MyDeals.Entities
             {
                 if (typeof(T) == typeof(string))
                 {
-                    return (T)((object) $"{ode.AtrbValue}");
+                    return (T)((object)$"{ode.AtrbValue}");
                 }
 
                 T ret = (T)ode.AtrbValueTyped(sourceData, throwCastErrors);
@@ -499,15 +499,13 @@ namespace Intel.MyDeals.Entities
                 {
                     throw;
                 }
-                
+
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine(ex);
 #endif
             }
             return errorDefault;
         }
-
-       
 
         /// <summary>
         /// See if set attribute value conforms to attribute metadata length specification
@@ -518,13 +516,12 @@ namespace Intel.MyDeals.Entities
         public static bool IsInMaxLength(this OpDataElementAtrb ode, AttributeCollection sourceData)
         {
             if (ode == null) { return true; } // Well, value not set is lenght = 0, so this is sort'a true...
-            
+
             var atrb = GetAttribute(ode, sourceData);
             if (atrb == null) { return false; } // Not sure what to do here...
 
             return atrb.IsLengthCheck($"{ode.AtrbValue}");
         }
-
 
         /// <summary>
         /// Is the attribute set values database save appropriate.  Checks:
@@ -542,39 +539,38 @@ namespace Intel.MyDeals.Entities
 
 #if DEBUG
             string debugDetails = $"DcID: {ode.DcID}, DcParentSID: {ode.DcParentID}, DcType: {ode.DcType}, DcParentType: {ode.DcParentType}, AtrbID: {ode.AtrbID}, DimID: {ode.DimID}, DimKeyString: {ode.DimKeyString}, ElementID: {ode.ElementID}, ExtraDimKeyString: {ode.ExtraDimKeyString}, State: {ode.State}\nValue: \"{ode.AtrbValue}\"";
-                
+
 #endif
 
-            if (ode.AtrbID <= 0 || ode.DcID == 0) 
-            { 
+            if (ode.AtrbID <= 0 || ode.DcID == 0)
+            {
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine(debugDetails);
                 System.Diagnostics.Debug.WriteLine($"Invalid AtrbID or DcID. {ode}");
 #endif
-                return false; 
+                return false;
             }
-            
+
             // If deleted, we don't care about the value....
             if (ode.State == OpDataElementState.Deleted) { return true; }
 
             // Value cannot be blanks...
-            if (ode.AtrbValue == null || string.IsNullOrEmpty($"{ode.AtrbValue}".Trim())) 
+            if (ode.AtrbValue == null || string.IsNullOrEmpty($"{ode.AtrbValue}".Trim()))
             {
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine(debugDetails);
                 System.Diagnostics.Debug.WriteLine($"Attribute Value cannot be blank unless State is Deleted. {ode}");
 #endif
-                return false; 
+                return false;
             }
 
-            
-            if(AtrbValueTyped(ode, sourceData) == null)
+            if (AtrbValueTyped(ode, sourceData) == null)
             {
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine(debugDetails);
                 System.Diagnostics.Debug.WriteLine($"Failed type conversion. {ode}");
 #endif
-                return false; 
+                return false;
             }
 
             if (!IsInMaxLength(ode, sourceData))
@@ -588,8 +584,6 @@ namespace Intel.MyDeals.Entities
 
             return true;
         }
-
-
 
         public static OpDataCollector CopyToOpDataCollector(this List<OpDataElement> sourceData, int id, int parentId)
         {
@@ -607,6 +601,5 @@ namespace Intel.MyDeals.Entities
 
             return odc;
         }
-
     }
 }

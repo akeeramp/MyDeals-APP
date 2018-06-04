@@ -986,6 +986,30 @@ namespace Intel.MyDeals.BusinessRules
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedDecreaseDes = r.Dc.GetDataElementsWhere(d => onChangeDecreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDecreasedFromOrig(atrbMstr)).ToList();
 
+            var titleDe = changedDes.Where(x => x.AtrbCd == AttributeCodes.TITLE);
+
+            // Product title changed..Check if Atrb 15 changed
+            if (titleDe.Any())
+            {
+                // Get all the products
+                List<OpDataElement> deProds = r.Dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER).ToList();
+
+                // Get products changed value order them
+                var deProdsValue = deProds.Select(x => x.AtrbValue.ToString()).OrderBy(x => x);
+
+                // Get products original value order them
+                var deProdsOriginalValue = deProds.Select(x => x.OrigAtrbValue.ToString()).OrderBy(x => x);
+
+                // Compare sequentially, if its equal there is no change
+                var isProductNotChanged = deProdsValue.SequenceEqual(deProdsOriginalValue, StringComparer.OrdinalIgnoreCase);
+
+                if (isProductNotChanged)
+                {
+                    // When products attributes have not changed, only order changed, remove the TITLE major change (DT Ci3, MB Ci3 -> Mb Ci3, DT Ci3)
+                    changedDes.Remove(titleDe.FirstOrDefault());
+                }
+            }
+
             // if not a major change... exit
             if (!changedDes.Any() && !changedIncreaseDes.Any() && !changedDecreaseDes.Any() && r.Dc.DcID > 0) return;
 
