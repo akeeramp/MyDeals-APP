@@ -727,11 +727,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
 					        	// Transform negative numbers into positive
 					        	if (colIndex == qtyIndex) {
-					        		var intVal = parseInt(value.value);
+					        	    var intVal = parseInt(value.value);
 					        		myRow["QTY"] = (isNaN(intVal) ? 1 : Math.abs(intVal));
 					        	}
 					        	if (colIndex == dscntPerLnIndex) {
-					        		myRow["DSCNT_PER_LN"] = (Math.abs(parseInt(value.value) || 0) || 0);
+					        	    myRow["DSCNT_PER_LN"] = (Math.abs(parseFloat(value.value).toFixed(2) || 0) || 0);
 					        	}
 					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
