@@ -26,7 +26,7 @@ namespace Intel.MyDeals.BusinessLogic
         public List<logFileObject> GetOpaqueLog(DateTime startDate, DateTime endDate)
         {
             DirectoryInfo directory = new DirectoryInfo(opLogPath);//Assuming Temp is your Folder
-            FileInfo[] Files = directory.GetFiles("*.log", SearchOption.TopDirectoryOnly).Where(file => file.LastWriteTime >= startDate && file.LastWriteTime <= endDate && file.FullName.Contains(FILE_NAME)).ToArray();
+            FileInfo[] Files = directory.GetFiles("*.txt", SearchOption.TopDirectoryOnly).Where(file => file.LastWriteTime >= startDate && file.LastWriteTime <= endDate && file.FullName.Contains(FILE_NAME)).ToArray();
 
             List<logFileObject> fileLog = new List<logFileObject>();
             foreach (FileInfo file in Files)
