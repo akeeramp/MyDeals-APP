@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -47,6 +48,40 @@ namespace Intel.MyDeals.DataLibrary
             return val;
         }
 
+        string MoneyMult(string moneyValue, string qty)
+        {
+            var val = "$0";
+            if (string.IsNullOrEmpty(qty))
+            {
+                qty = "1";
+            }
+            if (!string.IsNullOrEmpty(moneyValue))
+            {
+                val = (decimal.Parse(moneyValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) * decimal.Parse(qty)).ToString("C2");
+            }
+            return val;
+        }
+
+        string MoneyAdd(string moneyValue1, string moneyValue2)
+        {
+            var val = moneyValue1;
+            if (!(string.IsNullOrEmpty(moneyValue1) || string.IsNullOrEmpty(moneyValue2)))
+            {
+                val = (decimal.Parse(moneyValue1, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) + decimal.Parse(moneyValue2, NumberStyles.AllowCurrencySymbol | NumberStyles.Number)).ToString("C2");
+            }
+            return val;
+        }
+
+        string MoneySub(string moneyValue1, string moneyValue2)
+        {
+            var val = moneyValue1;
+            if (!(string.IsNullOrEmpty(moneyValue1) || string.IsNullOrEmpty(moneyValue2)))
+            {
+                val = (decimal.Parse(moneyValue1, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) - decimal.Parse(moneyValue2, NumberStyles.AllowCurrencySymbol | NumberStyles.Number)).ToString("C2");
+            }
+            return val;
+        }
+
         static string EscapeSpecialChars(string xml)
         {
             xml = xml.Replace("&amp;", "and");
@@ -82,6 +117,8 @@ namespace Intel.MyDeals.DataLibrary
             txtStatus.Value = tracker == "" ? "Offer" : "Active";
             //txtStatus.Value = stage == "Draft" ? psStage : stage;
 
+            string qtyP1, qtyS1, qtyS2, qtyS3, qtyS4, qtyS5, qtyS6, qtyS7, qtyS8, qtyS9;
+
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
             txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
@@ -89,43 +126,67 @@ namespace Intel.MyDeals.DataLibrary
             txtP1Ecap.Value = GetMoneyValue("PECAPPrice");
             txtP1ProdName.Value = GetValue("PProdDesc");
             txtP1ProdSeg.Value = GetValue("PProdCat");
+            qtyP1 = GetValue("PQty");
 
             txtS1Ecap.Value = GetMoneyValue("S1ECAPPrice");
             txtS1ProdName.Value = GetValue("S1ProdDesc");
             txtS1ProdSeg.Value = GetValue("S1ProdCat");
+            qtyS1 = GetValue("S1Qty");
 
             txtS2Ecap.Value = GetMoneyValue("S2ECAPPrice");
             txtS2ProdName.Value = GetValue("S2ProdDesc");
             txtS2ProdSeg.Value = GetValue("S2ProdCat");
+            qtyS2 = GetValue("S2Qty");
 
             txtS3Ecap.Value = GetMoneyValue("S3ECAPPrice");
             txtS3ProdName.Value = GetValue("S3ProdDesc");
             txtS3ProdSeg.Value = GetValue("S3ProdCat");
+            qtyS3 = GetValue("S3Qty");
 
             txtS4Ecap.Value = GetMoneyValue("S4ECAPPrice");
             txtS4ProdName.Value = GetValue("S4ProdDesc");
             txtS4ProdSeg.Value = GetValue("S4ProdCat");
+            qtyS4 = GetValue("S4Qty");
 
             txtS5Ecap.Value = GetMoneyValue("S5ECAPPrice");
             txtS5ProdName.Value = GetValue("S5ProdDesc");
             txtS5ProdSeg.Value = GetValue("S5ProdCat");
+            qtyS5 = GetValue("S5Qty");
 
             txtS6Ecap.Value = GetMoneyValue("S6ECAPPrice");
             txtS6ProdName.Value = GetValue("S6ProdDesc");
             txtS6ProdSeg.Value = GetValue("S6ProdCat");
+            qtyS6 = GetValue("S6Qty");
 
             txtS7Ecap.Value = GetMoneyValue("S7ECAPPrice");
             txtS7ProdName.Value = GetValue("S7ProdDesc");
             txtS7ProdSeg.Value = GetValue("S7ProdCat");
+            qtyS7 = GetValue("S7Qty");
 
             txtS8Ecap.Value = GetMoneyValue("S8ECAPPrice");
             txtS8ProdName.Value = GetValue("S8ProdDesc");
             txtS8ProdSeg.Value = GetValue("S8ProdCat");
+            qtyS8 = GetValue("S8Qty");
 
             txtS9Ecap.Value = GetMoneyValue("S9ECAPPrice");
             txtS9ProdName.Value = GetValue("S9ProdDesc");
             txtS9ProdSeg.Value = GetValue("S9ProdCat");
+            qtyS9 = GetValue("S9Qty");
 
+            //calculate kit discount - Formula: (Sum of Component ECAPs * respective QTYs) - Kit ECAP = Kit Rebate Bundle Discount
+            txtK1DiscEcap.Value = "$0";
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtP1Ecap.Value, qtyP1));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS1Ecap.Value, qtyS1));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS2Ecap.Value, qtyS2));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS3Ecap.Value, qtyS3));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS4Ecap.Value, qtyS4));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS5Ecap.Value, qtyS5));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS6Ecap.Value, qtyS6));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS7Ecap.Value, qtyS7));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS8Ecap.Value, qtyS8));
+            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS9Ecap.Value, qtyS9));
+            txtK1DiscEcap.Value = MoneySub(txtK1DiscEcap.Value, txtK1Ecap.Value);
+            txtK1DiscEcap.Value = "-" + txtK1DiscEcap.Value;
 
             // T's and C's
             txtProject.Value = EscapeSpecialChars(GetValue("QltrProject"));
@@ -178,9 +239,14 @@ namespace Intel.MyDeals.DataLibrary
                 txtK1ProdName.Visible = false;
                 txtK1ProdSeg.Visible = false;
                 lblBlankK1.Visible = false;
+                lblK1Disc.Visible = false;
+                txtK1DiscEcap.Visible = false;
+                txtK1DiscProdName.Visible = false;
+                txtK1DiscProdSeg.Visible = false;
+                lblBlankK1Disc.Visible = false;
             }
 
-            //if (GetValue("SubKitCheck") == "N")  //TODO: need to implement a sub kit check  //string.IsNullOrEmpty(txtK2ProdName.Value)
+            //if (GetValue("SubKitCheck") == "N")  //TODO: need to implement a sub kit check from db
             if (string.IsNullOrEmpty(txtK2ProdName.Value))
             {
                 lblK2.Visible = false;
