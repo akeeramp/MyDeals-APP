@@ -35,6 +35,15 @@
                 }
             },
             {
+                state: 'admin.oplog',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/oplog/oplog.html',
+                    url: 'oplog',
+                    controller: 'OpLogController as vm',
+                }
+            },
+            {
                 state: 'admin.constants',
                 abstract: false,
                 config: {

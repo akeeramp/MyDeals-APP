@@ -2287,4 +2287,34 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String CUST_NM { set; get; }
     }
+
+    public class logFileObject
+    {
+        [DataMember]
+        public System.String fileName;
+
+        [DataMember]
+        public System.DateTime creationDate;
+
+        [DataMember]
+        public System.DateTime modifiedDate;
+
+        [DataMember]
+        public System.String errorType;
+
+        [DataMember]
+        public System.String errorMessage;
+
+        [DataMember]
+        public System.Int32 WWID;
+    }
+
+    public class logDate
+    {
+        [DataMember]
+        public System.DateTime startDate;
+
+        [DataMember]
+        public System.DateTime endDate;
+    }
 }

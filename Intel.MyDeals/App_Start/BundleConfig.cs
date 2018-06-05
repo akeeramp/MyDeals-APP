@@ -114,6 +114,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/cache/cache.service.js"
                 , "~/app/admin/cache/cache.manager.resize.directive.js"
+                , "~/app/admin/oplog/admin.oplog.controller.js"
+                , "~/app/admin/oplog/oplog.service.js"
                 , "~/app/admin/constants/admin.constants.controller.js"
                 , "~/app/admin/constants/constants.service.js"
                 , "~/app/admin/customer/admin.customer.controller.js"

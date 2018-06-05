@@ -69,6 +69,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -125,6 +126,7 @@
     <Compile Include="TestHarness\TestHarnessLib.cs" />
     <Compile Include="Timeline\TimelineLib.cs" />
     <Compile Include="UI Templates\UiTemplateLib.cs" />
+    <Compile Include="OpLog\OpLogLib.cs" />
     <Compile Include="UserPreferences\UserPreferencesLib.cs" />
     <Compile Include="WorkFlow\WorkFlowLib.cs" />
   </ItemGroup>

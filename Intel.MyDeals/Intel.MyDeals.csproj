@@ -253,6 +253,7 @@
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
+    <Compile Include="Controllers\API\OpLogController.cs" />
     <Compile Include="Controllers\API\CacheController.cs" />
     <Compile Include="Controllers\API\CostTestController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
@@ -337,6 +338,9 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\oplog\admin.oplog.controller.js" />
+    <Content Include="app\admin\oplog\oplog.service.js" />
+    <Content Include="app\admin\oplog\oplog.html" />
     <Content Include="app\admin\meetComp\admin.meetComp.controller.js" />
     <Content Include="app\admin\meetComp\meetComp.html" />
     <Content Include="app\admin\meetComp\meetComp.service.js" />
@@ -1855,7 +1859,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55490</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
