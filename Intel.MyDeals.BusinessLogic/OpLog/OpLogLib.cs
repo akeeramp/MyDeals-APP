@@ -11,7 +11,7 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class OpLogLib : IOpLogLib
     {
-        string fileExtention = ".log";
+        string fileExtention = ".txt";
         string opLogPath = WebConfigurationManager.AppSettings["opLogPath"];
         public OpLogLib()
         {
