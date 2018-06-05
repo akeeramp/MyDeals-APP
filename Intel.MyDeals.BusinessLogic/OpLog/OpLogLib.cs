@@ -11,22 +11,23 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class OpLogLib : IOpLogLib
     {
-        string fileExtention = ".txt";
-        string opLogPath = WebConfigurationManager.AppSettings["opLogPath"];
+        private string fileExtention = ".txt";
+        private string opLogPath = WebConfigurationManager.AppSettings["opLogPath"];
+        private string FILE_NAME = "FileLogPerf";
+
         public OpLogLib()
         {
-            //_dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
-         /// <summary>
-         /// Return all the Log Captured by Opaque
+        /// <summary>
+        /// Return all the Log Captured by Opaque
         /// </summary>
         /// <returns></returns>
         public List<logFileObject> GetOpaqueLog(DateTime startDate, DateTime endDate)
-        {           
+        {
             DirectoryInfo directory = new DirectoryInfo(opLogPath);//Assuming Temp is your Folder
-            FileInfo[] Files = directory.GetFiles().Where(file => file.LastWriteTime >= startDate && file.LastWriteTime <= endDate && file.FullName.Contains(fileExtention)).ToArray();
-            
+            FileInfo[] Files = directory.GetFiles("*.log", SearchOption.TopDirectoryOnly).Where(file => file.LastWriteTime >= startDate && file.LastWriteTime <= endDate && file.FullName.Contains(FILE_NAME)).ToArray();
+
             List<logFileObject> fileLog = new List<logFileObject>();
             foreach (FileInfo file in Files)
             {
@@ -36,7 +37,6 @@ namespace Intel.MyDeals.BusinessLogic
                 o.modifiedDate = file.LastWriteTime;
 
                 fileLog.Add(o);
-
             }
             return fileLog;
         }
@@ -47,9 +47,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public string GetDetailsOpaqueLog(string fileName)
         {
-            return System.IO.File.ReadAllText(@"C:\Windows\Temp\"+ fileName + fileExtention);            
+            return System.IO.File.ReadAllText(@"C:\Windows\Temp\" + fileName + fileExtention);
         }
-
-       
     }
 }
