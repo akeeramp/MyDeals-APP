@@ -186,7 +186,7 @@ namespace Intel.MyDeals.DataLibrary
             txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS8Ecap.Value, qtyS8));
             txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS9Ecap.Value, qtyS9));
             txtK1DiscEcap.Value = MoneySub(txtK1DiscEcap.Value, txtK1Ecap.Value);
-            txtK1DiscEcap.Value = "-" + txtK1DiscEcap.Value;
+            txtK1DiscEcap.Value = txtK1DiscEcap.Value;
 
             // T's and C's
             txtProject.Value = EscapeSpecialChars(GetValue("QltrProject"));
