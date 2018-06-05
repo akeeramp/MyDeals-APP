@@ -2288,10 +2288,12 @@
                     if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT") {
                         for (var s = 0; s < sData.length; s++) {
                             if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
-                            if (sData[s]["REBATE_TYPE"] === "TENDER") {
-                                hasTender = true;
-                            } else {
-                                hasNonTender = true;
+                            if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" || sData[s].TIER_NBR === 1) {
+                                if (sData[s]["REBATE_TYPE"] === "TENDER") {
+                                    hasTender = true;
+                                } else {
+                                    hasNonTender = true;
+                                }
                             }
                         }
                         if (errDeals.length > 0 && hasTender && hasNonTender) {
