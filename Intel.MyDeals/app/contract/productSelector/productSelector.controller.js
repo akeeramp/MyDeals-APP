@@ -1009,8 +1009,8 @@
             });
 
             if (vm.dealType === "KIT") {
-                contractProduct = Object.keys(pricingTableSysProducts).map(function (x) {
-                    return x;
+                contractProduct = vm.addedProducts.map(function (x) {
+                    return x.DERIVED_USR_INPUT;
                 }).join(',');
             }
 
