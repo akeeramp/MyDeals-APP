@@ -2279,7 +2279,7 @@
                     }
 
 
-                    // 
+                    //
                     // This is a temporary fix to mock-stop users from mixing Tender with non-Tender deals.  Once the Stablization release happens, we can remove this check.
                     //
                     var hasTender = false;
@@ -2299,7 +2299,7 @@
                         if (errDeals.length > 0 && hasTender && hasNonTender) {
                             for (var t = 0; t < errDeals.length; t++) {
                                 var el = sData[errDeals[t]];
-                                    if (!el._behaviors) el._behaviors = {};
+                                if (!el._behaviors) el._behaviors = {};
                                 if (!el._behaviors.isError) el._behaviors.isError = {};
                                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
                                 el._behaviors.isError["REBATE_TYPE"] = true;
@@ -2400,8 +2400,11 @@
                             }
                         }
                     }
-
-                    sData = $scope.deNormalizeData(util.deepClone(sData));
+                    // We should denormalize pricing table row only when we are hitting MT
+                    // If there are errors dont denormalize, else PricingTableRow and spreadSheet data will be different
+                    if (!(errs.PRC_TBL_ROW !== undefined && errs.PRC_TBL_ROW.length !== 0)) {
+                        sData = $scope.deNormalizeData(util.deepClone(sData));
+                    }
                 }
             }
 
@@ -3120,14 +3123,14 @@
         }
 
         $scope.calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
-        	var kitRebateTotalVal = 0;
-        	for (var i = 0; i < numOfTiers; i++) {
-        		if (isDataPivoted) {
-        			var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
+            var kitRebateTotalVal = 0;
+            for (var i = 0; i < numOfTiers; i++) {
+                if (isDataPivoted) {
+                    var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
                     kitRebateTotalVal += (qty * parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
-        		} else if (i < data.length) {
-        			var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
-        			kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
+                } else if (i < data.length) {
+                    var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
+                    kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
                 }
             }
             var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
@@ -4137,18 +4140,18 @@
             $scope.goto('Compliance', 'contract.compliance');
         }
         $scope.gotoManage = function () {
-        	if (!$scope.enableFlowBtn()) return;
-        	$scope.isAddPricingTableHidden = true;
-        	$scope.isAddStrategyHidden = true;
-        	$scope.isAddStrategyBtnHidden = true;
-        	$scope.isSearchHidden = true;
+            if (!$scope.enableFlowBtn()) return;
+            $scope.isAddPricingTableHidden = true;
+            $scope.isAddStrategyHidden = true;
+            $scope.isAddStrategyBtnHidden = true;
+            $scope.isSearchHidden = true;
 
-        	$scope.goto('Manage', 'contract.summary');
+            $scope.goto('Manage', 'contract.summary');
         }
         $scope.goto = function (mode, state) {
-        	//if ($scope.flowMode === mode) return;
-        	$scope.flowMode = mode;
-        	$state.go(state, { cid: $scope.contractData.DC_ID });
+            //if ($scope.flowMode === mode) return;
+            $scope.flowMode = mode;
+            $state.go(state, { cid: $scope.contractData.DC_ID });
         }
 
         $scope.downloadQuoteLetter = function (customerSid, objTypeSid, objSid) {
@@ -4200,10 +4203,10 @@
         }
 
         $scope.isOverCharacterLimit = function (str, limit) {
-        	if (typeof str !== 'string') {
-        		return false;
-        	}
-        	return (str.length >= limit);
+            if (typeof str !== 'string') {
+                return false;
+            }
+            return (str.length >= limit);
         }
 
     }
