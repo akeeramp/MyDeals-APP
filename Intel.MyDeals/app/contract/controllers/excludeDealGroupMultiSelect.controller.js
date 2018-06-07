@@ -32,9 +32,11 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     }
     vm.filterData = function (e) {
         if (e) {
-            dataSourceSuggested.filter({ field: "IS_TOUCHED", operator: "eq", value: 1 });
+            dataSourceSuggested.filter({ field: "selected", operator: "eq", value: true });
             vm.toggleMessage = 'On';
             vm.toggleClass = 'txtOn';
+            dataSourceSuggested.read(); 
+            vm.delCounter = 0;
         }
         else {
             vm.delCounter = 0;
@@ -85,7 +87,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 				    if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
 						vm.gridData[i].selected = true;
                     }
-
+                    
                     if (vm.IS_EXCLUDED.indexOf(vm.gridData[i]["OVLP_DEAL_ID"]) > -1) {
                         vm.gridData[i]["IS_TOUCHED"] = 1;
                     }
@@ -155,6 +157,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			        OVLP_MAX_RPU: dataItem["MAX_RPU"],
                     OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"],
                     GRP_BY: 'SELF',
+                    selected: true,
                     SELF_OVLP: 1
                 });
                 
@@ -258,13 +261,32 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 	};
 
 	vm.selectProduct = function (dataItem) {
-		if (dataItem.selected) {
-			// checked
-			selectedGridDict[dataItem.OVLP_DEAL_ID] = true;
+        var varItem = vm.cellCurrValues.replace(/ /g, '').split(',');
+        if (dataItem.selected) {
+            // checked
+            selectedGridDict[dataItem.OVLP_DEAL_ID] = true;
+            if (varItem.indexOf(dataItem.OVLP_DEAL_ID) == -1) {
+                varItem.push(dataItem.OVLP_DEAL_ID);// = vm.cellCurrValues + ", " + vm.cellCurrValues;
+            }
+            //currValsArr.push(dataItem.OVLP_DEAL_ID, true);
 		} else {
 			// unchecked
-			delete selectedGridDict[dataItem.OVLP_DEAL_ID];
+            delete selectedGridDict[dataItem.OVLP_DEAL_ID];
+            delete selectedGridDict[dataItem.OVLP_DEAL_ID];
+            var indx = -1;
+            varItem.some(function (e, i) {
+                if (e == dataItem.OVLP_DEAL_ID) {
+                    indx = i;
+                    return true;
+                }
+            });
+            if (indx > -1) {
+                varItem.splice(indx,1);
+            }
+            //delete currValsArr(dataItem.OVLP_DEAL_ID);
         }
+
+        vm.cellCurrValues = varItem.toString();
         var indx = -1;
         vm.gridData.some(function (e, i) {
             if (e.OVLP_DEAL_ID == dataItem.OVLP_DEAL_ID) {
