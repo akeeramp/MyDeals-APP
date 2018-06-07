@@ -41,12 +41,13 @@
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 
     var env = ViewBag.AppToken == null || ViewBag.AppToken.OpEnvironment == null || ViewBag.AppToken.OpEnvironment.EnvLoc == null ? "UNKNOWN" : ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
-    //TODO: Fetch it from DB 
+    //TODO: Fetch it from DB
     var GAID = env == "CONS" ? "UA-47054404-40" : "UA-47054404-41";
+    if (env == "PROD") { GAID = "UA-47054404-42"; }
 }
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=@GAID"></script>
-<script>    
+<script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());

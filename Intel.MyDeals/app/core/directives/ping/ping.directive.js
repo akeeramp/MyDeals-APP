@@ -13,7 +13,7 @@ function ping($timeout) {
         transclude: true,
         templateUrl: '/app/core/directives/ping/ping.directive.html',
         controller: ['$scope', 'dataService', function ($scope, dataService) {
-            $scope.pingCycle = 15000;
+            $scope.pingCycle = 60000;
             $scope.pingValues = [];
             $scope.pingTime = null;
 

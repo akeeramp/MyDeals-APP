@@ -131,6 +131,9 @@
     <None Include="App.utt.config">
       <DependentUpon>App.config</DependentUpon>
     </None>
+    <None Include="App.prod.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
     <None Include="RunCommands\JMSDebug.cmd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -180,6 +183,8 @@
     <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\ciar\$(TargetFileName).config" Transform="App.ciar.config" />
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cinr\" />
     <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cinr\$(TargetFileName).config" Transform="App.cinr.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\prod\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\prod\$(TargetFileName).config" Transform="App.prod.config" />
     <!--Force build process to use the transformed configuration file from now on.-->
     <!--<ItemGroup>
       <AppConfigWithTargetPath Remove="App.config" />
