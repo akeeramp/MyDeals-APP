@@ -25,6 +25,6 @@ function showHelpTopic(helpTopic) {
     if (helpTopic && String(helpTopic).length > 0) {
         openInNewTab('Help?topic=' + helpTopic, '_blank');
     } else {
-        openInNewTab('Help', '_blank');
+        openInNewTab('Help?topic=intro', '_blank');
     }
 }
