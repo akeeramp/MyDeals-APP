@@ -938,7 +938,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> atrbs = new List<string> { AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD };
+            List<string> atrbs = new List<string> { AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD, AttributeCodes.EXPIRE_YCS2 };
 
             List<IOpDataElement> des = r.Dc.GetDataElementsIn(atrbs).Where(d => d.State != OpDataElementState.Unchanged).ToList();
             if (!des.Any()) return;
@@ -950,9 +950,19 @@ namespace Intel.MyDeals.BusinessRules
                 if (de.AtrbValue.ToString() == de.OrigAtrbValue.ToString()) continue;
 
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
-                if (atrb == null || de.OrigAtrbValue.ToString() == string.Empty) continue;
+                if (atrb == null) continue;
 
-                r.Dc.AddTimelineComment($"{ atrb.ATRB_LBL } changed from {de.OrigAtrbValue} to { de.AtrbValue }");
+                switch (de.AtrbCd)
+                {
+                    case AttributeCodes.EXPIRE_YCS2:
+                        if (de.AtrbValue.ToString() == "Yes") r.Dc.AddTimelineComment($"YCS2 deal has been expired");
+                        break;
+                    default:
+                        if (de.OrigAtrbValue.ToString() == string.Empty) continue;
+                        r.Dc.AddTimelineComment($"{ atrb.ATRB_LBL } changed from {de.OrigAtrbValue} to { de.AtrbValue }");
+                        break;
+                }
+
             }
         }
 

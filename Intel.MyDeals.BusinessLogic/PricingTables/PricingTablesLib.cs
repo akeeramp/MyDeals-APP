@@ -371,6 +371,8 @@ namespace Intel.MyDeals.BusinessLogic
                     KeyIdentifiers = new[] { dc.DcID }
                 });
 
+                dc.AddTimelineComment($"Wip Deal moved from {stageIn} to {targetStage}.");
+
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
             }
