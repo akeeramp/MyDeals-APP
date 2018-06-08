@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/4/2018 12:19:55 PM
+File Updated: 6/7/2018 10:20:32 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1722,6 +1722,15 @@ namespace Intel.MyDeals.Entities {
 		public const string PCSR_NBR = "PCSR_NBR";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 130
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string PNL_SPLIT = "PNL_SPLIT";
+
+		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2014
@@ -2573,6 +2582,7 @@ namespace Intel.MyDeals.Entities {
 		public const string AjayTest = "AjayTest";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
+		public const string BATCH_STATUS = "BATCH_STATUS";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
 		public const string COST_TEST_PRD_MODE_1 = "COST_TEST_PRD_MODE_1";
@@ -2591,6 +2601,7 @@ namespace Intel.MyDeals.Entities {
 		public const string ESDR_STAGE_PURGE_AFTER_X_DAYS = "ESDR_STAGE_PURGE_AFTER_X_DAYS";
 		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
 		public const string HRCDS_LINKED_SERVER_CONS = "HRCDS_LINKED_SERVER_CONS";
+		public const string HRCDS_LINKED_SERVER_PERF = "HRCDS_LINKED_SERVER_PERF";
 		public const string HRCDS_LINKED_SERVER_PROD = "HRCDS_LINKED_SERVER_PROD";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
@@ -2614,10 +2625,13 @@ namespace Intel.MyDeals.Entities {
 		public const string PeRF_MYDEALS_PRIMARY = "PeRF-MYDEALS-PRIMARY ";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
+		public const string RECYCLE_CACHE_COUNT_NODE1 = "RECYCLE_CACHE_COUNT_NODE1";
+		public const string RECYCLE_CACHE_COUNT_NODE2 = "RECYCLE_CACHE_COUNT_NODE2";
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
 		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
+		public const string VERBOSE_LOG_TO_DB = "VERBOSE_LOG_TO_DB";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";
 		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";
 	}
@@ -2753,13 +2767,13 @@ namespace Intel.MyDeals.Entities {
 			new List<OpDataElementTypeItem>
 			{
 				new OpDataElementTypeItem {Id = 1, OpDeType = OpDataElementType.CNTRCT, Alias = "CNTRCT", Description = "Contract", Order = 10 },
-				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PRC_ST, Alias = "PRC_ST", Description = "PricingStrategy", Order = 20 },
-				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PRC_TBL, Alias = "PRC_TBL", Description = "PricingTable", Order = 30 },
-				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PRC_TBL_ROW, Alias = "PRC_TBL_ROW", Description = "PricingTableRow", Order = 40 },
-				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Description = "WipDeals", Order = 50 },
-				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Description = "Deals", Order = 60 },
-				new OpDataElementTypeItem {Id = 7, OpDeType = OpDataElementType.MASTER, Alias = "MASTER", Description = "TenderMaster", Order = 70 },
-				new OpDataElementTypeItem {Id = 8, OpDeType = OpDataElementType.PTR_SNAPSHT, Alias = "PTR_SNAPSHT", Description = "PricingTableRowSnapshot", Order = 80 },
+				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PRC_ST, Alias = "PRC_ST", Description = "Pricing Strategy", Order = 20 },
+				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PRC_TBL, Alias = "PRC_TBL", Description = "Pricing Table", Order = 30 },
+				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PRC_TBL_ROW, Alias = "PRC_TBL_ROW", Description = "Pricing Table Row", Order = 40 },
+				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Description = "Deals", Order = 50 },
+				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Description = "Payable Deals", Order = 60 },
+				new OpDataElementTypeItem {Id = 7, OpDeType = OpDataElementType.MASTER, Alias = "MASTER", Description = "Tender Master", Order = 70 },
+				new OpDataElementTypeItem {Id = 8, OpDeType = OpDataElementType.PTR_SNAPSHT, Alias = "PTR_SNAPSHT", Description = "Pricing Table Row Snapshot", Order = 80 },
 			},
 
 			new Dictionary<OpDataElementType, OpDataElementType>
