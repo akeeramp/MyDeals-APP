@@ -77,7 +77,7 @@ namespace Intel.MyDeals.BusinessRules
             List<string> actions = DataCollections.GetWorkFlowItems()
                 .Where(w =>
                 w.WF_NM == "General WF" &&
-                (w.OBJ_TYPE == opDataElementType.ToDesc() || w.OBJ_TYPE == "ALL_TYPES") &&
+                (w.OBJ_TYPE == opDataElementType.ToDesc() || w.OBJ_TYPE == "ALL_TYPES" || w.OBJ_TYPE == "ALL OBJECT TYPES") &&
                 (w.OBJ_SET_TYPE_CD == objSetType || w.OBJ_SET_TYPE_CD == "ALL_TYPES") &&
                 w.WFSTG_CD_SRC == stage &&
                 w.ROLE_TIER_NM == opUserToken.Role.RoleTier).Select(w => w.WFSTG_ACTN_NM).ToList();
