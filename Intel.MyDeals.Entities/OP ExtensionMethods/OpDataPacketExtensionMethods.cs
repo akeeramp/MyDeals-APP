@@ -125,6 +125,11 @@ namespace Intel.MyDeals.Entities
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 60));
             foreach (OpDataCollector dc in packet.AllDataCollectors.Where(d => dealIds.Contains(d.DcID)))
             {
+                IOpDataElement de = dc.GetDataElement(AttributeCodes.WF_STG_CD);
+                if (de != null && de.State == OpDataElementState.Modified)
+                {
+                    dc.AddTimelineComment($"Deal state chaged from {de.OrigAtrbValue} to {de.AtrbValue}");
+                }
                 dc.AddTimelineComment("Tracker number(s) generated");
             }
 
