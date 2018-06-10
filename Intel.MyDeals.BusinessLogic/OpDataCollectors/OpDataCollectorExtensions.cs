@@ -167,6 +167,7 @@ namespace Intel.MyDeals.BusinessLogic
                                 newDe.SetDimKey("7:" + prdId + "/20:" + kvp.Key.Substring(kvp.Key.Length - 1));
                                 newDe.AtrbKey = newDe.AtrbCd + "|" + newDe.DimKeyString;
                                 newDe.AtrbValue = prdId;
+                                newDe.State = OpDataElementState.Modified;
 
                                 dc.DataElements.Add(newDe);
                             }
@@ -189,11 +190,7 @@ namespace Intel.MyDeals.BusinessLogic
                             }
                             else
                             {
-                                bool dimExists = incomingPrds.Exists(prd => prd.Value.ToString() == dePrd.AtrbValue.ToString());
-                                if (!dimExists)
-                                {
-                                    dePrd.AtrbValue = string.Empty;
-                                }
+                                dePrd.AtrbValue = string.Empty;
                             }
                         }
                     }
