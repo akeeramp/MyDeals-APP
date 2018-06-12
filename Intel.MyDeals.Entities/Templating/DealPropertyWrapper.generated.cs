@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/7/2018 12:22:07 PM
+File Updated: 6/12/2018 8:47:16 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2410,6 +2410,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
+		public static MyDealsAttribute IS_TENDER = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_TENDER",
+			ATRB_DESC = "Is a Tender Contract",
+			ATRB_LBL = "Is Tender",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3707,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute KIT_IND = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "KIT_IND",
@@ -3033,6 +3049,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute PNL_SPLIT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PNL_SPLIT",
+			ATRB_DESC = "P&L Split",
+			ATRB_LBL = "P&L Split",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 130,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PRC_GRP_CD = new MyDealsAttribute()
 		{

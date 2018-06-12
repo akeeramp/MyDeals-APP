@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/7/2018 10:20:32 PM
+File Updated: 6/12/2018 8:46:36 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1371,6 +1371,15 @@ namespace Intel.MyDeals.Entities {
 		public const string IS_SUPER_USER = "IS_SUPER_USER";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3707
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_TENDER = "IS_TENDER";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7065
@@ -2593,6 +2602,7 @@ namespace Intel.MyDeals.Entities {
 		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
 		public const string DB_LOGGING = "DB_LOGGING";
+		public const string DCS_DEAL_NOFILTER = "DCS_DEAL_NOFILTER";
 		public const string ECAP_KIT_MIGRATION = "ECAP_KIT_MIGRATION";
 		public const string ECAP_MIGRATION = "ECAP_MIGRATION";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
@@ -2614,6 +2624,7 @@ namespace Intel.MyDeals.Entities {
 		public const string LOCKED_OUT_ROLES = "LOCKED_OUT_ROLES";
 		public const string MISC_MIGRATION = "MISC_MIGRATION";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
+		public const string MYDL_1ST_BUILD = "MYDL_1ST_BUILD";
 		public const string NASP_PTL_Deal_Dtl_Load_St_Dt = "NASP_PTL_Deal_Dtl_Load_St_Dt";
 		public const string NEW_ACCOUNT_REVIEWER_APAC = "NEW_ACCOUNT_REVIEWER_APAC";
 		public const string NEW_ACCOUNT_REVIEWER_ASMO = "NEW_ACCOUNT_REVIEWER_ASMO";
