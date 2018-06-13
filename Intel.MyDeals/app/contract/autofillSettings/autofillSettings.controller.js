@@ -13,7 +13,8 @@
     function AutofillSettingsController($filter, $scope, $uibModalInstance, autofillData, dataService, logger) {
         var vm = this;
         vm.autofillData = autofillData;
-
+        vm.rebateTypeTitle = vm.autofillData.ISTENDER ? "Tender Table" : "Pricing Table";
+        
         if (!!vm.autofillData.DEFAULT.GEO_COMBINED) {
             //add extra tag to GEO_COMBINED so that templates give it multiselect behavior
             autofillData.DEFAULT.GEO_COMBINED["extra"] = true;

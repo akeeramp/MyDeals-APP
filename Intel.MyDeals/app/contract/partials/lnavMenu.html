@@ -9,7 +9,7 @@
          ng-class="{'lnavBtnDisabled': ('contract.details' | isState) ? true : !_dirty }">
         <i class="intelicon-save-outlined"></i>
     </div>-->
-    <div class="fl navIconLnk" title="Add Pricing Strategy" ng-if="C_ADD_PRICING_STRATEGY" id="navIconAddPs" ng-click="toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
+    <div class="fl navIconLnk" title="Add {{ psTitle }}" ng-if="C_ADD_PRICING_STRATEGY" id="navIconAddPs" ng-click="toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
         <i class="intelicon-plus-max"></i>
     </div>
     <div class="fl navIconLnk" title="Filter contract" ng-click="toggleSearch()" ng-class="{'active': !isSearchHidden}" ng-show="isExistingContract()">
@@ -22,8 +22,8 @@
             <i class="intelicon-fast-forward"></i>
         </div>
     </div>
-    <div class="helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.DealManager_ContractNavigator);">
-        <i class="intelicon-help" style="font-size:30px !important"></i>
+    <div class="fl navIconLnk" title="Help" onclick="showHelpTopic(HelpTopicEnum.DealManager_ContractNavigator);">
+        <i class="intelicon-help"></i>
     </div>
     <div class="clearboth"></div>
 </div>

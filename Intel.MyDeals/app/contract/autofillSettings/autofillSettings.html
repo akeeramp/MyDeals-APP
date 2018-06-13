@@ -2,7 +2,7 @@
     <div class="autofill-settings modal-header">
         <div class="row">
             <div class="cursorArea autofillHeader">
-                <p class="autofill-header-title">{{vm.autofillData.DEALTYPE_DISPLAY}} Pricing Table Autofill Settings</p>
+                <p class="autofill-header-title">{{vm.autofillData.DEALTYPE_DISPLAY}} {{vm.rebateTypeTitle}} Autofill Settings</p>
                 <p class="autofill-header-tip">Use the selections below to auto-populate your deal table, you may also overwrite the autofill selections made here in the grid</p>
             </div>
         </div>
@@ -11,7 +11,7 @@
         <div class="row" style="padding-bottom:50px">
             <div class="col-md-8">
                 <div ng-repeat="(key, value) in vm.autofillData.DEFAULT">
-                    <div ng-if="value.type == 'BUTTONGROUP'">
+                    <div ng-if="value.type == 'BUTTONGROUP'" ng-hide="vm.autofillData.ISTENDER && key == 'REBATE_TYPE'">
 
                         <div op-control-data-element
                              op-class="'md intel'"

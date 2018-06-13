@@ -42,6 +42,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.switchingTabs = false;
     var unlimitedVal = "Unlimited"; // TODO: Hook up to default from db maybe?
 
+    $scope.saveDesc = "Save your " + $scope.root.ptTitle + ", validate the products, and stay in your " + $scope.root.ptTitle + " Editor";
 
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
@@ -3383,7 +3384,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function validatePricingTableProducts() {
         if (!$scope._dirty) return;
 
-        if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Editor Save & Validate", "UX");
+        if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock($scope.ptTitle + " Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false, true);
     }

@@ -171,8 +171,8 @@
                     </td>
                     <td style="width: 50px; text-align: center;"></td>
                     <td>
-                        <span class="k-textbox k-space-left" style="width: 280px; margin-top: -4px;">
-                            <input type="text" placeholder="Search for pricing strategies or tables" ng-model="titleFilter" />
+                        <span class="k-textbox k-space-left" style="width: 300px; margin-top: -4px;">
+                            <input type="text" placeholder="Search for {{psTitle}} or {{ptTitle}}" ng-model="titleFilter" />
                             <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
                         </span>
                     </td>
@@ -203,7 +203,7 @@
                     <!--<td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Cancel</td>-->
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
-                    <td style="line-height: 1.1em;">Pricing Strategy / Table Name</td>
+                    <td style="line-height: 1.1em;">{{psTitle}} / {{ptTitle}}</td>
                     <!--<td style="width: 100px; text-align: center;"># of Tables</td>-->
                     <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                         <btn-run-pct-mct ng-model="root"
@@ -280,7 +280,7 @@
                                 <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete' && ps.PASSED_VALIDATION !== 'Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                             </td>
                             <td>
-                                <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
+                                <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the {{psTitle}} in the {{contractType}} Editor"></div>
                             </td>
                             <!--<td style="width: 100px; text-align: center;">
                                 <div ng-bind="ps.PRC_TBL.length" class="bolder"></div>
@@ -312,7 +312,7 @@
                                     <div class="textCircle valid_{{ pt.PASSED_VALIDATION }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                                 </td>
                                 <td>
-                                    <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the Pricing Table in the Contract Editor"></div>
+                                    <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the {{ptTitle}} in the {{contractType}} Editor"></div>
                                 </td>
                                 <td style="width: 100px;"></td>
                                 <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">

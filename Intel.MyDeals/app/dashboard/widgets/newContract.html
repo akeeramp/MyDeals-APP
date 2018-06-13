@@ -37,6 +37,7 @@
     </div>
 
     <div class="widget-md widget-sm" style="display: none;">
+        
         <div style="padding: 20px 0 0 0;">
             <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
                 <i class="intelicon-new-document-solid text-warning"></i>
@@ -48,7 +49,8 @@
             </div>
             <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
                 <div class="btn-ttl">Create a My Deals Contract</div>
-                <div class="btn-desc">You <b>do not</b> have access to Create Contracts</div>
+                <div class="btn-desc">You <b>do not</b> have access to Create Contracts
+                </div>
             </div>
 
             <div class="clearboth"></div>
@@ -72,13 +74,34 @@
 
             <div class="clearboth"></div>
         </div>
+
+        <div style="padding: 20px 0 0 0;">
+            <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
+                <i class="fa fa-book text-warning"></i>
+            </div>
+
+            <div class="fl btn-mock" onclick="newCntrct(true)" ng-if="C_CREATE_CONTRACT">
+                <div class="btn-ttl">Create a Customer Tender Folio</div>
+                <div class="btn-desc">Create a place for entering OEM tender deals</div>
+            </div>
+            <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">Create a Customer Tender Folio</div>
+                <div class="btn-desc">You <b>do not</b> have access to Create Tender Folios
+                </div>
+            </div>
+
+            <div class="clearboth"></div>
+        </div>
+
     </div>
 
 </div>
 
 <script>
-    function newCntrct() {
-        document.location.href = "/Contract#/manager/0/details";
+    function newCntrct(isTender) {
+        document.location.href = (isTender !== undefined && isTender === true)
+            ? "/Contract#/manager/0/details?tender=1"
+            : "/Contract#/manager/0/details";
     }
 </script>
 

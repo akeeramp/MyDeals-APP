@@ -5,7 +5,7 @@
         <div class="scaleTopAnim lnavMenuOption" style="padding: 10px;" ng-hide="isAddStrategyHidden">
             <form name="addNewPsForm" ng-submit="submitForm(CustomAddPsValidate())" novalidate>
                 <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
-                <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
+                <div class="fl ptLnavTitle">Enter {{psTitle}} Name</div>
                 <div class="clearboth"></div>
                 <div class="bgBlueContainer" ng-if="C_ADD_PRICING_STRATEGY" ng-class="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
                     <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
@@ -30,7 +30,7 @@
                            ng-model="newStrategy.TITLE"
                            ng-class="{isError: newStrategy._behaviors.isError.TITLE}" />
                     <div class="clearboth"></div>
-                    <div style="color: #F3D54E;"><h3></h3>Sorry, you cannot add new Strategies</h3></div>
+                    <div style="color: #F3D54E;"><h3>Sorry, you cannot add new {{psTitle}}</h3></div>
                 </div>
 
             </form>
@@ -40,7 +40,7 @@
             <div>
                 <i class="intelicon-arrow-up"></i>
             </div>
-            Start by adding a<br />Pricing Strategy
+            Start by adding a<br />{{psTitle}}
         </div>
 
 <style>

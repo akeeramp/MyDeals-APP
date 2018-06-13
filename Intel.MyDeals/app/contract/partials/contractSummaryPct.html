@@ -35,8 +35,8 @@
                         </div>
                     </td>
                     <td>
-                        <span class="k-textbox k-space-left" style="width: 330px; margin-top: -1px; margin-left: 15px;">
-                            <input type="text" placeholder="Search for pricing strategies, tables or names" ng-model="titleFilter" />
+                        <span class="k-textbox k-space-left" style="width: 340px; margin-top: -1px; margin-left: 15px;">
+                            <input type="text" placeholder="Search for {{psTitle}}, {{ptTitle}} or names" ng-model="titleFilter" />
                             <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
                         </span>
                     </td>
@@ -56,7 +56,7 @@
                                      btn-type="'pct'"
                                      btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
                 </td>
-                <td style="line-height: 1.1em;">Pricing Strategy / Table Name</td>
+                <td style="line-height: 1.1em;">{{psTitle}} / {{ptTitle}}</td>
                 <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal Type</td>
             </tr>
         </table>
@@ -76,7 +76,7 @@
                                 <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'bigIcon'" not-run-msg="'Incomplete validations, click table name to view'"></icon-mct-pct>
                             </td>
                             <td>
-                                <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
+                                <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the {{psTitle}} in the {{contractType}} Editor"></div>
                             </td>
                             <td style="width: 120px; text-align: center;">
                                 <div ng-bind="swapUnderscore(ps.WF_STG_CD)" class="bolder org"></div>
@@ -96,7 +96,7 @@
                                 </td>
                                 <td style="width: 30px;"></td>
                                 <td>
-                                    <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the Pricing Table in the Contract Editor"></div>
+                                    <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the {{ptTitle}} in the {{contractType}} Editor"></div>
                                 </td>
                                 <td style="width: 120px; text-align: center;">
                                     <div ng-bind="swapUnderscore(pt.OBJ_SET_TYPE_CD)" class="bold"></div>

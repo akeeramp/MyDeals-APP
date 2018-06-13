@@ -3,7 +3,7 @@
 	<div style="position:absolute; left: 5px; z-index: 900;  padding-top: 2px;">
 		<!-- Save Button -->
 	    <button class="btn btn-sm btn-save ssToolbarBtn" ng-class="{'notdirty': !_dirty}" ng-click="validatePricingTableProducts()" 
-                title="Save your pricing table, validate the products, and stay in your Pricing Table Editor">
+                title="{{saveDesc}}">
             <table>
                 <tr>
                     <td>
@@ -55,7 +55,7 @@
 
         <!-- Product Validator Button -->
         <button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_EDIT_PRODUCT" ng-click="validateOnlyProducts()"
-                title="Use Product Selector to search for product(s)">
+                title="Validate the products entered in the web sheet">
             <table>
                 <tr>
                     <td>

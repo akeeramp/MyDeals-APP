@@ -11,7 +11,7 @@
             <a ui-sref="contract.details" ui-sref-opts="{reload: true}" ng-if="usrRole == 'RA'"><div id="contractDetailsDiv">Details</div></a>
             <a ui-sref="contract.timeline" ui-sref-opts="{reload: true}"><div id="historyDiv">History</div></a>
             <a ui-sref="contract.details" ui-sref-opts="{reload: true}" ng-if="usrRole != 'RA'"><div id="contractDetailsDiv">Details</div></a>
-            <a ui-sref="contract.export" ui-sref-opts="{reload: true}" ng-if="CAN_VIEW_EXPORT"><div id="contractReviewDiv">Contract</div></a>
+            <a ui-sref="contract.export" ui-sref-opts="{reload: true}" ng-if="CAN_VIEW_EXPORT"><div id="contractReviewDiv">{{contractType}}</div></a>
             <a ui-sref="contract.deals" ui-sref-opts="{reload: true}" ng-if="CAN_VIEW_ALL_DEALS"><div id="dealReviewDiv">Deals</div></a>
             
         </div>

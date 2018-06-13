@@ -7,7 +7,7 @@
     <!--<div class="navIconLnk" title="Save Contract" ng-click="saveUpperContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
         <i class="intelicon-save-outlined"></i>
     </div>-->
-    <div class="navIconLnk" title="Add Pricing Strategy" ng-if="C_ADD_PRICING_STRATEGY" ng-click="toggleLnav();toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
+    <div class="navIconLnk" title="Add {{psTitle}}" ng-if="C_ADD_PRICING_STRATEGY" ng-click="toggleLnav();toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
         <i class="intelicon-plus-max"></i>
     </div>
     <div class="navIconLnk" title="Filter Current Contract" ng-show="isExistingContract()" ng-click="toggleLnav();toggleSearch()" ng-class="{'active': !isSearchHidden}">

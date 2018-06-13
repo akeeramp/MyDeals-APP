@@ -41,6 +41,15 @@
         $scope.contractHeaderMaxCharWidth = 55;
         $scope.isSuper = window.isSuper;
 
+        // custom Contract Titles
+        $scope.isTenderContract = false;
+        $scope.contractType = "Contract";
+        $scope.contractName = $scope.contractType + " Name:";
+        $scope.psTitle = "Pricing Strategy";
+        $scope.ptTitle = "Pricing Table";
+        $scope.ptTitleLbl = "Enter " + $scope.ptTitle + " Name";
+        $scope.pageTitle = $scope.ptTitle + " Editor";
+
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
@@ -258,9 +267,23 @@
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
-        $scope.saveBtnName = function () {
-            if ($scope.isCopyContract) return 'Copy Contract';
-            return $scope.contractData.DC_ID > 0 ? 'Save Contract' : 'Create Contract';
+        if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1") {
+            $scope.isTenderContract = true;
+            $scope.contractType = "Tender Folio";
+            $scope.contractName = $scope.contractType + " Name:";
+            $scope.psTitle = "Tender Sheet";
+            $scope.ptTitle = "Tender Table";
+            $scope.ptTitleLbl = "Enter Tender Table Name";
+
+            if ($location.url().split('tender=').length > 1) {
+                $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
+                $scope.contractData["IS_TENDER"] = "1";
+            }
+        }
+
+        $scope.saveBtnName = function () {            
+            if ($scope.isCopyContract) return 'Copy ' + $scope.contractType;
+            return $scope.contractData.DC_ID > 0 ? 'Save ' + $scope.contractType : 'Create ' + $scope.contractType;
         }
 
         $scope.needMct = function () {
@@ -745,7 +768,11 @@
             var result = {};
             angular.forEach(items, function (value, key) {
                 if (value.name !== 'ALL_TYPES' && value.name !== 'TENDER') {
-                    result[key] = value;
+                    if ($scope.isTenderContract) {
+                        if (['ECAP', 'KIT'].indexOf(value.name) >= 0) result[key] = value;
+                    } else {
+                        result[key] = value;
+                    }
                 }
             });
             return result;
@@ -1287,7 +1314,7 @@
 
                 // Check if row count is over the number of rows we allow
                 if ($scope.spreadDs._data.length >= ($scope.ptRowCount - 1)) {
-                    alert("Cannot insert a new row. You already have the maxium number of rows allowed in one Pricing Table. Pleas emake a new Pricing table or delete some existing rows the current pricing table.");
+                    alert("Cannot insert a new row. You already have the maxium number of rows allowed in one " + $scope.ptTitle + ". Please make a new " + $scope.ptTitle + " or delete some existing rows the current " + $scope.ptTitle + ".");
                     return;
                 }
 
@@ -1380,6 +1407,20 @@
             }, 2000);
         }
 
+        function getTenderBasedDefaults() {
+            var data = $scope.newPricingTable["_defaultAtrbs"];
+
+            if ($scope.isTenderContract) {
+                data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
+                    .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/true");
+            } else {
+                data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
+                    .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/false");
+            }
+
+            return data;
+        }
+
         // **** AUTODILL DEFAULTS Methods ****
         //
         function openAutofillModal(pt) {
@@ -1391,9 +1432,10 @@
             }
 
             var autofillData = {
+                'ISTENDER': $scope.isTenderContract,
                 'DEALTYPE': $scope.newPricingTable["OBJ_SET_TYPE_CD"],
                 'EXTRA': $scope.newPricingTable["_extraAtrbs"],             //may not be needed, extras are a one time set thing such as num tiers that we may choose to keep in the LNAV
-                'DEFAULT': $scope.newPricingTable["_defaultAtrbs"]
+                'DEFAULT': getTenderBasedDefaults()
             }
 
             var autofillModal = $uibModal.open({
@@ -1559,7 +1601,7 @@
         $scope.emailData = [];
 
         $scope.actionPricingStrategy = function (ps, actn) {
-            $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
+            $scope.setBusy("Updating " + $scope.psTitle + "...", "Please wait as we update the " + $scope.psTitle + "!", "Info", true);
             objsetService.actionPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps, actn).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1583,7 +1625,7 @@
             });
 
         $scope.actionPricingStrategies = function (data, emailEnabled) {
-            $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!", "Info", true);
+            $scope.setBusy("Updating " + $scope.psTitle + "...", "Please wait as we update the " + $scope.psTitle + "!", "Info", true);
 
             var pcActn = new perfCacheBlock("Action Pricing Strategies", "MT");
 
@@ -1728,16 +1770,16 @@
         // **** DELETE Methods ****
         //
         $scope.deletePricingStrategy = function (ps) {
-            kendo.confirm("Are you sure that you want to delete this pricing strategy?").then(function () {
+            kendo.confirm("Are you sure that you want to delete this " + $scope.psTitle + "?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info");
+                    $scope.setBusy("Deleting...", "Deleting the " + $scope.psTitle, "Info");
                     $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
                     objsetService.deletePricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                                $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Strategy", "Error");
+                                $scope.setBusy("Delete Failed", "Unable to Deleted the " + $scope.psTitle, "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1756,7 +1798,7 @@
                             // delete item
                             $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
-                            $scope.setBusy("Delete Successful", "Deleted the Pricing Strategy", "Success");
+                            $scope.setBusy("Delete Successful", "Deleted the " + $scope.psTitle, "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
@@ -1770,7 +1812,7 @@
                             }
                         },
                         function (result) {
-                            logger.error("Could not delete Pricing Strategy " + ps.DC_ID, result, result.statusText, "Error");
+                            logger.error("Could not delete " + $scope.psTitle + " " + ps.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1779,16 +1821,16 @@
             });
         }
         $scope.rollBackPricingStrategy = function (ps) {
-            kendo.confirm("Are you sure that you want to undo this pricing strategy re-deal?").then(function () {
+            kendo.confirm("Are you sure that you want to undo this " + $scope.psTitle + " re-deal?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("RollBack...", "Rolling the Pricing Strategy back", "Info");
+                    $scope.setBusy("RollBack...", "Rolling the " + $scope.psTitle + " back", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
                     objsetService.rollBackPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps.DC_ID).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                                $scope.setBusy("RollBack Failed", "Unable to RollBack the Pricing Strategy re-deal", "Error");
+                                $scope.setBusy("RollBack Failed", "Unable to RollBack the " + $scope.psTitle + " re-deal", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1796,7 +1838,7 @@
                             }
 
                             logger.info(data.data.Message, data.data.Message, "Rollback Results");
-                            $scope.setBusy("RollBack Successful", "RollBack the Pricing Strategy re-deal", "Success");
+                            $scope.setBusy("RollBack Successful", "RollBack the " + $scope.psTitle + " re-deal", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
@@ -1806,7 +1848,7 @@
                             $scope.reloadPage();
                         },
                         function (result) {
-                            logger.error("Could not RollBack the Pricing Strategy " + ps.DC_ID, result, result.statusText, "Error");
+                            logger.error("Could not RollBack the " + $scope.psTitle + " " + ps.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1815,22 +1857,22 @@
             });
         }
         $scope.cancelPricingStrategy = function (ps) {
-            kendo.confirm("Are you sure that you want to cancel this pricing strategy?").then(function () {
+            kendo.confirm("Are you sure that you want to cancel this " + $scope.psTitle + "?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Cancel...", "Canceling the Pricing Strategy back", "Info");
+                    $scope.setBusy("Cancel...", "Canceling the " + $scope.psTitle + " back", "Info");
                     $scope._dirty = false;
                     topbar.show();
                     objsetService.cancelPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps).then(
                         function (data) {
                             if (data.data.Messages[0].MsgType !== 1) {
-                                $scope.setBusy("Cancel Failed", "Unable to Cancel the Pricing Strategy with Deals having Trackers", "Error");
+                                $scope.setBusy("Cancel Failed", "Unable to Cancel the " + $scope.psTitle + " with Deals having Trackers", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
                                 return;
                             }
 
-                            $scope.setBusy("Cancel Successful", "Cancel the Pricing Strategy", "Success");
+                            $scope.setBusy("Cancel Successful", "Cancel the " + $scope.psTitle, "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
@@ -1841,7 +1883,7 @@
                             }, { reload: true });
                         },
                         function (result) {
-                            logger.error("Could not Cancel the Pricing Strategy " + ps.DC_ID, result, result.statusText, "Error");
+                            logger.error("Could not Cancel the " + $scope.psTitle + " " + ps.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1850,9 +1892,9 @@
             });
         }
         $scope.deletePricingTable = function (ps, pt) {
-            kendo.confirm("Are you sure that you want to delete this pricing table?").then(function () {
+            kendo.confirm("Are you sure that you want to delete this " + $scope.ptTitle + "?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Deleting...", "Deleting the Pricing Table", "Info", true);
+                    $scope.setBusy("Deleting...", "Deleting the " + $scope.ptTitle, "Info", true);
                     $scope._dirty = false;
                     topbar.show();
 
@@ -1860,7 +1902,7 @@
                     objsetService.deletePricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                                $scope.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error");
+                                $scope.setBusy("Delete Failed", "Unable to Delete the " + $scope.ptTitle, "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1878,7 +1920,7 @@
                             // delete item
                             ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
 
-                            $scope.setBusy("Delete Successful", "Deleted the Pricing Table", "Success");
+                            $scope.setBusy("Delete Successful", "Deleted the " + $scope.ptTitle, "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -1892,7 +1934,7 @@
                             }
                         },
                         function (response) {
-                            logger.error("Could not delete the Pricing Table " + pt.DC_ID, response, response.statusText, "Error");
+                            logger.error("Could not delete the " + $scope.ptTitle + " " + pt.DC_ID, response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
                         }
@@ -1902,9 +1944,9 @@
         }
         // ROLLBACK NEED TO VERIFY BELOW WITH PHIL
         $scope.rollBackPricingTable = function (ps, pt) {
-            kendo.confirm("Are you sure that you want to undo this pricing table re-deal?").then(function () {
+            kendo.confirm("Are you sure that you want to undo this " + $scope.ptTitle + " re-deal?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Rollback...", "Rolling Back the Pricing Table");
+                    $scope.setBusy("Rollback...", "Rolling Back the " + $scope.ptTitle);
                     $scope._dirty = false;
                     topbar.show();
 
@@ -1912,7 +1954,7 @@
                     objsetService.rollBackPricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt.DC_ID).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                                $scope.setBusy("RollBack Failed", "Unable to RollBack the Pricing Table re-deal", "Error");
+                                $scope.setBusy("RollBack Failed", "Unable to RollBack the " + $scope.ptTitle + "re-deal", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1920,7 +1962,7 @@
                             }
 
                             logger.info(data.data.Message, data.data.Message, "Rollback Results");
-                            $scope.setBusy("RollBack Successful", "RollBack the Pricing Table re-deal", "Success");
+                            $scope.setBusy("RollBack Successful", "RollBack the " + $scope.ptTitle + " re-deal", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -1930,7 +1972,7 @@
                             $scope.reloadPage();
                         },
                         function (response) {
-                            logger.error("Could not RollBack the Pricing Table " + pt.DC_ID, response, response.statusText, "Error");
+                            logger.error("Could not RollBack the " + $scope.ptTitle + " " + pt.DC_ID, response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
                         }
@@ -1939,22 +1981,22 @@
             });
         }
         $scope.cancelPricingTable = function (ps, pt) {
-            kendo.confirm("Are you sure that you want to cancel this pricing table?").then(function () {
+            kendo.confirm("Are you sure that you want to cancel this " + $scope.ptTitle + "?").then(function () {
                 $scope.$apply(function () {
-                    $scope.setBusy("Canceling...", "Canceling the Pricing Table");
+                    $scope.setBusy("Canceling...", "Canceling the " + $scope.ptTitle);
                     $scope._dirty = false;
                     topbar.show();
                     objsetService.cancelPricingTable($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, pt).then(
                         function (data) {
                             if (data.data.Messages[0].MsgType !== 1) {
-                                $scope.setBusy("Cancel Failed", "Unable to Cancel the pricing Table with Deals having Trackers", "Error");
+                                $scope.setBusy("Cancel Failed", "Unable to Cancel the " + $scope.ptTitle + " with Deals having Trackers", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
                                 return;
                             }
 
-                            $scope.setBusy("Cancel Successful", "Canceled the Pricing Table", "Success");
+                            $scope.setBusy("Cancel Successful", "Canceled the " + $scope.ptTitle, "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
@@ -1965,7 +2007,7 @@
                             }, { reload: true });
                         },
                         function (result) {
-                            logger.error("Could not Cancel the Pricing Table " + pt.DC_ID, result, result.statusText, "Error");
+                            logger.error("Could not Cancel the " + $scope.ptTitle + " " + pt.DC_ID, result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1975,7 +2017,7 @@
         }
         $scope.deletePricingTableRow = function (wip) {
             $scope.$apply(function () {
-                $scope.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal");
+                $scope.setBusy("Deleting...", "Deleting the " + $scope.ptTitle + " Row and Deal");
                 $scope._dirty = false;
                 topbar.show();
 
@@ -1983,7 +2025,7 @@
                 objsetService.deletePricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
                     function (data) {
                         if (data.data.MsgType !== 1) {
-                            $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table", "Error");
+                            $scope.setBusy("Delete Failed", "Unable to Deleted the " + $scope.ptTitle, "Error");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -1992,7 +2034,7 @@
 
                         $scope.$broadcast('removeRow', wip.DC_PARENT_ID);
 
-                        $scope.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal", "Success");
+                        $scope.setBusy("Delete Successful", "Deleted the " + $scope.ptTitle + " Row and Deal", "Success");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
@@ -2000,7 +2042,7 @@
 
                     },
                     function (response) {
-                        logger.error("Could not delete the Pricing Table " + pt.DC_ID, response, response.statusText);
+                        logger.error("Could not delete the " + $scope.ptTitle + " " + pt.DC_ID, response, response.statusText);
                         $scope.setBusy("", "");
                         topbar.hide();
                     }
@@ -2009,7 +2051,7 @@
         }
         $scope.rollbackPricingTableRow = function (wip) {
             $scope.$apply(function () {
-                $scope.setBusy("Rolling Back...", "Rolling Back the Pricing Table Row and Deal");
+                $scope.setBusy("Rolling Back...", "Rolling Back the " + $scope.ptTitle + " Row and Deal");
                 $scope._dirty = false;
                 topbar.show();
 
@@ -2017,14 +2059,14 @@
                 objsetService.rollbackPricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
                     function (data) {
                         if (data.data.MsgType !== 1) {
-                            $scope.setBusy("Rollback Failed", "Unable to Rollback the Pricing Table", "Error");
+                            $scope.setBusy("Rollback Failed", "Unable to Rollback the " + $scope.ptTitle, "Error");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
                             return;
                         }
 
-                        $scope.setBusy("Rollback Successful", "Rollback of the Pricing Table Row and Deal", "Success");
+                        $scope.setBusy("Rollback Successful", "Rollback of the " + $scope.ptTitle + " Row and Deal", "Success");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
@@ -2034,7 +2076,7 @@
                         $scope.reloadPage();
                     },
                     function (response) {
-                        logger.error("Could not Rollback the Pricing Table " + pt.DC_ID, response, response.statusText);
+                        logger.error("Could not Rollback the "+ $scope.ptTitle + " " + pt.DC_ID, response, response.statusText);
                         $scope.setBusy("", "");
                         topbar.hide();
                     }
@@ -2049,10 +2091,10 @@
         // **** COPY Methods ****
         //
         $scope.copyPricingStrategy = function (c, ps) {
-            $scope.copyObj("Pricing Strategy", c.PRC_ST, ps.DC_ID, objsetService.copyPricingStrategy);
+            $scope.copyObj($scope.psTitle, c.PRC_ST, ps.DC_ID, objsetService.copyPricingStrategy);
         }
         $scope.copyPricingTable = function (ps, pt) {
-            $scope.copyObj("Pricing Table", ps.PRC_TBL, pt.DC_ID, objsetService.copyPricingTable);
+            $scope.copyObj($scope.ptTitle, ps.PRC_TBL, pt.DC_ID, objsetService.copyPricingTable);
         }
         $scope.copyObj = function (objType, objTypes, id, invokFunc) {
             $scope.setBusy("Copying", "Copying the " + objType);
@@ -2117,7 +2159,7 @@
         //
         $scope.unGroupPricingTableRow = function (wip) {
             $scope.$apply(function () {
-                $scope.setBusy("Splitting Deals...", "Splitting the Grouped Pricing Table Row into seperate deals");
+                $scope.setBusy("Splitting Deals...", "Splitting the Grouped " + $scope.ptTitle + " Row into seperate deals");
                 $scope._dirty = false;
                 topbar.show();
 
@@ -2125,7 +2167,7 @@
                 objsetService.unGroupPricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
                     function (data) {
                         if (!!data.data.MsgType && data.data.MsgType !== 1) {
-                            $scope.setBusy("Splitting Failed", "Unable to Split the Pricing Table Row");
+                            $scope.setBusy("Splitting Failed", "Unable to Split the " + $scope.ptTitle + " Row");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -2161,7 +2203,7 @@
                         // refresh upper contract
                         if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
 
-                        $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals", "Success");
+                        $scope.setBusy("Split Successful", "Split the " + $scope.ptTitle + " Row into single Deals", "Success");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
@@ -2169,7 +2211,7 @@
 
                     },
                     function (response) {
-                        logger.error("Could not split the Pricing Table Row.", response, response.statusText);
+                        logger.error("Could not split the " + $scope.ptTitle + " Row.", response, response.statusText);
                         topbar.hide();
                     }
                 );
@@ -2303,9 +2345,9 @@
                                 if (!el._behaviors.isError) el._behaviors.isError = {};
                                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
                                 el._behaviors.isError["REBATE_TYPE"] = true;
-                                el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same Pricing Table";
+                                el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Cannot mix Tender and Non-Tender deals in the same Pricing Table.");
+                                errs.PRC_TBL_ROW.push("Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".");
                             }
                         }
                     }
@@ -2526,12 +2568,12 @@
 
                 if (!$scope.curPricingTable._behaviors.isDirty || $scope.curPricingTable._behaviors.isDirty.TITLE) {
                     if ($scope.curPricingTable !== undefined && $scope.curPricingTable.TITLE === "") {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The Pricing Table needs a Title.";
+                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " needs a Title.";
                         $scope.curPricingTable._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     }
                     else if (!isPtUnique) {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The Pricing Table must have unique name within contract.";
+                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " must have unique name within contract.";
                         $scope.curPricingTable._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     }
@@ -2549,12 +2591,12 @@
 
                 if (!$scope.curPricingStrategy._behaviors.isDirty || $scope.curPricingStrategy._behaviors.isDirty.TITLE) {
                     if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
-                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy needs a Title.";
+                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " needs a Title.";
                         $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     } else if (!isPsUnique) {
                         $scope.curPricingStrategy._behaviors
-                            .validMsg["TITLE"] = "The Pricing Strategy must have unique name within strategy.";
+                            .validMsg["TITLE"] = "The " + $scope.psTitle + " must have unique name.";
                         $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     } else {
@@ -2606,8 +2648,8 @@
                 $scope.isAutoSaving = false;
 
                 var msg = [];
-                if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
-                if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
+                if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push($scope.ptTitle);
+                if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push($scope.psTitle);
 
                 kendo.alert("The " + msg.join(" and ") + " either must have a title or needs a unique name in order to save.");
                 return;
@@ -3526,7 +3568,7 @@
         $scope.addPricingStrategy = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving the Pricing Strategy", "Info", true);
+            $scope.setBusy("Saving...", "Saving the " + $scope.psTitle, "Info", true);
 
             var ct = $scope.contractData;
 
@@ -3546,7 +3588,7 @@
                     $scope.contractData.PRC_ST.push(ps);
                     $scope.showAddPricingTable(ps);
                     topbar.hide();
-                    $scope.setBusy("Save Successful", "Added Pricing Strategy", "Success");
+                    $scope.setBusy("Save Successful", "Added " + $scope.psTitle, "Success");
                     $timeout(function () {
                         $scope.setBusy("", "");
                     }, 1000);
@@ -3558,7 +3600,7 @@
                 },
                 function (response) {
                     $scope.addStrategyDisabled = false;
-                    logger.error("Could not create the pricing strategy.", response, response.statusText);
+                    logger.error("Could not create the " + $scope.psTitle + ".", response, response.statusText);
                     $scope.setBusy("", "");
                     topbar.hide();
                 });
@@ -3658,13 +3700,13 @@
         $scope.addPricingTable = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving Pricing Table", "Info");
+            $scope.setBusy("Saving...", "Saving " + $scope.ptTitle, "Info");
 
             // Clone base model and populate changes
             var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
             if (!pt) {
                 $scope.addTableDisabled = false;
-                logger.error("Could not create the pricing table.", "Error");
+                logger.error("Could not create the " + $scope.ptTitle + ".", "Error");
                 topbar.hide();
                 $scope.setBusy("", "");
                 return;
@@ -3699,7 +3741,7 @@
             objsetService.createPricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
                 function (data) {
                     $scope.updateResults(data.data.PRC_TBL, pt);
-                    $scope.setBusy("Saved", "Redirecting you to the Contract Editor");
+                    $scope.setBusy("Saved", "Redirecting you to the " + $scope.contractType + " Editor");
                     $scope._dirty = false;
                     //$scope.addTableDisabled = false;  //commented out, as we are routing we away anyways we do not need to re-enable this, leaving this in also allows users to potentially add the same table twice, creating duplicates
                     // load the screen
@@ -3711,7 +3753,7 @@
                 },
                 function (response) {
                     $scope.addTableDisabled = false;
-                    logger.error("Could not create the pricing table.", response, response.statusText);
+                    logger.error("Could not create the " + $scope.ptTitle + ".", response, response.statusText);
                     topbar.hide();
                     $scope.setBusy("", "");
                 }
@@ -3721,7 +3763,7 @@
         $scope.editPricingTable = function () {
             topbar.show();
 
-            $scope.setBusy("Saving...", "Saving Pricing Table", "Info", true);
+            $scope.setBusy("Saving...", "Saving " + $scope.ptTitle, "Info", true);
 
             // Clone base model and populate changes
             var pt = util.clone($scope.currentPricingTable);
@@ -3756,13 +3798,13 @@
                     //var seeme = $scope.curPricingTable
                     //$scope.curPricingTableId = pt.DC_ID;
 
-                    logger.success("Edited Pricing Table", pt, "Save Successful");
+                    logger.success("Edited " + $scope.ptTitle, pt, "Save Successful");
                     topbar.hide();
                     $scope.setBusy("", "");
                 },
                 function (response) {
                     $scope.addTableDisabled = false;
-                    logger.error("Could not edit the pricing table " + pt.DC_ID, response, response.statusText);
+                    logger.error("Could not edit the " + $scope.ptTitle + "e " + pt.DC_ID, response, response.statusText);
                     topbar.hide();
                     $scope.setBusy("", "");
                 }
@@ -3892,7 +3934,7 @@
             if (oldValue == null && newValue != null) {
                 //initialize, hard coded for now, build into an admin page in future.
                 if ($scope.currentPricingTable == null) {
-                    if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = "MCP";
+                    if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All Direct Market Segments"];
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
                     if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption";
@@ -3950,7 +3992,7 @@
 
         $scope.publishWipDealsFromTab = function () {
             if ($scope.enableDealEditorTab() === false) return;
-            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Editor Save, Validate & Tab Switch", "UX");
+            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock($scope.ptTitle + " Editor Save, Validate & Tab Switch", "UX");
             $scope.publishWipDeals();
         }
 
@@ -4002,7 +4044,7 @@
             $scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
         $scope.gotoToPricingTable = function () {
-            $scope.setBusy("Loading...", "Loading the Pricing Table Editor", "Info");
+            $scope.setBusy("Loading...", "Loading the " + $scope.ptTitle + " Editor", "Info");
             $scope.spreadNeedsInitialization = true;
             $state.go('contract.manager.strategy',
                 {
@@ -4035,11 +4077,11 @@
         }
 
         $scope.editPricingStrategyName = function (ps) {
-            $scope.openRenameTitle(ps, "Pricing Strategy");
+            $scope.openRenameTitle(ps, $scope.psTitle);
         }
 
         $scope.editPricingTableName = function (pt) {
-            $scope.openRenameTitle(pt, "Pricing Table");
+            $scope.openRenameTitle(pt, $scope.ptTitle);
         }
 
         $scope.openRenameTitle = function (dataItem, mode, defVal, errMsg) {

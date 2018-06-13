@@ -3,14 +3,14 @@
     <div id="secContainer">
         <form novalidate dirty-tracking obj-type="contractData" class="contract-detail-form">
             <div class="row">
-                <h4 class="col-md-3">Contract Details</h4>
+                <h4 class="col-md-3">{{contractType}} Details</h4>
                 <span class="col-md-2 infospan"><span> * </span>Indicates Required fields</span>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="col-md-12 row">
-                        <h6>Contract Information</h6>
+                        <h6>{{contractType}} Information</h6>
                     </div>
 
                     <div class="col-md-11 row">
@@ -48,51 +48,14 @@
                          ng-model="contractData"
                          op-cd="'TITLE'"
                          op-type="'TEXTBOX'"
-                         op-label="'Contract Name:'"
+                         op-label="contractName"
                          op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
-                </div>
 
-				<div class="col-md-6">
-					<div class="col-md-11 row">
-						<h6>Customer Acceptance of Contract is...</h6>
-					</div>
+                    
+                    
 
-					<div class="col-md-1">
-						<div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
-							<i class="intelicon-help" style="font-size:30px !important"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
-							<div class="col-md-1">
-								<i class="fa fa-info-circle fa-2x" style="color:#FFA300"></i>
-							</div>
-							<div class="col-md-11">
-								In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
-							</div>
-						</div>
-					    <div class="col-md-11"
-                             id="radCustAccpt"
-							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT}"
-							 op-control-flat
-							 ng-model="contractData"
-							 op-cd="'CUST_ACCPT'"
-							 op-type="'RADIOBUTTONGROUP'"
-							 op-label="''"
-							 op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
-							 op-lookup-text="'DROP_DOWN'"
-							 op-lookup-value="'DROP_DOWN'"
-							 op-is-form="true"
-							 op-extra="true"
-							 op-ui-mode="'VERTICAL'"></div>
-						</div>
-					</div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="col-md-12 row">
+                    <div class="col-md-12 row" style="margin-top: 20px;">
                         <h6>Dates&nbsp;<span kendo-tooltip k-content="constants.helpTipDateRanges" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
                     </div>
                     <div class="col-md-11 row mb5">
@@ -213,12 +176,48 @@
                     </div>
 
                 </div>
+                
                 <div class="col-md-6">
+					<div class="col-md-11 row" ng-hide="isTenderContract">
+						<h6>Customer Acceptance of Contract is...</h6>
+					</div>
+
+					<div class="col-md-1" ng-hide="isTenderContract">
+						<div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
+							<i class="intelicon-help" style="font-size:30px !important"></i>
+						</div>
+					</div>
+					<div class="row" ng-hide="isTenderContract" style="margin-bottom: 20px;">
+						<div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
+							<div class="col-md-1">
+								<i class="fa fa-info-circle fa-2x" style="color:#FFA300"></i>
+							</div>
+							<div class="col-md-11">
+								In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
+							</div>
+						</div>
+					    <div class="col-md-11"
+                             id="radCustAccpt"
+							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT}"
+							 op-control-flat
+							 ng-model="contractData"
+							 op-cd="'CUST_ACCPT'"
+							 op-type="'RADIOBUTTONGROUP'"
+							 op-label="''"
+							 op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
+							 op-lookup-text="'DROP_DOWN'"
+							 op-lookup-value="'DROP_DOWN'"
+							 op-is-form="true"
+							 op-extra="true"
+							 op-ui-mode="'VERTICAL'"></div>
+						</div>
+
+
                     <div class="col-md-12 row">
                         <h6>Information</h6>
                     </div>
 
-                    <div class="col-md-11 row C2ALabel">
+                    <div class="col-md-11 row C2ALabel" ng-hide="isTenderContract">
                         <div op-control-flat
                              ng-model="contractData"
                              op-cd="'C2A_DATA_C2A_ID'"
@@ -305,7 +304,7 @@
 
     <div id="secFooter">
         <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="deleteContract()" ng-if="contractData.DC_ID && contractData.DC_ID > 0 && C_DELETE_CONTRACT">
-            <span>Delete Contract</span>
+            <span>Delete {{contractType}}</span>
         </button>
         <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">
             <span ng-bind="saveBtnName()"></span>
