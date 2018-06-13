@@ -3078,9 +3078,10 @@
             }
         }
         $scope.numOfPivot = function (dataItem) {
-            if (!$scope.curPricingTable) return false;
+            if ($scope.curPricingTable === undefined) return 1;
 
             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+
                 var pivotFieldName = "NUM_OF_TIERS";
                 // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
                 if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
@@ -3093,7 +3094,7 @@
                 if (!$scope.isPivotable()) return 1;
 
                 if (dataItem === undefined) {
-                    return parseInt($scope.curPricingTable[pivotFieldName]);
+                    return $scope.curPricingTable[pivotFieldName] === undefined ? 1 :parseInt($scope.curPricingTable[pivotFieldName]);
                 }
 
                 if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb

@@ -2485,7 +2485,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var colNum = pasteRef.topLeft.col;
                 if (!nonMergedColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only
                     for (row = 0; row < state.data.length; row++) {
-                        var numTiers = root.numOfPivot(row);    //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later
+
+                        var data = $scope.root.spreadDs.data();
+                        var dataItem = data[pasteRef.topLeft.row + padNumRows + row];
+                        var numTiers = root.numOfPivot(dataItem);    //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later
                         for (var t = 0; t < numTiers; t++) {
                             newData.push(util.deepClone(state.data[row]));
                         }
