@@ -11,8 +11,8 @@ namespace Intel.MyDeals.BusinessRules
     {
         public static List<MyOpRule> GetBasicValidationRules()
         {
-			return new List<MyOpRule>
-			{
+            return new List<MyOpRule>
+            {
                 //new MyOpRule
                 //{
                 //    Title="Compress Product Json",
@@ -121,16 +121,16 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-				new MyOpRule
-				{
-					Title="Rate must have a positive value",
+                new MyOpRule
+                {
+                    Title="Rate must have a positive value",
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-					AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
-				},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
+                },
                 new MyOpRule
                 {
                     Title="Check for Modified or deleted Products",
@@ -140,23 +140,23 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
                 new MyOpRule
-				{
-					Title="Must be greater than 0",
-					ActionRule = MyDcActions.ValidateTierStartVol,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_VOL)
-				},
-				new MyOpRule
-				{
-					Title="Must be greater than 0",
-					ActionRule = MyDcActions.ValidateTierEndVol,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
-				},
+                {
+                    Title="Must be greater than 0",
+                    ActionRule = MyDcActions.ValidateTierStartVol,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_VOL)
+                },
+                new MyOpRule
+                {
+                    Title="Must be greater than 0",
+                    ActionRule = MyDcActions.ValidateTierEndVol,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
+                },
                                 new MyOpRule
                 {
                     Title="Rollup Error Message",
@@ -165,40 +165,40 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnPostValidate },
                 },
                 new MyOpRule
-				{
-					Title="Quantity must be greater than 0",
-					ActionRule = MyDcActions.ValidateTierQty,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.QTY)
-				},
-				new MyOpRule
-				{
-					Title="Tiered ECAP value check",
-					ActionRule = MyDcActions.ValidateTierEcap,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.ECAP_PRICE)
-				},
-				new MyOpRule
-				{
-					Title="Qty must be a whole number",
+                {
+                    Title="Quantity must be greater than 0",
+                    ActionRule = MyDcActions.ValidateTierQty,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.QTY)
+                },
+                new MyOpRule
+                {
+                    Title="Tiered ECAP value check",
+                    ActionRule = MyDcActions.ValidateTierEcap,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.ECAP_PRICE)
+                },
+                new MyOpRule
+                {
+                    Title="Qty must be a whole number",
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTieredQty,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-				},
-				new MyOpRule
-				{
-					Title="End Vol must be greater than start vol",
-					ActionRule = MyDcActions.CompareStartEndVol,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-				},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                },
+                new MyOpRule
+                {
+                    Title="End Vol must be greater than start vol",
+                    ActionRule = MyDcActions.CompareStartEndVol,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
                 new MyOpRule
                 {
                     Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
@@ -220,7 +220,7 @@ namespace Intel.MyDeals.BusinessRules
 				//			Args = new object[] {"{0} must be positive"},
 				//		}
 				//	}
-				//}, 
+				//},
 				new MyOpRule
                 {
                     Title="Check for Atrb Changes for TimeLine",
@@ -261,7 +261,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Validate ECAP Price",
                     ActionRule = MyDcActions.ValidateEcapPrice,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule
@@ -281,14 +281,14 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-				new MyOpRule
-				{
+                new MyOpRule
+                {
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
                     Title="On Ad Validation Set Default",
-					ActionRule = MyDcActions.ExecuteOnAd,
-					InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-				},
+                    ActionRule = MyDcActions.ExecuteOnAd,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
                 // Removed since it was a dummy test for date in past check.  Will bring back when real rule is needed.
                 //new MyOpRule
                 //{
@@ -382,10 +382,10 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Frontend can't be consumption",
                     ActionRule = MyDcActions.CheckFrontendConsumption,
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-				},
+                },
                 new MyOpRule
                 {
                     Title="Frontend can't be created without Sold To and Price Grp Code",
@@ -416,13 +416,13 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule
-				{
-					Title="DropDown Value Validations",
-					ActionRule = MyDcActions.CheckDropDownValues,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
-				},
-				new MyOpRule
+                {
+                    Title="DropDown Value Validations",
+                    ActionRule = MyDcActions.CheckDropDownValues,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
                 {
                     Title="Customer Division Value Validations",
                     ActionRule = MyDcActions.CheckCustDivValues,
@@ -510,28 +510,28 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }
                 },
                 new MyOpRule
-				{
-					Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
-					ActionRule = MyDcActions.CheckTotalDollarAmount,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-				},
-				new MyOpRule
-				{
-					Title="Adjusted ECAP Units must have a positive value",
-					ActionRule = MyDcActions.CheckEcapAdjUnit,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-				},
-				new MyOpRule
-				{
-					Title="KIT Product Spreadsheet validations",
-					ActionRule = MyDcActions.ValidateKITSpreadsheetProducts,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-					InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-				},
+                {
+                    Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
+                    ActionRule = MyDcActions.CheckTotalDollarAmount,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
+                    Title="Adjusted ECAP Units must have a positive value",
+                    ActionRule = MyDcActions.CheckEcapAdjUnit,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
+                    Title="KIT Product Spreadsheet validations",
+                    ActionRule = MyDcActions.ValidateKITSpreadsheetProducts,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
                 new MyOpRule
                 {
                     Title="KIT Product Grid validations",
@@ -539,6 +539,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
+                    Title="Frontend XOA3 L1/L2 product validation",
+                    ActionRule = MyDcActions.ValidateFrontendXOA3Products,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
 				//new MyOpRule
 				//{
@@ -571,15 +579,15 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnDealListLoad },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
-				},
-				new MyOpRule
-				{
-					Title="KIT ECAP equal to total discounts per line check",
-					ActionRule = MyDcActions.ValidateKitRebateBundleDiscount,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-					InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnLoad }
-				},
+                },
+                new MyOpRule
+                {
+                    Title="KIT ECAP equal to total discounts per line check",
+                    ActionRule = MyDcActions.ValidateKitRebateBundleDiscount,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnLoad }
+                },
                 new MyOpRule
                 {
                     Title="SUBKIT ECAP equal to total discounts per line check",
@@ -594,7 +602,6 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.NewObjTimeLineComment,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 }
-
             };
         }
     }

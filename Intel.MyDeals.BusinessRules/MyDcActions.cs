@@ -599,6 +599,49 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        /// <summary>
+        /// Frontend XOA3 deals can only have Exempt product.
+        /// </summary>
+        /// <param name="args"></param>
+        public static void ValidateFrontendXOA3Products(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            if (!progPayment.Contains("XOA3"))
+            {
+                return;
+            }
+
+            IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
+            if (string.IsNullOrEmpty(prdJson)) return;
+            ProdMappings items = null;
+            try
+            {
+                prdJson = FixesHelpers.FixStructure(prdJson);
+                items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
+
+                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
+                {
+                    foreach (ProdMapping prod in prdMapping.Value)
+                    {
+                        if (prod.HAS_L1 == 1 || prod.HAS_L2 == 1)
+                        {
+                            dePrdUsr.AddMessage("Frontend XOA3 deal can only have Exempt products. L1 and L2 products are not allowed");
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                dePrdUsr.AddMessage("Unable to read the selected products legal classification.  Please use the Product Selector to fix the issue.");
+                return;
+            }
+        }
+
         public static void RequiredServerDealType(params object[] args)
         {
             // US53204 - TENDER: Tender deal item 2. Server deal type-drop down single select.Mandatory only for server products. Leave blank by default.
@@ -957,12 +1000,12 @@ namespace Intel.MyDeals.BusinessRules
                     case AttributeCodes.EXPIRE_YCS2:
                         if (de.AtrbValue.ToString() == "Yes") r.Dc.AddTimelineComment($"YCS2 deal has been expired");
                         break;
+
                     default:
                         if (de.OrigAtrbValue.ToString() == string.Empty) continue;
                         r.Dc.AddTimelineComment($"{ atrb.ATRB_LBL } changed from {de.OrigAtrbValue} to { de.AtrbValue }");
                         break;
                 }
-
             }
         }
 
