@@ -279,7 +279,7 @@
                 $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
                 $scope.contractData["IS_TENDER"] = "1";
             }
-        }
+        } 
 
         $scope.saveBtnName = function () {            
             if ($scope.isCopyContract) return 'Copy ' + $scope.contractType;

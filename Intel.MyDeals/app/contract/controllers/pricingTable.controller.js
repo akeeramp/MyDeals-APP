@@ -225,6 +225,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
         }
 
+        if (root.isTenderContract) {
+            ptTemplate.model.fields["REBATE_TYPE"].editable = false;
+        } else {
+            ptTemplate.model.fields["REBATE_TYPE"].opLookupUrl = ptTemplate.model.fields["REBATE_TYPE"].opLookupUrl
+                .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/false");
+        }
+
         $scope.ptSpreadOptions = {
             headerWidth: 0, /* Hide the Row numbers */
             change: onChange,
