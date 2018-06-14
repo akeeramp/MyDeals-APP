@@ -4,12 +4,12 @@ using System.Linq;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
+using Force.DeepCloner;
 
 namespace Intel.MyDeals.Entities
 {
     public static class OpDataCollectorExtensionMethods
     {
-
         ///// <summary>
         ///// Add a simple data element.
         ///// Uses default service client to get attribute master data.
@@ -118,7 +118,7 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         public static IEnumerable<OpDataElementAtrb> GetAtrbs(this OpDataCollector dc, string atrbCd)
         {
-            if (dc?.DataElements == null) { return new OpDataElementAtrb[]{}; }
+            if (dc?.DataElements == null) { return new OpDataElementAtrb[] { }; }
             return dc.DataElements.Where(de => de.AtrbCd == atrbCd);
         }
 
@@ -130,8 +130,6 @@ namespace Intel.MyDeals.Entities
             if (dc?.DataElements == null) { return new OpDataElementAtrb[] { }; }
             return dc.DataElements.Where(de => de.AtrbID == atrbId);
         }
-
-
 
         /// <summary>
         /// Ensure each data collector has the DcAltId set when known, and has an OpDataElement for DEAL_SID.
@@ -166,7 +164,7 @@ namespace Intel.MyDeals.Entities
 
             dc.DcType = dealType ?? string.Empty;
 
-            IOpDataElement deDealTypeCd = (IOpDataElement) dc.GetAtrb("OBJ_TYPE");
+            IOpDataElement deDealTypeCd = (IOpDataElement)dc.GetAtrb("OBJ_TYPE");
             if (deDealTypeCd == null)
             {
                 dc.DataElements.Add(new OpDataElement
@@ -185,9 +183,8 @@ namespace Intel.MyDeals.Entities
             }
             else if (deDealTypeCd.AtrbValue.ToString() == string.Empty)
             {
-                deDealTypeCd.AtrbValue=dc.DcType;
+                deDealTypeCd.AtrbValue = dc.DcType;
             }
-
         }
 
         public static void AddTimelineComment(this OpDataCollector dc, string message)
@@ -221,7 +218,6 @@ namespace Intel.MyDeals.Entities
             }
         }
 
-
         /// <summary>
         /// Ensure each data collector has the DcAltId set when known, and has an OpDataElement for DEAL_SID.
         /// </summary>
@@ -244,7 +240,6 @@ namespace Intel.MyDeals.Entities
                     State = OpDataElementState.Unchanged
                 });
             }
-
         }
 
         public static bool HasTracker(this OpDataCollector dc)
@@ -258,17 +253,17 @@ namespace Intel.MyDeals.Entities
             return hasTracker == "1";
         }
 
-        public static void ApplySecurityAttributes(this OpDataCollector dc, 
-            string atrbAction, 
-            SecurityWrapper securityWrapper, 
-            string[] excludeList = null, 
+        public static void ApplySecurityAttributes(this OpDataCollector dc,
+            string atrbAction,
+            SecurityWrapper securityWrapper,
+            string[] excludeList = null,
             Dictionary<string, bool> securityActionCache = null)
         {
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
             if (dc.GetDataElementValue("OBJ_SET_TYPE_CD") == "") return;
 
             OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.GetDataElementValue("OBJ_SET_TYPE_CD"));
-			string stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             if (dcType == OpDataElementType.WIP_DEAL || dcType == OpDataElementType.PRC_TBL_ROW) stg = dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
             if (excludeList == null) excludeList = new string[] { };
 
@@ -281,7 +276,7 @@ namespace Intel.MyDeals.Entities
             {
                 var result = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
                     dcType,
-					objSetType,
+                    objSetType,
                     stg,
                     atrbAction,
                     de.AtrbCd,
@@ -293,8 +288,7 @@ namespace Intel.MyDeals.Entities
 
         public static OpDataCollector Clone(this OpDataCollector dc, int dcId)
         {
-            string dcJson = JsonConvert.SerializeObject(dc);
-            OpDataCollector dcClone = JsonConvert.DeserializeObject<OpDataCollector>(dcJson);
+            OpDataCollector dcClone = dc.DeepClone();
             dcClone.DcID = dcId;
             foreach (OpDataElement de in dcClone.DataElements)
             {
@@ -320,7 +314,7 @@ namespace Intel.MyDeals.Entities
             string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
             if (opDataElementType == OpDataElementType.ALL_OBJ_TYPE) opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
-            
+
             // load actions
             return workflows
                 .Where(w =>

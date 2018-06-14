@@ -13,6 +13,7 @@ using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Force.DeepCloner;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -961,8 +962,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (hasErrors)
             {
                 // "Clone" to object...
-                string json = JsonConvert.SerializeObject(myDealsData);
-                myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
+                myDealsDataWithErrors = myDealsData.DeepClone();
             }
 
             // Note to self..  This does take order values into account.
