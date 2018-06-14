@@ -120,6 +120,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             List<int> psGoingActive = new List<int>();
+            List<int> psGoingPending = new List<int>();
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
             List<int> auditableDealIds = new List<int>();
 
@@ -212,6 +213,12 @@ namespace Intel.MyDeals.BusinessLogic
                     targetStage = WorkFlowStages.Approved;
                 }
 
+                // Check to see if we are passing the Pending threshold
+                if (targetStage == WorkFlowStages.Pending)
+                {
+                    psGoingPending.Add(dc.DcID);
+                }
+
                 // Check to see if we are passing the Approved threshold and need to pass actions
                 if (targetStage == WorkFlowStages.Approved)
                 {
@@ -243,49 +250,23 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
 
-            // Now let us test for PCT or MCT if needed
-            //if (needsPctMctDealIds.Any())
-            //{
-            //    bool passMct, passPct;
-
-            //    start = DateTime.Now;
-            //    bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
-            //    contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
-
-            //    if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
-            //    {
-            //        string passMsg = !passMct && !passPct
-            //            ? "Meet Comp and Cost Test"
-            //            : !passMct ? "Meet Comp" : "Cost Test";
-
-            //        foreach (int dcId in needsPctMctDealIds)
-            //        {
-            //            opMsgQueue.Messages.Add(new OpMsg
-            //            {
-            //                Message = $"Pricing Strategy did not pass {passMsg}.",
-            //                MsgType = OpMsg.MessageType.Warning,
-            //                ExtraDetails = dcId,
-            //                KeyIdentifiers = new[] { dcId }
-            //            });
-            //        }
-
-            //        return opMsgQueue;
-            //    }
-
-            //}
-
-
-
             List<int> dealIds = new List<int>();
+            List<int> pendingDealIds = new List<int>();
             List<int> tenderDealIds = new List<int>();
             List<int> tenderWonDealsIds = new List<int>();
             List<int> quotableDealIds = new List<int>();
-            if (psGoingActive.Any())
+            if (psGoingPending.Any() || psGoingActive.Any())
             {
                 List<OpDataElementType> opDataElementTypesActive = new List<OpDataElementType>
                 {
                     OpDataElementType.WIP_DEAL
                 };
+
+                List<OpDataElement> deals = new List<OpDataElement>();
+                List<int> tenderPotentialIds = new List<int>();
+                List<OpDataElement> tenderDeals = new List<OpDataElement>();
+                List<OpDataElement> tenderWonDeals = new List<OpDataElement>();
+                myDealsData[OpDataElementType.WIP_DEAL] = new OpDataPacket<OpDataElementType>();
 
                 List<int> atrbsActive = new List<int>
                 {
@@ -295,57 +276,89 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID
                 };
 
-                start = DateTime.Now;
-                var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive, opDataElementTypesActive, atrbsActive);
-                contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
-
-                myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
-                List<OpDataElement> deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
-                dealIds = deals.Select(d => d.DcID).ToList();
-
-                List<int> tenderPotentialIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => d.AtrbHasValue(AttributeCodes.OBJ_SET_TYPE_CD, "ECAP") || d.AtrbHasValue(AttributeCodes.OBJ_SET_TYPE_CD, "KIT"))
-                    .Select(d => d.DcID).ToList();
-
-                List<OpDataElement> tenderDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => dealIds.Contains(d.DcID) && tenderPotentialIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
-                tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
-
-                List<OpDataElement> tenderWonDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => tenderDealIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.BID_STATUS, "Won")).ToList();
-                tenderWonDealsIds = tenderWonDeals.Select(d => d.DcID).ToList();
-
-                List<string> quotableTypes = new List<string> { "ECAP", "KIT"};
-                quotableDealIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                    .Where(d => dealIds.Contains(d.DcID) && d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString()))
-                    .Select(d => d.DcID).ToList();
-
-                foreach (OpDataElement de in deals)
+                if (psGoingPending.Any())
                 {
-                    de.SetAtrbValue(WorkFlowStages.Active);
+                    start = DateTime.Now;
+                    var myDealsPendingDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive.Union(psGoingPending), opDataElementTypesActive, atrbsActive);
+                    contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
-                    // If Tender... need to set the Bid Status
-                    if (!tenderDealIds.Contains(de.DcID)) continue;
-                    OpDataElement deBid = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.BID_STATUS).FirstOrDefault(d => d.DcID == de.DcID);
-                    if (deBid == null)
+                    foreach (OpDataCollector t in myDealsPendingDataPs[OpDataElementType.WIP_DEAL].Data.Values)
                     {
-                        OpDataCollector dc = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == de.DcID);
-                        dc?.DataElements.Add(new OpDataElement
-                        {
-                            DcID = dc.DcID,
-                            DcType = de.DcType,
-                            DcParentID = de.DcParentID,
-                            DcParentType = de.DcParentType,
-                            AtrbID = Attributes.BID_STATUS.ATRB_SID,
-                            AtrbCd = Attributes.BID_STATUS.ATRB_COL_NM,
-                            DataType = "System.String",
-                            AtrbValue = "Offer"
-                        });
+                        myDealsData[OpDataElementType.WIP_DEAL].Data.Add(t);
+                    }
+                    deals = myDealsPendingDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+                    pendingDealIds = deals.Select(d => d.DcID).ToList();
+
+                    foreach (OpDataElement de in deals)
+                    {
+                        de.SetAtrbValue(WorkFlowStages.Pending);
                     }
                 }
 
+                if (psGoingActive.Any())
+                {
+                    start = DateTime.Now;
+                    var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive.Union(psGoingPending), opDataElementTypesActive, atrbsActive);
+                    contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+                    foreach (OpDataCollector t in myDealsDataPs[OpDataElementType.WIP_DEAL].Data.Values)
+                    {
+                        myDealsData[OpDataElementType.WIP_DEAL].Data.Add(t);
+                    }
+
+                    myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
+                    deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+                    dealIds = deals.Select(d => d.DcID).ToList();
+
+                    tenderPotentialIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => d.AtrbHasValue(AttributeCodes.OBJ_SET_TYPE_CD, "ECAP") || d.AtrbHasValue(AttributeCodes.OBJ_SET_TYPE_CD, "KIT"))
+                        .Select(d => d.DcID).ToList();
+
+                    tenderDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => dealIds.Contains(d.DcID) && tenderPotentialIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
+                    tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
+
+                    tenderWonDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => tenderDealIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.BID_STATUS, "Won")).ToList();
+                    tenderWonDealsIds = tenderWonDeals.Select(d => d.DcID).ToList();
+
+                    List<string> quotableTypes = new List<string> { "ECAP", "KIT" };
+                    quotableDealIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => dealIds.Contains(d.DcID) && d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString()))
+                        .Select(d => d.DcID).ToList();
+
+                    foreach (OpDataElement de in deals)
+                    {
+                        if (psGoingActive.Any())
+                        {
+                            de.SetAtrbValue(WorkFlowStages.Active);
+
+                            // If Tender... need to set the Bid Status
+                            if (!tenderDealIds.Contains(de.DcID)) continue;
+                            OpDataElement deBid = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.BID_STATUS).FirstOrDefault(d => d.DcID == de.DcID);
+                            if (deBid == null)
+                            {
+                                OpDataCollector dc = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == de.DcID);
+                                dc?.DataElements.Add(new OpDataElement
+                                {
+                                    DcID = dc.DcID,
+                                    DcType = de.DcType,
+                                    DcParentID = de.DcParentID,
+                                    DcParentType = de.DcParentType,
+                                    AtrbID = Attributes.BID_STATUS.ATRB_SID,
+                                    AtrbCd = Attributes.BID_STATUS.ATRB_COL_NM,
+                                    DataType = "System.String",
+                                    AtrbValue = "Offer"
+                                });
+                            }
+                        }
+                    }
+
+                }
             }
+
 
 
             myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
@@ -360,7 +373,7 @@ namespace Intel.MyDeals.BusinessLogic
             //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
             myDealsData[OpDataElementType.PRC_ST].AddAuditActions(auditableDealIds);
 
-            if (dealIds.Any())
+            if (dealIds.Any() || pendingDealIds.Any())
             {
                 myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
                 myDealsData[OpDataElementType.WIP_DEAL].GroupID = -102; // Whatever the real ID of this object is
@@ -373,9 +386,12 @@ namespace Intel.MyDeals.BusinessLogic
                 List<int> nonTenderIds = dealIds.Where(d => !tenderDealIds.Contains(d)).ToList();
                 List<int> possibleMajorIds = dealIds.Where(d => !tenderDealIds.Contains(d) || tenderWonDealsIds.Contains(d)).ToList();
                 myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, possibleMajorIds);
-                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds.Union(tenderWonDealsIds).ToList()); // not sure if we need it in both places or just the PS
-                myDealsData[OpDataElementType.WIP_DEAL].AddQuoteLetterActions(quotableDealIds); // not sure if we need it in both places or just the PS
-                
+                if (dealIds.Any())
+                {
+                    myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds.Union(tenderWonDealsIds).ToList()); // not sure if we need it in both places or just the PS
+                    myDealsData[OpDataElementType.WIP_DEAL].AddQuoteLetterActions(quotableDealIds); // not sure if we need it in both places or just the PS
+                }
+
             }
 
             myDealsData.EnsureBatchIDs();

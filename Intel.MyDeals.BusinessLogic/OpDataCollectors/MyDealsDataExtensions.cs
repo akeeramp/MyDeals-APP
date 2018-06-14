@@ -955,11 +955,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (hasCriticalErrors)
             {
                 OpLog.Log("SavePacketsBase - Failed.");
-
-                // "Clone" to object...
-                string json = JsonConvert.SerializeObject(myDealsData);
-                myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
-                return myDealsDataWithErrors;
+                return myDealsData;
             }
 
             if (hasErrors)
