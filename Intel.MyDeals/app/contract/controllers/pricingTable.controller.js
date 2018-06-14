@@ -857,125 +857,127 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             };
                         }
 
-                        confirmationModal.showModal({}, modalOptions)
-							.then(function (result) { // Merge existing row with currently-changing row
-							    var originalExistingCopy = null;
-							    var originalExistingIndex = null;   //note: not zero-based - index X corresponds to the Xth kit grouping
-							    var prevValues = [];
-							    var root = $scope.$parent.$parent;	// Access to parent scope
-							    var sourceData = root.pricingTableData.PRC_TBL_ROW;
-							    var data = root.spreadDs.data();
-							    var numOfExistingTiers = 0;
+                        if (key !== "") {
+                            confirmationModal.showModal({}, modalOptions)
+                                .then(function (result) { // Merge existing row with currently-changing row
+                                    var originalExistingCopy = null;
+							        var originalExistingIndex = null;   //note: not zero-based - index X corresponds to the Xth kit grouping
+							        var prevValues = [];
+							        var root = $scope.$parent.$parent;	// Access to parent scope
+							        var sourceData = root.pricingTableData.PRC_TBL_ROW;
+							        var data = root.spreadDs.data();
+							        var numOfExistingTiers = 0;
 
-							    // Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
-							    for (var i = 0; i < data.length; i++) {
-							        if (data[i] !== undefined && originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) === 1 && data[i]["DC_ID"] === confirmationModPerDealGrp[result.key].existingDcID) {
-							            // get the original existing copy to merge everything into
-							            originalExistingCopy = angular.copy(data[i]);
-							            originalExistingIndex = i;
-							            break;
+							        // Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
+							        for (var i = 0; i < data.length; i++) {
+							            if (data[i] !== undefined && originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) === 1 && data[i]["DC_ID"] === confirmationModPerDealGrp[result.key].existingDcID) {
+							                // get the original existing copy to merge everything into
+							                originalExistingCopy = angular.copy(data[i]);
+							                originalExistingIndex = i;
+							                break;
+							            }
 							        }
-							    }
-							    // Find/get all occurances with deal-grp-nm
-							    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-							        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
-							            for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM values (not null), so we want to backtrack to include the other tiers within that group.  The reason the other tiers are null is because when a user changes a merged cell, kendo will only update the first row and keep the others in the merge group null.  we need to remember this and thus also enforce this behavior in applySpreadsheetMerge to make sure the data source is consistent in reflecting kendo's behavior
-							                prevValues.push(angular.copy(data[j]));
+							        // Find/get all occurances with deal-grp-nm
+							        for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
+							            if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+							                for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM values (not null), so we want to backtrack to include the other tiers within that group.  The reason the other tiers are null is because when a user changes a merged cell, kendo will only update the first row and keep the others in the merge group null.  we need to remember this and thus also enforce this behavior in applySpreadsheetMerge to make sure the data source is consistent in reflecting kendo's behavior
+							                    prevValues.push(angular.copy(data[j]));
 
-							                if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							                    // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
-							                    //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
+							                    if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+							                        // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
+							                        //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
 
-							                    numOfExistingTiers++;
+							                        numOfExistingTiers++;
 
-							                    if (parseInt(data[j]["TIER_NBR"]) == 1) {
-							                        continue;
+							                        if (parseInt(data[j]["TIER_NBR"]) == 1) {
+							                            continue;
+							                        }
+							                    }
+							                    else {
+							                        if (j < originalExistingIndex) {
+							                            // the original index will decrease if the row we are currently examining is above the original and gets spliced out for merging
+							                            originalExistingIndex -= 1;
+							                        }
+							                        // "delete" the rows to merge
+							                        data.splice(j, 1);
 							                    }
 							                }
-							                else {
-							                    if (j < originalExistingIndex) {
-							                        // the original index will decrease if the row we are currently examining is above the original and gets spliced out for merging
-							                        originalExistingIndex -= 1;
-							                    }
-							                    // "delete" the rows to merge
-							                    data.splice(j, 1);
+							            }
+							        }
+							        var numOfDuplicates = 0;
+							        // Check for and remove duplicates
+							        var duplicateCheckerDict = {};
+							        for (var i = prevValues.length - 1; i >= 0; i--) {
+							            if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
+							                prevValues.splice(i, 1);
+							                numOfDuplicates++;
+							            } else {
+							                duplicateCheckerDict[formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
+							            }
+							        }
+
+							        prevValues = prevValues.reverse();
+
+							        // Update the row to have merged deal grp names
+							        for (var i = 0; i < numOfExistingTiers; i++) {
+							            var updateIndex = originalExistingIndex + i;
+							            data[updateIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
+							            data[updateIndex]["PTR_SYS_PRD"] = null; // force revalidation
+							            data[updateIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
+							            data[updateIndex]['dirty'] = true;
+							        }
+
+							        cleanupData(data); // Cleanup to get KIT re-tiering
+							        sheet.batch(function (e) {
+							            // TODO: disable numOfDuplicates below data
+							            // Disable user editable columns
+							            disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
+
+							            // Re-enable Product column
+							            var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + (data.length + 2 + numOfDuplicates));
+							            prdRange.enable(true);
+							            prdRange.background(null);
+							        });
+							        // Re-put old merged dimensionalized values into the new merged rows
+							        for (var i = 0; i < parseInt(prevValues.length) ; i++) {
+							            var newRowIndex = originalExistingIndex + i; // data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
+							            for (var d = 0; d < root.kitDimAtrbs.length; d++) {
+							                if (root.kitDimAtrbs[d] == "TIER_NBR") {
+							                    continue;
 							                }
+							                data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
 							            }
 							        }
+							        // Recalculate KIT Rebate
+							        // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+							        data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(data[originalExistingIndex]["NUM_OF_TIERS"]), false);
+
+							        data[originalExistingIndex]['dirty'] = true;
+							        sourceData[originalExistingIndex]['dirty'] = true;
+
+							        //sync
+							        spreadDsSync();
+							        clearUndoHistory();
+							        root.child.setRowIdStyle(data);
+
 							    }
-							    var numOfDuplicates = 0;
-							    // Check for and remove duplicates
-							    var duplicateCheckerDict = {};
-							    for (var i = prevValues.length - 1; i >= 0; i--) {
-							        if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
-							            prevValues.splice(i, 1);
-							            numOfDuplicates++;
-							        } else {
-							            duplicateCheckerDict[formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
-							        }
-							    }
-
-							    prevValues = prevValues.reverse();
-
-							    // Update the row to have merged deal grp names
-							    for (var i = 0; i < numOfExistingTiers; i++) {
-							        var updateIndex = originalExistingIndex + i;
-							        data[updateIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
-							        data[updateIndex]["PTR_SYS_PRD"] = null; // force revalidation
-							        data[updateIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
-							        data[updateIndex]['dirty'] = true;
-							    }
-
-							    cleanupData(data); // Cleanup to get KIT re-tiering
-							    sheet.batch(function (e) {
-							        // TODO: disable numOfDuplicates below data
-							        // Disable user editable columns
-							        disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
-
-							        // Re-enable Product column
-							        var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + (data.length + 2 + numOfDuplicates));
-							        prdRange.enable(true);
-							        prdRange.background(null);
-							    });
-							    // Re-put old merged dimensionalized values into the new merged rows
-							    for (var i = 0; i < parseInt(prevValues.length) ; i++) {
-							        var newRowIndex = originalExistingIndex + i; // data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
-							        for (var d = 0; d < root.kitDimAtrbs.length; d++) {
-							            if (root.kitDimAtrbs[d] == "TIER_NBR") {
-							                continue;
+							    , function (response) { // Cancel Merge
+							        // Find all occurances with deal-grp-nm
+							        for (var i = data.length - 1; i >= 0; i--) {
+							            if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
+							                // Don't clear the existing
+							                if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
+							                    continue;
+							                }
+							                // Clear
+							                data[i]["DEAL_GRP_NM"] = "";
+							                data[i]["dirty"] = true;
 							            }
-							            data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
 							        }
+							        spreadDsSync();
 							    }
-							    // Recalculate KIT Rebate
-							    // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-							    data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(data[originalExistingIndex]["NUM_OF_TIERS"]), false);
-
-							    data[originalExistingIndex]['dirty'] = true;
-							    sourceData[originalExistingIndex]['dirty'] = true;
-
-							    //sync
-							    spreadDsSync();
-							    clearUndoHistory();
-							    root.child.setRowIdStyle(data);
-
-							}
-							, function (response) { // Cancel Merge
-							    // Find all occurances with deal-grp-nm
-							    for (var i = data.length - 1; i >= 0; i--) {
-							        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
-							            // Don't clear the existing
-							            if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
-							                continue;
-							            }
-							            // Clear
-							            data[i]["DEAL_GRP_NM"] = "";
-							            data[i]["dirty"] = true;
-							        }
-							    }
-							    spreadDsSync();
-							}
-						);
+						    );
+                        }
                     }
                 }   //end kit deal group merging
 
