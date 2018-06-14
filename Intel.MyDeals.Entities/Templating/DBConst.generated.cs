@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/12/2018 8:46:36 AM
+File Updated: 6/14/2018 4:09:33 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2688,6 +2688,7 @@ namespace Intel.MyDeals.Entities {
 		public const string Pending = "Pending";
 		public const string Requested = "Requested";
 		public const string Submitted = "Submitted";
+		public const string WonBid = "WonBid";
 	}
 
 
