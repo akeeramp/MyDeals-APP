@@ -418,7 +418,15 @@
                     if (value.length == 0) {
                         value = -1;
                     }
-                    meetCompService.getMeetCompData(vm.selectedCustomerID, vm.selectedProdCatName, vm.selectedBrandName, value.toString())
+
+                    var meetCompSearch = {
+                        "cid": vm.selectedCustomerID,
+                        "PRD_CAT_NM": vm.selectedProdCatName,
+                        "BRND_NM": vm.selectedBrandName,
+                        "HIER_VAL_NM": value.toString()
+                    };
+
+                    meetCompService.getMeetCompData(meetCompSearch)
                         .then(function (response) {
                             vm.meetCompMasterData = response.data;
                             var grid = $("#grid").data().kendoGrid;

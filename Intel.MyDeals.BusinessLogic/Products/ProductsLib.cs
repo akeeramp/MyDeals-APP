@@ -753,7 +753,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             userProd = Regex.Replace(userProd, " OR ", @"~", RegexOptions.IgnoreCase); // Replace OR with ~
             userProd = userProd.Replace("&", "~"); // Replace & with ~
-            userProd = userProd.Replace("+", "~"); // Replace & with ~
+            //Note: Removed due to Brand Name contains Plus (+)
+            //userProd = userProd.Replace("+", "~"); // Replace & with ~
 
             // Replace forward slash product separator
             var replaceSlashRegex = new Regex(@"\([^\)]*\)|(/)");

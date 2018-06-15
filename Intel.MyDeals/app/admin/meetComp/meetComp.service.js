@@ -19,8 +19,8 @@
 
         return service;
 
-        function getMeetCompData(cid, prodCatName, brandName, prodName) {
-            return dataService.get(apiBaseUrl + 'GetMeetCompData' + "/" + cid + "/" + prodCatName + "/" + brandName + "/" + prodName );
+        function getMeetCompData(data) {
+            return dataService.post(apiBaseUrl + 'GetMeetCompData', data );
         }
 
         function getMeetCompDIMData(cid, mode) {

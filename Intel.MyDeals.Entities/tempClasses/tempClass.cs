@@ -2317,4 +2317,20 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.DateTime endDate;
     }
+
+    public class MeetCompSearch
+    {
+        [DataMember]
+        public int cid;
+
+        [DataMember]
+        public string PRD_CAT_NM;
+
+        [DataMember]
+        public string BRND_NM;
+
+        [DataMember]
+        public string HIER_VAL_NM;
+
+    }
 }

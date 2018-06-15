@@ -27,10 +27,11 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <returns>Meet Comp Data</returns>
         [Authorize]
-        [Route("GetMeetCompData/{cid}/{PRD_CAT_NM}/{BRND_NM}/{HIER_VAL_NM}")]
-        public IEnumerable<MeetComp> GetMeetCompData(int cid, string PRD_CAT_NM, string BRND_NM, string HIER_VAL_NM = "") 
+        [Route("GetMeetCompData")]
+        [HttpPost]
+        public IEnumerable<MeetComp> GetMeetCompData(MeetCompSearch meetCompSearch) 
         {
-            return SafeExecutor(() => _meetCompLib.GetMeetCompData(cid, PRD_CAT_NM, BRND_NM, HIER_VAL_NM)
+            return SafeExecutor(() => _meetCompLib.GetMeetCompData(meetCompSearch.cid, meetCompSearch.PRD_CAT_NM, meetCompSearch.BRND_NM, meetCompSearch.HIER_VAL_NM)
                 , $"Unable to get {"Meet Comp data"}"
             );
         }
@@ -109,4 +110,6 @@ namespace Intel.MyDeals.Controllers.API
 
 
     }
+
+    
 }
