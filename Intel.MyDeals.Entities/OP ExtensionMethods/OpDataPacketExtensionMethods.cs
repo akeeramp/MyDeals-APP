@@ -140,7 +140,11 @@ namespace Intel.MyDeals.Entities
         {
             foreach (IOpDataCollector dc in packet.AllDataCollectors.Where(c => dealIds.Contains(c.DcID)))
             {
-                dc.SetDataElementValue(AttributeCodes.IN_REDEAL, 0);
+                IOpDataElement deReDeal = dc.GetDataElement(AttributeCodes.IN_REDEAL);
+                if (deReDeal != null)
+                {
+                    deReDeal.AtrbValue = 0;
+                }
             }
         }
 

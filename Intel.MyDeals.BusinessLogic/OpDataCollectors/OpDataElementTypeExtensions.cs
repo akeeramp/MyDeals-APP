@@ -163,6 +163,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.IN_REDEAL.ATRB_SID,
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.SYS_COMMENTS.ATRB_SID
             };

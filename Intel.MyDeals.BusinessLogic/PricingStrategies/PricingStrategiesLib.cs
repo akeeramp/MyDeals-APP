@@ -135,6 +135,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.IN_REDEAL.ATRB_SID,
                 Attributes.HAS_L1.ATRB_SID,
                 Attributes.SYS_COMMENTS.ATRB_SID
             };
@@ -273,6 +274,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.WF_STG_CD.ATRB_SID,
                     Attributes.BID_STATUS.ATRB_SID,
                     Attributes.REBATE_TYPE.ATRB_SID,
+                    Attributes.IN_REDEAL.ATRB_SID,
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID
                 };
 

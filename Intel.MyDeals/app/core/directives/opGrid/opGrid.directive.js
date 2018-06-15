@@ -1525,6 +1525,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["WF_STG_CD"] = args.WIP_DEAL[i]["WF_STG_CD"];
                             dataItem["PS_WF_STG_CD"] = args.WIP_DEAL[i]["PS_WF_STG_CD"];
                             dataItem["TRKR_NBR"] = args.WIP_DEAL[i]["TRKR_NBR"];
+                            dataItem["IN_REDEAL"] = args.WIP_DEAL[i]["IN_REDEAL"];
                             dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
                             dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
@@ -1548,6 +1549,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["WF_STG_CD"] = args.WIP_DEAL[i]["WF_STG_CD"];
                             dataItem["PS_WF_STG_CD"] = args.WIP_DEAL[i]["PS_WF_STG_CD"];
                             dataItem["TRKR_NBR"] = args.WIP_DEAL[i]["TRKR_NBR"];
+                            dataItem["IN_REDEAL"] = args.WIP_DEAL[i]["IN_REDEAL"];
                             dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
                             dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
