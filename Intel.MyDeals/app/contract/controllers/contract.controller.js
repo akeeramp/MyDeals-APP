@@ -697,9 +697,12 @@
                 pastDateConfirm($scope.contractData.START_DT, $scope.contractData.START_DT);
             }
 
-            if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) {
+            if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) { 
                 getCurrentQuarterDetails();
             } else {
+                if (moment($scope.contractData.END_DT) > moment($scope.contractData.START_DT).add(10, 'years')) {
+                    $scope.contractData.END_DT = moment($scope.contractData.START_DT).add(10, 'years').format("MM/DD/YYYY");
+                }
                 updateQuarterByDates('START_DT', $scope.contractData.START_DT);
                 updateQuarterByDates('END_DT', $scope.contractData.END_DT);
             }
