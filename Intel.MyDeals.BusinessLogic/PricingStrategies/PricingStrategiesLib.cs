@@ -312,7 +312,8 @@ namespace Intel.MyDeals.BusinessLogic
 
                     myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
                     deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft) 
+                        || d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Pending)).ToList();
                     dealIds = deals.Select(d => d.DcID).ToList();
 
                     tenderPotentialIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
@@ -324,7 +325,7 @@ namespace Intel.MyDeals.BusinessLogic
                     tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
 
                     tenderWonDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                        .Where(d => tenderDealIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.WF_STG_CD, "Won")).ToList();
+                        .Where(d => tenderDealIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Won)).ToList();
                     tenderWonDealsIds = tenderWonDeals.Select(d => d.DcID).ToList();
 
                     List<string> quotableTypes = new List<string> { "ECAP", "KIT" };

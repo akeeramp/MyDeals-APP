@@ -52,6 +52,7 @@ namespace Intel.MyDeals.BusinessRules
             // load settings
             List<string> possibleSettings = new List<string>
             {
+                SecurityActns.C_DEL_PRICING_STRATEGY,
                 SecurityActns.C_ADD_PRICING_TABLE,
                 SecurityActns.C_DEL_PRICING_TABLE,
                 SecurityActns.C_VIEW_QUOTE_LETTER,
@@ -239,26 +240,26 @@ namespace Intel.MyDeals.BusinessRules
 
         public static List<string> GetTenderActionList(string stage)
         {
-            List<string> availTenderStages = new List<string> { "Won", "Lost", "Offer" };
+            List<string> availTenderStages = new List<string> { WorkFlowStages.Won, WorkFlowStages.Lost, WorkFlowStages.Offer };
 
             List<string> actions = new List<string>();
             if (!availTenderStages.Contains(stage)) return actions;
 
             switch (stage)
             {
-                case "Offer":
-                    actions.Add("Offer");
-                    actions.Add("Won");
-                    actions.Add("Lost");
+                case WorkFlowStages.Offer:
+                    actions.Add(WorkFlowStages.Offer);
+                    actions.Add(WorkFlowStages.Won);
+                    actions.Add(WorkFlowStages.Lost);
                     break;
 
-                case "Won":
-                    actions.Add("Won");
+                case WorkFlowStages.Won:
+                    actions.Add(WorkFlowStages.Won);
                     break;
 
-                case "Lost":
-                    actions.Add("Offer");
-                    actions.Add("Lost");
+                case WorkFlowStages.Lost:
+                    actions.Add(WorkFlowStages.Offer);
+                    actions.Add(WorkFlowStages.Lost);
                     break;
             }
             return actions;

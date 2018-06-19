@@ -426,7 +426,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetTenderDealList(SearchParams data, bool activeOnly)
         {
-            string actvstr = activeOnly ? " AND WIP_DEAL_WF_STG_CD IN ('Won', 'Lost', 'Offer')" : "";
+            string actvstr = activeOnly ? " AND WIP_DEAL_WF_STG_CD IN ('" + WorkFlowStages.Won + "', '" + WorkFlowStages.Lost + "', '" + WorkFlowStages.Offer + "')" : "";
             return GetDealList(data, new List<int>
             {
                 Attributes.BLLG_DT.ATRB_SID,

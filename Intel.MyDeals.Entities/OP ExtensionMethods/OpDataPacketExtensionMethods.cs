@@ -51,7 +51,7 @@ namespace Intel.MyDeals.Entities
 
             // Also check Tender changes to Won
             List<int> wonTenderIds = testPacket.AllDataElements
-                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == "Won" && d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Won && d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
                 .Select(d => d.DcID).ToList();
 
             majorDealIds.AddRange(wonTenderIds);

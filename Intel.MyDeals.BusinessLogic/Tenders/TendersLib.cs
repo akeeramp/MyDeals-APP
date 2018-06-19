@@ -269,7 +269,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
                 contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
-                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == "Won");
+                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
 
                 // Get new Tender Action List
                 List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
@@ -288,7 +288,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     MsgType = OpMsg.MessageType.Info,
                     Message = "Action List",
-                    ExtraDetails = actn == "Won" ? (object) dictTrkrs : actions
+                    ExtraDetails = actn == WorkFlowStages.Won ? (object) dictTrkrs : actions
                 });
             }
 
