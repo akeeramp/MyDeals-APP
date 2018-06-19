@@ -1172,17 +1172,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 110,
                 ExcelTemplate = "#=gridUtils.formatDate(ON_ADD_DT)#"
             });
-            items.Add(new UiTemplateContainerItem  // WIP ECAP, Kit types
-            {
-                Id = 3435,
-                AtrbCd = AttributeCodes.BID_STATUS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
-                Template = "#=gridUtils.uiBidStatusControlWrapper(data, 'BID_STATUS')#",
-                IsFilterable = true,
-                IsSortable = true,
-                Width = 90
-            });
             items.Add(new UiTemplateContainerItem  // WIP VT types
             {
                 Id = 21,

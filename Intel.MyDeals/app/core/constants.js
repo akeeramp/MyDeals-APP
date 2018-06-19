@@ -240,9 +240,6 @@
                     "QLTR_PROJECT": {
                         "Groups": ["Deal Info"]
                     },
-                    "BID_STATUS": {
-                        "Groups": ["Deal Info"]
-                    },
                     "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
@@ -850,9 +847,6 @@
                         "Groups": ["Deal Info"]
                     },
                     "QLTR_PROJECT": {
-                        "Groups": ["Deal Info"]
-                    },
-                    "BID_STATUS": {
                         "Groups": ["Deal Info"]
                     },
                     "END_CUSTOMER_RETAIL": {

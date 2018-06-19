@@ -75,57 +75,58 @@ namespace Intel.MyDeals.BusinessLogic
 
         private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType)
         {
-            string rtn = string.Empty;
-            List<string> modifiedSearchList = new List<string>();
+            return "";
+            //string rtn = string.Empty;
+            //List<string> modifiedSearchList = new List<string>();
 
-            List<string> searchAtrbs = new List<string>
-            {
-                AttributeCodes.END_CUSTOMER_RETAIL,
-                AttributeCodes.QLTR_PROJECT,
-                AttributeCodes.TRKR_NBR,
-                AttributeCodes.TITLE,
-                AttributeCodes.BID_STATUS
-            };
+            //List<string> searchAtrbs = new List<string>
+            //{
+            //    AttributeCodes.END_CUSTOMER_RETAIL,
+            //    AttributeCodes.QLTR_PROJECT,
+            //    AttributeCodes.TRKR_NBR,
+            //    AttributeCodes.TITLE,
+            //    AttributeCodes.BID_STATUS
+            //};
 
-            // Tender Deals
-            modifiedSearchList.Add($"{opDataElementType}_REBATE_TYPE = 'TENDER'");
+            //// Tender Deals
+            //modifiedSearchList.Add($"{opDataElementType}_REBATE_TYPE = 'TENDER'");
 
-            // Set Start Date
-            modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.START_DT} <= '{data.StrEnd:MM/dd/yyyy}'");
+            //// Set Start Date
+            //modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.START_DT} <= '{data.StrEnd:MM/dd/yyyy}'");
 
-            // Set End Date
-            modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
+            //// Set End Date
+            //modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
 
-            // search string can be a comma delim string... each string needs to be validated against the list of atrbs
-            if (!string.IsNullOrEmpty(data.StrSearch))
-            {
-                var aSearch = data.StrSearch.Split(',');
-                foreach (string singleSearchText in aSearch)
-                {
-                    int dcId;
-                    List<string> conditions = new List<string>();
-                    if (int.TryParse(singleSearchText.Trim(), out dcId))
-                    {
-                        conditions.Add($"{opDataElementType}_OBJ_SID = {singleSearchText.Trim()}");
-                    }
-                    conditions.AddRange(searchAtrbs.Select(atrb => $"{opDataElementType}_{atrb} LIKE '%{singleSearchText.Trim().Replace("*","%")}%'"));
-                    modifiedSearchList.Add("(" + string.Join(" OR ", conditions) + ")");
-                }
-            }
+            //// search string can be a comma delim string... each string needs to be validated against the list of atrbs
+            //if (!string.IsNullOrEmpty(data.StrSearch))
+            //{
+            //    var aSearch = data.StrSearch.Split(',');
+            //    foreach (string singleSearchText in aSearch)
+            //    {
+            //        int dcId;
+            //        List<string> conditions = new List<string>();
+            //        if (int.TryParse(singleSearchText.Trim(), out dcId))
+            //        {
+            //            conditions.Add($"{opDataElementType}_OBJ_SID = {singleSearchText.Trim()}");
+            //        }
+            //        conditions.AddRange(searchAtrbs.Select(atrb => $"{opDataElementType}_{atrb} LIKE '%{singleSearchText.Trim().Replace("*","%")}%'"));
+            //        modifiedSearchList.Add("(" + string.Join(" OR ", conditions) + ")");
+            //    }
+            //}
 
-            // create the full string
-            rtn += string.Join(" AND ", modifiedSearchList);
+            //// create the full string
+            //rtn += string.Join(" AND ", modifiedSearchList);
 
-            // grid level filters and passed serverside and need to be converted into a sql where compatible string
-            string strFilters = SearchTools.BuildFilterClause(data.StrFilters, opDataElementType);
+            //// grid level filters and passed serverside and need to be converted into a sql where compatible string
+            //string strFilters = SearchTools.BuildFilterClause(data.StrFilters, opDataElementType);
 
-            // If no found filters... return
-            if (string.IsNullOrEmpty(strFilters)) return rtn;
+            //// If no found filters... return
+            //if (string.IsNullOrEmpty(strFilters)) return rtn;
 
-            // Put the search and filter criteria together
-            if (!string.IsNullOrEmpty(rtn)) rtn += " AND ";
-            rtn += strFilters;
-            return rtn;
+            //// Put the search and filter criteria together
+            //if (!string.IsNullOrEmpty(rtn)) rtn += " AND ";
+            //rtn += strFilters;
+            //return rtn;
         }
 
 
@@ -268,10 +269,10 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
                 contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
-                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.BID_STATUS, actn, actn == "Won");
+                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == "Won");
 
                 // Get new Tender Action List
-                List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn, WorkFlowStages.Active);
+                List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
 
                 List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
 

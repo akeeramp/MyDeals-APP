@@ -1528,7 +1528,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["IN_REDEAL"] = args.WIP_DEAL[i]["IN_REDEAL"];
                             dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
-                            dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
                             dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"];
                             dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
                         }
@@ -1552,7 +1551,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["IN_REDEAL"] = args.WIP_DEAL[i]["IN_REDEAL"];
                             dataItem["AVG_RPU"] = args.WIP_DEAL[i]["AVG_RPU"];
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
-                            dataItem["BID_STATUS"] = args.WIP_DEAL[i]["BID_STATUS"];
                             dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"];
                             dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
                         }

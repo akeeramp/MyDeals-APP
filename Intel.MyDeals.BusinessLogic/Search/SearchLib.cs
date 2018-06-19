@@ -139,7 +139,7 @@ namespace Intel.MyDeals.BusinessLogic
                 AttributeCodes.QLTR_PROJECT,
                 AttributeCodes.TRKR_NBR,
                 AttributeCodes.TITLE,
-                AttributeCodes.BID_STATUS
+                AttributeCodes.WF_STG_CD
             };
 
             // Tender Deals
@@ -316,7 +316,7 @@ namespace Intel.MyDeals.BusinessLogic
                         item["Customer"] = new Dictionary<string,object>();
                         item[AttributeCodes.ECAP_PRICE] = "no access";
                         item[AttributeCodes.CAP] = "no access";
-                        item[AttributeCodes.BID_STATUS] = "no access";
+                        item[AttributeCodes.WF_STG_CD] = "no access";
                         item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
                         item[AttributeCodes.VOLUME] = "no access";
                         item[AttributeCodes.CREDIT_VOLUME] = "no access";
@@ -339,7 +339,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             item[AttributeCodes.ECAP_PRICE] = "no access";
                             item[AttributeCodes.CAP] = "no access";
-                            item[AttributeCodes.BID_STATUS] = "no access";
+                            item[AttributeCodes.WF_STG_CD] = "no access";
                             item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
                             item[AttributeCodes.VOLUME] = "no access";
                             item[AttributeCodes.CREDIT_VOLUME] = "no access";
@@ -426,10 +426,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetTenderDealList(SearchParams data, bool activeOnly)
         {
-            string actvstr = activeOnly ? " AND WIP_DEAL_WF_STG_CD = 'Active'" : "";
+            string actvstr = activeOnly ? " AND WIP_DEAL_WF_STG_CD IN ('Won', 'Lost', 'Offer')" : "";
             return GetDealList(data, new List<int>
             {
-                Attributes.BID_STATUS.ATRB_SID,
                 Attributes.BLLG_DT.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
                 Attributes.CREDIT_AMT.ATRB_SID,

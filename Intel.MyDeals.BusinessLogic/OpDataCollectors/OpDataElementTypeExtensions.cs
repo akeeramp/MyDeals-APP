@@ -208,9 +208,9 @@ namespace Intel.MyDeals.BusinessLogic
                     if (prevVal != value.ToString()) de.State = OpDataElementState.Modified;
                 }
 
-                if (atrb.ATRB_COL_NM == AttributeCodes.BID_STATUS && prevVal != value.ToString())
+                if (atrb.ATRB_COL_NM == AttributeCodes.WF_STG_CD && prevVal != value.ToString())
                 {
-                    dc.AddTimelineComment($"Bid Status changed from {prevVal} to {value}");
+                    dc.AddTimelineComment($"Stage changed from {prevVal} to {value}");
                 }
             }
 

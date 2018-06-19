@@ -127,7 +127,7 @@
             excelTemplate: " ",
             bypassExport: true
         }, {
-            field: "BID_STATUS",
+            field: "WF_STG_CD",
             title: "Bid Action",
             template: "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
             excelTemplate: "#=gridUtils.getBidActionsLabel(data)#</div>",
@@ -154,13 +154,13 @@
             type: "number",
             width: 100,
             filterable: $scope.numObjFilter,
-            template: "#= gridUtils.goToObject(data, 'BID_STATUS', 'DC_ID') #"
+            template: "#= gridUtils.goToObject(data, 'WF_STG_CD', 'DC_ID') #"
         }, {
             field: "CNTRCT_TITLE",
             title: "Contract Title",
             type: "string",
             width: 120,
-            template: "#= gridUtils.goToObject(data, 'BID_STATUS', 'CNTRCT_OBJ_SID', 'CNTRCT_TITLE') #"
+            template: "#= gridUtils.goToObject(data, 'WF_STG_CD', 'CNTRCT_OBJ_SID', 'CNTRCT_TITLE') #"
         }, {
             field: "PRODUCT_FILTER",
             title: "Product",
@@ -442,18 +442,18 @@
         $scope.canShowCheckBox = function (dataItem, scope) {
             if (dataItem.BID_ACTNS === undefined) return "";
 
-            var ar = dataItem["BID_STATUS"];
+            var ar = dataItem["WF_STG_CD"];
             if (ar !== undefined && ar !== null && ar === "no access") {
                 return false;
             }
 
-            return dataItem.BID_ACTNS.length > 1 && (scope.curLinkedVal === "" || scope.curLinkedVal === dataItem.BID_STATUS);
+            return dataItem.BID_ACTNS.length > 1 && (scope.curLinkedVal === "" || scope.curLinkedVal === dataItem.WF_STG_CD);
         }
 
         $scope.chkClick = function (dataItem, scope) {
             var isLinked = dataItem.isLinked;
             if (isLinked) {
-                scope.curLinkedVal = dataItem.BID_STATUS;
+                scope.curLinkedVal = dataItem.WF_STG_CD;
             } else {
                 var data = scope.ds.data();
                 var linkedData = $linq.Enumerable().From(data)
@@ -475,7 +475,7 @@
         }
 
         $scope.changeBidAction = function (dataItem, scope) {
-            var newVal = dataItem.BID_STATUS;
+            var newVal = dataItem.WF_STG_CD;
             var dsData = scope.ds.data();
             var tenders = [];
 
@@ -483,7 +483,7 @@
             if (dataItem.isLinked) {
                 for (var d = 0; d < dsData.length; d++) {
                     if (dsData[d].isLinked) {
-                        dsData[d].BID_STATUS = newVal;
+                        dsData[d].WF_STG_CD = newVal;
                         tenders.push({
                             DC_ID: dsData[d].DC_ID,
                             CNTRCT_OBJ_SID: dsData[d].CNTRCT_OBJ_SID,
@@ -516,12 +516,12 @@
                     if (dataItem.isLinked) {
                         for (var d = 0; d < dsData.length; d++) {
                             if (dsData[d].isLinked) {
-                                dsData[d].BID_STATUS = dataItem["orig_BID_STATUS"];
+                                dsData[d].WF_STG_CD = dataItem["orig_WF_STG_CD"];
                                 dropdownlist = $("#ddListStat_" + dsData[d].DC_ID).data("kendoDropDownList");
                                 indx = 0;
                                 lis = dropdownlist.ul.children();
                                 for (i = 0; i < lis.length; i++) {
-                                    if (lis[i].textContent === dsData[d]["orig_BID_STATUS"]) indx = i;
+                                    if (lis[i].textContent === dsData[d]["orig_WF_STG_CD"]) indx = i;
                                 }
                                 dsData[d]['isLinked'] = false;
                                 dropdownlist.select(indx);
@@ -532,7 +532,7 @@
                         indx = 0;
                         lis = dropdownlist.ul.children();
                         for (i = 0; i < lis.length; i++) {
-                            if (lis[i].textContent === dataItem["orig_BID_STATUS"]) indx = i;
+                            if (lis[i].textContent === dataItem["orig_WF_STG_CD"]) indx = i;
                         }
                         dropdownlist.select(indx);
                     }
@@ -623,7 +623,7 @@
 
             // Uncheck row
             dsData['isLinked'] = false;
-            var bidSatus = dsData.BID_STATUS;
+            var bidSatus = dsData.WF_STG_CD;
 
             var dropdownlist = $("#ddListStat_" + dsData.DC_ID).data("kendoDropDownList");
             var oldData = dropdownlist.dataSource.data();

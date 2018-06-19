@@ -1005,7 +1005,7 @@ gridUtils.tender = function (dataItem, field, format) {
     }
     if (ar === undefined || ar === null)
     {
-        return dataItem["BID_STATUS"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
+        return dataItem["WF_STG_CD"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
     }
 
 
@@ -1029,7 +1029,7 @@ gridUtils.tenderDim = function (dataItem, field, format) {
         return "<div class='noaccess'>no access</div>";
     }
     if (ar === undefined || ar === null) {
-        return dataItem["BID_STATUS"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
+        return dataItem["WF_STG_CD"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
     }
 
     function compare(a, b) {
@@ -1275,7 +1275,7 @@ gridUtils.stgOneChar = function (dataItem) {
 gridUtils.getBidActionsLabel = function (data) {
     var bidActns = gridUtils.getBidActionsList(data);
     if (bidActns.length === 0) return "Not Actionable";
-    return data.BID_STATUS;
+    return data.WF_STG_CD;
 }
 
 gridUtils.getBidActionsList = function (data) {
@@ -1333,19 +1333,19 @@ gridUtils.goToObject = function (data, accessCheckField, field, title) {
 gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined) return "";
 
-    var ar = data["BID_STATUS"];
+    var ar = data["WF_STG_CD"];
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
 
     var bidActns = gridUtils.getBidActionsList(data);
-    data["orig_BID_STATUS"] = data.BID_STATUS;
+    data["orig_WF_STG_CD"] = data.WF_STG_CD;
     data.BID_ACTNS = bidActns;
 
-    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>{{dataItem.BID_STATUS}}<div style='color: #aaaaaa;' title='This deal is currently being negotiated and is not Active yet.  Once the deal gets approved, it will be available to action.'>(<i>Not Actionable</i>)</div></div>";
-    if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.BID_STATUS}}</div>";
+    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is currently being negotiated and is not approved yet.  Once the deal gets approved, it will be available to action.'>(<i>Not Actionable</i>)</div></div>";
+    if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}</div>";
 
-    return '<select kendo-drop-down-list id="ddListStat_' + data.DC_ID + '" ng-model="(dataItem.BID_STATUS)" ' +
+    return '<select kendo-drop-down-list id="ddListStat_' + data.DC_ID + '" ng-model="(dataItem.WF_STG_CD)" ' +
         'k-data-text-field="\'BidActnName\'" ' +
         'k-data-value-field="\'BidActnValue\'" ' +
         'k-data-source="dataItem.BID_ACTNS" ' +
@@ -1357,7 +1357,7 @@ gridUtils.showBidStatusWip = function (data) {
     //if (data.WF_STG_CD === "Draft") return data.REBATE_TYPE === "TENDER" ? "<i>Not Actionable</i>" : "";
     // new requirement... show blank for tender also
     if (data.WF_STG_CD === "Draft") return "";
-    return "<a href='/advancedSearch#/tenderSearch?id=" + data.DC_ID + "'>" + data.BID_STATUS + "</a>";
+    return "<a href='/advancedSearch#/tenderSearch?id=" + data.DC_ID + "'>" + data.WF_STG_CD + "</a>";
 }
 
 gridUtils.stgFullTitleChar = function (dataItem) {

@@ -110,10 +110,9 @@
                     fields: {
                         DC_ID: { type: "number" },
                         TITLE: { type: "string" },
-                        BID_STATUS: { type: "string" },
+                        WF_STG_CD: { type: "string" },
                         OBJ_SET_TYPE_CD: { type: "string" },
                         PASSED_VALIDATION: { type: "string" },
-                        WF_STG_CD: { type: "string" },
                         TRKR_NBR: { type: "object" },
                         PRODUCT_FILTER: { type: "object" },
                         START_DT: { type: "date" },
@@ -163,7 +162,7 @@
                 }
             },
             filterMenuInit: function (e) {
-                if (e.field === "BID_STATUS" || e.field === "OBJ_SET_TYPE_CD") {
+                if (e.field === "WF_STG_CD" || e.field === "OBJ_SET_TYPE_CD") {
                     var firstValueDropDown = e.container.find("select:eq(0)").data("kendoDropDownList");
                     var infoMsg = e.container.find(".k-filter-help-text");
                     setTimeout(function () {
@@ -187,7 +186,7 @@
                     sortable: false,
                     template: "<deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='canShowCheckBox(dataItem)'></deal-tools>"
                 }, {
-                    field: "BID_STATUS",
+                    field: "WF_STG_CD",
                     title: "Bid Action",
                     template: "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
                     filterable: {
@@ -344,7 +343,7 @@
                             newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
                             elem.innerHTML = newHtmlVal;
                             if (j === 0) elem.innerHTML = "";
-                            if (j === 1) elem.innerHTML = dataItem.BID_STATUS;
+                            if (j === 1) elem.innerHTML = dataItem.WF_STG_CD;
                             if (row.cells[columnTemplate.cellIndex] != undefined) {
                                 // Output the text content of the templated cell into the exported cell.
                                 var newVal = elem.textContent || elem.innerText || "";
@@ -392,13 +391,13 @@
 
         $scope.canShowCheckBox = function (dataItem) {
             if (dataItem.BID_ACTNS === undefined) return "";
-            return dataItem.BID_ACTNS.length > 1 && ($scope.curLinkedVal === "" || $scope.curLinkedVal === dataItem.BID_STATUS);
+            return dataItem.BID_ACTNS.length > 1 && ($scope.curLinkedVal === "" || $scope.curLinkedVal === dataItem.WF_ST_CD);
         }
 
         $scope.chkClick = function (dataItem) {
             var isLinked = dataItem.isLinked;
             if (isLinked) {
-                $scope.curLinkedVal = dataItem.BID_STATUS;
+                $scope.curLinkedVal = dataItem.WF_STG_CD;
             } else {
                 var data = $scope.ds.data();
                 var linkedData = $linq.Enumerable().From(data)
@@ -411,7 +410,7 @@
 
         $scope.changeBidAction = function (e) {
             var dataItem = e.sender.$angular_scope.dataItem;
-            var newVal = dataItem.BID_STATUS;
+            var newVal = dataItem.WF_STG_CD;
             var dsData = $scope.ds.data();
             var ids = [];
 
@@ -419,7 +418,7 @@
             if (dataItem.isLinked) {
                 for (var d = 0; d < dsData.length; d++) {
                     if (dsData[d].isLinked) {
-                        dsData[d].BID_STATUS = newVal;
+                        dsData[d].WF_STG_CD = newVal;
                         ids.push(dsData[d].DC_ID);
                     }
                 }
@@ -439,7 +438,7 @@
                     $scope.actionTenderDeals(ids.join(","), newVal);
                 },
                 function () {
-                    dataItem["BID_STATUS"] = dataItem["orig_BID_STATUS"];
+                    dataItem["WF_STG_CD"] = dataItem["orig_WF_STG_CD"];
                     $scope.ds.read();
                 });
 

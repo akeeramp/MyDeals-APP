@@ -205,22 +205,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (rebateType.ToUpper() != "TENDER" || (objType != "ECAP" && objType != "KIT")) return;
 
-            string bidValue = r.Dc.GetDataElementValue(AttributeCodes.BID_STATUS);
             string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-
-            // TODO need a new security action for C_BID_TENDERS
-            if (bidValue == string.Empty)
-            {
-                bidValue = "Offer";
-                r.Dc.DataElements.Add(new OpDataElement
-                {
-                    DcID = r.Dc.DcID,
-                    AtrbID = 99999,
-                    AtrbCd = "BID_STATUS",
-                    DataType = "System.String",
-                    AtrbValue = bidValue
-                });
-            }
 
             OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
             OpDataElementSetType opDataElementSetType = OpDataElementSetTypeConverter.FromString(r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
@@ -230,7 +215,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (canBidTender)
             {
-                actions = GetTenderActionList(bidValue, stage);
+                actions = GetTenderActionList(stage);
             }
 
             IOpDataElement deBidActn = r.Dc.GetDataElement("BID_ACTNS");
@@ -252,12 +237,14 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static List<string> GetTenderActionList(string bidValue, string stage)
+        public static List<string> GetTenderActionList(string stage)
         {
-            List<string> actions = new List<string>();
-            if (stage != WorkFlowStages.Active) return actions;
+            List<string> availTenderStages = new List<string> { "Won", "Lost", "Offer" };
 
-            switch (bidValue)
+            List<string> actions = new List<string>();
+            if (!availTenderStages.Contains(stage)) return actions;
+
+            switch (stage)
             {
                 case "Offer":
                     actions.Add("Offer");

@@ -300,7 +300,6 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[]
                             {
-                                AttributeCodes.BID_STATUS,
                                 AttributeCodes.BLLG_DT,
                                 AttributeCodes.CAP,
                                 AttributeCodes.CAP_END_DT,
