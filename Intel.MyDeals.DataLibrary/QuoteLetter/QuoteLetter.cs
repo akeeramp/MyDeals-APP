@@ -49,39 +49,42 @@ namespace Intel.MyDeals.DataLibrary
             return val;
         }
 
-        string MoneyMult(string moneyValue, string qty)
-        {
-            var val = "$0";
-            if (string.IsNullOrEmpty(qty))
-            {
-                qty = "1";
-            }
-            if (!string.IsNullOrEmpty(moneyValue))
-            {
-                val = (decimal.Parse(moneyValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) * decimal.Parse(qty)).ToString("C2");
-            }
-            return val;
-        }
+        ////function not used with removal of kit discount
+        //string MoneyMult(string moneyValue, string qty)
+        //{
+        //    var val = "$0";
+        //    if (string.IsNullOrEmpty(qty))
+        //    {
+        //        qty = "1";
+        //    }
+        //    if (!string.IsNullOrEmpty(moneyValue))
+        //    {
+        //        val = (decimal.Parse(moneyValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) * decimal.Parse(qty)).ToString("C2");
+        //    }
+        //    return val;
+        //}
 
-        string MoneyAdd(string moneyValue1, string moneyValue2)
-        {
-            var val = moneyValue1;
-            if (!(string.IsNullOrEmpty(moneyValue1) || string.IsNullOrEmpty(moneyValue2)))
-            {
-                val = (decimal.Parse(moneyValue1, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) + decimal.Parse(moneyValue2, NumberStyles.AllowCurrencySymbol | NumberStyles.Number)).ToString("C2");
-            }
-            return val;
-        }
+        ////function not used with removal of kit discount
+        //string MoneyAdd(string moneyValue1, string moneyValue2)
+        //{
+        //    var val = moneyValue1;
+        //    if (!(string.IsNullOrEmpty(moneyValue1) || string.IsNullOrEmpty(moneyValue2)))
+        //    {
+        //        val = (decimal.Parse(moneyValue1, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) + decimal.Parse(moneyValue2, NumberStyles.AllowCurrencySymbol | NumberStyles.Number)).ToString("C2");
+        //    }
+        //    return val;
+        //}
 
-        string MoneySub(string moneyValue1, string moneyValue2)
-        {
-            var val = moneyValue1;
-            if (!(string.IsNullOrEmpty(moneyValue1) || string.IsNullOrEmpty(moneyValue2)))
-            {
-                val = (decimal.Parse(moneyValue1, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) - decimal.Parse(moneyValue2, NumberStyles.AllowCurrencySymbol | NumberStyles.Number)).ToString("C2");
-            }
-            return val;
-        }
+        ////function not used with removal of kit discount
+        //string MoneySub(string moneyValue1, string moneyValue2)
+        //{
+        //    var val = moneyValue1;
+        //    if (!(string.IsNullOrEmpty(moneyValue1) || string.IsNullOrEmpty(moneyValue2)))
+        //    {
+        //        val = (decimal.Parse(moneyValue1, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) - decimal.Parse(moneyValue2, NumberStyles.AllowCurrencySymbol | NumberStyles.Number)).ToString("C2");
+        //    }
+        //    return val;
+        //}
 
         static string EscapeSpecialChars(string xml)
         {
@@ -111,94 +114,97 @@ namespace Intel.MyDeals.DataLibrary
             txtECAPType.Value = GetValue("RebateType");
             txtQuantity.Value = GetValue("Quantity");
             txtProgramPayment.Value = GetValue("ProgramPayment");
+            txtBasedOn.Value = GetValue("PayoutBasedOn");
 
             string stage = GetValue("WfStgCd");
             string psStage = GetValue("PsWfStgCd");
             string tracker = GetValue("PTracker");
             txtStatus.Value = tracker == "" ? WorkFlowStages.Offer : WorkFlowStages.Active;
             //txtStatus.Value = stage == "Draft" ? psStage : stage;
-
-            string qtyP1, qtyS1, qtyS2, qtyS3, qtyS4, qtyS5, qtyS6, qtyS7, qtyS8, qtyS9;
-
+            
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
-            txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
+            //txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
 
             txtP1Ecap.Value = GetMoneyValue("PECAPPrice");
             txtP1ProdName.Value = GetValue("PProdDesc");
             txtP1ProdSeg.Value = GetValue("PProdCat");
-            qtyP1 = GetValue("PQty");
+            txtQtyP1.Value = GetValue("PQty");
 
             txtS1Ecap.Value = GetMoneyValue("S1ECAPPrice");
             txtS1ProdName.Value = GetValue("S1ProdDesc");
             txtS1ProdSeg.Value = GetValue("S1ProdCat");
-            qtyS1 = GetValue("S1Qty");
+            txtQtyS1.Value = GetValue("S1Qty");
 
             txtS2Ecap.Value = GetMoneyValue("S2ECAPPrice");
             txtS2ProdName.Value = GetValue("S2ProdDesc");
             txtS2ProdSeg.Value = GetValue("S2ProdCat");
-            qtyS2 = GetValue("S2Qty");
+            txtQtyS2.Value = GetValue("S2Qty");
 
             txtS3Ecap.Value = GetMoneyValue("S3ECAPPrice");
             txtS3ProdName.Value = GetValue("S3ProdDesc");
             txtS3ProdSeg.Value = GetValue("S3ProdCat");
-            qtyS3 = GetValue("S3Qty");
+            txtQtyS3.Value = GetValue("S3Qty");
 
             txtS4Ecap.Value = GetMoneyValue("S4ECAPPrice");
             txtS4ProdName.Value = GetValue("S4ProdDesc");
             txtS4ProdSeg.Value = GetValue("S4ProdCat");
-            qtyS4 = GetValue("S4Qty");
+            txtQtyS4.Value = GetValue("S4Qty");
 
             txtS5Ecap.Value = GetMoneyValue("S5ECAPPrice");
             txtS5ProdName.Value = GetValue("S5ProdDesc");
             txtS5ProdSeg.Value = GetValue("S5ProdCat");
-            qtyS5 = GetValue("S5Qty");
+            txtQtyS5.Value = GetValue("S5Qty");
 
             txtS6Ecap.Value = GetMoneyValue("S6ECAPPrice");
             txtS6ProdName.Value = GetValue("S6ProdDesc");
             txtS6ProdSeg.Value = GetValue("S6ProdCat");
-            qtyS6 = GetValue("S6Qty");
+            txtQtyS6.Value = GetValue("S6Qty");
 
             txtS7Ecap.Value = GetMoneyValue("S7ECAPPrice");
             txtS7ProdName.Value = GetValue("S7ProdDesc");
             txtS7ProdSeg.Value = GetValue("S7ProdCat");
-            qtyS7 = GetValue("S7Qty");
+            txtQtyS7.Value = GetValue("S7Qty");
 
             txtS8Ecap.Value = GetMoneyValue("S8ECAPPrice");
             txtS8ProdName.Value = GetValue("S8ProdDesc");
             txtS8ProdSeg.Value = GetValue("S8ProdCat");
-            qtyS8 = GetValue("S8Qty");
+            txtQtyS8.Value = GetValue("S8Qty");
 
             txtS9Ecap.Value = GetMoneyValue("S9ECAPPrice");
             txtS9ProdName.Value = GetValue("S9ProdDesc");
             txtS9ProdSeg.Value = GetValue("S9ProdCat");
-            qtyS9 = GetValue("S9Qty");
+            txtQtyS9.Value = GetValue("S9Qty");
 
-            //calculate kit discount - Formula: (Sum of Component ECAPs * respective QTYs) - Kit ECAP = Kit Rebate Bundle Discount
-            txtK1DiscEcap.Value = "$0";
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtP1Ecap.Value, qtyP1));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS1Ecap.Value, qtyS1));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS2Ecap.Value, qtyS2));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS3Ecap.Value, qtyS3));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS4Ecap.Value, qtyS4));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS5Ecap.Value, qtyS5));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS6Ecap.Value, qtyS6));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS7Ecap.Value, qtyS7));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS8Ecap.Value, qtyS8));
-            txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS9Ecap.Value, qtyS9));
-            txtK1DiscEcap.Value = MoneySub(txtK1DiscEcap.Value, txtK1Ecap.Value);
-            txtK1DiscEcap.Value = txtK1DiscEcap.Value;
+            ////calculate kit discount - Formula: (Sum of Component ECAPs * respective QTYs) - Kit ECAP = Kit Rebate Bundle Discount
+            //txtK1DiscEcap.Value = "$0";
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtP1Ecap.Value, txtQtyP1.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS1Ecap.Value, txtQtyS1.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS2Ecap.Value, txtQtyS2.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS3Ecap.Value, txtQtyS3.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS4Ecap.Value, txtQtyS4.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS5Ecap.Value, txtQtyS5.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS6Ecap.Value, txtQtyS6.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS7Ecap.Value, txtQtyS7.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS8Ecap.Value, txtQtyS8.Value));
+            //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtS9Ecap.Value, txtQtyS9.Value));
+            //txtK1DiscEcap.Value = MoneySub(txtK1DiscEcap.Value, txtK1Ecap.Value);
+            //txtK1DiscEcap.Value = txtK1DiscEcap.Value;
 
             // T's and C's
             txtProject.Value = EscapeSpecialChars(GetValue("QltrProject"));
             txtTerms.Value = EscapeSpecialChars(GetValue("Terms"));
 
 
-            // Start hidding rows
+            // Start hiding rows
 
             if (GetValue("KitCheck") == "N")
             {
                 lblP1.Value = " ";
+                htmlTextBox3.Value = " ";   //the "Kit Qty" Header label
+                txtQtyP1.Value = " ";
+                lblK1.Value = " ";
+                txtK1Ecap.Value = " ";
             }
 
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))
@@ -222,6 +228,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtP1Ecap.Visible = false;
                 txtP1ProdName.Visible = false;
                 txtP1ProdSeg.Visible = false;
+                txtQtyP1.Visible = false;
+                lblK1.Visible = false;
+                txtK1Ecap.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS1ProdName.Value))
@@ -230,32 +239,35 @@ namespace Intel.MyDeals.DataLibrary
                 txtS1Ecap.Visible = false;
                 txtS1ProdName.Visible = false;
                 txtS1ProdSeg.Visible = false;
-                lblBlankS1.Visible = false;
+                txtQtyS1.Visible = false;
+                blankKitPriceS1.Visible = false;
+                blankMaxQtyS1.Visible = false;
             }
 
-            if (GetValue("KitCheck") == "N") //string.IsNullOrEmpty(txtK1ProdName.Value)
-            {
-                lblK1.Visible = false;
-                txtK1Ecap.Visible = false;
-                txtK1ProdName.Visible = false;
-                txtK1ProdSeg.Visible = false;
-                lblBlankK1.Visible = false;
-                lblK1Disc.Visible = false;
-                txtK1DiscEcap.Visible = false;
-                txtK1DiscProdName.Visible = false;
-                txtK1DiscProdSeg.Visible = false;
-                lblBlankK1Disc.Visible = false;
-            }
+            //// no longer in use now that KIT is a column rather than a row
+            //if (GetValue("KitCheck") == "N") //string.IsNullOrEmpty(txtK1ProdName.Value)
+            //{
+            //    //lblK1.Visible = false;
+            //    //txtK1Ecap.Visible = false;
+            //    //txtK1ProdName.Visible = false;
+            //    //txtK1ProdSeg.Visible = false;
+            //    //txtQtyK1.Visible = false;
+            //    //lblK1Disc.Visible = false;
+            //    //txtK1DiscEcap.Visible = false;
+            //    //txtK1DiscProdName.Visible = false;
+            //    //txtK1DiscProdSeg.Visible = false;
+            //    //txtQtyK1Disc.Visible = false;
+            //}
 
-            //if (GetValue("SubKitCheck") == "N")  //TODO: need to implement a sub kit check from db
-            if (string.IsNullOrEmpty(txtK2ProdName.Value))
-            {
-                lblK2.Visible = false;
-                txtK2Ecap.Visible = false;
-                txtK2ProdName.Visible = false;
-                txtK2ProdSeg.Visible = false;
-                lblBlankK2.Visible = false;
-            }
+            ////if (GetValue("SubKitCheck") == "N")  //TODO: need to implement a sub kit check from db
+            //if (string.IsNullOrEmpty(null))
+            //{
+            //    //lblK2.Visible = false;
+            //    //txtK2Ecap.Visible = false;
+            //    //txtK2ProdName.Visible = false;
+            //    //txtK2ProdSeg.Visible = false;
+            //    //txtQtyK2.Visible = false;
+            //}
 
             if (string.IsNullOrEmpty(txtS2ProdName.Value))
             {
@@ -263,7 +275,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS2Ecap.Visible = false;
                 txtS2ProdName.Visible = false;
                 txtS2ProdSeg.Visible = false;
-                lblBlankS2.Visible = false;
+                txtQtyS2.Visible = false;
+                blankKitPriceS2.Visible = false;
+                blankMaxQtyS2.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS3ProdName.Value))
@@ -272,7 +286,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS3Ecap.Visible = false;
                 txtS3ProdName.Visible = false;
                 txtS3ProdSeg.Visible = false;
-                lblBlankS3.Visible = false;
+                txtQtyS3.Visible = false;
+                blankKitPriceS3.Visible = false;
+                blankMaxQtyS3.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS4ProdName.Value))
@@ -281,7 +297,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS4Ecap.Visible = false;
                 txtS4ProdName.Visible = false;
                 txtS4ProdSeg.Visible = false;
-                lblBlankS4.Visible = false;
+                txtQtyS4.Visible = false;
+                blankKitPriceS4.Visible = false;
+                blankMaxQtyS4.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS5ProdName.Value))
@@ -290,7 +308,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS5Ecap.Visible = false;
                 txtS5ProdName.Visible = false;
                 txtS5ProdSeg.Visible = false;
-                lblBlankS5.Visible = false;
+                txtQtyS5.Visible = false;
+                blankKitPriceS5.Visible = false;
+                blankMaxQtyS5.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS6ProdName.Value))
@@ -299,7 +319,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS6Ecap.Visible = false;
                 txtS6ProdName.Visible = false;
                 txtS6ProdSeg.Visible = false;
-                lblBlankS6.Visible = false;
+                txtQtyS6.Visible = false;
+                blankKitPriceS6.Visible = false;
+                blankMaxQtyS6.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS7ProdName.Value))
@@ -308,7 +330,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS7Ecap.Visible = false;
                 txtS7ProdName.Visible = false;
                 txtS7ProdSeg.Visible = false;
-                lblBlankS7.Visible = false;
+                txtQtyS7.Visible = false;
+                blankKitPriceS7.Visible = false;
+                blankMaxQtyS7.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS8ProdName.Value))
@@ -317,7 +341,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS8Ecap.Visible = false;
                 txtS8ProdName.Visible = false;
                 txtS8ProdSeg.Visible = false;
-                lblBlankS8.Visible = false;
+                txtQtyS8.Visible = false;
+                blankKitPriceS8.Visible = false;
+                blankMaxQtyS8.Visible = false;
             }
 
             if (string.IsNullOrEmpty(txtS9ProdName.Value))
@@ -326,7 +352,9 @@ namespace Intel.MyDeals.DataLibrary
                 txtS9Ecap.Visible = false;
                 txtS9ProdName.Visible = false;
                 txtS9ProdSeg.Visible = false;
-                lblBlankS9.Visible = false;
+                txtQtyS9.Visible = false;
+                blankKitPriceS9.Visible = false;
+                blankMaxQtyS9.Visible = false;
             }
 
 
@@ -353,7 +381,8 @@ namespace Intel.MyDeals.DataLibrary
             txtEndDate.Value = GetStringValue(parameters["EndDate"].Value);
             txtECAPType.Value = GetStringValue(parameters["ECAPType"].Value);
             txtQuantity.Value = GetStringValue(parameters["Quantity"].Value);
-            txtProgramPayment.Value = GetStringValue(parameters["ProdSegment"].Value);
+            txtProgramPayment.Value = GetStringValue(parameters["ProgramPayment"].Value);
+            txtBasedOn.Value = GetStringValue(parameters["PayoutBasedOn"].Value);
             txtProject.Value = EscapeSpecialChars(GetStringValue(parameters["Project"].Value));
             txtTerms.Value = EscapeSpecialChars(GetStringValue(parameters["Terms"].Value));
 
