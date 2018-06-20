@@ -256,6 +256,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> tenderDealIds = new List<int>();
             List<int> tenderWonDealsIds = new List<int>();
             List<int> quotableDealIds = new List<int>();
+
             if (psGoingPending.Any() || psGoingActive.Any())
             {
                 List<OpDataElementType> opDataElementTypesActive = new List<OpDataElementType>
@@ -274,6 +275,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.WF_STG_CD.ATRB_SID,
                     Attributes.REBATE_TYPE.ATRB_SID,
                     Attributes.IN_REDEAL.ATRB_SID,
+                    Attributes.HAS_TRACKER.ATRB_SID,
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID
                 };
 
@@ -324,10 +326,6 @@ namespace Intel.MyDeals.BusinessLogic
                         .Where(d => dealIds.Contains(d.DcID) && tenderPotentialIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.REBATE_TYPE, "TENDER")).ToList();
                     tenderDealIds = tenderDeals.Select(d => d.DcID).ToList();
 
-                    tenderWonDeals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                        .Where(d => tenderDealIds.Contains(d.DcID) && d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Won)).ToList();
-                    tenderWonDealsIds = tenderWonDeals.Select(d => d.DcID).ToList();
-
                     List<string> quotableTypes = new List<string> { "ECAP", "KIT" };
                     quotableDealIds = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
                         .Where(d => dealIds.Contains(d.DcID) && d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString()))
@@ -337,7 +335,25 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         foreach (OpDataElement de in deals)
                         {
-                            de.SetAtrbValue(tenderDealIds.Contains(de.DcID) ? WorkFlowStages.Offer : WorkFlowStages.Active);
+                            if (tenderDealIds.Contains(de.DcID))
+                            {
+                                OpDataElement deTracker = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.FirstOrDefault(d => d.DcID == de.DcID && d.AtrbCd == AttributeCodes.HAS_TRACKER);
+                                if (deTracker != null && deTracker.AtrbValue.ToString() == "1")
+                                {
+                                    de.SetAtrbValue(WorkFlowStages.Won);
+                                    tenderWonDealsIds.Add(de.DcID);
+                                    dealIds.Add(de.DcID);
+                                }
+                                else
+                                {
+                                    de.SetAtrbValue(WorkFlowStages.Offer);
+                                }
+                            }
+                            else
+                            {
+                                de.SetAtrbValue(WorkFlowStages.Active);
+                            }
+
                         }
                     }
 
@@ -358,7 +374,7 @@ namespace Intel.MyDeals.BusinessLogic
             //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
             myDealsData[OpDataElementType.PRC_ST].AddAuditActions(auditableDealIds);
 
-            if (dealIds.Any() || pendingDealIds.Any())
+             if (dealIds.Any() || pendingDealIds.Any() || tenderWonDealsIds.Any())
             {
                 myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
                 myDealsData[OpDataElementType.WIP_DEAL].GroupID = -102; // Whatever the real ID of this object is

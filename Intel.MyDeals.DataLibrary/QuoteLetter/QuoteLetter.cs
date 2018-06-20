@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -114,7 +115,7 @@ namespace Intel.MyDeals.DataLibrary
             string stage = GetValue("WfStgCd");
             string psStage = GetValue("PsWfStgCd");
             string tracker = GetValue("PTracker");
-            txtStatus.Value = tracker == "" ? "Offer" : "Active";
+            txtStatus.Value = tracker == "" ? WorkFlowStages.Offer : WorkFlowStages.Active;
             //txtStatus.Value = stage == "Draft" ? psStage : stage;
 
             string qtyP1, qtyS1, qtyS2, qtyS3, qtyS4, qtyS5, qtyS6, qtyS7, qtyS8, qtyS9;

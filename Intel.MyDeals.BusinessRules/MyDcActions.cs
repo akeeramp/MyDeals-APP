@@ -1099,7 +1099,7 @@ namespace Intel.MyDeals.BusinessRules
                     : WorkFlowStages.Draft);
             }
 
-            if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
+            if (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
             {
                 bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
