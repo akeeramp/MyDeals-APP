@@ -2034,6 +2034,7 @@
                         }
 
                         $scope.$broadcast('removeRow', wip.DC_PARENT_ID);
+                        $scope.refreshContractData($scope.curPricingStrategyId);
 
                         $scope.setBusy("Delete Successful", "Deleted the " + $scope.ptTitle + " Row and Deal", "Success");
                         $timeout(function () {
@@ -2043,7 +2044,7 @@
 
                     },
                     function (response) {
-                        logger.error("Could not delete the " + $scope.ptTitle + " " + pt.DC_ID, response, response.statusText);
+                        logger.error("Could not delete the " + $scope.ptTitle + " " + wip.DC_PARENT_ID, response, response.statusText);
                         $scope.setBusy("", "");
                         topbar.hide();
                     }
