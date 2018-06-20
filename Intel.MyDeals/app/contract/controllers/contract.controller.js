@@ -435,11 +435,10 @@
             // Set customer acceptance rulesc
             var setCustAcceptanceRules = function (newValue) {
                 $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: (newValue === 'Pending');
-                $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && (!hasUnSavedFiles && !hasFiles);
+                $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && (!hasUnSavedFiles && !hasFiles) && !$scope.isTenderContract;
                 if ($scope.contractData.DC_ID < 0) $scope.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : $scope.contractData.C2A_DATA_C2A_ID;
-                $scope.contractData.IsAttachmentRequired = ($scope.contractData.C2A_DATA_C2A_ID === "") && (newValue !== 'Pending');
-                $scope.contractData.AttachmentError = $scope.contractData.AttachmentError &&
-                    $scope.contractData.IsAttachmentRequired;
+                $scope.contractData.IsAttachmentRequired = !$scope.isTenderContract && $scope.contractData.C2A_DATA_C2A_ID === "" && newValue !== 'Pending';
+                $scope.contractData.AttachmentError = $scope.contractData.AttachmentError && $scope.contractData.IsAttachmentRequired;
             }
 
             // Contract name validation
@@ -789,8 +788,7 @@
                 $(".k-upload-selected").hide();
             });
 
-            $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = $scope.contractData._behaviors
-                .isError["C2A_DATA_C2A_ID"] = false;
+            $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = $scope.contractData._behaviors.isError["C2A_DATA_C2A_ID"] = false;
             if ($scope.contractData.DC_ID < 0) $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
             hasUnSavedFiles = true;
             $scope.contractData.AttachmentError = false;
@@ -798,7 +796,7 @@
 
         $scope.onFileRemove = function (e) {
             var numberOfFiles = $("#fileUploader").data("kendoUpload").getFiles().length;
-            if (numberOfFiles <= 1) {
+            if (numberOfFiles <= 1 && !$scope.isTenderContract) {
                 $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = true;
                 hasUnSavedFiles = false;
             }
