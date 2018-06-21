@@ -34,6 +34,23 @@
             <div class="btn-desc" ng-if="C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">Or, create a My Deals contract from an existing one</div>
             <div class="btn-desc" ng-if="!C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">You <b>do not</b> have access to Create Contracts</div>
         </div>
+ 
+        <div style="padding: 25px 0 0 0;">
+            <div class="fl" style="font-size: 30px; margin: -5px 10px 0 0; height: 20px">
+                <i class="intelicon-new-document-solid text-warning"></i>
+            </div>
+
+            <div class="fl btn-mock" onclick="newCntrct(true)" ng-if="C_CREATE_CONTRACT">
+                <div class="btn-ttl">Tender Folio</div>
+            </div>
+            <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">Tender Folio</div>
+            </div>
+
+            <div class="clearboth"></div>
+            <div class="btn-desc" ng-if="C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">Create a place for entering OEM tender deals</div>
+            <div class="btn-desc" ng-if="!C_CREATE_CONTRACT" style="text-align: left; margin-left: 40px;">You <b>do not</b> have access to Create Tender Folios</div>
+        </div>
     </div>
 
     <div class="widget-md widget-sm" style="display: none;">
@@ -62,7 +79,7 @@
             </div>
 
             <div class="fl btn-mock" ng-click="openCopyCntrctDlg()" ng-if="C_CREATE_CONTRACT">
-                <div class="btn-ttl">Copy a MyDeals Contract</div>
+                <div class="btn-ttl">Copy a My Deals Contract</div>
                 <div class="btn-desc">Or, create a My Deals contract from an existing one</div>
             </div>
             <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
@@ -75,7 +92,7 @@
             <div class="clearboth"></div>
         </div>
 
-        <div style="padding: 20px 0 0 0;">
+        <div style="padding: 25px 0 0 0;">
             <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
                 <i class="fa fa-book text-warning"></i>
             </div>
