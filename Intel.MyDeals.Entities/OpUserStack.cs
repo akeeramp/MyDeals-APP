@@ -41,6 +41,15 @@ namespace Intel.MyDeals.Entities
             UserSettings[key] = new UserSetting {UserToken = new OpUserToken {Usr = new OpUser {Idsid = key} } };
         }
 
+        public static void Delete()
+        {
+            string key = GetMyKey();
+            if (UserSettings.ContainsKey(key))
+            {
+                UserSettings.Remove(key);
+            }
+        }
+
         public static void ClearAllUsers()
         {
             UserSettings.Clear();
@@ -70,11 +79,49 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         public static void EmulateUnitTester()
         {
-            string unitTestName = "TestUser"; //idsid length limit 8, also need to make sure test user exists in db before using
+            OpUserToken unitOpUserToken = new OpUserToken
+            {
+                Role = new OpRoleType
+                {
+                    RoleTypeCd = "SA"
+                },
+                Usr = new OpUser
+                {
+                    FirstName = "Unit",
+                    LastName = "Tester",
+                    WWID = 10548414,
+                    Idsid = "TestUser"
+                }
+            };
+            EmulateUnitTester(unitOpUserToken);
+        }
 
+        /// <summary>
+        /// Emulate the Unit Tester account
+        /// </summary>
+        public static void EmulateUnitTester(OpUserToken opUserToken)
+        {
+            if (opUserToken == null)
+            {
+                // valid user... relies on get My Customer routines
+                opUserToken = new OpUserToken
+                {
+                    Role = new OpRoleType
+                    {
+                        RoleTypeCd = "GA"
+                    },
+                    Usr = new OpUser
+                    {
+                        FirstName = "Philip",
+                        LastName = "Eckenroth",
+                        WWID = 10505693,
+                        Idsid = "Pweckenr"
+                    }
+                };
+            }
             IList<Claim> claimCollection = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, unitTestName)
+                new Claim(ClaimTypes.Name, opUserToken.Usr.Idsid)
             };
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimCollection, "MyDeals Unit Test"));
 
@@ -83,20 +130,7 @@ namespace Intel.MyDeals.Entities
 
             UserSettings[key] = new UserSetting
             {
-                UserToken = new OpUserToken
-                {
-                    Role = new OpRoleType
-                    {
-                        RoleTypeCd = "SA"
-                    },
-                    Usr = new OpUser
-                    {
-                        FirstName = "Unit",
-                        LastName = "Tester",
-                        WWID = 10548414,
-                        Idsid = unitTestName                        
-                    }
-                }
+                UserToken = opUserToken
             };
         }
 

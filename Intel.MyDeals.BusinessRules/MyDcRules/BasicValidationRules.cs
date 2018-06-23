@@ -29,7 +29,7 @@ namespace Intel.MyDeals.BusinessRules
                 //},
                 new MyOpRule
                 {
-                    Title="Must have a positive value",
+                    Title="Must have a positive Num Tiers value",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
@@ -91,7 +91,7 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="User Defined AVG RPU cannot be negative",
+                    Title="Value cannot be negative",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
@@ -101,23 +101,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be positive or zero" },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.USER_AVG_RPU }) && de.HasValue() && de.IsNegative()
-                        }
-                    }
-                },
-                new MyOpRule
-                {
-                    Title="User Defined MAX RPU cannot be negative",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = MyDeActions.AddMessage,
-                            Args = new object[] { "{0} must be positive or zero" },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.USER_MAX_RPU }) && de.HasValue() && de.IsNegative()
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.USER_AVG_RPU, AttributeCodes.USER_MAX_RPU }) && de.HasValue() && de.IsNegative()
                         }
                     }
                 },
@@ -133,15 +117,7 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="Check for Modified or deleted Products",
-                    ActionRule = MyDcActions.CheckForModifiedProducts,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
-                },
-                new MyOpRule
-                {
-                    Title="Must be greater than 0",
+                    Title="Must be greater than 0 Start Vol",
                     ActionRule = MyDcActions.ValidateTierStartVol,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
@@ -150,14 +126,14 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="Must be greater than 0",
+                    Title="Must be greater than 0 End Vol",
                     ActionRule = MyDcActions.ValidateTierEndVol,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
                 },
-                                new MyOpRule
+                new MyOpRule
                 {
                     Title="Rollup Error Message",
                     ActionRule = MyDcActions.RollUpErrorMessage,

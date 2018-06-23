@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Force.DeepCloner;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.Test;
@@ -13,6 +14,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
     [TestFixture]
     public class DataCollectorTests
     {
+
+        private MyDealsData ComplexContract => _complexContract ?? (_complexContract = UnitTestHelpers.BuildSimpleContract());
+        private MyDealsData _complexContract;
+        
+        
         /// <summary>
         /// Runs before the current test fixture
         /// </summary>
@@ -35,48 +41,49 @@ namespace Intel.MyDeals.BusinessLogic.Test
         [TestCase]
         public void GetContractTest()
         {
-            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
+            MyDealsData myDealsData = ComplexContract.DeepClone();
 
             Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any());
-            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD) == null);
-            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElementValue(AttributeCodes.WF_STG_CD) == StageCodes.Requested.ToString());
-            //Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue("START_DT") == "6/6/2016 12:00:00 AM");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.CNTRCT].Data[1];
+            Assert.IsTrue(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == "ALL_TYPES");
+            Assert.IsTrue(dc.GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.InComplete);
         }
 
-        [TestCase]
-        public void FlattenedTest()
-        {
-            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
+        //[TestCase]
+        //public void FlattenedTest()
+        //{
+        //    MyDealsData myDealsData = ComplexContract.DeepClone();
 
-            OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        //    OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
-            Assert.IsTrue(data[OpDataElementType.CNTRCT][0][AttributeCodes.WF_STG_CD].ToString() == "Requested");
+        //    Assert.IsTrue(data[OpDataElementType.CNTRCT][0][AttributeCodes.WF_STG_CD].ToString() == WorkFlowStages.Requested);
 
-            data[OpDataElementType.CNTRCT][0][AttributeCodes.WF_STG_CD] = StageCodes.Submitted.ToString();
+        //    data[OpDataElementType.CNTRCT][0][AttributeCodes.WF_STG_CD] = StageCodes.Submitted.ToString();
 
-            Assert.IsTrue(data[OpDataElementType.CNTRCT][0]["WF_STG_CD"].ToString() == "Submitted");
-        }
+        //    Assert.IsTrue(data[OpDataElementType.CNTRCT][0]["WF_STG_CD"].ToString() == WorkFlowStages.Submitted);
+        //}
 
-        [TestCase]
-        public void HierarchialTest()
-        {
-            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
+        //[TestCase]
+        //public void HierarchialTest()
+        //{
+        //    MyDealsData myDealsData = ComplexContract.DeepClone();
 
-            OpDataCollectorFlattenedList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.CNTRCT);
+        //    OpDataCollectorFlattenedList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.CNTRCT);
 
-            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PRC_ST.ToString()])[0][AttributeCodes.DC_ID];
+        //    var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PRC_ST.ToString()])[0][AttributeCodes.DC_ID];
 
-            Assert.IsTrue(dcId.ToString() == "201");
-        }
+        //    Assert.IsTrue(dcId.ToString() == "1");
+        //}
 
-        [TestCase]
-        public void PeTest()
-        {
-            MyDealsData myDealsData = PricingTableData.GetData(123);
-            OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
-            MyDealsData myDealsData2 = data.ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
+        //[TestCase]
+        //public void PeTest()
+        //{
+        //    MyDealsData myDealsData = ComplexContract.DeepClone();
+        //    OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        //    MyDealsData myDealsData2 = data.ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 1 });
             
-        }
+        //}
     }
 
 }

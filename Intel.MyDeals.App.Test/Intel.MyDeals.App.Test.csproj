@@ -83,6 +83,10 @@
       <Project>{D49F802F-7F79-4F6E-9553-D26F40E7DB34}</Project>
       <Name>Intel.MyDeals.BusinessLogic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.DataLibrary.Test\Intel.MyDeals.DataLibrary.Test.csproj">
+      <Project>{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}</Project>
+      <Name>Intel.MyDeals.DataLibrary.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
       <Project>{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}</Project>
       <Name>Intel.MyDeals.Entities</Name>

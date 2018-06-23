@@ -104,7 +104,7 @@ namespace Intel.MyDeals.App
 
         public static void SetupDataAccessLib()
         {
-            Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/Intel.Mydeals");
+            Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/Intel.MyDeals");
 
             if (rootWebConfig.ConnectionStrings.ConnectionStrings.Count <= 0)
                 throw new Exception("Unable to get the ConnectionString for the Database.");

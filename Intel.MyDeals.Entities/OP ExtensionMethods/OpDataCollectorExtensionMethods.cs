@@ -28,7 +28,12 @@ namespace Intel.MyDeals.Entities
             if (dc == null) throw new ArgumentNullException("dc");
             IOpDataElement de = dc.GetDataElement(name);
             string val = de?.AtrbValue.ToString();
-            return string.IsNullOrEmpty(val) ? ifNull : val;
+            return String.IsNullOrEmpty(val) ? ifNull : val;
+        }
+
+        public static IOpDataElement GetDataElementByDim(this IOpDataCollector dc, string name, OpAtrbMapCollection dimKey)
+        {
+            return !dc.CheckDataElement(ref name) ? null : dc.DataElements.FirstOrDefault(d => d.AtrbCd == name && d.DimKey != null && d.DimKey.ToString() == dimKey.ToString());
         }
 
         /// <summary>
@@ -64,7 +69,7 @@ namespace Intel.MyDeals.Entities
 
             de.AtrbValue = val;
             de.State = OpDataElementState.Modified;
-            if (!string.IsNullOrEmpty(timelineComment))
+            if (!String.IsNullOrEmpty(timelineComment))
             {
                 dc.AddTimelineComment(timelineComment);
             }
@@ -137,7 +142,7 @@ namespace Intel.MyDeals.Entities
         public static void EnsureDcType(this OpDataCollector dc, AttributeCollection sourceData, OpDataElementType opType)
         {
             // TODO May not need this if decision is to store dealtype (objsettype) instead of the SID
-            if (dc == null || !string.IsNullOrEmpty(dc.DcType)) { return; }
+            if (dc == null || !String.IsNullOrEmpty(dc.DcType)) { return; }
 
             string dealType = opType != OpDataElementType.DEAL && opType != OpDataElementType.WIP_DEAL ? opType.ToString() : null;
 
@@ -145,9 +150,9 @@ namespace Intel.MyDeals.Entities
             {
                 string deDealTypeSid = dc.GetAtrbValue("OBJ_TYPE").ToString();
 
-                if (string.IsNullOrEmpty(deDealTypeSid))
+                if (String.IsNullOrEmpty(deDealTypeSid))
                 {
-                    dc.DcType = string.Empty;
+                    dc.DcType = String.Empty;
                     return;
                 }
 
@@ -162,7 +167,7 @@ namespace Intel.MyDeals.Entities
             if (dealType == OpDataElementType.PRC_TBL.ToString()) dealType = "PRICING TABLE";
             if (dealType == OpDataElementType.PRC_TBL_ROW.ToString()) dealType = "PRICING TABLE ROW";
 
-            dc.DcType = dealType ?? string.Empty;
+            dc.DcType = dealType ?? String.Empty;
 
             IOpDataElement deDealTypeCd = (IOpDataElement)dc.GetAtrb("OBJ_TYPE");
             if (deDealTypeCd == null)
@@ -181,7 +186,7 @@ namespace Intel.MyDeals.Entities
                     State = OpDataElementState.Unchanged
                 });
             }
-            else if (deDealTypeCd.AtrbValue.ToString() == string.Empty)
+            else if (deDealTypeCd.AtrbValue.ToString() == String.Empty)
             {
                 deDealTypeCd.AtrbValue = dc.DcType;
             }
@@ -202,13 +207,13 @@ namespace Intel.MyDeals.Entities
                     DcParentID = dc.DcParentID,
                     AtrbID = Attributes.SYS_COMMENTS.ATRB_SID,
                     AtrbValue = message,
-                    OrigAtrbValue = string.Empty,
-                    PrevAtrbValue = string.Empty,
+                    OrigAtrbValue = String.Empty,
+                    PrevAtrbValue = String.Empty,
                     AtrbCd = AttributeCodes.SYS_COMMENTS,
                     State = OpDataElementState.Modified
                 });
             }
-            else if (string.IsNullOrEmpty(deComment.AtrbValue.ToString()) || deComment.AtrbValue.ToString() == deComment.OrigAtrbValue.ToString())
+            else if (String.IsNullOrEmpty(deComment.AtrbValue.ToString()) || deComment.AtrbValue.ToString() == deComment.OrigAtrbValue.ToString())
             {
                 deComment.AtrbValue = message;
             }
@@ -245,7 +250,7 @@ namespace Intel.MyDeals.Entities
         public static bool HasTracker(this OpDataCollector dc)
         {
             // cover the levels with TRKR_NBR defined
-            var trackers = dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
+            var trackers = dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => d.AtrbValue.ToString() != String.Empty);
             if (trackers != null && trackers.Any()) return true;
 
             // cover rollup values
@@ -310,7 +315,7 @@ namespace Intel.MyDeals.Entities
         {
             OpUserToken opUserToken = OpUserStack.MyOpUserToken;
 
-            if (string.IsNullOrEmpty(stage)) stage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            if (String.IsNullOrEmpty(stage)) stage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
             if (opDataElementType == OpDataElementType.ALL_OBJ_TYPE) opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
@@ -327,6 +332,15 @@ namespace Intel.MyDeals.Entities
                 .OrderBy(w => w.OBJ_TYPE == "ALL_TYPES" ? 1 : 0)
                 .ThenBy(w => w.OBJ_SET_TYPE_CD == "ALL_TYPES" ? 1 : 0)
                 .Select(w => w.WFSTG_CD_DEST).FirstOrDefault();
+        }
+
+        public static void ClearValidationMessages(this OpDataCollector dc)
+        {
+            if (dc == null) return;
+            foreach (IOpDataElement de in dc.GetDataElementsWhere(d => !string.IsNullOrEmpty(d.ValidationMessage)))
+            {
+                de.ValidationMessage = string.Empty;
+            }
         }
     }
 }

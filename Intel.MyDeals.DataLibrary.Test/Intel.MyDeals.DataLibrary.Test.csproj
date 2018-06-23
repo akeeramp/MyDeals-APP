@@ -79,6 +79,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -99,6 +100,7 @@
     <Compile Include="GeoDataLibTests.cs" />
     <Compile Include="CustomerDataLibTests.cs" />
     <Compile Include="LoggingDataLibTest.cs" />
+    <Compile Include="OpDeTestItem.cs" />
     <Compile Include="OtherTests.cs" />
     <Compile Include="DropdownDataLibTest.cs" />
     <Compile Include="ProductCategoriesDataLibTest.cs" />
@@ -108,10 +110,6 @@
     <Compile Include="UnitTestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Intel.MyDeals.BusinessLogic\Intel.MyDeals.BusinessLogic.csproj">
-      <Project>{D49F802F-7F79-4F6E-9553-D26F40E7DB34}</Project>
-      <Name>Intel.MyDeals.BusinessLogic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj">
       <Project>{b45850dc-1515-40d2-bfa5-15c8dffc5af2}</Project>
       <Name>Intel.MyDeals.DataLibrary</Name>

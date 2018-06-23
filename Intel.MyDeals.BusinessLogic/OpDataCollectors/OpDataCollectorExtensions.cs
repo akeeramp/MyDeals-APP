@@ -22,23 +22,17 @@ namespace Intel.MyDeals.BusinessLogic
         public static List<CustomerDivision> GetCustomerDivisions(this OpDataCollector dc)
         {
             string val = dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
-            if (string.IsNullOrEmpty(val))
-            {
-                // TODO throw an error
-                val = "0";
-            }
-            return new CustomerLib().GetCustomerDivisionsByCustNmId(Convert.ToInt32(val));
+            return string.IsNullOrEmpty(val) 
+                ? new List<CustomerDivision>() 
+                : new CustomerLib().GetCustomerDivisionsByCustNmId(Convert.ToInt32(val));
         }
 
         public static MyCustomersInformation GetMyCustomer(this OpDataCollector dc)
         {
             string val = dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
-            if (string.IsNullOrEmpty(val))
-            {
-                // TODO throw an error
-                val = "0";
-            }
-            return new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == Convert.ToInt32(val));
+            return string.IsNullOrEmpty(val) 
+                ? new MyCustomersInformation() 
+                : new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == Convert.ToInt32(val));
         }
 
         /// <summary>

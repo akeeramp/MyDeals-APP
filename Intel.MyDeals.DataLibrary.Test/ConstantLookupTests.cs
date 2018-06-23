@@ -24,8 +24,8 @@ namespace Intel.MyDeals.DataLibrary.Test
         [TestMethod]
         public void GetToolContant()
         {
-            string value = new ConstantLookupDataLib().GetAdminToolConst("DAYS_TO_EXPIRE");
-            Assert.IsTrue(!string.IsNullOrEmpty(value));
+            string value = new ConstantLookupDataLib().GetAdminToolConst("DB_LOGGING");
+            Assert.IsFalse(string.IsNullOrEmpty(value));
 
             value = new ConstantLookupDataLib().GetAdminToolConst("THIS_DOES_NOT_EXIST");
             Assert.IsTrue(string.IsNullOrEmpty(value));
@@ -34,7 +34,7 @@ namespace Intel.MyDeals.DataLibrary.Test
         [TestMethod]
         public void GetToolConstInt()
         {
-            int intValue = new ConstantLookupDataLib().GetAdminToolConstInt("DAYS_TO_EXPIRE");
+            int intValue = new ConstantLookupDataLib().GetAdminToolConstInt("EXPIRE_CUTOFF_DAYS");
             Assert.IsTrue(intValue > 0);
 
             intValue = new ConstantLookupDataLib().GetAdminToolConstInt("THIS_DOES_NOT_EXIST");

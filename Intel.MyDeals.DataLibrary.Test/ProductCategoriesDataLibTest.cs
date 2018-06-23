@@ -63,19 +63,19 @@ namespace Intel.MyDeals.DataLibrary.Test
 			Assert.IsTrue(results.Any());
 		}
 
-		[TestCase(1)]
-        //[TestCase(2)] // TODO: Test other counts once we are able to add new product Verticals and replace the hard cded Ids
-        public void ProductCategoriesUpload(int count)
-		{
-			// ARRANGE
-			List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
+		//[TestCase(1)]
+  //      //[TestCase(2)] // TODO: Test other counts once we are able to add new product Verticals and replace the hard cded Ids
+  //      public void ProductCategoriesUpload(int count)
+		//{
+		//	// ARRANGE
+		//	List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
 
-			// ACT
-			List<ProductCategory> results = new ProductCategoriesDataLib().UpdateProductCategories(pcList);
+		//	// ACT
+		//	List<ProductCategory> results = new ProductCategoriesDataLib().UpdateProductCategories(pcList);
 
-			// ASSERT
-			Assert.IsTrue(results.Any());
-		}
+		//	// ASSERT
+		//	Assert.IsTrue(results.Any());
+		//}
 
 	}
 }

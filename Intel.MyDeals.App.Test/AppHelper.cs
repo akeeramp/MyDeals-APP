@@ -1,4 +1,5 @@
 ﻿using System;
+using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +26,7 @@ namespace Intel.MyDeals.App.Test
             string connStr = BusinessLogic.BusinessLogic.GetConnectionString();
             Assert.IsTrue(string.IsNullOrEmpty(connStr));
 
-            App.AppHelper.SetupDataAccessLib();
+            UnitTestHelpers.SetDbConnection();
 
             env = BusinessLogic.BusinessLogic.GetEnvironment();
             Assert.IsFalse(string.IsNullOrEmpty(env));

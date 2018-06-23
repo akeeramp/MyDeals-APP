@@ -423,19 +423,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckForModifiedProducts(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement title = r.Dc.GetDataElement(AttributeCodes.TITLE);
-
-            List<IOpDataElement> fact15s = r.Dc.GetDataElements(AttributeCodes.PRODUCT_FILTER).ToList();
-            if (!fact15s.Any()) return;
-
-            int i = 0;
-        }
-
         public static void CheckGeos(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -1021,7 +1008,7 @@ namespace Intel.MyDeals.BusinessRules
             var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             // if there isn't a future stage, then it isn't redealable
             // TO DO - WE NEED TO ADD IN PARENT PS STAGE FOR THIS CHECK
-            if (futureStage == null && wipStage != WorkFlowStages.Active) return;
+            if (futureStage == null && wipStage != WorkFlowStages.Pending && wipStage != WorkFlowStages.Active) return;
 
             // We should not call this function for ECAP Front End YCS2, if we are here then something went wrong. Correct it here(partially) do not redeal
             if (wipStage == WorkFlowStages.Active && dealType == OpDataElementSetType.ECAP.ToString() && programPayment.Contains("Frontend YCS2")) return;

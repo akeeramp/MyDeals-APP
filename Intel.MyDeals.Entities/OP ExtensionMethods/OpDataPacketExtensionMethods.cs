@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 
@@ -207,6 +208,37 @@ namespace Intel.MyDeals.Entities
         }
 
 
+        public static bool RollupValidationMessages(this MyDealsData myDealsData, OpDataCollector dc, List<OpDataElementType> ignoreTypes, ref bool dataHasValidationErrors)
+        {
+            bool dcHasErrors = false;
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
+
+            foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
+            {
+                dcHasErrors = true;
+                if (!ignoreTypes.Contains(opDataElementType))
+                {
+                    dataHasValidationErrors = true;
+                }
+
+                dc.Message.Messages.Add(new OpMsg
+                {
+                    DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                    KeyIdentifier = de.DcID,
+                    Message = de.ValidationMessage,
+                    MsgType = OpMsg.MessageType.Warning
+                });
+
+                myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
+                {
+                    DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                    KeyIdentifier = de.DcID,
+                    Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
+                    MsgType = OpMsg.MessageType.Warning
+                });
+            }
+            return dcHasErrors;
+        }
 
     }
 }

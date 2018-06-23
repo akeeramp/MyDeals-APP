@@ -568,6 +568,7 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
+
         public static bool ValidationApplyRules(this MyDealsData myDealsData, SavePacket savePacket)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
@@ -593,6 +594,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //}
 
                 if (!myDealsData.ContainsKey(opDataElementType)) continue;
+                
                 foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
                 {
                     var dcHasErrors = false;
@@ -604,30 +606,7 @@ namespace Intel.MyDeals.BusinessLogic
                     dc.ApplyRules(MyRulesTrigger.OnPostValidate);
                     //}
 
-                    foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
-                    {
-                        dcHasErrors = true;
-                        if (!ignoreTypes.Contains(opDataElementType))
-                        {
-                            dataHasValidationErrors = true;
-                        }
-
-                        dc.Message.Messages.Add(new OpMsg
-                        {
-                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
-                            KeyIdentifier = de.DcID,
-                            Message = de.ValidationMessage,
-                            MsgType = OpMsg.MessageType.Warning
-                        });
-
-                        myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
-                        {
-                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
-                            KeyIdentifier = de.DcID,
-                            Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
-                            MsgType = OpMsg.MessageType.Warning
-                        });
-                    }
+                    if (myDealsData.RollupValidationMessages(dc, ignoreTypes, ref dataHasValidationErrors)) dcHasErrors = true;
 
                     if (savePacket.ValidateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
