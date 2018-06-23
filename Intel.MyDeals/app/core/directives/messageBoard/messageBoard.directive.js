@@ -69,7 +69,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                 }
                 actnList.push(kendo.template($("#emailItemTemplate").html())(data));
                 var msg = actnList.join("\n\n");
-
+                
                 var dataItem = {
                     from: "mydeals.notification@intel.com",
                     to: "",

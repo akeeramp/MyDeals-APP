@@ -32,6 +32,8 @@
         $scope.ranManuallySincePageLoaded = false;
         root.enablePCT = false;
         $scope.needToRunOverlaps = [];
+        $scope.canActionIcon = true;
+        $scope.canEmailIcon = true;
 
         $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
 
@@ -139,9 +141,53 @@
                         document.getElementsByName(e.target.name)[i].checked = false;
                 }
 
+
+            if (e.target.id.indexOf("email") > 0) {
+                var anyEmailChecked = false;
+                var items = document.getElementsByClassName('psCheck-Email');
+                for (var i = 0; i < items.length; i++)
+                    if (items[i].checked) anyEmailChecked = true;
+
+                items = document.getElementsByClassName('psCheck-Approve');
+                for (var i = 0; i < items.length; i++) items[i].checked = false;
+
+                items = document.getElementsByClassName('psCheck-Revise');
+                for (var i = 0; i < items.length; i++) items[i].checked = false;
+
+                if (e.target.checked || anyEmailChecked) {
+                    $scope.canActionIcon = false;
+                    $scope.canEmailIcon = true;
+                } else {
+                    $scope.canActionIcon = true;
+                    $scope.canEmailIcon = true;
+                }
+
+            } else {
+                var anyActionChecked = false;
+                var items = document.getElementsByClassName('psCheck-Approve');
+                for (var i = 0; i < items.length; i++)
+                    if (items[i].checked) anyActionChecked = true;
+
+                var items = document.getElementsByClassName('psCheck-Revise');
+                for (var i = 0; i < items.length; i++)
+                    if (items[i].checked) anyActionChecked = true;
+
+                items = document.getElementsByClassName('psCheck-Email');
+                for (var i = 0; i < items.length; i++) items[i].checked = false;
+
+                if (e.target.checked || anyActionChecked) {
+                    $scope.canActionIcon = true;
+                    $scope.canEmailIcon = false;
+                } else {
+                    $scope.canActionIcon = true;
+                    $scope.canEmailIcon = true;
+                }
+            }
+
             // clear global check
             document.getElementById('all_rad_approve').checked = false;
             document.getElementById('all_rad_revise').checked = false;
+            document.getElementById('all_rad_email').checked = false;
             //document.getElementById('all_rad_cancel').checked = false; // Appears to have been removed somewhere
         }
 
@@ -710,28 +756,28 @@
         }
 
         $scope.actionItems = function (fromToggle, checkForRequirements) {
+
+            if (fromToggle === undefined && checkForRequirements === undefined) {
+                var ids = [];
+                var anyEmailChecked = false;
+                var items = document.getElementsByClassName('psCheck-Email');
+                for (var i = 0; i < items.length; i++)
+                    if (items[i].checked) {
+                        ids.push(parseInt(items[i].attributes["dcid"].value));
+                        anyEmailChecked = true;
+                    }
+
+                if (anyEmailChecked) {
+                    $scope.openEmailMsg(ids);
+                    return;
+                }
+            }
+
             if (fromToggle === undefined || fromToggle === null) fromToggle = false;
             if (checkForRequirements === undefined || checkForRequirements === null) checkForRequirements = false;
 
             var ps = root.contractData.PRC_ST;
 
-            //var numCheckboxes = $(".sum-main-container input:visible").length;
-            //var numChecked = $(".sum-main-container input:visible:checked").length;
-            //var hasPendingCheck = false;
-            //if (fromToggle && !$scope.isPending) {
-            //    for (var p = 0; p < ps.length; p++) {
-            //        if (ps[p].WF_STG_CD === "Pending") {
-            //            hasPendingCheck = true;
-            //        }
-            //    }
-            //}
-
-            //if (!hasPendingCheck) {
-            //    if (numCheckboxes === 0 || numChecked === 0) {
-            //        kendo.alert("No items were selected to action.");
-            //        return;
-            //    }
-            //}
 
             // look for checked ending
             if (ps !== undefined) {
@@ -863,7 +909,7 @@
             modalInstance.result.then(function (result) {
                 if ($scope.$root.pc !== null) $scope.$root.pc.add(pcUser.stop());
                 if (saveCustAcceptance === true) {
-                    root.quickSaveContract($scope.checkPriorToActioning, data, result)
+                    root.quickSaveContract($scope.checkPriorToActioning, data, result);
                 } else {
                     $scope.checkPriorToActioning(data, result);
                 }
@@ -902,6 +948,67 @@
             modalInstance.result.then(function (result) {
             }, function () { });
         }
+
+        $scope.openEmailMsg = function (ids) {
+
+            $("#wincontractMessages").data("kendoWindow").close();
+
+            var rootUrl = window.location.protocol + "//" + window.location.host;
+
+            var items = [];
+
+            for (var a = 0; a < $scope.root.contractData.PRC_ST.length; a++) {
+                var stItem = $scope.root.contractData.PRC_ST[a];
+                if (!!stItem && ids.indexOf(stItem.DC_ID) >= 0) {
+                    var item = {
+                        "CNTRCT": "#" + $scope.root.contractData.DC_ID + " " + $scope.root.contractData.TITLE,
+                        "DC_ID": stItem.DC_ID,
+                        "WF_STG_CD": stItem.WF_STG_CD,
+                        "TITLE": stItem.TITLE,
+                        "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID
+                    };
+                    items.push(item);
+                }
+            }
+
+            if (items.length === 0) {
+                kendo.alert("No items were selected to email.");
+                return;
+            }
+
+            var data = {
+                from: window.usrEmail,
+                items: items
+            }
+
+            var actnList = [];
+            actnList.push(kendo.template($("#emailItemTemplate").html())(data));
+            var msg = actnList.join("\n\n");
+
+            var dataItem = {
+                from: "mydeals.notification@intel.com",
+                to: "",
+                subject: "My Deals Action Required!",
+                body: msg
+            };
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'emailModal',
+                controller: 'emailModalCtrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+            }, function () { });
+        }
+
 
         $scope.openOverlappingDealCheck = function (ovrlpData) {
             $scope.$root.ovrlpData = ovrlpData === undefined ? [] : ovrlpData;

@@ -68,6 +68,11 @@ function emailModalCtrl($scope, $uibModalInstance, dataItem) {
                         '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
                         '<div class="clearboth"></div>' +
                         '</div>',
+        tagTemplate: '<div class="tmpltItem">' +
+                        '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+                        '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+                        '<div class="clearboth"></div>' +
+                        '</div>',
         valuePrimitive: false,
         filter: "contains",
         autoBind: false,

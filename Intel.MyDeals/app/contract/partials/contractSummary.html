@@ -11,6 +11,44 @@
     <div id="perfChart" style="height: 40px; padding: 0;"></div>
 </div>
 
+<!-- Don't use quotes -->
+<script id="emailItemTemplate" type="text/x-kendo-template">
+
+    <div style='font-family:sans-serif;'>
+        <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
+        <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:#= data.from #'>#= data.from #</a>.</span></p>
+        <br />
+        <p><span style='font-size:18px;'>Pricing Strategies</span></p>
+        <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <b style='color: \\#00AEEF;'>View Pricing Strategy</b> in order to view details in My Deals.</span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
+                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy \\#</strong></th>
+                    <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Stage</strong></th>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                # for (var i = 0; i < data.items.length; i++) { #
+                <tr>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].CNTRCT #</span> </td>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>#= data.items[i].DC_ID #</a>*</span> </td>
+                    <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].TITLE #</span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#767171;'>#= data.items[i].WF_STG_CD # </span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>View Pricing Strategy</a>*</span> </td>
+                </tr>
+                # } #
+            </tbody>
+        </table>
+        <br />
+        <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
+    </div>
+
+</script>
+
 <div style="font-size: 14px; line-height: 1.1em; text-align: center; position: absolute; top: 5px; right: 18px;"
      title="click to change Contract Acceptance Criteria">
     <span style="color: #0071C5;">Customer Acceptance</span>
@@ -147,6 +185,12 @@
                                class="with-font" id="all_rad_revise"
                                ng-click="clkAllRow($event, 'psCheck-Revise')" /><label for="all_rad_revise"></label>
                     </td>
+                    <td style="width: 50px; text-align: center;">
+                        <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
+                        <input type="checkbox" name="allRadGrp"
+                               class="with-font" id="all_rad_email"
+                               ng-click="clkAllRow($event, 'psCheck-Email')" /><label for="all_rad_email"></label>
+                    </td>
                     <td style="width: 100px; text-align: center;" nowrap>
                         <div class="btn-group">
                             <button class="btn btn-sm btn-skyblue" type="button" ng-click="clearFilter()" title="Click to clear the filter" style="padding: 5px 10px 4px 10px; margin-right: 1px; margin-top: -2px; border-right: 1px solid #0071C5">
@@ -179,15 +223,7 @@
                     <td style="width: 500px; text-align: right; padding-right: 2px;">
 
                         <div class="dropdown clearfix fr" style="padding-top: 5px;">
-                            <button class="btn btn-skyblue dropdown-toggle" id="dropActionss" aria-expanded="true" type="button" data-toggle="dropdown">
-                                Actions
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right cur-pointer scaleTopAnim" role="menu" aria-labelledby="dropActionss" style="min-width: 100px;">
-                                <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests" ng-show="canEdit">Submit</a></li>
-                                <!--<li role="presentation"><a tabindex="-1" role="menuitem" href="#">Copy</a></li>-->
-                                <!--<li role="presentation"><a tabindex="-1" role="menuitem" ng-if="C_DELETE_CONTRACT" ng-click="deleteContract()" title="Delete the current Contract" ng-show="canEdit">Delete Contract</a></li>-->
-                            </ul>
+                            <button class="btn btn-skyblue dropdown-toggle" id="dropActionss"type="button" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests or send an email" ng-show="canEdit">Submit</button>
                         </div>
 
                     </td>
@@ -200,6 +236,7 @@
                     <td style="width: 30px;">&nbsp;</td>
                     <td style="width: 60px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Approve</td>
                     <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Revise</td>
+                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Email</td>
                     <!--<td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Cancel</td>-->
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
@@ -241,7 +278,7 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="canAction('Approve', ps, true)" ng-attr-title="{{actionReason('Approve', ps)}}" ng-show="ps.WF_STG_CD !== 'Pending'">
+                                <div ng-if="canAction('Approve', ps, true) && canActionIcon" ng-attr-title="{{actionReason('Approve', ps)}}" ng-show="ps.WF_STG_CD !== 'Pending'">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': !canAction('Approve', ps, false)}"
                                            ng-disabled="!canAction('Approve', ps, false)"
@@ -250,12 +287,19 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="canAction('Revise', ps, true)" ng-attr-title="{{actionReason('Revise', ps)}}">
+                                <div ng-if="canAction('Revise', ps, true) && canActionIcon" ng-attr-title="{{actionReason('Revise', ps)}}">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': !canAction('Revise', ps, false)}"
                                            ng-disabled="!canAction('Revise', ps, false)"
                                            class="with-font psCheck psCheck-Revise" id="rad_revise_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_revise_{{ps.DC_ID}}"></label>
+                                </div>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <div ng-if="canEmailIcon" title="email pricing strategy">
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
+                                           class="with-font psCheck psCheck-Email" id="rad_email_{{ps.DC_ID}}"
+                                           ng-click="clkRow($event)" /><label for="rad_email_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <!--<td style="width: 50px; text-align: center;" ng-show="canEdit">
