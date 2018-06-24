@@ -115,7 +115,6 @@ gridUtils.uiBoolControlWrapper = function (dataItem, field) {
 }
 
 gridUtils.uiStartDateWrapper = function (passedData, field, format) {
-
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
@@ -123,6 +122,66 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
     tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span></div>';
     tmplt += '</div>';
     return tmplt;
+}
+
+gridUtils.uiCrDbPercWrapper = function (passedData) {
+    var numberWithCommas = (x) => {
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+
+    var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
+        ? 0
+        : parseFloat(passedData.CREDIT_VOLUME);
+    var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
+        ? 0
+        : parseFloat(passedData.DEBIT_VOLUME);
+    var vol = passedData.VOLUME === undefined || passedData.VOLUME === null || isNaN(passedData.VOLUME)
+        ? 0
+        : parseFloat(passedData.VOLUME);
+
+    var numerator = crVol - dbVol;
+    if (numerator < 0) numerator = 0;
+    var perc = numerator / vol * 100;
+    perc = Math.round(perc * 100) / 100;
+
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+    tmplt += '    <div class="ng-binding vert-center">';
+    if (vol !== 999999999) {
+        tmplt += '      <div class="progress" style="height: 12px; margin-top: -2px; margin-bottom: 2px;">';
+        tmplt += '        <div class="progress-bar" role="progressbar" aria-valuenow="' + perc + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + perc + '%;"></div>';
+        tmplt += '      </div>';
+        tmplt += '      <div style="font-size: 10px; line-height: 10px;">' + numberWithCommas(numerator) + ' out of ' + numberWithCommas(vol) + '</div>';
+    } else {
+        tmplt += '      <div>' + numberWithCommas(numerator) + '</div>';
+    }
+    tmplt += '    </div>';
+    tmplt += '</div>';
+    return tmplt;
+
+}
+
+gridUtils.uiCrDbPercExcelWrapper = function (passedData) {
+    var numberWithCommas = (x) => {
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+
+    var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
+        ? 0
+        : parseFloat(passedData.CREDIT_VOLUME);
+    var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
+        ? 0
+        : parseFloat(passedData.DEBIT_VOLUME);
+    var vol = passedData.VOLUME === undefined || passedData.VOLUME === null || isNaN(passedData.VOLUME)
+        ? 0
+        : parseFloat(passedData.VOLUME);
+
+    var numerator = crVol - dbVol;
+    if (numerator < 0) numerator = 0;
+    return numberWithCommas(numerator) + ' out of ' + numberWithCommas(vol);
 }
 
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {

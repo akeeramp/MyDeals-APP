@@ -2059,7 +2059,6 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_VOLUME', 'number')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
@@ -2072,7 +2071,6 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_VOLUME', 'number')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
@@ -2100,6 +2098,18 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_AMT', 'currency')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 9999,
+                AtrbCd = "TOTAL_CR_DB_PERC",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Total Deal Volume",
+                Width = 140,
+                IsFilterable = false,
+                IsSortable = false,
+                Template = "#=gridUtils.uiCrDbPercWrapper(data)#",
+                ExcelTemplate = "#=gridUtils.uiCrDbPercExcelWrapper(data)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {

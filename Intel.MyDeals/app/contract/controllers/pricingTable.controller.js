@@ -315,7 +315,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
         gTools.assignColSettings();
 
-
         root.wipOptions = {
             "isLayoutConfigurable": true,
             "isPricingTableEnabled": true,
@@ -356,6 +355,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     numWarn++;
                 }
             }
+
+            root.pricingTableData.WIP_DEAL[w]._behaviors.isReadOnly["TOTAL_CR_DB_PERC"] = true;
         }
 
         root.wipOptions.numSoftWarn = numWarn;

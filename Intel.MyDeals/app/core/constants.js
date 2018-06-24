@@ -89,6 +89,7 @@
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
+                    { "name": "Payment", "order": 10 },
                     { "name": "CAP Info", "order": 98 },
                     { "name": "All", "order": 99 }
                 ],
@@ -97,6 +98,7 @@
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
                     { "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_L1", "value": "0" }] },
+                    { "name": "Payment", "order": 10 },
                     { "name": "All", "order": 99 }
                 ],
                 "PROGRAM": [
@@ -104,6 +106,7 @@
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
                     { "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_L1", "value": "0" }] },
+                    { "name": "Payment", "order": 10 },
                     { "name": "All", "order": 99 }
                 ],
                 "KIT": [
@@ -112,6 +115,7 @@
                     { "name": "Backdate", "order": 2 },
                     { "name": "SubKit", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_SUBKIT", "value": "0" }] },
                     { "name": "CAP Info", "order": 98 },
+                    { "name": "Payment", "order": 10 },
                     { "name": "All", "order": 99 }
                 ]
             },
@@ -211,7 +215,7 @@
                         "Groups": ["All"]
                     },
                     "VOLUME": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "Payment"]
                     },
                     "ON_ADD_DT": {
                         "Groups": ["Deal Info"]
@@ -277,19 +281,22 @@
                         "Groups": ["All"]
                     },
                     "CREDIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "CREDIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
+                    },
+                    "TOTAL_CR_DB_PERC": {
+                        "Groups": ["Payment"]
                     },
                     "BLLG_DT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     }
                 },
                 "VOL_TIER": {
@@ -429,19 +436,22 @@
                         "Groups": ["All"]
                     },
                     "CREDIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "CREDIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
+                    },
+                    "TOTAL_CR_DB_PERC": {
+                        "Groups": ["Payment"]
                     },
                     "BLLG_DT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     }
                 },
                 "PROGRAM": {
@@ -650,19 +660,22 @@
                         "Groups": ["All"]
                     },
                     "CREDIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "CREDIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
+                    },
+                    "TOTAL_CR_DB_PERC": {
+                        "Groups": ["Payment"]
                     },
                     "BLLG_DT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     }
                 },
                 "KIT": {
@@ -820,7 +833,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "VOLUME": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "Payment"]
                     },
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
@@ -886,19 +899,22 @@
                         "Groups": ["All"]
                     },
                     "CREDIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_VOLUME": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "CREDIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     },
                     "DEBIT_AMT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
+                    },
+                    "TOTAL_CR_DB_PERC": {
+                        "Groups": ["Payment"]
                     },
                     "BLLG_DT": {
-                        "Groups": ["All"]
+                        "Groups": ["Payment"]
                     }
                 }
             }
