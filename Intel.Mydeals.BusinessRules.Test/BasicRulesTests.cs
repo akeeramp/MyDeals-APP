@@ -2,8 +2,10 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Force.DeepCloner;
 using Intel.MyDeals.BusinessRules;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -88,7 +90,45 @@ namespace Intel.Mydeals.BusinessRules.Test
             }
             de.IsRequired = false;
         }
-        
+
+        private void RunReadOnlyRule(MyDealsData myDealsData, OpDataCollector dc, MyOpRule rule, MyDealsAttribute atrb, bool expectedResult)
+        {
+            RunRule(myDealsData, dc, rule);
+            IOpDataElement de = dc.GetDataElement(atrb.ATRB_COL_NM);
+            if (expectedResult)
+            {
+                Assert.IsTrue(de.IsReadOnly);
+            }
+            else
+            {
+                Assert.IsFalse(de.IsReadOnly);
+            }
+            de.IsReadOnly = false;
+        }
+
+        private void RunReadOnlyRules(MyDealsData myDealsData, OpDataCollector dc, MyOpRule rule, List<MyDealsAttribute> atrbs, bool expectedResult)
+        {
+            foreach (MyDealsAttribute myAtrb in atrbs)
+            {
+                RunReadOnlyRule(myDealsData, dc, rule, myAtrb, expectedResult);
+            }
+        }
+
+        private List<MyDealsAttribute> GetMyDealsAttributes(OpDataCollector dc, IEnumerable<string> atrbs)
+        {
+            List<MyDealsAttribute> readOnlyAtrbs = new List<MyDealsAttribute>();
+            foreach (string atrb in atrbs)
+            {
+                FieldInfo fieldInfo = typeof(Attributes).GetField(atrb);
+                if (fieldInfo == null) continue;
+                MyDealsAttribute myAtrb = (MyDealsAttribute)fieldInfo.GetValue(null);
+                readOnlyAtrbs.Add(myAtrb);
+                dc.SetDataElement(myAtrb, "Some Value");
+            }
+
+            return readOnlyAtrbs;
+        }
+
         private static bool RunRule(MyDealsData myDealsData, OpDataCollector dc, MyOpRule rule, Dictionary<string, bool> securityActionCache = null, params object[] args)
         {
             bool dataHasValidationErrors = false;
@@ -765,6 +805,644 @@ namespace Intel.Mydeals.BusinessRules.Test
 
             Assert.IsFalse(dc.Message.HighestMessageType == "");
             Assert.IsTrue(dc.Message.HighestMessageType == "Warning");
+        }
+
+        [TestCase]
+        public void BasicRules_Positive_Num_Tiers()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Must have a positive Num Tiers value");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            var origVal = dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+
+            dc.SetDataElement(Attributes.NUM_OF_TIERS, 5);
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.NUM_OF_TIERS, 0);
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.NUM_OF_TIERS, -5);
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_Enforce_Required()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Enforce Required Fields");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            IOpDataElement de = dc.GetDataElement(AttributeCodes.START_DT);
+            de.IsRequired = true;
+
+            dc.SetDataElement(Attributes.START_DT, "1/1/2018");
+            RunRule(myDealsData, dc, rule);
+            Assert.IsFalse(de.ValidationMessage == "Start Date is required\n");
+
+            dc.SetDataElement(Attributes.START_DT, "");
+            RunRule(myDealsData, dc, rule);
+            Assert.IsTrue(de.ValidationMessage == "Start Date is required\n");
+
+        }
+
+        [TestCase]
+        public void BasicRules_Qty_Positive()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Quantity must be greater than 0");
+
+            int dcId = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && d.AtrbValue.ToString() == "KIT")
+                .Select(d => d.DcID).FirstOrDefault();
+            OpDataCollector dc = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId);
+
+            // define 3 tiers
+            dc.SetDataElements(new List<OpDeTestItem>
+            {
+                new OpDeTestItem(Attributes.NUM_OF_TIERS, 3),
+                new OpDeTestItem(Attributes.TIER_NBR, 1, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.QTY, 1, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.TIER_NBR, 2, new OpAtrbMapCollection(new OpAtrbMap(20,1))),
+                new OpDeTestItem(Attributes.QTY, 1, new OpAtrbMapCollection(new OpAtrbMap(20,1))),
+                new OpDeTestItem(Attributes.TIER_NBR, 3, new OpAtrbMapCollection(new OpAtrbMap(20,2))),
+                new OpDeTestItem(Attributes.QTY, 2, new OpAtrbMapCollection(new OpAtrbMap(20,2)))
+            });
+
+            dc.SetDataElement(Attributes.QTY, 5, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.QTY, 0, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.QTY, -5, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_Qty_Whole_Nbr()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Qty must be a whole number");
+
+            int dcId = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && d.AtrbValue.ToString() == "KIT")
+                .Select(d => d.DcID).FirstOrDefault();
+            OpDataCollector dc = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId);
+
+            // define 3 tiers
+            dc.SetDataElements(new List<OpDeTestItem>
+            {
+                new OpDeTestItem(Attributes.NUM_OF_TIERS, 3),
+                new OpDeTestItem(Attributes.TIER_NBR, 1, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.QTY, 1, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.TIER_NBR, 2, new OpAtrbMapCollection(new OpAtrbMap(20,1))),
+                new OpDeTestItem(Attributes.QTY, 1, new OpAtrbMapCollection(new OpAtrbMap(20,1))),
+                new OpDeTestItem(Attributes.TIER_NBR, 3, new OpAtrbMapCollection(new OpAtrbMap(20,2))),
+                new OpDeTestItem(Attributes.QTY, 2, new OpAtrbMapCollection(new OpAtrbMap(20,2)))
+            });
+
+            dc.SetDataElement(Attributes.QTY, 5, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.QTY, "abc", new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.QTY, 5.5, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_Tiered_ECAP()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Tiered ECAP value check");
+
+            int dcId = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && d.AtrbValue.ToString() == "KIT")
+                .Select(d => d.DcID).FirstOrDefault();
+            OpDataCollector dc = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId);
+
+            // define 3 tiers
+            dc.SetDataElements(new List<OpDeTestItem>
+            {
+                new OpDeTestItem(Attributes.NUM_OF_TIERS, 3),
+                new OpDeTestItem(Attributes.TIER_NBR, 1, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.ECAP_PRICE, 100, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.TIER_NBR, 2, new OpAtrbMapCollection(new OpAtrbMap(20,1))),
+                new OpDeTestItem(Attributes.ECAP_PRICE, 90, new OpAtrbMapCollection(new OpAtrbMap(20,1))),
+                new OpDeTestItem(Attributes.TIER_NBR, 3, new OpAtrbMapCollection(new OpAtrbMap(20,2))),
+                new OpDeTestItem(Attributes.ECAP_PRICE, 80, new OpAtrbMapCollection(new OpAtrbMap(20,2)))
+            });
+
+            dc.SetDataElement(Attributes.ECAP_PRICE, 5, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.ECAP_PRICE, 0, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.ECAP_PRICE, -5, new OpAtrbMapCollection(new OpAtrbMap(20, 1)));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_End_Vol_Greater_Than_Start_Vol()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "End Vol must be greater than start vol");
+
+            int dcId = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && d.AtrbValue.ToString() == "VOL_TIER")
+                .Select(d => d.DcID).FirstOrDefault();
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId);
+
+            // define 3 tiers
+            dc.SetDataElements(new List<OpDeTestItem>
+            {
+                new OpDeTestItem(Attributes.NUM_OF_TIERS, "3"),
+                new OpDeTestItem(Attributes.TIER_NBR, 1, new OpAtrbMapCollection(new OpAtrbMap(10,1))),
+                new OpDeTestItem(Attributes.STRT_VOL, 1, new OpAtrbMapCollection(new OpAtrbMap(10,1))),
+                new OpDeTestItem(Attributes.END_VOL, 100, new OpAtrbMapCollection(new OpAtrbMap(10,1))),
+                new OpDeTestItem(Attributes.RATE, 5, new OpAtrbMapCollection(new OpAtrbMap(10,1))),
+                new OpDeTestItem(Attributes.TIER_NBR, 2, new OpAtrbMapCollection(new OpAtrbMap(10,2))),
+                new OpDeTestItem(Attributes.STRT_VOL, 101, new OpAtrbMapCollection(new OpAtrbMap(10,2))),
+                new OpDeTestItem(Attributes.END_VOL, 200, new OpAtrbMapCollection(new OpAtrbMap(10,2))),
+                new OpDeTestItem(Attributes.RATE, 4, new OpAtrbMapCollection(new OpAtrbMap(10,2))),
+                new OpDeTestItem(Attributes.TIER_NBR, 3, new OpAtrbMapCollection(new OpAtrbMap(10,3))),
+                new OpDeTestItem(Attributes.STRT_VOL, 201, new OpAtrbMapCollection(new OpAtrbMap(10,3))),
+                new OpDeTestItem(Attributes.END_VOL, 300, new OpAtrbMapCollection(new OpAtrbMap(10,3))),
+                new OpDeTestItem(Attributes.RATE, 3, new OpAtrbMapCollection(new OpAtrbMap(10,3)))
+            });
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(new OpDeTestItem(Attributes.STRT_VOL, 100, new OpAtrbMapCollection(new OpAtrbMap(10, 1))));
+            dc.SetDataElement(new OpDeTestItem(Attributes.END_VOL, 200, new OpAtrbMapCollection(new OpAtrbMap(10, 1))));
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(new OpDeTestItem(Attributes.STRT_VOL, 100, new OpAtrbMapCollection(new OpAtrbMap(10, 1))));
+            dc.SetDataElement(new OpDeTestItem(Attributes.END_VOL, 100, new OpAtrbMapCollection(new OpAtrbMap(10, 1))));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(new OpDeTestItem(Attributes.STRT_VOL, 100, new OpAtrbMapCollection(new OpAtrbMap(10, 1))));
+            dc.SetDataElement(new OpDeTestItem(Attributes.END_VOL, 50, new OpAtrbMapCollection(new OpAtrbMap(10, 1))));
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_Check_For_Expire_Flag()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Check for Expire Flag");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            string pastDate = DateTime.Now.AddDays(-1).ToString("MM/dd/yyyy");
+            string futureDate = DateTime.Now.AddDays(+1).ToString("MM/dd/yyyy");
+
+            dc.SetDataElement(Attributes.END_DT, futureDate);
+            dc.SetDataElement(Attributes.EXPIRE_FLG, "0");
+            RunRule(myDealsData, dc, rule);
+            Assert.IsTrue(dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG) == "0");
+
+            dc.SetDataElement(Attributes.END_DT, pastDate);
+            dc.SetDataElement(Attributes.EXPIRE_FLG, "0");
+            RunRule(myDealsData, dc, rule);
+            Assert.IsTrue(dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG) == "1");
+
+        }
+
+        [TestCase]
+        public void BasicRules_Exceed_Max_Limit()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Does not exceed max character limit");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
+
+            dc.SetDataElement(Attributes.TITLE, "Short Title");
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.TITLE, "Long Title... I mean a really long titile that should not be allowed to save because it is just way too long!!!");
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_End_Date_Later_Start_Date()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Make sure End Date is later than Start Date");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault();
+
+            string pastDate = DateTime.Now.AddDays(-1).ToString("MM/dd/yyyy");
+            string futureDate = DateTime.Now.AddDays(+1).ToString("MM/dd/yyyy");
+
+            dc.SetDataElement(Attributes.START_DT, pastDate);
+            dc.SetDataElement(Attributes.END_DT, futureDate);
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.START_DT, pastDate);
+            dc.SetDataElement(Attributes.END_DT, pastDate);
+            Assert.IsTrue(RunRule(myDealsData, dc, rule));
+
+            dc.SetDataElement(Attributes.START_DT, futureDate);
+            dc.SetDataElement(Attributes.END_DT, pastDate);
+            Assert.IsFalse(RunRule(myDealsData, dc, rule));
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Tracker()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Tracker Exists");
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "0");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "1");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Tracker_Tbl_Row()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Tracker Exists Table Row Only");
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "0");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "1");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Frontend_Tracker()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly for Frontend With Tracker");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+            dc.SetDataElement(Attributes.DEAL_DESC, "Some Value");
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "0");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.DEAL_DESC, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "1");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.DEAL_DESC, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "0");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.DEAL_DESC, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "1");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.DEAL_DESC, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Frontend_No_Tracker()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly for Frontend With No Tracker (Expire YCS2 Flag)");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+            dc.SetDataElement(Attributes.EXPIRE_YCS2, "Some Value");
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "0");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.EXPIRE_YCS2, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "1");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.EXPIRE_YCS2, false);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "0");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.EXPIRE_YCS2, true);
+
+            dc.SetDataElement(Attributes.HAS_TRACKER, "1");
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.EXPIRE_YCS2, false);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Cancelled()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Cancelled");
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.IS_CANCELLED, "0");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.IS_CANCELLED, "1");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Not_Tender()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if not TENDER");
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.REBATE_TYPE, "TENDER");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.REBATE_TYPE, "MCP");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Not_SvrWS()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Server Deal Type Read Only if Product is not SvrWS");
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+            dc.SetDataElement(Attributes.SERVER_DEAL_TYPE, "Some Value");
+
+            dc.SetDataElement(Attributes.PRODUCT_CATEGORIES, "DT,SvrWS");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.SERVER_DEAL_TYPE, false);
+
+            dc.SetDataElement(Attributes.PRODUCT_CATEGORIES, "DT,MBL");
+            RunReadOnlyRule(myDealsData, dc, rule, Attributes.SERVER_DEAL_TYPE, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Backend_Deal()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Backend Deal");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Frontend_Deal()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Frontend Deal");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Expire_Flag_Yes()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Expire YCS2 flag is Yes");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.EXPIRE_YCS2, "No");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.EXPIRE_YCS2, "Yes");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_No_CS()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if no chipset");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.PRODUCT_CATEGORIES, "CS, CPU");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.PRODUCT_CATEGORIES, "CPU, Dt");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_Wip_Always()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly WIP/Deal ALWAYS");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_Always()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly ALWAYS");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_Ptr_Always()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly PTR ALWAYS");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_Backdate()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly backdate if in the past");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            string pastDate = DateTime.Now.AddDays(-1).ToString("MM/dd/yyyy");
+            string futureDate = DateTime.Now.AddDays(+1).ToString("MM/dd/yyyy");
+
+            dc.SetDataElement(Attributes.START_DT, pastDate);
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.START_DT, futureDate);
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Not_Consumption()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Not Consumption");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.PAYOUT_BASED_ON, "Consumption");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.PAYOUT_BASED_ON, "Billings");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Not_Backend_Deal()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if Not Backend");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Backend");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.PROGRAM_PAYMENT, "Frontend YCS2");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+        }
+
+        [TestCase]
+        public void BasicRules_Readonly_If_Geo_WW()
+        {
+            MyDealsData myDealsData = ComplexContract.DeepClone();
+
+            MyOpRule rule = Rules.FirstOrDefault(r => r.Title == "Readonly if geo is WW");
+
+            string[] atrbs = rule.OpRuleActions[0].Target;
+
+            OpDataCollector dc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            List<MyDealsAttribute> readOnlyAtrbs = GetMyDealsAttributes(dc, atrbs);
+
+            dc.SetDataElement(Attributes.GEO_COMBINED, "ASMO,APAC");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, false);
+
+            dc.SetDataElement(Attributes.GEO_COMBINED, "WW");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
+
+            dc.SetDataElement(Attributes.GEO_COMBINED, "WorldWide");
+            RunReadOnlyRules(myDealsData, dc, rule, readOnlyAtrbs, true);
         }
 
     }

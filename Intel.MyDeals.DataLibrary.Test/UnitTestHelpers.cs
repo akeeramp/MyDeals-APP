@@ -391,7 +391,11 @@ namespace Intel.MyDeals.DataLibrary.Test
             {
                 new OpDeTestItem(Attributes.OBJ_SET_TYPE_CD, "KIT"),
                 new OpDeTestItem(Attributes.ECAP_PRICE, "5"),
-                new OpDeTestItem(Attributes.TITLE, "JS29F08G08AANC1")
+                new OpDeTestItem(Attributes.TITLE, "JS29F08G08AANC1"),
+                new OpDeTestItem(Attributes.NUM_OF_TIERS, 1),
+                new OpDeTestItem(Attributes.TIER_NBR, 1, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.ECAP_PRICE, 50, new OpAtrbMapCollection(new OpAtrbMap(20,0))),
+                new OpDeTestItem(Attributes.QTY, 0, new OpAtrbMapCollection(new OpAtrbMap(20,0)))
             });
 
             return dc;
@@ -493,6 +497,8 @@ namespace Intel.MyDeals.DataLibrary.Test
                 new OpDeTestItem(Attributes.PTR_USER_PRD, "29F02T2AOCMG2,29F64B2AMCMG4"),
                 new OpDeTestItem(Attributes.PTR_SYS_PRD, "{\"29F02T2AOCMG2\":[{\"BRND_NM\":\"NA\",\"CAP\":\"96.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"2/22/2017\",\"DEAL_PRD_NM\":\"29F02T2AOCMG2\",\"DEAL_PRD_TYPE\":\"NAND\",\"DERIVED_USR_INPUT\":\"29F02T2AOCMG2\",\"FMLY_NM\":\"NA\",\"HAS_L1\":0,\"HAS_L2\":0,\"HIER_NM_HASH\":\"NAND NAND NA NA NA 29F02T2AOCMG2 \",\"HIER_VAL_NM\":\"29F02T2AOCMG2\",\"MM_MEDIA_CD\":\"\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"NA\",\"PRD_ATRB_SID\":7007,\"PRD_CAT_NM\":\"NAND\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":71242,\"PRD_STRT_DTM\":\"12/4/2015\",\"USR_INPUT\":\"29F02T2AOCMG2\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}],\"29F64B2AMCMG4\":[{\"BRND_NM\":\"NA\",\"CAP\":\"96.00\",\"CAP_END\":\"11/31/9999\",\"CAP_START\":\"11/15/2017\",\"DEAL_PRD_NM\":\"29F64B2AMCMG4\",\"DEAL_PRD_TYPE\":\"NAND\",\"DERIVED_USR_INPUT\":\"29F64B2AMCMG4\",\"FMLY_NM\":\"NA\",\"HAS_L1\":1,\"HAS_L2\":1,\"HIER_NM_HASH\":\"NAND NAND NA NA NA 29F64B2AMCMG4 \",\"HIER_VAL_NM\":\"29F64B2AMCMG4\",\"MM_MEDIA_CD\":\"\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"NA\",\"PRD_ATRB_SID\":7007,\"PRD_CAT_NM\":\"NAND\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":71932,\"PRD_STRT_DTM\":\"1/14/2016\",\"USR_INPUT\":\"29F64B2AMCMG4\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}")
             });
+            OpDataCollector dcWipK1 = myDealsData.CreateWipDealKit(dcPtrK1, id++);
+
             OpDataCollector dcPtrK2 = myDealsData.CreatePricingTableRowKit(dcPtK1, id++, new List<OpDeTestItem>
             {
                 new OpDeTestItem(Attributes.GEO_COMBINED, "APAC,EMEA"),
@@ -501,6 +507,7 @@ namespace Intel.MyDeals.DataLibrary.Test
                 new OpDeTestItem(Attributes.PTR_USER_PRD, "29F02T2AOCMG2"),
                 new OpDeTestItem(Attributes.PTR_SYS_PRD, "{\"29F02T2AOCMG2\":[{\"BRND_NM\":\"NA\",\"CAP\":\"96.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"2/22/2017\",\"DEAL_PRD_NM\":\"29F02T2AOCMG2\",\"DEAL_PRD_TYPE\":\"NAND\",\"DERIVED_USR_INPUT\":\"29F02T2AOCMG2\",\"FMLY_NM\":\"NA\",\"HAS_L1\":0,\"HAS_L2\":0,\"HIER_NM_HASH\":\"NAND NAND NA NA NA 29F02T2AOCMG2 \",\"HIER_VAL_NM\":\"29F02T2AOCMG2\",\"MM_MEDIA_CD\":\"\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"NA\",\"PRD_ATRB_SID\":7007,\"PRD_CAT_NM\":\"NAND\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":71242,\"PRD_STRT_DTM\":\"12/4/2015\",\"USR_INPUT\":\"29F02T2AOCMG2\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}")
             });
+            OpDataCollector dcWipK2 = myDealsData.CreateWipDealKit(dcPtrK2, id++);
 
             return myDealsData;
         }
