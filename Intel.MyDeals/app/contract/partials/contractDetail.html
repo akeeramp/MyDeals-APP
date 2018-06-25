@@ -199,7 +199,7 @@
 						</div>
 					    <div class="col-md-11"
                              id="radCustAccpt"
-							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT}"
+							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0}"
 							 op-control-flat
 							 ng-model="contractData"
 							 op-cd="'CUST_ACCPT'"
