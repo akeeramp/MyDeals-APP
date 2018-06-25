@@ -26,6 +26,9 @@ function loadingPanel() {
 			$scope.funFactDesc = "";
 			$scope.funFactIcon = "";
 
+            // Enable or Disable Fun Facts
+			$scope.isFunFactEnabled = false;
+
 			$scope.GetRandomFact = function () {
 
 				// Get a random number between min (inclusive) and max (exclusive)

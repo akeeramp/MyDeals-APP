@@ -19,7 +19,7 @@
 		<p ng-bind="description"></p>
 
 
-	    <div ng-if="isShowFunFact" class="row ss-funfact-container">
+	    <div ng-if="isShowFunFact && isFunFactEnabled" class="row ss-funfact-container">
 	        <p ng-init="GetRandomFact()" class="col-md-12 ss-funfact-title">
 	            <i class="fa {{ funFactIcon }} ss-funfact-icon"></i> {{ funFactTitle }}
 	        </p>
