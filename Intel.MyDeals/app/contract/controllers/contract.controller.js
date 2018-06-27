@@ -277,6 +277,7 @@
 
             if ($location.url().split('tender=').length > 1) {
                 $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
+                $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto-Filled";
                 $scope.contractData["IS_TENDER"] = "1";
             }
         } 
