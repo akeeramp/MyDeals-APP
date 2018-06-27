@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Intel.MyDeals.DataLibrary.Test
 {
-    [TestClass]
+    //[TestClass]
     public class ProductDataLibTests
     {
         public ProductDataLibTests()
@@ -13,13 +13,12 @@ namespace Intel.MyDeals.DataLibrary.Test
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
-        
+
         [TestMethod]
         public void ProductsGetAll()
         {
             IEnumerable<Product> results = new ProductDataLib().GetProducts();
             Assert.IsTrue(results.Any());
         }
-
     }
 }

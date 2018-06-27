@@ -9,65 +9,66 @@ using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
-	public class SecurityAttributesLib : ISecurityAttributesLib
-	{
-		private readonly ISecurityAttributesDataLib _securityAttributesDataLib;
-		private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+    public class SecurityAttributesLib : ISecurityAttributesLib
+    {
+        private readonly ISecurityAttributesDataLib _securityAttributesDataLib;
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-		public SecurityAttributesLib(ISecurityAttributesDataLib _securityAttributesDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
-		{
-			this._securityAttributesDataLib = _securityAttributesDataLib;
-			this._dataCollectionsDataLib = _dataCollectionsDataLib;
-		}
+        public SecurityAttributesLib(ISecurityAttributesDataLib _securityAttributesDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._securityAttributesDataLib = _securityAttributesDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
 
-		/// <summary>
-		/// TODO: This parameterless constructor is left as a reminder,
-		/// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
-		/// </summary>
-		public SecurityAttributesLib()
-		{
-			this._securityAttributesDataLib = new SecurityAttributesDataLib();
-		}
+        /// <summary>
+        /// TODO: This parameterless constructor is left as a reminder,
+        /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+        /// </summary>
+        public SecurityAttributesLib()
+        {
+            this._securityAttributesDataLib = new SecurityAttributesDataLib();
+            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
 
-		#region Security Mapping
+        #region Security Mapping
 
-		public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
-		{
-			return _dataCollectionsDataLib.GetSecurityAttributesDropDownData();
-		}
+        public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
+        {
+            return _dataCollectionsDataLib.GetSecurityAttributesDropDownData();
+        }
 
-		public Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs()
-		{
-			List<SecurityAttributesDropDown> attributesList = _dataCollectionsDataLib.GetSecurityAttributesDropDownData();
+        public Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs()
+        {
+            List<SecurityAttributesDropDown> attributesList = _dataCollectionsDataLib.GetSecurityAttributesDropDownData();
 
-			Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> objTypes = new Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>();
-			Dictionary<string, List<string>> objsetTypesOfAttributes = new Dictionary<string, List<string>>();
+            Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> objTypes = new Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>();
+            Dictionary<string, List<string>> objsetTypesOfAttributes = new Dictionary<string, List<string>>();
 
-			List<OpDataElementTypeItem> objTypeList = OpDataElementTypeRepository.OpDetCollection.Items; // attributesList.Select(x => x.OBJ_TYPE).Distinct().ToList();
-	
-			Dictionary<OpDataElementType, List<OpDataElementSetType>> objDict = OpDataElementSetTypeRepository.OpDestCollection.Heirarchy;
+            List<OpDataElementTypeItem> objTypeList = OpDataElementTypeRepository.OpDetCollection.Items; // attributesList.Select(x => x.OBJ_TYPE).Distinct().ToList();
 
-		    var workFlows = DataCollections.GetWorkFlowItems();
+            Dictionary<OpDataElementType, List<OpDataElementSetType>> objDict = OpDataElementSetTypeRepository.OpDestCollection.Heirarchy;
 
-            // Create dictionary of ObjTypes and Attributes for easy lookup		
+            var workFlows = DataCollections.GetWorkFlowItems();
+
+            // Create dictionary of ObjTypes and Attributes for easy lookup
             foreach (KeyValuePair<OpDataElementType, List<OpDataElementSetType>> objKey in objDict)
-			{
-				OpDataElementTypeItem objTypeKey = objTypeList.Find(x => x.OpDeType == objKey.Key);
-			    if (objTypeKey == null) continue;
+            {
+                OpDataElementTypeItem objTypeKey = objTypeList.Find(x => x.OpDeType == objKey.Key);
+                if (objTypeKey == null) continue;
 
                 foreach (OpDataElementSetType objsetTypeKey in objKey.Value)
-				{
-					// TODO: All_Types should not be hard-coded 
-					List<string> atrbList = attributesList.Where(x => x.OBJ_TYPE_SID == objTypeKey.Id && (x.OBJ_SET_TYPE == objsetTypeKey.ToString() || x.OBJ_SET_TYPE == "ALL_TYPES")).Select(x => x.ATRB_COL_NM).Distinct().ToList();
-					objsetTypesOfAttributes[objsetTypeKey.ToString()] = atrbList;
-				}
-			    if (!objTypes.ContainsKey(objTypeKey.Alias))
-			    {
+                {
+                    // TODO: All_Types should not be hard-coded
+                    List<string> atrbList = attributesList.Where(x => x.OBJ_TYPE_SID == objTypeKey.Id && (x.OBJ_SET_TYPE == objsetTypeKey.ToString() || x.OBJ_SET_TYPE == "ALL_TYPES")).Select(x => x.ATRB_COL_NM).Distinct().ToList();
+                    objsetTypesOfAttributes[objsetTypeKey.ToString()] = atrbList;
+                }
+                if (!objTypes.ContainsKey(objTypeKey.Alias))
+                {
                     objTypes[objTypeKey.Alias] = new Dictionary<string, Dictionary<string, List<string>>>();
                 }
                 objTypes[objTypeKey.Alias]["ATTRBS"] = objsetTypesOfAttributes;
 
-				objTypes[objTypeKey.Alias]["STAGES"] = new Dictionary<string, List<string>>();
+                objTypes[objTypeKey.Alias]["STAGES"] = new Dictionary<string, List<string>>();
                 foreach (WorkFlows workFlow in workFlows.Where(w => w.OBJ_TYPE_SID == objTypeKey.Id).Distinct())
                 {
                     if (!objTypes[objTypeKey.Alias]["STAGES"].ContainsKey(workFlow.WFSTG_MBR_SID.ToString()))
@@ -82,11 +83,11 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Clear Lists for next iteration
                 objsetTypesOfAttributes = new Dictionary<string, List<string>>();
-			}
+            }
 
             // Now, we must copy the Pricing Strategy Stages all the way down to WIP Deals
             if (objTypes.ContainsKey(OpDataElementType.PRC_ST.ToString()))
-		    {
+            {
                 if (objTypes.ContainsKey(OpDataElementType.PRC_TBL.ToString()))
                     objTypes[OpDataElementType.PRC_TBL.ToString()]["STAGES"] = objTypes[OpDataElementType.PRC_ST.ToString()]["STAGES"];
                 if (objTypes.ContainsKey(OpDataElementType.PRC_TBL_ROW.ToString()))
@@ -96,17 +97,17 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return objTypes;
-		}
+        }
 
-		public bool SaveSecurityMappings(List<SecurityMapSave> saveMappings)
-		{
-			return _securityAttributesDataLib.SaveSecurityMappings(saveMappings);
-		}
-		
-		public SecurityWrapper GetSecurityMasks()
-		{
-			return DataCollections.GetSecurityWrapper();
-		}
+        public bool SaveSecurityMappings(List<SecurityMapSave> saveMappings)
+        {
+            return _securityAttributesDataLib.SaveSecurityMappings(saveMappings);
+        }
+
+        public SecurityWrapper GetSecurityMasks()
+        {
+            return DataCollections.GetSecurityWrapper();
+        }
 
         public SecurityItems GetMySecurityMasks()
         {
@@ -120,26 +121,25 @@ namespace Intel.MyDeals.BusinessLogic
             };
         }
 
-        #endregion
+        #endregion Security Mapping
 
         #region Admin DealTypes
 
         public List<AdminDealType> GetAdminDealTypes()
-		{
-			return _dataCollectionsDataLib.GetAdminDealTypes();
-		}
+        {
+            return _dataCollectionsDataLib.GetAdminDealTypes();
+        }
 
-		public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
-		{
-			return _securityAttributesDataLib.ManageAdminDealType(dealType, state);
-		}
+        public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
+        {
+            return _securityAttributesDataLib.ManageAdminDealType(dealType, state);
+        }
 
-		public bool DeleteAdminDealType(int id)
-		{
-			return _securityAttributesDataLib.DeleteAdminDealType(id);
-		}
+        public bool DeleteAdminDealType(int id)
+        {
+            return _securityAttributesDataLib.DeleteAdminDealType(id);
+        }
 
         #endregion Admin DealTypes
-
     }
 }

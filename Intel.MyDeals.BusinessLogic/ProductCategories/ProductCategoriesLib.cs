@@ -7,25 +7,25 @@ using Intel.MyDeals.Entities;
 namespace Intel.MyDeals.BusinessLogic
 {
     public class ProductCategoriesLib : IProductCategoriesLib
-	{
-		private readonly IProductCategoriesDataLib _productCategoriesDataLib;
-		private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+    {
+        private readonly IProductCategoriesDataLib _productCategoriesDataLib;
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-		/// <summary>
-		/// TODO: This parameterless constructor is left as a reminder,
-		/// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
-		/// </summary>
-		public ProductCategoriesLib()
-		{
-			_productCategoriesDataLib = new ProductCategoriesDataLib();
-		}
+        /// <summary>
+        /// TODO: This parameterless constructor is left as a reminder,
+        /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+        /// </summary>
+        public ProductCategoriesLib()
+        {
+            _productCategoriesDataLib = new ProductCategoriesDataLib();
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
 
-		public ProductCategoriesLib(IProductCategoriesDataLib productCategoriesDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
-		{
-			_productCategoriesDataLib = productCategoriesDataLib;
-			_dataCollectionsDataLib = dataCollectionsDataLib;
-		}
-
+        public ProductCategoriesLib(IProductCategoriesDataLib productCategoriesDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
+        {
+            _productCategoriesDataLib = productCategoriesDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
+        }
 
         //public ProductCategory CreateProductCategory(ProductCategory category)
         //{
@@ -37,9 +37,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <returns>list of Product Verticals</returns>
         public List<ProductCategory> GetProductCategories()
-		{
-			return _dataCollectionsDataLib.GetProductCategories();
-		}
+        {
+            return _dataCollectionsDataLib.GetProductCategories();
+        }
 
         /// <summary>
         /// Updates a list of product Verticals
@@ -47,9 +47,8 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="categories">The list of changed products to be updated</param>
         /// <returns>A boolean of whether the update successed or not</returns>
         public List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories)
-		{
-			return _productCategoriesDataLib.UpdateProductCategories(categories);
-		}
-
-	}
+        {
+            return _productCategoriesDataLib.UpdateProductCategories(categories);
+        }
+    }
 }

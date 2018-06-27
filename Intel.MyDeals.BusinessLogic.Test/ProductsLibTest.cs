@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestFixture]
+    [Ignore("Takes time to build")]
     public class ProductLibTests
     {
         public ProductLibTests()
