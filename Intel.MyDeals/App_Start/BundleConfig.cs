@@ -107,6 +107,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/meetComp/meetCompDealDetails.js"
                 , "~/app/core/filters/kitProducts.filter.js"
                 , "~/app/core/filters/kitCalculatedValues.filter.js"
+                , "~/app/core/filters/gridMath.filter.js"
                 , "~/app/blocks/util.js"
                 ));
 

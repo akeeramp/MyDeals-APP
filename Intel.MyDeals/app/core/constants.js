@@ -785,6 +785,9 @@
                     "CAP_KIT": {
                         "Groups": ["Deal Info", "CAP Info"]
                     },
+                    "BACKEND_REBATE": {
+                        "Groups": ["Deal Info"]
+                    },
                     "YCS2_INFO": {
                         "Groups": ["Deal Info"]
                     },

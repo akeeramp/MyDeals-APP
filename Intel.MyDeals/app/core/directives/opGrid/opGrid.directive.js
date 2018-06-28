@@ -1100,7 +1100,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             	// default QTY value
             	if (field == "QTY") {
-            		var test = dataItem[field];
             		for (var i = 0; i < 10; i++) {
             			var key = "20___" + i;
             			if (!dataItem[field].hasOwnProperty(key)) {
@@ -1115,7 +1114,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             	}
             	// default DSCNT_PER_LN value
             	if (field == "DSCNT_PER_LN") {
-            		var test = dataItem[field];
             		for (var i = 0; i < 10; i++) {
             			var key = "20___" + i;
             			if (!dataItem[field].hasOwnProperty(key)) {

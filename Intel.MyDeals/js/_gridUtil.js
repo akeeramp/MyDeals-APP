@@ -728,6 +728,22 @@ gridUtils.exportKitCalculatedValuesControlWrapper = function (passedData, kittyp
     return tmplt;
 }
 
+//control wrapper to calculate difference or sum between two other numeric cell values
+gridUtils.uiMathControlWrapper = function (passedData, atrb1, dim1, atrb2, dim2, operation, format) {
+    var tmplt = '';
+    tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | gridMath : \'' + atrb1 + '\':\'' + dim1 + '\':\'' + atrb2 + '\':\'' + dim2 + '\':\'' + operation + '\') ' + gridUtils.getFormat("", format) + ')"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
+gridUtils.exportMathControlWrapper = function (passedData, atrb1, dim1, atrb2, dim2, operation, format) {
+    var tmplt = '';
+    var val = gridUtils.gridMath(passedData, atrb1, dim1, atrb2, dim2, operation);
+    tmplt += gridUtils.formatValue(val, format);
+    return tmplt;
+}
+
 gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt, dimKey) {
     var msg = "";
     var msgClass = "";
@@ -966,6 +982,35 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
         }
     }
 
+    return total;
+};
+
+//filter to do math between atrb values in the grid.
+//dim1 and dim2 can be left blank if non-dimentionalized
+//type is a string indicating the mathematical operation we want to achieve, i.e. sub/add
+gridUtils.gridMath = function (items, atrb1, dim1, atrb2, dim2, type) {
+    var data1 = items[atrb1];
+    var data2 = items[atrb2];
+
+    if (data1 === undefined || data2 === undefined) return "";
+
+    if (!(dim1 == "" || dim1 == null)) {
+        data1 = data1[dim1];
+    }
+    if (!(dim2 == "" || dim2 == null)) {
+        data2 = data2[dim2];
+    }
+
+    if (data1 === undefined || data2 === undefined) return "";
+
+    var total = 0.00;
+
+    if (type == "sub") {
+        total = data1 - data2;
+    }
+    else if (type == "add") {
+        total = data1 + data2
+    }
     return total;
 };
 
