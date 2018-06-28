@@ -124,6 +124,30 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.getTotalDealVolume = function(passedData) {
+
+    var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === "" || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
+        ? 0
+        : parseFloat(passedData.CREDIT_VOLUME);
+    var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === "" || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
+        ? 0
+        : parseFloat(passedData.DEBIT_VOLUME);
+    var vol = passedData.VOLUME === undefined || passedData.VOLUME === "" || passedData.VOLUME === null || isNaN(passedData.VOLUME)
+        ? 0
+        : parseFloat(passedData.VOLUME);
+
+    var numerator = crVol - dbVol;
+    if (numerator < 0) numerator = 0;
+    var perc = vol === 0 ? 0 : numerator / vol * 100;
+    perc = Math.round(perc * 100) / 100;
+
+    return {
+        numerator: numerator,
+        vol: vol,
+        perc: perc
+    }
+}
+
 gridUtils.uiCrDbPercWrapper = function (passedData) {
     var numberWithCommas = (x) => {
         var parts = x.toString().split(".");
@@ -131,30 +155,17 @@ gridUtils.uiCrDbPercWrapper = function (passedData) {
         return parts.join(".");
     }
 
-    var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
-        ? 0
-        : parseFloat(passedData.CREDIT_VOLUME);
-    var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
-        ? 0
-        : parseFloat(passedData.DEBIT_VOLUME);
-    var vol = passedData.VOLUME === undefined || passedData.VOLUME === null || isNaN(passedData.VOLUME)
-        ? 0
-        : parseFloat(passedData.VOLUME);
-
-    var numerator = crVol - dbVol;
-    if (numerator < 0) numerator = 0;
-    var perc = numerator / vol * 100;
-    perc = Math.round(perc * 100) / 100;
+    var percData = gridUtils.getTotalDealVolume(passedData);
 
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
     tmplt += '    <div class="ng-binding vert-center">';
     if (vol !== 999999999) {
         tmplt += '      <div class="progress" style="height: 12px; margin-top: -2px; margin-bottom: 2px;">';
-        tmplt += '        <div class="progress-bar" role="progressbar" aria-valuenow="' + perc + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + perc + '%;"></div>';
+        tmplt += '        <div class="progress-bar" role="progressbar" aria-valuenow="' + percData.perc + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percData.perc + '%;"></div>';
         tmplt += '      </div>';
-        tmplt += '      <div style="font-size: 10px; line-height: 10px;">' + numberWithCommas(numerator) + ' out of ' + numberWithCommas(vol) + '</div>';
+        tmplt += '      <div style="font-size: 10px; line-height: 10px;">' + numberWithCommas(percData.numerator) + ' out of ' + numberWithCommas(percData.vol) + '</div>';
     } else {
-        tmplt += '      <div>' + numberWithCommas(numerator) + '</div>';
+        tmplt += '      <div>' + numberWithCommas(percData.numerator) + '</div>';
     }
     tmplt += '    </div>';
     tmplt += '</div>';
@@ -839,6 +850,26 @@ gridUtils.uiIconWrapper = function (passedData, field, format) {
     tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.' + field + '}"></i>';
     tmplt += '</div>';
     return tmplt;
+}
+
+gridUtils.uiPropertyWrapper = function (data) {
+    if (typeof data.value === 'object') {
+        //20___0
+
+        if (data.value === undefined || data.value === null) return "";
+
+        var sortedKeys = Object.keys(data.value).sort();  //to enforce primary listed before secondaries and dims are shown in order
+
+        var tmplt = '';
+        for (var index in sortedKeys) { //only looking for positive dim keys
+            dimkey = sortedKeys[index];
+            if (data.value.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+                var val = data.value[dimkey];
+                tmplt += "<b>" + gridUtils.getDimLabel(dimkey) + ":</b> " + val + '<br/>';
+            }
+        }
+        return tmplt;
+    } else return data.value;
 }
 
 gridUtils.concatDimElements = function (passedData, field) {

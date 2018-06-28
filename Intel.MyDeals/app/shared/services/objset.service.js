@@ -62,6 +62,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         updateAtrbValue: updateAtrbValue,
 
         getWipDealsByPtr: getWipDealsByPtr,
+        getWipDealById: getWipDealById,
         actionPricingStrategy: actionPricingStrategy,
         actionPricingStrategies: actionPricingStrategies,
         actionWipDeal: actionWipDeal,
@@ -228,6 +229,9 @@ function objsetService($http, dataService, logger, $q, $location) {
 
     function getWipDealsByPtr(id) {
         return dataService.get(apiBasePricingTableUrl + 'GetWipDealsByPtr/' + id);
+    }
+    function getWipDealById(id) {
+        return dataService.get(apiBasePricingTableUrl + 'GetWipDeal/' + id);
     }
     function actionPricingStrategy(custId, contractId, contractCustAccpt, pt, actn) {
         return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + contractId + '/' + contractCustAccpt + '/' + actn, [pt]);

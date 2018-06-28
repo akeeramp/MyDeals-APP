@@ -179,6 +179,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetWipDeal/{id}")]
+        public WipDealQuickViewPacket GetWipDeal(int id)
+        {
+            return SafeExecutor(() => _pricingTablesLib.GetWipDeal(id)
+                , $"Unable to get Wip Deal {id}"
+            );
+        }
+
+        [Authorize]
         [Route("ActionWipDeal/{custId}/{contractId}/{actn}")]
         [HttpPost]
         [AntiForgeryValidate]

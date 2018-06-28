@@ -129,7 +129,7 @@ namespace Intel.MyDeals.Entities
                 IOpDataElement de = dc.GetDataElement(AttributeCodes.WF_STG_CD);
                 if (de != null && de.State == OpDataElementState.Modified)
                 {
-                    dc.AddTimelineComment($"Deal state chaged from {de.OrigAtrbValue} to {de.AtrbValue}");
+                    dc.AddTimelineComment($"Deal state changed from {de.OrigAtrbValue} to {de.AtrbValue}");
                 }
                 dc.AddTimelineComment("Tracker number(s) generated");
             }

@@ -34,6 +34,14 @@
                 }
             },
             {
+                state: 'testCases.controls',
+                config: {
+                    templateUrl: 'app/testCases/controls/controls.manage.html',
+                    url: 'controls',
+                    controller: 'controlsController as vm'
+                }
+            },
+            {
                 state: 'testCases.basicGrid',
                 config: {
                     templateUrl: 'app/testCases/grids/basic.manage.html',

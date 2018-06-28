@@ -43,7 +43,9 @@ namespace Intel.MyDeals
                 "~/Scripts/bootstrap-switch.min.js",
                 "~/Scripts/intcAnalytics.js",
                 "~/Scripts/Angular/clipboard.min.js",
-                "~/Scripts/Angular/ngclipboard.min.js"
+                "~/Scripts/Angular/ngclipboard.min.js",
+                "~/Scripts/modernizr-2.6.2.min.js",
+                "~/Scripts/polyfills.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
@@ -83,6 +85,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/attributeBuilder/attributeBuilder.directive.js"
                 , "~/app/core/directives/attributeSearch/attributeSearchGrid.directive.js"
                 , "~/app/core/directives/buttons/btnRunPctMct.directive.js"
+                , "~/app/core/directives/dealPopup/dealPopup.directive.js"
                 , "~/app/core/directives/gridCell/dealDetail.directive.js"
                 , "~/app/core/directives/gridCell/dealTools.directive.js"
                 , "~/app/core/directives/gridCell/dealToolsTender.directive.js"
@@ -228,6 +231,7 @@ namespace Intel.MyDeals
                 , "~/app/shared/services/userPreferences.service.js"
                 , "~/app/testCases/testCases.module.js"
                 , "~/app/testCases/testCases.route.js"
+                , "~/app/testCases/controls/controls.controller.js"
                 , "~/app/testCases/grids/basic.controller.js"
                 , "~/app/testCases/grids/status.controller.js"
                 , "~/app/testCases/grids/opGrid.controller.js"
@@ -259,7 +263,8 @@ namespace Intel.MyDeals
                 "~/css/select2.min.css",
                 "~/css/nv.d3.min.css",
                 "~/css/angular-gridster.css",
-                "~/css/bootstrap-switch.min.css"
+                "~/css/bootstrap-switch.min.css",
+                "~/app/core/directives/dealPopup/dealPopup.directive.css"
                 // TODO: Check with Tory...Commenting this for now as its affecting global css
                 // May be refer this in handbook html directly
                 //"~/css/simple-sidebar.css"

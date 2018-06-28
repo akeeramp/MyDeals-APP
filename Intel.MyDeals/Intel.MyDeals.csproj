@@ -4,7 +4,8 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion></ProductVersion>
+    <ProductVersion>
+    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{82000E27-2C54-48BC-8226-001857E1A45D}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -20,7 +21,8 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <NuGetPackageImportStamp></NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -165,7 +167,8 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.WebRequest"></Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -507,6 +510,9 @@
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
     <Content Include="app\core\directives\csrfRequestVerificationToken.js" />
+    <Content Include="app\core\directives\dealPopup\dealPopup.directive.css" />
+    <Content Include="app\core\directives\dealPopup\dealPopup.directive.html" />
+    <Content Include="app\core\directives\dealPopup\dealPopup.directive.js" />
     <Content Include="app\core\directives\dirtyTracking.directive.js" />
     <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\blocks\uiControls\focusOnShow.directive.js" />
@@ -570,6 +576,8 @@
     <Content Include="app\tenderManager\partials\tenderManager.html" />
     <Content Include="app\tenderManager\tenderManager.module.js" />
     <Content Include="app\tenderManager\tenderManager.route.js" />
+    <Content Include="app\testCases\controls\controls.controller.js" />
+    <Content Include="app\testCases\controls\controls.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
@@ -1654,9 +1662,11 @@
     <Content Include="Scripts\kendo\2018.R1\jszip.min.js" />
     <Content Include="Scripts\kendo\2018.R1\kendo.all.min.js" />
     <Content Include="Scripts\lz-string.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.min.js" />
     <Content Include="Scripts\moment-timezone.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
+    <Content Include="Scripts\polyfills.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr.min.js" />
@@ -1881,7 +1891,8 @@
           <IISUrl>http://localhost:55490/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl></CustomServerUrl>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

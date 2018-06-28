@@ -11,6 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id);
         OpDataCollectorFlattenedDictList GetWipDealsByPtr(int id);
+        WipDealQuickViewPacket GetWipDeal(int id);
         CostTestDetail GetPctDetails(int id);
         string GetPath(int id, string opType);
         PctOverrideReason SetPctOverrideReason(PctOverrideReason data);

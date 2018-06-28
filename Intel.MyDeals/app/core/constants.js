@@ -64,14 +64,15 @@
                 "Complete": "#C4D600",
                 "InComplete": "#FC4C02",
                 "Draft": "#d8dddf",
+                "Pending": "#FFA300",
                 "Requested": "#f9eaa7",
                 "Submitted": "#ffd180",
                 "Approved": "#c4d600",
                 "InProgress": "#d8dddf",
                 "Processed": "#C4D600",
                 "Active": "#c4d600",
-                "Pending Bid": "#FFA300",
-                "Lost Bid": "#FC4C02"
+                "Offer": "#FFA300",
+                "Lost": "#FC4C02"
             }
         })
         .constant('contractManagerConstants', {

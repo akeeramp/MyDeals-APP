@@ -82,6 +82,72 @@ namespace Intel.MyDeals.BusinessLogic
             return data;
         }
 
+        public WipDealQuickViewPacket GetWipDeal(int id)
+        {
+            WipDealQuickViewPacket ret = new WipDealQuickViewPacket();
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                OpDataElementType.WIP_DEAL
+            };
+
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(new List<int> { id }, opDataElementTypes).FillInHolesFromAtrbTemplate();
+
+            List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
+                .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
+            List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
+            foreach (OpDataElement de in myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER))
+            {
+                if (de.AtrbValue.ToString() == "") continue;
+                int prodId = int.Parse(de.AtrbValue.ToString());
+                ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
+                if (prod != null) de.AtrbValue = prod.PRODUCT_NAME;
+            }
+
+            ret.Data = myDealsData.ToOpDataCollectorFlattenedDictList(OpDataElementType.WIP_DEAL, ObjSetPivotMode.Nested).FirstOrDefault();
+
+            List<int> atrbs = new List<int> { Attributes.TITLE.ATRB_SID };
+            List<OpDataElementType> opDataElementTypesPath = new List<OpDataElementType>
+            {
+                OpDataElementType.CNTRCT,
+                OpDataElementType.PRC_ST,
+                OpDataElementType.PRC_TBL
+            };
+            MyDealsData myDealsPathData = OpDataElementType.WIP_DEAL.GetByIDs(new List<int> { id }, opDataElementTypesPath, atrbs);
+
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            foreach (KeyValuePair<string, object> kvp in ret.Data)
+            {
+                MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == kvp.Key);
+                if (atrb != null) ret.AtrbMap[kvp.Key] = atrb.ATRB_LBL;
+            }
+
+            OpDataElement deCntrct = myDealsPathData[OpDataElementType.CNTRCT].AllDataElements.FirstOrDefault();
+            if (deCntrct != null)
+            {
+                ret.Path.ContractId = deCntrct.DcID;
+                ret.Path.ContractTitle = deCntrct.AtrbValue.ToString();
+            }
+
+            OpDataElement dePs = myDealsPathData[OpDataElementType.PRC_ST].AllDataElements.FirstOrDefault();
+            if (dePs != null)
+            {
+                ret.Path.PricingStrategyId = dePs.DcID;
+                ret.Path.PricingStrategyTitle = dePs.AtrbValue.ToString();
+            }
+
+            OpDataElement dePt = myDealsPathData[OpDataElementType.PRC_TBL].AllDataElements.FirstOrDefault();
+            if (dePt != null)
+            {
+                ret.Path.PricingTableId = dePt.DcID;
+                ret.Path.PricingTableTitle = dePt.AtrbValue.ToString();
+            }
+
+            ret.Path.WipDealId = id;
+
+            return ret;
+        }
+
         public CostTestDetail GetPctDetails(int id)
         {
             return new CostTestLib().GetCostTestDetails(id);

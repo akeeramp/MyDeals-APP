@@ -1,0 +1,287 @@
+﻿
+<span id="cn-cntrl-{{data.DC_ID}}">
+    <span class="cn-button" ng-click="menuClick()" title="Click to view a Quick Look at deal #{{dealId}}"><i class="intelicon-bright-off"></i></span>
+    
+    <span class="draggable">
+        
+        <span class="cn-close" ng-class="{ 'cn-info-open': open }">
+            <i class="fa fa-times-circle" ng-click="closeControl()"></i>
+        </span>
+
+        <span class="cn-info" ng-class="{ 'cn-info-open': open }">
+                <div ng-show="isLoading" style="top: 15px; left: -9px; color: #C4D600;">
+                    <div class="loading-div">
+                        <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                </div>
+                <div ng-hide="isLoading" style="margin-top: 7px;">
+                    <div ng-show="helpTip == 0" class="help-tip-base">
+                        <div class="deal deal-num">
+                            <a href="">#{{data.DC_ID}}</a>
+                        </div>
+                        <div class="deal deal-icons">
+                            <div class="fl textCircle valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
+                                {{ data.OBJ_SET_TYPE_CD | limitTo:1 }}
+                            </div>
+                            <div class="fl textCircle" style="background-color: {{getColorMct(data.MEETCOMP_TEST_RESULT)}};" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT }}">
+                                <i class="fa fa-tablet"></i>
+                            </div>
+                            <div class="fl textCircle" style="background-color: {{getColorPct(data.COST_TEST_RESULT)}};" title="Price Cost Test: {{ data.COST_TEST_RESULT }}">
+                                <i class="fa fa-usd"></i>
+                            </div>
+                            <div class="fl textCircle" style="background-color: {{getColorStage(data.WF_STG_CD)}};" title="Stage: {{ data.WF_STG_CD }}">
+                                <i class="fa fa-map-marker"></i>
+                            </div>
+                            <div class="fl textCircle valid_{{ data.HAS_TRACKER }}" title="{{ getTrackerTitle() }}">
+                                <i class="fa fa-paw"></i>
+                            </div>
+                            <div class="clearboth"></div>
+                        </div>
+                        <div class="deal deal-dates">{{data.START_DT}} - {{data.END_DT}}</div>
+                    </div>
+                
+                    <div ng-show="helpTip == 1" class="help-tip">
+                        <i class="fa fa-list"></i>
+                        <div>General Properties</div>
+                    </div>
+
+                    <div ng-show="helpTip == 2" class="help-tip">
+                        <i class="fa fa-th-list"></i>
+                        <div>Schedule Information</div>
+                    </div>
+
+                    <div ng-show="helpTip == 3" class="help-tip">
+                        <i class="fa fa-search"></i>
+                        <div>Search Deal Properties</div>
+                    </div>
+
+                    <div ng-show="helpTip == 4" class="help-tip">
+                        <i class="fa fa-desktop"></i>
+                        <div>Product Details</div>
+                    </div>
+
+                    <div ng-show="helpTip == 5" class="help-tip">
+                        <i class="fa fa-comment-o"></i>
+                        <div>User Notes</div>
+                    </div>
+
+                    <div ng-show="helpTip == 6" class="help-tip">
+                        <i class="fa fa-clock-o"></i>
+                        <div>Deal Timeline</div>
+                    </div>
+
+                    <div ng-show="helpTip == 7" class="help-tip">
+                        <i class="fa fa-quote-right"></i>
+                        <div>Quote Letter</div>
+                    </div>
+
+                    <div ng-show="helpTip == 8" class="help-tip">
+                        <i class="fa fa-usd"></i>
+                        <div>Payment Details</div>
+                    </div>
+                </div>
+            </span>
+
+        <div class="cn-wrapper" id="cn_wrapper_{{data.DC_ID}}" ng-click="wrapperClick()" ng-class="{ 'rot1': sel == 1, 'rot2': sel == 2, 'rot3': sel == 3, 'rot4': sel == 4, 'rot5': sel == 5, 'rot6': sel == 6, 'rot7': sel == 7, 'rot8': sel == 8 }">
+            <ul>
+                <li ng-click="focusMenu($event, 1)" ng-mouseover="helpTip=1" ng-mouseout="helpTip=0" class="active"><div><a href=""><i class="fa fa-list"></i></a></div></li>
+                <li ng-click="focusMenu($event, 2)" ng-mouseover="helpTip=2" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-th-list"></i></a></div></li>
+                <li ng-click="focusMenu($event, 3)" ng-mouseover="helpTip=3" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-search"></i></a></div></li>
+                <li ng-click="focusMenu($event, 4)" ng-mouseover="helpTip=4" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-desktop"></i></a></div></li>
+                <li ng-click="focusMenu($event, 5)" ng-mouseover="helpTip=5" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-comment-o"></i></a></div></li>
+                <li ng-click="focusMenu($event, 6)" ng-mouseover="helpTip=6" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-clock-o"></i></a></div></li>
+                <li ng-click="focusMenu($event, 7)" ng-mouseover="helpTip=7" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-quote-right"></i></a></div></li>
+                <li ng-click="focusMenu($event, 8)" ng-mouseover="helpTip=8" ng-mouseout="helpTip=0"><div><a href=""><i class="fa fa-usd"></i></a></div></li>
+            </ul>
+        </div>
+
+        <div class="cn-panel cn-panel1" ng-class="{ 'cn-panel-open1': sel == 1 && showPanel }">
+            <div class="header">
+                <i class="fa fa-list"></i> General Properties
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body" style="overflow: hidden;">
+                <div>
+                    <div class="fl cn-title" title="#{{path.ContractId}} {{path.ContractTitle}}">
+                        <div class="cn-desc">Contract</div>
+                        {{path.ContractTitle}}
+                    </div>
+                    <div class="fl cn-divider"><i class="intelicon-right-next"></i></div>
+                    <div class="fl cn-title" title="#{{path.PricingStrategyId}} {{path.PricingStrategyTitle}}">
+                        <div class="cn-desc">Pricing Strategy</div>
+                        {{path.PricingStrategyTitle}}
+                    </div>
+                    <div class="fl cn-divider"><i class="intelicon-right-next"></i></div>
+                    <div class="fl cn-title" title="#{{path.PricingTableId}} {{path.PricingTableTitle}}">
+                        <div class="cn-desc">Pricing Table</div>
+                        {{path.PricingTableTitle}}
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+                <hr class="cn-hr" />
+                <div>
+                    <div class="fl">
+                        <div class="cn-deal-title" style="margin-top: 5px;">#{{data.DC_ID}} <span class="org" ng-bind="displayDealType()"></span></div>
+                        <div class="cn-desc-bold">{{data.Customer.CUST_NM}} <i class="fa fa-chevron-right"></i> {{data.START_DT}} - {{data.END_DT}}</div>
+                        <div>
+                            <div class="cn-desc" style="margin-top: 15px;">Market Segment:</div>
+                            <div class="cn-max-width">{{data.MRKT_SEG}}</div>
+                        </div>
+                        <div>
+                            <div class="cn-desc" title="{{data.TITLE}}">Products:</div>
+                            <div class="cn-max-width">{{data.TITLE}}</div>
+                        </div>
+                    </div>
+                    <div class="fr cn-info-container">
+                        <div><div class="cn-desc">Payout Based On:</div> {{data.PAYOUT_BASED_ON}}</div>
+                        <div><div class="cn-desc">Geo:</div> {{data.GEO_COMBINED}}</div>
+                        <div><div class="cn-desc">Rebate Type:</div> {{data.REBATE_TYPE}}</div>
+                        <div><div class="cn-desc">Program Payment:</div> {{data.PROGRAM_PAYMENT}}</div>
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cn-panel cn-panel2" ng-class="{ 'cn-panel-open2': sel == 2 && showPanel }">
+            <div class="header">
+                <i class="fa fa-th-list"></i> Schedule Information
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body-no-pad">
+                <kendo-grid id="grid_sched_{{data.DC_ID}}" options="scheduleGridOptions" class="micro-grid" style="height: 120px; border: 0 solid transparent;"></kendo-grid>
+            </div>
+        </div>
+
+        <div class="cn-panel cn-panel3" id="cn_prop_panel_{{data.DC_ID}}" ng-class="{ 'cn-panel-open3': sel == 3 && showPanel }">
+            <div class="header">
+                <i class="fa fa-search"></i> Search Deal Properties
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body-no-pad">
+                <div>
+                    <button class="btn btn-xs btn-default no-border" aria-pressed="false" ng-click="tglGroup($event)" type="button" data-toggle="button" autocomplete="off">
+                        <i class="fa fa-sitemap"></i>
+                    </button>
+                    <button class="btn btn-xs btn-default no-border" aria-pressed="false" ng-click="tglGrdSize($event, data.DC_ID)" type="button" data-toggle="button" autocomplete="off">
+                        <i class="fa fa-arrows-v"></i>
+                    </button>
+                    <input ng-model="propSearchFilter" class="round-border-search" placeholder="search..." />
+                </div>
+                <kendo-grid options="propertiesGridOptions" class="micro-grid prop-grid" id="cn_prop_grid_{{data.DC_ID}}"></kendo-grid>
+            </div>
+        </div>
+
+        <div class="cn-panel cn-panel4" ng-class="{ 'cn-panel-open4': sel == 4 && showPanel }">
+            <div class="header">
+                <i class="fa fa-desktop"></i> Product Details
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body-no-pad">
+                <div ng-hide="productsLoaded">
+                    <div style="padding: 10px;">
+                        Loading Products...
+                    </div>
+                </div>
+                <div ng-show="productsLoaded">
+                    <kendo-grid options="productsGridOptions" class="micro-grid" style="height: 140px; border: 0 solid transparent;"></kendo-grid>
+                </div>
+            </div>
+        </div>
+
+        <div class="cn-panel cn-panel5" ng-class="{ 'cn-panel-open5': sel == 5 && showPanel }">
+            <div class="header">
+                <i class="fa fa-comment-o"></i> User Notes
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body"><div ng-bind-html="data.NOTES"></div></div>
+        </div>
+
+        <div class="cn-panel cn-panel6" ng-class="{ 'cn-panel-open6': sel == 6 && showPanel }">
+            <div class="header">
+                <i class="fa fa-clock-o"></i> Deal Timeline
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body-no-pad">
+                <div ng-hide="timelineLoaded">
+                    <div style="padding: 10px;">
+                        Loading TimeLine...
+                    </div> 
+                </div>
+                <div ng-show="timelineLoaded">
+                    <kendo-grid options="timelineGridOptions" class="micro-grid" style="height: 140px;"></kendo-grid>
+                </div>
+            </div>
+        </div>
+
+        <div class="cn-panel cn-panel7" ng-class="{ 'cn-panel-open7': sel == 7 && showPanel }">
+            <div class="header">
+                <i class="fa fa-quote-right"></i> Quote Letter
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body" style="padding: 27px 40px;">
+                <img src="/Images/QuoteLetter.png" class="fl" style="margin-right: 15px; margin-top: 8px;"/>
+                <div class="cn-deal-title"><span class="org">Quote Letter</span></div>
+                <div class="cn-desc-bold">View the Pending or Active Quote Letter</div>
+                <button class="btn btn-sm btn-primary" style="margin-top: 10px;" ng-click="downloadQuoteLetter()">Open Quote Letter</button>
+
+            </div>
+        </div>
+
+        <div class="cn-panel cn-panel8" ng-class="{ 'cn-panel-open8': sel == 8 && showPanel }">
+            <div class="header">
+                <i class="fa fa-usd"></i> Payment Details
+                <div class="fr"><i class="fa fa-angle-double-left cn-close-panel" ng-click="closePanel()" title="Close"></i></div>
+            </div>
+            <div class="body">
+                <div>
+                    <div class="fl">
+                        <div class="cn-deal-title" style="margin-top: 5px;">
+                            Ceiling Volume
+                            <span class="org" ng-if="data.VOLUME == ''">Unlimited</span>
+                            <span class="org" ng-if="data.VOLUME != ''">{{ (data.VOLUME | number) }}</span>
+                        </div>
+                        
+                        <table style="margin-top: 15px;">
+                            <tr>
+                                <th style="width: 60px; text-align: right;">&nbsp;</th>
+                                <th style="width: 80px; text-align: right;">Volume</th>
+                                <th style="width: 80px; text-align: right;">Amount</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right;">Credit</th>
+                                <td style="text-align: right;">{{data.CREDIT_VOLUME | number}}</td>
+                                <td style="text-align: right;">{{data.CREDIT_AMT | currency}}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right;">Debit</th>
+                                <td style="text-align: right;">{{data.DEBIT_VOLUME | number}}</td>
+                                <td style="text-align: right;">{{data.DEBIT_AMT | currency}}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right;">Total</th>
+                                <td ng-if="percData.vol != 0" colspan="2" style="text-align: right;">{{ percData.numerator | number }} out of {{ percData.vol | number }}</td>
+                                <td ng-if="percData.vol == 0" colspan="2" style="text-align: right;">{{ percData.numerator | number }} out of Unlimited</td>
+                            </tr>
+                        </table>
+                        
+                        <div style="margin-top: 10px;">
+                            <span class="cn-desc" style="margin-right: 8px;">Last Credit/Debit Payment Date:</span>
+                            <span class="cn-desc-black">{{ data.BLLG_DT || "none" }}</span> 
+                        </div>
+                    </div>
+                    
+                    <div class="fr cn-info-container">
+                        <div id="chart_{{dealId}}" style="height: 125px;" ng-if="data.VOLUME"></div>
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+            </div>
+        </div>
+
+    </span>
+    <!--<span class="cn-overlay" ng-click="closeControl()" ng-class="{ 'on-overlay': open }"></span>-->
+
+</span>
+
+
