@@ -11,7 +11,7 @@
     </div>
 
     <!-- Split group icon -->
-    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && dataItem.WF_STG_CD === 'Active')))">
+    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
         <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
     </div>
     <div class='fl md-icon-disabled rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
