@@ -1723,7 +1723,9 @@
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
             }
 
-            dataItem.WF_STG_CD = $scope.messages[0].ShortMessage;
+            if ($scope.messages[0].ShortMessage.indexOf("You do not have permission") < 0 && $scope.messages[0].ShortMessage.indexOf("The stage was changed by another") < 0) {
+                dataItem.WF_STG_CD = $scope.messages[0].ShortMessage;
+            }
             //PS moved to
             if ($scope.messages.length > 1) {
                 for (var i = 1; i < $scope.messages.length; i++) {

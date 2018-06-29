@@ -399,7 +399,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     opMsgQueue.Messages.Add(new OpMsg
                     {
-                        Message = "The stage was change by another source prior to this action.  Please refresh and try again.",
+                        Message = "The stage was changed by another source prior to this action.  Please refresh and try again.",
                         MsgType = OpMsg.MessageType.Warning,
                         ExtraDetails = dc.DcType,
                         KeyIdentifiers = new[] { dc.DcID }

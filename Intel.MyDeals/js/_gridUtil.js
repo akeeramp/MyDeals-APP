@@ -159,7 +159,7 @@ gridUtils.uiCrDbPercWrapper = function (passedData) {
 
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
     tmplt += '    <div class="ng-binding vert-center">';
-    if (vol !== 999999999) {
+    if (percData.vol !== 999999999) {
         tmplt += '      <div class="progress" style="height: 12px; margin-top: -2px; margin-bottom: 2px;">';
         tmplt += '        <div class="progress-bar" role="progressbar" aria-valuenow="' + percData.perc + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percData.perc + '%;"></div>';
         tmplt += '      </div>';
