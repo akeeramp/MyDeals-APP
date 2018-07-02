@@ -5,6 +5,12 @@
     angular
         .module('app.core')
         .constant('toastr', toastr)
+        .constant('quickDealConstants',
+        {
+            enabled: false,
+            maxQuickDeals: 6,
+            maxRecent: 10
+        })
         .constant('gridConstants', {
             pageSizes: [10, 25, 50, 100],
             filterable: {

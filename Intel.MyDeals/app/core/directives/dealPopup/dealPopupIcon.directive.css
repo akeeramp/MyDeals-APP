@@ -1,0 +1,19 @@
+﻿
+.cn-deal-popup-icon {
+    cursor: pointer;
+    color: #00AEEF;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+.cn-deal-popup-icon:hover,
+.cn-deal-popup-icon:active,
+.cn-deal-popup-icon:focus {
+    color: #0071C5;
+}
+.k-window-titlebar.k-dialog-titlebar.k-header {
+    display: none;
+}

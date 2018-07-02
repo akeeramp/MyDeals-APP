@@ -510,6 +510,12 @@
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
     <Content Include="app\core\directives\csrfRequestVerificationToken.js" />
+    <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.css" />
+    <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.html" />
+    <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.js" />
+    <Content Include="app\core\directives\dealPopup\dealPopupDock.directive.css" />
+    <Content Include="app\core\directives\dealPopup\dealPopupDock.directive.html" />
+    <Content Include="app\core\directives\dealPopup\dealPopupDock.directive.js" />
     <Content Include="app\core\directives\dealPopup\dealPopup.directive.css" />
     <Content Include="app\core\directives\dealPopup\dealPopup.directive.html" />
     <Content Include="app\core\directives\dealPopup\dealPopup.directive.js" />

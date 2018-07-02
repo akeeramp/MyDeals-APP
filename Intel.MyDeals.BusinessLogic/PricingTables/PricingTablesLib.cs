@@ -96,15 +96,41 @@ namespace Intel.MyDeals.BusinessLogic
                 .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
                 .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
             List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
-            foreach (OpDataElement de in myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER))
+
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
             {
-                if (de.AtrbValue.ToString() == "") continue;
-                int prodId = int.Parse(de.AtrbValue.ToString());
-                ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
-                if (prod != null) de.AtrbValue = prod.PRODUCT_NAME;
+                List<OpDataElement> des = new List<OpDataElement>();
+                foreach (OpDataElement de in dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER))
+                {
+                    if (de.AtrbValue.ToString() == "") continue;
+                    int prodId = int.Parse(de.AtrbValue.ToString());
+                    ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
+                    if (prod == null) continue;
+
+                    des.Add(new OpDataElement
+                    {
+                        DcID = de.DcID,
+                        AtrbID = 0,
+                        AtrbCd = "PRODUCT_NAME",
+                        AtrbValue = prod.PRODUCT_NAME,
+                        DimKey = de.DimKey,
+                    });
+                }
+                if (des.Any()) dc.DataElements.AddRange(des);
             }
 
             ret.Data = myDealsData.ToOpDataCollectorFlattenedDictList(OpDataElementType.WIP_DEAL, ObjSetPivotMode.Nested).FirstOrDefault();
+            if (ret.Data == null)
+            {
+                return ret;
+            }
+
+            int custId = int.Parse(ret.Data[AttributeCodes.CUST_MBR_SID].ToString());
+            if (DataCollections.GetMyCustomers().CustomerInfo.All(c => c.CUST_SID != custId))
+            {
+                ret.Data = null;
+                return ret;
+            }
 
             List<int> atrbs = new List<int> { Attributes.TITLE.ATRB_SID };
             List<OpDataElementType> opDataElementTypesPath = new List<OpDataElementType>

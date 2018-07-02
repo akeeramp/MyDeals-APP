@@ -154,7 +154,7 @@
             type: "number",
             width: 100,
             filterable: $scope.numObjFilter,
-            template: "#= gridUtils.goToObject(data, 'WF_STG_CD', 'DC_ID') #"
+            template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon>#= gridUtils.goToObject(data, 'WF_STG_CD', 'DC_ID') #"
         }, {
             field: "CNTRCT_TITLE",
             title: "Contract Title",

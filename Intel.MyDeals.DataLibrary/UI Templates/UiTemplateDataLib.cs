@@ -827,7 +827,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#",
+                Template = "#=gridUtils.uiControlDealWrapper(data, 'DC_ID')#",
                 ExcelTemplate = "#=DC_ID#",
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only

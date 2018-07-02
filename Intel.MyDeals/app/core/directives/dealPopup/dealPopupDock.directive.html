@@ -1,0 +1,61 @@
+﻿<div class="deal-popup-docking" ng-if="isEnabled">
+    <div>
+        <div class="dropdown">
+            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="">
+                <span class="badge badge-docking" ng-show="ids.length > 0">{{ids.length}}</span>
+                <span class="fa-stack">
+                    <i class="fa fa-circle-o-notch fa-rotate-90" style="font-size: 26px;"></i>
+                    <i class="fa fa-bars fa-stack-1x" style="font-size: 12px; margin-top: -1px;"></i>
+                </span>
+                <i class="intelicon-down"></i>
+            </a>
+            <ul class="dropdown-menu scaleTopAnim multi-level" role="menu" aria-labelledby="dropdownMenu" style="left: -300px;">
+                <li style="width: 400px; color: #000000;">
+                    <div class="fl cn-dock-title">Quick Deals</div>
+                    <div class="fr cn-dock-btns" style="padding-right: 8px;">
+                        <a href="" type="button" ng-click="closeAll()"><i class="fa fa-window-close-o" title="Close all Quick Deals"></i></a>
+                        <a href="" type="button" ng-click="cascadeAll()"><i class="fa fa-clone" title="Cascade all Quick Deals"></i></a>
+                        <a href="" type="button" ng-click="tileAll()"><i class="fa fa-th-large" title="Tile all Quick Deals"></i></a>
+                        <a href="" type="button" ng-click="lowerAll()"><i class="fa fa-ellipsis-h" style="vertical-align: sub;" title="Line all Quick Deals to the bottom of the screen"></i></a>
+                        &nbsp;
+                    </div>
+                    <div class="clearboth"></div>
+
+                    <hr/>
+
+                    <div class="cn-deal-label" ng-show="ids.length > 0">Current Deals</div>
+                    <div ng-repeat="item in ids">
+                        <div class="fl">
+                            <span class="cn-deal-popup-recent-icon" ng-click="recentClicked($event, item.id)">
+                                <span class="fa-stack" style="height: 1.3em; line-height: 1.3em; margin-bottom: 3px;">
+                                    <i class="fa fa-circle-o-notch fa-rotate-90"></i>
+                                    <i class="fa fa-bars fa-stack-1x" style="font-size: 9px; color: #FFA300;"></i>
+                                </span>
+                                <span class="cn-deal-link">{{item.id}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="clearboth"></div>
+
+                    <div class="cn-deal-label" ng-show="recent.length > 0">Recent Deals</div>
+                    <div ng-repeat="item in recent">
+                        <div class="fl">
+                            <span class="cn-deal-popup-recent-icon" ng-click="recentClicked($event, item.id)">
+                                <span class="fa-stack" style="height: 1.3em; line-height: 1.3em; margin-bottom: 3px;">
+                                    <i class="fa fa-circle-o-notch fa-rotate-90"></i>
+                                    <i class="fa fa-bars fa-stack-1x" style="font-size: 9px; color: #FFA300;"></i>
+                                </span>
+                                <span class="cn-deal-link">{{item.id}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="clearboth"></div>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div ng-repeat="item in ids" style="position: absolute; top: 0; z-index: 1000; left: 0px;">
+        <deal-popup deal-id="item.id" init-top="item.top" init-left="item.left" is-open="'true'"></deal-popup>
+    </div>
+</div>

@@ -35,6 +35,18 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiControlDealWrapper = function (passedData, field, format) {
+    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    tmplt += '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+    tmplt += '    <div class="ng-binding vert-center">';
+    tmplt += '        <deal-popup-icon deal-id="\'' + passedData[field] + '\'"></deal-popup-icon>';
+    tmplt += '        <span ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span>';
+    tmplt += '    </div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.uiControlWrapperWithDefault = function (passedData, field, format) {
     var defVal = "View";
     if (passedData._behaviors !== undefined && passedData._behaviors.isReadOnly !== undefined && passedData._behaviors.isReadOnly[field] !== undefined && passedData._behaviors.isReadOnly[field] === true) {
@@ -148,13 +160,13 @@ gridUtils.getTotalDealVolume = function(passedData) {
     }
 }
 
-gridUtils.uiCrDbPercWrapper = function (passedData) {
-    var numberWithCommas = (x) => {
-        var parts = x.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
+gridUtils.numberWithCommas = function(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 
+gridUtils.uiCrDbPercWrapper = function (passedData) {
     var percData = gridUtils.getTotalDealVolume(passedData);
 
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
@@ -163,9 +175,9 @@ gridUtils.uiCrDbPercWrapper = function (passedData) {
         tmplt += '      <div class="progress" style="height: 12px; margin-top: -2px; margin-bottom: 2px;">';
         tmplt += '        <div class="progress-bar" role="progressbar" aria-valuenow="' + percData.perc + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percData.perc + '%;"></div>';
         tmplt += '      </div>';
-        tmplt += '      <div style="font-size: 10px; line-height: 10px;">' + numberWithCommas(percData.numerator) + ' out of ' + numberWithCommas(percData.vol) + '</div>';
+        tmplt += '      <div style="font-size: 10px; line-height: 10px;">' + gridUtils.numberWithCommas(percData.numerator) + ' out of ' + gridUtils.numberWithCommas(percData.vol) + '</div>';
     } else {
-        tmplt += '      <div>' + numberWithCommas(percData.numerator) + '</div>';
+        tmplt += '      <div>' + gridUtils.numberWithCommas(percData.numerator) + '</div>';
     }
     tmplt += '    </div>';
     tmplt += '</div>';
@@ -174,12 +186,6 @@ gridUtils.uiCrDbPercWrapper = function (passedData) {
 }
 
 gridUtils.uiCrDbPercExcelWrapper = function (passedData) {
-    var numberWithCommas = (x) => {
-        var parts = x.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
-
     var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
         ? 0
         : parseFloat(passedData.CREDIT_VOLUME);
@@ -192,7 +198,7 @@ gridUtils.uiCrDbPercExcelWrapper = function (passedData) {
 
     var numerator = crVol - dbVol;
     if (numerator < 0) numerator = 0;
-    return numberWithCommas(numerator) + ' out of ' + numberWithCommas(vol);
+    return gridUtils.numberWithCommas(numerator) + ' out of ' + gridUtils.numberWithCommas(vol);
 }
 
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {

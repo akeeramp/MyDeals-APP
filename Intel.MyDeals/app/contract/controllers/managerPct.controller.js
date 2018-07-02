@@ -617,7 +617,7 @@
                 field: "DEAL_ID",
                 title: "Deal Id",
                 width: "100px",
-                template: "<a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='Click to go to the Deal Editor'> #= DEAL_ID # </a>",
+                template: "<deal-popup-icon deal-id=\"'#=DEAL_ID#'\"></deal-popup-icon><a ng-click='gotoDealDetails(#= DEAL_ID #)' role='button' title='Click to go to the Deal Editor'> #= DEAL_ID # </a>",
                 groupHeaderTemplate: "#= gridPctUtils.getColumnTemplate(value) #",
                 locked: true,
                 parent: true,

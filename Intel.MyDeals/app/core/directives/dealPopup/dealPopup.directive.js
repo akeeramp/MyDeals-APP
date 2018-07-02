@@ -2,18 +2,24 @@
     .module('app.core')
     .directive('dealPopup', dealPopup);
 
-dealPopup.$inject = ['objsetService', '$timeout', 'logger', 'colorDictionary', 'opGridTemplate'];
+dealPopup.$inject = ['objsetService', '$timeout', 'logger', 'colorDictionary', 'opGridTemplate', 'securityService'];
 
-function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTemplate) {
+function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTemplate, securityService) {
     kendo.culture("en-US");
     return {
         scope: {
-            dealId: '='
+            dealId: '=',
+            initLeft: '=',
+            initTop: '=',
+            isOpen: '='
         },
         restrict: 'AE',
         transclude: true,
         templateUrl: '/app/core/directives/dealPopup/dealPopup.directive.html',
         controller: ['$scope', 'objsetService', function ($scope, objsetService) {
+
+            $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
+            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
 
             //open and close menu when the button is clicked
             $scope.open = false;
@@ -269,7 +275,8 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     $("#cn_prop_panel_" + id).addClass("cn-panel-large");
                     $("#cn_prop_grid_" + id).addClass("prop-grid-large");
                 }
-                $("#cn_prop_grid_" + id).data("kendoGrid").resize();
+                var grid = $("#cn_prop_grid_" + id).data("kendoGrid");
+                if (grid !== undefined && grid !== null) grid.resize();
             }
 
             $scope.pieData = [];
@@ -379,7 +386,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 e.stopPropagation(); //so that it doesn't trigger click event on document
 
                 if (!$scope.open) {
-                    $scope.openNav();
+                    $scope.openNav(true);
                 } else {
                     $scope.closeNav();
                 }
@@ -393,6 +400,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             $scope.showQuote = function () {
                 return $scope.data.WF_STG_CD !== 'Cancelled' && ($scope.data.WF_STG_CD === 'Active' || $scope.data.PS_WF_STG_CD === 'Pending' || $scope.data.HAS_TRACKER === '1');
             }
+
             $scope.downloadQuoteLetter = function () {
                 var customerSid = $scope.data["CUST_MBR_SID"];
                 var objSid = $scope.data["DC_ID"];
@@ -402,12 +410,24 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 window.open(downloadPath, '_blank', '');
             }
 
-            $scope.openNav = function () {
+            $scope.openNav = function (isInit) {
                 $scope.open = true;
+
+                if ($scope.initLeft !== undefined && ($scope.initLeft + 600) > $(document).width()) {
+                    $scope.initLeft = $(document).width() - 600;
+                }
+
                 objsetService.getWipDealById($scope.dealId).then(function (response) {
+
                     var numTiers, t;
 
                     $scope.data = response.data.Data;
+                    if ($scope.data === null) {
+                        op.notifyWarning("Unable to locate Deal # '" + $scope.dealId + "'", "No Deal");
+                        $scope.closeNav();
+                        return;
+                    }
+
                     $scope.path = response.data.Path;
                     $scope.atrbMap = response.data.AtrbMap;
 
@@ -425,14 +445,14 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
                     if ($scope.data["OBJ_SET_TYPE_CD"] !== "ECAP" && $scope.data["OBJ_SET_TYPE_CD"] !== "KIT") {
                         $timeout(function () {
-                            $("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li:nth-child(7)").addClass("disabled");
-                            $("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li:nth-child(8)").addClass("disabled");
+                            $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li:nth-child(7)").addClass("disabled");
+                            $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li:nth-child(8)").addClass("disabled");
                         }, 200);
                     }
 
                     if ($scope.data["OBJ_SET_TYPE_CD"] === "PROGRAM" || $scope.data["OBJ_SET_TYPE_CD"] === "ECAP") {
                         $timeout(function () {
-                            $("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li:nth-child(2)").addClass("disabled");
+                            $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li:nth-child(2)").addClass("disabled");
                         }, 200);
                     }
 
@@ -462,7 +482,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                             });
                         }
                     } else if ($scope.data["OBJ_SET_TYPE_CD"] === "KIT") {
-                        var prd = $scope.data["PRODUCT_FILTER"];
+                        var prd = $scope.data["PRODUCT_NAME"];
                         prd["20_____1"] = ""; // add KIT
                         for (var k in prd) {
                             if (prd.hasOwnProperty(k)) {
@@ -527,7 +547,16 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                         $scope.$apply();
                     });
 
-                    $(".draggable").draggable();
+                    $(".draggable").draggable({
+                        stop: function () {
+                            var elemRect = document.getElementById("cn-draggable-" + $scope.dealId).getBoundingClientRect();
+                            $scope.$root.$broadcast('QuickDealWidgetMoved', $scope.dealId, elemRect.top, elemRect.left);
+                        }
+                    });
+
+                }, function (response) {
+                    op.notifyWarning("Unable to locate Deal # '" + $scope.dealId + "'", "No Deal");
+                    $scope.closeNav();
                 });
             }
 
@@ -541,11 +570,29 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 $scope.openWithData = false;
                 $scope.isLoading = true;
                 $scope.timelineLoaded = false;
-                $scope.setPropGrdSizeSmall(true, $scope.data["DC_ID"]);
-                $("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li").removeClass("active");
-                $("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li").first().addClass("active");
+                if ($scope.data !== null) {
+                    $scope.setPropGrdSizeSmall(true, $scope.data["DC_ID"]);
+                }
+                $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li").removeClass("active");
+                $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li").first().addClass("active");
 
+                $scope.$root.$broadcast('QuickDealWidgetClosed', $scope.dealId);
             }
+
+            $scope.$on('QuickDealOpen', function (event, id) {
+                if (id !== $scope.dealId) return;
+                $scope.openNav(true);
+            });
+
+            $scope.$on('QuickDealClosePanel', function (event, id) {
+                if (id !== $scope.dealId) return;
+                $scope.closePanel();
+            });
+
+            $scope.$on('QuickDealOpenPanel', function (event, id) {
+                if (id !== $scope.dealId) return;
+                $scope.openPanel();
+            });
 
             $scope.closeControl = function () {
                 $scope.closeNav();
@@ -594,7 +641,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             }
 
             $scope.focusMenu = function ($event, id) {
-                if ($("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li:nth-child(" + id + ")").hasClass("disabled")) return;
+                if ($("#cn-draggable-" + $scope.dealId + " .cn-wrapper li:nth-child(" + id + ")").hasClass("disabled")) return;
 
                 $scope.sel = id;
                 if ($scope.sel === 6) $scope.openTimeline();
@@ -631,12 +678,15 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     }
                 }
                 $scope.showPanel = true;
-                $("#cn-cntrl-" + $scope.dealId + " .cn-wrapper li").removeClass("active");
+                $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li").removeClass("active");
                 $($event.currentTarget).addClass("active");
             }
 
-            $scope.closePanel = function() {
+            $scope.closePanel = function () {
                 $scope.showPanel = false;
+            }
+            $scope.openPanel = function () {
+                $scope.showPanel = true;
             }
 
             $scope.openTimeline = function () {
@@ -645,6 +695,13 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             $scope.openProducts = function () {
                 $scope.productsDs.read();
             }
+
+            $timeout(function () {
+                if ($scope.isOpen !== undefined && $scope.isOpen) {
+                    $scope.openNav(true);
+                }
+            },100);
+
 
         }],
         link: function (scope, element, attrs) {

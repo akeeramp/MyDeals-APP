@@ -82,8 +82,14 @@
                     No deals found.
                 </div>
                 <div ng-repeat="item in $root.globalSearchResultsData.results.WIP_DEAL.data" class="search-result-item" ng-click="gotoDeal(item.DC_ID)">
-                    <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}</div>
-                    <div style="color: #00AEEF;">{{item.TITLE}}</div>
+                    <div class="fl">
+                        <deal-popup-icon deal-id="item.DC_ID"></deal-popup-icon>
+                    </div>
+                    <div class="fl">
+                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}</div>
+                        <div style="color: #00AEEF;">{{item.TITLE}}</div>
+                    </div>
+                    <div class="clearboth"></div>
                 </div>
             </div>
             <div class="see-more" ng-click="more('WIP_DEAL')" ng-show="$root.globalSearchResultsData.results.WIP_DEAL.data.length === $root.globalSearchResultsData.take">view more</div>

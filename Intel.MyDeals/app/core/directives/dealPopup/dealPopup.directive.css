@@ -1,10 +1,10 @@
-﻿    a, button {
+﻿    /*a, button {
         outline: none;
-    }
+    }*/
 
-    * {
+    /** {
         position: relative;
-    }
+    }*/
 
     .valid_0 {
         background-color: #eeeeee;
@@ -34,11 +34,12 @@
         color: #0071C5 !important;
     }
 
+
 .cn-close {
     position: absolute;
     top: calc(100% - 88px);
     left: calc(50% - 100px);
-    z-index: 21;
+    z-index: 10;
     color: #FC4C02;
     cursor: pointer;
     width: 20px;
@@ -65,8 +66,7 @@
     position: absolute;
     top: calc(100% - 60px);
     left: calc(50% - 62px);
-    z-index: 20;
-    background-color: #ffffff;
+    z-index: 10;
     color: #000000;
     width: 100px;
     height: 100px;
@@ -77,13 +77,42 @@
     transform: scale(0.01);
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
     transition: all .3s ease;
     clip-path: ellipse(50px 50px at 50px 50px);
 }
+
+.cn-info2 {
+    position: absolute;
+    top: 300px;
+    left: 300px;
+    z-index: 10;
+    color: #000000;
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    font-size: 11px;
+    -webkit-transform: scale(0.01);
+    -ms-transform: scale(0.01);
+    -moz-transform: scale(0.01);
+    transform: scale(0.01);
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    clip-path: ellipse(50px 50px at 50px 50px);
+}
+
+    .cn-info .cn-info-help {
+    padding-top: 7px; 
+    background-color: #ffffff;
+    width: 100px;
+    height: 100px;
+}
 .cn-info .loading-div {
     position: relative;
-    top: -14px;
-    left: 9px;
     text-align: center;
     width: 100px;
     height: 100px;
@@ -115,11 +144,11 @@
 .cn-info .deal.deal-icons {
     font-size: 14px;
     height: 20px;
-    left: 5px;
+    left: 4px;
     top: 18px;
-    width: 93px;
+    width: 94px;
     border-top: 1px solid #b1babf;
-    padding: 4px 2px;
+    padding: 0;
 }
 .cn-info .deal.deal-dates {
     font-size: 9px;
@@ -129,21 +158,24 @@
     border-top: 1px solid #b1babf;
 }
 .cn-info .deal.deal-icons div {
-    margin: 0 1px;
+    margin: 0;
+    display: inline-block; 
+    width: 16px;
 }
 
 
 .cn-panel {
     position: absolute;
     top: calc(100% - 90px);
-    left: 63px;
-    z-index: 21;
+    left: 91px;
+    z-index: 10;
     background-color: #ffffff;
     color: #000000;
     width: 1px;
     height: 160px;
     font-size: 11px;
     border: 1px solid #b0b8be;
+    -ms-border-radius: 8px;
     border-radius: 8px;
     -webkit-transform: scale(0.001);
     -ms-transform: scale(0.001);
@@ -151,9 +183,14 @@
     transform: scale(0.001);
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
     transition: all .3s ease;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
+    .cn-panel a {
+    text-decoration: none;
 }
 .cn-panel-large {
     height: 360px;
@@ -244,7 +281,7 @@
 .cn-button {
     position: relative;
     cursor: pointer;
-    z-index: 9;
+    z-index: 10;
     color: #00AEEF;
     text-align: center;
     font-size: 18px;
@@ -337,28 +374,8 @@
   transform: scale(1);
 }
 
-.cn-overlay {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,1);
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  opacity: 0;
-  visibility: hidden;
-  -webkit-transition: all .3s ease;
-  -moz-transition: all .3s ease;
-  transition: all .3s ease;
-  z-index: 2;
-}
-.cn-overlay.on-overlay {
-  visibility: visible;
-  opacity: 0.4;
-}
-
 .cn-wrapper {
+    position: relative;
     font-size: 12px;
     width: 160px;
     height: 160px;
@@ -379,7 +396,7 @@
 
 .cn-wrapper li {
     position: absolute;
-    z-index: 15;
+    z-index: 10;
     width: 80px;
     height: 80px;
     -webkit-transform-origin: 50% 100%;
@@ -394,7 +411,6 @@
     clip-path: polygon(40px 80px, 7px 0, 74px 0);
     cursor: pointer;
 }
-
 .cn-wrapper li div {
     width: 100%;
     height:100%
@@ -410,7 +426,6 @@
     padding-top: 6px;
     text-align: center;
 }
-
 
 .csstransforms .cn-wrapper li:first-child {
   -webkit-transform: rotate(0deg);
@@ -480,9 +495,13 @@
 }
 
 /* disabled style */
+.csstransforms .cn-wrapper li.disabled {
+  background-color: #edeff0;
+  cursor: default;
+}
 .csstransforms .cn-wrapper li.disabled i {
-  color: #0071C5;
-    cursor: default;
+  color: #b1babf;
+  cursor: default;
 }
 
 /* hover style */
@@ -579,10 +598,10 @@
 }
 .cn-desc {
     font-size: 9px;
-    color: #cccccc;
+    color: #aaaaaa;
     text-transform: uppercase;
     line-height: 0.7em;
-    margin-top: 3px;
+    margin-top: 2px;
 }
 .cn-desc-black {
     font-size: 9px;
@@ -607,7 +626,7 @@
     line-height: 1em;
 }
 .cn-hr {
-    margin-top: 4px;
+    margin-top: 3px;
     margin-bottom: 0;
     border-top: 1px solid #b0b8be;
 }

@@ -86,6 +86,8 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/attributeSearch/attributeSearchGrid.directive.js"
                 , "~/app/core/directives/buttons/btnRunPctMct.directive.js"
                 , "~/app/core/directives/dealPopup/dealPopup.directive.js"
+                , "~/app/core/directives/dealPopup/dealPopupDock.directive.js"
+                , "~/app/core/directives/dealPopup/dealPopupIcon.directive.js"
                 , "~/app/core/directives/gridCell/dealDetail.directive.js"
                 , "~/app/core/directives/gridCell/dealTools.directive.js"
                 , "~/app/core/directives/gridCell/dealToolsTender.directive.js"
@@ -265,7 +267,9 @@ namespace Intel.MyDeals
                 "~/css/nv.d3.min.css",
                 "~/css/angular-gridster.css",
                 "~/css/bootstrap-switch.min.css",
-                "~/app/core/directives/dealPopup/dealPopup.directive.css"
+                "~/app/core/directives/dealPopup/dealPopup.directive.css",
+                "~/app/core/directives/dealPopup/dealPopupDock.directive.css",
+                "~/app/core/directives/dealPopup/dealPopupIcon.directive.css"
                 // TODO: Check with Tory...Commenting this for now as its affecting global css
                 // May be refer this in handbook html directly
                 //"~/css/simple-sidebar.css"

@@ -34,16 +34,16 @@
     @Scripts.Render("~/bundles/angularReusable")
     @Scripts.Render("~/bundles/angularModules")
 
-
-</body>
-
-</html>
-
-<script>
+    <script>
     kendo.spreadsheet.defineFunction("iserror", function (value) {
-        return value + "gg";
+        return value;
     }).args([
         ["value", "anyvalue"]
     ]);
 
-</script>
+    </script>
+</body>
+
+</html>
+
+

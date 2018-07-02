@@ -173,7 +173,7 @@
                 type: "number",
                 width: 100,
                 filterable: "numObjFilter",
-                template: "<a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
+                template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon><a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
             }, {
                 field: "WF_STG_CD",
                 title: "Deal Status",
