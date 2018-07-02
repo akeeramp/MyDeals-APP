@@ -1099,7 +1099,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.updateDirty = function (dataItem, field) {
 
             	// default QTY value
-            	if (field == "QTY") {
+                if (field == "QTY") {   //additional dirty updates needed? -> hide the logic for a CAP_____20_____1 thing in here?
+                    var kit_key = "20_____1";
+                    var capKitSum = 0;
+                    var ycs2KitSum = 0;
+
             		for (var i = 0; i < 10; i++) {
             			var key = "20___" + i;
             			if (!dataItem[field].hasOwnProperty(key)) {
@@ -1110,6 +1114,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             					dataItem[field][key] = 1;
             				}
             			}
+
+            		    // if quantity changes, we also need to update the CAP Kit and YCS2 Kit column values that we save/display
+            			if (dataItem["CAP"].hasOwnProperty(key)) {
+                            capKitSum += (dataItem["CAP"][key] * dataItem[field][key]);
+            			}
+            			if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(key)) {
+            			    ycs2KitSum += (dataItem["YCS2_PRC_IRBT"][key] * dataItem[field][key]);
+            			}
+            		}
+                    //set CAP Kit and YCS2 Kit values
+            		if (dataItem["CAP"].hasOwnProperty(kit_key)) {
+            		    dataItem["CAP"][kit_key] = capKitSum;
+            		}
+            		if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(kit_key)) {
+            		    dataItem["YCS2_PRC_IRBT"][kit_key] = ycs2KitSum;
             		}
             	}
             	// default DSCNT_PER_LN value

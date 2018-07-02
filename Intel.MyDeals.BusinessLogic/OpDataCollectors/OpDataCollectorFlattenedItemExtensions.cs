@@ -438,18 +438,33 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                             opFlatItem[AttributeCodes.YCS2_START_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_START;
                             opFlatItem[AttributeCodes.YCS2_END_DT + baseKitDimKey + dim] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_END;
 
+                            int tmpQty;
                             double tmpPrc;
                             if (double.TryParse(opFlatItem[AttributeCodes.CAP + baseKitDimKey + dim]?.ToString(), out tmpPrc))
                             {
-                                kitCap += tmpPrc;
+                                if (int.TryParse(opFlatItem[AttributeCodes.QTY + baseKitDimKey + dim]?.ToString(), out tmpQty))
+                                {
+                                    kitCap += (tmpPrc * tmpQty);
+                                } else
+                                {
+                                    kitCap += (tmpPrc * 1);
+                                }
                             }
                             else
                             {
                                 validKitCap = false;
                             }
+
                             if (double.TryParse(opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + dim]?.ToString(), out tmpPrc))
                             {
-                                kitYcs2 += tmpPrc;
+                                if (int.TryParse(opFlatItem[AttributeCodes.QTY + baseKitDimKey + dim]?.ToString(), out tmpQty))
+                                {
+                                    kitYcs2 += (tmpPrc * tmpQty);
+                                }
+                                else
+                                {
+                                    kitYcs2 += (tmpPrc * 1);
+                                }
                             }
                             else
                             {
