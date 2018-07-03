@@ -431,9 +431,8 @@
 
             var ds;
 
-            if (pt.OBJ_SET_TYPE_CD == "ECAP" || pt.OBJ_SET_TYPE_CD == "KIT") { // ECAP or KIT pt grid
+            if (pt.OBJ_SET_TYPE_CD === "ECAP" || pt.OBJ_SET_TYPE_CD === "KIT") { // ECAP or KIT pt grid
                 ds = new kendo.data.DataSource({
-                    type: "json",
                     transport: {
                         read: {
                             url: "/api/Dashboard/GetWipSummary/" + pt.DC_ID,
@@ -585,7 +584,6 @@
             }
             else { // Non-ECAP pt grids
                 ds = new kendo.data.DataSource({
-                    type: "json",
                     transport: {
                         read: {
                             url: "/api/Dashboard/GetWipSummary/" + pt.DC_ID,

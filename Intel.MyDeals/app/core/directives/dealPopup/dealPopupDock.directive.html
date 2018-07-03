@@ -13,15 +13,26 @@
                 <li style="width: 400px; color: #000000;">
                     <div class="fl cn-dock-title">Quick Deals</div>
                     <div class="fr cn-dock-btns" style="padding-right: 8px;">
-                        <a href="" type="button" ng-click="closeAll()"><i class="fa fa-window-close-o" title="Close all Quick Deals"></i></a>
-                        <a href="" type="button" ng-click="cascadeAll()"><i class="fa fa-clone" title="Cascade all Quick Deals"></i></a>
-                        <a href="" type="button" ng-click="tileAll()"><i class="fa fa-th-large" title="Tile all Quick Deals"></i></a>
-                        <a href="" type="button" ng-click="lowerAll()"><i class="fa fa-ellipsis-h" style="vertical-align: sub;" title="Line all Quick Deals to the bottom of the screen"></i></a>
+                        <a href="" type="button" ng-click="closeAll()" ng-show="ids.length"><i class="fa fa-window-close-o" title="Close all Quick Deals"></i></a>
+                        <a href="" type="button" ng-click="cascadeAll()" ng-show="ids.length"><i class="fa fa-clone" title="Cascade all Quick Deals"></i></a>
+                        <a href="" type="button" ng-click="tileAll()" ng-show="ids.length"><i class="fa fa-th-large" title="Tile all Quick Deals"></i></a>
+                        <a href="" type="button" ng-click="lowerAll()" ng-show="ids.length"><i class="fa fa-ellipsis-h" style="vertical-align: sub;" title="Line all Quick Deals to the bottom of the screen"></i></a>
                         &nbsp;
                     </div>
                     <div class="clearboth"></div>
 
                     <hr/>
+                    
+                    <div ng-show="ids.length === 0 && recent.length === 0" style="padding: 7px 20px; font-size: 12px; color: #666666;">
+                        To use the Quick Deal feature, click on the 
+                        <span class="cn-deal-popup-icon">
+                            <span class="fa-stack" style="height: 16px; line-height: 18px; margin-bottom: 3px;">
+                                <i class="fa fa-circle-o-notch fa-rotate-90"></i>
+                                <i class="fa fa-bars fa-stack-1x" style="font-size: 9px; color: #FFA300;"></i>
+                            </span>
+                        </span>
+                        icon next to deal numbers.  All opened Quick Deal or recently selected Quick Deals will appear here.
+                    </div>
 
                     <div class="cn-deal-label" ng-show="ids.length > 0">Current Deals (click to close)</div>
                     <div ng-repeat="item in ids">

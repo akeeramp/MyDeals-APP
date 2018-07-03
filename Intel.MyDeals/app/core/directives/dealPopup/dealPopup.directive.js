@@ -40,7 +40,6 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             $scope.timelineLoaded = false;
             $scope.timelineData = [];
             $scope.timelineDs = new kendo.data.DataSource({
-                type: "json",
                 transport: {
                     read: {
                         url: "api/Timeline/GetObjTimelineDetails",
@@ -49,8 +48,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                             objSid: $scope.dealId,
                             objTypeSid: 5,
                             objTypeIds: [5]
-                        },
-                        dataType: "json"
+                        }
                     }
                 },
                 schema: {
@@ -98,7 +96,6 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             $scope.productsLoaded = false;
             $scope.productsData = [];
             $scope.productsDs = new kendo.data.DataSource({
-                type: "json",
                 transport: {
                     read: {
                         url: "/api/Products/GetProductsByIds",
@@ -112,8 +109,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                             return {
                                 "PrdIds": prdIds
                             }
-                        },
-                        dataType: "json"
+                        }
                     }
                 },
                 requestEnd: function (e) {
@@ -223,7 +219,6 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             };
 
             $scope.propertiesDs = new kendo.data.DataSource({
-                type: "json",
                 transport: {
                     read: function (options) {
                         options.success($scope.properties);
@@ -283,7 +278,6 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
             $scope.scheduleData = [];
             $scope.scheduleDs = new kendo.data.DataSource({
-                type: "json",
                 transport: {
                     read: function (options) {
                         options.success($scope.scheduleData);
@@ -549,8 +543,11 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
                     $(".draggable").draggable({
                         stop: function () {
-                            var elemRect = document.getElementById("cn-draggable-" + $scope.dealId).getBoundingClientRect();
-                            $scope.$root.$broadcast('QuickDealWidgetMoved', $scope.dealId, elemRect.top, elemRect.left);
+                            var el = document.getElementById("cn-draggable-" + $scope.dealId);
+                            if (el !== undefined && el !== null) {
+                                var elemRect = el.getBoundingClientRect();
+                                $scope.$root.$broadcast('QuickDealWidgetMoved', $scope.dealId, elemRect.top, elemRect.left);
+                            }
                         }
                     });
 

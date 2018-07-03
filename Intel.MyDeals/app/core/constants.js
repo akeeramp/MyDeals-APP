@@ -7,7 +7,7 @@
         .constant('toastr', toastr)
         .constant('quickDealConstants',
         {
-            enabled: false,
+            enabled: true,
             maxQuickDeals: 6,
             maxRecent: 10
         })
