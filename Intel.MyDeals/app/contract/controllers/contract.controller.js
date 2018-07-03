@@ -267,7 +267,8 @@
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
-        if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1") {
+        var isCopyTender = (copyContractData !== undefined && copyContractData.data.length > 0 && copyContractData.data[0].IS_TENDER === "1");
+        if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1" || isCopyTender) {
             $scope.isTenderContract = true;
             $scope.contractType = "Tender Folio";
             $scope.contractName = $scope.contractType + " Name:";

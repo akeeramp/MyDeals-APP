@@ -41,6 +41,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_END_DTM = DB.GetReaderOrdinal(rdr, "END_DTM");
                     int IDX_HAS_ALERT = DB.GetReaderOrdinal(rdr, "HAS_ALERT");
+                    int IDX_IS_TENDER = DB.GetReaderOrdinal(rdr, "IS_TENDER");
                     int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
                     int IDX_STRT_DTM = DB.GetReaderOrdinal(rdr, "STRT_DTM");
                     int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
@@ -57,6 +58,7 @@ namespace Intel.MyDeals.DataLibrary
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             END_DTM = (IDX_END_DTM < 0 || rdr.IsDBNull(IDX_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_DTM),
                             HAS_ALERT = (IDX_HAS_ALERT < 0 || rdr.IsDBNull(IDX_HAS_ALERT)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_HAS_ALERT),
+                            IS_TENDER = (IDX_IS_TENDER < 0 || rdr.IsDBNull(IDX_IS_TENDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_TENDER),
                             NOTES = (IDX_NOTES < 0 || rdr.IsDBNull(IDX_NOTES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTES),
                             STRT_DTM = (IDX_STRT_DTM < 0 || rdr.IsDBNull(IDX_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_STRT_DTM),
                             TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE),
