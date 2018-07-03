@@ -4,25 +4,27 @@
     <div class="draggable" id="cn-draggable-{{data.DC_ID}}" style="left: {{initLeft || 0}}px; top: {{initTop || 0}}px;">
 
         <div class="cn-wrapper" id="cn_wrapper_{{data.DC_ID}}" ng-click="wrapperClick()" ng-class="{ 'rot1': sel == 1, 'rot2': sel == 2, 'rot3': sel == 3, 'rot4': sel == 4, 'rot5': sel == 5, 'rot6': sel == 6, 'rot7': sel == 7, 'rot8': sel == 8 }">
-            <ul>
-                <li ng-click="focusMenu($event, 1)" ng-mouseover="helpTip=1" ng-mouseout="helpTip=0" class="active">
-                    <div><a href=""><i class="fa fa-list"></i></a></div></li>
-                <li ng-click="focusMenu($event, 2)" ng-mouseover="helpTip=2" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-th"></i></a></div></li>
-                <li ng-click="focusMenu($event, 3)" ng-mouseover="helpTip=3" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-search"></i></a></div></li>
-                <li ng-click="focusMenu($event, 4)" ng-mouseover="helpTip=4" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-microchip"></i></a></div></li>
-                <li ng-click="focusMenu($event, 5)" ng-mouseover="helpTip=5" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-comment-o"></i></a></div></li>
-                <li ng-click="focusMenu($event, 6)" ng-mouseover="helpTip=6" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-clock-o"></i></a></div></li>
-                <li ng-click="focusMenu($event, 7)" ng-mouseover="helpTip=7" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-quote-right"></i></a></div></li>
-                <li ng-click="focusMenu($event, 8)" ng-mouseover="helpTip=8" ng-mouseout="helpTip=0">
-                    <div><a href=""><i class="fa fa-usd"></i></a></div></li>
-            </ul>
-        </div>
+                <ul>
+                    <li ng-click="focusMenu($event, 1)" ng-mouseover="helpTip=1" ng-mouseout="helpTip=0" class="active">
+                        <div><a href=""><i class="fa fa-list"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 2)" ng-mouseover="helpTip=2" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-th"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 3)" ng-mouseover="helpTip=3" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-search"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 4)" ng-mouseover="helpTip=4" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-microchip"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 5)" ng-mouseover="helpTip=5" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-comment-o"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 6)" ng-mouseover="helpTip=6" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-clock-o"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 7)" ng-mouseover="helpTip=7" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-quote-right"></i></a></div></li>
+                    <li ng-click="focusMenu($event, 8)" ng-mouseover="helpTip=8" ng-mouseout="helpTip=0">
+                        <div><a href=""><i class="fa fa-usd"></i></a></div></li>
+                </ul>
+            </div>
+
+        <div class="cn-wrapper-shadow" ng-class="{ 'rot1': sel == 1, 'rot2': sel == 2, 'rot3': sel == 3, 'rot4': sel == 4, 'rot5': sel == 5, 'rot6': sel == 6, 'rot7': sel == 7, 'rot8': sel == 8 }"></div>
 
         <span class="cn-info" ng-class="{ 'cn-info-open': open }">
             <div ng-show="isLoading">
@@ -101,7 +103,7 @@
         </span>
 
         <span class="cn-close" ng-class="{ 'cn-info-open': openWithData }">
-            <i class="fa fa-times-circle" ng-click="closeControl()"></i>
+            <i class="fa fa-times-circle" ng-click="closeControl()" style="margin-top: -2px;"></i>
         </span>
 
 

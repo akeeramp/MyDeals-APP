@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('dealPopupDock', dealPopupDock);
 
-dealPopupDock.$inject = ['$timeout', '$localStorage', 'quickDealConstants'];
+dealPopupDock.$inject = ['$timeout', '$localStorage', '$window', 'quickDealConstants'];
 
-function dealPopupDock($timeout, $localStorage, quickDealConstants) {
+function dealPopupDock($timeout, $localStorage, $window, quickDealConstants) {
     kendo.culture("en-US");
     return {
         scope: {
@@ -18,7 +18,11 @@ function dealPopupDock($timeout, $localStorage, quickDealConstants) {
             $scope.$storage = $localStorage;
             $scope.maxItems = quickDealConstants.maxQuickDeals;
             $scope.maxRecent = quickDealConstants.maxRecent;
+
+            // only for Chrome
             $scope.isEnabled = quickDealConstants.enabled;
+            if ($window.navigator.userAgent.indexOf("Chrome") < 0) $scope.isEnabled = false;
+
 
             $scope.ids = $scope.$storage.dealPopupDockData;
             if ($scope.ids === undefined) $scope.ids = [];
@@ -185,7 +189,18 @@ function dealPopupDock($timeout, $localStorage, quickDealConstants) {
                     kendo.alert("Only " + $scope.maxItems + " Quick Deals can be opened at one time.<br\>Please close one before trying to open this deal.");
                     return;
                 }
-                $scope.addToDockId(id, top, left);
+
+                var found = false;
+                for (var i = 0; i < $scope.ids.length; i++) {
+                    if ($scope.ids[i].id === id) {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    $scope.delId(id);
+                } else {
+                    $scope.addToDockId(id, top, left);
+                }
             });
             $scope.$on('QuickDealWidgetOpened', function (event, id, top, left, type) {
                 $scope.addId(id, top, left, type);

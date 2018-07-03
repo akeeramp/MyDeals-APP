@@ -83,29 +83,8 @@
     clip-path: ellipse(50px 50px at 50px 50px);
 }
 
-.cn-info2 {
-    position: absolute;
-    top: 300px;
-    left: 300px;
-    z-index: 10;
-    color: #000000;
-    background-color: red;
-    width: 100px;
-    height: 100px;
-    font-size: 11px;
-    -webkit-transform: scale(0.01);
-    -ms-transform: scale(0.01);
-    -moz-transform: scale(0.01);
-    transform: scale(0.01);
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    -ms-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
-    clip-path: ellipse(50px 50px at 50px 50px);
-}
 
-    .cn-info .cn-info-help {
+.cn-info .cn-info-help {
     padding-top: 7px; 
     background-color: #ffffff;
     width: 100px;
@@ -392,6 +371,25 @@
     -moz-transition: all .3s ease;
     transition: all .3s ease;
     clip-path: ellipse(80px 80px at 80px 80px);
+}
+.cn-wrapper-shadow {
+    position: relative;
+    font-size: 12px;
+    width: 175px;
+    height: 175px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 9;
+    top: calc(100% - 89px);
+    left: calc(50% - 92px);
+    -webkit-transform: rotate(0) scale(0.001);
+    -ms-transform: rotate(0) scale(0.001);
+    -moz-transform: rotate(0) scale(0.001);
+    transform: rotate(0) scale(0.001);
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+    background: radial-gradient(black 45%, transparent 65%);
 }
 
 .cn-wrapper li {
