@@ -129,10 +129,10 @@
             "templates": {
                 "ECAP": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "Payment"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "Payment"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -308,10 +308,10 @@
                 },
                 "VOL_TIER": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU", "Payment"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU", "Payment"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -463,10 +463,10 @@
                 },
                 "PROGRAM": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU", "Payment"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU", "Payment"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -687,10 +687,10 @@
                 },
                 "KIT": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit", "Payment"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit", "Payment"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
