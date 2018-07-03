@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Http;
 
+
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/JMSQueue")]
@@ -162,48 +163,51 @@ namespace Intel.MyDeals.Controllers.API
             //_jmsLib.Publish(jms.Url, jms.UserName, jms.Password, jms.QueueName, jms.Message);
         }
 
-        [HttpGet]
-        [Route("EncryptString/{password}")]
-        public string EncryptString(string password)
-        {
-            return StringEncrypter.StringEncrypt(password, "JMS_Password");
-        }
+        //[HttpGet]
+        //[Route("EncryptString/{password}")]
+        //[Authorize]
+        //public string EncryptString(string password)
+        //{
+        //    return StringEncrypter.StringEncrypt(password, "JMS_Password");
+        //}
 
-        [HttpGet]
-        [Route("DecryptString/{password}")]
-        public string DecryptString(string password)
-        {
-            return StringEncrypter.StringDecrypt(password, "JMS_Password");
-        }
+        //[HttpGet]
+        //[Route("DecryptString/{password}")]
+        //[Authorize]
+        //public string DecryptString(string password)
+        //{
+        //    return StringEncrypter.StringDecrypt(password, "JMS_Password");
+        //}
 
-        [HttpGet]
-        [Route("RunJMSBatch/{mode}")]
-        public string RunJMSBatch(char mode)
-        {
-            var fileName = string.Empty;
-            try
-            {
-                var useprocess = new System.Diagnostics.Process();
-                if (mode == 'U')
-                {
-                    fileName = @"D:\Mydeals_JMS\\RunCommands\JMSQUploadSendandRecieve.cmd";
-                }
-                else if (mode == 'E')
-                {
-                    fileName = @"D:\Mydeals_JMS\RunCommands\JMSQExpireSendandRecieve.cmd";
-                }
-                else
-                {
-                    return $"Invalid mode.";
-                }
-                useprocess.StartInfo.FileName = fileName;
-                useprocess.Start();
-                return $"JMS Batch started in mode : {mode}";
-            }
-            catch (Exception ex)
-            {
-                return $"File Name : {fileName} Message :{ex.Message}";
-            }
-        }
+        //[HttpGet]
+        //[Route("RunJMSBatch/{mode}")]
+        //[Authorize]
+        //public string RunJMSBatch(char mode)
+        //{
+        //    var fileName = string.Empty;
+        //    try
+        //    {
+        //        var useprocess = new System.Diagnostics.Process();
+        //        if (mode == 'U')
+        //        {
+        //            fileName = @"D:\Mydeals_JMS\\RunCommands\JMSQUploadSendandRecieve.cmd";
+        //        }
+        //        else if (mode == 'E')
+        //        {
+        //            fileName = @"D:\Mydeals_JMS\RunCommands\JMSQExpireSendandRecieve.cmd";
+        //        }
+        //        else
+        //        {
+        //            return $"Invalid mode.";
+        //        }
+        //        useprocess.StartInfo.FileName = fileName;
+        //        useprocess.Start();
+        //        return $"JMS Batch started in mode : {mode}";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return $"File Name : {fileName} Message :{ex.Message}";
+        //    }
+        //}
     }
 }

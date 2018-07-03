@@ -47,6 +47,17 @@
             vm.logDetails = '';            
             oplogService.getDetailsOpaqueLog(data.fileName.substring(0, data.fileName.length - 4)).then(
                 function (response) {
+					var entityMap = {
+						"&": "&amp;",
+						"<": "&lt;",
+						">": "&gt;",
+						'"': '&quot;',
+						"'": '&#39;',
+						"/": '&#x2F;'
+					};
+					response.data = String(str).replace(/[&<>"'\/]/g, function (s) {
+						return entityMap[s];
+					});
                     vm.logDetails = response.data;
                 }, function (e) {
                     logger.error("Error in getting Opaque Log.", e, e.statusText)

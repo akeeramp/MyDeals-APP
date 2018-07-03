@@ -12,7 +12,7 @@
 
         // defining the base url on top, subsequent calls in the service 
         // will be action methods under this controller    
-        var apiBaseUrl = "/api/OpLog/v1/";
+        var apiBaseUrl = "api/OpLog/";
 
         var service = {
             getOpaqueLog: getOpaqueLog,

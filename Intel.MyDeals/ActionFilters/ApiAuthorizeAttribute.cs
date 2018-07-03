@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using Intel.MyDeals.Entities;
+using System.Web.Mvc;
 
 namespace Intel.MyDeals.ActionFilters
 {
@@ -36,6 +37,7 @@ namespace Intel.MyDeals.ActionFilters
         ///
         /// </summary>
         /// <param name="actionContext"></param>
+        [ValidateAntiForgeryToken]
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         {
             actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Forbidden);

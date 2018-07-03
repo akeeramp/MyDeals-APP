@@ -12,6 +12,7 @@ using System;
 
 namespace Intel.MyDeals.Controllers.API
 {
+    [RoutePrefix("api/OpLog")]
     public class OpLogController : BaseApiController
     {
         private readonly IOpLogLib _opLogLib;
@@ -21,16 +22,18 @@ namespace Intel.MyDeals.Controllers.API
             this._opLogLib = _opLogLib;
         }
 
-        [Route("api/OpLog/v1/GetOpaqueLog")]
+        [Route("GetOpaqueLog")]
         [ApiAuthorize(AuthorizeDeveloper = true)]
         [HttpPost]
+        [Authorize]        
         public List<logFileObject> GetOpaqueLog(logDate logDate)
         {
             return _opLogLib.GetOpaqueLog(logDate.startDate, logDate.endDate);
         }
 
-        [Route("api/OpLog/v1/GetDetailsOpaqueLog/{fileName}")]
+        [Route("GetDetailsOpaqueLog/{fileName}")]
         [ApiAuthorize(AuthorizeDeveloper = true)]
+        [Authorize]       
         public string GetDetailsOpaqueLog(string fileName)
         {
             return _opLogLib.GetDetailsOpaqueLog(fileName);

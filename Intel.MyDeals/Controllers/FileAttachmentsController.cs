@@ -24,6 +24,7 @@ namespace Intel.MyDeals.Controllers
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>
+        [Authorize]        
         public ActionResult Save(IEnumerable<HttpPostedFileBase> files, int custMbrSid, int objSid, int objTypeSid)
         {
             string response = string.Empty;
@@ -62,18 +63,19 @@ namespace Intel.MyDeals.Controllers
                         }
 
                         var result = _filesLib.SaveFileAttachment(fileAttachment, textBytes);
-
+                        
                         if (result)
                         {
                             new FilesLib().UpdateFileAttachmentBit(objTypeSid, objSid);
                         }
+                      
                         response = result ? string.Empty :
-                            response += $"File {fileAttachment.FILE_NM} did not save properly. Please try again\n";
+                            response += HttpUtility.HtmlEncode($"File {fileAttachment.FILE_NM} did not save properly. Please try again\n");
                     }
                 }
             }
 
-            return Content(response);
+            return Json(response);
         }
     }
 }
