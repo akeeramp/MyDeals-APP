@@ -157,6 +157,12 @@
                 width: 140,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
+                field: "CNTRCT_OBJ_SID",
+                title: "Contract Id",
+                type: "string",
+                width: 110,
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_OBJ_SID#</a>"
+            }, {
                 field: "PRC_ST_TITLE",
                 title: "Pricing Strategy",
                 type: "string",
@@ -492,6 +498,16 @@
                 title: "Comments / notes",
                 type: "string",
                 width: 250
+            }, {
+                field: "GEO_APPROVED_BY",
+                title: "GEO Approved By",
+                type: "string",
+                width: 160
+            }, {
+                field: "DIV_APPROVED_BY",
+                title: "DIV Approved By",
+                type: "string",
+                width: 160
             }, {
                 field: "CRE_EMP_NAME",
                 title: "Created By",

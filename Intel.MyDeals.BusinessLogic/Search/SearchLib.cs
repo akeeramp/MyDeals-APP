@@ -199,6 +199,7 @@ namespace Intel.MyDeals.BusinessLogic
             rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", AttributeCodes.CUST_NM);
             rtn = rtn.Replace("WIP_DEAL_Customer.CUST_NM", AttributeCodes.CUST_NM);
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
+            rtn = rtn.Replace("WIP_DEAL_CNTRCT_OBJ_SID", "CNTRCT_OBJ_SID");
             rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
 
@@ -305,6 +306,9 @@ namespace Intel.MyDeals.BusinessLogic
                 item["CRE_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CRE_DTM.ToString());
                 item["CRE_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CRE_EMP_WWID;
                 item["CRE_EMP_NAME"] = decoderById[dcId].WIP_DEAL_CRE_EMP_NAME;
+                item["DIV_APPROVED_BY"] = decoderById[dcId].WIP_DEAL_DIV_APPROVED_BY;
+                item["GEO_APPROVED_BY"] = decoderById[dcId].WIP_DEAL_GEO_APPROVED_BY;
+                
 
                 // Need to convert CUST_MBR_SID to Customer Object
                 if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))
@@ -390,10 +394,13 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.DEAL_GRP_NM.ATRB_SID,
                 Attributes.DEBIT_AMT.ATRB_SID,
                 Attributes.DEBIT_VOLUME.ATRB_SID,
+                Attributes.DIV_APPROVED_BY.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
                 Attributes.END_VOL.ATRB_SID,
+                Attributes.FSE_APPROVED_BY.ATRB_SID,
+                Attributes.GEO_APPROVED_BY.ATRB_SID,
                 Attributes.GEO_COMBINED.ATRB_SID,
                 Attributes.MRKT_SEG.ATRB_SID,
                 Attributes.NOTES.ATRB_SID,

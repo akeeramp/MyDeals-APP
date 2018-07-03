@@ -122,6 +122,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Special columns... When we make the advanced search, need a better way than hard coding this
             rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
+            rtn = rtn.Replace("WIP_DEAL_CNTRCT_OBJ_SID", "CNTRCT_OBJ_SID");
             rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
 
