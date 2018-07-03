@@ -55,7 +55,7 @@
 						"'": '&#39;',
 						"/": '&#x2F;'
 					};
-					response.data = String(str).replace(/[&<>"'\/]/g, function (s) {
+					response.data = String(response.data).replace(/[&<>"'\/]/g, function (s) {
 						return entityMap[s];
 					});
                     vm.logDetails = response.data;

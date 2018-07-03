@@ -48,10 +48,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public string GetDetailsOpaqueLog(string fileName)
         {
-            byte[] bytes = System.Text.Encoding.Default.GetBytes(@"C:\Windows\Temp\" + fileName + fileExtention);
-            string logDesc = System.Text.Encoding.UTF8.GetString(bytes);
-            return logDesc;
-            //return System.IO.File.ReadAllText(@"C:\Windows\Temp\" + fileName + fileExtention);
+            //byte[] bytes = System.Text.Encoding.Default.GetBytes(@"C:\Windows\Temp\" + fileName + fileExtention);
+            //string logDesc = System.Text.Encoding.UTF8.GetString(bytes);
+            //return logDesc;
+            return System.IO.File.ReadAllText(@"C:\Windows\Temp\" + fileName + fileExtention, Encoding.UTF8);
         }
     }
 }
