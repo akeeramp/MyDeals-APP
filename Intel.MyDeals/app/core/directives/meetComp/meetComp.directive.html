@@ -3,27 +3,26 @@
 <div ng-if="isDataAvaialable" ng-show="isVisible" class="meetComp-show-hide">
     <div id="meetCompOvrrd" class="col-md-12">
         <div style="margin-bottom:4px">
-            <button class="btn btn-sm ssToolbarBtn fl" 
-					style="padding: 5px 0px;"
-                    ng-click="saveAndRunMeetComp()"
-                    >                
-				<table>
-					<tbody>
-						<tr>
-							<td>
-								<div class="btn btn-skyblue-sm"><i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i></div>
-							</td>
-							<td class="skyblue-text" style="padding-left: 5px; text-align: left; font-size: 12px;">
-								Save &amp; Validate<br> Meet Comp
-							</td>
-						</tr>
-					</tbody>
-				</table>
+            <button class="btn btn-sm ssToolbarBtn fl"
+                    style="padding: 5px 0px;"
+                    ng-click="saveAndRunMeetComp()">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="btn btn-skyblue-sm"><i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i></div>
+                            </td>
+                            <td class="skyblue-text" style="padding-left: 5px; text-align: left; font-size: 12px;">
+                                Save &amp; Validate<br> Meet Comp
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </button>
 
             <div class="fr" style="padding: 0 5px; width: auto;">
                 <div ng-bind="lastMeetCompRunCalc()" class="btnLastRun" style="font-size: 15px" title="{{lastMetCompRunLocalTime}}"></div>
-            </div>			
+            </div>
 
             <div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.MeetComp_AutoPopulation);">
                 <i class="intelicon-help" style="font-size:30px !important"></i>

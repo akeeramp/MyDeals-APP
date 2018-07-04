@@ -26,7 +26,7 @@
                 var columnIndex = {
                     COMP_SKU: 7,
                     COMP_PRC: 7,
-                    IA_BNCH:  9,
+                    IA_BNCH: 9,
                     COMP_BNCH: 9,
                     COMP_OVRRD_FLG: 13,
                     COMP_OVRRD_RSN: 13
@@ -44,8 +44,8 @@
 
                 $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
                     $timeout(function () {
-                    	var newState = msg != undefined && msg !== "";
-                    	isShowFunFact = true; // Always show fun fact
+                        var newState = msg != undefined && msg !== "";
+                        isShowFunFact = true; // Always show fun fact
                         // if no change in state, simple update the text
                         if ($scope.isBusy === newState) {
                             $scope.isBusyMsgTitle = msg;
@@ -70,7 +70,7 @@
                             }, 100);
                         }
                     });
-                }                
+                }
 
                 $scope.lastMeetCompRunCalc = function () {
                     var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
@@ -81,13 +81,13 @@
                         var forceRun = $scope.$parent.forceRun();
 
                         var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
-                        
+
 
                         var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                         var hh = Math.abs(timeDiff.asHours());
                         var mm = Math.abs(timeDiff.asMinutes());
                         var ss = Math.abs(timeDiff.asSeconds());
-                        var zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];                        
+                        var zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
                         $scope.lastMetCompRunLocalTime = moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")"; //lastruntime.format("MM/DD/YY HH:mm:ss");
 
                         var dsplNum = hh;
@@ -103,7 +103,7 @@
                             dsplNum = ss;
                             dsplMsg = " secs ago";
                             if (!forceRun) $scope.needToRunPct = false;
-                        }                        
+                        }
 
                         if ($scope.needToRunPct) {
                             $scope.MC_MODE = "A";
@@ -128,10 +128,10 @@
                     $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
                     //WEB API call
                     //var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
-                    
+
                     $scope.$parent.IsFirstLoad = true;
                     $scope.IsMeetCompRun = false;
-                    $scope.lastMeetCompRunCalc();                    
+                    $scope.lastMeetCompRunCalc();
 
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
                         $scope.$parent.refreshContractData();
@@ -552,7 +552,7 @@
                                     pageSizes: [10, 25, 50, 100],
                                     buttonCount: 5
                                 },
-                                detailInit: detailInit,
+                                detailTemplate: "<div class='childGrid' kendo-grid k-options='detailInit(dataItem)'></div>",
                                 edit: function (e) {
                                     var input = e.container.find(".k-input");
                                     var value = input.val();
@@ -589,7 +589,7 @@
                                                         var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
                                                         //Updating Product Line
-                                                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && ( selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete" ) ) {
+                                                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && (selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                                             $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
                                                             addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_OVRRD_RSN");
                                                         }
@@ -835,7 +835,7 @@
                                         filterable: { multi: true, search: true },
                                         editable: function () { return false; },
                                         template: "<div title='#=BRND_FMLY#' class='readOnlyCell'>#=BRND_FMLY#</div>"
-                                    },                                    
+                                    },
                                     {
                                         field: "",
                                         title: "Group Deals",
@@ -1293,7 +1293,7 @@
                                                             var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
                                                             //Updating Product Line
-                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && ( selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete" ) ) {
+                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && (selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                                                 $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
                                                                 addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_OVRRD_FLG");
                                                             }
@@ -1325,7 +1325,7 @@
                                                                     x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
                                                                     x.GRP == "DEAL" &&
                                                                     x.MEET_COMP_UPD_FLG == "Y" &&
-                                                                    x.MEET_COMP_STS.toLowerCase() != "pass" );
+                                                                    x.MEET_COMP_STS.toLowerCase() != "pass");
                                                             })
                                                             .ToArray();
 
@@ -1418,7 +1418,7 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-                                    $scope.$root.$broadcast('refreshContractData');                                    
+                                    $scope.$root.$broadcast('refreshContractData');
                                 },
                                 function (response) {
                                     logger.error("Unable to save UpdateMeetCompProductDetails data", response, response.statusText);
@@ -1437,12 +1437,12 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-                                    $scope.$root.$broadcast('refreshContractData');                                    
+                                    $scope.$root.$broadcast('refreshContractData');
                                 },
                                 function (response) {
                                     logger.error("Unable to get GetMeetCompProductDetails data", response, response.statusText);
                                     $scope.isBusy = false;
-                                    });
+                                });
                             }
 
                             $scope.getDealDeatils = function (DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
@@ -1485,16 +1485,15 @@
                                         $scope.isBusy = false;
                                     });
                             }
-                            
-                            function detailInit(e) {
-                                $scope.TEMP_GRP_PRD_SID = e.data.GRP_PRD_SID;
-                                $("<div class='childGrid' style=' margin-bottom: 5px !important;'/>").appendTo(e.detailCell).kendoGrid({
+
+                            $scope.detailInit = function (parentDataItem) {
+                                return {
                                     dataSource: {
                                         transport: {
                                             read: function (e) {
                                                 e.success($linq.Enumerable().From($scope.meetCompMasterdata)
                                                     .Where(function (x) {
-                                                        return (x.GRP_PRD_SID == $scope.TEMP_GRP_PRD_SID && x.GRP == "DEAL" && x.DEFAULT_FLAG == "D");
+                                                        return (x.GRP_PRD_SID == parentDataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.DEFAULT_FLAG == "D");
                                                     }).OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());
                                             },
                                             create: function (e) {
@@ -1544,9 +1543,7 @@
                                             }
                                         },
                                     },
-
                                     filterable: true,
-                                    scrollable: true,
                                     sortable: true,
                                     navigatable: true,
                                     resizable: false,
@@ -1645,9 +1642,7 @@
 
                                             }
                                         }
-
                                     },
-
                                     columns: [
                                         {
                                             field: "OBJ_SET_TYPE",
@@ -1660,7 +1655,7 @@
                                             title: "Deal ID",
                                             width: 120,
                                             filterable: { multi: true, search: true },
-                                            template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID #, #=DEAL_OBJ_SID# )' class='btnDeal' title='Click to go to the Deal Editor'> #= DEAL_OBJ_SID # </a></div>"
+                                            template: "<div class='ovlpCell readOnlyCell'><deal-popup-icon deal-id='#=DEAL_OBJ_SID#'></deal-popup-icon><span><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID #, #=DEAL_OBJ_SID# )' class='btnDeal' title='Click to go to the Deal Editor'> #= DEAL_OBJ_SID # </a></span></div>"
                                         },
                                         {
                                             field: "DEAL_DESC",
@@ -1760,7 +1755,7 @@
                                             filterable: { multi: true, search: true },
                                             editable: function () { return false; },
                                             template: "<div title='#=BRND_FMLY#' class='readOnlyCell'>#=BRND_FMLY#</div>"
-                                        },                                        
+                                        },
                                         {
                                             field: "",
                                             title: "Group Deals",
@@ -1795,19 +1790,8 @@
                                             editable: function () { return false; },
                                             template: "<div title='#=YCS2#' class='readOnlyCell'>#if(YCS2 == 0){## ##} else {#$#:YCS2##}#</div>"
                                         },
-                                        //{
-                                        //    field: "MC_LAST_RUN",
-                                        //    title: "Last Run",
-                                        //    template: "<div class='readOnlyCell' title='#= gridUtils.convertPstToLocal(MC_LAST_RUN) #'>#= gridUtils.convertPstToLocal(MC_LAST_RUN) #</div>",
-                                        //    width: 150,
-                                        //    filterable: {
-                                        //        extra: false,
-                                        //        ui: "datepicker"
-                                        //    },
-                                        //    editable: function () { return false; },
-                                        //}
                                     ]
-                                });
+                                };
                             };
                         }
                         else {
