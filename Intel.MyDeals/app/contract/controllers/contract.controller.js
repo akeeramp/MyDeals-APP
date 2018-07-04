@@ -2560,7 +2560,7 @@
             }
         }
 
-        $scope.validateTitles = function () {
+        $scope.validateTitles = function (dataItem) {
             var rtn = true;
 
             if (!$scope.curPricingStrategy) return true;
@@ -2583,6 +2583,10 @@
                         $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " must have unique name within contract.";
                         $scope.curPricingTable._behaviors.isError["TITLE"] = true;
                         rtn = false;
+                    } else if ($scope.curPricingTable["TITLE"] !== undefined && $scope.curPricingTable["TITLE"].length > 80) {
+                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " cannot have more than 80 characters.";
+                        $scope.curPricingTable._behaviors.isError["TITLE"] = true;
+                        rtn = false;
                     }
                     else {
                         $scope.curPricingTable._behaviors.isError["TITLE"] = false;
@@ -2602,12 +2606,39 @@
                         $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     } else if (!isPsUnique) {
-                        $scope.curPricingStrategy._behaviors
-                            .validMsg["TITLE"] = "The " + $scope.psTitle + " must have unique name.";
+                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " must have unique name.";
+                        $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
+                        rtn = false;
+                    } else if ($scope.curPricingStrategy["TITLE"] !== undefined && $scope.curPricingStrategy["TITLE"].length > 80) {
+                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " cannot have more than 80 characters.";
                         $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     } else {
                         $scope.curPricingStrategy._behaviors.isError["TITLE"] = false;
+                    }
+                }
+            }
+
+            if (dataItem !== undefined) {
+                if (!dataItem._behaviors) dataItem._behaviors = {};
+                if (!dataItem._behaviors.validMsg) dataItem._behaviors.validMsg = {};
+                if (!dataItem._behaviors.isError) dataItem._behaviors.isError = {};
+
+                if (!dataItem._behaviors.isDirty || dataItem._behaviors.isDirty.TITLE) {
+                    if (dataItem !== undefined && dataItem.TITLE === "") {
+                        dataItem._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " needs a Title.";
+                        dataItem._behaviors.isError["TITLE"] = true;
+                        rtn = false;
+                    } else if (!isPsUnique) {
+                        dataItem._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " must have unique name.";
+                        dataItem._behaviors.isError["TITLE"] = true;
+                        rtn = false;
+                    } else if (dataItem["TITLE"] !== undefined && dataItem["TITLE"].length > 80) {
+                        dataItem._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " cannot have more than 80 characters.";
+                        dataItem._behaviors.isError["TITLE"] = true;
+                        rtn = false;
+                    } else {
+                        dataItem._behaviors.isError["TITLE"] = false;
                     }
                 }
             }
@@ -3648,6 +3679,13 @@
                 isValid = false;
             }
 
+            // Check name length
+            if ($scope.newStrategy["TITLE"].length > 80) {
+                $scope.newStrategy._behaviors.validMsg["TITLE"] = "* must be 80 characters or less";
+                $scope.newStrategy._behaviors.isError["TITLE"] = true;
+                isValid = false;
+            }
+
             if (isValid) {
                 $scope.addPricingStrategy();
             } else {
@@ -3893,6 +3931,13 @@
                 }
             }
 
+            // Check name length
+            if ($scope.newPricingTable["TITLE"].length > 80) {
+                $scope.newPricingTable._behaviors.validMsg["TITLE"] = "* must be 80 characters or less";
+                $scope.newPricingTable._behaviors.isError["TITLE"] = true;
+                isValid = false;
+            }
+
             // Check Extra atribs
             angular.forEach($scope.newPricingTable["_extraAtrbs"],
                 function (value, key) {
@@ -4130,7 +4175,7 @@
                 dataItem._behaviors.isDirty["TITLE"] = true;
                 dataItem.dirty = true;
 
-                if (!$scope.validateTitles()) {
+                if (!$scope.validateTitles(dataItem)) {
                     $scope.openRenameTitle(dataItem, mode, dataItem.TITLE, dataItem._behaviors.validMsg["TITLE"]);
                     dataItem.TITLE = retOrigValue;
                     dataItem.dirty = false;
