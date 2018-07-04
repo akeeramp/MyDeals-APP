@@ -51,7 +51,7 @@ namespace Intel.MyDeals.BusinessLogic
             //byte[] bytes = System.Text.Encoding.Default.GetBytes(@"C:\Windows\Temp\" + fileName + fileExtention);
             //string logDesc = System.Text.Encoding.UTF8.GetString(bytes);
             //return logDesc;
-            return System.IO.File.ReadAllText(@"C:\Windows\Temp\" + fileName + fileExtention, Encoding.UTF8);
+            return System.Web.HttpUtility.HtmlEncode(System.IO.File.ReadAllText(@"C:\Windows\Temp\" + fileName + fileExtention, Encoding.UTF8));
         }
     }
 }

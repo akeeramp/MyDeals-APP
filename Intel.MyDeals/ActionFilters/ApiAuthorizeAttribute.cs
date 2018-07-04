@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http.Controllers;
 using Intel.MyDeals.Entities;
 using System.Web.Mvc;
+using System.Web;
 
 namespace Intel.MyDeals.ActionFilters
 {
@@ -40,9 +41,16 @@ namespace Intel.MyDeals.ActionFilters
         [ValidateAntiForgeryToken]
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         {
-            actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Forbidden);
-            if (!string.IsNullOrEmpty(_responseReason))
-                actionContext.Response.ReasonPhrase = _responseReason;
+           
+            if (actionContext.Request.Headers.Authorization == null)
+            {
+                actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                actionContext.Response.Content = new StringContent(_responseReason);
+                if (!string.IsNullOrEmpty(_responseReason))
+                    actionContext.Response.ReasonPhrase = HttpUtility.HtmlEncode(_responseReason);
+            }
+            //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Forbidden,err);
+            
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
 using System.Collections.Generic;
 using System;
+using System.Web;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -33,10 +34,19 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetDetailsOpaqueLog/{fileName}")]
         [ApiAuthorize(AuthorizeDeveloper = true)]
-        [Authorize]       
+        [Authorize]
+        [HttpPost]        
         public string GetDetailsOpaqueLog(string fileName)
-        {
-            return _opLogLib.GetDetailsOpaqueLog(fileName);
+        {            
+            if (fileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1)
+            {
+               return HttpUtility.HtmlEncode(_opLogLib.GetDetailsOpaqueLog(HttpUtility.HtmlEncode(fileName)));
+            }            
+            else
+            {
+                return "Something went wrong";
+            }
+            
         }
 
         

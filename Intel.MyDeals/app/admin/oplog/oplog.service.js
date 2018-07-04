@@ -26,7 +26,7 @@
         }
 
         function getDetailsOpaqueLog(fileName) {
-            return dataService.get(apiBaseUrl + 'GetDetailsOpaqueLog/' + fileName);
+            return dataService.post(apiBaseUrl + 'GetDetailsOpaqueLog/' + fileName);
         }        
     }
 })();
