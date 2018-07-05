@@ -48,10 +48,17 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public string GetDetailsOpaqueLog(string fileName)
         {
-            //byte[] bytes = System.Text.Encoding.Default.GetBytes(@"C:\Windows\Temp\" + fileName + fileExtention);
-            //string logDesc = System.Text.Encoding.UTF8.GetString(bytes);
-            //return logDesc;
-            return System.Web.HttpUtility.HtmlEncode(System.IO.File.ReadAllText(@"C:\Windows\Temp\" + fileName + fileExtention, Encoding.UTF8));
+            if (fileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1 && fileName.Contains(FILE_NAME))
+            {
+                string _fileName = fileName.Replace("\\", string.Empty).Replace("..", string.Empty);
+                string path = @"C:\Windows\Temp\" + _fileName + fileExtention;                
+                return System.Web.HttpUtility.HtmlEncode(System.IO.File.ReadAllText(path, Encoding.UTF8));
+            }
+            else
+            {
+                return "Something went wrong";
+            }
+            
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]        
         public string GetDetailsOpaqueLog(string fileName)
         {            
-            if (fileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1)
+            if (fileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1 && fileName.Contains("FileLogPerf"))
             {
                return HttpUtility.HtmlEncode(_opLogLib.GetDetailsOpaqueLog(HttpUtility.HtmlEncode(fileName)));
             }            
