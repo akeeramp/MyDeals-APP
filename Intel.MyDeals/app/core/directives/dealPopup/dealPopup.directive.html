@@ -103,9 +103,12 @@
         </span>
 
         <span class="cn-close" ng-class="{ 'cn-info-open': openWithData }">
-            <i class="fa fa-times-circle" ng-click="closeControl()" style="margin-top: -2px;"></i>
+            <i class="fa fa-times-circle" ng-click="closeControl()" style="margin-top: -2px;" title="Close Quick Deal"></i>
         </span>
 
+        <span class="cn-refresh" ng-class="{ 'cn-info-open': openWithData }">
+            <i class="fa fa-refresh" ng-click="refreshControl()" style="margin-top: -2px;" title="Reload Data"></i>
+        </span>
 
         <div class="cn-panel cn-panel1" ng-class="{ 'cn-panel-open1': sel == 1 && showPanel }">
             <div class="header">

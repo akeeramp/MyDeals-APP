@@ -37,8 +37,8 @@
 
 .cn-close {
     position: absolute;
-    top: calc(100% - 88px);
-    left: calc(50% - 100px);
+    top: calc(100% - 75px);
+    left: calc(50% - 102px);
     z-index: 10;
     color: #FC4C02;
     cursor: pointer;
@@ -59,6 +59,33 @@
     color: red;
 }
 .cn-close i {
+    font-size: 24px;
+}
+
+.cn-refresh {
+    position: absolute;
+    top: calc(100% - 94px);
+    left: calc(50% - 80px);
+    z-index: 10;
+    color: #C4D600;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    -webkit-transform: scale(0.01);
+    -ms-transform: scale(0.01);
+    -moz-transform: scale(0.01);
+    transform: scale(0.01);
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+}
+.cn-refresh i:hover {
+    color: #228b22;
+}
+.cn-refresh i {
     font-size: 24px;
 }
 

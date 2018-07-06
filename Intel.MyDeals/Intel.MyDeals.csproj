@@ -1404,6 +1404,7 @@
     <Content Include="Images\loadingSmall.gif" />
     <Content Include="Images\NoAccess.png" />
     <Content Include="Images\PageNotFound.png" />
+    <Content Include="Images\QuoteLetter.png" />
     <Content Include="Images\radio-checked.png" />
     <Content Include="Images\radio.png" />
     <Content Include="Images\security.png" />

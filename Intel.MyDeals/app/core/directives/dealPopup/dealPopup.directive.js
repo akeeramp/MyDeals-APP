@@ -404,7 +404,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 window.open(downloadPath, '_blank', '');
             }
 
-            $scope.openNav = function (isInit) {
+            $scope.openNav = function (isInit, sel) {
                 $scope.open = true;
 
                 if ($scope.initLeft !== undefined && ($scope.initLeft + 600) > $(document).width()) {
@@ -431,7 +431,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
                     $scope.isLoading = false;
                     $scope.openWithData = true;
-                    $scope.sel = 1;
+                    $scope.sel = sel === undefined ? 1 : sel;
                     $scope.showPanel = true;
 
                     $scope.groups = opGridTemplate.groups[$scope.data["OBJ_SET_TYPE_CD"]];
@@ -576,6 +576,34 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 $scope.$root.$broadcast('QuickDealWidgetClosed', $scope.dealId);
             }
 
+            $scope.refresh = function () {
+                var sel = $scope.sel;
+                $scope.open = false;
+                $scope.openWithData = false;
+                $scope.isLoading = true;
+                $scope.data = {};
+                $scope.path = {};
+                $scope.atrbMap = {};
+                $scope.sel = 0;
+                $scope.showPanel = false;
+                $scope.properties = [];
+                $scope.helpTip = 0;
+                $scope.percData = {};
+                $scope.groups = [];
+                $scope.groupColumns = {};
+                $scope.timelineLoaded = false;
+                $scope.timelineData = [];
+                $scope.productsLoaded = false;
+                $scope.productsData = [];
+                $scope.pieData = [];
+                $scope.scheduleData = [];
+                if ($scope.data !== null) {
+                    $scope.setPropGrdSizeSmall(true, $scope.data["DC_ID"]);
+                }
+
+                $scope.openNav(true, sel);
+            }
+
             $scope.$on('QuickDealOpen', function (event, id) {
                 if (id !== $scope.dealId) return;
                 $scope.openNav(true);
@@ -593,6 +621,10 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
             $scope.closeControl = function () {
                 $scope.closeNav();
+            }
+
+            $scope.refreshControl = function () {
+                $scope.refresh();
             }
 
             $scope.numberWithCommas = function (x) {
@@ -676,7 +708,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 }
                 $scope.showPanel = true;
                 $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li").removeClass("active");
-                $($event.currentTarget).addClass("active");
+                if ($event !== undefined && $event !== null) $($event.currentTarget).addClass("active");
             }
 
             $scope.closePanel = function () {
