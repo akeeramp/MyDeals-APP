@@ -171,7 +171,7 @@ gridUtils.uiCrDbPercWrapper = function (passedData) {
 
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
     tmplt += '    <div class="ng-binding vert-center">';
-    if (percData.vol !== 999999999) {
+    if (passedData["VOLUME"] !== undefined && percData.vol !== 999999999) {
         tmplt += '      <div class="progress" style="height: 12px; margin-top: -2px; margin-bottom: 2px;">';
         tmplt += '        <div class="progress-bar" role="progressbar" aria-valuenow="' + percData.perc + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percData.perc + '%;"></div>';
         tmplt += '      </div>';
@@ -186,19 +186,12 @@ gridUtils.uiCrDbPercWrapper = function (passedData) {
 }
 
 gridUtils.uiCrDbPercExcelWrapper = function (passedData) {
-    var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
-        ? 0
-        : parseFloat(passedData.CREDIT_VOLUME);
-    var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
-        ? 0
-        : parseFloat(passedData.DEBIT_VOLUME);
-    var vol = passedData.VOLUME === undefined || passedData.VOLUME === null || isNaN(passedData.VOLUME)
-        ? 0
-        : parseFloat(passedData.VOLUME);
-
-    var numerator = crVol - dbVol;
-    if (numerator < 0) numerator = 0;
-    return gridUtils.numberWithCommas(numerator) + ' out of ' + gridUtils.numberWithCommas(vol);
+    var percData = gridUtils.getTotalDealVolume(passedData);
+    if (passedData["VOLUME"] !== undefined && percData.vol !== 999999999) {
+        return gridUtils.numberWithCommas(percData.numerator) + ' out of ' + gridUtils.numberWithCommas(percData.vol);
+    } else {
+        return gridUtils.numberWithCommas(percData.numerator);
+    }
 }
 
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
