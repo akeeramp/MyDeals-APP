@@ -53,8 +53,8 @@
                          op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
 
-                    
-                    
+
+
 
                     <div class="col-md-12 row" style="margin-top: 20px;">
                         <h6>Dates&nbsp;<span kendo-tooltip k-content="constants.helpTipDateRanges" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
@@ -177,7 +177,7 @@
                     </div>
 
                 </div>
-                
+
                 <div class="col-md-6">
 					<div class="col-md-11 row" ng-hide="isTenderContract">
 						<h6>Customer Acceptance of Contract is...</h6>
@@ -197,8 +197,7 @@
 								In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
 							</div>
 						</div>
-					    <div class="col-md-11"
-                             id="radCustAccpt"
+					    <div class="col-md-11 radCustAccpt"
 							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0}"
 							 op-control-flat
 							 ng-model="contractData"

@@ -281,9 +281,9 @@
                 $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto-Filled";
                 $scope.contractData["IS_TENDER"] = "1";
             }
-        } 
+        }
 
-        $scope.saveBtnName = function () {            
+        $scope.saveBtnName = function () {
             if ($scope.isCopyContract) return 'Copy ' + $scope.contractType;
             return $scope.contractData.DC_ID > 0 ? 'Save ' + $scope.contractType : 'Create ' + $scope.contractType;
         }
@@ -699,7 +699,7 @@
                 pastDateConfirm($scope.contractData.START_DT, $scope.contractData.START_DT);
             }
 
-            if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) { 
+            if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) {
                 getCurrentQuarterDetails();
             } else {
                 if (moment($scope.contractData.END_DT) > moment($scope.contractData.START_DT).add(10, 'years')) {
@@ -717,8 +717,8 @@
 
             if (!$scope.isNewContract) {
                 $timeout(function () {
-                    $("#radCustAccpt input[type=radio]").attr('disabled', true);
-                }, 300);
+                    $(".radCustAccpt input[type=radio]").attr('disabled', true);
+                });
             }
         }
 
