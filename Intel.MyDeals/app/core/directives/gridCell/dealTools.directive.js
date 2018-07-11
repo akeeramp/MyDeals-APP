@@ -136,7 +136,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             // HOLD Items
             $scope.getHoldValue = function (dataItem) {
-                if (dataItem.WF_STG_CD === 'Active') return 'NoShowHold';
+                if (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won') return 'NoShowHold';
 
                 if (dataItem._actionsPS === undefined) dataItem._actionsPS = {};
                 if (dataItem.WF_STG_CD === 'Hold') {
