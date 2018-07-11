@@ -1116,10 +1116,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             			}
 
             		    // if quantity changes, we also need to update the CAP Kit and YCS2 Kit column values that we save/display
-            			if (dataItem["CAP"].hasOwnProperty(key)) {
+            			if (dataItem["CAP"].hasOwnProperty(key) && !isNaN(dataItem["CAP"][key]) && dataItem["CAP"][key] != null) {
                             capKitSum += (dataItem["CAP"][key] * dataItem[field][key]);
             			}
-            			if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(key)) {
+            			if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(key) && !isNaN(dataItem["YCS2_PRC_IRBT"][key]) && dataItem["YCS2_PRC_IRBT"][key] != null) {
             			    ycs2KitSum += (dataItem["YCS2_PRC_IRBT"][key] * dataItem[field][key]);
             			}
             		}

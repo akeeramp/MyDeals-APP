@@ -424,8 +424,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                     double kitCap = 0;
                     double kitYcs2 = 0;
-                    bool validKitCap = true;
-                    bool validkitYcs2 = true;
+                    bool validKitCap = false;
+                    bool validkitYcs2 = false;
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
                         if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
@@ -442,6 +442,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                             double tmpPrc;
                             if (double.TryParse(opFlatItem[AttributeCodes.CAP + baseKitDimKey + dim]?.ToString(), out tmpPrc))
                             {
+                                validKitCap = true;
                                 if (int.TryParse(opFlatItem[AttributeCodes.QTY + baseKitDimKey + dim]?.ToString(), out tmpQty))
                                 {
                                     kitCap += (tmpPrc * tmpQty);
@@ -450,13 +451,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                                     kitCap += (tmpPrc * 1);
                                 }
                             }
-                            else
-                            {
-                                validKitCap = false;
-                            }
 
                             if (double.TryParse(opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + dim]?.ToString(), out tmpPrc))
                             {
+                                validkitYcs2 = true;
                                 if (int.TryParse(opFlatItem[AttributeCodes.QTY + baseKitDimKey + dim]?.ToString(), out tmpQty))
                                 {
                                     kitYcs2 += (tmpPrc * tmpQty);
@@ -465,10 +463,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                                 {
                                     kitYcs2 += (tmpPrc * 1);
                                 }
-                            }
-                            else
-                            {
-                                validkitYcs2 = false;
                             }
                             //if (pMap.PRD_CAT_NM == CHIPSET)
                             //{
