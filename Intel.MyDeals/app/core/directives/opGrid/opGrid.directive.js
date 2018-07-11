@@ -215,15 +215,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 if (!col) return;
 
+                var colGrp = $scope.opOptions.groupColumns[val.field];
                 if (col.hidden) {
                     $scope.grid.showColumn(val.field);
-                    $scope.opOptions.groupColumns[val.field].Groups.push($scope.curGroup);
+                    if (colGrp !== undefined && colGrp !== null) {
+                        if (colGrp.Groups === undefined) colGrp.Groups = [];
+                        colGrp.Groups.push($scope.curGroup);
+                    }
                 } else {
                     $scope.grid.hideColumn(val.field);
 
-                    var index = $scope.opOptions.groupColumns[val.field].Groups.indexOf($scope.curGroup);
+                    var index = colGrp.Groups.indexOf($scope.curGroup);
                     if (index > -1) {
-                        $scope.opOptions.groupColumns[val.field].Groups.splice(index, 1);
+                        colGrp.Groups.splice(index, 1);
                     }
                 }
             }
