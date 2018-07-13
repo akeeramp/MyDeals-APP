@@ -308,7 +308,9 @@ namespace Intel.MyDeals.DataLibrary
                     // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
                     if (!inNegotiation || forceRegenerateQuoteLetter)
                     {
-                        bool quoteResult = SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes).Result;
+                        bool quoteResult = forceRegenerateQuoteLetter ?
+                            SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes).Result:
+                            SaveQuotePDFWait(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
                     }
                 }
             }
@@ -338,6 +340,30 @@ namespace Intel.MyDeals.DataLibrary
                     FILE_DATA = quoteLetterPdf
                 };
                 using (var async = await DataAccess.ExecuteReaderAsync(cmd))
+                {
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
+        private bool SaveQuotePDFWait(QuoteLetterData quoteLetterData, string trkrNumber, byte[] quoteLetterPdf)
+        {
+            try
+            {
+                Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA cmd = new Procs.dbo.PR_MYDL_SAVE_QUOTE_LTTR_DATA
+                {
+                    CUST_MBR_SID = Convert.ToInt32(quoteLetterData.CustomerId),
+                    OBJ_TYPE_SID = Convert.ToInt32(quoteLetterData.ObjectTypeId),
+                    OBJ_SID = Convert.ToInt32(quoteLetterData.ObjectSid),
+                    TRKR_NBR = trkrNumber,
+                    FILE_DATA = quoteLetterPdf
+                };
+                using (DataAccess.ExecuteReader(cmd))
                 {
                 }
                 return true;
