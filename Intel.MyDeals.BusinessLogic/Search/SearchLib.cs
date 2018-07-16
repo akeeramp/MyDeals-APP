@@ -5,6 +5,7 @@ using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using System;
+using System.Text;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.Opaque.Data;
@@ -73,15 +74,42 @@ namespace Intel.MyDeals.BusinessLogic
 
         }
 
-        private string GetFormattedValue(SearchFilter item)
+        private string GetFormattedValue(SearchFilter item, OpDataElementType opDataElementType)
         {
+            string field = GetFormattedField(item, opDataElementType);
 
             string oper = item.Operator;
             object val = item.Value;
 
             if (oper == "LIKE")
             {
-                val = $"%{val.ToString().Replace("*", "%")}%";
+                if (val.ToString().IndexOf("[") >= 0)
+                {
+                    StringBuilder sb = new StringBuilder(val.ToString());
+
+                    string myString = sb
+                        .Replace("\r\n", "")
+                        .Replace("*", "%")
+                        .Replace("{", "")
+                        .Replace("}", "")
+                        .Replace("[  ", "")
+                        .Replace("[ ", "")
+                        .Replace("[", "")
+                        .Replace("]", "")
+                        .Replace("% ", "%")
+                        .Replace("\"", "")
+                        .Replace(", ", ",")
+                        .Replace(", ", ",")
+                        .ToString();
+
+                    List<string> aRtn = myString.Split(',').Select(s => $"{field} {oper} '%{s}%'").ToList();
+
+                    return $"({string.Join(" OR ", aRtn)})";
+                }
+                else
+                {
+                    val = $"%{val.ToString().Replace("*", "%")}%";
+                }
             }
             else if (item.Type == "list")
             {
@@ -112,7 +140,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             val = item.Type == "list" || item.Type == "number" || item.Type == "money" ? val : "\'" + val + "\'";
             val = val.ToString().Replace("\r\n", "");
-            return $"{oper} {val}";
+
+            return $"{field} {oper} {val}";
         }
 
         private string GetFormattedField(SearchFilter item, OpDataElementType opDataElementType)
@@ -160,7 +189,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Add Custom Search
             if (customSearchOption.Any() && customSearchOption[0].Field != "")
             {
-                modifiedSearchList.AddRange(customSearchOption.Select(item => $"{GetFormattedField(item, opDataElementType)} {GetFormattedValue(item)}"));
+                modifiedSearchList.AddRange(customSearchOption.Select(item => $"{GetFormattedValue(item, opDataElementType)}"));
             }
 
             // search string can be a comma delim string... each string needs to be validated against the list of atrbs

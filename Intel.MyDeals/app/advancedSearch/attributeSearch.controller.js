@@ -106,7 +106,7 @@
                 },
                 {
                     type: "list",
-                    operator: ["="]
+                    operator: ["=", "LIKE"]
                 },
                 {
                     type: "bool",
@@ -261,8 +261,32 @@
             }, {
                 field: "PRODUCT_CATEGORIES",
                 title: "Product Verticals",
-                type: "string",
-                width: 150
+                type: "list",
+                width: 150,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoMultiSelect({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Products/GetProductCategories",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "PRD_CAT_NM",
+                            dataValueField: "PRD_CAT_NM",
+                            tagMode: "single",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "PRD_CAT_NM",
+                lookupValue: "PRD_CAT_NM",
+                lookupUrl: "/api/Products/GetProductCategories"
             }, {
                 field: "PRODUCT_FILTER",
                 title: "Product",

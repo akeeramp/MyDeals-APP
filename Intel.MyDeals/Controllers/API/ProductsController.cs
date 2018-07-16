@@ -49,6 +49,21 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetProductCategories")]
+        public IEnumerable<Product> GetProductCategories()
+        {
+            try
+            {
+                return _productsLib.GetProducts().Where(p => p.PRD_ATRB_SID == 7003);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         [Route("GetProductsByIds")]
         public IEnumerable<Product> GetProductsByIds(ProductMicroPacket prdIds)
