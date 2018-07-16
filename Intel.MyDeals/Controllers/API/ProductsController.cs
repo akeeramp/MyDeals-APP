@@ -54,7 +54,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return _productsLib.GetProducts().Where(p => p.PRD_ATRB_SID == 7003);
+                return _productsLib.GetProducts().Where(p => p.PRD_ATRB_SID == 7003).OrderBy(s => s.PRD_CAT_NM);
             }
             catch (Exception ex)
             {
