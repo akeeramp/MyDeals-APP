@@ -20,6 +20,11 @@
             autofillData.DEFAULT.GEO_COMBINED["extra"] = true;
         }
 
+        // If tender... change dropdown url to remove frontend YCS2
+        if (vm.autofillData.ISTENDER) {
+            vm.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
+        }
+
         vm.autofillData.DEALTYPE_DISPLAY = vm.autofillData.DEALTYPE.replace("_", "").toUpperCase();
 
         vm.ok = function () {

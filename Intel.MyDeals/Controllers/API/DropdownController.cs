@@ -213,5 +213,15 @@ namespace Intel.MyDeals.Controllers.API
 				, $"Unable to get deal groups"
 			);
 		}
-	}
+
+        [Authorize]
+        [Route("GetProgPaymentDropdowns/{atrbCd}")]
+        public IEnumerable<BasicDropdown> GetProgPaymentDropdowns(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd).Where(d => d.DROP_DOWN != "Frontend YCS2")
+                , $"Unable to get Dropdowns for {atrbCd}"
+            );
+        }
+
+    }
 }
