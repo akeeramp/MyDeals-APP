@@ -1070,14 +1070,36 @@ namespace Intel.MyDeals.DataLibrary
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
+                    int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
+                    int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
+                    int IDX_DIV_NM = DB.GetReaderOrdinal(rdr, "DIV_NM");
+                    int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
+                    int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
+                    int IDX_OP_CD = DB.GetReaderOrdinal(rdr, "OP_CD");
+                    int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
+                    int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                    int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
                     int IDX_PRODUCT_NAME = DB.GetReaderOrdinal(rdr, "PRODUCT_NAME");
 
                     while (rdr.Read())
                     {
                         ret.Add(new ProductEngName
                         {
+                            BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
+                            DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
+                            DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
+                            DIV_NM = (IDX_DIV_NM < 0 || rdr.IsDBNull(IDX_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIV_NM),
+                            FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
+                            MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
+                            OP_CD = (IDX_OP_CD < 0 || rdr.IsDBNull(IDX_OP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OP_CD),
+                            PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
+                            PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+                            PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
                             PRODUCT_NAME = (IDX_PRODUCT_NAME < 0 || rdr.IsDBNull(IDX_PRODUCT_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT_NAME)
                         });
                     } // while

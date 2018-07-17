@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 7/3/2018 8:34:27 AM
-On: MHTIPPIN-MOBL
+File Updated: 7/16/2018 9:40:10 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -2262,7 +2262,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};

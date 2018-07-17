@@ -294,6 +294,7 @@ namespace Intel.MyDeals.BusinessLogic
                 .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
                 .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
             List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
+            Dictionary<int, List<ProductEngName>> prodMap = new Dictionary<int, List<ProductEngName>>();
 
             // Apply Rules
             if (rulesTrigger != null)
@@ -301,6 +302,7 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
                 {
                     dc.ApplyRules((MyRulesTrigger) rulesTrigger, null, prods);
+                    prodMap[dc.DcID] = dc.GetDataElements(AttributeCodes.PRODUCT_FILTER).Select(d => (ProductEngName) d.PrevAtrbValue).ToList();
                 }
             }
 
@@ -337,7 +339,7 @@ namespace Intel.MyDeals.BusinessLogic
                 item["CRE_EMP_NAME"] = decoderById[dcId].WIP_DEAL_CRE_EMP_NAME;
                 item["DIV_APPROVED_BY"] = decoderById[dcId].WIP_DEAL_DIV_APPROVED_BY;
                 item["GEO_APPROVED_BY"] = decoderById[dcId].WIP_DEAL_GEO_APPROVED_BY;
-                
+                item["products"] = prodMap.ContainsKey(dcId) ? prodMap[dcId]: new List<ProductEngName>();
 
                 // Need to convert CUST_MBR_SID to Customer Object
                 if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))

@@ -1296,6 +1296,7 @@ gridUtils.dialogShow = function () {
 
 gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
     var rows = [{ cells: [] }];
+    var rowsProd = [{ cells: [] }];
     var gridColumns = grid.columns;
     var colWidths = [];
     var colHidden = false;
@@ -1325,6 +1326,18 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
                 colWidths.push({ autoWidth: true });
             }
         }
+    }
+
+    // set prod title
+    var titles = ["Deal #", "Deal Product Name", "Product Type", "Product Category", "Brand", "Family", "Processor", "Product Name", "Material ID", "Division", "Op Code", "Prod Start Date", "Prod End Date"];
+    for (var t = 0; t < titles.length; t++) {
+        rowsProd[0].cells.push({
+            value: titles[t],
+            textAlign: "center",
+            background: "#0071C5",
+            color: "#ffffff",
+            wrap: true
+        });
     }
 
     var data = onlyVisible ? ds.view() : ds.data();
@@ -1377,6 +1390,29 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
             rows.push({
                 cells: cells
             });
+
+
+            // Products
+            for (var p = 0; p < dataItem["products"].length; p++) {
+                var prd = dataItem["products"][p];
+                rowsProd.push({
+                    cells: [
+                        { value: dataItem["DC_ID"], wrap: true },
+                        { value: prd["DEAL_PRD_NM"], wrap: true },
+                        { value: prd["DEAL_PRD_TYPE"], wrap: true },
+                        { value: prd["PRD_CAT_NM"], wrap: true },
+                        { value: prd["FMLY_NM"], wrap: true },
+                        { value: prd["BRND_NM"], wrap: true },
+                        { value: prd["PCSR_NBR"], wrap: true },
+                        { value: prd["PRODUCT_NAME"], wrap: true },
+                        { value: prd["MTRL_ID"], wrap: true },
+                        { value: prd["DIV_NM"], wrap: true },
+                        { value: prd["OP_CD"], wrap: true },
+                        { value: prd["PRD_STRT_DTM"], wrap: true },
+                        { value: prd["PRD_END_DTM"], wrap: true }
+                    ]
+                });
+            }
         }
 
 
@@ -1388,6 +1424,11 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
               title: title,
               frozenRows: 1,
               rows: rows
+          }, {
+              columns: colWidths,
+              title: "Products",
+              frozenRows: 1,
+              rows: rowsProd
           }
         ]
     });

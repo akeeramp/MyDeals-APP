@@ -195,7 +195,11 @@ namespace Intel.MyDeals.BusinessRules
                     if (int.TryParse(de.AtrbValue.ToString(), out prodId))
                     {
                         ProductEngName prod = prods.FirstOrDefault(p => p.PRD_MBR_SID == prodId);
-                        if (prod != null) de.AtrbValue = prod.PRODUCT_NAME;
+                        if (prod != null)
+                        {
+                            de.AtrbValue = prod.PRODUCT_NAME;
+                            de.PrevAtrbValue = prod;
+                        }
                     }
                 }
             }
