@@ -44,10 +44,10 @@
                         <div class="textCircle valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
                             {{ data.OBJ_SET_TYPE_CD | limitTo:1 }}
                         </div>
-                        <div class="textCircle" ng-if="CAN_VIEW_MEET_COMP" style="background-color: {{getColorMct(data.MEETCOMP_TEST_RESULT)}};" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT }}">
+                        <div class="textCircle" ng-if="CAN_VIEW_MEET_COMP" style="background-color: {{getColorMct(data.MEETCOMP_TEST_RESULT)}};" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT || 'Not Run Yet' }}">
                             <i class="fa fa-tablet"></i>
                         </div>
-                        <div class="textCircle" ng-if="CAN_VIEW_COST_TEST" style="background-color: {{getColorPct(data.COST_TEST_RESULT)}};" title="Price Cost Test: {{ data.COST_TEST_RESULT }}">
+                        <div class="textCircle" ng-if="CAN_VIEW_COST_TEST" style="background-color: {{getColorPct(data.COST_TEST_RESULT)}};" title="Price Cost Test: {{ data.COST_TEST_RESULT || 'Not Run Yet' }}">
                             <i class="fa fa-usd"></i>
                         </div>
                         <div class="textCircle" style="background-color: {{getColorStage(data.WF_STG_CD)}};" title="Stage: {{ data.WF_STG_CD }}">
