@@ -306,7 +306,8 @@ namespace Intel.MyDeals.DataLibrary
                     quoteLetterBytes = ms.ToArray();
 
                     // Save to DB here since this was generated (Mode 3 and didn't have a pre-existin PDF)
-                    if (!inNegotiation || forceRegenerateQuoteLetter)
+                    // forceRegenerateQuoteLetter adds all ECAP/KIT deals by default, but is not set on adhoc calls to Active deals not already saved.  We don't want to save tenders (or any deals) with no trackers.
+                    if (!inNegotiation || (forceRegenerateQuoteLetter && !inNegotiation))
                     {
                         bool quoteResult = forceRegenerateQuoteLetter ?
                             SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes).Result:
