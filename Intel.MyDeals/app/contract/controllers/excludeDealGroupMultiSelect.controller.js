@@ -9,7 +9,7 @@ SetRequestVerificationToken.$inject = ['$http'];
 ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataService', 'logger', 'dataItem', 'cellCurrValues', 'cellCommentValue', 'colInfo', 'enableCheckbox', 'excludeOutliers', '$timeout'];
 
 function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dataItem, cellCurrValues, cellCommentValue, colInfo, enableCheckbox, excludeOutliers, $timeout) {
-	var vm = this;
+    var vm = this;
 
 	var selectedGridDict = {};
 	vm.returnVal = {};
@@ -35,7 +35,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             dataSourceSuggested.filter({ field: "selected", operator: "eq", value: true });
             vm.toggleMessage = 'On';
             vm.toggleClass = 'txtOn';
-            dataSourceSuggested.read(); 
+            dataSourceSuggested.read();
             vm.delCounter = 0;
         }
         else {
@@ -43,9 +43,9 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             vm.toggleMessage = 'Off';
             vm.toggleClass = 'txtOff';
             dataSourceSuggested.filter({});
-            dataSourceSuggested.read();            
+            dataSourceSuggested.read();
         }
-        
+
     }
     var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
@@ -87,12 +87,12 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 				    if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
 						vm.gridData[i].selected = true;
                     }
-                    
+
                     if (vm.IS_EXCLUDED.indexOf(vm.gridData[i]["OVLP_DEAL_ID"]) > -1) {
                         vm.gridData[i]["IS_TOUCHED"] = 1;
                     }
 
-                }               
+                }
 
                 e.success(vm.gridData);
 
@@ -124,7 +124,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 					OVLP_WF_STG_CD: {},
 					selected: {type:"boolean"}
 				}
-			} 
+			}
 		}
 	});
 
@@ -160,7 +160,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                     selected: true,
                     SELF_OVLP: 1
                 });
-                
+
 				dataSourceSuggested.read();
 				vm.isLoading = false;
 			},
@@ -204,7 +204,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" }
 		],
         dataBound: function (e) {
-            
+
 		    if (!vm.hasCheckbox) {
 		        $('#ExcldGrid :checkbox').prop("disabled", true);
 		    }
@@ -230,7 +230,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    });
 
 		    $timeout(function () {
-                var data = e.sender.dataSource.data();                
+                var data = e.sender.dataSource.data();
 		        for (var d = 0; d < data.length; d++) {
 		            if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 0 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
                         //data[d].set("_disabled", true); // Commented due to PERF hike
@@ -246,8 +246,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		            }
 
                 }
-                if (data.length > 0) {
-                    //Remove the Dummy Group which is created beacuse we added dummy record at the top 
+		        if (data.length > 0 && enableCheckbox) {
+                    //Remove the Dummy Group which is created beacuse we added dummy record at the top
                     if (vm.delCounter === 0) {
                         $("#ExcldGrid .k-grid-content table tbody tr").slice(-2).remove();
                         vm.delCounter = 1;
@@ -255,8 +255,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                 }
 
             }, 50);
-            
-            
+
+
 		}
 	};
 
