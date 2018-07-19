@@ -1294,17 +1294,25 @@ gridUtils.dialogShow = function () {
     dialog.open();
 }
 
-gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
+gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
     var rows = [{ cells: [] }];
     var rowsProd = [{ cells: [] }];
     var gridColumns = grid.columns;
     var colWidths = [];
     var colHidden = false;
+    var hasProds = false;
     if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
+    var addAlways = [
+        {
+            field: "NOTES",
+            title: "Notes"
+        }
+    ];
 
     // Create element to generate templates in.
     var elem = document.createElement('div');
 
+    var colList = [];
     for (var i = 0; i < gridColumns.length; i++) {
         colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
         if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
@@ -1319,6 +1327,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
                 color: "#ffffff",
                 wrap: true
             });
+            colList.push(gridColumns[i].field);
 
             if (gridColumns[i].width !== undefined) {
                 colWidths.push({ width: gridColumns[i].width });
@@ -1327,6 +1336,20 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
             }
         }
     }
+
+    for (var a = 0; a < addAlways.length; a++) {
+        if (colList.indexOf(addAlways[a].field) < 0) {
+            rows[0].cells.push({
+                value: addAlways[a].title,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true
+            });
+            colWidths.push({ autoWidth: true });
+        }
+    }
+
 
     // set prod title
     var titles = ["Deal #", "Deal Product Name", "Product Type", "Product Category", "Brand", "Family", "Processor", "Product Name", "Material ID", "Division", "Op Code", "Prod Start Date", "Prod End Date"];
@@ -1386,51 +1409,73 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
                 }
             }
 
+            for (var a = 0; a < addAlways.length; a++) {
+                if (colList.indexOf(addAlways[a].field) < 0) {
+                    if (dataItem[addAlways[a].field] === undefined || dataItem[addAlways[a].field] === null)
+                        dataItem[addAlways[a].field] = "";
+
+                    cells.push({
+                        value: dataItem[addAlways[a].field],
+                        wrap: true
+                    });
+                }
+            }
 
             rows.push({
                 cells: cells
             });
 
-
             // Products
-            for (var p = 0; p < dataItem["products"].length; p++) {
-                var prd = dataItem["products"][p];
-                rowsProd.push({
-                    cells: [
-                        { value: dataItem["DC_ID"], wrap: true },
-                        { value: prd["DEAL_PRD_NM"], wrap: true },
-                        { value: prd["DEAL_PRD_TYPE"], wrap: true },
-                        { value: prd["PRD_CAT_NM"], wrap: true },
-                        { value: prd["FMLY_NM"], wrap: true },
-                        { value: prd["BRND_NM"], wrap: true },
-                        { value: prd["PCSR_NBR"], wrap: true },
-                        { value: prd["PRODUCT_NAME"], wrap: true },
-                        { value: prd["MTRL_ID"], wrap: true },
-                        { value: prd["DIV_NM"], wrap: true },
-                        { value: prd["OP_CD"], wrap: true },
-                        { value: prd["PRD_STRT_DTM"], wrap: true },
-                        { value: prd["PRD_END_DTM"], wrap: true }
-                    ]
-                });
+            if (dataItem["products"] !== undefined) {
+                hasProds = true;
+                for (var p = 0; p < dataItem["products"].length; p++) {
+                    var prd = dataItem["products"][p];
+                    rowsProd.push({
+                        cells: [
+                            { value: dataItem["DC_ID"], wrap: true },
+                            { value: prd["DEAL_PRD_NM"], wrap: true },
+                            { value: prd["DEAL_PRD_TYPE"], wrap: true },
+                            { value: prd["PRD_CAT_NM"], wrap: true },
+                            { value: prd["FMLY_NM"], wrap: true },
+                            { value: prd["BRND_NM"], wrap: true },
+                            { value: prd["PCSR_NBR"], wrap: true },
+                            { value: prd["PRODUCT_NAME"], wrap: true },
+                            { value: prd["MTRL_ID"], wrap: true },
+                            { value: prd["DIV_NM"], wrap: true },
+                            { value: prd["OP_CD"], wrap: true },
+                            { value: prd["PRD_STRT_DTM"], wrap: true },
+                            { value: prd["PRD_END_DTM"], wrap: true }
+                        ]
+                    });
+                }
+
             }
         }
 
 
     }
+
+    // sheets
+    var sheets = [
+        {
+            columns: colWidths,
+            title: title,
+            frozenRows: 1,
+            rows: rows
+        }
+    ];
+
+    if (hasProds) {
+        sheets.push({
+            columns: colWidths,
+            title: "Products",
+            frozenRows: 1,
+            rows: rowsProd
+        });
+    }
+
     var workbook = new kendo.ooxml.Workbook({
-        sheets: [
-          {
-              columns: colWidths,
-              title: title,
-              frozenRows: 1,
-              rows: rows
-          }, {
-              columns: colWidths,
-              title: "Products",
-              frozenRows: 1,
-              rows: rowsProd
-          }
-        ]
+        sheets: sheets
     });
 
     //save the file as Excel file with extension xlsx

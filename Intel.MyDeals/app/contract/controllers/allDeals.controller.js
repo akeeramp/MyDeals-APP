@@ -39,7 +39,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		        "DC_ID", "PASSED_VALIDATION", "CUST_MBR_SID", "TRKR_NBR", "START_DT", "END_DT", "OBJ_SET_TYPE_CD",
 		        "WF_STG_CD", "PRODUCT_CATEGORIES", "TITLE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
 		        "KIT_ECAP", "VOLUME", "CONSUMPTION_REASON", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "MRKT_SEG", "GEO_COMBINED",
-		        "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT"
+		        "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES"
 		    ];
 		    var usedCols = [];
 		    var excludeCols = ["details", "tools"];
@@ -66,6 +66,14 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		            root.wipOptions.default.groups.push({ "name": dealType.name, "order": order++ });
 
 		            var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[dealType.dealType];
+		            wipTemplate.columns.push({
+		                bypassExport:false,
+		                field:"NOTES",
+		                filterable:true,
+		                sortable:true,
+                        title:"Notes",
+                        width:150
+                    });
 		            for (var c = 0; c < wipTemplate.columns.length; c++) {
 		                var col = wipTemplate.columns[c];
 

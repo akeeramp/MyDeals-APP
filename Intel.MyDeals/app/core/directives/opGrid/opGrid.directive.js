@@ -834,68 +834,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.exportToExcelCustomColumns = function () {
-                // this doens't work becuase the template comiled is not binging to Angular... would need to bind each cell one by one and thoat would be expensive
                 gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", true);
-                //$scope.grid.saveAsExcel();
             }
 
             $scope.exportToExcel = function () {
                 gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", false);
-                return;
-
-                var excludeFields = $scope.exportableExcludeFields;
-
-                var widths = [];
-                var titles = [];
-                var fields = [];
-
-                var allCols = util.deepClone($scope.opOptions.columns);
-                allCols.sort(function (a, b) {
-                    if (a.title < b.title) return -1;
-                    if (a.title > b.title) return 1;
-                    return 0;
-                });
-
-                for (var t = 0; t < allCols.length; t++) {
-                    if (excludeFields.indexOf(allCols[t].field) <= 0) {
-                        titles.push({ value: allCols[t].title });
-                        widths.push({ autoWidth: true });
-                        fields.push(allCols[t].field);
-                    }
-                }
-                var rows = [{
-                    cells: titles
-                }];
-
-                var data = $scope.contractDs.data();
-
-                for (var i = 0; i < data.length; i++) {
-                    var cells = [];
-                    for (var c = 0; c < allCols.length; c++) {
-                        var col = allCols[c];
-                        if (excludeFields.indexOf(col.field) <= 0) {
-                            cells.push({ value: data[i][col.field] });
-                        }
-                    }
-
-                    //push single row for every record
-                    rows.push({
-                        cells: cells
-                    });
-                }
-                var workbook = new kendo.ooxml.Workbook({
-                    sheets: [
-                        {
-                            //columns: widths,
-                            title: "My Deals Data",
-                            rows: rows
-                        }
-                    ]
-                });
-
-                //save the file as Excel file with extension xlsx
-                kendo.saveAs({ dataURI: workbook.toDataURL(), fileName: "MyDealsData.xlsx" });
-
             }
 
             $scope.drawDetails = function (data) {
