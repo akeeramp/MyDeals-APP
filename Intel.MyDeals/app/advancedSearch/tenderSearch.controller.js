@@ -162,6 +162,15 @@
             width: 120,
             template: "#= gridUtils.goToObject(data, 'WF_STG_CD', 'CNTRCT_OBJ_SID', 'CNTRCT_TITLE') #"
         }, {
+            field: "PRODUCT_CATEGORIES",
+            title: "Product Verticals",
+            type: "list",
+            width: 150,
+            filterable: "listMultiProdCatFilter",
+            lookupText: "PRD_CAT_NM",
+            lookupValue: "PRD_CAT_NM",
+            lookupUrl: "/api/Products/GetProductCategories"
+        }, {
             field: "PRODUCT_FILTER",
             title: "Product",
             type: "string",

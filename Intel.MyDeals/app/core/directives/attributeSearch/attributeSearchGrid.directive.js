@@ -47,7 +47,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                 $scope.root.$broadcast('search-rule-loaded', newValue);
             });
 
-            $scope.getOperators = function(fieldType) {
+            $scope.getOperators = function (fieldType) {
                 var opers = $linq.Enumerable().From($scope.operatorSettings.types2operator)
                     .Where(function (x) {
                         return (x.type === fieldType);
@@ -91,6 +91,15 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                     }
                 };
 
+                $scope.listMultiProdCatFilter = {
+                    ui: function (element) {
+                        element[0].className = "k-textbox";
+                    },
+                    operators: {
+                        list: $scope.getOperators("list")
+                    }
+                };
+
                 $scope.objFilter = {
                     ui: function (element) {
                         element[0].className = "k-textbox";
@@ -103,7 +112,8 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                         if (item.filterable === "objFilter") item.filterable = $scope.objFilter;
                         else if (item.filterable === "numObjFilter") item.filterable = $scope.numObjFilter;
                         else if (item.filterable === "moneyObjFilter") item.filterable = $scope.moneyObjFilter;
-                    }
+                        else if (item.filterable === "listMultiProdCatFilter") item.filterable = $scope.listMultiProdCatFilter;
+            }
                 }
             }
 
@@ -218,7 +228,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                     }
                 },
                 filterMenuInit: function (e) {
-                    var hideOperatorForAtrbs = ["OBJ_SET_TYPE_CD", "OBJ_SET_TYPE_CD", "Customer.CUST_NM", "WF_STG_CD", "MRKT_SEG", "PRODUCT_CATEGORIES", "REBATE_TYPE", "PROGRAM_PAYMENT", "PAYOUT_BASED_ON"];
+                    var hideOperatorForAtrbs = ["OBJ_SET_TYPE_CD", "OBJ_SET_TYPE_CD", "Customer.CUST_NM", "WF_STG_CD", "MRKT_SEG", "REBATE_TYPE", "PROGRAM_PAYMENT", "PAYOUT_BASED_ON"];
                     if (hideOperatorForAtrbs.indexOf(e.field) >= 0) {
                         var firstValueDropDown = e.container.find("select:eq(0)").data("kendoDropDownList");
                         var infoMsg = e.container.find(".k-filter-help-text");

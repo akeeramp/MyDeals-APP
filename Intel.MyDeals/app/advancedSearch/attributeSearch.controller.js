@@ -263,27 +263,7 @@
                 title: "Product Verticals",
                 type: "list",
                 width: 150,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoMultiSelect({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Products/GetProductCategories",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "PRD_CAT_NM",
-                            dataValueField: "PRD_CAT_NM",
-                            tagMode: "single",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
+                filterable: "listMultiProdCatFilter",
                 lookupText: "PRD_CAT_NM",
                 lookupValue: "PRD_CAT_NM",
                 lookupUrl: "/api/Products/GetProductCategories"
