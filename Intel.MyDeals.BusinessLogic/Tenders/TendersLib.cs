@@ -166,7 +166,6 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                     Attributes.CUST_MBR_SID.ATRB_SID,
                     Attributes.CUST_ACCNT_DIV.ATRB_SID,
-                    Attributes.BID_STATUS.ATRB_SID,
                     Attributes.WF_STG_CD.ATRB_SID,
                     Attributes.PS_WF_STG_CD.ATRB_SID,
                     Attributes.TRKR_NBR.ATRB_SID,
@@ -228,7 +227,6 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     item[AttributeCodes.ECAP_PRICE] = "no access";
                     item[AttributeCodes.CAP] = "no access";
-                    item[AttributeCodes.BID_STATUS] = "no access";
                     item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
                     item[AttributeCodes.VOLUME] = "no access";
                     item[AttributeCodes.CREDIT_VOLUME] = "no access";
