@@ -275,10 +275,10 @@
             $scope.psTitle = "Tender Sheet";
             $scope.ptTitle = "Tender Table";
             $scope.ptTitleLbl = "Enter Tender Table Name";
+            $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
+            $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto-Filled";
 
             if ($location.url().split('tender=').length > 1) {
-                $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
-                $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto-Filled";
                 $scope.contractData["IS_TENDER"] = "1";
             }
         }
