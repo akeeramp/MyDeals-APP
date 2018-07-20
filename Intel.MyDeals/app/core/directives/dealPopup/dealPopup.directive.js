@@ -392,7 +392,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             };
 
             $scope.showQuote = function () {
-                return $scope.data.WF_STG_CD !== 'Cancelled' && ($scope.data.WF_STG_CD === 'Active' || $scope.data.PS_WF_STG_CD === 'Pending' || $scope.data.HAS_TRACKER === '1');
+                return $scope.data.WF_STG_CD !== 'Cancelled' && ($scope.data.WF_STG_CD === 'Active' || $scope.data.WF_STG_CD === 'Won' || $scope.data.WF_STG_CD === 'Pending' || $scope.data.HAS_TRACKER === '1');
             }
 
             $scope.downloadQuoteLetter = function () {

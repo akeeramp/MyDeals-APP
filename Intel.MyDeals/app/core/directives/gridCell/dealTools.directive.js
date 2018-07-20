@@ -555,7 +555,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.showQuote = function (dataItem) {
                 var excludeStages = ['Cancelled', 'Lost'];
-                var includeStages = ['Active', 'Pending', 'Offer'];
+                var includeStages = ['Active', 'Pending', 'Offer', 'Won'];
                 return excludeStages.indexOf(dataItem.WF_STG_CD) < 0 && (includeStages.indexOf(dataItem.WF_STG_CD) >= 0 || dataItem.HAS_TRACKER === '1');
             }
 

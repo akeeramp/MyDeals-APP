@@ -119,9 +119,10 @@ namespace Intel.MyDeals.DataLibrary
             string stage = GetValue("WfStgCd");
             string psStage = GetValue("PsWfStgCd");
             string tracker = GetValue("PTracker");
-            txtStatus.Value = tracker == "" ? WorkFlowStages.Offer : WorkFlowStages.Active;
+            txtStatus.Value = stage;
+            //txtStatus.Value = tracker == "" ? WorkFlowStages.Offer : WorkFlowStages.Active;
             //txtStatus.Value = stage == "Draft" ? psStage : stage;
-            
+
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
             //txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
