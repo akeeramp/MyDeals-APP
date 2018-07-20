@@ -82,7 +82,7 @@
         $scope.C_DEL_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA");
         $scope.CAN_VIEW_EXPORT = true;
         $scope.CAN_VIEW_EXCLUDE_GROUPS = true;
-        $scope.CAN_VIEW_ALL_DEALS = (window.isDeveloper || window.isTester);
+        $scope.CAN_VIEW_ALL_DEALS = true;  //Removed for DE8996 - (window.isDeveloper || window.isTester);
         $scope.canDeleteAttachment = function (wfStage) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
         }
