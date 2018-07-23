@@ -441,6 +441,12 @@
                 if ($scope.contractData.DC_ID < 0) $scope.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : $scope.contractData.C2A_DATA_C2A_ID;
                 $scope.contractData.IsAttachmentRequired = !$scope.isTenderContract && $scope.contractData.C2A_DATA_C2A_ID === "" && newValue !== 'Pending';
                 $scope.contractData.AttachmentError = $scope.contractData.AttachmentError && $scope.contractData.IsAttachmentRequired;
+
+                if (!$scope.isNewContract) {
+                    $timeout(function () {
+                        $(".radCustAccpt input[type=radio]").attr('disabled', true);
+                    });
+                }
             }
 
             // Contract name validation
@@ -715,11 +721,9 @@
                     : setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
             }, 300);
 
-            if (!$scope.isNewContract) {
-                $timeout(function () {
-                    $(".radCustAccpt input[type=radio]").attr('disabled', true);
-                });
-            }
+            $timeout(function () {
+                $(".radCustAccpt input[type=radio]").attr('disabled', true);
+            });
         }
 
         // File save methods and variable
