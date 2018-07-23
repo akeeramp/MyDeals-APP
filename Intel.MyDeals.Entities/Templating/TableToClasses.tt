@@ -344,6 +344,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "TimelineItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Fun Facts
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_FUN_FACT");
+	ds.Tables[0].TableName = "Funfact";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

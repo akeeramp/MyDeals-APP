@@ -12,7 +12,7 @@
     WorkflowController.$inject = ['$scope', 'dataService', 'workflowService', 'logger', 'confirmationModal', 'gridConstants'];
 
     function WorkflowController($scope, dataService, workflowService, logger, confirmationModal, gridConstants) {
-        var wrokFlowAttibutes = '';
+        var workFlowAttibutes = '';
         var vm = this;
         vm.selectedItem = null;
         vm.filters = {};
@@ -23,7 +23,7 @@
                 .then(
                     function (response) {
                         if (response.statusText == "OK") {
-                            wrokFlowAttibutes = response.data;
+                            workFlowAttibutes = response.data;
                         }
                     },
                     function (response) {
@@ -176,7 +176,7 @@
                     dataValueField: "Key",
                     dataSource:
                         {
-                            data: wrokFlowAttibutes,
+                            data: workFlowAttibutes,
                             filter: [
                                     { field: "COL_NM", operator: "eq", value: "ROLE_TIER_NM" }
                             ]
@@ -195,7 +195,7 @@
                     dataValueField: "Key",
                     dataSource:
                         {
-                            data: wrokFlowAttibutes,
+                            data: workFlowAttibutes,
                             filter: [
                                     { field: "COL_NM", operator: "eq", value: "OBJ_TYPE" }
                             ]
@@ -225,7 +225,7 @@
                     dataValueField: "Key",
                     dataSource:
                         {
-                            data: wrokFlowAttibutes,
+                            data: workFlowAttibutes,
                             filter: [
                                     { field: "COL_NM", operator: "eq", value: "OBJ_SET_TYPE_CD" }
                             ]
@@ -244,7 +244,7 @@
                     dataTextField: "Value",
                     dataValueField: "Key",
                     dataSource: {
-                        data: wrokFlowAttibutes,
+                        data: workFlowAttibutes,
                         filter: [
                                 { field: "COL_NM", operator: "eq", value: "WFSTG_ACTN_NM" }
                         ]
@@ -262,7 +262,7 @@
                     dataTextField: "Value",
                     dataValueField: "Key",
                     dataSource: {
-                        data: wrokFlowAttibutes,
+                        data: workFlowAttibutes,
                         filter: [
                                 { field: "COL_NM", operator: "eq", value: "WFSTG_CD_SRC_DEST" }
                         ]
@@ -280,7 +280,7 @@
                     dataTextField: "Value",
                     dataValueField: "Key",
                     dataSource: {
-                        data: wrokFlowAttibutes,
+                        data: workFlowAttibutes,
                         filter: [
                                 { field: "COL_NM", operator: "eq", value: "WFSTG_CD_SRC_DEST" }
                         ]

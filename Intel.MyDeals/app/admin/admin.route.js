@@ -53,6 +53,15 @@
                 }
             },
             {
+                state: 'admin.funfact',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/funfact/funfact.html',
+                    url: 'funfact',
+                    controller: 'FunfactController as vm',
+                }
+            },
+            {
                 state: 'admin.workflow',
                 abstract: false,
                 config: {

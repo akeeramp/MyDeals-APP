@@ -185,6 +185,11 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetSoldToIdList();
         }
 
+        public List<Funfact> GetFunfactList()
+        {
+            return DataCollections.GetFunfactList();
+        }
+
         /// <summary>
         /// Get Search string
         /// </summary>

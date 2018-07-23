@@ -671,5 +671,15 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<SoldToIds> _getSoldToIdList;
+
+        public static List<Funfact> GetFunfactList()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getFunfactList ?? (_getFunfactList = new FunfactDataLib().GetFunfactItems());
+            }
+        }
+
+        private static List<Funfact> _getFunfactList;
     }
 }

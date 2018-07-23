@@ -158,6 +158,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/securityEngine/securityEngine.controller.js"
                 , "~/app/admin/quoteLetter/admin.quoteLetter.controller.js"
                 , "~/app/admin/quoteLetter/quoteLetter.service.js"
+                , "~/app/admin/funfact/admin.funfact.controller.js"
+                , "~/app/admin/funfact/funfact.service.js"
                 , "~/app/admin/workflow/admin.workflow.controller.js"
                 , "~/app/admin/workflow/workflow.service.js"
                 , "~/app/admin/workflowStage/admin.workflowStages.controller.js"

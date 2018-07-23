@@ -79,6 +79,7 @@
     <Compile Include="SoldToId\ISoldToIdDataLib.cs" />
     <Compile Include="Timeline\ITimelineDataLib.cs" />
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
+    <Compile Include="Funfact\IFunfactDataLib.cs" />
     <Compile Include="Workflow\IWorkFlowDataLib.cs" />
   </ItemGroup>
   <ItemGroup>

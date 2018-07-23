@@ -282,6 +282,7 @@
     <Compile Include="Controllers\API\UserPreferencesController.cs" />
     <Compile Include="Controllers\API\TimelineController.cs" />
     <Compile Include="Controllers\API\MeetCompController.cs" />
+    <Compile Include="Controllers\API\FunfactController.cs" />
     <Compile Include="Controllers\API\WorkFlowController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -370,6 +371,9 @@
     <Content Include="app\admin\securityEngine\securityEngine.html" />
     <Content Include="app\admin\securityEngine\securityEngine.service.js" />
     <Content Include="app\admin\securityEngine\securityEngineDrawDeals.directive.js" />
+    <Content Include="app\admin\funfact\admin.funfact.controller.js" />
+    <Content Include="app\admin\funfact\funfact.html" />
+    <Content Include="app\admin\funfact\funfact.service.js" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />
