@@ -422,11 +422,31 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> atrbs = new List<int>();
 
-            OpDataCollectorFlattenedDictList data = OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false);
+            MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs);
+
+            // Get all the products in a collection base on the PRODUCT_FILTER
+            // Note: the first hit is a performance dog as the product cache builds for the first time
+            List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
+                .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
+            List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
+            Dictionary<int, List<ProductEngName>> prodMap = new Dictionary<int, List<ProductEngName>>();
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, prods);
+                prodMap[dc.DcID] = dc.GetDataElements(AttributeCodes.PRODUCT_FILTER).Select(d => (ProductEngName)d.PrevAtrbValue).ToList();
+            }
+
+            OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false);
+
+            //OpDataCollectorFlattenedDictList data = OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false);
 
             CustomerLib custLib = new CustomerLib();
             foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
             {
+                int dcId = int.Parse(item[AttributeCodes.DC_ID].ToString());
+                item["products"] = prodMap.ContainsKey(dcId) ? prodMap[dcId] : new List<ProductEngName>();
+
                 if (item.ContainsKey(AttributeCodes.CUST_MBR_SID))
                 {
                     CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
