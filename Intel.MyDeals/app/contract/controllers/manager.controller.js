@@ -731,7 +731,7 @@
 
         function drawGrid(pt) {
             if ($("#detailGrid_" + pt.DC_ID).length === 0) {
-                var html = "<kendo-grid options='sumGridOptions(" + pt.DC_ID + ")' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+                var html = "<kendo-grid options='sumGridOptions(" + pt.DC_ID + ")' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard sumGridOptionsExpand'></kendo-grid>";
                 var template = angular.element(html);
                 var linkFunction = $compile(template);
                 linkFunction($scope);
