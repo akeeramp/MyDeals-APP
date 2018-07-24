@@ -78,7 +78,8 @@
                 "Processed": "#C4D600",
                 "Active": "#c4d600",
                 "Offer": "#FFA300",
-                "Lost": "#FC4C02"
+                "Lost": "#FC4C02",
+                "Won": "#c4d600"
             }
         })
         .constant('contractManagerConstants', {

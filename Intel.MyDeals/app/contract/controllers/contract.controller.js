@@ -722,7 +722,10 @@
             }, 300);
 
             $timeout(function () {
-                $(".radCustAccpt input[type=radio]").attr('disabled', true);
+                if ($scope.contractData.DC_ID > 0)
+                {
+                    $(".radCustAccpt input[type=radio]").attr('disabled', true);
+                }
             });
         }
 
