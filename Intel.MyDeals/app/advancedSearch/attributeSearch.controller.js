@@ -438,6 +438,34 @@
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
             }, {
+                field: "SERVER_DEAL_TYPE",
+                title: "Server Deal Type",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
+            }, {
                 field: "TOTAL_DOLLAR_AMOUNT",
                 title: "Total Dollar Amount",
                 type: "number",
