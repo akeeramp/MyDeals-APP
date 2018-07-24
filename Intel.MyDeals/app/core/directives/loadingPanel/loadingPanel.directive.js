@@ -1,13 +1,13 @@
-﻿// SUMMARY:		Loading panel that fills the enitre parent's height and width. 
+﻿// SUMMARY:		Loading panel that fills the enitre parent's height and width.
 // EXAMPLE USAGE:	 <loading-panel show="true" header="'TEST'" description="'hello'" msg-type="'Info'" is-show-fun-fact="false"></loading-panel>
 
 angular
     .module('app.core')
-    .directive('loadingPanel', ['funfactService', loadingPanel]);
+    .directive('loadingPanel', loadingPanel);
 
-loadingPanel.$inject = [];
+loadingPanel.$inject = ['funfactService', 'logger'];
 
-function loadingPanel(funfactService) {
+function loadingPanel(funfactService, logger) {
 	return {
 		scope: {
 			show: '=',
