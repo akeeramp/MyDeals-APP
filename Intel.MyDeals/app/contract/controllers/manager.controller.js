@@ -470,7 +470,7 @@
 
                 $scope.clkAllItems = function (ev, id) {
                     var isChecked = document.getElementById("ptId_" + id + "chkDealTools").checked;
-                    var grid = $('detailGrid_" + pt.DC_ID + "').closest("[kendo-grid]").data("kendoGrid");
+                    var grid = $('#detailGrid_' + id).data("kendoGrid");
                     var data = grid.dataSource.view();
                     for (var i = 0; i < data.length; i++) {
                         data[i].isLinked = isChecked;
