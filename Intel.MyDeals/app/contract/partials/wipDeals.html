@@ -1,4 +1,14 @@
-﻿<div ng-if="wipData.length == 0">
+﻿<script id="filterMenuChecklistTemplate" type="text/x-kendo-template">
+    <div>
+        <div class="filterMenuChecklistControl" style="width: 100%;"></div>
+        <div style="white-space: nowrap">
+            <button type="submit" class="k-button k-primary">Filter</button>
+            <button type="reset" class="k-button">Clear</button>
+        </div>
+    </div>
+</script>
+
+<div ng-if="wipData.length == 0">
     <div><img src="/images/032.gif" /></div>
     Loading data....
 </div>

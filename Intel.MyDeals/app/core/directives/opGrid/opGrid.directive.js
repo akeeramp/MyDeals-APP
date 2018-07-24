@@ -184,7 +184,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     cols[c].hidden = true;
 
                     if (cols[c].filterable !== undefined && cols[c].filterable) {
-                        cols[c].filterable = { "multi": true, search: true };
+
+                        if (cols[c].filterable === true) {
+                            cols[c].filterable = { "multi": true, search: true };
+                        }
                     }
                 }
                 // now sort the columns based on the group settings
@@ -756,6 +759,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 resizable: $scope.resizable,
                 reorderable: true,
                 pageable: $scope.pageable,
+                filterMenuInit: $scope.opOptions.filterMenuInit,
 
                 save: function (e) {
                     var newField = util.getFirstKey(e.values);

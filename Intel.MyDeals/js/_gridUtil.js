@@ -1626,6 +1626,139 @@ gridUtils.stripMilliseconds = function (dateTimeStr) {
     return dateTimeStr;
 }
 
+
+
+gridUtils.initPrdBktDimFilter = function (e, kendoGrid, field) {
+    var filterContext = {
+        container: e.container,
+        popup: e.container.data("kendoPopup"),
+        dataSource: kendoGrid.dataSource,
+        field: e.field
+    };
+
+    var data = kendoGrid.dataSource.data();
+    var items = [];
+    for (var t = 0; t < data.length; t++) {
+        var item = data[t];
+        if (item[field] !== undefined) {
+            for (var k in item[field]) {
+                if (item[field].hasOwnProperty(k)) {
+                    if (typeof item[field][k] !== 'function' && k.indexOf("20___") >= 0) {
+                        items.push({
+                            text: item[field][k],
+                            value: item[field][k]
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    // Remove default filtering UI
+    filterContext.container.off();
+    filterContext.container.empty();
+
+    // Create custom filter UI using a template 
+    var template = kendo.template($("#filterMenuChecklistTemplate").html());
+    var result = template({});
+    filterContext.container.html(result);
+
+    $(filterContext.container).find(".filterMenuChecklistControl").kendoComboBox({
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: {
+            data: items
+        }
+    });
+
+    filterContext.container
+        .on('submit', $.proxy(gridUtils.onPrdBktDimSubmit, filterContext))
+        .on('reset', $.proxy(gridUtils.onFilterReset, filterContext));
+};
+
+gridUtils.onPrdBktDimSubmit = function (e) {
+    // the context here is the filteringContext  
+    e.preventDefault();
+    e.stopPropagation();
+
+    var combobox = $(e.currentTarget).find("div.filterMenuChecklistControl").data("kendoComboBox");
+    var val = combobox.value();
+
+    gridUtils.removeFilterForField(this.dataSource, this.field);
+    gridUtils.applyPrdBktDimFilter(this.dataSource, this.field, val);
+    this.popup.close();
+};
+
+gridUtils.applyPrdBktDimFilter = function (dataSource, field, val) {
+
+    // Create custom filter 
+    var newFilter = {
+        field: field,
+        operator: gridUtils.filterByPrdBktDim,
+        value: val
+    };
+
+    var masterFilter = dataSource.filter() || { logic: "and", filters: [] };
+    masterFilter.filters.push(newFilter);
+    dataSource.filter(masterFilter);
+};
+
+gridUtils.filterByPrdBktDim = function(dataItem, value) {
+    var dimFootprint = "20___";
+    if (dataItem !== undefined) {
+        for (var k in dataItem) {
+            if (dataItem.hasOwnProperty(k)) {
+                if (typeof dataItem[k] !== 'function' && k.indexOf(dimFootprint) >= 0) {
+                    if (dataItem[k] === value) return true;
+                }
+            }
+        }
+    }
+};
+
+gridUtils.onFilterReset = function(e) {
+    // the context here is the filteringContext  
+    e.preventDefault();
+    e.stopPropagation();
+
+    gridUtils.removeFilterForField(this.dataSource, this.field);
+    this.popup.close();
+};
+
+gridUtils.removeFilterForField = function(dataSource, field) {
+    var masterFilter = dataSource.filter();
+    if (!masterFilter) {
+        return;
+    }
+
+    // Get existing filters for the field 
+    var existingFilters = jQuery.grep(masterFilter.filters, function (item, index) {
+        return item.field === field;
+    });
+
+    jQuery.each(existingFilters, function (item) {
+        var index = masterFilter.filters.indexOf(item);
+        masterFilter.filters.splice(index, 1);
+    });
+
+    dataSource.filter(masterFilter);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function gridTools(model, cols) {
     this.model = model;
     this.cols = cols;

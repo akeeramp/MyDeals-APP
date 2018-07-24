@@ -153,7 +153,7 @@
             title: "Deal",
             type: "number",
             width: 100,
-            filterable: $scope.numObjFilter,
+            filterable: "numObjFilter",
             template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon>#= gridUtils.goToObject(data, 'WF_STG_CD', 'DC_ID') #"
         }, {
             field: "CNTRCT_TITLE",
@@ -176,7 +176,7 @@
             type: "string",
             width: 250,
             dimKey: 20,
-            filterable: $scope.objFilter,
+            filterable: "objFilter",
             template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
         }, {
             field: "END_CUSTOMER_RETAIL",
@@ -189,7 +189,7 @@
             type: "string",
             width: 210,
             dimKey: 20,
-            filterable: $scope.objFilter,
+            filterable: "objFilter",
             template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
         }, {
             field: "ECAP_PRICE",
@@ -198,7 +198,7 @@
             width: 170,
             dimKey: 20,
             format: "{0:c}",
-            filterable: $scope.moneyObjFilter,
+            filterable: "moneyObjFilter",
             template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
         }, {
             field: "CAP",
@@ -207,7 +207,7 @@
             width: 170,
             dimKey: 20,
             format: "{0:c}",
-            filterable: $scope.moneyObjFilter,
+            filterable: "moneyObjFilter",
             template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
         }, {
             field: "YCS2_PRC_IRBT",
@@ -216,7 +216,7 @@
             width: 170,
             dimKey: 20,
             format: "{0:c}",
-            filterable: $scope.moneyObjFilter,
+            filterable: "moneyObjFilter",
             template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
         }, {
             field: "START_DT",
@@ -376,10 +376,10 @@
             template: "# if (BLLG_DT !== undefined) { # #=moment(BLLG_DT).format('MM/DD/YYYY')# # } #",
             width: 140
         }, {
-            field: "CRE_EMP_WWID",
+            field: "CRE_EMP_NAME",
             title: "Created By",
             type: "string",
-            width: 120
+            width: 160
         }, {
             field: "CRE_DTM",
             title: "Created Time",

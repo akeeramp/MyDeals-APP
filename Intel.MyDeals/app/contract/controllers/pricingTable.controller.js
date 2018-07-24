@@ -332,15 +332,51 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.wipOptions.isOverlapNeeded = (root.curPricingStrategy !== undefined && (root.curPricingStrategy.WF_STG_CD === "Draft" || root.curPricingStrategy.WF_STG_CD === "Requested"));
 
-        //root.wipOptions.default.groups = [
-        //    { "name": "Deal Info", "order": 0 },
-        //    { "name": "Consumption", "order": 1 },
-        //    { "name": "Meet Comp", "order": 2 },
-        //    { "name": "Backdate", "order": 4 },
-        //    { "name": "Overlapping", "order": 5 },
-        //    { "name": "Cost Test", "order": 6 },
-        //    { "name": "All", "order": 99 }
-        //];
+        var dimPrdBktFields = ["TRKR_NBR", "ECAP_PRICE", "CAP", "CAP_STRT_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT"];
+
+        for (var c = 0; c < root.wipOptions.columns.length; c++) {
+            var col = root.wipOptions.columns[c];
+            if (col.field === "EXPIRE_FLG") {
+                col.filterable = {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataTextField: "text",
+                            dataValueField: "value",
+                            dataSource: {
+                                data: [
+                                    { text: "Yes", value: "1" },
+                                    { text: "No", value: "0" }
+                                ]
+                            }
+                        });
+                    },
+                    extra: false
+                };
+            } else if (col.field === "CUST_MBR_SID") {
+                col.filterable = false;
+            } else if (dimPrdBktFields.indexOf(col.field) >= 0) {
+                col.sortable = false;
+            }
+        }
+
+        root.wipOptions.filterMenuInit = function (e) {
+            var hideOperatorForAtrbs = [
+                "EXPIRE_FLG"
+            ];
+            if (hideOperatorForAtrbs.indexOf(e.field) >= 0) {
+                var firstValueDropDown = e.container.find("select:eq(0)").data("kendoDropDownList");
+                var infoMsg = e.container.find(".k-filter-help-text");
+                setTimeout(function() {
+                    infoMsg.hide();
+                    firstValueDropDown.wrapper.hide();
+                });
+            }
+
+            if (dimPrdBktFields.indexOf(e.field) >= 0) {
+                gridUtils.initPrdBktDimFilter(e, this, e.field);
+            }
+
+        };
 
         // check for soft warnings
         var numWarn = 0;
