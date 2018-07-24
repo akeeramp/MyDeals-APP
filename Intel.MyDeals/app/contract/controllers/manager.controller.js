@@ -467,119 +467,133 @@
                         drawGrid(pt);
                     }
                 });
-                $scope.sumGridOptions = {
-                    filterable: true,
-                    resizable: true,
-                    autoBind: false,
-                    dataSource: ds,
-                    sortable: true,
-                    height: 250,
-                    columns: [
-                        {
-                            field: "NOTES",
-                            title: "Tools",
-                            width: "200px",
-                            locked: true,
-                            template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
-                            filterable: false
-                        }, {
-                            field: "DC_ID",
-                            title: "Deal Id",
-                            width: "120px",
-                            locked: true,
-                            template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "TRKR_NBR",
-                            title: "Tracker Number",
-                            width: "150px",
-                            locked: true,
-                            template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "OBJ_SET_TYPE_CD",
-                            title: "Type",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "START_DT",
-                            title: "Deal Start/End",
-                            width: "170px",
-                            template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "TITLE",
-                            title: "Product",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "CAP",
-                            title: "CAP",
-                            template: "#= gridUtils.getFormatedDim(data, 'CAP', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
-                            width: "100px",
-                            filterable: false
-                        }, {
-                            field: "ECAP_PRICE",
-                            title: "ECAP",
-                            template: "#= gridUtils.getFormatedDim(data, 'ECAP_PRICE', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
-                            width: "100px",
-                            filterable: false
-                        }, {
-                            field: "YCS2_PRC_IRBT",
-                            title: "YCS2",
-                            template: "#= gridUtils.getFormatedDim(data, 'YCS2_PRC_IRBT', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
-                            width: "100px",
-                            filterable: false
-                        }, {
-                            field: "REBATE_TYPE",
-                            title: "Rebate Type",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "COST_TEST_RESULT",
-                            title: "Cost Test Result",
-                            width: "100px",
-                            hidden: !root.CAN_VIEW_COST_TEST,
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "MEETCOMP_TEST_RESULT",
-                            title: "Meet Comp Test Result",
-                            width: "100px",
-                            hidden: !root.CAN_VIEW_MEET_COMP,
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "VOLUME",
-                            title: "Ceiling Volume",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "END_CUSTOMER_RETAIL",
-                            title: "End Customer",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "DEAL_DESC",
-                            title: "Deal Description",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "WF_STG_CD",
-                            title: "Stage",
-                            width: "100px",
-                            filterable: { multi: true, search: true },
-                            template: "#= gridUtils.stgFullTitleChar(data) #"
-                        }, {
-                            field: "EXPIRE_FLG",
-                            title: "Expired",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "HAS_ATTACHED_FILES",
-                            title: "Attachments",
-                            width: "80px",
-                            template: "#= gridUtils.hasAttachments(data, 'HAS_ATTACHED_FILES') #"
-                        }
-                    ]
+
+                $scope.clkAllItems = function (ev, id) {
+                    var isChecked = document.getElementById("ptId_" + id + "chkDealTools").checked;
+                    var grid = $('detailGrid_" + pt.DC_ID + "').closest("[kendo-grid]").data("kendoGrid");
+                    var data = grid.dataSource.view();
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].isLinked = isChecked;
+                    }
+                }
+
+                $scope.sumGridOptions = function (gridId) {
+                    return {
+                        filterable: true,
+                        resizable: true,
+                        autoBind: false,
+                        dataSource: ds,
+                        sortable: true,
+                        height: 250,
+                        columns: [
+                            {
+                                field: "NOTES",
+                                title: "Tools",
+                                width: "200px",
+                                locked: true,
+                                template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                headerTemplate: "<input type='checkbox' ng-click='clkAllItems($event, "+ gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
+                                filterable: false,
+                                sortable: false
+                            }, {
+                                field: "DC_ID",
+                                title: "Deal Id",
+                                width: "120px",
+                                locked: true,
+                                template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "TRKR_NBR",
+                                title: "Tracker Number",
+                                width: "150px",
+                                locked: true,
+                                template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "OBJ_SET_TYPE_CD",
+                                title: "Type",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "START_DT",
+                                title: "Deal Start/End",
+                                width: "170px",
+                                template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "TITLE",
+                                title: "Product",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "CAP",
+                                title: "CAP",
+                                template: "#= gridUtils.getFormatedDim(data, 'CAP', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                filterable: false
+                            }, {
+                                field: "ECAP_PRICE",
+                                title: "ECAP",
+                                template: "#= gridUtils.getFormatedDim(data, 'ECAP_PRICE', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                filterable: false
+                            }, {
+                                field: "YCS2_PRC_IRBT",
+                                title: "YCS2",
+                                template: "#= gridUtils.getFormatedDim(data, 'YCS2_PRC_IRBT', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                filterable: false
+                            }, {
+                                field: "REBATE_TYPE",
+                                title: "Rebate Type",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "COST_TEST_RESULT",
+                                title: "Cost Test Result",
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_COST_TEST,
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "MEETCOMP_TEST_RESULT",
+                                title: "Meet Comp Test Result",
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_MEET_COMP,
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "VOLUME",
+                                title: "Ceiling Volume",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "END_CUSTOMER_RETAIL",
+                                title: "End Customer",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "DEAL_DESC",
+                                title: "Deal Description",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "WF_STG_CD",
+                                title: "Stage",
+                                width: "100px",
+                                filterable: { multi: true, search: true },
+                                template: "#= gridUtils.stgFullTitleChar(data) #"
+                            }, {
+                                field: "EXPIRE_FLG",
+                                title: "Expired",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "HAS_ATTACHED_FILES",
+                                title: "Attachments",
+                                width: "80px",
+                                template: "#= gridUtils.hasAttachments(data, 'HAS_ATTACHED_FILES') #"
+                            }
+                        ]
+                    }
                 }
             }
             else { // Non-ECAP pt grids
@@ -615,96 +629,100 @@
                         drawGrid(pt);
                     }
                 });
-                $scope.sumGridOptions = {
-                    filterable: true,
-                    resizable: true,
-                    autoBind: false,
-                    dataSource: ds,
-                    sortable: true,
-                    height: 250,
-                    columns: [
-                        {
-                            field: "NOTES",
-                            title: "Tools",
-                            width: "200px",
-                            locked: true,
-                            template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
-                            filterable: false
-                        }, {
-                            field: "DC_ID",
-                            title: "Deal Id",
-                            width: "120px",
-                            locked: true,
-                            template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "TRKR_NBR",
-                            title: "Tracker Number",
-                            width: "150px",
-                            locked: true,
-                            template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "OBJ_SET_TYPE_CD",
-                            title: "Type",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "START_DT",
-                            title: "Deal Start/End",
-                            width: "170px",
-                            template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "TITLE",
-                            title: "Product",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "REBATE_TYPE",
-                            title: "Rebate Type",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "COST_TEST_RESULT",
-                            title: "Cost Test Result",
-                            width: "100px",
-                            hidden: !root.CAN_VIEW_COST_TEST,
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "MEETCOMP_TEST_RESULT",
-                            title: "Meet Comp Test Result",
-                            width: "100px",
-                            hidden: !root.CAN_VIEW_MEET_COMP,
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "MAX_RPU",
-                            title: "Max RPU",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "DEAL_DESC",
-                            title: "Deal Description",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "WF_STG_CD",
-                            title: "Stage",
-                            width: "100px",
-                            filterable: { multi: true, search: true },
-                            template: "#= gridUtils.stgFullTitleChar(data) #"
-                        }, {
-                            field: "EXPIRE_FLG",
-                            title: "Expired",
-                            width: "100px",
-                            filterable: { multi: true, search: true }
-                        }, {
-                            field: "HAS_ATTACHED_FILES",
-                            title: "Attachments",
-                            width: "80px",
-                            template: "#= gridUtils.hasAttachments(data, 'HAS_ATTACHED_FILES') #"
-                        }
-                    ]
+                $scope.sumGridOptions = function (gridId) {
+                    return {
+                        filterable: true,
+                        resizable: true,
+                        autoBind: false,
+                        dataSource: ds,
+                        sortable: true,
+                        height: 250,
+                        columns: [
+                            {
+                                field: "NOTES",
+                                title: "Tools",
+                                width: "200px",
+                                locked: true,
+                                template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                headerTemplate: "<input type='checkbox' ng-click='clkAllItems($event, " + gridId + ")' class='with-font' id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
+                                filterable: false,
+                                sortable: false
+                            }, {
+                                field: "DC_ID",
+                                title: "Deal Id",
+                                width: "120px",
+                                locked: true,
+                                template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "TRKR_NBR",
+                                title: "Tracker Number",
+                                width: "150px",
+                                locked: true,
+                                template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "OBJ_SET_TYPE_CD",
+                                title: "Type",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "START_DT",
+                                title: "Deal Start/End",
+                                width: "170px",
+                                template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "TITLE",
+                                title: "Product",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "REBATE_TYPE",
+                                title: "Rebate Type",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "COST_TEST_RESULT",
+                                title: "Cost Test Result",
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_COST_TEST,
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "MEETCOMP_TEST_RESULT",
+                                title: "Meet Comp Test Result",
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_MEET_COMP,
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "MAX_RPU",
+                                title: "Max RPU",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "DEAL_DESC",
+                                title: "Deal Description",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "WF_STG_CD",
+                                title: "Stage",
+                                width: "100px",
+                                filterable: { multi: true, search: true },
+                                template: "#= gridUtils.stgFullTitleChar(data) #"
+                            }, {
+                                field: "EXPIRE_FLG",
+                                title: "Expired",
+                                width: "100px",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "HAS_ATTACHED_FILES",
+                                title: "Attachments",
+                                width: "80px",
+                                template: "#= gridUtils.hasAttachments(data, 'HAS_ATTACHED_FILES') #"
+                            }
+                        ]
+                    }
                 }
             }
 
@@ -713,7 +731,7 @@
 
         function drawGrid(pt) {
             if ($("#detailGrid_" + pt.DC_ID).length === 0) {
-                var html = "<kendo-grid options='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+                var html = "<kendo-grid options='sumGridOptions(" + pt.DC_ID + ")' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
                 var template = angular.element(html);
                 var linkFunction = $compile(template);
                 linkFunction($scope);
