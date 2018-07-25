@@ -35,11 +35,6 @@
                     label: "not equal to"
                 },
                 {
-                    operator: "!=",
-                    operCode: "ne",
-                    label: "not equal to"
-                },
-                {
                     operator: "<",
                     operCode: "lt",
                     label: "less than"
@@ -387,7 +382,7 @@
             template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
             width: 140
         }, {
-            field: "CHG_EMP_WWID",
+            field: "CHG_EMP_NAME",
             title: "Last Update By",
             type: "string",
             width: 120

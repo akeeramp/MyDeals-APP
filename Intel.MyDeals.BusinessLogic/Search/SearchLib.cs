@@ -334,6 +334,7 @@ namespace Intel.MyDeals.BusinessLogic
                 item["PRC_ST_TITLE"] = decoderById[dcId].PRC_ST_TITLE;
                 item["CHG_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CHG_DTM.ToString());
                 item["CHG_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CHG_EMP_WWID;
+                item["CHG_EMP_NAME"] = decoderById[dcId].WIP_DEAL_CHG_EMP_NAME;
                 item["CRE_DTM"] = DateTime.Parse(decoderById[dcId].WIP_DEAL_CRE_DTM.ToString());
                 item["CRE_EMP_WWID"] = decoderById[dcId].WIP_DEAL_CRE_EMP_WWID;
                 item["CRE_EMP_NAME"] = decoderById[dcId].WIP_DEAL_CRE_EMP_NAME;
