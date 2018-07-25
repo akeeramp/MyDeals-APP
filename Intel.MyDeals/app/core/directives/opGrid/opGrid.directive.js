@@ -1157,11 +1157,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                 } else {    //All other multi-dim editors
+                    var dim_base = "20___";
+                    var dim_index = 0;  //start with dim 0 - the primary product
                     var model = options.model[options.field];
-                    for (var key in model) {
-                        if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid" && key.indexOf("_____") < 0) {     //skio non-dim keys and also skip the negative (5-underscores) dim keys
-                            el += $scope.createEditEl(options.field, field.uiType, key, field.format);
-                        }
+                    while (model.hasOwnProperty(dim_base + dim_index)) {
+                        el += $scope.createEditEl(options.field, field.uiType, dim_base + dim_index, field.format);
+                        dim_index++;
                     }
                 }
 
