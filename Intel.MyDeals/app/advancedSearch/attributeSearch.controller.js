@@ -332,6 +332,14 @@
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE"
             }, {
+                field: "TRKR_NBR",
+                title: "Tracker #",
+                type: "string",
+                width: 210,
+                dimKey: 20,
+                filterable: "objFilter",
+                template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
+            }, {
                 field: "CAP",
                 title: "CAP",
                 type: "money",
@@ -465,6 +473,11 @@
                 lookupText: "DROP_DOWN",
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
+            }, {
+                field: "GEO_COMBINED",
+                title: "Geo",
+                type: "string",
+                width: 100
             }, {
                 field: "TOTAL_DOLLAR_AMOUNT",
                 title: "Total Dollar Amount",
