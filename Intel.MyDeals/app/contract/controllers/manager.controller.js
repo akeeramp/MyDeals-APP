@@ -10,9 +10,9 @@
     SetRequestVerificationToken.$inject = ['$http'];
 
 
-    managerController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal'];
+    managerController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$location'];
 
-    function managerController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal) {
+    function managerController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $location) {
 
         var root = $scope.$parent;	// Access to parent scope
         $scope.root = root;
@@ -1179,11 +1179,18 @@
             e.stopPropagation();
         });
 
-
         $scope.refreshContract = function () {
             root.refreshContractData();
             $scope.LAST_COST_TEST_RUN_DSPLY = '&nbsp;';
         }
+
+        if ($location.url().split('searchTxt=').length > 1) {
+            var sTxt = $location.url().split('searchTxt=')[1];
+            var decodedTxt = $('<div/>').html(sTxt).text();
+            decodedTxt = decodeURIComponent((decodedTxt + '').replace(/\+/g, '%20'));
+            $scope.titleFilter = decodedTxt;
+        }
+
         $scope.clearFilter();
         $scope.calcNeedToRunStatus();
 

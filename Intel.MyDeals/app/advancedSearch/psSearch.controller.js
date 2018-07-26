@@ -66,7 +66,7 @@
             // Found it... redirect
             var url = "/Contract#/manager/" + response.data.ContractId;
             if (window.usrRole === "DA") {
-                url += "/summary";
+                url += "/summary?searchTxt=" + response.data.PricingStrategyTitle;
             } else if (response.data.PricingTableId > 0) {
                 url += "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId + "/wip";
             }

@@ -102,7 +102,8 @@ namespace Intel.MyDeals.BusinessLogic
             new List<int>
             {
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                Attributes.CUST_MBR_SID.ATRB_SID
+                Attributes.CUST_MBR_SID.ATRB_SID,
+                Attributes.TITLE.ATRB_SID
             });
 
             DcPath dcPath = new DcPath();
@@ -116,21 +117,24 @@ namespace Intel.MyDeals.BusinessLogic
             dcPath.CustMbrSid = myDealsData[OpDataElementType.CNTRCT].AllDataElements
                 .Where(s => s.AtrbCd == AttributeCodes.CUST_MBR_SID)
                 .Select(s => int.Parse(s.AtrbValue.ToString())).FirstOrDefault();
-
+            
             while (opDataElementType != OpDataElementType.ALL_OBJ_TYPE)
             {
                 switch (opDataElementType)
                 {
                     case OpDataElementType.CNTRCT:
                         dcPath.ContractId = dcId;
+                        dcPath.ContractTitle = myDealsData[OpDataElementType.CNTRCT].AllDataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
                         break;
                     case OpDataElementType.PRC_ST:
                         dcPath.PricingStrategyId = dcId;
                         if (dcPath.PricingTableId == 0)
                             dcPath.PricingTableId = myDealsData[OpDataElementType.PRC_TBL].AllDataElements.Where(s => s.DcParentID == dcId).Select(s => s.DcID).FirstOrDefault();
+                        dcPath.PricingStrategyTitle = myDealsData[OpDataElementType.PRC_ST].AllDataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
                         break;
                     case OpDataElementType.PRC_TBL:
                         dcPath.PricingTableId = dcId;
+                        dcPath.PricingTableTitle = myDealsData[OpDataElementType.PRC_TBL].AllDataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
                         break;
                     case OpDataElementType.PRC_TBL_ROW:
                         dcPath.PricingTableRowId = dcId;
