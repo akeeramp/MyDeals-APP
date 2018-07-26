@@ -1638,16 +1638,18 @@ gridUtils.initPrdBktDimFilter = function (e, kendoGrid, field) {
 
     var data = kendoGrid.dataSource.data();
     var items = [];
+    var vals = [];
     for (var t = 0; t < data.length; t++) {
         var item = data[t];
         if (item[field] !== undefined) {
             for (var k in item[field]) {
                 if (item[field].hasOwnProperty(k)) {
-                    if (typeof item[field][k] !== 'function' && k.indexOf("20___") >= 0) {
+                    if (typeof item[field][k] !== 'function' && k.indexOf("20___") >= 0 && vals.indexOf(item[field][k]) < 0) {
                         items.push({
                             text: item[field][k],
                             value: item[field][k]
                         });
+                        vals.push(item[field][k]);
                     }
                 }
             }

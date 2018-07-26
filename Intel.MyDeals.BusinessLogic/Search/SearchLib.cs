@@ -444,6 +444,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PS_WF_STG_CD.ATRB_SID,
                 Attributes.RATE.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
+                Attributes.SERVER_DEAL_TYPE.ATRB_SID,
                 Attributes.START_DT.ATRB_SID,
                 Attributes.STRT_VOL.ATRB_SID,
                 Attributes.TITLE.ATRB_SID,
