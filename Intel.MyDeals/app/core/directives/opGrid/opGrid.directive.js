@@ -773,6 +773,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var grid = this;
                     var isDetailTemplate = !!grid.detailTemplate ? 1 : 0;
                     var fieldName = grid.columns[e.container.index() - isDetailTemplate + $scope.numColsLocked].field;
+                    // TODO - Make the tempalte have a "Modeled after" field and replace the next line with that replacment
+                    if (fieldName === "KIT_ECAP") fieldName = "ECAP_PRICE"; // Broken out special purpose field needs to be renamed back to ECAP PRICE
                     if (e.model._behaviors.isReadOnly[fieldName] === true || e.model._behaviors.isHidden[fieldName] === true) {
                         $scope.grid.closeCell();
                     }
