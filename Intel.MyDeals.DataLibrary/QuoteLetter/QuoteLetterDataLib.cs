@@ -103,7 +103,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo)
+        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo, bool forceRegenerateQuoteLetter = false)
         {
             QuoteLetterFile quoteLetterPdfBytes = new QuoteLetterFile();
             var quoteLetterDataList = new List<QuoteLetterData> { quoteLetterDealData };
@@ -114,7 +114,7 @@ namespace Intel.MyDeals.DataLibrary
             else
                 GetDealQuoteLetterData(quoteLetterDataList, 2);
 
-            quoteLetterPdfBytes = GenerateQuoteLetterPDF(quoteLetterDataList[0]);
+            quoteLetterPdfBytes = GenerateQuoteLetterPDF(quoteLetterDataList[0], forceRegenerateQuoteLetter);
             return quoteLetterPdfBytes;
         }
 
