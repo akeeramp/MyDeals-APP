@@ -277,6 +277,7 @@
                 field: "ECAP_PRICE",
                 title: "ECAP Price",
                 template: "#=gridUtils.uiReadonlyDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
+                excelTemplate: "#=gridUtils.uiReadonlyDimExcelControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
                 width: 120
             }, {
                 field: "MAX_RPU",

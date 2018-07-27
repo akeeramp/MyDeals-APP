@@ -105,6 +105,18 @@ gridUtils.uiReadonlyDimControlWrapper = function (passedData, field, dim, format
     }
     return tmplt;
 }
+gridUtils.uiReadonlyDimExcelControlWrapper = function (passedData, field, dim, format) {
+    var tmplt = '';
+    if (passedData[field] === undefined) return tmplt;
+
+    if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
+        return "No Sub KIT";
+    } else {
+        return passedData[field][dim];
+        //tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
+    }
+    //return tmplt;
+}
 
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
