@@ -400,7 +400,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 var objSid = $scope.data["DC_ID"];
                 var objTypeSid = 5;
 
-                var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + customerSid + "/" + objTypeSid + "/" + objSid;
+                var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + customerSid + "/" + objTypeSid + "/" + objSid + "/0";
                 window.open(downloadPath, '_blank', '');
             }
 
