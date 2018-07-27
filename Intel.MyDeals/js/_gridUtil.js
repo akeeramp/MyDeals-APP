@@ -1655,6 +1655,7 @@ gridUtils.initPrdBktDimFilter = function (e, kendoGrid, field) {
             }
         }
     }
+    items = items.sort(function (a, b) { return (a.text > b.text) ? 1 : ((b.text > a.text) ? -1 : 0); });
 
     // Remove default filtering UI
     filterContext.container.off();
