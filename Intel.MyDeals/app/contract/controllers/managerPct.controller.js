@@ -223,6 +223,29 @@
             }
         }
 
+        // Get the hroup header checkbox a unique id
+        function getColumnTemplateByObjType(pt){
+            var template = angular.copy($scope.templates.columns[pt.OBJ_SET_TYPE_CD]);
+            if (template[0].field === "TOOLS") {
+                template[0].headerTemplate = template[0].headerTemplate.replace(/PT_ID/g, pt.DC_ID);
+            }
+            return template;
+        }
+
+        $scope.clkAllItems = function (ev, id) {
+            var isChecked = document.getElementById("chkDealTools_" + id).checked;
+            var grid = $('#detailGrid_' + id).data("kendoGrid");
+            var data = grid.dataSource.view();
+            for (var i = 0; i < data.length; i++) {
+                if (data[i]['items'] !== undefined && data[i]['items'][0] !== undefined) {
+                    data[i]['items'][0]['isLinked'] = isChecked;
+                    $(".lnkChk_" + data[i]['items'][0].DC_ID).each(function () {
+                        this.checked = isChecked;
+                    });
+                }
+            }
+        }
+
         $scope.togglePt = function (ps, pt) {
 
             if (!!!pt.isPtCollapsed) {
@@ -236,11 +259,19 @@
 
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
                     //$scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
-
                     var response = e.data["CostTestDetailItems"];
-
                     var rollupPctBydeal = {};
                     for (var j = 0; j < response.length; j++) {
+
+                        response[j]['DC_ID'] = response[j]["DEAL_ID"];
+                        response[j]['PS_WF_STG_CD'] = pt.PS_WF_STG_CD;
+
+                        // Copy PS actions to deal to deal tools to work
+                        response[j]['_actionsPS']= ps._actions;
+
+                        // Deal id is not parent id here..Make deal tool directive work assigning this value
+                        response[j]['DC_PARENT_ID'] = response[j]["DEAL_ID"];
+
                         $scope.dealPtIdDict[response[j]["DEAL_ID"]] = pt.DC_ID;
                         var isOverridden = response[j]["COST_TEST_OVRRD_FLG"] === "Yes";
                         var pct = isOverridden ? "Pass" : response[j]["PRC_CST_TST_STS"];
@@ -335,7 +366,7 @@
                         height: 250,
                         filterable: true,
                         resizable: true,
-                        columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
+                        columns: getColumnTemplateByObjType(pt),
                         dataBound: function (e) {
 
                             var grid = this;
@@ -409,7 +440,7 @@
 
 
                             $timeout(function () {
-                                $scope.setOverrideMarkup(ps,pt);
+                                $scope.setOverrideMarkup(ps, pt);
                             }, 100);
 
                         }
@@ -434,11 +465,9 @@
                     }, 2000);
                 }
             );
-
-
         }
 
-        $scope.setOverrideMarkup = function(ps,pt) {
+        $scope.setOverrideMarkup = function (ps, pt) {
             var grid = $("#detailGrid_" + pt.DC_ID).data("kendoGrid");
             if (grid === undefined || grid === null) return;
 
@@ -531,7 +560,7 @@
 
             dataItem["DEAL_GRP_EXCLDS"] = "calc";
             dataItem["DEAL_GRP_CMNT"] = cmnt;
-            
+
             var modal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: 'app/contract/partials/ptModals/excludeDealGroupMultiSelectModal.html',
@@ -553,14 +582,14 @@
                     enableCheckbox: function () {
                         return false;
                     },
-                    excludeOutliers: function() {
+                    excludeOutliers: function () {
                         return true;
                     }
                 }
             });
 
             modal.result.then(
-                function (result) {},
+                function (result) { },
                 function () {
                 });
         }
@@ -597,13 +626,24 @@
             return gridPctUtils.getResultMapping(result, flg, '', '', className, style);
         }
 
-        $scope.gotoExclude = function() {
+        $scope.gotoExclude = function () {
             $state.go('contract.grouping');
         }
 
         // Global Settings
         var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG || !dataItem.COST_TEST_OVRRD_CMT', 'dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_CMT', '', 'font-size: 20px !important;', INCMPL_COST_TEST_RSN) #" : "&nbsp;";
         $scope.cellColumns = {
+            "TOOLS": {
+                field: "TOOLS",
+                title: "Tools",
+                width: "150px",
+                locked: true,
+                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-file-attachment-enabled='false' is-history-enabled='true' is-comment-enabled='false' is-editable='true' is-quote-letter-enabled='false' is-delete-enabled='false'></deal-tools>",
+                headerTemplate: "<input type='checkbox' ng-click='clkAllItems($event, PT_ID)' class='with-font' id='chkDealTools_PT_ID' /><label for='chkDealTools_PT_ID'>Tools</label>",
+                filterable: false,
+                sortable: false,
+                parent: true,
+            },
             "PRC_CST_TST_STS": {
                 field: "PRC_CST_TST_STS",
                 title: "PCT Result",
@@ -827,6 +867,7 @@
                 "ECAP": {
                     id: "DEAL_ID",
                     fields: {
+                        TOOLS: { type: "string" },
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
@@ -855,6 +896,7 @@
                 "KIT": {
                     id: "DEAL_ID",
                     fields: {
+                        TOOLS: { type: "string" },
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
@@ -883,6 +925,7 @@
                 "VOL_TIER": {
                     id: "DEAL_ID",
                     fields: {
+                        TOOLS: { type: "string" },
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
@@ -909,6 +952,7 @@
                 "PROGRAM": {
                     id: "DEAL_ID",
                     fields: {
+                        TOOLS: { type: "string" },
                         PRC_CST_TST_STS: { type: "string" },
                         DEAL_ID: { type: "number" },
                         PRODUCT: { type: "string" },
@@ -929,12 +973,14 @@
                         CNSMPTN_RSN: { type: "string" },
                         PROG_PMT: { type: "string" },
                         DEAL_GRP_CMNT: { type: "string" },
-                        LAST_COST_TEST_RUN: { type: "string" }
+                        LAST_COST_TEST_RUN: { type: "string" },
+                        WF_STG_CD: { type: 'string' }
                     }
                 }
             },
             "columns": {
                 "ECAP": [
+                    $scope.cellColumns["TOOLS"],
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
@@ -960,6 +1006,7 @@
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ],
                 "KIT": [
+                    $scope.cellColumns["TOOLS"],
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
@@ -985,6 +1032,7 @@
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ],
                 "VOL_TIER": [
+                    $scope.cellColumns["TOOLS"],
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],
@@ -1008,6 +1056,7 @@
                     $scope.cellColumns["LAST_COST_TEST_RUN"]
                 ],
                 "PROGRAM": [
+                    $scope.cellColumns["TOOLS"],
                     $scope.cellColumns["PRC_CST_TST_STS"],
                     $scope.cellColumns["DEAL_ID"],
                     $scope.cellColumns["PRODUCT"],

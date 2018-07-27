@@ -13,12 +13,15 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             isFileAttachmentEnabled: '<?',
             isHistoryEnabled: '<?',
             isQuoteLetterEnabled: '<?',
-            isDeleteEnabled: '<?'
+            isDeleteEnabled: '<?',
+            isSplitEnabled: '<?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
-
+            if ($scope.dataItem.PS_WF_STG_CD === undefined && $scope.dataItem.items !== undefined) {
+                $scope.dataItem = $scope.dataItem.items[0];
+            }
             if (!$scope.isEditable || $scope.isEditable === "false" || $scope.isEditable === false || $scope.dataItem.PS_WF_STG_CD === "Cancelled") {
                 $scope.editable = (1 === 2);
             }
@@ -39,6 +42,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.isHistoryEnabled = $scope.assignVal("isHistoryEnabled", true);
             $scope.isQuoteLetterEnabled = $scope.assignVal("isQuoteLetterEnabled", true);
             $scope.isDeleteEnabled = $scope.assignVal("isDeleteEnabled", true);
+            $scope.isSplitEnabled = $scope.assignVal("isSplitEnabled", true);
 
             if ($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') $scope.isQuoteLetterEnabled = false;
 
@@ -50,7 +54,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.rootScope = rootScope;
 
             $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false: rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
-          
+
             if ($scope.rootScope.C_DEL_DEALS === false) {
                 $scope.isDeleteEnabled = false;
             }
@@ -278,7 +282,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
                 var fVal = $scope.getFileValue(dataItem);
 
-                //Forces datasource web API call 
+                //Forces datasource web API call
                 $scope.attachmentsDataSource.read();
                 if (fVal === "HasFile" || fVal === "AddFile") $scope.openAttachments();
             }
@@ -330,12 +334,12 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 transport: {
                     read: {
                         url: $scope.getAttachmentDatasourceURL(),
-                        dataType: "json"                        
+                        dataType: "json"
                     }
                 },
                 requestStart: function () {
                     kendo.ui.progress($("#attachmentsGrid"), true);
-                },               
+                },
                 requestEnd: function (e) {
                     var view = e.response;
 
@@ -414,7 +418,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     closable: false,
                     modal: true,
                     open: function(e) {
-                        
+
                     },
                     actions: [
                         {
@@ -447,7 +451,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     rootScope.unGroupPricingTableRow($scope.dataItem);
                 });
             }
-         
+
             $scope.getLinkedIds = function (model) {
                 var ids = [];
                 if (model.isLinked !== undefined && model.isLinked) {
@@ -506,7 +510,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     return;
                 }
                 kendo.confirm("<h4>Would you like to cancel this deal?</h4><p>This will set the deal stage to Canceled.</p>").then(function () {
-                    rootScope.actionWipDeal($scope.dataItem, 'Cancel'); 
+                    rootScope.actionWipDeal($scope.dataItem, 'Cancel');
                 });
             }
 

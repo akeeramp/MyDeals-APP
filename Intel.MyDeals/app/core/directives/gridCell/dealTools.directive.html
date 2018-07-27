@@ -1,31 +1,35 @@
 ﻿
 <div class="dealTools">
-    
+
     <div class="dirtyTip" ng-show="dataItem._dirty" title="This deal has been modified"></div>
 
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
-    
+
     <!-- Checkbox -->
     <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
-        <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
+        <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
     </div>
 
     <!-- Split group icon -->
-    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
-        <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
+    <div ng-if="isSplitEnabled">
+        <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
+            <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
+        </div>
+        <div class='fl md-icon-disabled rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
+            <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
+               title="You cannot split this group while it is being re-dealed."></i>
+        </div>
     </div>
-    <div class='fl md-icon-disabled rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
-        <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
-           title="You cannot split this group while it is being re-dealed."></i>
-    </div>
-    
 
     <!-- Notes icon -->
-    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
-        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
-    </div>
-    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
-        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
+    <div ng-if="isCommentEnabled">
+        <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
+            <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
+        </div>
+
+        <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
+            <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
+        </div>
     </div>
 
     <!-- History icon -->

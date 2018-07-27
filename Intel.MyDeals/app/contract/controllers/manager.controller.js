@@ -425,6 +425,15 @@
             return ids;
         }
 
+        $scope.clkAllItem = function (ev, id) {
+            var isChecked = document.getElementById("ptId_" + id + "chkDealTools").checked;
+            var grid = $('#detailGrid_' + id).data("kendoGrid");
+            var data = grid.dataSource.view();
+            for (var i = 0; i < data.length; i++) {
+                data[i].isLinked = isChecked;
+            }
+        }
+
         $scope.togglePt = function (ps, pt) {
 
             $("#sumWipGrid_" + pt.DC_ID).html("<div style='margin: 10px;'><ul class='fa-ul'><li><i class='fa-li fa fa-spinner fa-spin'></i>Loading...</li></ul></div>");
@@ -468,15 +477,6 @@
                     }
                 });
 
-                $scope.clkAllItems = function (ev, id) {
-                    var isChecked = document.getElementById("ptId_" + id + "chkDealTools").checked;
-                    var grid = $('#detailGrid_' + id).data("kendoGrid");
-                    var data = grid.dataSource.view();
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].isLinked = isChecked;
-                    }
-                }
-
                 $scope.sumGridOptions = function (gridId) {
                     return {
                         filterable: true,
@@ -491,8 +491,8 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
-                                headerTemplate: "<input type='checkbox' ng-click='clkAllItems($event, "+ gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
+                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, "+ gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
                             }, {
@@ -643,8 +643,8 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
-                                headerTemplate: "<input type='checkbox' ng-click='clkAllItems($event, " + gridId + ")' class='with-font' id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
+                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
                             }, {

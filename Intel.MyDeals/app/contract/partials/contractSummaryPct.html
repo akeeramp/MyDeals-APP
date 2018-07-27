@@ -2,6 +2,7 @@
 <div ng-include="'app/contract/partials/ptModals/pctOverrideReasonModal.html'"></div>
 <div ng-include="'app/contract/partials/ptModals/pctGroupModal.html'"></div>
 <div ng-include="'app/contract/partials/ptModals/selectPricingTableModal.html'"></div>
+<div ng-include="'app/contract/partials/ptModals/dealTimelineModal.html'"></div>
 
 <div id="sum-wrapper">
     <div id="sum-header">
@@ -16,7 +17,7 @@
             </ul>
             <input ng-model="pctFilter" type="hidden" />
         </div>
-        
+
         <div class="sum-filter-bar toolbar">
             <table style="width: 100%;">
                 <tr>
@@ -60,9 +61,9 @@
                 <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal Type</td>
             </tr>
         </table>
-        <hr />            
+        <hr />
     </div>
-    
+
     <div id="sum-container">
         <div class="sum-main-body">
             <div class="sum-main-container">
@@ -84,7 +85,7 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                     <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL | filter: customFilter">
                         <table style="width: 100%;">
                             <tr>
@@ -685,5 +686,15 @@
         font-size: 20px;
         margin: 0;
         padding: 0;
+    }
+    .gridStatusMarker {
+        height: 100%;
+        width: 16px;
+        color: #000000;
+        background-color: #cccccc;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 2px 6px 7px;
+        text-align: center;
     }
 </style>
