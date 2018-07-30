@@ -13,6 +13,8 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
             endDate: '=',
             customers: '=',
             customFilter: '=',
+            layoutName: '=',
+            defaultColumnOrderArr: '=',
             operatorSettings: '=',
             attributeSettings: '='
         },
@@ -22,6 +24,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
 
 
             $scope.root = $scope.$parent;
+            $scope.$storage = $localStorage;
 
             $scope.data = [];
             $scope.optionsDetails = {};
@@ -145,6 +148,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                         sortable: item.sortable,
                         template: item.template,
                         excelTemplate: item.excelTemplate,
+                        headerTemplate: item.headerTemplate,
                         bypassExport: item.bypassExport,
                         lookupValue: item.lookupValue,
                         lookupText: item.lookupText,
@@ -157,6 +161,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
 
             $scope.$on('reload-search-dataSource', function (event, args) {
                 if (args !== undefined && args !== null && args.columns !== undefined) $scope.colsShowHide(args.columns);
+                $scope.customLayout();
                 $scope.loadData();
             });
 
@@ -267,6 +272,91 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                 });
 
             }
+
+
+
+
+
+
+            $scope.reorderGridColumns = function (columnOrderArr) {
+                for (var c = 0; c < columnOrderArr.length; c++) {
+                    var fieldToMatch = columnOrderArr[c];
+
+                    for (var i = 0; i < $scope.grid.columns.length; i++) {
+                        if ($scope.grid.columns[i]["field"] === fieldToMatch) {
+                            $scope.grid.reorderColumn(c, $scope.grid.columns[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            $scope.defaultLayout = function () {
+                $timeout(function () {
+                    $scope.reorderGridColumns($scope.defaultColumnOrderArr);
+                }, 10);
+            }
+
+            $scope.applyCustomLayoutToGrid = function (data) {
+                $scope.defaultColumnOrderArr = $scope.getColumnOrder();
+
+                var customColumnOrderArr = [];
+                var columnOrderSetting = data.filter(function (obj) {
+                    return obj.PRFR_KEY === "Layout";
+                });
+                if (columnOrderSetting && columnOrderSetting.length > 0) {
+                    customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
+                }
+
+                $scope.reorderGridColumns(customColumnOrderArr);
+            }
+
+            $scope.getColumnOrder = function () {
+                var columnOrderArr = [];
+                for (var i = 0; i < $scope.grid.columns.length; i++) {
+                    columnOrderArr.push($scope.grid.columns[i]["field"]);
+                }
+                return columnOrderArr;
+            }
+
+            $scope.customLayout = function () {
+                debugger;
+                if ($scope.$storage["AdvancedSearch" + $scope.layoutName] !== undefined) {
+                    $scope.applyCustomLayoutToGrid($scope.$storage["AdvancedSearch" + $scope.layoutName]);
+                    return;
+                }
+
+                userPreferencesService.getActions("AdvancedSearch", $scope.layoutName)
+                    .then(function (response) {
+                        $scope.$storage["AdvancedSearch" + $scope.layoutName] = response.data;
+                        if (response.data && response.data.length > 0) {
+                            $scope.applyCustomLayoutToGrid(response.data);
+                        }
+                    }, function (response) {
+                        logger.error("Unable to get Custom Layout.", response, response.statusText);
+                    });
+            }
+
+            $scope.saveLayout = function () {
+                var columnOrderArr = [];
+                for (var i = 0; i < $scope.grid.columns.length; i++) {
+                    columnOrderArr.push($scope.grid.columns[i]["field"]);
+                }
+
+                userPreferencesService.updateAction(
+                    "AdvancedSearch",
+                    $scope.layoutName,
+                    "Layout",
+                    JSON.stringify(columnOrderArr)).then(function (response) {
+                        $scope.$storage["AdvancedSearch" + $scope.layoutName] = undefined;
+                    }, function (response) {
+                        logger.error("Unable to save Custom Layout.", response, response.statusText);
+                    });
+            }
+
+
+
+
 
             $scope.columnMenu = {
                 openOnClick: true,

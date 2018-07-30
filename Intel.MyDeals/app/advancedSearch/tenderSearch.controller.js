@@ -9,10 +9,10 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderSearchController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$location'];
+    tenderSearchController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$location', 'userPreferencesService'];
 
-    function tenderSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $location) {
-
+    function tenderSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $location, userPreferencesService) {
+        
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
 
         $scope.$root.pc = null;
@@ -109,16 +109,36 @@
             ]
         }
 
+        $scope.layoutName = "TenderManager";
+
+        $scope.clkAllTenderItem = function(event) {
+            var isChecked = document.getElementById("chkAllBox").checked;
+            var grid = $("#attributeGrid .k-grid").data("kendoGrid");
+            var data = grid.dataSource.view();
+            var firstVal = null;
+            for (var i = 0; i < data.length; i++) {
+                var dataItem = data[i];
+
+                if (dataItem.BID_ACTNS !== undefined && dataItem.BID_ACTNS.length > 1 && dataItem["WF_STG_CD"] !== undefined && dataItem["WF_STG_CD"] !== "no access") {
+                    if (firstVal === null) {
+                        firstVal = dataItem["WF_STG_CD"];
+                    } 
+                    if (firstVal === dataItem["WF_STG_CD"]) data[i].isLinked = isChecked;
+                }
+
+            }
+        }
+
         $scope.attributeSettings = [
         {
-            field: "DC_ID",
+            field: "CHK",
             title: "&nbsp;",
             type: "number",
             width: 70,
             filterable: false,
             sortable: false,
-            template:
-                "<span id='dealTool_#=data.DC_ID#'><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></span>",
+            template: "<span id='dealTool_#=data.DC_ID#'><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></span>",
+            headerTemplate: "<input type='checkbox' ng-click='root.clkAllTenderItem($event)' class='with-font' id='chkAllBox' /><label for='chkAllBox' style='margin-left: -6px;'>&nbsp;</label>",
             excelTemplate: " ",
             bypassExport: true
         }, {
@@ -394,6 +414,13 @@
             width: 140
         }
         ];
+
+        $scope.defaultColumnOrderArr = [];
+        for (var key in $scope.attributeSettings) {
+            if ($scope.attributeSettings.hasOwnProperty(key)) {
+                $scope.defaultColumnOrderArr.push($scope.attributeSettings[key].field);
+            }
+        }
 
         $scope.options = {
             "messages": {

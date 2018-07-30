@@ -1772,8 +1772,6 @@ gridUtils.removeFilterForField = function(dataSource, field) {
 
 
 
-
-
 function gridTools(model, cols) {
     this.model = model;
     this.cols = cols;

@@ -20,7 +20,7 @@
                     <td style="border: 0 solid transparent !important;">
                         <i class="intelicon-tap skyBlue" aria-hidden="true" style="font-size: 30px !important;"></i>
                     </td>
-                    <td class="hidden-sm hidden-xs" style="padding-left: 0; text-align: left; color: \\#00AEEF; line-height: 1.1em; border: 0 solid transparent;">
+                    <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 0; text-align: left; color: \\#00AEEF; line-height: 1.1em; border: 0 solid transparent;">
                         Actionable<br />Deals Only
                     </td>
                 </tr>
@@ -46,7 +46,7 @@
                             <td style="border: 0px solid transparent;">
                                 <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
-                            <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                            <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Excel<br>Export
                             </td>
                             <td style="border: 0 solid transparent;">
@@ -62,6 +62,27 @@
             </ul>
         </div>
 
+        <div class="fr attrbMenu" style="margin-top: 0;">
+            <ul kendo-menu style="margin-top: -3px;">
+                <li>
+                    <i class="fl intelicon-settings-solid skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
+                    <span class="fl skyBlue hidden-md hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
+                    <i style="font-size: 40px !important; width: 1px !important; color: \\#00AEEF;"></i>
+                    <ul>
+                        <li ng-click="defaultLayout()">
+                            <i class="intelicon-dashboard-solid" style="font-size: 18px;"></i> DEFAULT LAYOUT
+                        </li>
+                        <li ng-click="customLayout()" ng-class="{'li-disabled': opOptions.custom === undefined}">
+                            <i class="intelicon-dashboard-outlined" style="font-size: 18px;"></i> CUSTOM LAYOUT
+                        </li>
+                        <li ng-click="saveLayout()">
+                            <i class="intelicon-save-outlined" style="font-size: 18px;"></i> SAVE LAYOUT
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
         <div class="fr">
             <button class="btn btn-sm ssToolbarBtn" ng-click="clearSortingFiltering()" title="Clear all sorting and filtering." style="margin-top: -5px;">
                 <table>
@@ -70,7 +91,7 @@
                             <td style="border: 0px solid transparent;">
                                 <i class="intelicon-cancel-filter-outlined skyBlue" aria-hidden="true" style="font-size: 30px !important"></i>
                             </td>
-                            <td class="hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
+                            <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 2px; text-align: left; color: \\#00AEEF; line-height: 1.2em; border: 0px solid transparent;">
                                 Clear All<br>
                                 Sorting/Filtering
                             </td>
@@ -84,7 +105,7 @@
             <ul kendo-menu k-options="columnMenu" style="margin-top: -3px;">
                 <li>
                     <i class="fl intelicon-view-by-columns skyBlue" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                    <span class="fl skyBlue hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
+                    <span class="fl skyBlue hidden-md hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br />Options</span>
                     <i style="font-size: 40px !important; width: 1px !important; color: \\#00AEEF;"></i>
                     <ul>
                         <li>
@@ -128,6 +149,8 @@
          op-options="options"
          start-date="startDt"
          end-date="endDt"
+         layout-name="layoutName"
+         default-column-order-arr="defaultColumnOrderArr"
          operator-settings="operatorSettings"
          attribute-settings="attributeSettings"></div>
 </div>
@@ -158,6 +181,13 @@
     }
     .attrbMenu .k-state-hover .k-link {
         background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
+    }
+    .attrbMenu .k-state-hover .k-animation-container .k-link {
+        background-image: none, linear-gradient(to bottom, transparent 0px, transparent 100%) !important;
+        color: #000000;
+    }
+    .attrbMenu .k-animation-container .k-state-hover .k-link {
+        color: #000000;
     }
 
     .k-dialog.k-alert .k-dialog-titlebar, .k-dialog.k-confirm .k-dialog-titlebar, .k-dialog.k-prompt .k-dialog-titlebar {
@@ -244,4 +274,52 @@
     .toggleSelect {
         background-color: #eeeeee !important;
     }
+
+    input[type=radio].with-font,
+    input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    input[type=radio].with-font + label:before,
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px;
+    }
+    input[type=radio].with-font:hover + label:before,
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+    input[type=radio].with-font.disabled + label:before,
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+    
+    input[type=radio].with-font:checked + label:before,
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+    }
+    input[type=radio].with-font:focus + label:before,
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color:#C4D600;
+    }
+
 </style>
