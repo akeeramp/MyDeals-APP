@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -82,10 +83,47 @@ namespace Intel.MyDeals.BusinessLogic
                 item["_parentCnt"] = childParent[dcPrntId];
                 if (item["WF_STG_CD"].ToString() == "Draft")
                 item["PS_WF_STG_CD"] = item["WF_STG_CD"].ToString() == "Draft"? psStage: item["WF_STG_CD"];
+                item["sortOrder"] = SortVal(item);
             }
 
-
             return opDcFlatDictList;
+        }
+
+        private int SortVal(OpDataCollectorFlattenedItem item)
+        {
+            int mctVal = 0;
+            int pctVal = 0;
+
+            string mct = item["MEETCOMP_TEST_RESULT"].ToString().ToUpper();
+            string pct = item["COST_TEST_RESULT"].ToString().ToUpper();
+
+            switch (mct)
+            {
+                case "FAIL":
+                    mctVal = 3;
+                    break;
+                case "INCOMPLETE":
+                    mctVal = 2;
+                    break;
+                case "PASS":
+                    mctVal = 1;
+                    break;
+            }
+
+            switch (pct)
+            {
+                case "FAIL":
+                    pctVal = 3;
+                    break;
+                case "INCOMPLETE":
+                    pctVal = 2;
+                    break;
+                case "PASS":
+                    pctVal = 1;
+                    break;
+            }
+
+            return mctVal + pctVal;
         }
     }
 }

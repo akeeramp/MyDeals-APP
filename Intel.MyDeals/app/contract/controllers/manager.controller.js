@@ -474,7 +474,8 @@
                     },
                     requestEnd: function (e) {
                         drawGrid(pt);
-                    }
+                    },
+                    sort: { field: "sortOrder", dir: "desc" }
                 });
 
                 $scope.sumGridOptions = function (gridId) {
