@@ -320,7 +320,6 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
             }
 
             $scope.customLayout = function () {
-                debugger;
                 if ($scope.$storage["AdvancedSearch" + $scope.layoutName] !== undefined) {
                     $scope.applyCustomLayoutToGrid($scope.$storage["AdvancedSearch" + $scope.layoutName]);
                     return;
