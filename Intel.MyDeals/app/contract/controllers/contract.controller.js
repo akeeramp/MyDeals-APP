@@ -1385,6 +1385,9 @@
                 var inpt = $("#inptPrcTitle");
                 if (inpt.length > 0 && inpt.position() !== undefined) {
                     var t = inpt.position().top + inpt.height() + 4;
+                    $("#divHelpAddPs").css({
+                        display: "inline"
+                    });
                     $("#divHelpAddPs").animate({
                         opacity: 1,
                         top: t
