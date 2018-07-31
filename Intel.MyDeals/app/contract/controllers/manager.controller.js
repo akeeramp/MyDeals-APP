@@ -389,9 +389,15 @@
             }
             $scope.updateAtrbValue("WIP_DEAL", ids, fieldName, dataItem[fieldName]);
         });
+
         $scope.$on('refreshContractDataComplete', function (event) {
             $scope.calcNeedToRunStatus();
         });
+
+        $scope.$on('actionPricingStrategyComplete', function (event) {
+            $scope.canEmailIcon = true;
+        });
+
 
         $scope.calcNeedToRunStatus = function () {
             root.enablePCT = false;

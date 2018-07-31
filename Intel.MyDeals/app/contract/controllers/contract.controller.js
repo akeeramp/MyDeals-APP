@@ -1653,6 +1653,7 @@
 
                     $timeout(function () {
                         $scope.$broadcast('refresh');
+                        $scope.$broadcast('actionPricingStrategyComplete');
                         $("#wincontractMessages").data("kendoWindow").open();
                         $scope.refreshContractData();
                         $scope.setBusy("", "");
