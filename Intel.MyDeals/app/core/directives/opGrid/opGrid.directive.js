@@ -1409,7 +1409,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false) {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
-                        dataItem.set(newField, newValue);
+                        if (dataItem[newField] !== newValue) dataItem.set(newField, newValue);
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
                 }
