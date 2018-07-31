@@ -114,7 +114,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (arFilterClauses[f].IndexOf("WIP_DEAL_WF_STG_CD") >= 0)
                 {
-                    arFilterClauses[f] = $"({arFilterClauses[f]} OR {arFilterClauses[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")})";
+                    arFilterClauses[f] = $"({arFilterClauses[f]} OR (WIP_DEAL_WF_STG_CD = 'Draft' AND {arFilterClauses[f].Replace("WIP_DEAL_WF_STG_CD", "WIP_DEAL_PS_WF_STG_CD")}))";
                 }
             }
             string rtn = string.Join(" and ", arFilterClauses);
