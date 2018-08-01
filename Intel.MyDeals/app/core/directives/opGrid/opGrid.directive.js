@@ -2447,6 +2447,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var gData = $scope.contractDs.data();
                     for (var i = 0; i < gData.length; i++) {
                         if (gData[i].QLTR_BID_GEO !== undefined && Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
+                        if (gData[i].DEAL_SOLD_TO_ID !== undefined && Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
                     }
 
                     $scope.contractDs.sync();
