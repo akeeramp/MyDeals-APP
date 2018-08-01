@@ -257,8 +257,7 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                 gridUtils.dsToExcel($scope.grid, $scope.ds, "Search Export", true);
             }
 
-            $scope.saveToExcel = function () {
-                var newDsOptions = $scope.getDsOptions();
+            $scope.saveToExcelBase = function (newDsOptions) {
                 newDsOptions.pageSize = 'all';
                 newDsOptions.requestStart = function (e) {
                     $scope.setBusy($scope.opOptions.busy.export.title, $scope.opOptions.busy.export.message);
@@ -270,6 +269,20 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                 ds.fetch(function () {
                     gridUtils.dsToExcel($scope.grid, this, "Search Export", false);
                 });
+            }
+
+            $scope.saveToExcel = function () {
+                var newDsOptions = $scope.getDsOptions();
+                
+                if ($scope.ds._total !== undefined && $scope.ds._total >= 5000) {
+                    kendo.confirm("You are exporting a rather large amount of data (" + $scope.ds._total + " rows).<br\>If you would like to continue, My Deals will only export the first 5000 items.<br\>You might consider narrowing down your search or using BI Reporting.<br\><br\>Would you like to continue?").then(function () {
+                            $scope.$apply(function () {
+                                $scope.saveToExcelBase(newDsOptions);
+                            });
+                        });
+                } else {
+                    $scope.saveToExcelBase(newDsOptions);
+                }
 
             }
 
