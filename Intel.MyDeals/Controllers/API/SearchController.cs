@@ -67,7 +67,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() =>
             {
-                int maxLength = 1000;
+                int maxLength = 5000;
                 if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
 
                 SearchResultPacket rtn = _searchLib.GetNonTenderDealList(new SearchParams
@@ -98,7 +98,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() =>
             {
-                int maxLength = 1000;
+                int maxLength = 5000;
                 if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
 
                 SearchResultPacket rtn = _searchLib.GetTenderDealList(new SearchParams
