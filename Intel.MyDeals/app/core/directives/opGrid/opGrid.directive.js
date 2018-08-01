@@ -1488,6 +1488,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["MAX_RPU"] = args.WIP_DEAL[i]["MAX_RPU"];
                             dataItem["EXPIRE_FLG"] = args.WIP_DEAL[i]["EXPIRE_FLG"];
                             dataItem["_behaviors"] = args.WIP_DEAL[i]["_behaviors"];
+                            dataItem["_dirty"] = false;
+                            dataItem["isLinked"] = false;
                         }
                     }
                 }
