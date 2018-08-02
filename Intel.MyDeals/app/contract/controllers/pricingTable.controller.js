@@ -111,8 +111,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // force a resize event to format page
         //$scope.resizeEvent();
 
-        topbar.hide();
-
         //// Set Pricing Strategy ID and Object
         if (root.curPricingStrategyId !== $stateParams.sid) {
             root.curPricingStrategyId = $stateParams.sid;
@@ -2879,8 +2877,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
-            topbar.show();
-
+            
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
@@ -2890,13 +2887,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 .then(function (response) {
                     pcMt.addPerfTimes(response.data.PerformanceTimes);
                     if ($scope.$root.pc !== null) $scope.$root.pc.add(pcMt.stop());
-                    topbar.hide();
                     if (response.statusText === "OK") {
                         response.data.Data = buildTranslatorOutputObject(invalidProductJSONRows, response.data.Data);
                         cookProducts(currentRowNumber, response.data.Data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
                     }
                 }, function (response) {
-                    topbar.hide();
                     root.setBusy("Validating products...", "Error in translating products");
                     $timeout(function () {
                         root.setBusy("", "");

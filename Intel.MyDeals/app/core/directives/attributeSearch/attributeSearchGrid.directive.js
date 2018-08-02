@@ -412,14 +412,12 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
-                            topbar.hide();
-
+                            
                             document.location.href = "/Contract#/manager/" + data.data;
 
                         },
                         function (response) {
                             logger.error("Could not find the Deal's contract.", response, response.statusText);
-                            topbar.hide();
                         }
                     );
             }

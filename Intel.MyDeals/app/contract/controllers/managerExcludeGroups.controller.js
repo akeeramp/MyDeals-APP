@@ -170,19 +170,15 @@
                     data[i]['END_DT'] = kendo.toString(new Date(data[i]['END_DT']), 'M/d/yyyy hh:mm');
                 }
 
-                topbar.show();
                 root.setBusy("Saving Groupings", "Please wait while we exclude the deals from the groups");
                 objsetService.updateWipDeals($scope.contractData.CUST_MBR_SID, $scope.contractData.DC_ID, data).then(
                     function (results) {
-                        topbar.hide();
                         $scope._dirty = false;
                         $scope.$broadcast('resetOpGridDirtyRows');
 
-                        topbar.show();
                         root.setBusy("Running Cost Test", "Currently running Price Cost Test");
                         objsetService.runPctContract($scope.root.contractData.DC_ID).then(
                             function (e) {
-                                topbar.hide();
                                 $scope.root.refreshContractData();
                                 $timeout(function () {
                                     $scope.root.setBusy("", "");
@@ -203,7 +199,6 @@
                     },
                     function(response) {
                         logger.error("Could not save Deal Exludes.", response, response.statusText);
-                        topbar.hide();
                         root.setBusy("", "");
                     }
                 );

@@ -592,6 +592,8 @@
     <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\help\actions\actions.html" />
     <Content Include="Content\help\actions\actions.png" />
     <Content Include="Content\help\addreq\addreq.html" />
@@ -1648,18 +1650,13 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
-    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\intcAnalytics.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
-    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.1.1.js" />
-    <Content Include="Scripts\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.rainbowJSON.js" />
     <Content Include="Scripts\kendo\2017.R1\angular.min.js" />
@@ -1671,14 +1668,14 @@
     <Content Include="Scripts\kendo\2018.R1\kendo.all.min.js" />
     <Content Include="Scripts\lz-string.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.min.js" />
+    <Content Include="Scripts\Modernizr.js" />
     <Content Include="Scripts\moment-timezone.js" />
-    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
     <Content Include="Scripts\polyfills.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr.min.js" />
-    <Content Include="Scripts\topbar.min.js" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1734,8 +1731,6 @@
     <Content Include="Views\CodingPractices\PresentationMvcController.cshtml" />
     <Content Include="Views\CodingPractices\PresentationCallWebApi.cshtml" />
     <Content Include="Views\Others\Constants.cshtml" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.1.1.min.map" />
     <Content Include="Views\CodingPractices\Logging.cshtml" />
     <Content Include="Views\CodingPractices\ErrorHandling.cshtml" />
     <Content Include="Views\CodingPractices\CodingTools.cshtml" />

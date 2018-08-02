@@ -275,45 +275,6 @@
 
         $scope.deleteContract = function () {
             $scope.root.deleteContract();
-
-            return;
-            // TODO need to check if there are any tracker numbers
-
-            kendo.confirm("Are you sure that you want to delete this contract?").then(function () {
-                $scope.$apply(function () {
-
-                    $scope.setBusy("Deleting...", "Deleting the Contract");
-                    topbar.show();
-                    // Remove from DB first... then remove from screen
-                    objsetService.deleteContract($scope.getCustId(), $scope.contractData.DC_ID).then(
-                        function (data) {
-
-                            if (data.data.MsgType !== 1) {
-                                $scope.setBusy("Delete Failed", "Unable to Deleted the Contract");
-                                $timeout(function () {
-                                    $scope.setBusy("", "");
-                                }, 4000);
-                                return;
-                            }
-
-                            $scope.setBusy("Delete Successful", "Deleted the Contract");
-                            $timeout(function () {
-                                $scope.setBusy("", "");
-                            }, 2000);
-                            topbar.hide();
-
-                            // redirect if focused PT belongs to deleted PS
-                            document.location.href = "/Dashboard#/portal";
-                        },
-                        function (result) {
-                            logger.error("Could not delete the Contract.", result, result.statusText);
-                            topbar.hide();
-                            $scope.setBusy("", "");
-                        }
-                    );
-                });
-            });
-
         }
 
         $scope.summaryFilter = function (ps) {

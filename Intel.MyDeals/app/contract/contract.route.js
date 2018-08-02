@@ -24,7 +24,6 @@
                             resolve: {
                                 contractData: ['$stateParams', 'objsetService', function ($stateParams, objsetService) {
                                     if ($stateParams.cid <= 0) return null;
-                                    topbar.show();
                                     return objsetService.readContract($stateParams.cid);
                                 }],
                                 templateData: ['$stateParams', 'templatesService', function ($stateParams, templatesService) {
@@ -221,7 +220,6 @@
                             resolve: {
                                 pricingTableData: ['$stateParams', 'objsetService', function ($stateParams, objsetService) {
                                     if ($stateParams.pid <= 0) return null;
-                                    topbar.show();
                                     return objsetService.readPricingTable($stateParams.pid);
                                 }]
                             }

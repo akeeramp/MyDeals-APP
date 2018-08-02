@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace Intel.MyDeals
 {
@@ -11,13 +10,8 @@ namespace Intel.MyDeals
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
-
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/jquery-2.2.0.min.js",
+                "~/Scripts/jquery-3.1.1.min.js",
                 "~/Scripts/Angular/1.5.8/angular.min.js",
                 "~/Scripts/kendo/2017.R1/jszip.min.js",
                 "~/Scripts/kendo/2017.R1/kendo.all.min.js",
@@ -26,7 +20,6 @@ namespace Intel.MyDeals
                 "~/Scripts/moment-timezone.js",
                 "~/Scripts/Opaque/OpaqueUtils.js",
                 "~/Scripts/toastr.min.js",
-                "~/Scripts/topbar.min.js",
                 "~/Scripts/jquery.rainbowJSON.js",
                 "~/Scripts/jquery-ui.min.js",
                 "~/js/bootstrap.min.js",
@@ -42,8 +35,7 @@ namespace Intel.MyDeals
                 "~/Scripts/intcAnalytics.js",
                 "~/Scripts/Angular/clipboard.min.js",
                 "~/Scripts/Angular/ngclipboard.min.js",
-                "~/Scripts/modernizr-2.6.2.min.js",
-                "~/Scripts/polyfills.js"
+                "~/Scripts/modernizr-2.6.2.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
