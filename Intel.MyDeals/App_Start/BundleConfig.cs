@@ -22,7 +22,7 @@ namespace Intel.MyDeals
                 "~/Scripts/toastr.min.js",
                 "~/Scripts/jquery.rainbowJSON.js",
                 "~/Scripts/jquery-ui.min.js",
-                "~/js/bootstrap.min.js",
+                "~/Scripts/bootstrap.min.js",
                 "~/Scripts/angular-bootstrap-toggle.js",
                 "~/Scripts/Angular/select.min.js",
                 "~/Scripts/Angular/angular-linq.min.js",
