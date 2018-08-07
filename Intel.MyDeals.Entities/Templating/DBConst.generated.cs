@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/3/2018 8:34:14 AM
+File Updated: 8/7/2018 10:24:31 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2587,6 +2587,8 @@ namespace Intel.MyDeals.Entities {
 	//-- ToolConstantName ---------------------------------------------------------------------------------
 
 	public static class ToolConstantName {
+		public const string NUMBER_2018WW31_OTS = "2018WW31_OTS";
+		public const string ADMIN_MESSAGE = "ADMIN_MESSAGE";
 		public const string AGS_PROVISIONING_MAILING_SUPPORT_LIST = "AGS_PROVISIONING_MAILING_SUPPORT_LIST";
 		public const string AjayTest = "AjayTest";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";

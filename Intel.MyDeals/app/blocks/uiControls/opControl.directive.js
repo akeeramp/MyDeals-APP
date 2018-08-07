@@ -372,7 +372,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         loader.then(function (html) {
             if (element.html() !== "") return;
             if (element.parent().find(".opUiElement").length > 0) return;
-            html = html.replace(/id="{{opCd}}"/g, 'id="' + scope.opCd + '"');
+            html = html.data.replace(/id="{{opCd}}"/g, 'id="' + scope.opCd + '"');  //html = html.replace(/id="{{opCd}}"/g, 'id="' + scope.opCd + '"');
             var x = angular.element(html);
             element.html(x);
             $compile(x)(scope);
