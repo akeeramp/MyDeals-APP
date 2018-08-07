@@ -67,7 +67,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             	scope.values = {
                     transport: {
                     	read: function(e) {
-                    		// Use dataService to take advantage of ng caching							
+                    		// Use dataService to take advantage of ng caching
                     		dataService.get(scope.opLookupUrl, null, null, true)
 								.then(function (response) {
 									e.success(response.data);
@@ -85,7 +85,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                 var hDS = {
                                     data: serviceData
                                 };
-                                
+
                                 //check first item by default
                                 //hDS.data[0].checked = true;
 
@@ -103,7 +103,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
                                 //flatten service data for use by paired multiselect
                                 serviceData = flattenTreeData(serviceData);
-                                
+
                             }
                             return serviceData;
                         }
@@ -169,12 +169,12 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     return geos;
                 }
             }
-            
+
             scope.setValue = function (val) {
                 if (!!scope.opExtra) {
                     //if extra, scope.value should be an array unless blended
                     if (scope.blend.blended) scope.value = convertFromBlend(scope.value); //convert to unblended format for calculations
-                    
+
                     if (scope.value.indexOf(val) > -1) {
                         //already in values, deselect
                         scope.value.splice(scope.value.indexOf(val), 1);
@@ -185,7 +185,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     }
 
                     if (scope.blend.blended) scope.value = convertToBlend(scope.value); //convert back to blended format
-                    
+
                 } else {
                     scope.value = val;
                 }
@@ -204,7 +204,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         }
 
         if (scope.opType === 'MULTISELECT') {
-              
+
             if (!!scope.value && !Array.isArray(scope.value) && !(typeof scope.value === "object")) {
                 scope.value = scope.value.toString().split(",");
             }
@@ -242,7 +242,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                             if (matches.length > 1) {
                                 //quickfix for Region having same name as Country - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same country name
                                 //for now we select the deepest level node, aka the childless nodes
-                            
+
                                 for (var j = 0; j < matches.length; j++) {
                                     var dataItem = treeview.dataItem(matches[j]);
                                     if (!dataItem.hasChildren) {    //only check nodes that are childless (base level leaf nodes)
@@ -369,7 +369,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         //}).then(function (response) {
         //    element.replaceWith($compile(element.html())(scope));
         //});
-        loader.success(function (html) {
+        loader.then(function (html) {
             if (element.html() !== "") return;
             if (element.parent().find(".opUiElement").length > 0) return;
             html = html.replace(/id="{{opCd}}"/g, 'id="' + scope.opCd + '"');

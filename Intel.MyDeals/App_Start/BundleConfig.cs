@@ -12,7 +12,7 @@ namespace Intel.MyDeals
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                 "~/Scripts/jquery-3.1.1.min.js",
-                "~/Scripts/Angular/1.5.8/angular.min.js",
+                "~/Scripts/Angular/1.6.9/angular.min.js",
                 "~/Scripts/kendo/2017.R1/jszip.min.js",
                 "~/Scripts/kendo/2017.R1/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
@@ -28,7 +28,6 @@ namespace Intel.MyDeals
                 "~/Scripts/Angular/angular-linq.min.js",
                 "~/Scripts/Angular/ngStorage.min.js",
                 "~/Scripts/angular-gridster.min.js",
-                "~/Scripts/angular-confirm.min.js",
                 "~/Scripts/base64-string.js",
                 "~/Scripts/lz-string.min.js",
                 "~/Scripts/bootstrap-switch.min.js",
@@ -39,9 +38,9 @@ namespace Intel.MyDeals
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-           "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
-           , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
-           , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
+           "~/Scripts/Angular/1.6.9/angular-ui-router.min.js"
+           , "~/Scripts/Angular/1.6.9/angular-animate.min.js"
+           , "~/Scripts/Angular/1.6.9/angular-sanitize.min.js"
            , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
            , "~/Scripts/Angular/angular-linq.min.js"
            , "~/Scripts/Angular/angular-filter.min.js"

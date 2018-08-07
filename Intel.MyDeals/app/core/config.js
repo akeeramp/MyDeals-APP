@@ -5,12 +5,24 @@
 
     core.config(Config);
 
-    Config.$inject = ['toastr', '$httpProvider', 'intcAnalyticsProvider'];
+    Config.$inject = ['toastr', '$httpProvider', 'intcAnalyticsProvider', '$sceDelegateProvider', '$qProvider', '$locationProvider', '$compileProvider'];
 
-    function Config(toastr, $httpProvider, intcAnalyticsProvider) {
+    function Config(toastr, $httpProvider, intcAnalyticsProvider, $sceDelegateProvider, $qProvider, $locationProvider, $compileProvider) {
         toastr.options.timeOut = 5000;
         toastr.options.positionClass = 'toast-bottom-right';
         $httpProvider.interceptors.push('progressInterceptor');
+        $locationProvider.hashPrefix('');
+        //$compileProvider.preAssignBindingsEnabled(false);
+
+        $sceDelegateProvider.resourceUrlWhitelist([
+            // Allow same origin resource loads.
+            'self',
+            // Allow loading from our assets domain.  Notice the difference between * and **.
+            'https://appusage.intel.com/**',
+            'https://www.googletagmanager.com/**'
+        ]);
+
+        $qProvider.errorOnUnhandledRejections(false);
 
         intcAnalyticsProvider.setDebugging(true);                   //Optional line - for debugging
         intcAnalyticsProvider.setLocalhostMode(true);               //Optional line - for local dev testing
