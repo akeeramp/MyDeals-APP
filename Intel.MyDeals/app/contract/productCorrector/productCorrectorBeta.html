@@ -36,7 +36,7 @@
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | filter:{exclude: 'I'} | unique:'name'">
-                                <span ng-class="{'strike': p.matchName != '','btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
+                                <span ng-class="{'strike': p.matchName.length != 0,'btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
                                     <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name, p.exclude)">&nbsp;×</span>
                                 </span>
@@ -51,7 +51,7 @@
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | filter:{exclude: 'E'} | unique:'name'">
-                                <span ng-class="{'strike': p.matchName != '','btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
+                                <span ng-class="{'strike': p.matchName.length != 0,'btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
                                     <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name, p.exclude)">&nbsp;×</span>
                                 </span>

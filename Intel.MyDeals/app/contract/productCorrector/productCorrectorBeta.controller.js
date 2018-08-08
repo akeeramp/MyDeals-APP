@@ -465,7 +465,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 },
                 width: "50px",
                 headerTemplate: "&nbsp;",
-                template: '<div ng-if="!((vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID#"></label></div>' +
+                template: '<div ng-if="!((vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID + data.USR_INPUT#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID + data.USR_INPUT#"></label></div>' +
                           '<div ng-if="(vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
             },
             {
