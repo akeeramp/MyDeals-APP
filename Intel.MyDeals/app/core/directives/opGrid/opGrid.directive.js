@@ -186,7 +186,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (cols[c].filterable !== undefined && cols[c].filterable) {
 
                         if (cols[c].filterable === true) {
-                            cols[c].filterable = { "multi": true, search: true };
+                            cols[c].filterable = { multi: true, search: true };
+                            if (cols[c]["field"] == "WF_STG_CD") {
+                                cols[c].filterable = {
+                                    multi: true,
+                                    search: true,
+                                    itemTemplate: function (e) {
+                                        if (e.field == "all") {
+                                            return '<li class="k-item"><label class="k-label"><input type="checkbox" class="k-check-all" value="Select All">Select All</label></li>';
+                                        } else {
+                                            return '<li class="k-item"><label class="k-label"><input type="checkbox" class="" value="#=data.WF_STG_CD#">#=gridUtils.stgFullTitleChar(data)#</label></li>'
+                                        }
+                                    }
+                                };
+                            }
                         }
                     }
                 }

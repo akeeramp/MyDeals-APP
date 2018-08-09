@@ -124,7 +124,7 @@ gridUtils.booleanDisplay = function (passedData, field) {
 
 gridUtils.uiParentControlWrapper = function (dataItem) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="showStage(dataItem)"></div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="showStage(dataItem)"></div>';    //note: opGrid's showStage() calls gridUtils.stgFullTitleChar() in this file
     tmplt += '</div>';
     return tmplt;
 }
