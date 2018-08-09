@@ -34,6 +34,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.isExcludeProd = false;
     vm.DEAL_TYPE = dealType;
     vm.showIncludeExcludeLabel = false;
+    vm.selectedItms = [];
 
     //Deal type checking: make it false if you don't want to show the label in Product(s) not found area.
     if (vm.DEAL_TYPE == "VOL_TIER" || vm.DEAL_TYPE == "PROGRAM") {
@@ -110,7 +111,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                             for (var n = 0; n < pItem.length; n++) {
                                 name.push(pItem[n].HIER_VAL_NM);
                             }
-                            matchName.push(name.length === 0 ? "" : name.length === 1 ? name[0] : name.length + " products");
+                            for (var ii = 0; ii < name.length; ii++) {
+                                matchName.push(name[ii]);
+                            }
+                            
                         }
                     }
 
@@ -412,6 +416,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     function gridDataBound(e) {
         var grid = e.sender;
         var data = grid.dataSource.data();
+        
         if (!data.length) {
             return;
         }
@@ -425,6 +430,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 });
                 expandLink.css({ 'opacity': '0', 'cursor': 'default' });
             }
+            var foundIndex = -1;
+            for (var tempCnt = 0; tempCnt < vm.selectedItms.length; tempCnt++) {
+                if (vm.selectedItms[tempCnt].PRD_MBR_SID == data[item].PRD_MBR_SID && vm.selectedItms[tempCnt].ROW_NM == data[item].ROW_NM) {
+                    $("#prdChk" + vm.selectedItms[tempCnt].PRD_MBR_SID + vm.selectedItms[tempCnt].USR_INPUT).prop('checked', true);
+                    
+                }
+            }
+            
         }
     };
 
@@ -459,7 +472,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             },
             {
                 field: "IS_SEL",
-                filterable: false,
+                filterable: true,
                 sortable: {
                     initialDirection: "desc"
                 },
@@ -729,7 +742,24 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             //Item added from the selected List
             item.matchName.push(name);
-
+            //Added to check Uncheck Checkbox
+            var addSelIndex = -1;
+            vm.selectedItms.some(function (e, i) {
+                if (e.PRD_MBR_SID == id && e.ROW_NM == vm.curRowId) {
+                    addSelIndex = i;
+                    return true;
+                }
+            });
+            if (addSelIndex == -1) {
+                vm.selectedItms.push({
+                    "PRD_MBR_SID": foundItem.PRD_MBR_SID,
+                    "ROW_NM": foundItem.ROW_NM,
+                    "HIER_NM_HASH": foundItem.HIER_NM_HASH,
+                    'USR_INPUT': foundItem.USR_INPUT
+                });
+            } 
+            
+            
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
             foundItem.HIER_VAL_NM = getFullNameOfProduct(foundItem);
@@ -752,8 +782,26 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         }
         else {
             //Item deleted from the selected List
-            var delIndex = item.matchName.indexOf(name);
+            var delIndex = -1;
+            item.matchName.some(function (e, i) {
+                if (e.name == name) {
+                    delIndex = i;
+                    return true;
+                }
+            });
+            //var delIndex = item.matchName.indexOf(name);
             item.matchName.splice(delIndex, 1);
+
+            var delSelIndex = -1;
+            vm.selectedItms.some(function (e, i) {
+                if (e.PRD_MBR_SID == id && e.ROW_NM == vm.curRowId) {
+                    delSelIndex = i;
+                    return true;
+                }
+            });
+            if (delSelIndex > -1) {
+                vm.selectedItms.splice(delSelIndex, 1);
+            }            
 
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
@@ -775,7 +823,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     item.IS_SEL = false;
                 }
             });
-        }
+        }        
     }
 
     function checkForDuplicateProducts(item, lookup) {
