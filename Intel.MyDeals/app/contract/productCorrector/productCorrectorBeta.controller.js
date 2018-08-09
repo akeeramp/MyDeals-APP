@@ -29,6 +29,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.allDone = false;
     vm.curRowDone = false;
     vm.isValidCapDetails = isValidCapDetails;
+    vm.replaceString = replaceString;
     //vm.includeExcludeMode = CorrectorMode;
     vm.isIncludeProd = false;
     vm.isExcludeProd = false;
@@ -337,7 +338,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         vm.numIssueRows = issueRowIds.length;
         vm.totRows = Object.keys(data.ProdctTransformResults).length;
     }
-
+    function replaceString(item) {
+        return "prdChk" + item.PRD_MBR_SID + item.USR_INPUT.toLowerCase().replace(/\s/g, "_").trim();
+    }
     vm.dataSourceProduct = new kendo.data.DataSource({
         transport: {
             read: function (e) {
@@ -433,14 +436,13 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             var foundIndex = -1;
             for (var tempCnt = 0; tempCnt < vm.selectedItms.length; tempCnt++) {
                 if (vm.selectedItms[tempCnt].PRD_MBR_SID == data[item].PRD_MBR_SID && vm.selectedItms[tempCnt].ROW_NM == data[item].ROW_NM) {
-                    $("#prdChk" + vm.selectedItms[tempCnt].PRD_MBR_SID + vm.selectedItms[tempCnt].USR_INPUT).prop('checked', true);
-                    
+                    $("#prdChk" + vm.selectedItms[tempCnt].PRD_MBR_SID + vm.selectedItms[tempCnt].USR_INPUT.toLowerCase().replace(/\s/g, "_").trim()).prop('checked', true);                    
                 }
             }
             
         }
     };
-
+    
     vm.gridOptionsPotential = {
         dataSource: vm.dataSourceProduct,
         filterable: gridConstants.filterable,
@@ -478,7 +480,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 },
                 width: "50px",
                 headerTemplate: "&nbsp;",
-                template: '<div ng-if="!((vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID + data.USR_INPUT#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID + data.USR_INPUT#"></label></div>' +
+                template: '<div ng-if="!((vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="{{vm.replaceString(dataItem)}}" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="{{vm.replaceString(dataItem)}}"></label></div>' +
                           '<div ng-if="(vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
             },
             {
@@ -630,7 +632,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             },
         ]
     }
-
+  
     function getFullNameOfProduct(item) {
         // When a product belongs to two different family, get the full path
         if (item.PRD_ATRB_SID == 7006) {
