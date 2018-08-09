@@ -1775,8 +1775,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 });
 
-                spreadDsSync();
-
                 sheet.batch(function () {
                     if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                         // HACK: fix column formatting for the first row. Unsure why, but these columns will lose formatting sometimes
@@ -1905,7 +1903,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
-            $scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
+            $timeout(function () {
+                $scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
+            });
         }
     }
 
@@ -2877,7 +2877,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
-            
+
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
