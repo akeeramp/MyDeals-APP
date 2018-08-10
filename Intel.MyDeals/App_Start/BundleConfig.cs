@@ -35,7 +35,7 @@ namespace Intel.MyDeals
                 "~/Scripts/Angular/clipboard.min.js",
                 "~/Scripts/Angular/ngclipboard.min.js",
                 "~/Scripts/modernizr-2.6.2.min.js"
-                ));
+                )); 
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
            "~/Scripts/Angular/1.6.9/angular-ui-router.min.js"
