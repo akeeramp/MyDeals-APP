@@ -327,7 +327,7 @@
                                     DSPL_WF_STG_CD: item["WF_STG_CD"]
                                 };
 
-                                var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showDealGroups(" + item["DEAL_ID"] + ", \"" + item["DEAL_GRP_CMNT"] + "\")'>View</div>" : "";
+                                var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showDealGroups(" + item["DEAL_ID"] + ", \"" + item["DEAL_GRP_CMNT"].replace(/'/g," ") + "\")'>View</div>" : "";
                                 val = "<div style='text-align: center;'>" + grp + "</div>";
                             }
 
