@@ -11,12 +11,12 @@ namespace Intel.MyDeals
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/jquery-3.1.1.min.js",
+                "~/Scripts/jquery-3.3.1.min.js",
                 "~/Scripts/Angular/1.6.9/angular.min.js",
                 "~/Scripts/kendo/2017.R1/jszip.min.js",
                 "~/Scripts/kendo/2017.R1/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
-                "~/Scripts/moment.js",
+                "~/Scripts/moment.min.js",
                 "~/Scripts/moment-timezone.js",
                 "~/Scripts/Opaque/OpaqueUtils.js",
                 "~/Scripts/toastr.min.js",
