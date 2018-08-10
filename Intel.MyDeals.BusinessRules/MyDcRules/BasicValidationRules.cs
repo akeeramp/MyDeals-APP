@@ -364,6 +364,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Ceiling Volume Tender Validation",
+                    ActionRule = MyDcActions.CheckCeilingVolume,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="Frontend can't be created without Sold To and Price Grp Code",
                     ActionRule = MyDcActions.CheckFrontendSoldPrcGrpCd,
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),

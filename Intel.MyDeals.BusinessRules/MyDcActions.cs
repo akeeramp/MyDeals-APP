@@ -804,6 +804,30 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckCeilingVolume(params object[]  args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string rType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string cVol = r.Dc.GetDataElementValue(AttributeCodes.VOLUME);
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
+
+            if (rType.ToUpper() == "TENDER")
+            {
+                if (cVol == null || cVol == "")
+                {
+                    de.AddMessage("Ceiling Volume is required for TENDER deals.");
+                    de.IsRequired = true;
+                }
+                if (cVol == "999999999")
+                {
+                    de.AddMessage("Ceiling Volume canot be Blank or Unlimited (999999999) for TENDER deals.");
+                }
+
+            }
+        }
+
         public static void CheckFrontendSoldPrcGrpCd(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
