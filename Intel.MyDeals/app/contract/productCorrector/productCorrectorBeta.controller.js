@@ -850,7 +850,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                         return prod.PRD_MBR_SID !== item.PRD_MBR_SID;
                     });
                     vm.curRowData = vm.curRowData.filter(function (prod) {
-                        return prod.PRD_MBR_SID !== item.PRD_MBR_SID;
+                        return !(prod.PRD_MBR_SID == item.PRD_MBR_SID && prod.USR_INPUT == item.USR_INPUT);
                     });
                     vm.gridOptionsPotential.dataSource.read();
                     var delProduct = false;
