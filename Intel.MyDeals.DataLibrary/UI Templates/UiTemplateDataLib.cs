@@ -1374,6 +1374,32 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 ExcelTemplate = "#=gridUtils.exportKitCalculatedValuesControlWrapper(data, 'subkit', 'rebateBundle')#"
             });
+            items.Add(new UiTemplateContainerItem  // WIP Kit types
+            {
+                Id = 5,
+                AtrbCd = "BACKEND_REBATE",
+                Label = "Backend Rebate",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                Width = 130,
+                Template = "#=gridUtils.uiMathControlWrapper(data, 'CAP', '20___0', 'ECAP_PRICE', '20___0', 'sub', 'currency')#",
+                DataType = "object",
+                Format = "{0:c}",
+                ExcelTemplate = "#=gridUtils.exportMathControlWrapper(data, 'CAP', '20___0', 'ECAP_PRICE', '20___0', 'sub', 'currency')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP Kit types
+            {
+                Id = 5,
+                AtrbCd = "BACKEND_REBATE",
+                Label = "Backend Rebate",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 130,
+                Template = "#=gridUtils.uiMathControlWrapper(data, 'CAP', '20_____1', 'ECAP_PRICE', '20_____1', 'sub', 'currency')#",
+                DataType = "object",
+                Format = "{0:c}",
+                ExcelTemplate = "#=gridUtils.exportMathControlWrapper(data, 'CAP', '20_____1', 'ECAP_PRICE', '20_____1', 'sub', 'currency')#"
+            });
             items.Add(new UiTemplateContainerItem  // WIP Kit types + Dimension by Prod Bucket
             {
                 Id = 3681,
@@ -1520,19 +1546,6 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 Format = "{0:c}",
                 ExcelTemplate = "#=gridUtils.exportDimControlWrapper(data, 'CAP', '20_____1', 'currency')#"
-            });
-            items.Add(new UiTemplateContainerItem  // WIP Kit types
-            {
-                Id = 5,
-                AtrbCd = "BACKEND_REBATE",
-                Label = "Backend Rebate",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                Width = 130,
-                Template = "#=gridUtils.uiMathControlWrapper(data, 'CAP', '20_____1', 'ECAP_PRICE', '20_____1', 'sub', 'currency')#",
-                DataType = "object",
-                Format = "{0:c}",
-                ExcelTemplate = "#=gridUtils.exportMathControlWrapper(data, 'CAP', '20_____1', 'ECAP_PRICE', '20_____1', 'sub', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {

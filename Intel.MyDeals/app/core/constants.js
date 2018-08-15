@@ -195,6 +195,9 @@
                     "ECAP_PRICE": {
                         "Groups": ["Deal Info", "CAP Info"]
                     },
+                    "BACKEND_REBATE": {
+                        "Groups": ["Deal Info"]
+                    },
                     "CAP_INFO": {
                         "Groups": ["Deal Info", "CAP Info"]
                     },
@@ -762,6 +765,9 @@
                     "SUBKIT_REBATE_BUNDLE_DISCOUNT": {
                         "Groups": ["SubKit"]
                     },
+                    "BACKEND_REBATE": {
+                        "Groups": ["Deal Info"]
+                    },
                     "DSCNT_PER_LN": {
                         "Groups": ["Deal Info", "SubKit"]
                     },
@@ -791,9 +797,6 @@
                     },
                     "CAP_KIT": {
                         "Groups": ["Deal Info", "CAP Info"]
-                    },
-                    "BACKEND_REBATE": {
-                        "Groups": ["Deal Info"]
                     },
                     "YCS2_INFO": {
                         "Groups": ["Deal Info"]
