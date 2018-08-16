@@ -1341,7 +1341,7 @@ gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
             colList.push(gridColumns[i].field);
 
             if (gridColumns[i].width !== undefined) {
-                colWidths.push({ width: gridColumns[i].width });
+                colWidths.push({ width: parseInt(gridColumns[i].width )});
             } else {
                 colWidths.push({ autoWidth: true });
             }

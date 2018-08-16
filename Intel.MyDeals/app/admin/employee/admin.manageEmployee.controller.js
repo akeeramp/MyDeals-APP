@@ -1,5 +1,6 @@
 ﻿(function () {
     'use strict';
+
     angular
         .module('app.admin')
         .controller('manageEmployeeController', manageEmployeeController)
@@ -37,16 +38,14 @@
             }, function () { });
         }
 
-        $scope.dataSource = new kendo.data.DataSource({
+        $scope.dataSourceOptions = {
             type: "json",
             transport: {
                 read: function (e) {
                     manageEmployeeService.getEmployeeData()
                         .then(function (response) {
-                            for (var c = 0; c < response.data.length; c++)
-                            {
-                                if (response.data[c].USR_CUST === "")
-                                {
+                            for (var c = 0; c < response.data.length; c++) {
+                                if (response.data[c].USR_CUST === "") {
                                     response.data[c].USR_CUST = "[Please Add Customers]";
                                 }
                                 response.data[c].FULL_NAME = response.data[c].LST_NM + ", " + response.data[c].FRST_NM + " " + response.data[c].MI
@@ -82,13 +81,28 @@
                     }
                 }
             }
-        });
+        };
+        $scope.dataSource = new kendo.data.DataSource($scope.dataSourceOptions);
 
         $scope.clearFilters = function () {
             $("form.k-filter-menu button[type='reset']").trigger("click");
         };
 
+        $scope.exportExcel = function () {
+            var previousPageSize = $scope.dataSource._take;
+            var dataLength = $scope.dataSource._total;
+            $scope.dataSource.pageSize(dataLength); // 'all' didn't work here and blanked out data.
+
+            gridUtils.dsToExcel($scope.grid, $scope.dataSource, "Users Export", true);
+
+            $scope.dataSource.pageSize(previousPageSize);
+        };
+
         $scope.gridOptions = {
+            toolbar: [
+                { text: "", template: kendo.template($("#grid_toolbar_clearbutton").html()) },
+                { text: "", template: kendo.template($("#grid_toolbar_exportexcel").html()) }
+            ],
             dataSource: $scope.dataSource,
             filterable: true, //gridConstants.filterable,
             sortable: true,
@@ -96,13 +110,14 @@
             resizable: true,
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes
+                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
             },
             filter: function (e) {
                 if (e.field == "USR_ROLE") {
                     if (e.filter !== undefined && e.filter !== null) { // Safety check for clearing out set.
                         e.filter.filters.forEach(function (f) {
-                            f.operator = "eq";
+                            //f.operator = "eq";
+                            f.operator = "contains"; // Forced checkable items to reflect into concatonated list as a contains instead of equals
                         })
                     }
                 }
@@ -191,16 +206,17 @@
                 filterable: {
                     multi: true,
                     dataSource: [
-                        { USR_ROLE: "CBA"} ,
-                        { USR_ROLE: "DA"} ,
-                        { USR_ROLE: "FSE"} ,
-                        { USR_ROLE: "Finance"} ,
+                        { USR_ROLE: "CBA"},
+                        { USR_ROLE: "DA" },
+                        { USR_ROLE: "Finance" },
+                        { USR_ROLE: "FSE"},
                         { USR_ROLE: "GA"} ,
-                        { USR_ROLE: "Legal"} ,
-                        { USR_ROLE: "MyDeals SA"} ,
-                        { USR_ROLE: "Net ASP SA"} ,
-                        { USR_ROLE: "RA"} ,
-                        { USR_ROLE: "Rebate Forecast SA"} ,
+                        { USR_ROLE: "Legal" },
+                        { USR_ROLE: "RA" },
+                        { USR_ROLE: "SA" },
+                        { USR_ROLE: "MyDeals SA"},
+                        { USR_ROLE: "Net ASP SA"},
+                        { USR_ROLE: "Rebate Forecast SA"},
                         { USR_ROLE: "WRAP SA"}]
                 },
                 width: "100px",
@@ -290,6 +306,14 @@
         }
 
         $timeout(function () {
+            // Set active indicator filter to default = true
+            $("#grdManageEmployee").data("kendoGrid").dataSource.filter({
+                field: "ACTV_IND",
+                operator: "eq",
+                value: true
+            });
+
+            // If this page passes a WWID, Force filter upon that WWID.
             if ($location.search().id !== undefined) {
                 $("#grdManageEmployee").data("kendoGrid").dataSource.filter({
                     field: "EMP_WWID",
