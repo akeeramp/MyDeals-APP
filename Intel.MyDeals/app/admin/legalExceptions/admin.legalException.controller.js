@@ -84,7 +84,7 @@
                                 required: { message: "* field is required" },
                             }
                         },
-                        IS_DSBL: { editable: true, defaultValue: true, type: "boolean" }
+                        IS_DSBL: { editable: true, defaultValue: false, type: "boolean" }
 						, SCPE: {
 						    type: "string", validation: {
 						        required: { message: "* field is required" }
