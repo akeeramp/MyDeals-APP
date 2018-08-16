@@ -122,6 +122,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     vm.curRowProds.push({
                         "id": p,
                         "name": item,
+                        "anchorName": item,
                         "status": status,
                         "reason": reason,
                         "cnt": cnt,
@@ -159,7 +160,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                                     });
                                     if (result.length > 0) {
                                         var flag = true;
-                                        dataitem[k][r]["IS_SEL"] = 'true';
+                                        dataitem[k][r]["IS_SEL"] = true;
                                     }
                                 }
                             }
@@ -195,6 +196,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 vm.curRowIssues.push({
                     "id": x,
                     "name": vm.curRowProds[x].name,
+                    "anchorName": vm.curRowProds[x].anchorName,
                     "value": vm.curRowProds[x].name,
                     "selected": false,
                     "status": vm.curRowProds[x].status,
@@ -852,6 +854,11 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     vm.curRowData = vm.curRowData.filter(function (prod) {
                         return !(prod.PRD_MBR_SID == item.PRD_MBR_SID && prod.USR_INPUT == item.USR_INPUT);
                     });
+                    for (var aa = 0; aa < vm.curRowIssues.length; aa++) {
+                        if (vm.curRowIssues[aa].anchorName === item.USR_INPUT) {
+                            vm.curRowIssues[aa].cnt = $filter('where')(vm.curRowData, { 'USR_INPUT': item.USR_INPUT }).length;
+                        }                        
+                    }
                     vm.gridOptionsPotential.dataSource.read();
                     var delProduct = false;
                     if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
