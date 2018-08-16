@@ -41,10 +41,13 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
             },
             requestEnd: function (e) {
                 if (!e.response) return;
-
                 var response = e.response;
-                for (var i = 0; i < response.length; i++) {
+                for (var i = response.length - 1; i >= 0; i -= 1) {
                     response[i]["isSelected"] = $scope.curData.indexOf(response[i]["MYDL_PCT_LGL_EXCPT_SID"].toString()) >= 0;
+                    // If not read only then remove the hidden exception
+                    if (!dataItem._readonly && response[i].IS_DSBL) {
+                        response.splice(i, 1);
+                    }
                 }
             }
         },
@@ -62,11 +65,11 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                         +   "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>"
                         + "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# != -1' style='padding-left: 6px;'>"                                //all other legal exceptions get an ordinary checkbox
-                        +   "<input type='checkbox' " + $scope.disabled + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font' ng-class='disabled'/>"
-                        +   "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
+                        + "<input type='checkbox' " + $scope.disabled + " ng-class='{disabled: dataItem.IS_DSBL}' ng-disabled='dataItem.IS_DSBL' ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font' ng-class='disabled'/>"
+                        + "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' title='{{dataItem.IS_DSBL ? \"Exception is disabled for selection. Please contact legal\" : \"\"}}' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>",
                 width: "60px",
-                locked:true
+                locked: true,
             },
             {
                 field: "INTEL_PRD",

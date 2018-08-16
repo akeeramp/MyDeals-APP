@@ -38,6 +38,7 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("APRV_ATRNY", typeof(string));
             this.Columns.Add("DT_APRV", typeof(string));
             this.Columns.Add("ACTV_IND", typeof(bool));
+            this.Columns.Add("IS_DSBL", typeof(bool));
         }
 
         /// <summary>
@@ -67,6 +68,7 @@ namespace Intel.MyDeals.Entities
             r["APRV_ATRNY"] = itm.APRV_ATRNY;
             r["DT_APRV"] = itm.DT_APRV;
             r["ACTV_IND"] = itm.ACTV_IND;
+            r["IS_DSBL"] = itm.IS_DSBL;
             this.Rows.Add(r);
         }
 
@@ -100,6 +102,7 @@ namespace Intel.MyDeals.Entities
                 r["APRV_ATRNY"] = itm.APRV_ATRNY;
                 r["DT_APRV"] = itm.DT_APRV;
                 r["ACTV_IND"] = itm.ACTV_IND;
+                r["IS_DSBL"] = itm.IS_DSBL;
                 this.Rows.Add(r);
             }
         }

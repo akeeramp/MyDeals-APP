@@ -83,7 +83,8 @@
                             validation: {
                                 required: { message: "* field is required" },
                             }
-                        }
+                        },
+                        IS_DSBL: { editable: true, defaultValue: true, type: "boolean" }
 						, SCPE: {
 						    type: "string", validation: {
 						        required: { message: "* field is required" }
@@ -181,6 +182,10 @@
 
         var editNotAllowed = usrRole == "SA" ? 1 : 0;
 
+        $scope.isEditable = function (dataItem) {
+            return editNotAllowed === 1 ? false : dataItem.ACTV_IND && dataItem.USED_IN_DL !== 'Y';
+        }
+
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: true,
@@ -213,7 +218,7 @@
             columns: [
             {
                 command: [
-                       { name: "edit", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                       { name: "edit", template: "<a ng-if='" + !editNotAllowed + "' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
                        { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                 ],
                 width: 100,
@@ -225,6 +230,18 @@
                 template: gridUtils.boolViewer('ACTV_IND'),
                 editor: gridUtils.boolEditor,
                 attributes: { style: "text-align: center;" },
+                editable: $scope.isEditable
+            },
+            {
+                field: "IS_DSBL",
+                width: 115,
+                headerTemplate: "<div class='isRequired'> Hidden </div>",
+                template: gridUtils.boolViewer('IS_DSBL'),
+                editor: gridUtils.boolEditor,
+                attributes: { style: "text-align: center;" },
+                editable: function (dataItem) {
+                    return editNotAllowed === 1 ? false : true;
+                }
             },
             {
                 field: "MYDL_PCT_LGL_EXCPT_SID",
@@ -238,7 +255,8 @@
                 editor: textareaEditor,
                 title: "Intel Product",
                 width: 240,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "SCPE",
@@ -246,7 +264,8 @@
                 editor: textareaEditor,
                 title: "Scope",
                 width: 200,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "PRC_RQST",
@@ -254,7 +273,8 @@
                 title: "Price Request",
                 headerTemplate: "<div class='isRequired'> Price Request </div>",
                 width: 160,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "COST",
@@ -262,7 +282,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Cost </div>",
                 width: 120,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "PCT_LGL_EXCPT_STRT_DT",
@@ -273,7 +294,8 @@
                 filterable: {
                     extra: false,
                     ui: "datepicker"
-                }
+                },
+                editable: $scope.isEditable
             },
             {
                 field: "PCT_LGL_EXCPT_END_DT",
@@ -284,7 +306,8 @@
                 filterable: {
                     extra: false,
                     ui: "datepicker"
-                }
+                },
+                editable: $scope.isEditable
             },
             {
                 field: "FRCST_VOL_BYQTR",
@@ -292,7 +315,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Forecasted Volume By Quarter </div>",
                 width: 190,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "CUST_PRD",
@@ -300,7 +324,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Customer Product </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "MEET_COMP_PRD",
@@ -308,7 +333,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Comp Product </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "MEET_COMP_PRC",
@@ -316,7 +342,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Comp Price </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "BUSNS_OBJ",
@@ -324,7 +351,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Business Object </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "PTNTL_MKT_IMPCT",
@@ -332,7 +360,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
                 width: 180,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "OTHER",
@@ -340,7 +369,8 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Other </div>",
                 width: 120,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "JSTFN_PCT_EXCPT",
@@ -348,28 +378,32 @@
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
                 width: 220,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "RQST_CLNT",
                 title: "Requesting Client",
                 headerTemplate: "<div class='isRequired'> Requesting Client </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "RQST_ATRNY",
                 title: "Requesting Attorney",
                 headerTemplate: "<div class='isRequired'> Requesting Attorney </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "APRV_ATRNY",
                 title: "Approving Attorney",
                 headerTemplate: "<div class='isRequired'> Approving Attorney </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: $scope.isEditable
             },
             {
                 field: "DT_APRV",
@@ -380,14 +414,16 @@
                 filterable: {
                     extra: false,
                     ui: "datepicker"
-                }
+                },
+                editable: $scope.isEditable
             },
             {
                 field: "CHG_EMP_NAME",
                 title: "Entered By",
                 headerTemplate: "<div class='isRequired'> Entered By </div>",
                 width: 150,
-                filterable: { multi: true, search: true }
+                filterable: { multi: true, search: true },
+                editable: false
             },
             {
                 field: "CHG_DTM",
@@ -398,7 +434,8 @@
                 filterable: {
                     extra: false,
                     ui: "datepicker"
-                }
+                },
+                editable: false
             }]
         }
 
@@ -432,13 +469,6 @@
                     });
                     return true;
                 }
-            }
-
-            if (e.data.models[0].USED_IN_DL == "Y") {
-                $scope.$apply(function () {
-                    vm.validationMessage = 'Cannot ' + mode + ' Legal exception in use';
-                });
-                return true;
             }
 
             e.data.models[0].PCT_LGL_EXCPT_STRT_DT = moment(e.data.models[0].PCT_LGL_EXCPT_STRT_DT).format("l");

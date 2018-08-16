@@ -222,6 +222,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DT_APRV = DB.GetReaderOrdinal(rdr, "DT_APRV");
                     int IDX_FRCST_VOL_BYQTR = DB.GetReaderOrdinal(rdr, "FRCST_VOL_BYQTR");
                     int IDX_INTEL_PRD = DB.GetReaderOrdinal(rdr, "INTEL_PRD");
+                    int IDX_IS_DSBL = DB.GetReaderOrdinal(rdr, "IS_DSBL");
                     int IDX_JSTFN_PCT_EXCPT = DB.GetReaderOrdinal(rdr, "JSTFN_PCT_EXCPT");
                     int IDX_MEET_COMP_PRC = DB.GetReaderOrdinal(rdr, "MEET_COMP_PRC");
                     int IDX_MEET_COMP_PRD = DB.GetReaderOrdinal(rdr, "MEET_COMP_PRD");
@@ -252,6 +253,7 @@ namespace Intel.MyDeals.DataLibrary
                             CUST_PRD = (IDX_CUST_PRD < 0 || rdr.IsDBNull(IDX_CUST_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_PRD),
                             DT_APRV = (IDX_DT_APRV < 0 || rdr.IsDBNull(IDX_DT_APRV)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DT_APRV),
                             FRCST_VOL_BYQTR = (IDX_FRCST_VOL_BYQTR < 0 || rdr.IsDBNull(IDX_FRCST_VOL_BYQTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRCST_VOL_BYQTR),
+                            IS_DSBL = (IDX_IS_DSBL < 0 || rdr.IsDBNull(IDX_IS_DSBL)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_DSBL),
                             INTEL_PRD = (IDX_INTEL_PRD < 0 || rdr.IsDBNull(IDX_INTEL_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INTEL_PRD),
                             JSTFN_PCT_EXCPT = (IDX_JSTFN_PCT_EXCPT < 0 || rdr.IsDBNull(IDX_JSTFN_PCT_EXCPT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSTFN_PCT_EXCPT),
                             MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRC),
@@ -317,6 +319,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DT_APRV = DB.GetReaderOrdinal(rdr, "DT_APRV");
                     int IDX_FRCST_VOL_BYQTR = DB.GetReaderOrdinal(rdr, "FRCST_VOL_BYQTR");
                     int IDX_INTEL_PRD = DB.GetReaderOrdinal(rdr, "INTEL_PRD");
+                    int IDX_IS_DSBL = DB.GetReaderOrdinal(rdr, "IS_DSBL");
                     int IDX_JSTFN_PCT_EXCPT = DB.GetReaderOrdinal(rdr, "JSTFN_PCT_EXCPT");
                     int IDX_MEET_COMP_PRC = DB.GetReaderOrdinal(rdr, "MEET_COMP_PRC");
                     int IDX_MEET_COMP_PRD = DB.GetReaderOrdinal(rdr, "MEET_COMP_PRD");
@@ -347,6 +350,7 @@ namespace Intel.MyDeals.DataLibrary
                             CUST_PRD = (IDX_CUST_PRD < 0 || rdr.IsDBNull(IDX_CUST_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_PRD),
                             DT_APRV = (IDX_DT_APRV < 0 || rdr.IsDBNull(IDX_DT_APRV)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DT_APRV),
                             FRCST_VOL_BYQTR = (IDX_FRCST_VOL_BYQTR < 0 || rdr.IsDBNull(IDX_FRCST_VOL_BYQTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRCST_VOL_BYQTR),
+                            IS_DSBL = (IDX_IS_DSBL < 0 || rdr.IsDBNull(IDX_IS_DSBL)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_DSBL),
                             INTEL_PRD = (IDX_INTEL_PRD < 0 || rdr.IsDBNull(IDX_INTEL_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INTEL_PRD),
                             JSTFN_PCT_EXCPT = (IDX_JSTFN_PCT_EXCPT < 0 || rdr.IsDBNull(IDX_JSTFN_PCT_EXCPT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSTFN_PCT_EXCPT),
                             MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRC),
