@@ -152,11 +152,15 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     vm.curRowPrdCnt++;
                     if (!!dataitem[k]) {
                         for (var r = 0; r < dataitem[k].length; r++) {
+                            if (dataitem[k][r]['DISP_HIER_VAL_NM'] == undefined) {
+                                dataitem[k][r]['DISP_HIER_VAL_NM'] = dataitem[k][r]["HIER_VAL_NM"];
+                            }
                             if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
+                                
                                 if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k].length > 0) {
                                     var result = [];
                                     result = validDataItem[k].filter(function (value) {
-                                        return value.PRD_MBR_SID == dataitem[k][r].PRD_MBR_SID;
+                                        return value.PRD_MBR_SID == dataitem[k][r].PRD_MBR_SID && value.USR_INPUT == dataitem[k][r].USR_INPUT;
                                     });
                                     if (result.length > 0) {
                                         var flag = true;
@@ -485,10 +489,19 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 template: '<div ng-if="!((vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="{{vm.replaceString(dataItem)}}" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="{{vm.replaceString(dataItem)}}"></label></div>' +
                           '<div ng-if="(vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
             },
+            //Removed due to Bug no: DE13816
+            //{
+            //    field: "HIER_VAL_NM",
+            //    title: "Product",
+            //    template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
+            //    width: "150px",
+            //    hidden: true,
+            //    filterable: { multi: true, search: true }
+            //},
             {
-                field: "HIER_VAL_NM",
+                field: "DISP_HIER_VAL_NM",
                 title: "Product",
-                template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
+                template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= DISP_HIER_VAL_NM #</div>',
                 width: "150px",
                 filterable: { multi: true, search: true }
             },
@@ -745,7 +758,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
 
             //Item added from the selected List
-            item.matchName.push(name);
+            item.matchName.push(getFullNameOfProduct(foundItem));
             //Added to check Uncheck Checkbox
             var addSelIndex = -1;
             vm.selectedItms.some(function (e, i) {
@@ -786,16 +799,19 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         }
         else {
             //Item deleted from the selected List
+            var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
             var delIndex = -1;
             item.matchName.some(function (e, i) {
-                if (e.name == name) {
+                if (e == getFullNameOfProduct(foundItem)) {
                     delIndex = i;
                     return true;
                 }
             });
             //var delIndex = item.matchName.indexOf(name);
-            item.matchName.splice(delIndex, 1);
-
+            if (delIndex > -1) {
+                item.matchName.splice(delIndex, 1);
+            }
+            
             var delSelIndex = -1;
             vm.selectedItms.some(function (e, i) {
                 if (e.PRD_MBR_SID == id && e.ROW_NM == vm.curRowId) {
