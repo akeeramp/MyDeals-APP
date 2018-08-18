@@ -1412,8 +1412,13 @@ gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
                             .replace(/LINEBREAKTOKEN/g, '\n');
                     }
 
+                    // Replace special characters that are killers - do it here to catch templated items as well as normal ones.
+                    // \x0b\x1a (Vertical Tab), replace with nothing
+                    // ’, replace with '
+                    val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
+
                     cells.push({
-                        value: val,
+                        value: val, 
                         wrap: true
                     });
 
