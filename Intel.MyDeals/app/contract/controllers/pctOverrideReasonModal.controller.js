@@ -44,8 +44,9 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                 var response = e.response;
                 for (var i = response.length - 1; i >= 0; i -= 1) {
                     response[i]["isSelected"] = $scope.curData.indexOf(response[i]["MYDL_PCT_LGL_EXCPT_SID"].toString()) >= 0;
+
                     // If not read only then remove the hidden exception
-                    if (!dataItem._readonly && response[i].IS_DSBL) {
+                    if ((!dataItem._readonly && response[i].IS_DSBL) || (dataItem._readonly && !response[i].isSelected && response[i].IS_DSBL)) {
                         response.splice(i, 1);
                     }
                 }
