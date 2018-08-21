@@ -181,7 +181,8 @@ namespace Intel.MyDeals.Entities.Logging
             try
             {
                 var clf = ConvertToCLFEntity(messages);
-
+                // Do not log for local env
+                if (_env.Equals("local", StringComparison.InvariantCultureIgnoreCase)) return;
                 CLFClient.PostAsJsonAsync("/Logger/SaveLogs", clf);
             }
             catch (Exception ex)
