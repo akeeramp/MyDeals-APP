@@ -387,6 +387,7 @@ namespace Intel.MyDeals.Entities
 
             try
             {
+                if (oav == "" && testValue != "") return true; // Rare case where there was not a value before, but user added one now... (DE18185)
                 switch (atrb.DATA_TYPE_CD)
                 {
                     case "MONEY":
@@ -428,6 +429,7 @@ namespace Intel.MyDeals.Entities
 
             try
             {
+                if (oav == "" && testValue != "") return true; // Rare case where there was not a value before, but user added one now... (DE18185)
                 switch (atrb.DATA_TYPE_CD)
                 {
                     case "MONEY":
