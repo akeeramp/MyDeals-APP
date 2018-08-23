@@ -59,10 +59,10 @@ namespace Intel.MyDeals.Entities
 
             // Gather items that are minor field changes, including deal being cancelled.
             List<int> minorDealIds = testPacket.AllDataElements
-                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && ((d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged) || (d.AtrbValue.ToString() == WorkFlowStages.Cancelled && d.HasValueChanged)) && !wonTenderIds.Contains(d.DcID) && (!dealIds.Any() || dealIds.Contains(d.DcID)))
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (((d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged) || (d.AtrbValue.ToString() == WorkFlowStages.Cancelled && d.HasValueChanged)) && !wonTenderIds.Contains(d.DcID) && (!dealIds.Any() || dealIds.Contains(d.DcID)))
                 .Select(d => d.DcID).ToList();
 
-            if (majorDealIds.Any()) // 
+            if (majorDealIds.Any()) 
             {
                 packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, majorDealIds, 80)); // Set action - save it.
             }
