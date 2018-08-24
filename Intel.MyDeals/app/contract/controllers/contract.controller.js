@@ -4050,6 +4050,10 @@
                 { reload: true });
         }
         $scope.backToPricingTable = function () {
+            var isDirty = $("button.notdirty");
+            if (isDirty !== undefined && isDirty.length > 0) {
+                $scope._dirty = false;
+            }
             if ($scope.isPtr) return;
 
             if (!$scope._dirty) {
