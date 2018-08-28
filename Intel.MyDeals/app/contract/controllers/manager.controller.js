@@ -440,6 +440,10 @@
                         }
                     },
                     requestEnd: function (e) {
+                        for (var i = 0; i < e.response.length; i++) {
+                            if (e.response[i].WF_STG_CD === "Draft") e.response[i].WF_STG_CD = e.response[i].PS_WF_STG_CD;
+                        }
+
                         drawGrid(pt);
                     },
                     sort: { field: "sortOrder", dir: "desc" }
@@ -594,6 +598,11 @@
                         }
                     },
                     requestEnd: function (e) {
+                        for (var i = 0; i < e.response.length; i++)
+                        {
+                            if (e.response[i].WF_STG_CD === "Draft") e.response[i].WF_STG_CD = e.response[i].PS_WF_STG_CD;
+                        }
+
                         drawGrid(pt);
                     }
                 });
