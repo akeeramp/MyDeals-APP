@@ -531,11 +531,14 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
 }
 
 gridUtils.showGroupExcludeMsg = function (field) {
-    if (field === 1) {
+    if (field === 2) {
         return "Deals shown in grey overlap but are NOT included as part of the Cost Test";
     }
-    else if (field === 0) {
+    else if (field === 1) {
         return "Deals below are included as part of the Cost Test";
+    }
+    else if (field === 0) {
+        return "SELF Deal"
     }
     return "";
 }

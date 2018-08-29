@@ -84,9 +84,13 @@
 
 <style>
 .contractHeaderGrpExclusion{
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+
+}
+#ExcldGrid>.k-grid-content>table>tbody>tr:nth-child(1) {
+display:none;
+}
+#ExcldGrid>.k-grid-content>table>tbody>tr:nth-child(2)>td {
+    border: 1px solid rgba(230,230,230, 0.40);
 }
 .txtOff {     
 	text-align: right !important;
