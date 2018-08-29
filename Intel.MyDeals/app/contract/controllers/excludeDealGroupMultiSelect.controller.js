@@ -230,7 +230,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "250px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_DEAL_DESC#">{{vm.trimString(dataItem,"OVLP_DEAL_DESC")}}</div>' },
             { field: "OVLP_ECAP_PRC", title: "ECAP", width: "120px", format: "{0:c}" },
             { field: "OVLP_MAX_RPU", title: "Max RPU", width: "120px", format: "{0:c}" },
-            { field: "OVLP_CNSMPTN_RSN",width:"120px", title: "Comsumption Reason", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNSMPTN_RSN#">{{vm.trimString(dataItem,"OVLP_CNSMPTN_RSN")}}</div>' }
+            { field: "OVLP_CNSMPTN_RSN", width:"120px", title: "Comsumption Reason", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNSMPTN_RSN#">{{vm.trimString(dataItem,"OVLP_CNSMPTN_RSN")}}</div>' }
 		],
         dataBound: function (e) {
 
