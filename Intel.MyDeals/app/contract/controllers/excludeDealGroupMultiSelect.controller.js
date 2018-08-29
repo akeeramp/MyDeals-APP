@@ -222,15 +222,15 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    },
 			{ field: "OVLP_DEAL_ID", title: "Deal Id", width: "80px" },
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
-            { field: "OVLP_CNTRCT_NM", title: "Contract", width: "200px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNTRCT_NM#">{{vm.trimString(dataItem,"OVLP_CNTRCT_NM")}}</div>'},
-			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "120px" },
+            { field: "OVLP_CNTRCT_NM", title: "Contract", width: "250px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNTRCT_NM#">{{vm.trimString(dataItem,"OVLP_CNTRCT_NM")}}</div>'},
+			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "90px" },
 			{ field: "OVLP_DEAL_STRT_DT", title: "Deal Start", width: "120px", template: "#= moment(OVLP_DEAL_STRT_DT).format('MM/DD/YYYY') #" },
 			{ field: "OVLP_DEAL_END_DT", title: "Deal End", width: "120px", template: "#= moment(OVLP_DEAL_END_DT).format('MM/DD/YYYY') #" },
 			{ field: "OVLP_ADDITIVE", title: "Additive", width: "120px" },
-            { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "180px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_DEAL_DESC#">{{vm.trimString(dataItem,"OVLP_DEAL_DESC")}}</div>' },
-            { field: "OVLP_ECAP_PRC", title: "ECAP", width: "180px", format: "{0:c}" },
-            { field: "OVLP_MAX_RPU", title: "Max RPU", width: "180px", format: "{0:c}" },
-            { field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNSMPTN_RSN#">{{vm.trimString(dataItem,"OVLP_CNSMPTN_RSN")}}</div>' }
+            { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "250px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_DEAL_DESC#">{{vm.trimString(dataItem,"OVLP_DEAL_DESC")}}</div>' },
+            { field: "OVLP_ECAP_PRC", title: "ECAP", width: "120px", format: "{0:c}" },
+            { field: "OVLP_MAX_RPU", title: "Max RPU", width: "120px", format: "{0:c}" },
+            { field: "OVLP_CNSMPTN_RSN",width:"120px", title: "Comsumption Reason", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNSMPTN_RSN#">{{vm.trimString(dataItem,"OVLP_CNSMPTN_RSN")}}</div>' }
 		],
         dataBound: function (e) {
 
