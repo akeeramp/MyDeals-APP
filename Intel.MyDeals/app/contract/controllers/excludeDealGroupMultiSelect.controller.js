@@ -169,7 +169,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 			            ? dataItem["ECAP_PRICE"]
 			            : dataItem["ECAP_PRICE"]["20___0"];
 
-			    var cntrctTtl = "Product: " + ((dataItem["TITLE"].length > 100) ? dataItem["TITLE"].substr(0, 100) + "..." : dataItem["TITLE"]);
+			    //var cntrctTtl = "Product: " + ((dataItem["TITLE"].length > 100) ? dataItem["TITLE"].substr(0, 100) + "..." : dataItem["TITLE"]); -- removed Due to new trimming rules implemented
+                var cntrctTtl = "Product: " + (dataItem["TITLE"]);
 
 			    vm.gridData.unshift({
 			        CST_MCP_DEAL_FLAG: 2,
