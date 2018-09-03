@@ -124,7 +124,6 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                 }
 
                 e.success(vm.gridData);
-
 			}
 		},
 		sort: [
@@ -171,27 +170,31 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 
 			    //var cntrctTtl = "Product: " + ((dataItem["TITLE"].length > 100) ? dataItem["TITLE"].substr(0, 100) + "..." : dataItem["TITLE"]); -- removed Due to new trimming rules implemented
                 var cntrctTtl = "Product: " + (dataItem["TITLE"]);
+                //if (enableCheckbox) {
+                    vm.gridData.unshift({
+                        CST_MCP_DEAL_FLAG: 2,
+                        EXCLD_DEAL_FLAG: 2,
+                        OVLP_ADDITIVE: dataItem["DEAL_COMB_TYPE"],
+                        OVLP_CNSMPTN_RSN: dataItem["CONSUMPTION_REASON"] === undefined ? "" : dataItem["CONSUMPTION_REASON"],
+                        OVLP_CNTRCT_NM: cntrctTtl,
+                        OVLP_DEAL_DESC: dataItem["DEAL_DESC"],
+                        OVLP_DEAL_END_DT: dataItem["END_DT"],
+                        OVLP_DEAL_ID: dataItem["DC_ID"],
+                        OVLP_DEAL_STRT_DT: dataItem["START_DT"],
+                        OVLP_DEAL_TYPE: dataItem["OBJ_SET_TYPE_CD"],
+                        OVLP_ECAP_PRC: ecap,
+                        OVLP_MAX_RPU: dataItem["MAX_RPU"],
+                        OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"],
+                        GRP_BY: 0,
+                        selected: true,
+                        SELF_OVLP: 1
+                    });
+               // }			    
 
-			    vm.gridData.unshift({
-			        CST_MCP_DEAL_FLAG: 2,
-			        EXCLD_DEAL_FLAG: 2,
-			        OVLP_ADDITIVE: dataItem["DEAL_COMB_TYPE"],
-                    OVLP_CNSMPTN_RSN: dataItem["CONSUMPTION_REASON"] === undefined ? "" : dataItem["CONSUMPTION_REASON"],
-			        OVLP_CNTRCT_NM: cntrctTtl,
-			        OVLP_DEAL_DESC: dataItem["DEAL_DESC"],
-			        OVLP_DEAL_END_DT: dataItem["END_DT"],
-			        OVLP_DEAL_ID: dataItem["DC_ID"],
-			        OVLP_DEAL_STRT_DT: dataItem["START_DT"],
-			        OVLP_DEAL_TYPE: dataItem["OBJ_SET_TYPE_CD"],
-			        OVLP_ECAP_PRC: ecap,
-			        OVLP_MAX_RPU: dataItem["MAX_RPU"],
-                    OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"],
-                    GRP_BY: 0,
-                    selected: true,
-                    SELF_OVLP: 1
-                });
-
-				dataSourceSuggested.read();
+                //dataSourceSuggested.read();
+                dataSourceSuggested.filter({});
+                dataSourceSuggested.read();
+                
 				vm.isLoading = false;
 			},
 			function (response) {
@@ -239,7 +242,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		        $('#ExcldGrid :checkbox').prop("disabled", true);
 		    }
 
-		    //e.sender.element.find(".customHeaderRowStyles").remove();
+		    e.sender.element.find(".customHeaderRowStyles").remove();
 		    var items = e.sender.items();
 		    e.sender.element.height(e.sender.options.height);
 		    items.each(function () {
@@ -276,13 +279,10 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		            }
 
                 }
-		        //if (data.length > 0 && enableCheckbox) {
-          //          //Remove the Dummy Group which is created beacuse we added dummy record at the top
-          //          if (vm.delCounter === 0) {
-          //              $("#ExcldGrid .k-grid-content table tbody tr").slice(-2).remove();
-          //              vm.delCounter = 1;
-          //          }
-          //      }
+                if (!enableCheckbox) {
+                    //Remove the Dummy Group which is created beacuse we added dummy record at the top
+                    $("#ExcldGrid .k-grid-content table tbody tr:nth-child(2)").addClass("displayNone");                    
+                }
 
             }, 50);
 
