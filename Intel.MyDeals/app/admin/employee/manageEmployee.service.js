@@ -17,6 +17,7 @@
             getCustomers: getCustomers,
             getCustomersFromGeos: getCustomersFromGeos,
             setEmployeeData: setEmployeeData,
+            setEmployeeVerticalData: setEmployeeVerticalData
         }
 
         return service;
@@ -35,6 +36,10 @@
 
         function setEmployeeData(data) {
             return dataService.post(apiBaseUrl + 'SetManageUserData', data);
+        }
+
+        function setEmployeeVerticalData(data) {
+            return dataService.post(apiBaseUrl + 'SetEmployeeVerticalData', data);
         }
 
     }

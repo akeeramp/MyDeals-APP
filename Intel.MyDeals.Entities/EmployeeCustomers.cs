@@ -6,5 +6,6 @@ namespace Intel.MyDeals.Entities
     {
         public int empWWID { get; set; }
         public List<int> custIds { get; set; }
+        public List<int> vertIds { get; set; }
     }
 }

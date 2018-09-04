@@ -366,7 +366,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 var cmd = new Procs.dbo.PR_MANAGE_USERS()
                 {
-                    mode = "Update",
+                    mode = "UPD_CUST",
                     wwid = data.empWWID,
                     cust_ids = new type_int_list(data.custIds.ToArray())
                 };
@@ -381,5 +381,28 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
         }
+
+        public void SetManageUserVerticalData(EmployeeCustomers data)
+        {
+            try
+            {
+                var cmd = new Procs.dbo.PR_MANAGE_USERS()
+                {
+                    mode = "UPD_VERT",
+                    wwid = data.empWWID,
+                    cust_ids = new type_int_list(data.vertIds.ToArray())
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
     }
 }

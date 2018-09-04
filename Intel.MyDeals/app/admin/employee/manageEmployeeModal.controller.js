@@ -113,7 +113,8 @@ function manageEmployeeModalCtrl(manageEmployeeService, $scope, $uibModalInstanc
 
         var data = {
             "empWWID": dataItem["EMP_WWID"],
-            "custIds": saveIds
+            "custIds": saveIds,
+            "vertIds": []
         }
 
         manageEmployeeService.setEmployeeData(data)

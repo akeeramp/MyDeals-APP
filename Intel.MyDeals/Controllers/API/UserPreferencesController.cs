@@ -109,6 +109,18 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to Apply for Customer Accounts");
         }
 
+        [AntiForgeryValidate]
+        [Authorize]
+        [Route("SetEmployeeVerticalData")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpMsg SetEmployeeVerticalData(EmployeeCustomers data)
+        {
+            int j = 0;
+            return SafeExecutor(() => new EmployeesLib().SetEmployeeVerticalData(data)
+                , $"Unable to set SetEmployeeVerticalData");
+        }
+
         #endregion
 
     }

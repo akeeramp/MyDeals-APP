@@ -38,6 +38,30 @@
             }, function () { });
         }
 
+        $scope.openEmployeeVerticals = function (dataItem) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'manageEmployeeVerticalsModal',
+                controller: 'manageEmployeeVerticalsModalCtrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return angular.copy(dataItem);
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (returnData) {
+                if (returnData !== undefined && returnData !== null) {
+                    $scope.context.USR_VERTS = returnData;
+                }
+            }, function () { });
+        }
+        
         $scope.dataSourceOptions = {
             type: "json",
             transport: {
@@ -47,6 +71,9 @@
                             for (var c = 0; c < response.data.length; c++) {
                                 if (response.data[c].USR_CUST === "") {
                                     response.data[c].USR_CUST = "[Please Add Customers]";
+                                }
+                                if (response.data[c].USR_VERTS === "") {
+                                    response.data[c].USR_VERTS = "[Please Add Products]";
                                 }
                                 response.data[c].FULL_NAME = response.data[c].LST_NM + ", " + response.data[c].FRST_NM + " " + response.data[c].MI
                             }
@@ -261,7 +288,8 @@
                         }
                     }
                 },
-                width: "100px",
+                template: "#=gridUtils.verticalsFormatting(data, 'USR_VERTS', 'USR_ROLE', 'USR_GEOS')#",
+                width: "200px",
             },
             {
                 field: "ACTV_IND",

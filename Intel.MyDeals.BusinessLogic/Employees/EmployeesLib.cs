@@ -83,9 +83,16 @@ namespace Intel.MyDeals.BusinessLogic
             new EmployeeDataLib().SetManageUserData(new EmployeeCustomers
             {
                 empWWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                custIds = data.CustIds
+                custIds = data.CustIds,
+                vertIds = data.VertIds
             });
             return new OpMsg("Customers have been saved");
+        }
+
+        public OpMsg SetEmployeeVerticalData(EmployeeCustomers data)
+        {
+            new EmployeeDataLib().SetManageUserVerticalData(data);
+            return new OpMsg("Verticals have been saved");
         }
 
     }

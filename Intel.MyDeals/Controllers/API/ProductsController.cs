@@ -64,6 +64,34 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetProductCategoriesWithAll")]
+        public IEnumerable<Product> GetProductCategoriesWithAll()
+        {
+            try
+            {
+                // This is very hackish, but I didn't want to wreck any code that actually depended upon special division data for an admin screen,
+                // so all products is added on for this manage list to pre-pend "all products" as a selection. Thank me now, shoot me later.  :)
+                Product allProducts = new Product
+                {
+                    ACTV_IND = true,
+                    ALL_PRD_NM = "All Products",
+                    PRD_CAT_NM = "All Products",
+                    PRD_CAT_NM_SID = 1,
+                    PRD_MBR_SID = 1
+                };
+                List<Product> productsList = new List<Product>();
+                productsList.Add(allProducts);
+                productsList.AddRange(_productsLib.GetProducts().Where(p => p.PRD_ATRB_SID == 7003).OrderBy(s => s.PRD_CAT_NM));
+                return productsList;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         [Route("GetProductsByIds")]
         public IEnumerable<Product> GetProductsByIds(ProductMicroPacket prdIds)

@@ -1273,6 +1273,7 @@ gridUtils.msgIcon = function (dataItem) {
     return dataItem.MsgType;
 }
 
+// Admin page "User Customer Assignments" Customers column formatting
 gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos) {
     var valCusts = passedData[usrCusts];
     var valRoles = passedData[usrRole];
@@ -1302,6 +1303,28 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
     }
     // All other people, just make their customers list clickable
     return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>"; // Edit enabled
+}
+
+// Admin page "User Customer Assignments" Verticals column formatting
+gridUtils.verticalsFormatting = function (passedData, usrVerts, usrRole, usrGeos) {
+    var valVerts = passedData[usrVerts];
+    var valRoles = passedData[usrRole];
+    var valGeos = passedData[usrGeos];
+    // Pad an empty user with something to click from manage employee screen
+    if (valVerts === "[Please Add Products]") {
+        if (valRoles !== "" && valGeos !== "") {
+            return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeVerticals(dataItem)' ng-bind='dataItem.USR_VERTS'></span>"; // Edit enabled
+        }
+        else {
+            return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_VERTS'></span>"; // Edit turned off
+        }
+    }
+
+    if (valRoles === "" || valGeos === "") {
+        return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_VERTS'></span>"; // Edit turned off
+    }
+    // All other people, just make their customers list clickable
+    return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeVerticals(dataItem)' ng-bind='dataItem.USR_VERTS'></span>"; // Edit enabled
 }
 
 gridUtils.dialogShow = function () {

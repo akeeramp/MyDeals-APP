@@ -14,6 +14,8 @@
 
         var service = {
             getProducts: getProducts,
+            getProductCategories: getProductCategories,
+            getProductCategoriesWithAll: getProductCategoriesWithAll
         }
 
         return service;
@@ -25,5 +27,14 @@
             // Getting all the products is a costly operations as it brings ~75K records
             return dataService.get(apiBaseUrl + 'GetProductByCategoryName/EIA CPU/false');
         }
+
+        function getProductCategories() {
+            return dataService.get(apiBaseUrl + 'GetProductCategories');
+        }
+
+        function getProductCategoriesWithAll() {
+            return dataService.get(apiBaseUrl + 'GetProductCategoriesWithAll');
+        }
+        
     }
 })();

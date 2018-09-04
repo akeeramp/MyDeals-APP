@@ -334,6 +334,8 @@
     <Content Include="app\admin\employee\manageEmployee.service.js" />
     <Content Include="app\admin\employee\manageEmployeeModal.controller.js" />
     <Content Include="app\admin\employee\manageEmployeeModal.html" />
+    <Content Include="app\admin\employee\manageEmployeeVerticalsModal.html" />
+    <Content Include="app\admin\employee\manageEmployeeVerticalsModal.controller.js" />
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />

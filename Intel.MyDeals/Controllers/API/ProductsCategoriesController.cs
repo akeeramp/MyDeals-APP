@@ -31,23 +31,23 @@ namespace Intel.MyDeals.Controllers.API
 			);
 		}
 
-		//[Authorize]
-		//[HttpPost]
-		//[Route("CreateProductCategory")]
-		//public ProductCategory CreateProductCategory(ProductCategory category)
-		//{			
-		//	try
-		//	{
-		//		return _productCategoriesLib.CreateProductCategory(category);
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		OpLogPerf.Log(ex);
-		//		throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
-		//	}
-		//}
-		
-		[Authorize]
+        //[Authorize]
+        //[HttpPost]
+        //[Route("CreateProductCategory")]
+        //public ProductCategory CreateProductCategory(ProductCategory category)
+        //{			
+        //	try
+        //	{
+        //		return _productCategoriesLib.CreateProductCategory(category);
+        //	}
+        //	catch (Exception ex)
+        //	{
+        //		OpLogPerf.Log(ex);
+        //		throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+        //	}
+        //}
+
+        [Authorize]
 		[HttpPut]
         [AntiForgeryValidate]
         [Route("UpdateProductCategory")]

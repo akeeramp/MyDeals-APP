@@ -1,29 +1,20 @@
-﻿<script type="text/ng-template" id="manageEmployeeModal">
+﻿<script type="text/ng-template" id="manageEmployeeVerticalsModal">
     <div class="modal-header modalBlueBody">
-        <h3 class="modal-title" id="modal-title">Customer Selection</h3>
+        <h3 class="modal-title" id="modal-title">Verticals Selection</h3>
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="desc role-title">Update selections for:</div>
                 <div class="nm">{{LST_NM}}, {{FRST_NM}}</div>
-            </div>
-            <div class="col-md-6">
-                <div class="desc role-title">AGS selected geographies:</div>
-                <span ng-repeat="item in geoAllOptions" class="item" id="{{item.id}}">
-                    <span ng-if="isChecked(item.id)" style="margin-right: 7px">{{item.id}}</span>
-                    <!--<label class="btn btn-sm btn-default" ng-class="{active: isChecked(item.id)}">
-                        {{item.id}} <input disabled style="display: none" type="checkbox" ng-change="sync(bool, item)" ng-model="bool" ng-checked="isChecked(item.id)">
-                    </label>-->
-                </span>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
                 <!--{{selectedIds}}-->
-                <div class="desc role-title" style="margin-top: 15px;">Edit by selecting from customers dropdown:</div>
+                <div class="desc role-title" style="margin-top: 15px;">Edit by selecting from verticals dropdown:</div>
                 <select kendo-multi-select k-options="selectOptions" id="selCustomers" class="selCustomers" k-ng-model="selectedIds"></select>
             </div>
         </div>
@@ -50,31 +41,34 @@
     .nm {
         color: #0071C5;
     }
+
     .k-window-titlebar.k-dialog-titlebar.k-header {
         display: none;
     }
+
     .k-widget.k-dialog.k-window.k-alert .k-content {
         background-color: #003C71;
         color: #ffffff;
     }
+
     .excelText {
         line-height: 1.2em;
         font-size: 12px;
         float: right;
     }
 
-    .excelText span {
-        text-align: left;
-    }
+        .excelText span {
+            text-align: left;
+        }
 
     .selCustomers {
-        margin-bottom: 330px !important; 
-        max-height: 150px; 
+        margin-bottom: 330px !important;
+        max-height: 150px;
         overflow: auto;
     }
 
-    #selCustomers-list.k-list-container.k-popup.k-group.k-reset, 
-    #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller, 
+    #selCustomers-list.k-list-container.k-popup.k-group.k-reset,
+    #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller,
     #selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul {
         height: 300px !important;
     }
@@ -106,5 +100,4 @@
         font-size: 12px;
         color: #aaaaaa;
     }
-
 </style>

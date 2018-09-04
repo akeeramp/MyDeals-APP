@@ -8,6 +8,9 @@ namespace Intel.MyDeals.Entities
         [JsonProperty(PropertyName = "custIds")]
         public List<int> CustIds { get; set; }
 
+        [JsonProperty(PropertyName = "vertIds")]
+        public List<int> VertIds { get; set; }
+
         [JsonProperty(PropertyName = "emailBody")]
         public string EmailBody { get; set; }
     }

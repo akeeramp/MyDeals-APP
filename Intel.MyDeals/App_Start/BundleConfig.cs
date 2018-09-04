@@ -123,6 +123,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/employee/manageEmployee.service.js"
                 , "~/app/admin/employee/admin.manageEmployee.controller.js"
                 , "~/app/admin/employee/manageEmployeeModal.controller.js"
+                , "~/app/admin/employee/manageEmployeeVerticalsModal.controller.js"
                 , "~/app/admin/geo/admin.geo.controller.js"
                 , "~/app/admin/geo/geo.service.js"
                 , "~/app/admin/iCostProducts/directive/pct.queryBuilder.directive.js"
