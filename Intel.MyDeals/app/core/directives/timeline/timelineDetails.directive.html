@@ -1,9 +1,9 @@
 ﻿<link href="css/timeline.css" rel="stylesheet" />
-<div ng-if="timelineData.length > 0" class="col-md-12 row row" style="height:430px;overflow:auto">     
-    <div ng-repeat="tm in selectedObj | limitTo : numberOfRecrods " class="item">        
+<div ng-if="timelineData.length > 0" class="col-md-12 row row" style="height:430px;overflow:auto">
+    <div ng-repeat="tm in selectedObj | limitTo : numberOfRecrods " class="item">
         <div class="details">
             <div>
-                <h1>{{tm.ATRB_DESC}}</h1> <span class="updateBy" title="{{tm.FRST_NM + ' ' + tm.LST_NM + ' '}} ({{tm.USR_ROLES}})">updated by <span class="capitalize">{{tm.FRST_NM + ' ' + tm.LST_NM | lowercase}}</span> ({{tm.USR_ROLES}})</span>
+                <h1>{{tm.ATRB_DESC}}</h1> <span class="updateBy" title="{{tm.FRST_NM + ' ' + tm.LST_NM + ' '}} ({{tm.USR_ROLES}}) ({{ tm.CHG_EMP_WWID }})">updated by <span class="capitalize">{{tm.FRST_NM + ' ' + tm.LST_NM | lowercase}}</span> ({{tm.USR_ROLES}}) ({{ tm.CHG_EMP_WWID }})</span>
                 <p class="atbrDetails"><span ng-if="tm.FLAG != 'Pricing Strategy'">"</span>{{tm.ATRB_VAL}}<span ng-if="tm.FLAG != 'Pricing Strategy'">"</span></p><p class="atbrDate">{{tm.HIST_EFF_FR_DTM | date:'dd-MMM-yyyy @ h:mma'}}</p>
             </div>
         </div>

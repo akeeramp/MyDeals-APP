@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -60,16 +60,16 @@
                     size: 'lg',
                     resolve: {
                         dataItem: angular.copy(dataItem),
-                        cellCurrValues: function() {
+                        cellCurrValues: function () {
                             return angular.copy(dataItem["DEAL_GRP_EXCLDS"]);
                         },
-                        cellCommentValue: function() {
+                        cellCommentValue: function () {
                             return angular.copy(dataItem["DEAL_GRP_CMNT"]);
                         },
-                        colInfo: function() {
+                        colInfo: function () {
                             return col;
                         },
-                        enableCheckbox: function() {
+                        enableCheckbox: function () {
                             return enabledList.indexOf(dataItem["PS_WF_STG_CD"]) < 0 && (window.usrRole !== "DA");
                         },
                         excludeOutliers: function () {
@@ -79,13 +79,13 @@
                 });
 
                 modal.result.then(
-                    function(result) {
+                    function (result) {
                         dataItem.DEAL_GRP_EXCLDS = result.DEAL_GRP_EXCLDS;
                         dataItem.DEAL_GRP_CMNT = result.DEAL_GRP_CMNT;
                         dataItem._dirty = true;
                         $scope._dirty = true;
                     },
-                    function() {
+                    function () {
                     });
             });
 
@@ -93,70 +93,70 @@
             ? "#= gridPctUtils.getResultMapping(data.COST_TEST_RESULT, 'true', '', '', '', 'font-size: 20px !important;', '', true) #"
             : "&nbsp;";
 
-        $scope.togglePctFilter = function() {
+        $scope.togglePctFilter = function () {
             $scope.pctFilterEnabled = !$scope.pctFilterEnabled;
             $scope.filterPct();
         }
-        $scope.filterPct = function() {
-            $timeout(function() {
-                    var grid = $("#grdExcludeGroups .k-grid").data("kendoGrid");
-                    if ($scope.pctFilterEnabled) {
-                        grid.dataSource.filter({
-                            logic: "or",
-                            filters: [
-                                {
-                                    field: "COST_TEST_RESULT",
-                                    operator: "eq",
-                                    value: "Fail"
-                                },
-                                {
-                                    field: "COST_TEST_RESULT",
-                                    operator: "eq",
-                                    value: "InComplete"
-                                }
-                            ]
-                        });
-                    } else {
-                        grid.dataSource.filter({});
-                    }
-                },
+        $scope.filterPct = function () {
+            $timeout(function () {
+                var grid = $("#grdExcludeGroups .k-grid").data("kendoGrid");
+                if ($scope.pctFilterEnabled) {
+                    grid.dataSource.filter({
+                        logic: "or",
+                        filters: [
+                            {
+                                field: "COST_TEST_RESULT",
+                                operator: "eq",
+                                value: "Fail"
+                            },
+                            {
+                                field: "COST_TEST_RESULT",
+                                operator: "eq",
+                                value: "InComplete"
+                            }
+                        ]
+                    });
+                } else {
+                    grid.dataSource.filter({});
+                }
+            },
                 10);
         }
 
         $scope.firstGridLoaded = false;
         $scope.$on('OpGridDataBound',
-            function(event, args) {
+            function (event, args) {
                 if (!$scope.firstGridLoaded) {
                     if ($scope.pctFilterEnabled) {
-                        $timeout(function() {
+                        $timeout(function () {
 
-                                // if allowed... add tab to go back to PCT tab
-                                $scope.filterPct();
+                            // if allowed... add tab to go back to PCT tab
+                            $scope.filterPct();
 
-                                var html = '<li ng-click="gotoPct()" class="k-item k-state-default"><span unselectable="on" class="k-link" title="Click to go back to Price Cost Test">Price Cost Test</span></li>';
-                                var template = angular.element(html);
-                                var linkFunction = $compile(template);
-                                linkFunction($scope);
+                            var html = '<li ng-click="gotoPct()" class="k-item k-state-default"><span unselectable="on" class="k-link" title="Click to go back to Price Cost Test">Price Cost Test</span></li>';
+                            var template = angular.element(html);
+                            var linkFunction = $compile(template);
+                            linkFunction($scope);
 
-                                $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
-                            },
+                            $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
+                        },
                             500);
                     }
                 }
                 $scope.firstGridLoaded = true;
             });
 
-        $scope.gotoPct = function() {
+        $scope.gotoPct = function () {
             $state.go('contract.pct');
         }
 
-        $scope.saveAndRunPct = function() {
+        $scope.saveAndRunPct = function () {
             if (!$scope._dirty) return;
             $scope.$broadcast('requestOpGridDirtyRows');
         }
 
         $scope.$on('receiveOpGridDirtyRows',
-            function(event, data) {
+            function (event, data) {
 
                 if (data.length === 0) {
                     kendo.alert("There were no items to save.");
@@ -197,7 +197,7 @@
                         );
 
                     },
-                    function(response) {
+                    function (response) {
                         logger.error("Could not save Deal Exludes.", response, response.statusText);
                         root.setBusy("", "");
                     }
@@ -227,6 +227,11 @@
                 field: "DEAL_GRP_CMNT",
                 title: "Exclusion Reason",
                 template: "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_CMNT')#",
+                width: 120
+            }, {
+                field: "PTR_USER_PRD",
+                title: "Contract product",
+                template: "#=gridUtils.uiReadonlyControlWrapper(data, 'PTR_USER_PRD')#",
                 width: 120
             }, {
                 field: "TITLE",
@@ -303,96 +308,100 @@
         // Generates options that kendo's html directives will use
         // Generates options that kendo's html directives will use
         function initGrid(data) {
-            $timeout(function() {
-                    root.wipOptions = {
-                        isLayoutConfigurable: false,
-                        isVisibleAdditionalDiscounts: false,
-                        isPinEnabled: false,
-                        columns: $scope.displayCols,
-                        model: {
-                            id: "DC_ID",
-                            fields: {
-                                DSPL_WF_STG_CD: { type: "string" },
-                                DEAL_GRP_EXCLDS: { type: "string" },
-                                DEAL_GRP_CMNT: { type: "string" },
-                                TITLE: { type: "string" },
-                                COST_TEST_RESULT: { type: "string" },
-                                MEETCOMP_TEST_RESULT: { type: "string" },
-                                OBJ_SET_TYPE_CD: { type: "string" },
-                                START_DT: { type: "date" },
-                                END_DT: { type: "date" },
-                                DEAL_COMB_TYPE: { type: "string" },
-                                ECAP_PRICE: { type: "object" },
-                                MAX_RPU: { type: "number" },
-                                DEAL_DESC: { type: "string" },
-                                CONSUMPTION_REASON: { type: "string" },
-                                CONSUMPTION_REASON_CMNT: { type: "string" }
-                            }
-                        },
-                        default: {
-                            groups: [
-                                { "name": "Grouping Exclusions", "order": 0 }
-                            ],
-                            groupColumns: {
-                                "DC_ID": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "DEAL_DESC": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "DEAL_GRP_EXCLDS": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "DEAL_GRP_CMNT": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "TITLE": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "COST_TEST_RESULT": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "MEETCOMP_TEST_RESULT": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "OBJ_SET_TYPE_CD": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "DSPL_WF_STG_CD": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "START_DT": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "END_DT": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "DEAL_COMB_TYPE": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "ECAP_PRICE": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "MAX_RPU": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "CONSUMPTION_REASON": {
-                                    "Groups": ["Grouping Exclusions"]
-                                },
-                                "CONSUMPTION_REASON_CMNT": {
-                                    "Groups": ["Grouping Exclusions"]
-                                }
+            $timeout(function () {
+                root.wipOptions = {
+                    isLayoutConfigurable: false,
+                    isVisibleAdditionalDiscounts: false,
+                    isPinEnabled: false,
+                    columns: $scope.displayCols,
+                    model: {
+                        id: "DC_ID",
+                        fields: {
+                            DSPL_WF_STG_CD: { type: "string" },
+                            DEAL_GRP_EXCLDS: { type: "string" },
+                            DEAL_GRP_CMNT: { type: "string" },
+                            PTR_USER_PRD: { type: "string" },
+                            TITLE: { type: "string" },
+                            COST_TEST_RESULT: { type: "string" },
+                            MEETCOMP_TEST_RESULT: { type: "string" },
+                            OBJ_SET_TYPE_CD: { type: "string" },
+                            START_DT: { type: "date" },
+                            END_DT: { type: "date" },
+                            DEAL_COMB_TYPE: { type: "string" },
+                            ECAP_PRICE: { type: "object" },
+                            MAX_RPU: { type: "number" },
+                            DEAL_DESC: { type: "string" },
+                            CONSUMPTION_REASON: { type: "string" },
+                            CONSUMPTION_REASON_CMNT: { type: "string" }
+                        }
+                    },
+                    default: {
+                        groups: [
+                            { "name": "Grouping Exclusions", "order": 0 }
+                        ],
+                        groupColumns: {
+                            "DC_ID": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "DEAL_DESC": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "DEAL_GRP_EXCLDS": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "DEAL_GRP_CMNT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "PTR_USER_PRD": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "TITLE": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "COST_TEST_RESULT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "MEETCOMP_TEST_RESULT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "OBJ_SET_TYPE_CD": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "DSPL_WF_STG_CD": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "START_DT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "END_DT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "DEAL_COMB_TYPE": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "ECAP_PRICE": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "MAX_RPU": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "CONSUMPTION_REASON": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "CONSUMPTION_REASON_CMNT": {
+                                "Groups": ["Grouping Exclusions"]
                             }
                         }
-                    };
+                    }
+                };
 
-                    root.wipData = data;
-                },
+                root.wipData = data;
+            },
                 10);
         }
 
         // Get all WIP
-        $scope.getWipDeals = function() {
+        $scope.getWipDeals = function () {
             objsetService.readWipExclusionFromContract($scope.contractData.DC_ID).then(function (response) {
                 if (response.data) {
 
@@ -409,25 +418,22 @@
                     $timeout(function () {
                         $scope.msg = "Done";
                         $scope.loading = false;
-                    },2000);
+                    }, 2000);
                 }
             });
         }
 
         $scope.getWipDeals();
 
-        $timeout(function() {
-                $("#approvalDiv").removeClass("active");
-                $("#pctDiv").removeClass("active");
-                $("#contractReviewDiv").removeClass("active");
-                $("#dealReviewDiv").removeClass("active");
-                $("#historyDiv").removeClass("active");
-                $("#overlapDiv").removeClass("active");
-                $("#groupExclusionDiv").addClass("active");
-                $scope.$apply();
-            },
-            50);
-
-
+        $timeout(function () {
+            $("#approvalDiv").removeClass("active");
+            $("#pctDiv").removeClass("active");
+            $("#contractReviewDiv").removeClass("active");
+            $("#dealReviewDiv").removeClass("active");
+            $("#historyDiv").removeClass("active");
+            $("#overlapDiv").removeClass("active");
+            $("#groupExclusionDiv").addClass("active");
+            $scope.$apply();
+        }, 50);
     }
 })();

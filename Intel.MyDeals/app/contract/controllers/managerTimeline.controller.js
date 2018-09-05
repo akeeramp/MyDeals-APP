@@ -31,7 +31,7 @@
                     data: {
                         objSid: $scope.root.contractData.DC_ID,
                         objTypeSid: 1,
-                        objTypeIds: [1,2,3,4,5]
+                        objTypeIds: [1, 2, 3, 4, 5]
                     },
                     dataType: "json"
                 }
@@ -87,8 +87,8 @@
             }, {
                 field: "user",
                 title: "Changed By",
-                template: "#= user # (#= USR_ROLES #)",
-                width: "200px",
+                template: "#= user # (#= USR_ROLES #) (#= CHG_EMP_WWID #)",
+                width: "220px",
                 filterable: { multi: true, search: true }
             }, {
                 field: "HIST_EFF_FR_DTM",

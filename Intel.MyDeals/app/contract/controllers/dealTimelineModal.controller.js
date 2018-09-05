@@ -71,8 +71,8 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         }, {
             field: "user",
             title: "Changed By",
-            template: "#= user # (#= USR_ROLES #)",
-            width: "200px",
+            template: "#= user # (#= USR_ROLES #) (#= CHG_EMP_WWID #)",
+            width: "240px",
             filterable: { multi: true, search: true }
         }, {
             field: "HIST_EFF_FR_DTM",

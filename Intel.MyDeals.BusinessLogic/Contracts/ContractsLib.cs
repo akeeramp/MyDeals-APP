@@ -369,7 +369,6 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList GetWipExclusionFromContract(int id)
         {
-
             MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(
                 new List<int> { id },
                 new List<OpDataElementType>
@@ -383,6 +382,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.DEAL_GRP_EXCLDS.ATRB_SID,
                     Attributes.DEAL_GRP_CMNT.ATRB_SID,
                     Attributes.TITLE.ATRB_SID,
+                    Attributes.PTR_USER_PRD.ATRB_SID,
                     Attributes.COST_TEST_RESULT.ATRB_SID,
                     Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID,

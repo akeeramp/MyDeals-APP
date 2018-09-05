@@ -365,7 +365,7 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                            
+
                             // redirect if focused PT belongs to deleted PS
                             document.location.href = "/Dashboard#/portal";
                         },
@@ -1578,7 +1578,7 @@
 
         $scope.updateAtrbValue = function (objSetType, ids, atrb, value) {
             $scope.setBusy("Saving", "Please wait while your information is being saved.");
-            
+
             var data = {
                 objSetType: objSetType,
                 ids: ids,
@@ -1812,7 +1812,7 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                            
+
                             // redirect if focused PT belongs to deleted PS
                             if (deleteReload) {
                                 $state.go('contract.manager', {
@@ -1849,7 +1849,7 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                            
+
                             // You changed the list, just reload it.
                             $scope.reloadPage();
                         },
@@ -1880,7 +1880,7 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                            
+
                             $state.go('contract.manager', {
                                 cid: $scope.contractData.DC_ID
                             }, { reload: true });
