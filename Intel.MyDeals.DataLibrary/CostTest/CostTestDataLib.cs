@@ -54,6 +54,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
                     int IDX_MKT_SEG = DB.GetReaderOrdinal(rdr, "MKT_SEG");
                     int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+                    int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
                     int IDX_PRC_CST_TST_STS = DB.GetReaderOrdinal(rdr, "PRC_CST_TST_STS");
                     int IDX_PRD_COST = DB.GetReaderOrdinal(rdr, "PRD_COST");
                     int IDX_PRD_MBR_SIDS = DB.GetReaderOrdinal(rdr, "PRD_MBR_SIDS");
@@ -93,6 +94,7 @@ namespace Intel.MyDeals.DataLibrary
                             MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
                             MKT_SEG = (IDX_MKT_SEG < 0 || rdr.IsDBNull(IDX_MKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MKT_SEG),
                             OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
+                            PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
                             PRC_CST_TST_STS = (IDX_PRC_CST_TST_STS < 0 || rdr.IsDBNull(IDX_PRC_CST_TST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_CST_TST_STS),
                             PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_PRD_COST),
                             PRD_MBR_SIDS = (IDX_PRD_MBR_SIDS < 0 || rdr.IsDBNull(IDX_PRD_MBR_SIDS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_MBR_SIDS),
@@ -146,7 +148,6 @@ namespace Intel.MyDeals.DataLibrary
                             PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT)
                         });
                     } // while
-
                 }
             }
             catch (Exception ex)
