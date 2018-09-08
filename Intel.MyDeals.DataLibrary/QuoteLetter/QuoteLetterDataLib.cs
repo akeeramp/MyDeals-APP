@@ -298,6 +298,23 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     // Generate new quote Letter PDf and Save to DB/Display to user
                     Telerik.Reporting.Report reportToExport = new QuoteLetter(quoteLetterData.ContentInfo.QUOTE_LETTER, quoteLetterData.TemplateInfo.HDR_INFO, quoteLetterData.TemplateInfo.BODY_INFO, string.IsNullOrWhiteSpace(dealId) ? 0 : int.Parse(dealId));
+
+                    if (inNegotiation) // add a water mark to signify that this is not a real contract
+                    {
+                        Telerik.Reporting.Drawing.TextWatermark textWatermark1 = new Telerik.Reporting.Drawing.TextWatermark();
+                        textWatermark1.Color = System.Drawing.Color.Red;
+                        textWatermark1.Font.Bold = true;
+                        textWatermark1.Font.Size = Telerik.Reporting.Drawing.Unit.Point(72D);
+                        textWatermark1.Orientation = Telerik.Reporting.Drawing.WatermarkOrientation.Diagonal;
+                        textWatermark1.Position = Telerik.Reporting.Drawing.WatermarkPosition.Front;
+                        textWatermark1.PrintOnFirstPage = true;
+                        textWatermark1.PrintOnLastPage = true;
+                        textWatermark1.Text = "Not an Offer";
+                        textWatermark1.Opacity = 0.3D;
+
+                        reportToExport.PageSettings.Watermarks.Add(textWatermark1);
+                    }
+
                     ReportProcessor reportProcessor = new ReportProcessor();
                     Telerik.Reporting.InstanceReportSource instanceReportSource = new Telerik.Reporting.InstanceReportSource { ReportDocument = reportToExport };
                     RenderingResult result = reportProcessor.RenderReport("PDF", instanceReportSource, null);
