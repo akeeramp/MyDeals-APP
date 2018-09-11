@@ -8,6 +8,22 @@
     // Minification safe dependency injection
     manageEmployeeService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
+    // Get the ROLE and WWID of the user if needed, SA users get a free pass and get to play with everyone
+    var usrWwid = 0;
+    var usrRole = "UNKNOWN";
+
+    usrRole = window.usrRole;
+    if (usrRole === "SA")
+    {
+        usrWwid = window.usrWwid = "0";
+    }
+    else
+    {
+        usrWwid = window.usrWwid;
+    }
+
+        debugger;
+
     function manageEmployeeService($http, dataService, logger, $q) {
 
         var apiBaseUrl = "api/UserPreferences/";
@@ -23,7 +39,7 @@
         return service;
 
         function getEmployeeData() {
-            return dataService.get(apiBaseUrl + 'GetManageUserData/' + 0); // Passing 0 as a WWID for all users, other services might pass WWID to get specific user records.
+            return dataService.get(apiBaseUrl + 'GetManageUserData/' + usrWwid); // Passing 0 as a WWID for all users, other services might pass WWID to get specific user records.
         }
 
         function getCustomers() {
