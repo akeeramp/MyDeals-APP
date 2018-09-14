@@ -177,6 +177,8 @@ namespace Intel.MyDeals.DataLibrary
             txtS9ProdSeg.Value = GetValue("S9ProdCat");
             txtQtyS9.Value = GetValue("S9Qty");
 
+            ttlKitName.Value = "Kit Name: " + GetValue("KitName");
+
             ////calculate kit discount - Formula: (Sum of Component ECAPs * respective QTYs) - Kit ECAP = Kit Rebate Bundle Discount
             //txtK1DiscEcap.Value = "$0";
             //txtK1DiscEcap.Value = MoneyAdd(txtK1DiscEcap.Value, MoneyMult(txtP1Ecap.Value, txtQtyP1.Value));
@@ -206,6 +208,7 @@ namespace Intel.MyDeals.DataLibrary
                 txtQtyP1.Value = " ";
                 lblK1.Value = " ";
                 txtK1Ecap.Value = " ";
+                ttlKitName.Value = " ";
             }
 
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))

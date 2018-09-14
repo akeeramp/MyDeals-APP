@@ -145,6 +145,7 @@ namespace Intel.MyDeals.DataLibrary
             this.blankMaxQtyS7 = new Telerik.Reporting.HtmlTextBox();
             this.blankMaxQtyS8 = new Telerik.Reporting.HtmlTextBox();
             this.blankMaxQtyS9 = new Telerik.Reporting.HtmlTextBox();
+            this.ttlKitName = new Telerik.Reporting.HtmlTextBox();
 
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
@@ -304,7 +305,9 @@ namespace Intel.MyDeals.DataLibrary
             this.blankMaxQtyS6,
             this.blankMaxQtyS7,
             this.blankMaxQtyS8,
-            this.blankMaxQtyS9});
+            this.blankMaxQtyS9,
+            this.ttlKitName
+            });
             this.panel1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(3.9378803194267675E-05D), Telerik.Reporting.Drawing.Unit.Inch(0.92503899335861206D));
             this.panel1.Name = "panel1";
             this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(7.5988616943359375D), Telerik.Reporting.Drawing.Unit.Inch(23.89996337890625D));
@@ -617,6 +620,19 @@ namespace Intel.MyDeals.DataLibrary
             this.ttlProductInfo.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.ttlProductInfo.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.ttlProductInfo.Value = "Product Information";
+            // 
+            // ttlKitName
+            // 
+            this.ttlKitName.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(2.5000D), Telerik.Reporting.Drawing.Unit.Inch(0.1000D));
+            this.ttlKitName.Name = "ttlKitName";
+            this.ttlKitName.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(5.0000D), Telerik.Reporting.Drawing.Unit.Inch(0.2000D));
+            this.ttlKitName.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(227)))), ((int)(((byte)(247)))));
+            this.ttlKitName.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.ttlKitName.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.ttlKitName.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(125)))), ((int)(((byte)(197)))));
+            this.ttlKitName.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.ttlKitName.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.ttlKitName.Value = "Kit Name";
             // 
             // txtQuantity
             // 
@@ -3441,5 +3457,6 @@ namespace Intel.MyDeals.DataLibrary
         private HtmlTextBox blankMaxQtyS7;
         private HtmlTextBox blankMaxQtyS8;
         private HtmlTextBox blankMaxQtyS9;
+        private HtmlTextBox ttlKitName;
     }
 }
