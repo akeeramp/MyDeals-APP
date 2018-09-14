@@ -15,8 +15,10 @@ function objsetService($http, dataService, logger, $q, $location) {
     var apiBaseCostTestUrl = "/api/CostTest/v1/";
     var apiBaseTenderUrl = "/api/Tenders/v1/";
     var apiBaseEmailUrl = "/api/Email/";
+    var dropDownApiUrl = "/api/Dropdown/";
 
     var service = {
+        createTenderContract: createTenderContract,
         createContract: createContract,
         copyContract: copyContract,
         copyContractPivot: copyContractPivot,
@@ -26,7 +28,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         deleteContract: deleteContract,
         isDuplicateContractTitle: isDuplicateContractTitle,
         getExportContract: getExportContract,
-
+        
         createPricingStrategy: createPricingStrategy,
         copyPricingStrategy: copyPricingStrategy,
         readPricingStrategy: readPricingStrategy,
@@ -74,14 +76,18 @@ function objsetService($http, dataService, logger, $q, $location) {
         getOverlappingDealsFromContract: getOverlappingDealsFromContract,
         getOverlappingDealsFromPricingStrategy: getOverlappingDealsFromPricingStrategy,
         getOverlappingDealsFromPricingTable: getOverlappingDealsFromPricingTable,
-        updateOverlappingDeals: updateOverlappingDeals
+        updateOverlappingDeals: updateOverlappingDeals,
         //getDealQuoteLetter: getDealQuoteLetter,
+
+        getDefaultValuesForTenderKit: getDefaultValuesForTenderKit
     }
 
     return service;
 
     // #### CONTRACT CRUD ####
-
+    function createTenderContract(custId, contractId, data) {        
+        return dataService.post(apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId, data);
+    }
     function createContract(custId, contractId, ct) {
         return dataService.post(apiBaseContractUrl + 'SaveContract/' + custId + '/' + contractId, [ct]);
     }
@@ -116,8 +122,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         return dataService.get(apiBaseContractUrl + 'GetExportContract/' + id);
     }
 
-    // #### PRICING STRATEGY CRUD ####
-
+    // #### PRICING STRATEGY CRUD ####    
     function createPricingStrategy(custId, contractId, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'SavePricingStrategy/' + custId + '/' + contractId, [ps]);
     }
@@ -281,6 +286,11 @@ function objsetService($http, dataService, logger, $q, $location) {
     // #### Quote Letter
     function getDealQuoteLetter(dealId) {
         return dataService.get(apiBaseQuoteLetterUrl + 'GetDealQuoteLetter/' + dealId);
+    }
+
+    // #### Get Default Values for KIT - TENDER
+    function getDefaultValuesForTenderKit() {
+        return dataService.get(dropDownApiUrl + 'GetTenderDefaultDropDown/');
     }
 
 }

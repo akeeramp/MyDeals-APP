@@ -36,7 +36,8 @@
                                 }],
                                 copyContractData: ['objsetService', function (objsetService) {
                                     return objsetService.readCopyContract();
-                                }]
+                                }],
+                                isTender: function () { return false }
                             }
                         }
                     }

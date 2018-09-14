@@ -8,10 +8,20 @@
 
 
     SetRequestVerificationToken.$inject = ['$http'];
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary'];
+    ContractController.$inject = ['$scope', '$uibModalStack', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'isTender', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary', '$q'];
 
-    function ContractController($scope, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary) {
-        // store template information
+    function ContractController($scope, $uibModalStack, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, isTender, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary, $q) {
+        // store template information ()
+        if (contractData) {
+            $scope.MEETCOMP_TEST_RESULT = contractData.data[0].MEETCOMP_TEST_RESULT; 
+            $scope.COST_TEST_RESULT = contractData.data[0].COST_TEST_RESULT; 
+        } else {
+            $scope.MEETCOMP_TEST_RESULT = "";
+            $scope.COST_TEST_RESULT = ""; 
+        }
+        
+        $scope.selectedTAB = 'PTR'; // Tender Deals
+        $scope._tabDetails = []; // Tender Deals
         $scope.templates = $scope.templates || templateData.data;
         $scope.constants = contractManagerConstants;
         $scope.isContractDetailsPage = $state.current.name === $scope.constants.ContractDetails;
@@ -39,10 +49,10 @@
         $scope.helpTopicContractAndDealViews = HelpTopicEnum.ContractManager_ContractAndDealViews;
         $scope.helpTopicGroupingExclusions = HelpTopicEnum.ContractManager_GroupingExclusions;
         $scope.contractHeaderMaxCharWidth = 55;
-        $scope.isSuper = window.isSuper;
-
+        $scope.isSuper = window.isSuper;        
+        
         // custom Contract Titles
-        $scope.isTenderContract = false;
+        $scope.isTenderContract = isTender;
         $scope.contractType = "Contract";
         $scope.contractName = $scope.contractType + " Name:";
         $scope.psTitle = "Pricing Strategy";
@@ -268,7 +278,7 @@
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
         var isCopyTender = (copyContractData !== undefined && copyContractData.data.length > 0 && copyContractData.data[0].IS_TENDER === "1");
-        if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1" || isCopyTender) {
+        if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1" || isCopyTender || $scope.isTenderContract) {
             $scope.isTenderContract = true;
             $scope.contractType = "Tender Folio";
             $scope.contractName = $scope.contractType + " Name:";
@@ -277,10 +287,22 @@
             $scope.ptTitleLbl = "Enter Tender Table Name";
             $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
             $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto-Filled";
-
-            if ($location.url().split('tender=').length > 1) {
+            $scope.isTenderContract = $scope.contractData["IS_TENDER"];
+            if ($location.url().split('tender=').length > 1 || $scope.isTenderContract) {
                 $scope.contractData["IS_TENDER"] = "1";
             }
+        }
+        if ($state.current.name == 'contract.manager' && ($scope.isTenderContract)) {
+            $state.go('contract.manager.strategy', {
+                cid: $scope.contractData.DC_ID,
+                sid: $scope.contractData.PRC_ST[0].DC_ID,
+                pid: $scope.contractData.PRC_ST[0].PRC_TBL[0].DC_ID
+            }, { reload: true });
+
+        }
+
+        if ($state.current.name == 'contract.manager.strategy.wip') {
+            $scope.selectedTAB = 'DE'; // DE- Deal Editor
         }
 
         $scope.saveBtnName = function () {
@@ -395,7 +417,7 @@
         }
         $scope.contractData.CUST_ACCNT_DIV_UI = "";
         // Contract detail page initializations
-        if ($scope.isContractDetailsPage) {
+        if ($scope.isContractDetailsPage || ($scope.isTenderContract && isTender )) {
             var today = moment().format('l');
 
             // Set dates Max and Min Values for numeric text box
@@ -1535,8 +1557,8 @@
                 $scope.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = false;
                 $scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "";
             }
-
-            openAutofillModal(null);
+            if (!$scope.isTenderContract)
+                openAutofillModal(null);
         }
         $scope.setNptTemplate = function (pt) {
             $scope.currentPricingTable = pt;
@@ -3364,21 +3386,70 @@
                 false,
                 true);
         }
+        $scope.createTenderContract = function (ct) {
+            //Cloning PS
+            var ps = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
+            ps.DC_ID = $scope.uid--;
+            ps.DC_PARENT_ID = ct.DC_ID;
+            ps.PRC_TBL = [];
+            ps.TITLE = "_PS1_" + ct.Customer.CUST_NM; //Have to change Based on the Naming Convention in MT
 
-        $scope.saveContract = function () {
-            $scope.setBusy("Saving Contract", "Saving the Contract Information");
+            // Clone base model and populate changes
+            var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
+            if (!pt) {
+                $scope.addTableDisabled = false;
+                logger.error("Could not create the " + $scope.ptTitle + ".", "Error");
+                $scope.setBusy("", "");
+                return;
+            }
 
-            // Contract Data
-            var ct = $scope.contractData;
+            pt.DC_ID = $scope.uid--;
+            pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
+            pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
+            pt.TITLE = "_PT1_" + ct.Customer.CUST_NM; //Have to change Based on the Naming Convention in MT
 
-            // check for NEW contract
-            if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
+            for (var atrb in $scope.newPricingTable._extraAtrbs) {
+                if ($scope.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
+                    //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                    pt[atrb] = $scope.newPricingTable._extraAtrbs[atrb].value;
+                }
+            }
+            for (var atrb in $scope.newPricingTable._defaultAtrbs) {
+                if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) &&
+                    pt.hasOwnProperty(atrb)) {
+                    //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                    if (Array.isArray($scope.newPricingTable._defaultAtrbs[atrb].value)) {
+                        //Array, Middle Tier expects a comma separated string
+                        pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value.join();
+                    } else {
+                        //String
+                        pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value;
+                    }
+                }
+            }
 
-            // Add to DB first... then add to screen
-            objsetService.createContract($scope.getCustId(), $scope.contractData.DC_ID, ct).then(
-                function (data) {
+            var data = {
+                "Contract": [ct],
+                "PricingStrategy": [ps],
+                "PricingTable": [pt],
+                "PricingTableRow": [],
+                "WipDeals": [],
+                "EventSource": "",
+                "Errors": {}
+            }
+
+            objsetService.createTenderContract($scope.getCustId(), $scope.contractData.DC_ID, data).then(
+                function (data) {                    
                     $scope.updateResults(data.data.CNTRCT, ct);
 
+                    $scope.updateResults(data.data.PRC_ST, ps);
+
+                    if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
+                    $scope.contractData.PRC_ST.push(ps);
+                    $scope.showAddPricingTable(ps);
+
+
+                    $scope.updateResults(data.data.PRC_TBL, pt); //?? needed?
                     //Check for errors
                     if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
                         $scope.setBusy("Save unsuccessful", "Could not create the contract", "Error");
@@ -3388,20 +3459,25 @@
                         return;
                     };
 
-                    $scope.setBusy("Save Successful", "Saved the contract", "Success");
-
                     if (hasUnSavedFiles) {
                         $scope.uploadFile();
                     } else {
                         $timeout(function () {
                             $scope._dirty = false; // don't want to kick of listeners
-                            $state.go('contract.manager',
-                                {
-                                    cid: $scope.contractData.DC_ID
-                                },
-                                { reload: true });
+
+                            $uibModalStack.dismissAll();//Closing Tender Folio Popup
+
+                            $state.go('contract.manager.strategy', {
+                                cid: $scope.contractData.DC_ID,
+                                sid: pt.DC_PARENT_ID,
+                                pid: pt.DC_ID
+                            }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
+
+
                         });
                     }
+                    $scope.setBusy("Save Successful", "Saved the contract", "Success");
+
                     $scope.setBusy("", "");
                 },
                 function (result) {
@@ -3409,6 +3485,56 @@
                     $scope.setBusy("", "");
                 }
             );
+            return true;
+        }
+        $scope.saveContract = function () {
+            $scope.setBusy("Saving Contract", "Saving the Contract Information");
+
+            // Contract Data
+            var ct = $scope.contractData;
+
+            // check for NEW contract
+            if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
+            if ($scope.isTenderContract) {
+                $scope.createTenderContract(ct); // Creating Tender Contract
+            }
+            else {
+                // Add to DB first... then add to screen
+                objsetService.createContract($scope.getCustId(), $scope.contractData.DC_ID, ct).then(
+                    function (data) {
+                        $scope.updateResults(data.data.CNTRCT, ct);
+
+                        //Check for errors
+                        if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                            $scope.setBusy("Save unsuccessful", "Could not create the contract", "Error");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        };
+
+                        $scope.setBusy("Save Successful", "Saved the contract", "Success");
+
+                        if (hasUnSavedFiles) {
+                            $scope.uploadFile();
+                        } else {
+                            $timeout(function () {
+                                $scope._dirty = false; // don't want to kick of listeners
+                                $state.go('contract.manager',
+                                    {
+                                        cid: $scope.contractData.DC_ID
+                                    },
+                                    { reload: true });
+                            });
+                        }
+                        $scope.setBusy("", "");
+                    },
+                    function (result) {
+                        logger.error("Could not create the contract.", result, result.statusText);
+                        $scope.setBusy("", "");
+                    }
+                );
+            }
         }
 
         $scope.copyContract = function () {
@@ -3926,7 +4052,7 @@
 
             if (oldValue != null && newValue == null) return;
 
-            if (oldValue == null && newValue != null) {
+            if ((oldValue == null && newValue != null) || ($scope.isTenderContract && $scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT')) {
                 //initialize, hard coded for now, build into an admin page in future.
                 if ($scope.currentPricingTable == null) {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
@@ -3935,8 +4061,11 @@
                     if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
-                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1";
-                    if (!!newValue["SERVER_DEAL_TYPE"]) newValue["SERVER_DEAL_TYPE"].value = "";
+                    if (!$scope.isTenderContract && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') {
+                        if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
+                        if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
+                    }
+                    
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
@@ -4246,6 +4375,13 @@
                 return false;
             }
             return (str.length >= limit);
+        }
+
+        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {
+            $scope.selectedTAB = _tabName;
+
+            if (angular.isFunction($scope[_actionName]))
+                $scope[_actionName]();
         }
 
     }

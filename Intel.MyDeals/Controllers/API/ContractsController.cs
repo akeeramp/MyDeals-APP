@@ -141,6 +141,18 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("SaveTenderContract/{custId}/{contractId}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket upperContractData)
+        {
+            return SafeExecutor(() => _contractsLib.SaveTenderContract(custId, contractId, upperContractData)
+                , "Unable to save the Contract"
+            );
+
+        }
+
+        [Authorize]
         [Route("SaveFullContract/{custId}/{contractId}")]
         [HttpPost]
         [AntiForgeryValidate]

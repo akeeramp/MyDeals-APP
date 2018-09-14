@@ -1,5 +1,5 @@
-﻿<div id="horizontal" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
-    <div id="center-pane" class="fr">
+﻿<div id="horizontal" ng-class="{'collapsed': isLnavHidden || isTenderContract == true, 'expanded': !isLnavHidden && isTenderContract != true, 'hideLnav': isTenderContract == true}">
+    <div id="center-pane" class="fr" ng-class="{'overFlowHidden': isTenderContract == true}">
         <div id="contractContainerWrapper">
             <div id="contractHeader">
                 <div ui-view="contractHeaderView"></div>
@@ -13,9 +13,42 @@
         </div>
     </div>
 
-    <div id="left-pane" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+    <div id="left-pane" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden, 'notReqForTender': isTenderContract == true}">
         <div ui-view="lnavView" class="fullHeight"></div>
     </div>
 
     <div class="clearboth"></div>
 </div>
+<style>
+    .blink_me {
+        animation: blinker 6s ease-out 10;
+		font-size:16px;
+    }
+
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
+    .btnWidgetActive {
+        background: #0071c5 !important;
+    } 
+    .btnLastRun {
+        margin-top: 10px;
+    }
+    .hideLnav {
+        margin-left: 2px !important;
+    }
+    .notReqForTender{
+        display:none !important;
+    }
+    .overFlowHidden{
+        overflow: hidden !important;
+    }
+    .isDisabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+    }
+</style>

@@ -434,6 +434,7 @@
     <Content Include="app\contract\partials\contractSummaryOverlapping.html" />
     <Content Include="app\contract\partials\contractSummaryExcludeGroups.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
+    <Content Include="app\contract\partials\tenderWidget.html" />
     <Content Include="app\contract\partials\lnavFlowMini.html" />
     <Content Include="app\contract\partials\ptModals\datePickerModal.html" />
     <Content Include="app\contract\partials\contractSummaryPct.html" />
@@ -466,6 +467,7 @@
     <Content Include="app\contract\partials\ptModals\renameTitleModal.html" />
     <Content Include="app\contract\partials\ptModals\pctOverrideReasonModal.html" />
     <Content Include="app\contract\partials\ptModals\dealTimelineModal.html" />
+    <Content Include="app\contract\partials\ptModals\tenderFolio.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.controller.js" />

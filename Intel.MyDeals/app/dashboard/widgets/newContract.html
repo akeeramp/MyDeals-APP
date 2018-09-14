@@ -40,7 +40,7 @@
                 <i class="intelicon-new-document-solid text-warning"></i>
             </div>
 
-            <div class="fl btn-mock" onclick="newCntrct(true)" ng-if="C_CREATE_CONTRACT">
+            <div class="fl btn-mock" ng-click="openTenderFolioDialog()" ng-if="C_CREATE_CONTRACT">
                 <div class="btn-ttl">Create Tender Folio</div>
             </div>
             <div class="fl btn-mock-no-click" ng-if="!C_CREATE_CONTRACT">
@@ -97,7 +97,7 @@
                 <i class="fa fa-book text-warning"></i>
             </div>
 
-            <div class="fl btn-mock" onclick="newCntrct(true)" ng-if="C_CREATE_CONTRACT">
+            <div class="fl btn-mock" ng-click="openTenderFolioDialog()" ng-if="C_CREATE_CONTRACT">
                 <div class="btn-ttl">Create a Customer Tender Folio</div>
                 <div class="btn-desc">Create a place for entering OEM tender deals</div>
             </div>

@@ -470,7 +470,43 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
         // Open the dlg.
         $scope.copyCntrctDlg.data("kendoDialog").open();
     }
+    $scope.openTenderFolioDialog = function (mode) {
+        //alert('Test M3');
+        var modal = $uibModal.open({
+            backdrop: 'static',
+            templateUrl: '/app/contract/partials/ptModals/tenderFolio.html',
+            controller: 'ContractController',
+            controllerAs: 'contract',
+            size: 'lg',
+            windowClass: 'tenderFolio-modal-window',
+            resolve: {
+                contractData: function () {
+                    return null;
+                },
+                templateData: ['$stateParams', 'templatesService', function ($stateParams, templatesService) {
+                    return templatesService.readTemplates();
+                }], isNewContract: function () {
+                    return true;
+                },
+                securityLoaded: ['securityService', function (securityService) {
+                    return securityService.loadSecurityData();
+                }],
+                copyContractData: ['objsetService', function (objsetService) {
+                    return objsetService.readCopyContract();
+                }],
+                isTender: function () { return true }
+            }
+        });
 
+        modal.result.then(
+            function () {
+                //Close Event will come here
+            },
+            function () {
+                // Do Nothing on cancel
+            });
+
+    }
     $scope.onCopyCntrctCancelClick = function () {
         var dlg = $("#copyCntrctDlg").data("kendoDialog");
         dlg.close();

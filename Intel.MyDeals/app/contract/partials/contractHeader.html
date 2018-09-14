@@ -1,6 +1,13 @@
 ﻿<div style="margin: 0;">
     <div ng-if="!isNewContract" class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
-    
+    <div class="pricing-strategy-status-bar fl" ng-if="!('contract.details' | isState) && isTenderContract == true" style="margin-left: -5px;position: absolute;left: 0px;">
+        <div class="valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 5px 8px;">
+            <span class="contractHeaderId">#{{ contractData.DC_ID }}</span>
+            <span>{{contractData.Customer.CUST_NM}}:</span>
+            <span>{{contractData.TITLE}}</span>
+        </div>
+
+    </div>
     <!--<div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}" ng-if="!('contract.details' | isState)">
         <div class="fl">{{ pageTitle }}</div>
         <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
@@ -8,9 +15,9 @@
     <div class="pricing-strategy-status-bar fr" ng-if="!('contract.details' | isState)">
         <div class="valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 5px 8px;"><span style="opacity: 0.5;">{{psTitle}}:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
     </div>
-
+    <div ng-if="isTenderContract == true" ng-include="'app/contract/partials/tenderWidget.html'"></div>
     <div ng-if="isPtr || isWip">
-        <div class="contractHeader" style="margin: 0 10px 0 0; line-height: 1.2em; font-size: 18px;">
+        <div ng-class="{'notReqForTender': isTenderContract == true}" class="contractHeader" style="margin: 0 10px 0 0; line-height: 1.2em; font-size: 18px;">
             <table style="width: 100%;">
                 <tr>
                     <td>

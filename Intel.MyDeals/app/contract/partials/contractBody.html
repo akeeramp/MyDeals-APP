@@ -6,7 +6,7 @@
 
 <div id="secContainerWrapper" class="fadeInAnim" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
 	<div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
-		<div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
+		<div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
 			<div class="col-md-11"
 				 style="margin: 0 6px 0px 10px;">
@@ -16,13 +16,13 @@
 			</div>
 			<div class="clearboth"></div>
 		</div>
-		<div id="perfMs"></div>
-		<div id="perfLegend"></div>
-		<div id="perfDetails"></div>
-		<div style="position: absolute; top: 70px; right: 5px;">
+		<div id="perfMs" ng-class="{'notReqForTender': isTenderContract == true}"></div>
+		<div id="perfLegend" ng-class="{'notReqForTender': isTenderContract == true}"></div>
+		<div id="perfDetails" ng-class="{'notReqForTender': isTenderContract == true}"></div>
+		<div style="position: absolute; top: 70px; right: 5px;" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div id="perfChart" style="height: 40px; padding: 0;"></div>
 		</div>
-		<div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip">
+		<div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">{{ptTitle}} Editor</div>
 			<div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}"
 				 title="Save, validate, and finalize your deals in the Deal Editor. *Additional deal information may be required"
@@ -30,8 +30,10 @@
 			<div class="clearboth"></div>
 		</div>
 	</div>
-
-	<div id="secContainer">
+    <div ng-if="selectedTAB == 'MC'">
+        <meet-comp obj-sid="contractData.DC_ID" is-adhoc="0" obj-type-id="1" last_meet_comp_run="contractData.LAST_COST_TEST_RUN"></meet-comp>
+    </div>
+	<div id="secContainer" ng-show="selectedTAB != 'MC'">
 		<div kendo-splitter
 			 k-panes="[null, { collapsible: true, collapsed: true, min: '235px', size: '235px' }]"
 			 k-orientation="'vertical'"
@@ -70,7 +72,7 @@
 
 </div>
 
-<div ng-show="!(isAddStrategyHidden && isAddPricingTableHidden)">
+<div ng-show="!(isAddStrategyHidden && isAddPricingTableHidden)" ng-class="{'notReqForTender': isTenderContract == true}">
 	<div ng-include="'app/contract/partials/help.html'"></div>
 </div>
 

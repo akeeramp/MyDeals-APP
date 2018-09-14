@@ -18,12 +18,16 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IOpDataCollectorLib _dataCollectorLib;
         private readonly IUiTemplateLib _uiTemplateLib;
         private readonly IDropdownLib _dropdownLib;
+        private readonly IPricingStrategiesLib _pricingStrategiesLib;
+        private readonly IPricingTablesLib _pricingTablesLib;
 
-        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib)
+        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib, IPricingTablesLib pricingTablesLib, IPricingStrategiesLib pricingStrategiesLib)
         {
             _dataCollectorLib = dataCollectorLib;
             _uiTemplateLib = uiTemplateLib;
             _dropdownLib = dropdownLib;
+            _pricingStrategiesLib = pricingStrategiesLib;
+            _pricingTablesLib = pricingTablesLib;
         }
 
         /// <summary>
@@ -122,6 +126,105 @@ namespace Intel.MyDeals.BusinessLogic
             return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes)
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted)
                 .ToHierarchialList(OpDataElementType.CNTRCT);
+        }
+
+        /// <summary>
+        /// Save a Tender contract
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="savePacket"></param>
+        /// <returns>MyDealsData</returns>
+        public OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket upperContractData)
+        {
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
+            {
+                CustId = custId,
+                ContractId = contractId
+            });
+
+            OpDataCollectorFlattenedDictList baseContract = SaveContract(upperContractData.Contract, savePacket);
+
+            int CNTRCT_ID = -100;
+            foreach (var item in baseContract)
+            {
+                if (item.Key.ToString() == OpDataElementType.CNTRCT.ToString())
+                {
+                    foreach (var itm in item.Value)
+                    {
+                        if (itm.ContainsKey("DC_ID"))
+                        {
+                            int.TryParse(itm[AttributeCodes.DC_ID].ToString(), out CNTRCT_ID);
+                        }
+                    }
+                }
+            }
+
+            // Purpose: Creating PS for Tender Contract
+            SavePacket savePacketPS = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
+            {
+                CustId = custId,
+                ContractId = CNTRCT_ID
+            });
+
+            foreach (var ps in upperContractData.PricingStrategy)
+            {
+                if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+                {
+                    ps[AttributeCodes.DC_PARENT_ID.ToString()] = CNTRCT_ID;
+                }
+
+                if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
+                {
+                    ps[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + ps[AttributeCodes.TITLE.ToString()].ToString();
+                }
+            }
+
+            OpDataCollectorFlattenedDictList prcPsData = _pricingStrategiesLib.SavePricingStrategy(upperContractData.PricingStrategy, savePacketPS);
+
+            //Purpose: Creating PT for Tender
+            int CONT_PS_ID = -100;
+            foreach (var item in prcPsData)
+            {
+                if (item.Key.ToString() == OpDataElementType.PRC_ST.ToString())
+                {
+                    foreach (var itm in item.Value)
+                    {
+                        if (itm.ContainsKey("DC_ID"))
+                        {
+                            int.TryParse(itm[AttributeCodes.DC_ID].ToString(), out CONT_PS_ID);
+                        }
+                    }
+                }
+            }
+            foreach (var pt in upperContractData.PricingTable)
+            {
+                if (!pt.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+                {
+                    pt.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PS_ID);
+                }
+                else
+                {
+                    pt[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PS_ID;
+                }
+
+                if (pt.ContainsKey(AttributeCodes.TITLE.ToString()))
+                {
+                    pt[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + pt[AttributeCodes.TITLE.ToString()].ToString();
+                }
+            }
+
+            SavePacket savePacketPT = new SavePacket(new ContractToken("ContractToken Created - SavePricingTable")
+            {
+                CustId = custId,
+                ContractId = CNTRCT_ID
+            });
+
+            OpDataCollectorFlattenedDictList PRC_TBL_DATA = _pricingTablesLib.SavePricingTable(upperContractData.PricingTable, savePacketPT);
+
+            baseContract.Add(OpDataElementType.PRC_ST, prcPsData[OpDataElementType.PRC_ST]);
+            baseContract.Add(OpDataElementType.PRC_TBL, PRC_TBL_DATA[OpDataElementType.PRC_TBL]);
+
+            return baseContract;
         }
 
         /// <summary>
