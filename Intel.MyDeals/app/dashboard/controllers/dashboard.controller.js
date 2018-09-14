@@ -9,14 +9,14 @@
 
 
 SetRequestVerificationToken.$inject = ['$http'];
-DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService', '$linq'];
+DashboardController.$inject = ['$rootScope', '$scope', '$uibModalStack', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger', '$templateRequest', '$compile', 'dataService', '$linq'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
 
-function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService, $linq) {
+function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService, $linq) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
@@ -507,6 +507,10 @@ function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $
             });
 
     }
+    //Adhoc Tender Manager popup close
+    $scope.dismissPopup = function () {
+        $uibModalStack.dismissAll();
+    };
     $scope.onCopyCntrctCancelClick = function () {
         var dlg = $("#copyCntrctDlg").data("kendoDialog");
         dlg.close();

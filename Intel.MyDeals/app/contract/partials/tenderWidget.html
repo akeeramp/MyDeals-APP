@@ -11,10 +11,10 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel" ng-class="{'complete': isWip, disabled: enableDealEditorTab() === true}">
+        <div class="wizard-panel" ng-class="{'complete': enableDealEditorTab() == true, disabled: enableDealEditorTab() == false}">
             <span class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'DE'}">2</span>
         </div>
-        <a ng-class="{'isDisabled': !isWip, 'isDisabled': enableDealEditorTab() === false}" ng-click="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">
+        <a ng-class="{'complete': enableDealEditorTab() == true, 'isDisabled': enableDealEditorTab() == false}" ng-click="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">
             <div class="wizard-step-text">
                 <h4><i ng-show="selectedTAB == 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
                 <p>Adhoc Tender Deal Editor Manager</p>

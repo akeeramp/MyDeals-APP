@@ -1,4 +1,4 @@
-﻿<div class="container-fluid widget-container widget-new-contract" style="overflow: auto; text-align: center; display: table;">
+﻿<div id='createNewContract' class="container-fluid widget-container widget-new-contract" style="overflow: auto; text-align: center; display: table;">
     
     <div class="widget-xs" style="display: none;">
         <div style="padding: 20px 0 0 0;">
@@ -120,6 +120,12 @@
             ? "/Contract#/manager/0/details?tender=1"
             : "/Contract#/manager/0/details";
     }
+	function dismissPopup() {
+	 var scope = angular.element(document.getElementById("createNewContract")).scope();
+        scope.$apply(function () {
+            scope.dismissPopup();
+        });    
+	}
 </script>
 
 <style>
