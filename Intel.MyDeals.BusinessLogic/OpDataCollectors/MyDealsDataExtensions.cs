@@ -1009,7 +1009,8 @@ namespace Intel.MyDeals.BusinessLogic
             //newPacket.Messages.Messages.RemoveAll(r => true);
 
             // Tack on the save action call now
-            newPacket.AddSaveActions(myDealsData[opDataElementType]);
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            newPacket.AddSaveActions(myDealsData[opDataElementType], null, atrbMstr);
 
             if (opDataElementType == contractToken.CopyFromObjType && contractToken.CopyFromId > 0)
             {
@@ -1063,7 +1064,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (finalDeleteIds.Any())
             {
-                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, finalDeleteIds, 40));
+                packet.AttachAction(DealSaveActionCodes.OBJ_DELETE, 40, finalDeleteIds);
             }
         }
     }

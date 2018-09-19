@@ -5,6 +5,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.MyDeals.DataLibrary;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -386,7 +387,8 @@ namespace Intel.MyDeals.BusinessLogic
                 // Tack on the save action call now
                 List<int> nonTenderIds = dealIds.Where(d => !tenderDealIds.Contains(d)).ToList();
                 List<int> possibleMajorIds = dealIds.Where(d => !tenderDealIds.Contains(d) || tenderWonDealsIds.Contains(d)).ToList();
-                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, possibleMajorIds);
+                AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, possibleMajorIds, atrbMstr);
                 if (dealIds.Any())
                 {
                     myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds.Union(tenderWonDealsIds).ToList()); // not sure if we need it in both places or just the PS
