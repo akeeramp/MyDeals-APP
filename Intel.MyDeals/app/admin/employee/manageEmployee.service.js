@@ -22,8 +22,6 @@
         usrWwid = window.usrWwid;
     }
 
-        debugger;
-
     function manageEmployeeService($http, dataService, logger, $q) {
 
         var apiBaseUrl = "api/UserPreferences/";

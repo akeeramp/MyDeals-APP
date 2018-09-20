@@ -58,7 +58,7 @@ namespace Intel.MyDeals.Entities
             majorDealIds.AddRange(wonTenderIds);
 
             // US155169: Check for major change not triggering re-deal items to trigger tracker and sync major (Wrong way major changes)
-            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList();
+            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList(): new List<MyDealsAttribute>();
 
             List<int> onChangeWrongWayIds = testPacket.AllDataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
             List<int> majorFieldNoRedealIds = testPacket.AllDataElements
