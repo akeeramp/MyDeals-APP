@@ -236,11 +236,12 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.getFileValue = function (dataItem) {
                 if (!rootScope.C_VIEW_ATTACHMENTS) return "NoPerm";
                 if ($scope.isFileAttachmentEnabled) {
-                    if (!dataItem.HAS_ATTACHED_FILES) {
+                    if (!dataItem.HAS_ATTACHED_FILES || dataItem.HAS_ATTACHED_FILES === '0') {
                         if (dataItem.PS_WF_STG_CD === 'Cancelled') return "CantAdd";
-                        if (dataItem.PS_WF_STG_CD !== 'Cancelled') return "AddFile";
+                        if (dataItem.PS_WF_STG_CD !== 'Cancelled')  return "AddFile";
                     }
-                    if (dataItem.HAS_ATTACHED_FILES === '1') return "HasFile";
+                    // Else it has files
+                    return "HasFile";
                 }
 
                 return "NoPerm";
@@ -284,7 +285,9 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
                 //Forces datasource web API call
                 $scope.attachmentsDataSource.read();
-                if (fVal === "HasFile" || fVal === "AddFile") $scope.openAttachments();
+                if (fVal === "HasFile" || fVal === "AddFile") {
+                    $scope.openAttachments();
+                }
             }
 
             $scope.onFileSelect = function (e) {
@@ -350,6 +353,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     rootScope.saveCell($scope.dataItem, "HAS_ATTACHED_FILES");
 
                     $scope.initComplete = true;
+
                     kendo.ui.progress($("#attachmentsGrid"), false);
                 },
                 pageSize: 25,
@@ -476,6 +480,12 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     title: "Deal " + $scope.dataItem.DC_ID + " Attachments",
                     closable: false,
                     modal: true,
+                    close: function(e){
+                        //alert("Hi");
+                        $scope.initComplete = false;
+                        $scope.attachmentCount = 1;
+                        $("#attachmentsGrid").remove();
+                    },
                     actions: [
                         {
                             text: 'Close',
@@ -546,13 +556,11 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 $rootScope.$broadcast('busy', "Updating Deals", "Updating hold status of Deals.");
                 objsetService.actionWipDeals($scope.rootScope.contractData.CUST_MBR_SID, $scope.rootScope.contractData.DC_ID, data).then(
                     function (returnData) {
-                        //debugger;
                         $rootScope.$broadcast('SyncHiddenItems', returnData, data);
                         $rootScope.$broadcast('busy', "", "");
                     },
                     function (result) {
                         $rootScope.$broadcast('busy', "", "");
-                        //debugger;
                     }
                 );
             }
