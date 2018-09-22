@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/7/2018 10:25:35 AM
+File Updated: 9/21/2018 5:14:55 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -234,22 +234,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute BID_STATUS = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "BID_STATUS",
-			ATRB_DESC = "Tender Bid Status",
-			ATRB_LBL = "Tender Bid Status",
-			ATRB_MAX_LEN = 0,
-			ATRB_SID = 3702,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
-		};
 		public static MyDealsAttribute BLENDED_GEO = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "BLENDED_GEO",
@@ -297,6 +281,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute BOX_SPEC_CD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "BOX_SPEC_CD",
+			ATRB_DESC = "Spec code for box product",
+			ATRB_LBL = "Spec code for box product",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 7094,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "PRD",
+			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute BRAND_GROUP = new MyDealsAttribute()
 		{
@@ -1193,6 +1193,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_Q_SPEC_FLG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_Q_SPEC_FLG",
+			ATRB_DESC = "Default flag for all customers to select Q spec products",
+			ATRB_LBL = "Default Samples Flag",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 2023,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute DIV_APPROVED_BY = new MyDealsAttribute()
 		{
@@ -3274,6 +3290,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute PRE_SLS_IND = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRE_SLS_IND",
+			ATRB_DESC = "Pre Sales Indicator",
+			ATRB_LBL = "Pre Sales Indicator",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3710,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute PRICE_SEGMENT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRICE_SEGMENT",
@@ -3417,6 +3449,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute Q_SPEC_FLG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "Q_SPEC_FLG",
+			ATRB_DESC = " Flag for customer to select Q spec products",
+			ATRB_LBL = "Samples Flag",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 2024,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute QLTR_BID_GEO = new MyDealsAttribute()
 		{
@@ -3866,6 +3914,38 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute SPEC_CD_FLTR = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SPEC_CD_FLTR",
+			ATRB_DESC = "Product spec code filter",
+			ATRB_LBL = "Product spec code filter",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3708,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute SPEC_XFER_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SPEC_XFER_DT",
+			ATRB_DESC = "Q to S Transfer Date",
+			ATRB_LBL = "Q to S Transfer Date",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 7096,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "PRD",
+			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = default(System.String)
+		};
 		public static MyDealsAttribute START_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "START_DT",
@@ -3946,6 +4026,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CMNT_HIST"
 		};
+		public static MyDealsAttribute TENDER_PUBLISHED = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TENDER_PUBLISHED",
+			ATRB_DESC = "Is Tender Contract Published",
+			ATRB_LBL = "Is Tender Published",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3008,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute TERMS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "TERMS",
@@ -4025,6 +4121,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute TRAY_SPEC_CD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TRAY_SPEC_CD",
+			ATRB_DESC = "Spec code for tray product",
+			ATRB_LBL = "Spec code for tray product",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 7095,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "PRD",
+			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute TRDMRK_NM = new MyDealsAttribute()
 		{
@@ -4185,6 +4297,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute VERTICAL_ROLLUP = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "VERTICAL_ROLLUP",
+			ATRB_DESC = "Rollup value of product verticals of children for vertical security",
+			ATRB_LBL = "Vertical Rollup",
+			ATRB_MAX_LEN = 1000,
+			ATRB_SID = 3709,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute VOLUME = new MyDealsAttribute()
 		{
