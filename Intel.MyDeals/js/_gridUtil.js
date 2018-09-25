@@ -324,14 +324,14 @@ gridUtils.exportDimTrkrControlWrapper = function (passedData) {
 
 gridUtils.getFormatedDim = function (dataItem, field, dim, format) {
     var item = dataItem[field];
-    if (item === undefined || item[dim] === undefined) return item;
+    if (item === undefined || item[dim] === undefined) return ""; //return item; // Used to return "undefined" which would show on the UI.
     return gridUtils.formatValue(item[dim], format);
 }
 gridUtils.formatValue = function (val, format) {
     if (val === undefined) {
         val = "";
     }
-    else if (format !== undefined) {
+    else if (format !== undefined || format !== "string") { // Just pass val back for string, beats an empty IF case below..
         kendo.culture("en-US");
         if (format === "currency") {
             if (!isNaN(val))

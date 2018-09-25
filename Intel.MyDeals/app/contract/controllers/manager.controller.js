@@ -527,6 +527,20 @@
                                 hidden: !root.CAN_VIEW_COST_TEST,
                                 filterable: { multi: true, search: true }
                             }, {
+                                field: "COMP_SKU",
+                                title: "Comp SKU",
+                                template: "#= gridUtils.getFormatedDim(data, 'COMP_SKU', '20___0', 'string') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_COST_TEST,
+                                filterable: false
+                            }, {
+                                field: "COMPETITIVE_PRICE",
+                                title: "Comp Price",
+                                template: "#= gridUtils.getFormatedDim(data, 'COMPETITIVE_PRICE', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_COST_TEST,
+                                filterable: false
+                            }, {
                                 field: "MEETCOMP_TEST_RESULT",
                                 title: "Meet Comp Test Result",
                                 width: "100px",
@@ -665,6 +679,20 @@
                                 width: "100px",
                                 hidden: !root.CAN_VIEW_COST_TEST,
                                 filterable: { multi: true, search: true }
+                            }, {
+                                                                field: "COMP_SKU",
+                                title: "Comp SKU",
+                                template: "#= gridUtils.getFormatedDim(data, 'COMP_SKU', '20___0', 'string') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_COST_TEST,
+                                filterable: false
+                            }, {
+                                field: "COMPETITIVE_PRICE",
+                                title: "Comp Price",
+                                template: "#= gridUtils.getFormatedDim(data, 'COMPETITIVE_PRICE', '20___0', 'currency') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
+                                width: "100px",
+                                hidden: !root.CAN_VIEW_COST_TEST,
+                                filterable: false
                             }, {
                                 field: "MEETCOMP_TEST_RESULT",
                                 title: "Meet Comp Test Result",
