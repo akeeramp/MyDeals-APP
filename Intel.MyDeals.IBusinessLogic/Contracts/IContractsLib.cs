@@ -40,5 +40,7 @@ namespace Intel.MyDeals.IBusinessLogic
         bool IsDuplicateContractTitle(int dcId, string title);
 
         dynamic GetContractsStatus(DashboardFilter dashboardFilter);
+
+        List<PublishTender> PublishTenderDeals(int CONTRACT_SID);
     }
 }

@@ -19,6 +19,7 @@ function objsetService($http, dataService, logger, $q, $location) {
 
     var service = {
         createTenderContract: createTenderContract,
+        publishTenderDeals: publishTenderDeals,
         createContract: createContract,
         copyContract: copyContract,
         copyContractPivot: copyContractPivot,
@@ -88,6 +89,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     function createTenderContract(custId, contractId, data) {        
         return dataService.post(apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId, data);
     }
+    function publishTenderDeals(contractId) {
+        return dataService.post(apiBaseContractUrl + 'PublishTenderContract/' + contractId);
+    }    
     function createContract(custId, contractId, ct) {
         return dataService.post(apiBaseContractUrl + 'SaveContract/' + custId + '/' + contractId, [ct]);
     }

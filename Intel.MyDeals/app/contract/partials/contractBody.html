@@ -31,7 +31,7 @@
 		</div>
 	</div>
     <div ng-if="selectedTAB == 'MC'">
-        <meet-comp obj-sid="contractData.DC_ID" is-adhoc="0" obj-type-id="1" last_meet_comp_run="contractData.LAST_COST_TEST_RUN"></meet-comp>
+        <div ng-include="'app/contract/partials/meetComp.html'"></div>
     </div>
 	<div id="secContainer" ng-show="selectedTAB != 'MC'">
 		<div kendo-splitter
@@ -78,6 +78,8 @@
 
 
 <style>
+.wizard-step-text h4 {cursor: pointer}
+.wizard-step-text p {cursor: pointer}
 	.contractStratHeader .isReadOnly {
 		background-color: #ffffff !important;
 	}

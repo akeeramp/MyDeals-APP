@@ -498,6 +498,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
                 dealType: function () {
                     return root.curPricingTable.OBJ_SET_TYPE_CD;
+                },
+                isTender: function () {
+                    return root.contractData.IS_TENDER;
                 }
             }
         });
@@ -2715,6 +2718,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         },
                         dealType: function () {
                             return root.curPricingTable.OBJ_SET_TYPE_CD;
+                        },
+                        isTender: function () {
+                            return root.contractData.IS_TENDER;
                         }
                     }
                 });
@@ -2757,7 +2763,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var msg = isError ? beh.validMsg["PTR_USER_PRD"] : "";
         sheet.range(root.colToLetter['PTR_USER_PRD'] + (row + 1)).validation(root.myDealsValidation(isError, msg, false));
     }
-
+    
     function ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         var pcUi = new perfCacheBlock("Validate Products", "UI");
 
@@ -2883,7 +2889,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
             var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
 
-            productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType, $scope.contractData.DC_ID) //Once the database is fixed remove the hard coded geo_mbr_sid
+            productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType, $scope.contractData.DC_ID, $scope.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
                     pcMt.addPerfTimes(response.data.PerformanceTimes);
                     if ($scope.$root.pc !== null) $scope.$root.pc.add(pcMt.stop());

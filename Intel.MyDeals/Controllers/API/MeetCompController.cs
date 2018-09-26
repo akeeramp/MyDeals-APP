@@ -72,13 +72,14 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="CNTRCT_OBJ_SID"></param>
         /// <returns></returns>
         [Authorize]
-        [Route("GetMeetCompProductDetails/{CNTRCT_OBJ_SID}/{MODE}")]
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
+        [Route("GetMeetCompProductDetails/{CNTRCT_OBJ_SID}/{MODE}/{OBJ_TYPE_ID}")]
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE, int? OBJ_TYPE_ID)
         {
-            return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE)
+            OBJ_TYPE_ID = OBJ_TYPE_ID ?? 1;
+            return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE, (int)OBJ_TYPE_ID)
                 , $"Unable to {"get Meet Comp"}"
             );
-        }
+        }        
 
         /// <summary>
         /// Manage Meet Comp TAB

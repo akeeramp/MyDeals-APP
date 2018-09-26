@@ -147,7 +147,7 @@
 
 	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%; margin-top: -3px; margin-left: -2px;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
 
-	<div class="help-add-prod" id="divHelpAddProd" ng-if="root.pricingTableData.PRC_TBL_ROW.length === 0">
+	<div class="help-add-prod" id="divHelpAddProd" ng-if="root.pricingTableData.PRC_TBL_ROW.length === 0" ng-class="{'tenderTooltipHelp': isTenderContract == true}">
 		<div>
 			<i class="intelicon-arrow-up"></i>
 		</div>
@@ -170,6 +170,9 @@
 </script>
 
 <style>
+	.tenderTooltipHelp{
+		left: 160px !important;
+	}
 	.help-add-prod {
 		position: absolute;
 		top: calc(60vh);

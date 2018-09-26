@@ -1,7 +1,8 @@
 ﻿<div class="row wizard" style="padding-top: 35px;">
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first" ng-class="{'complete': isWip, 'complete': enableDealEditorTab() === true}">
-            <a><span class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'PTR'}">1</span></a>
+        <div class="wizard-panel first" ng-class="{'complete': curPricingStrategy.PASSED_VALIDATION == 'Complete'}">
+            <a id="tenderWidPTR" ng-click="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+			<span class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'PTR'}">1</span></a>
         </div>
         <a ng-click="tenderWidgetPathManager('backToPricingTable', 'PTR')">
             <div class="wizard-step-text">
@@ -11,10 +12,10 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel" ng-class="{'complete': enableDealEditorTab() == true, disabled: enableDealEditorTab() == false}">
-            <span class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'DE'}">2</span>
+        <div class="wizard-panel" ng-class="{'complete': curPricingStrategy.PASSED_VALIDATION == 'Complete', disabled: curPricingStrategy.PASSED_VALIDATION != 'Complete'}">
+            <span id="tenderWidDE" class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'DE', 'isDisabled': curPricingStrategy.PASSED_VALIDATION != 'Complete'}" ng-click="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">2</span>
         </div>
-        <a ng-class="{'complete': enableDealEditorTab() == true, 'isDisabled': enableDealEditorTab() == false}" ng-click="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">
+        <a ng-class="{'isDisabled': curPricingStrategy.PASSED_VALIDATION != 'Complete'}" ng-click="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">
             <div class="wizard-step-text">
                 <h4><i ng-show="selectedTAB == 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
                 <p>Adhoc Tender Deal Editor Manager</p>
@@ -22,23 +23,30 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel" ng-class="{'complete': MEETCOMP_TEST_RESULT == 'Pass'}">
-            <span class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'MC'}">3</span>
+        <div class="wizard-panel" ng-class="{'complete': curPricingStrategy.MEETCOMP_TEST_RESULT == 'Pass'}">
+            <span id="tenderWidMC" class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'MC', 'isDisabled': curPricingStrategy.PASSED_VALIDATION != 'Complete'}" ng-click="tenderWidgetPathManager('', 'MC')">3</span>
         </div>
-        <a ng-class="{'isDisabled': COST_TEST_RESULT.length > 0}" ng-click="tenderWidgetPathManager('', 'MC')">
+        <a ng-class="{'isDisabled': curPricingStrategy.PASSED_VALIDATION != 'Complete'}" ng-click="tenderWidgetPathManager('', 'MC')">
             <div class="wizard-step-text">
                 <h4><i ng-show="selectedTAB == 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
-                <p>Adhoc Tender Meet Comp Manager</p>
+                <p>Tender Meet Comp Manager</p>
             </div>
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel last isDisabled"><span class="badge wizard-step">4</span></div>
-        <a ng-click="tenderWidgetPathManager('publishWipDealsFromTab', 'PD')">
+        <div class="wizard-panel last" ng-class="{'complete': selectedTAB == 'PD','isDisabled': curPricingStrategy.MEETCOMP_TEST_RESULT != 'Pass'}">
+			<span id="tenderWidPD" class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'PD'}" ng-click="tenderWidgetPathManager('publishTenderDeal', 'PD')">4</span>
+		</div>
+        <a ng-click="tenderWidgetPathManager('publishTenderDeal', 'PD')" ng-class="{'isDisabled': curPricingStrategy.MEETCOMP_TEST_RESULT != 'Pass'}">
             <div class="wizard-step-text">
-                <h4>Publish Adhoc Deal</h4>
-                <p>Don't peep. We are changing.</p>
+                <h4><i ng-show="selectedTAB == 'PD'" class="intelicon-arrow-forward-right "></i> &nbsp; Publish Adhoc Deal</h4>
+                <p>Converting into individuals deals.</p>
             </div>
         </a>
     </div>
 </div>
+<style>
+#tenderWidPD, #tenderWidDE, #tenderWidMC, #tenderWidPTR{
+	cursor:pointer !important;
+	}
+</style>

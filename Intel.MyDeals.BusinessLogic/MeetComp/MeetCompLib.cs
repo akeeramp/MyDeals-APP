@@ -50,10 +50,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="CNTRCT_OBJ_SID"></param>
         /// <returns></returns>
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE, int OBJ_TYPE_ID)
         {
             // TODO :Later need to decide caching will be apply or not
-            List<MeetCompResult> data = _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE);
+            List<MeetCompResult> data = _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE, OBJ_TYPE_ID);
             dynamic[] dynData = data.Cast<dynamic>().ToArray();
             MyRulesConfiguration.ApplyRules(dynData, MyRulesTrigger.OnLoadMeetComp);
             List<MeetCompResult> retData = dynData.Cast<MeetCompResult>().ToList();

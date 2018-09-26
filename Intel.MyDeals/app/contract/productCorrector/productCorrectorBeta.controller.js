@@ -36,6 +36,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.DEAL_TYPE = dealType;
     vm.showIncludeExcludeLabel = false;
     vm.selectedItms = [];
+    vm.isTender = "";
+    if (contractData.IS_TENDER) {
+        vm.isTender = contractData.IS_TENDER;
+    }
 
     //Deal type checking: make it false if you don't want to show the label in Product(s) not found area.
     if (vm.DEAL_TYPE == "VOL_TIER" || vm.DEAL_TYPE == "PROGRAM") {
@@ -241,6 +245,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     HAS_L1: "",
                     HAS_L2: "",
                     HIER_NM_HASH: "",
+                    DISP_HIER_VAL_NM: "",
                     HIER_VAL_NM: "",
                     MM_MEDIA_CD: "",
                     MTRL_ID: "",
@@ -715,6 +720,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function validateNoOfKITProducts() {
+        var noOfValidItem = (vm.isTender == 1 && vm.DEAL_TYPE.toLowerCase() == 'ecap') ? 1 : 10; //Added Tender ECAP Rules
         var validProducts = $linq.Enumerable().From(vm.curRowProds)
             .Where(function (x) { return x.status === 'Good' }).ToArray().length;
 
@@ -722,8 +728,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             .Where(function (x) { return x.status === 'Issue' })
             .Select(function (x) { return x.matchName.length })
             .Sum();
-        if (parseInt(resolvedProducts) + parseInt(validProducts) >= 10) {
-            logger.stickyError("You have too many products! You may have up to 10 products.");
+        if (parseInt(resolvedProducts) + parseInt(validProducts) >= noOfValidItem) {
+            logger.stickyError("You have too many products! You may have up to " + noOfValidItem + " product(s)." );
             return false;
         }
         return true;
@@ -740,7 +746,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 event.target.checked = false;
                 return;
             }
-            if (vm.DEAL_TYPE === "KIT" && !validateNoOfKITProducts()) {
+            if (((vm.DEAL_TYPE === "KIT" || (vm.isTender == 1 && vm.DEAL_TYPE.toLowerCase() == 'ecap')) && !validateNoOfKITProducts())) { //Added Tender ECAP Rules
                 event.target.checked = false;
                 return;
             }
@@ -1022,6 +1028,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 suggestedProduct: angular.copy(suggestedProduct),
                 dealType: function () {
                     return dealType;
+                },
+                isTender: function () {
+                    return vm.isTender;
                 }
             }
         });

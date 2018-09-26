@@ -1186,6 +1186,45 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        /// <summary>
+        /// Publishing Tender Deals
+        /// </summary>
+        /// <param name="CONTRACT_SID"></param>
+        /// <param name="USER_WWID"></param>
+        /// <returns></returns>
+        public List<PublishTender> PublishTenderDeals(int OBJ_SID)
+        {
+            OpLog.Log("PR_MYDL_PUBL_TNDR");
+
+            var ret = new List<PublishTender>();
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_PUBL_TNDR
+                {
+                    @OBJ_SID = OBJ_SID,
+                    @USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                }))
+                {
+                    int IDX_SUCCESS = DB.GetReaderOrdinal(rdr, "SUCCESS");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new PublishTender
+                        {
+                            SUCCESS = (IDX_SUCCESS < 0 || rdr.IsDBNull(IDX_SUCCESS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SUCCESS)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
 
     }
 }

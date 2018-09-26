@@ -605,7 +605,9 @@
                     ""
                     ? null
                     : $scope.contractData.CUST_MBR_SID;
-                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, value, null, null)
+                var qtrValue = isTender == true ? "4" : null;
+                var yearValue = isTender == true ? new Date().getFullYear() : null;
+                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, value, qtrValue, yearValue)
                     .then(function (response) {
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
@@ -632,7 +634,10 @@
 
             var getCurrentQuarterDetails = function () {
                 var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
-                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, new Date, null, null)
+                var isDate = isTender == true ? null : new Date();
+                var qtrValue = isTender == true ? "4" : null;
+                var yearValue = isTender == true ? new Date().getFullYear() : null;
+                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
                     .then(function (response) {
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
@@ -2797,6 +2802,7 @@
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.$broadcast('saveComplete', data);
                         $scope.resetDirty();
+                        
                         $scope.delPtrIds = [];
 
                         if (!!toState) {
@@ -2810,6 +2816,10 @@
                                 $scope.stealthMode = false;
                             }, 1000);
                         }
+                        if ($scope.isTenderContract && $scope.selectedTAB == 'PTR') {
+                            $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                        }
+                        
                     } else {
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
@@ -3387,6 +3397,9 @@
                 true);
         }
         $scope.createTenderContract = function (ct) {
+            //Adding TENDER_PUBLISHED for Tender Contract
+            ct.TENDER_PUBLISHED = 1===0;
+
             //Cloning PS
             var ps = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
             ps.DC_ID = $scope.uid--;
@@ -4054,9 +4067,10 @@
 
             if ((oldValue == null && newValue != null) || ($scope.isTenderContract && $scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT')) {
                 //initialize, hard coded for now, build into an admin page in future.
+                var marketSegment = ($scope.isTenderContract) ? "Corp" : "All Direct Market Segments";
                 if ($scope.currentPricingTable == null) {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
-                    if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All Direct Market Segments"];
+                    if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = [marketSegment];
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
                     if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
@@ -4377,12 +4391,71 @@
             return (str.length >= limit);
         }
 
-        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {
-            $scope.selectedTAB = _tabName;
+        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {            
+            var isFired = false;
 
-            if (angular.isFunction($scope[_actionName]))
-                $scope[_actionName]();
+            if (_tabName == 'DE') {
+                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    isFired = true;
+                    $scope.selectedTAB = _tabName;
+                }
+                else {
+                    logger.stickyError("Validate all your product(s) to open Deal Editor.");
+                }
+                
+            }
+
+            if (_tabName == 'MC' ) {
+                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    isFired = true;
+                    $scope.selectedTAB = _tabName;
+                }
+                else {
+                    logger.stickyError("Validate all your product(s) to open Deal Editor.");                    
+                }
+
+            }
+
+            if (_tabName == 'PD' ) {
+                if ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Pass') {
+                    isFired = true;
+                    $scope.selectedTAB = _tabName;
+                }
+                else {
+                    logger.stickyError("Meet Comp is not passed. You can not Publish this deal yet.");
+                }
+
+            }
+            
+            if (angular.isFunction($scope[_actionName]) && isFired)
+                $scope[_actionName]();            
         }
 
+        $scope.publishTenderDeal = function () {
+            $scope.setBusy("Publishing deals", "Converting into individuals deals. Then we will redicrt you to Tender Dashboard.");
+            objsetService.publishTenderDeals($scope.contractData.DC_ID).then(
+                function (data) {
+                    
+                    if (data.data.length > 0) { 
+                        if (data.data[0].SUCCESS == 1) {
+                            $scope.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
+                            document.location.href = "/advancedSearch#/tenderSearch";                            
+                        } else {
+                            logger.error("Publishing deals failed. Contact Administrator.");
+                        }
+                        $scope.setBusy("", "");
+                    }
+                    else {
+                        logger.error("Publishing deals failed. Contact Administrator.");                       
+                    }
+                    
+                },
+                function (result) {
+                    logger.error("Could not publish deals.", result, result.statusText);
+                    $scope.setBusy("", "");
+                }
+            );
+        }
+        
     }
 })();

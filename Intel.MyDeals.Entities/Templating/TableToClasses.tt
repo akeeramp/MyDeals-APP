@@ -20,7 +20,7 @@
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
 
-	var dbobjects = new DBObjects(@"Database=MyDeals;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;");
+	var dbobjects = new DBObjects(@"Database=MyDeals;Server=EG1RDMDBdev01.AMR.CORP.INTEL.COM\RDMDEV1, 3180;integrated security=SSPI;");
 
 	WriteLine(dbobjects.BoilerPlateDetails);
 
@@ -322,12 +322,12 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Get Deal Details
-	ds = dbobjects.ExecuteDataSet("exec PR_MANAGE_QUOTE_LETTER_TEMPLATES @intWWID=10548414, @mode='Get' ");
+	ds = dbobjects.ExecuteDataSet("exec PR_MANAGE_QUOTE_LETTER_TEMPLATES @intWWID=10548414, @mode='Get', @debug = 0 ");
 	ds.Tables[0].TableName = "AdminQuoteLetter";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//Get Quote Letter Body
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_QUOTE_INFO @objsidlst = '502124', @callMode =2");
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_QUOTE_INFO @objsidlst = '502124', @callMode =1");
 	ds.Tables[0].TableName = "QuoteLetterContentInfo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -347,6 +347,12 @@ using System.Collections.Generic;
 	//Fun Facts
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_FUN_FACT");
 	ds.Tables[0].TableName = "Funfact";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	
+	//Publish Tender deal
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_PUBL_TNDR @OBJ_SID = 5310, @USER_WWID = 99999999");
+	ds.Tables[0].TableName = "PublishTender";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();

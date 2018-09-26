@@ -403,10 +403,10 @@ namespace Intel.MyDeals.Controllers.API
              );
         }
 
-        [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}/{contractId}")]
+        [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}/{contractId}/{IS_TENDER}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public ProductLookupPacket TranslateProducts(List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId)
+        public ProductLookupPacket TranslateProducts(List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId, bool IS_TENDER)
         {
             DateTime start = DateTime.Now;
 
@@ -416,7 +416,7 @@ namespace Intel.MyDeals.Controllers.API
                 ContractId = contractId
             };
 
-            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, usrData, CUST_MBR_SID, DEAL_TYPE)
+            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, usrData, CUST_MBR_SID, DEAL_TYPE, IS_TENDER)
                 , $"Unable to translate products"
             );
 
@@ -430,7 +430,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("TranslateProductsWithMapping/{CUST_MBR_SID}/{DEAL_TYPE}/{contractId}/{pricingStrategyId}/{pricingTableId}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public ProductLookupPacket TranslateProductsWithMapping(List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId, int pricingStrategyId, int pricingTableId)
+        public ProductLookupPacket TranslateProductsWithMapping(List<ProductEntryAttribute> usrData, int CUST_MBR_SID, string DEAL_TYPE, int contractId, bool IS_TENDER, int pricingStrategyId, int pricingTableId)
         {
             DateTime start = DateTime.Now;
 
@@ -440,7 +440,7 @@ namespace Intel.MyDeals.Controllers.API
                 ContractId = contractId
             };
 
-            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, usrData, CUST_MBR_SID, DEAL_TYPE)
+            ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, usrData, CUST_MBR_SID, DEAL_TYPE, IS_TENDER)
                 , $"Unable to translate products"
             );
 
@@ -472,7 +472,7 @@ namespace Intel.MyDeals.Controllers.API
                     ContractId = item.contractId
                 };
 
-                ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, item.usrData, item.CUST_MBR_SID, item.DEAL_TYPE)
+                ProductLookup result = SafeExecutor(() => _productsLib.TranslateProducts(contractToken, item.usrData, item.CUST_MBR_SID, item.DEAL_TYPE, item.IS_TENDER)
                     , $"Unable to translate products"
                 );
 

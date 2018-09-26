@@ -11,7 +11,10 @@
 
         return {
             scope: {
-                objSid: '='
+                objSid: '=',
+                isAdhoc: '=',
+                objTypeId: '=',
+                lastMeetCompRun: '='
             },
             restrict: 'AE',
             transclude: true,
@@ -22,7 +25,7 @@
                 var hideViewMeetCompResult = window.usrRole === "FSE";  //|| !$scope.root.CAN_VIEW_MEET_COMP;
                 var hideViewMeetCompOverride = !(window.usrRole === "DA" || window.usrRole === "Legal"); //|| !$scope.root.CAN_VIEW_MEET_COMP;
                 var canUpdateMeetCompSKUPriceBench = (usrRole === "FSE" || usrRole === "GA");
-
+                
                 var columnIndex = {
                     COMP_SKU: 7,
                     COMP_PRC: 7,
@@ -73,7 +76,7 @@
                 }
 
                 $scope.lastMeetCompRunCalc = function () {
-                    var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
+                    var LAST_MEET_COMP_RUN = $scope.isAdhoc === 0 ? $scope.$parent.contractData.LAST_COST_TEST_RUN : $scope.lastMeetCompRun;
                     if (!!LAST_MEET_COMP_RUN) {
                         var localTime = gridUtils.convertLocalToPST(new Date());
                         var lastruntime = moment(LAST_MEET_COMP_RUN);
@@ -117,7 +120,17 @@
                         $scope.IsMeetCompRun = true;
                     }
 
-                    return "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
+                    if ($scope.isAdhoc === 0) {
+                        $scope.MC_MODE = "D";                        
+                    }
+
+                    if (Math.round(dsplNum) > 0) {
+                        return "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
+                    }
+                    else {
+                        return "";
+                    }
+                    
                 }
 
                 if (!!$scope.objSid) {
@@ -133,7 +146,7 @@
                     $scope.IsMeetCompRun = false;
                     $scope.lastMeetCompRunCalc();
 
-                    dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE).then(function (response) {
+                    dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE + "/" + $scope.objTypeId).then(function (response) {
                         $scope.$parent.refreshContractData();
                         if (response.data.length > 0) {
                             response.data.forEach(function (obj) {
@@ -253,7 +266,7 @@
                                     }
 
                                     //COMP_OVRRD_RSN checking....
-                                    if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA" )) {
+                                    if (data[i].COMP_OVRRD_RSN <= 0 && (usrRole == "DA")) {
                                         errorObj.COMP_OVRRD_RSN = true;
                                         errorObj.RW_NM = data[i].RW_NM;
                                         isError = true;
@@ -1118,10 +1131,10 @@
                                                         }
                                                         else {
                                                             tempprcData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                    .Where(function (x) {
-                                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
-                                                                    })
-                                                                    .ToArray();
+                                                                .Where(function (x) {
+                                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                                                })
+                                                                .ToArray();
 
                                                             for (var i = 0; i < tempprcData.length; i++) {
                                                                 if (options.model.COMP_PRC) {
@@ -1420,14 +1433,14 @@
                                     $scope.meetCompUpdatedList = [];
                                     $scope.$root.$broadcast('refreshContractData');
                                 },
-                                function (response) {
-                                    logger.error("Unable to save UpdateMeetCompProductDetails data", response, response.statusText);
-                                    $scope.isBusy = false;
-                                });
+                                    function (response) {
+                                        logger.error("Unable to save UpdateMeetCompProductDetails data", response, response.statusText);
+                                        $scope.isBusy = false;
+                                    });
                             }
                             $scope.forceRunMeetComp = function () {
                                 $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
-                                dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + 'A').then(function (response) {
+                                dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + 'A' + "/" + $scope.objTypeId).then(function (response) {
                                     $scope.meetCompMasterdata = response.data;
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
                                     if (usrRole == "GA") {
@@ -1439,10 +1452,10 @@
                                     $scope.meetCompUpdatedList = [];
                                     $scope.$root.$broadcast('refreshContractData');
                                 },
-                                function (response) {
-                                    logger.error("Unable to get GetMeetCompProductDetails data", response, response.statusText);
-                                    $scope.isBusy = false;
-                                });
+                                    function (response) {
+                                        logger.error("Unable to get GetMeetCompProductDetails data", response, response.statusText);
+                                        $scope.isBusy = false;
+                                    });
                             }
 
                             $scope.getDealDeatils = function (DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {

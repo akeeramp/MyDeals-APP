@@ -8,9 +8,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'crossVertical'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'crossVertical','isTender'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct, crossVertical) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct, crossVertical, isTender) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
@@ -60,8 +60,9 @@
         vm.isTester = isTester;
         vm.ToggleShowTree = toggleShowTree;
         vm.showDefault = true;
-        vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
-
+        vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >";
+        vm.isTender = isTender;
+        
         function resetexcludeProductMessage() {
             vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
         }
@@ -897,6 +898,7 @@
         }
 
         vm.save = function () {
+            var noOfValidItem = (vm.isTender == 1 && vm.dealType === "ECAP") ? 1 : 10; //Added Tender ECAP Rules
             if (vm.dealType !== "ECAP" && vm.dealType !== "KIT") {
                 // Get unique product types
                 var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
@@ -910,8 +912,8 @@
                     return;
                 }
             }
-            if (vm.dealType === "KIT" && vm.addedProducts.length > 10) {
-                logger.stickyError("You have too many products! You may have up to 10. Please remove " + (vm.addedProducts.length - 10) + " products from this row.");
+            if (((vm.dealType === "KIT") || (vm.isTender == 1 && vm.dealType === "ECAP")) && vm.addedProducts.length > noOfValidItem) {
+                logger.stickyError("You have too many products! You may have up to " + noOfValidItem + ". Please remove " + (vm.addedProducts.length - noOfValidItem) + " products from this row.");
                 return;
             }
 

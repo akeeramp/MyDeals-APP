@@ -163,10 +163,10 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE)
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE, int OBJ_TYPE_ID)
         {
             OpLog.Log("GetMeetCompProductDetails");
-
+            
             var ret = new List<MeetCompResult>();
             var cmd = new Procs.dbo.PR_MYDL_GET_MEET_COMP { };
 
@@ -178,6 +178,7 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_MEET_COMP
                 {
                     @obj_sids = dt,
+                    @OBJ_TYPE_ID = OBJ_TYPE_ID,
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
                     @MODE = MODE

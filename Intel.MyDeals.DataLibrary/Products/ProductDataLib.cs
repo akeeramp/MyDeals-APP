@@ -404,7 +404,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="productsToMatch"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE)
+        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE, bool IS_TENDER)
         {
             OpLog.Log("FindProductMatch");
             var ret = new List<PRD_TRANSLATION_RESULTS>();
@@ -418,6 +418,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     @CUST_MBR_SID = CUST_MBR_SID,
                     @DEAL_TYPE = DEAL_TYPE,
+                    @IS_TENDER = IS_TENDER,
                     tvt_HIER_VAL_NM = dt
                 };
 
@@ -956,11 +957,14 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CAP_END = DB.GetReaderOrdinal(rdr, "CAP_END");
                     int IDX_CAP_PRC_COND = DB.GetReaderOrdinal(rdr, "CAP_PRC_COND");
                     int IDX_CAP_START = DB.GetReaderOrdinal(rdr, "CAP_START");
+                    int IDX_CAPMaxRange = DB.GetReaderOrdinal(rdr, "CAPMaxRange");
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_FLAG_PICK = DB.GetReaderOrdinal(rdr, "FLAG_PICK");
                     int IDX_GEO_MBR_SID = DB.GetReaderOrdinal(rdr, "GEO_MBR_SID");
                     int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                    int IDX_RNK = DB.GetReaderOrdinal(rdr, "RNK");
+                    int IDX_ROW_NM = DB.GetReaderOrdinal(rdr, "ROW_NM");
                     int IDX_RowNumber = DB.GetReaderOrdinal(rdr, "RowNumber");
                     int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
                     int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
@@ -974,11 +978,14 @@ namespace Intel.MyDeals.DataLibrary
                             CAP_END = (IDX_CAP_END < 0 || rdr.IsDBNull(IDX_CAP_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_END),
                             CAP_PRC_COND = (IDX_CAP_PRC_COND < 0 || rdr.IsDBNull(IDX_CAP_PRC_COND)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP_PRC_COND),
                             CAP_START = (IDX_CAP_START < 0 || rdr.IsDBNull(IDX_CAP_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_START),
+                            CAPMaxRange = (IDX_CAPMaxRange < 0 || rdr.IsDBNull(IDX_CAPMaxRange)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAPMaxRange),
                             CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             FLAG_PICK = (IDX_FLAG_PICK < 0 || rdr.IsDBNull(IDX_FLAG_PICK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLAG_PICK),
                             GEO_MBR_SID = (IDX_GEO_MBR_SID < 0 || rdr.IsDBNull(IDX_GEO_MBR_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_MBR_SID),
                             HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                            RNK = (IDX_RNK < 0 || rdr.IsDBNull(IDX_RNK)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RNK),
+                            ROW_NM = (IDX_ROW_NM < 0 || rdr.IsDBNull(IDX_ROW_NM)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROW_NM),
                             RowNumber = (IDX_RowNumber < 0 || rdr.IsDBNull(IDX_RowNumber)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RowNumber),
                             YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2),
                             YCS2_END = (IDX_YCS2_END < 0 || rdr.IsDBNull(IDX_YCS2_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END),

@@ -580,5 +580,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             return myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
+
+
+        public List<PublishTender> PublishTenderDeals(int CONTRACT_SID)
+        {
+            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+            return opdc.PublishTenderDeals(CONTRACT_SID);
+        }
     }
+    
 }

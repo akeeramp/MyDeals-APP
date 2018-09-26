@@ -29,11 +29,12 @@
 
         return service;
 
-        function TranslateProducts(products, CUST_CD, DEAL_TYPE, contractId) {
-            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId, products);
+        function TranslateProducts(products, CUST_CD, DEAL_TYPE, contractId, isTender) {
+            var is_Tender = isTender == 1 ? true : false;
+            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId + "/" + is_Tender , products);
         }
-        function TranslateProductsWithMapping(products, CUST_CD, DEAL_TYPE, contractId, psId, ptId) {
-            return dataService.post(apiBaseUrl + 'TranslateProductsWithMapping/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId + "/" + psId + "/" + ptId, products);
+        function TranslateProductsWithMapping(products, CUST_CD, DEAL_TYPE, contractId, IS_TENDER, psId, ptId) {
+            return dataService.post(apiBaseUrl + 'TranslateProductsWithMapping/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId + "/" + contractId + "/" + psId + "/" + ptId, products);
         }
 
         function TranslateProductsWithMappingInBulk(data) {

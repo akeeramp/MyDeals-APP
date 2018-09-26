@@ -237,7 +237,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="products"></param>
         /// <returns></returns>
 
-        public ProductLookup TranslateProducts(ContractToken contractToken, List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string DEAL_TYPE)
+        public ProductLookup TranslateProducts(ContractToken contractToken, List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string DEAL_TYPE, bool IS_TENDER)
         {
             DateTime start = DateTime.Now;
             Stopwatch stopwatch = new Stopwatch();
@@ -351,7 +351,7 @@ namespace Intel.MyDeals.BusinessLogic
             start = DateTime.Now;
 
             var productsToDb = productsTodbConcurrent.SelectMany(x => x).ToList();
-            var productMatchResults = GetProductDetails(productsToDb, CUST_MBR_SID, DEAL_TYPE);
+            var productMatchResults = GetProductDetails(productsToDb, CUST_MBR_SID, DEAL_TYPE, IS_TENDER);
             contractToken.AddMark("GetProductDetails - PR_MYDL_TRANSLT_PRD_ENTRY", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductDetails", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
@@ -607,9 +607,9 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE)
+        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE, bool IS_TENDER)
         {
-            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, DEAL_TYPE);
+            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, DEAL_TYPE, IS_TENDER);
         }
 
         /// <summary>

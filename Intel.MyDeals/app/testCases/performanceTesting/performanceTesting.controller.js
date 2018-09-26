@@ -391,6 +391,7 @@
                         $scope.bulkPrdTranslateData.push({
                             usrData: savePacket,
                             CUST_MBR_SID: savePacket[0].CUST_MBR_SID, 
+                            IS_TENDER: savePacket[0].IS_TENDER, 
                             DEAL_TYPE: savePacket[0].dealType,
                             contractId: contractPacket.cntrctId,
                             pricingStrategyId: savePacket[0].psId,
@@ -399,7 +400,7 @@
                     } else {
                         $scope.prdResultDict[contractPacket.cntrctId + "_" + savePacket[0].psId + "_" + savePacket[0].ptId] = new perfCacheBlock("Product Validation", "MT");
 
-                        productSelectorService.TranslateProductsWithMapping(savePacket, savePacket[0].CUST_MBR_SID, savePacket[0].dealType, contractPacket.cntrctId, savePacket[0].psId, savePacket[0].ptId)
+                        productSelectorService.TranslateProductsWithMapping(savePacket, savePacket[0].CUST_MBR_SID, savePacket[0].dealType, contractPacket.cntrctId, contractPacket.IS_TENDER, savePacket[0].psId, savePacket[0].ptId)
                             .then(function (response) {
                                 $scope.processTranslatedResult(response);
                             }, function (response) {
