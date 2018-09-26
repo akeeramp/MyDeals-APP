@@ -393,7 +393,16 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
+                Attributes.COST_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
                 Attributes.PASSED_VALIDATION.ATRB_SID
+            };
+
+            List<string> submittedFailTests = new List<string>
+            {
+                "Not Run Yet",
+                "InComplete",
+                "Fail"
             };
 
             Dictionary<int, string> id2actnMapping = new Dictionary<int, string>();
@@ -419,6 +428,8 @@ namespace Intel.MyDeals.BusinessLogic
                 string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
                 string stageIn = id2stageMapping[dc.DcID];
                 string actn = id2actnMapping[dc.DcID];
+                string costTestInDB = dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
+                string meetCompInDB = dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
 
                 // concurency check
                 if (stageIn != stageInDb)
@@ -426,6 +437,19 @@ namespace Intel.MyDeals.BusinessLogic
                     opMsgQueue.Messages.Add(new OpMsg
                     {
                         Message = "The stage was changed by another source prior to this action.  Please refresh and try again.",
+                        MsgType = OpMsg.MessageType.Warning,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+                    continue;
+                }
+
+                // concurency check for meet comp and cost test values..
+                if (stageIn == WorkFlowStages.Submitted && submittedFailTests.Contains(meetCompInDB) && submittedFailTests.Contains(costTestInDB) && actns.ContainsKey("Approve") && actns["Approve"].Any(i => i.DC_ID == dc.DcID))
+                {
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = "Meet Comp and/or Cost Test need to be re-run prior to approvals.  Please refresh and try again.",
                         MsgType = OpMsg.MessageType.Warning,
                         ExtraDetails = dc.DcType,
                         KeyIdentifiers = new[] { dc.DcID }
