@@ -32,6 +32,11 @@
 
         vm.gridOptionsCAP = {
             dataSource: vm.dataSource,
+            toolbar: [{ name: 'excel', text: '<div class="excelText"><span>Excel<br/>Export</span></div>' }],
+            excel: {
+                fileName: "CAP Breakup Deatils Export.xlsx",
+                filterable: true
+            },
             sortable: true,
             resizable: true,
             columns: [
@@ -46,6 +51,11 @@
 
         vm.gridOptionsYCS2 = {
             dataSource: vm.dataSource,
+            toolbar: [{ name: 'excel', text: '<div class="excelText"><span>Excel<br/>Export</span></div>' }],
+            excel: {
+                fileName: "YCS2 Details Export.xlsx",
+                filterable: true
+            },
             sortable: true,
             resizable: true,
             columns: [
