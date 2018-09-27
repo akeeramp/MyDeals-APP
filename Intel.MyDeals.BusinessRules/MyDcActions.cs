@@ -864,9 +864,9 @@ namespace Intel.MyDeals.BusinessRules
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
             if (de == null || de.AtrbValue.ToString() == "") return;
-            if (de.AtrbValue.ToString() != "" && progPayment != "Backend")
+            if (de.AtrbValue.ToString() != "" && progPayment == "Frontend YCS2") // Moved check from "All Front End" Deals to only "Front End YCS2" (DE20600)
             {
-                de.AddMessage("Volume cannot be set for Frontend Deals.");
+                de.AddMessage("Volume cannot be set for Frontend YCS2 Deals.");
                 return;
             }
 

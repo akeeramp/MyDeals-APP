@@ -428,12 +428,12 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="Readonly if Not Backend",
+                    Title="Readonly if Not Backend (YCS2 only)", // This is being opened up for XAO3 deals, used to shut it down for all front end (DE20600)
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null 
-                        && !String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
+                        && String.Equals(de.AtrbValue.ToString(), "Frontend YCS2", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
