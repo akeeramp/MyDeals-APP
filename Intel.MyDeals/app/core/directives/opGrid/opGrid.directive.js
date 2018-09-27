@@ -1162,10 +1162,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var dim_base = "20___";
                     var dim_index = 0;  //start with dim 0 - the primary product
                     var model = options.model[options.field];
-                    while (model.hasOwnProperty(dim_base + dim_index)) {
-                        el += $scope.createEditEl(options.field, field.uiType, dim_base + dim_index, field.format);
-                        dim_index++;
-                    }
+                    if (model) {
+                        while (model.hasOwnProperty(dim_base + dim_index)) {
+                            el += $scope.createEditEl(options.field, field.uiType, dim_base + dim_index, field.format);
+                            dim_index++;
+                        }
+                    }                    
                 }
 
 
@@ -2569,6 +2571,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     size: 'lg',
                     resolve: {
                         productData: angular.copy(productData),
+                        priceCondition: function () {
+                            return priceCondition;
+                        }
                     }
                 });
 

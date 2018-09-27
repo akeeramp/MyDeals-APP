@@ -512,6 +512,9 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
             if (field === "CAP") {
                 tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
             }
+            if (field === "YCS2") {
+                tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
+            }
             tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\", \"" + dimkey + "\")'>";
             var fieldText = field + '_STRT_DT';
             // Special handling for YCS2, naming convention is not followed in defining start date attribute..

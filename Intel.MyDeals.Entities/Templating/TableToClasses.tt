@@ -242,7 +242,7 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "ProductEngName";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CAP_YCS2_CALC] @PrcCond='YCS2', @FlagPick='N'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CAP_YCS2_CALC] @PrcCond='YCS2', @FlagPick='N', @DSAView = 0");
 	ds.Tables[0].TableName = "ProductCAPYCS2";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

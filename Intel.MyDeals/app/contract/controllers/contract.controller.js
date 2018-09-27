@@ -650,7 +650,7 @@
                             $scope.contractData._behaviors.validMsg['END_DT'] = "";
 
                         // By default we dont want a contract to be backdated
-                        $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today)
+                        $scope.contractData.START_DT = isTender == 1 ? moment().format('l') : moment(response.data.QTR_STRT).isBefore(today)
                             ? today
                             : moment(response.data.QTR_STRT).format('l');
 
@@ -4393,7 +4393,9 @@
 
         $scope.tenderWidgetPathManager = function (_actionName, _tabName) {            
             var isFired = false;
-
+            if (_tabName == 'PTR') {
+                isFired = true;
+            }
             if (_tabName == 'DE') {
                 if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
                     isFired = true;

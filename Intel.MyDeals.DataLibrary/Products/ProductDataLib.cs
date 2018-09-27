@@ -948,7 +948,8 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     DealProductCustomer = dt,
                     PrcCond = priceCondition,
-                    FlagPick = getAvailable
+                    FlagPick = getAvailable,
+                    DSAView = false
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -962,10 +963,12 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_FLAG_PICK = DB.GetReaderOrdinal(rdr, "FLAG_PICK");
                     int IDX_GEO_MBR_SID = DB.GetReaderOrdinal(rdr, "GEO_MBR_SID");
                     int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
+                    int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
                     int IDX_RNK = DB.GetReaderOrdinal(rdr, "RNK");
                     int IDX_ROW_NM = DB.GetReaderOrdinal(rdr, "ROW_NM");
                     int IDX_RowNumber = DB.GetReaderOrdinal(rdr, "RowNumber");
+                    int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
                     int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
                     int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
                     int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
@@ -983,10 +986,12 @@ namespace Intel.MyDeals.DataLibrary
                             FLAG_PICK = (IDX_FLAG_PICK < 0 || rdr.IsDBNull(IDX_FLAG_PICK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLAG_PICK),
                             GEO_MBR_SID = (IDX_GEO_MBR_SID < 0 || rdr.IsDBNull(IDX_GEO_MBR_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_MBR_SID),
                             HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
+                            MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
                             RNK = (IDX_RNK < 0 || rdr.IsDBNull(IDX_RNK)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RNK),
                             ROW_NM = (IDX_ROW_NM < 0 || rdr.IsDBNull(IDX_ROW_NM)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROW_NM),
                             RowNumber = (IDX_RowNumber < 0 || rdr.IsDBNull(IDX_RowNumber)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RowNumber),
+                            SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID),
                             YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2),
                             YCS2_END = (IDX_YCS2_END < 0 || rdr.IsDBNull(IDX_YCS2_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END),
                             YCS2_START = (IDX_YCS2_START < 0 || rdr.IsDBNull(IDX_YCS2_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_START)

@@ -554,7 +554,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 field: "YCS2",
                 title: "YCS2",
                 width: "150px",
-                template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"YCS2\")' op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
                 filterable: { multi: true, search: true }
             },
             {
@@ -1272,7 +1272,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             windowClass: 'cap-modal-window',
             size: 'lg',
             resolve: {
-                productData: angular.copy(productData)
+                productData: angular.copy(productData),
+                priceCondition: function () {
+                    return priceCondition;
+                }
             }
         });
 

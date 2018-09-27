@@ -4448,9 +4448,9 @@ namespace Intel.MyDeals.Entities
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
-    /// on MBIRADAR-MOBL1
-    /// by mbiradar
-    /// at 9/5/2018 2:40:49 PM
+    /// on SAURAVKU-MOBL
+    /// by sauravku
+    /// at 09/26/2018 3:04:10 PM
     ///</summary>
 
     [DataContract]
@@ -4494,6 +4494,10 @@ namespace Intel.MyDeals.Entities
 
 
         [DataMember]
+        public System.String MTRL_ID { set; get; }
+
+
+        [DataMember]
         public System.Int32 PRD_MBR_SID { set; get; }
 
 
@@ -4507,6 +4511,10 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.Int32 RowNumber { set; get; }
+
+
+        [DataMember]
+        public System.String SOLD_TO_ID { set; get; }
 
 
         [DataMember]
@@ -4536,10 +4544,12 @@ namespace Intel.MyDeals.Entities
         int IDX_FLAG_PICK = DB.GetReaderOrdinal(rdr, "FLAG_PICK");
         int IDX_GEO_MBR_SID = DB.GetReaderOrdinal(rdr, "GEO_MBR_SID");
         int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
+        int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
         int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
         int IDX_RNK = DB.GetReaderOrdinal(rdr, "RNK");
         int IDX_ROW_NM = DB.GetReaderOrdinal(rdr, "ROW_NM");
         int IDX_RowNumber = DB.GetReaderOrdinal(rdr, "RowNumber");
+        int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
         int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
         int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
         int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
@@ -4555,10 +4565,12 @@ namespace Intel.MyDeals.Entities
         FLAG_PICK = (IDX_FLAG_PICK < 0 || rdr.IsDBNull(IDX_FLAG_PICK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLAG_PICK),
         GEO_MBR_SID = (IDX_GEO_MBR_SID < 0 || rdr.IsDBNull(IDX_GEO_MBR_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_MBR_SID),
         HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
+        MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
         PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
         RNK = (IDX_RNK < 0 || rdr.IsDBNull(IDX_RNK)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RNK),
         ROW_NM = (IDX_ROW_NM < 0 || rdr.IsDBNull(IDX_ROW_NM)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROW_NM),
         RowNumber = (IDX_RowNumber < 0 || rdr.IsDBNull(IDX_RowNumber)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RowNumber),
+        SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID),
         YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2),
         YCS2_END = (IDX_YCS2_END < 0 || rdr.IsDBNull(IDX_YCS2_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END),
         YCS2_START = (IDX_YCS2_START < 0 || rdr.IsDBNull(IDX_YCS2_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_START)

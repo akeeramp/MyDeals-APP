@@ -2,7 +2,7 @@
     <div class="capbreakout modal-header">
         <div class="row">
             <div class="cursorArea col-md-6 cappProdHeader">
-                <p class="">Product CAP Breakout</p>
+                <p class="">Product {{priceCondition}} Breakout</p>
             </div>
             <div class="col-md-1" style="padding-top:15px;">
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
@@ -13,8 +13,11 @@
         </div>
     </div>
     <div class="capbreakout modal-body">
-        <div>
+        <div ng-if="priceCondition == 'CAP'">
             <div kendo-grid class="opUiContainer md capbreakout kendoGridHeight" k-options="vm.gridOptionsCAP"></div>
+        </div>
+		<div ng-if="priceCondition == 'YCS2'">
+            <div kendo-grid class="opUiContainer md capbreakout kendoGridHeight" k-options="vm.gridOptionsYCS2"></div>
         </div>
     </div>
 </div>

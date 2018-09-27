@@ -759,7 +759,7 @@
                     field: "YCS2",
                     title: "YCS2",
                     width: "150px",
-                    template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"YCS2\")' op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
                     filterable: { multi: true, search: true },
                 },
                 {
@@ -883,6 +883,9 @@
                 size: 'lg',
                 resolve: {
                     productData: angular.copy(productData),
+                    priceCondition: function () {
+                        return priceCondition;
+                    }
                 }
             });
 
@@ -898,7 +901,7 @@
         }
 
         vm.save = function () {
-            var noOfValidItem = (vm.isTender == 1 && vm.dealType === "ECAP") ? 1 : 10; //Added Tender ECAP Rules
+            var noOfValidItem = (vm.isTender == 1 && vm.dealType === "ECAP" && vm.splitProducts != true) ? 1 : 10; //Added Tender ECAP Rules
             if (vm.dealType !== "ECAP" && vm.dealType !== "KIT") {
                 // Get unique product types
                 var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
@@ -912,7 +915,7 @@
                     return;
                 }
             }
-            if (((vm.dealType === "KIT") || (vm.isTender == 1 && vm.dealType === "ECAP")) && vm.addedProducts.length > noOfValidItem) {
+            if (((vm.dealType === "KIT") || (vm.isTender == 1 && vm.dealType === "ECAP" && vm.splitProducts != true)) && vm.addedProducts.length > noOfValidItem) {
                 logger.stickyError("You have too many products! You may have up to " + noOfValidItem + ". Please remove " + (vm.addedProducts.length - noOfValidItem) + " products from this row.");
                 return;
             }
@@ -1615,7 +1618,7 @@
                 {
                     field: "YCS2",
                     title: "YCS2",
-                    template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"YCS2\")' op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
                     filterable: { multi: true, search: true },
                 },
                 {
