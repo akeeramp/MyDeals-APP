@@ -33,7 +33,10 @@
     <div ng-if="selectedTAB == 'MC'">
         <div ng-include="'app/contract/partials/meetCompTab.html'"></div>
     </div>
-	<div id="secContainer" ng-show="selectedTAB != 'MC'">
+	<div ng-if="selectedTAB == 'PD'">
+        <div ng-include="'app/contract/partials/publishTender.html'"></div>
+    </div>
+	<div id="secContainer" ng-show="selectedTAB != 'MC' && selectedTAB != 'PD'">
 		<div kendo-splitter
 			 k-panes="[null, { collapsible: true, collapsed: true, min: '235px', size: '235px' }]"
 			 k-orientation="'vertical'"

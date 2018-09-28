@@ -4438,22 +4438,22 @@
             objsetService.publishTenderDeals($scope.contractData.DC_ID).then(
                 function (data) {
                     
-                    if (data.data.length > 0) { 
-                        if (data.data[0].SUCCESS == 1) {
+                    if (data) { 
+                        if (data.data == true) {
                             $scope.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
                             document.location.href = "/advancedSearch#/tenderSearch";                            
                         } else {
-                            logger.error("Publishing deals failed. Contact Administrator.");
+                            logger.stickyError("Publishing deals failed. Contact Administrator.");
                         }
                         $scope.setBusy("", "");
                     }
                     else {
-                        logger.error("Publishing deals failed. Contact Administrator.");                       
+                        logger.stickyError("Publishing deals failed. Contact Administrator.");                       
                     }
                     
                 },
                 function (result) {
-                    logger.error("Could not publish deals.", result, result.statusText);
+                    logger.stickyError("Could not publish deals.", result, result.statusText);
                     $scope.setBusy("", "");
                 }
             );

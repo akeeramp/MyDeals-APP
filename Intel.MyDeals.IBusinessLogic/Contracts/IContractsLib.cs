@@ -41,6 +41,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         dynamic GetContractsStatus(DashboardFilter dashboardFilter);
 
-        List<PublishTender> PublishTenderDeals(int CONTRACT_SID);
+        bool PublishTenderDeals(int CONTRACT_SID);
     }
 }

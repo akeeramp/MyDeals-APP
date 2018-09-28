@@ -1192,37 +1192,36 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="CONTRACT_SID"></param>
         /// <param name="USER_WWID"></param>
         /// <returns></returns>
-        public List<PublishTender> PublishTenderDeals(int OBJ_SID)
+        public bool PublishTenderDeals(int OBJ_SID)
         {
             OpLog.Log("PR_MYDL_PUBL_TNDR");
-
-            var ret = new List<PublishTender>();
+            bool success = false;
 
             try
             {
-                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_PUBL_TNDR
+                var ret = DataAccess.ExecuteScalar(new Procs.dbo.PR_MYDL_PUBL_TNDR
                 {
                     @OBJ_SID = OBJ_SID,
                     @USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID
-                }))
-                {
-                    int IDX_SUCCESS = DB.GetReaderOrdinal(rdr, "SUCCESS");
+                });
 
-                    while (rdr.Read())
-                    {
-                        ret.Add(new PublishTender
-                        {
-                            SUCCESS = (IDX_SUCCESS < 0 || rdr.IsDBNull(IDX_SUCCESS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SUCCESS)
-                        });
-                    } // while
+                
+                if (ret == null || ret == DBNull.Value || Convert.ToBoolean(ret) == false)
+                {
+                    success = false;
                 }
+                else
+                {
+                    success = true;
+                }
+                
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return ret;
+            return success;
         }
 
 

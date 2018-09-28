@@ -1,0 +1,58 @@
+﻿<div class="publishDiv row allDone" style="margin: 10px 0 0 0;">
+                <table style="width: 100%; height: 100%;">
+                    <tr>
+                        <td style="width: 100%;">
+                            <i class="intelicon-passed-completed-solid" style="font-size: 40px;color: #C4D600;"></i>
+
+                            <div class="done-title">Deals are ready to be Published!!</div>                            
+                            <div class="done-confirm">
+                                Would you like to convert into individuals deals?
+                            </div>
+                            <div>                                
+                                <button class="btn btn-primary prdBtn" ng-click="tenderWidgetPathManager('publishTenderDeal', 'PD')" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+</div>
+
+<style>
+	.publishDiv{
+		width: 100%;
+		margin: 0 auto;
+		text-align: center;
+		margin-top: 200px !important;
+	}
+	.prdBtn {
+        font-size: 13px;
+    }
+
+	.prdBtn.btn-primary {
+		background-color: #01AEEF;
+	}
+
+	.prdBtn.btn-primary:hover {
+		background-color: #01AEEF;
+		color: #1a3e6f;
+	}
+
+	.prdBtn.btn-primary:focus, .btn-primary:active {
+		outline: none !important;
+		background-color: #01AEEF;
+	}
+	
+	.done-title {
+        font-size: 30px;
+    }
+
+    .done-body {
+        font-size: 12px;
+    }
+
+    .done-confirm {
+        font-size: 16px;
+        text-align: center;
+        width: 100%;
+        padding: 25px 0;
+    }
+</style>

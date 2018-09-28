@@ -582,7 +582,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public List<PublishTender> PublishTenderDeals(int CONTRACT_SID)
+        public bool PublishTenderDeals(int CONTRACT_SID)
         {
             OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
             return opdc.PublishTenderDeals(CONTRACT_SID);
