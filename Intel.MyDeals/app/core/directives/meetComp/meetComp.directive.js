@@ -120,7 +120,7 @@
                         $scope.IsMeetCompRun = true;
                     }
 
-                    if ($scope.isAdhoc === 0) {
+                    if ($scope.isAdhoc === 1) {
                         $scope.MC_MODE = "D";                        
                     }
 
@@ -1404,7 +1404,7 @@
                                     if ($scope.tempUpdatedList.length > 0) {
                                         $scope.updateMeetComp();
                                     }
-                                    else {
+                                    else if ($scope.isAdhoc === 0 && $scope.tempUpdatedList.length == 0) {
                                         $scope.forceRunMeetComp();
                                         //kendo.alert('No new Meet Comp Changes detected to be saved.');
                                     }
