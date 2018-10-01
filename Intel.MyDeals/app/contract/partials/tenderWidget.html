@@ -1,6 +1,6 @@
 ﻿<div class="row wizard" style="padding-top: 35px;">
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first" ng-class="{'complete': isPTRPartiallyComplete() == true}">
+        <div class="wizard-panel first" ng-class="{'complete': isPTRPartiallyComplete() == true || curPricingStrategy.PASSED_VALIDATION == 'Complete'}">
             <a id="tenderWidPTR" ng-click="tenderWidgetPathManager('backToPricingTable', 'PTR')">
 			<span class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'PTR'}">1</span></a>
         </div>

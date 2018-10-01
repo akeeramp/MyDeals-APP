@@ -27,9 +27,9 @@ function opPopover($compile, dataService, $timeout, logger) {
             var ycs2Columns = [
                 { field: "YCS2", title: "YCS2", template: "#= isNaN(YCS2) ? YCS2 : kendo.toString(parseFloat(YCS2), 'c') #" },
                 { field: "GEO_MBR_SID", title: "GEO" },
-                { field: "SOLD_TO_ID", title: "SOLD_TO_ID", template: " #= kendo.toString(SOLD_TO_ID) #" },
-                { field: "HIER_VAL_NM", title: "DEAL_PRD_NM", template: " #= kendo.toString(HIER_VAL_NM) #" },
-                { field: "MTRL_ID", title: "MTRL_ID", template: " #= kendo.toString(MTRL_ID) #" },
+                { field: "SOLD_TO_ID", title: "Sold To Id", template: " #= kendo.toString(SOLD_TO_ID) #" },
+                { field: "Level4", title: "Deal Product Name", template: " #= kendo.toString(Level4) #" },
+                { field: "MTRL_ID", title: "Material Id", template: " #= kendo.toString(MTRL_ID) #" },
                 { field: "YCS2_START", title: "Start Date", template: "#= kendo.toString(new Date(YCS2_START), 'M/d/yyyy') #" },
                 { field: "YCS2_END", title: "End Date", template: " #= kendo.toString(new Date(YCS2_END), 'M/d/yyyy') #" }
             ];
@@ -73,7 +73,7 @@ function opPopover($compile, dataService, $timeout, logger) {
             };
 
             scope.$watch('insidePopover', function (insidePopover) {
-                togglePopover(insidePopover);
+                togglePopover(insidePopover);                
             });
 
             scope.$watch('dynamicPopover', function (dynamicPopover) {
@@ -83,7 +83,7 @@ function opPopover($compile, dataService, $timeout, logger) {
             function togglePopover(isInsidePopover) {
                 $timeout.cancel(togglePopover.$timer);
                 togglePopover.$timer = $timeout(function () {
-                    if (isInsidePopover) {
+                    if (isInsidePopover && scope.opOptions == 'CAP') {
                         showPopover();
                     } else {
                         hidePopover();

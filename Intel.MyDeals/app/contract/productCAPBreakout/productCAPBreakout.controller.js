@@ -40,7 +40,7 @@
             sortable: true,
             resizable: true,
             columns: [
-                  { field: "HIER_VAL_NM", title: "Product" },
+                  { field: "Level4", title: "Product" },
                   { field: "CAP_START", title: "Date Range", width: '24%', template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') # - #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
                   { field: "GEO_MBR_SID", title: "GEO" },
                   { field: "CUST_MBR_SID1", title: "SOLD TO"},
@@ -61,9 +61,9 @@
             columns: [
                 { field: "YCS2", title: "YCS2", template: "#= isNaN(YCS2) ? YCS2 : kendo.toString(parseFloat(YCS2), 'c') #" },
                 { field: "GEO_MBR_SID", title: "GEO" },
-                { field: "SOLD_TO_ID", title: "SOLD_TO_ID", template: " #= kendo.toString(SOLD_TO_ID) #" },
-                { field: "DEAL_PRD_NM", title: "HIER_VAL_NM", template: " #= kendo.toString(HIER_VAL_NM) #" },
-                { field: "MTRL_ID", title: "MTRL_ID", template: " #= kendo.toString(MTRL_ID) #" },
+                { field: "SOLD_TO_ID", title: "Sold To Id", template: " #= kendo.toString(SOLD_TO_ID) #" },
+                { field: "Level4", title: "Deal Product Name", template: " #= kendo.toString(Level4) #" },
+                { field: "MTRL_ID", title: "Material Id", template: " #= kendo.toString(MTRL_ID) #" },
                 { field: "YCS2_START", title: "Start Date", template: "#= kendo.toString(new Date(YCS2_START), 'M/d/yyyy') #" },
                 { field: "YCS2_END", title: "End Date", template: " #= kendo.toString(new Date(YCS2_END), 'M/d/yyyy') #" }
             ]
