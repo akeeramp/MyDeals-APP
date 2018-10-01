@@ -49,7 +49,8 @@
         $scope.helpTopicContractAndDealViews = HelpTopicEnum.ContractManager_ContractAndDealViews;
         $scope.helpTopicGroupingExclusions = HelpTopicEnum.ContractManager_GroupingExclusions;
         $scope.contractHeaderMaxCharWidth = 55;
-        $scope.isSuper = window.isSuper;        
+        $scope.isSuper = window.isSuper;  
+        $scope.isErrorWarning = false;
         
         // custom Contract Titles
         $scope.isTenderContract = isTender;
@@ -2797,7 +2798,7 @@
                         }
                     }
 
-                    if (!anyWarnings || !forceValidation) {
+                    if (!anyWarnings || !forceValidation) {                        
                         $scope.stealthMode = true;
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.$broadcast('saveComplete', data);
@@ -2816,11 +2817,14 @@
                                 $scope.stealthMode = false;
                             }, 1000);
                         }
-                        if ($scope.isTenderContract && $scope.selectedTAB == 'PTR') {
+                        if ($scope.isTenderContract && $scope.selectedTAB == 'PTR' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
                             $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
                         }
+                        else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'PTR') {
+                            $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
+                        }
                         
-                    } else {
+                    } else {                        
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
                         $timeout(function () {
@@ -4391,13 +4395,34 @@
             return (str.length >= limit);
         }
 
+        $scope.isPTRPartiallyComplete = function () {
+            var isPtrDirty = false;
+            //$scope.pricingTableData.PRC_TBL_ROW.length
+            if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined && $scope.pricingTableData.PRC_TBL_ROW.length > 0) {
+                var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+                    function (x) {
+                        return (x.PASSED_VALIDATION === 'Dirty');
+                    }).ToArray();
+                if (dirtyItems.length > 0) isPtrDirty = true;
+            }
+            else {
+                isPtrDirty = true;
+            }
+            if (!isPtrDirty && !$scope._dirty) {
+                return true;
+            }
+            else {
+                return false;
+            }            
+        }
+
         $scope.tenderWidgetPathManager = function (_actionName, _tabName) {            
             var isFired = false;
             if (_tabName == 'PTR') {
                 isFired = true;
             }
             if (_tabName == 'DE') {
-                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || $scope.isPTRPartiallyComplete() == true) && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                 }
@@ -4412,6 +4437,14 @@
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                 }
+                else if ($scope.isPTRPartiallyComplete() == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
+                    isFired = true;  
+                    if ($scope.selectedTAB != 'DE') {
+                        $scope.selectedTAB = "DE"; // Send it to Deal Editor
+                        _actionName = 'publishWipDealsFromTab';
+                    }
+                    
+                }
                 else {
                     logger.stickyError("Validate all your product(s) to open Deal Editor.");                    
                 }
@@ -4422,6 +4455,13 @@
                 if ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Pass') {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
+                }
+                else if ($scope.isPTRPartiallyComplete() == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
+                    isFired = true;
+                    if ($scope.selectedTAB != 'DE') {
+                        $scope.selectedTAB = "DE"; // Send it to Deal Editor
+                        _actionName = 'publishWipDealsFromTab';
+                    }
                 }
                 else {
                     logger.stickyError("Meet Comp is not passed. You can not Publish this deal yet.");
