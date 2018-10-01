@@ -810,10 +810,12 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string rType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            string hasTracker = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
             string cVol = r.Dc.GetDataElementValue(AttributeCodes.VOLUME);
             IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
 
-            if (rType.ToUpper() == "TENDER")
+            if (rType.ToUpper() == "TENDER") // Tender Deals Force Volume Check
             {
                 if (cVol == null || cVol == "")
                 {
@@ -824,7 +826,19 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     de.AddMessage("Ceiling Volume canot be Blank or Unlimited (999999999) for TENDER deals.");
                 }
+            }
 
+            if (progPayment == "Frontend XOA3" && hasTracker != "1") // XOA3 Deals Force Volume Check only if they are in play, don't crash on old deals. (DE20600 Addition)
+            {
+                if (cVol == null || cVol == "")
+                {
+                    de.AddMessage("Ceiling Volume is required for Frontend XOA3 deals.");
+                    de.IsRequired = true;
+                }
+                if (cVol == "999999999")
+                {
+                    de.AddMessage("Ceiling Volume canot be Blank or Unlimited (999999999) for Frontend XOA3 deals.");
+                }
             }
         }
 
