@@ -15,7 +15,7 @@
     <AssemblyName>Intel.MyDeals</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
@@ -253,6 +253,7 @@
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
+    <Compile Include="Controllers\API\NotificationsController.cs" />
     <Compile Include="Controllers\API\OpLogController.cs" />
     <Compile Include="Controllers\API\CacheController.cs" />
     <Compile Include="Controllers\API\CostTestController.cs" />
@@ -341,6 +342,9 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\notifications\notification.service.js" />
+    <Content Include="app\admin\notifications\notificationsSettings.html" />
+    <Content Include="app\admin\notifications\notificationsSettings.controller.js" />
     <Content Include="app\admin\oplog\admin.oplog.controller.js" />
     <Content Include="app\admin\oplog\oplog.service.js" />
     <Content Include="app\admin\oplog\oplog.html" />
@@ -572,6 +576,8 @@
     <Content Include="app\core\directives\meetComp\meetCompDealDetails.js" />
     <Content Include="app\core\directives\meetComp\meetComp.directive.html" />
     <Content Include="app\core\directives\meetComp\meetComp.directive.js" />
+    <Content Include="app\core\directives\notification\notificationDock.directive.html" />
+    <Content Include="app\core\directives\notification\notificationDock.directive.js" />
     <Content Include="app\core\directives\opGrid\opGrid.directive.js" />
     <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.html" />
     <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.js" />

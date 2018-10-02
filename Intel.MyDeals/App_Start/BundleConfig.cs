@@ -36,7 +36,7 @@ namespace Intel.MyDeals
                 "~/Scripts/Angular/clipboard.min.js",
                 "~/Scripts/Angular/ngclipboard.min.js",
                 "~/Scripts/modernizr-2.6.2.min.js"
-                )); 
+                ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
            "~/Scripts/Angular/1.6.9/angular-ui-router.min.js"
@@ -87,6 +87,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"
                 , "~/app/core/directives/loadingPanel/loadingPanel.directive.js"
                 , "~/app/core/directives/messageBoard/messageBoard.directive.js"
+                , "~/app/core/directives/notification/notificationDock.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
                 , "~/app/core/directives/overlappingDeals/overlappingDeals.directive.js"
@@ -131,6 +132,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/iCostProducts/admin.iCostProducts.controller.js"
                 , "~/app/admin/legalExceptions/legalExceptions.service.js"
                 , "~/app/admin/legalExceptions/admin.legalException.controller.js"
+                , "~/app/admin/notifications/notificationsSettings.controller.js"
+                , "~/app/admin/notifications/notification.service.js"
                 , "~/app/admin/productCategories/admin.productCategories.controller.js"
                 , "~/app/admin/productCategories/productCategories.service.js"
                 , "~/app/admin/products/admin.products.controller.js"

@@ -95,6 +95,7 @@
     <Compile Include="Helpers\FixesHelpers.cs" />
     <Compile Include="JMS.cs" />
     <Compile Include="LogPerformanceTime.cs" />
+    <Compile Include="Notification\NotificationSubscriptions.cs" />
     <Compile Include="OP ExtensionMethods\AvmforceMode.cs" />
     <Compile Include="OpDataCollectorFlattenedDictListPacket.cs" />
     <Compile Include="OpMsgQueuePacket.cs" />
@@ -170,6 +171,9 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="TableTypeParameters\t_notif_list.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\in_deal_ovrrd.cs">
       <SubType>Component</SubType>
     </Compile>

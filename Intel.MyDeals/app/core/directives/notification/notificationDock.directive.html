@@ -1,0 +1,21 @@
+﻿<div>
+    <div>
+        <div class="dropdown">
+            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="">
+                <span class="badge badge-docking" ng-show="ids.length > 0">{{ids.length}}</span>
+                <i class="intelicon-notification" style="font-size:20px"></i>
+            </a>
+            <ul class="dropdown-menu scaleTopAnim multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li style="width: 500px; color: #000000;font-size:18px">
+                    <b>Notifications</b>
+                    <span title="Settings" ng-click="gotoNotificationSettings()" style="padding-right:10px;font-size:18px" class="fr">
+                            <i class="intelicon-settings-solid"></i>
+                    </span>
+                    <hr />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div style="position: absolute; top: 0; z-index: 1000; left: 0px;">
+    </div>
+</div>

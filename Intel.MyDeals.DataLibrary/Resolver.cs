@@ -14,10 +14,10 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ICustomerCalendarDataLib, CustomerCalendarDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
             registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();
-			registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
-			registerService.RegisterType<IOpDataCollectorDataLib, OpDataCollectorDataLib>();
-			registerService.RegisterType<IEcapTrackerDataLib, EcapTrackerDataLib>();
-			registerService.RegisterType<IDropdownDataLib, DropdownDataLib>();
+            registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
+            registerService.RegisterType<IOpDataCollectorDataLib, OpDataCollectorDataLib>();
+            registerService.RegisterType<IEcapTrackerDataLib, EcapTrackerDataLib>();
+            registerService.RegisterType<IDropdownDataLib, DropdownDataLib>();
             registerService.RegisterType<IFilesDataLib, FilesDataLib>();
             registerService.RegisterType<IFunfactDataLib, FunfactDataLib>();
             registerService.RegisterType<IQuoteLetterDataLib, QuoteLetterDataLib>();
@@ -26,17 +26,18 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IProductCategoriesDataLib, ProductCategoriesDataLib>();
             registerService.RegisterType<IProductCostTestDataLib, ProductCostTestDataLib>();
             registerService.RegisterType<IProductDataLib, ProductDataLib>();
-			registerService.RegisterType<IRetailPullDataLib, RetailPullDataLib>();
-			registerService.RegisterType<ISearchDataLib, SearchDataLib>();
+            registerService.RegisterType<IRetailPullDataLib, RetailPullDataLib>();
+            registerService.RegisterType<ISearchDataLib, SearchDataLib>();
             registerService.RegisterType<ISecurityAttributesDataLib, SecurityAttributesDataLib>();
-			registerService.RegisterType<ISoldToIdDataLib, SoldToIdDataLib>();
-			registerService.RegisterType<IUiTemplateDataLib, UiTemplateDataLib>();
+            registerService.RegisterType<ISoldToIdDataLib, SoldToIdDataLib>();
+            registerService.RegisterType<IUiTemplateDataLib, UiTemplateDataLib>();
             registerService.RegisterType<IWorkFlowDataLib, WorkFlowDataLib>();
             registerService.RegisterType<ITimelineDataLib, TimelineDataLib>();
             registerService.RegisterType<IMeetCompDataLib, MeetCompDataLib>();
             registerService.RegisterType<IUserPreferencesDataLib, UserPreferencesDataLib>();
             registerService.RegisterType<IQuoteLetterDataLib, QuoteLetterDataLib>();
             registerService.RegisterType<IJmsDataLib, JmsDataLib>();
+            registerService.RegisterType<INotificationsDataLib, NotificationsDataLib>();
         }
     }
 }

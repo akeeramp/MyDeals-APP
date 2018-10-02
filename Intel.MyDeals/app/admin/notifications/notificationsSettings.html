@@ -1,0 +1,96 @@
+﻿<div class="modal-header modalBlueBody">
+    <h5 class="modal-title" id="modal-title">Notification Settings - {{role}}<img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /><i role="button" title="Close" class="intelicon-close-max fr" ng-click="close()"></i></h5>
+</div>
+<div class="modal-body modalBlueBody" id="modal-body">
+    <div class="row">
+        <div class="col-md-7"></div>
+        <div class="col-md-2 text-center">
+            Email
+        </div>
+        <div class="col-md-2 text-center">
+            In Tool
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">SELECT ALL</div>
+        <div class="col-md-2 text-center">
+            <toggle class="toggle-accept"
+                    ng-model="selectAllDefaults.EMAIL_IND"
+                    off="OFF"
+                    on="ON"
+                    onstyle="btn-success"
+                    ng-click= "selectAll('EMAIL_IND')"
+                    size="btn-xs"
+                    style="width: 140px !important"></toggle>
+        </div>
+        <div class="col-md-2 text-center">
+            <toggle class="toggle-accept"
+                    ng-model="selectAllDefaults.IN_TOOL_IND"
+                    off="OFF"
+                    on="ON"
+                    onstyle="btn-success"
+                    ng-click= "selectAll('IN_TOOL_IND')"
+                    size="btn-xs"
+                    style="width: 140px !important"></toggle>
+        </div>
+    </div>
+    <hr style="margin-top:18px;margin-bottom:18px" />
+    <div class="row" ng-repeat="s in subScriptions" style="padding-bottom:6px;">
+        <div class="col-md-7" title="{{s.NOTIF_DESC}}">{{::s.NOTIF_NM}}</div>
+        <div class="col-md-2 text-center">
+            <toggle class="toggle-accept"
+                    ng-model="s.EMAIL_IND"
+                    off="OFF"
+                    on="ON"
+                    onstyle="btn-success"
+                    size="btn-xs"
+                    style="width: 140px !important"></toggle>
+        </div>
+        <div class="col-md-2 text-center">
+            <toggle class="toggle-accept"
+                    ng-model="s.IN_TOOL_IND"
+                    off="OFF"
+                    on="ON"
+                    onstyle="btn-success"
+                    size="btn-xs"
+                    style="width: 140px !important"></toggle>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" style="width: 100%;" ng-click="saveAndClose()">Save & Close</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+
+    .toggle-accept .toggle {
+        width: 60px !important;
+        border-radius: 4px;
+        height: 19px !important;
+    }
+
+        .toggle-accept .toggle .btn-success {
+            background-color: #00AEEF;
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.2em;
+        }
+
+        .toggle-accept .toggle .btn-default {
+            background-color: #C4D600;
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.2em;
+        }
+
+        .toggle-accept .toggle .toggle-handle {
+            background-color: #eeeeee;
+        }
+</style>

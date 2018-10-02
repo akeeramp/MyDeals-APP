@@ -18,7 +18,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IDashboardLib, DashboardLib>();
             registerService.RegisterType<IOpDataCollectorLib, OpDataCollectorLib>();
             registerService.RegisterType<IDropdownLib, DropdownLib>();
-			registerService.RegisterType<IEcapTrackerLib, EcapTrackerLib>();
+            registerService.RegisterType<IEcapTrackerLib, EcapTrackerLib>();
             registerService.RegisterType<IEmployeesLib, EmployeesLib>();
             registerService.RegisterType<IFilesLib, FilesLib>();
             registerService.RegisterType<IFunfactLib, FunfactLib>();
@@ -41,7 +41,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IQuoteLetterLib, QuoteLetterLib>();
             registerService.RegisterType<IJmsLib, JmsLib>();
             registerService.RegisterType<IOpLogLib, OpLogLib>();
-
+            registerService.RegisterType<INotificationsLib, NotificationsLib>();
         }
     }
 }

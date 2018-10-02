@@ -96,6 +96,7 @@
     <Compile Include="Employees\EmployeeHelpers.cs" />
     <Compile Include="Files\FilesLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
+    <Compile Include="NotificationsLib\NotificationsLib.cs" />
     <Compile Include="OpDataCollectors\OpDataCollectorLib.cs" />
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="OpDataCollectors\MyDealsDataExtensions.cs" />

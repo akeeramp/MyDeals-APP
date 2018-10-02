@@ -59,6 +59,7 @@
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />
     <Compile Include="JMS\IJmsDataLib.cs" />
+    <Compile Include="Notifications\INotificationsDataLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterDataLib.cs" />
     <Compile Include="Search\IAdvancedSearchDataLib.cs" />
     <Compile Include="UserPreferences\IUserPreferencesDataLib.cs" />
