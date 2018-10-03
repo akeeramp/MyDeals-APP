@@ -24,6 +24,7 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new List<DashboardContractSummary>();
 
             string verticalsList = string.Join(",", vertIds); // If list is empty (WW), then string will be empty as well and SP views empty to be WW.
+            if (string.IsNullOrEmpty(verticalsList)) verticalsList = null;
 
             var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_GET_CNSNT_SUMMARY
             {
