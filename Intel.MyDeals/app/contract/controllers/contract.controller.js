@@ -12,7 +12,7 @@
 
     function ContractController($scope, $uibModalStack, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, isTender, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary, $q) {
         // store template information ()
-        if (contractData) {
+        if (contractData && contractData.data.length > 0) { // Safety check for user jumping to contract that they don't have access to tossing errors (MEETCOMP_TEST_RESULT key not found)
             $scope.MEETCOMP_TEST_RESULT = contractData.data[0].MEETCOMP_TEST_RESULT; 
             $scope.COST_TEST_RESULT = contractData.data[0].COST_TEST_RESULT; 
         } else {

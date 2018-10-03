@@ -20,7 +20,7 @@
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
 
-	var dbobjects = new DBObjects(@"Database=MyDeals;Server=EG1RDMDBdev01.AMR.CORP.INTEL.COM\RDMDEV1, 3180;integrated security=SSPI;");
+	var dbobjects = new DBObjects(@"Database=MyDeals;Server=EG1RDMDBDEV01.AMR.CORP.INTEL.COM\RDMDEV1, 3180;integrated security=SSPI;");
 
 	WriteLine(dbobjects.BoilerPlateDetails);
 
@@ -83,7 +83,7 @@ using System.Collections.Generic;
 	//// Tables[7] - skipped, contains WFSTG Security items
 
 
-	ds = dbobjects.ExecuteDataSet("DECLARE @CUST_SIDS [dbo].[type_int_list]; INSERT INTO @CUST_SIDS(ITEM) VALUES (2); exec dbo.PR_MYDL_GET_CNSNT_SUMMARY @CUST_SIDS, '1/1/2016', '1/1/2018'");
+	ds = dbobjects.ExecuteDataSet("DECLARE @CUST_SIDS [dbo].[type_int_list]; INSERT INTO @CUST_SIDS(ITEM) VALUES (2); exec dbo.PR_MYDL_GET_CNSNT_SUMMARY @CUST_SIDS, '1/1/2017', '1/1/2018'");
 	ds.Tables[0].TableName = "DashboardContractSummary";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

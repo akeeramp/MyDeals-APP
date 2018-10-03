@@ -277,7 +277,7 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="canAction('Approve', ps, true) && canActionIcon" ng-attr-title="{{actionReason('Approve', ps)}}" ng-show="ps.WF_STG_CD !== 'Pending'">
+                                <div ng-if="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" ng-attr-title="{{actionReason('Approve', ps)}}" ng-show="ps.WF_STG_CD !== 'Pending'">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': !canAction('Approve', ps, false)}"
                                            ng-disabled="!canAction('Approve', ps, false)"
@@ -286,7 +286,7 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="canAction('Revise', ps, true) && canActionIcon" ng-attr-title="{{actionReason('Revise', ps)}}">
+                                <div ng-if="canAction('Revise', ps, true) && canActionIcon && hasVertical(ps)" ng-attr-title="{{actionReason('Revise', ps)}}">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': !canAction('Revise', ps, false)}"
                                            ng-disabled="!canAction('Revise', ps, false)"
@@ -295,7 +295,7 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <div ng-if="canEmailIcon" title="email pricing strategy">
+                                <div ng-if="canEmailIcon && hasVertical(ps)" title="email pricing strategy">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            class="with-font psCheck psCheck-Email" id="rad_email_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_email_{{ps.DC_ID}}"></label>

@@ -37,7 +37,8 @@ namespace Intel.MyDeals.Controllers.API
 
         List<DashboardContractSummary> Temp(DashboardFilter data)
         {
-            List<DashboardContractSummary> y = _dashboardLib.GetDashboardContractSummary(data.CustomerIds, data.StartDate, data.EndDate);
+            List<int> verticalIds = AppLib.GetMyVerticals(OpUserStack.MyOpUserToken).Select(v => v.Id).ToList();
+            List<DashboardContractSummary> y = _dashboardLib.GetDashboardContractSummary(data.CustomerIds, data.StartDate, data.EndDate, verticalIds);
             //Random rnd = new Random();
             //List<string> stages = new List<string> {"Complete", "InComplete", "Archived"};
             

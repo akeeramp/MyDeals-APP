@@ -6,6 +6,6 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface IDashboardDataLib
     {
-        List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate);
+        List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate, List<int> vertIds = null);
     }
 }

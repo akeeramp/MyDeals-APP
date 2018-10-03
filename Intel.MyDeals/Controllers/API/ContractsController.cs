@@ -50,7 +50,13 @@ namespace Intel.MyDeals.Controllers.API
             );
 
             int custId = !rtn.Any() || rtn[0]["CUST_MBR_SID"] == null || rtn[0]["CUST_MBR_SID"].ToString() == string.Empty ? 0 : int.Parse(rtn[0]["CUST_MBR_SID"].ToString());
-            if (custId == 0 || DataCollections.GetMyCustomers().CustomerInfo.All(c => c.CUST_SID != custId))
+
+            //List<VerticalSecurityItem> blah = DataCollections.GetMyVerticals().VerticalInfo; // Testing call, comment out
+            //List<string> objVerticals = rtn[0]["VERTICAL_ROLLUP"].ToString().Split(',').ToList(); // Testing call, comment out
+            // Next line gathers the current user's verticals and cross checks them with the contract level verticals to set containsVertical flag.  Matches trigger True as does empty user verticals (WW).
+            bool containsVertical = DataCollections.GetMyVerticals().VerticalInfo.Any()? DataCollections.GetMyVerticals().VerticalInfo.Select(x => x.VerticalName).Intersect(rtn[0]["VERTICAL_ROLLUP"].ToString().Split(',').ToList()).Any(): true;
+
+            if (custId == 0 || DataCollections.GetMyCustomers().CustomerInfo.All(c => c.CUST_SID != custId) || !containsVertical)
             {
                 return new OpDataCollectorFlattenedList();
             }

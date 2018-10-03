@@ -134,6 +134,21 @@ namespace Intel.MyDeals.App
             return UserSettings[idsid].AllMyCustomers;
         }
 
+        public static List<VerticalSecurityItem> GetMyVerticals(OpUserToken opUserToken)
+        {
+            string idsid = opUserToken.Usr.Idsid.ToUpper();
+            if (!UserSettings.ContainsKey(idsid))
+            {
+                PopulateUserSettings(opUserToken);
+            }
+            List<VerticalSecurityItem> retItem = new List<VerticalSecurityItem>();
+            if (UserSettings[idsid].UserToken.Role.RoleTypeCd == RoleTypes.DA) // WARNING: Verticals only apply to DA users at present.
+            {
+                retItem.AddRange((UserSettings[idsid].VerticalSecurity).ToList());
+            }
+            return retItem; // If user is not DA or above returns empty list, all is good since empty is All Verticals
+        }
+
         public static List<UserPreference> GetUserPreferences(OpUserToken opUserToken)
         {
             string idsid = opUserToken.Usr.Idsid.ToUpper();

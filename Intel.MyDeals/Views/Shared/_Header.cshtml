@@ -7,6 +7,7 @@
     var usrRole = "UNKNOWN";
     var usrRoleId = 0;
     var usrEmail = "";
+    var usrVerticals = "";
     try
     {
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
@@ -14,6 +15,15 @@
         usrEmail = ViewBag.UserToken.Usr.Email;
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
         usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
+
+        foreach (var x in ViewBag.UserVarticals)
+        {
+            usrVerticals += "," + x.VerticalName;
+        }
+        if (usrVerticals.Length >= 1)
+        {
+            usrVerticals = usrVerticals.Remove(0, 1);
+        }
     }
     catch (Exception ex)
     {
@@ -351,6 +361,7 @@
     window.usrWwid = "@usrWwid";
     window.usrEmail = "@usrEmail";
     window.isSuper = "@isSuper" === "True";
+    window.usrVerticals = "@usrVerticals";
 
     window.isDeveloper = "@isDeveloper" === "True";
     window.isTester = "@isTester" === "True";

@@ -496,6 +496,41 @@ namespace Intel.MyDeals.DataLibrary
 
         private static Dictionary<string, MyCustomerDetailsWrapper> _getMyCustomers;
 
+        public static MyVerticalDetailsWrapper GetMyVerticals()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getMyVerticals == null || !_getMyVerticals.Any())
+                {
+                    _getMyVerticals = new Dictionary<string, MyVerticalDetailsWrapper>();
+                }
+                string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\", "");
+                if (!_getMyVerticals.ContainsKey(authenticatedName) ||
+                    (_getMyVerticals.ContainsKey(authenticatedName) && _getMyVerticals[authenticatedName] == null))
+                {
+                    if (!_getMyVerticals.ContainsKey(authenticatedName))
+                    {
+                        _getMyVerticals[authenticatedName] = new MyVerticalDetailsWrapper();
+                        _getMyVerticals[authenticatedName].VerticalInfo = new List<VerticalSecurityItem>();
+                    }
+
+                    OpUserToken unitOpUserToken = new OpUserToken
+                    {
+                        Usr = new OpUser
+                        {
+                            Idsid = authenticatedName
+                        }
+                    };
+
+                    _getMyVerticals[authenticatedName].VerticalInfo.AddRange(new EmployeeDataLib().GetUserSettings(unitOpUserToken).VerticalSecurity); 
+                    //_getMyVerticals[authenticatedName].VerticalInfo = blah;
+                }
+                return _getMyVerticals[authenticatedName];
+            }
+        }
+
+        private static Dictionary<string, MyVerticalDetailsWrapper> _getMyVerticals;
+
         public static List<Product> GetProductData()
         {
             lock (LOCK_OBJECT ?? new object())

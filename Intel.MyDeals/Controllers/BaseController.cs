@@ -33,6 +33,7 @@ namespace Intel.MyDeals.Controllers
             ViewBag.IsTester = user.IsTester();
 
             var idsid = user.Usr.Idsid.ToUpper();
+            ViewBag.UserVarticals = AppLib.UserSettings[idsid].VerticalSecurity.ToList();
             if (AppLib.UserSettings != null && AppLib.UserSettings.ContainsKey(idsid) && AppLib.UserSettings[idsid].AllMyCustomers.CustomerInfo.Any()) return;
 
             // Redirect to "Request Customer" page

@@ -20,9 +20,9 @@ namespace Intel.MyDeals.BusinessLogic
             _pricingTablesLib = pricingTablesLib;
         }
 
-        public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate)
+        public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate, List<int> vertIds = null)
         {
-            return new DashboardDataLib().GetDashboardContractSummary(custIds, startDate, endDate);
+            return new DashboardDataLib().GetDashboardContractSummary(custIds, startDate, endDate, vertIds);
         }
 
         public OpDataCollectorFlattenedDictList GetWipSummary(int ptId)

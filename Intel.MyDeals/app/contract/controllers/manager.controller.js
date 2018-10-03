@@ -33,6 +33,7 @@
         root.enablePCT = false;
         $scope.needToRunOverlaps = [];
         $scope.canActionIcon = true;
+        $scope.hasVertical = false;
         $scope.canEmailIcon = true;
 
         $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
@@ -91,6 +92,25 @@
 
         $scope.canAction = function (actn, dataItem, isExists) {
             return dataItem._actions[actn] !== undefined && (isExists || dataItem._actions[actn] === true);
+        }
+
+        $scope.hasVertical = function (dataItem) {
+            var psHasUserVerticals = true;
+            //if (dataItem.dc_type === "PRC_ST")
+            //{
+                if (window.usrRole === "DA") {
+                    if (window.usrVerticals.length > 0)
+                    {
+                        var user = window.usrVerticals.split(",");
+                        var blah = dataItem.VERTICAL_ROLLUP.split(",");
+
+                        psHasUserVerticals = blah.some(r=> user.indexOf(r) >= 0)
+                    }
+                    return psHasUserVerticals;
+                    // else, DA is All Verticals and gets a free pass
+                }
+            //}
+            return psHasUserVerticals;
         }
 
         $scope.actionReason = function (actn, dataItem) {

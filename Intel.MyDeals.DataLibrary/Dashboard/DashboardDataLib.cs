@@ -17,17 +17,20 @@ namespace Intel.MyDeals.DataLibrary
         /// Get Dashboard Contract Summary
         /// </summary>
         /// <returns></returns>
-        public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate)
+        public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate, List<int> vertIds = null)
         {
             OpLog.Log("GetDashboardContractSummary");
 
             var ret = new List<DashboardContractSummary>();
 
+            string verticalsList = string.Join(",", vertIds); // If list is empty (WW), then string will be empty as well and SP views empty to be WW.
+
             var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_GET_CNSNT_SUMMARY
             {
                 CUST_SIDS = new type_int_list(custIds.ToArray()),
                 STRT_DTM = startDate,
-                END_DTM = endDate
+                END_DTM = endDate,
+                VRTCL_LST = verticalsList
             };
 
             try

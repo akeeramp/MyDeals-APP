@@ -7,4 +7,9 @@ namespace Intel.MyDeals.Entities
         public List<MyCustomersInformation> CustomerInfo { get; set; }
         //public List<MyCustomersSoldTo> CustomerSoldTo { get; set; }
     }
+
+    public class MyVerticalDetailsWrapper
+    {
+        public List<VerticalSecurityItem> VerticalInfo { get; set; }
+    }
 }
