@@ -1019,7 +1019,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.scheduleEditor = function (container, options) {
-                var numTiers = $scope.root.curPricingTable.NUM_OF_TIERS;
+                var numTiers = options.model.NUM_OF_TIERS; // DE21100 - Was reading from autofill field ($scope.root.curPricingTable.NUM_OF_TIERS) which is not correct
 
                 var tmplt = '<table>';
                 var fields = [
