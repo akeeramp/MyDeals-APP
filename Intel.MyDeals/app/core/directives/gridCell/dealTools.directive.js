@@ -19,7 +19,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
-            $scope.isTenderContract = 1===2;
+            
             if (typeof $scope.$parent.$parent.$parent.isTenderContract !== 'undefined') {
                 $scope.isTenderContract = $scope.$parent.$parent.$parent.isTenderContract == true;
             }
