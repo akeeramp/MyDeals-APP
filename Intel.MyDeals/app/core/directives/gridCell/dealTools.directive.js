@@ -19,6 +19,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
+            $scope.isTenderContract = $scope.$parent.$parent.$parent.$parent.$parent.root.isTenderContract == 1;            
             if ($scope.dataItem.PS_WF_STG_CD === undefined && $scope.dataItem.items !== undefined) {
                 $scope.dataItem = $scope.dataItem.items[0];
             }

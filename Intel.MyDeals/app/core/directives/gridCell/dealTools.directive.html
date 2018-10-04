@@ -43,10 +43,10 @@
     </div>
 
     <!-- Quote Letter icon -->
-    <div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
+    <div class='fl md-icon' ng-if="(isQuoteLetterEnabled) && isTenderContract == false">
         <i ng-if="showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
     </div>
-    <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
+    <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled) && isTenderContract == false">
         <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
     </div>
 
@@ -71,10 +71,10 @@
     </div>
 
     <!-- Hold icon -->
-    <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold'">
+    <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false">
         <i ng-class='getHoldIcon(dataItem)' ng-style="getHoldStyle(dataItem)" ng-attr-title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkHoldIcon(dataItem)"></i>
     </div>
-    <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1)">
+    <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1) && isTenderContract == false">
         <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
     </div>
