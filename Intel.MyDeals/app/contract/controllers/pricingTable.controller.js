@@ -2878,7 +2878,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var invalidProductJSONRows = pricingTableRowData.filter(function (x) {
             return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
         });
-
+        if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Product Validation", "UX");
         $scope.$root.pc.add(pcUi.stop());
 
         // Products that needs server side attention

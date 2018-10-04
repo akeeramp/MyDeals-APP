@@ -51,6 +51,7 @@
         $scope.contractHeaderMaxCharWidth = 55;
         $scope.isSuper = window.isSuper;  
         $scope.isErrorWarning = false;
+        $scope.forceNavigation = false;
         
         // custom Contract Titles
         $scope.isTenderContract = isTender;
@@ -357,9 +358,26 @@
                 $timeout(function () {
                     $scope.$apply();
                 });
+
+                if ($scope.forceNavigation && $scope.isTenderContract) {
+                    if ($scope.isTenderContract && ( $scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE' )  && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                        $scope.isPtr = false;                        
+                        $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                    }
+                    else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'PTR') {
+                        $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically                          
+                        $scope.publishWipDealsFromTab();
+                    }
+                    else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'MC' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                        $scope.resetDirty();
+                        $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+                    }
+                }
             });
         }
-
+        $scope.setForceNavigationForMC = function () {
+            $scope.forceNavigation = true;
+        }
         $scope.deleteContract = function () {
 
             // TODO need to check if there are any tracker numbers
@@ -2796,8 +2814,7 @@
                             }
                             $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                         }
-                    }
-
+                    }                    
                     if (!anyWarnings || !forceValidation) {                        
                         $scope.stealthMode = true;
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
@@ -2817,14 +2834,18 @@
                                 $scope.stealthMode = false;
                             }, 1000);
                         }
-                        if ($scope.isTenderContract && $scope.selectedTAB == 'PTR' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
-                            $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                        if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE' )) {
+                            $scope.forceNavigation = true; //Purpose: If No Error/Warning go to Meet Comp Automatically-After Refreshing Contract                           
                         }
-                        else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'PTR') {
-                            $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
+                        else {
+                            $scope.forceNavigation = false;
                         }
                         
-                    } else {                        
+                    } else { 
+                        if ($scope.isTenderContract && $scope.selectedTAB == 'PTR') {
+                            $scope.forceNavigation = false; //Purpose: If No Error/Warning go to PTR Automatically-After Refreshing Contract                            
+                        }
+                        
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
                         $timeout(function () {
@@ -2833,6 +2854,7 @@
                     }
 
                     if (toState === undefined || toState === null || toState === "") {
+
                         $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
                     }
                     $scope.isAutoSaving = false;
@@ -4062,7 +4084,8 @@
         //setting a few constants for the strings that occur a lot
         var GEO = "GEO_COMBINED";
         var MRKT_SEG = "MRKT_SEG";
-
+        
+        
         //watch for user changing global auto-fill default values
         $scope.$watch('newPricingTable._defaultAtrbs', function (newValue, oldValue, el) {
             if (oldValue === newValue) return;
@@ -4395,7 +4418,7 @@
             return (str.length >= limit);
         }
 
-        $scope.isPTRPartiallyComplete = function () {
+        $scope.isPTRPartiallyComplete = function (selectedTab) {
             var isPtrDirty = false;
             //$scope.pricingTableData.PRC_TBL_ROW.length
             if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined && $scope.pricingTableData.PRC_TBL_ROW.length > 0) {
@@ -4408,6 +4431,9 @@
             else {
                 isPtrDirty = true;
             }
+            if (selectedTab == 'PD') {
+                return !isPtrDirty;
+            }
             if (!isPtrDirty && !$scope._dirty) {
                 return true;
             }
@@ -4415,7 +4441,7 @@
                 return false;
             }            
         }
-
+        
         $scope.tenderWidgetPathManager = function (_actionName, _tabName) {            
             var isFired = false;
             if (_tabName == 'PTR') {
@@ -4433,12 +4459,21 @@
             }
 
             if (_tabName == 'MC' ) {
-                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isPTRPartiallyComplete() == true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
+                    $scope.isPtr = false;
+                }
+                else if ($scope.isPTRPartiallyComplete() == false) {
+                    if (!!$scope.child) {
+                        $scope.child.validateSavepublishWipDeals();
+                    } else {
+                        $scope.publishWipDealsBase();
+                    }
                 }
                 else if ($scope.isPTRPartiallyComplete() == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
-                    isFired = true;  
+                    isFired = true;
+                    $scope.isPtr = false;
                     if ($scope.selectedTAB != 'DE') {
                         $scope.selectedTAB = "DE"; // Send it to Deal Editor
                         _actionName = 'publishWipDealsFromTab';
@@ -4452,11 +4487,24 @@
             }
 
             if (_tabName == 'PD' ) {
-                if ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Pass') {
+                if ($scope.isPTRPartiallyComplete('PD') == false) {
+                    if (!!$scope.child) {
+                        $scope.child.validateSavepublishWipDeals();
+                    } else {
+                        $scope.publishWipDealsBase();
+                    }
+                }
+                else if ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet' && $scope.isPTRPartiallyComplete('PD') == true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
+                    $scope.isPtr = false;
+                }                
+                else if (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && $scope.isPTRPartiallyComplete('PD') == true) {
+                    isFired = true;
+                    $scope.selectedTAB = 'MC';
+                    $scope.isPtr = false;
                 }
-                else if ($scope.isPTRPartiallyComplete() == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
+                else if ($scope.isPTRPartiallyComplete('PD') == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     if ($scope.selectedTAB != 'DE') {
                         $scope.selectedTAB = "DE"; // Send it to Deal Editor
@@ -4498,6 +4546,5 @@
                 }
             );
         }
-        
     }
 })();

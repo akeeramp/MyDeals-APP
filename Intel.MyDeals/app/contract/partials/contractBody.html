@@ -5,7 +5,7 @@
 <div ng-include="'app/contract/partials/ptModals/dealTimelineModal.html'"></div>
 
 <div id="secContainerWrapper" class="fadeInAnim" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
-	<div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
+	<div id="secHeader" ng-class="{'noborders': !isPtr && !isWip && isTenderContract != true}">
 		<div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
 			<div class="col-md-11"
@@ -30,10 +30,10 @@
 			<div class="clearboth"></div>
 		</div>
 	</div>
-    <div ng-if="selectedTAB == 'MC'">
+    <div ng-if="selectedTAB == 'MC' && isTenderContract == true">
         <div ng-include="'app/contract/partials/meetCompTab.html'"></div>
     </div>
-	<div ng-if="selectedTAB == 'PD'">
+	<div ng-if="selectedTAB == 'PD' && isTenderContract == true">
         <div ng-include="'app/contract/partials/publishTender.html'"></div>
     </div>
 	<div id="secContainer" ng-show="selectedTAB != 'MC' && selectedTAB != 'PD'">
@@ -81,6 +81,7 @@
 
 
 <style>
+.opPopOver{max-height:300px}
 .wizard-step-text h4 {cursor: pointer}
 .wizard-step-text p {cursor: pointer}
 	.contractStratHeader .isReadOnly {

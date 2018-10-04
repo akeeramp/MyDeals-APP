@@ -120,10 +120,6 @@
                         $scope.IsMeetCompRun = true;
                     }
 
-                    if ($scope.isAdhoc === 1) {
-                        $scope.MC_MODE = "D";                        
-                    }
-
                     if (Math.round(dsplNum) > 0) {
                         return "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
                     }
@@ -1404,7 +1400,7 @@
                                     if ($scope.tempUpdatedList.length > 0) {
                                         $scope.updateMeetComp();
                                     }
-                                    else if ($scope.isAdhoc === 0 && $scope.tempUpdatedList.length == 0) {
+                                    else if ($scope.tempUpdatedList.length == 0) {
                                         $scope.forceRunMeetComp();
                                         //kendo.alert('No new Meet Comp Changes detected to be saved.');
                                     }
@@ -1431,6 +1427,10 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
+                                    
+                                    if ($scope.isAdhoc == 1) {
+                                        $scope.$parent.setForceNavigationForMC();
+                                    }
                                     $scope.$root.$broadcast('refreshContractData');
                                 },
                                     function (response) {
