@@ -4448,7 +4448,14 @@
                 isFired = true;
             }
             if (_tabName == 'DE') {
-                if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || $scope.isPTRPartiallyComplete() == true) && $scope.enableDealEditorTab() === true) {
+                if ($scope.isPTRPartiallyComplete() == false) {
+                    if (!!$scope.child) {
+                        $scope.child.validateSavepublishWipDeals();
+                    } else {
+                        $scope.publishWipDealsBase();
+                    }
+                }
+                else if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || $scope.isPTRPartiallyComplete() == true) && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                 }
