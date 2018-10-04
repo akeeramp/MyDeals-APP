@@ -439,6 +439,7 @@
     <Content Include="app\contract\partials\contractSummaryExcludeGroups.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
     <Content Include="app\contract\partials\meetCompTab.html" />
+    <Content Include="app\contract\partials\publishTender.html" />
     <Content Include="app\contract\partials\tenderWidget.html" />
     <Content Include="app\contract\partials\lnavFlowMini.html" />
     <Content Include="app\contract\partials\ptModals\datePickerModal.html" />
