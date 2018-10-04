@@ -198,11 +198,11 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 // concurency check for meet comp and cost test values..
-                if (stageIn == WorkFlowStages.Submitted && submittedFailTests.Contains(meetCompInDB) && submittedFailTests.Contains(costTestInDB) && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
+                if (stageIn == WorkFlowStages.Submitted && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)) && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
                 {
                     opMsgQueue.Messages.Add(new OpMsg
                     {
-                        Message = "Meet Comp and/or Cost Test need to be re-run prior to approvals.  Please refresh and try again.",
+                        Message = "Meet Comp and/or Cost Test failed or have been changed by another source prior to this action.  Please refresh and try again.",
                         MsgType = OpMsg.MessageType.Warning,
                         ExtraDetails = dc.DcType,
                         KeyIdentifiers = new[] { dc.DcID }
@@ -225,13 +225,47 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
+
+                // Brought this block back in to force DA into having to re-run PCT/MCT on approval for Jyoti's "Change Cost in DB after user does PCT" defect (DE19996)
                 // Meet Comp Test / Price Cost Test Check
-                //bool needToRunMct = actn == "Approve" && hasL1 && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
-                //bool needToRunPct = actn == "Approve" && hasL1 && stageIn == WorkFlowStages.Submitted;
-                //if (needToRunMct || needToRunPct)
-                //{
-                //    needsPctMctDealIds.Add(dc.DcID);
-                //}
+                bool needToRunMct = actn == "Approve" && hasL1 && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
+                bool needToRunPct = actn == "Approve" && hasL1 && stageIn == WorkFlowStages.Submitted;
+                if (needToRunMct || needToRunPct)
+                {
+                    needsPctMctDealIds.Add(dc.DcID);
+                }
+
+                // Now let us test for PCT or MCT if needed
+                if (needsPctMctDealIds.Any())
+                {
+                    bool passMct, passPct;
+
+                    start = DateTime.Now;
+                    bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
+                    contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+                    if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
+                    {
+                        string passMsg = !passMct && !passPct
+                            ? "Meet Comp and Cost Test"
+                            : !passMct ? "Meet Comp" : "Cost Test";
+
+                        foreach (int dcId in needsPctMctDealIds)
+                        {
+                            opMsgQueue.Messages.Add(new OpMsg
+                            {
+                                Message = $"Pricing Strategy did not pass {passMsg}.",
+                                MsgType = OpMsg.MessageType.Warning,
+                                ExtraDetails = dcId,
+                                KeyIdentifiers = new[] { dcId }
+                            });
+                        }
+
+                        return opMsgQueue;
+                    }
+
+                }
+                // END DE19996 block...
 
 
                 // Check for pending stage... might need to bypass it

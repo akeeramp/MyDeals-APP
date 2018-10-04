@@ -59,7 +59,8 @@ namespace Intel.MyDeals.BusinessLogic
         private OpMsg RunPct(int objTypeId, List<int> objSetTypeIds)
         {
             bool passMct, passPct;
-            if (ExecutePctMct(objTypeId, objSetTypeIds, out passMct, out passPct))
+            bool testResults = ExecutePctMct(objTypeId, objSetTypeIds, out passMct, out passPct); // Broke this out for readability, next statement is notted.
+            if (!testResults)
             {
                 return new OpMsg
                 {

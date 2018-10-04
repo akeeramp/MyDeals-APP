@@ -1108,6 +1108,7 @@
 
         $scope.checkPctMctPriorToActioning = function (data, result) {
             // check for running MCP or PCT
+            debugger;
             var ids = $scope.getIdsToPctMct(data);
             if (ids.length > 0) {
                 $(".iconRunPct").addClass("fa-spin grn");
@@ -1117,12 +1118,17 @@
                     function (e) {
                         if ($scope.$root.pc !== null) $scope.$root.pc.add(pcPct.stop());
 
-                        //TODO Look at PCT/MCT results and determine if we can proceed
-                        //
-                        var testType = window.usrRole === "GA" ? "MCT" : "PCT";
+                        //Look at PCT/MCT results and determine if we can proceed - PCT updated test results, actionPricingStrategies now checks for fails
+                        var msg = e.data.Message;
+                        if (msg.includes("Didn't Pass")) // Failed PCT
+                        {
+                            if ($scope.$root.pc !== null) $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed with Failure Result.  Approval actions will not be run.", "Warning");
+                        }
+                        else // Passed PCT
+                        {
+                            if ($scope.$root.pc !== null) $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
+                        }
 
-
-                        if ($scope.$root.pc !== null) $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success");
                         $(".iconRunPct").removeClass("fa-spin grn");
                         root.actionPricingStrategies(data, result);
                     },
