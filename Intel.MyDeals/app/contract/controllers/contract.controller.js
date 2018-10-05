@@ -13,13 +13,13 @@
     function ContractController($scope, $uibModalStack, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, isTender, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary, $q) {
         // store template information ()
         if (contractData && contractData.data.length > 0) { // Safety check for user jumping to contract that they don't have access to tossing errors (MEETCOMP_TEST_RESULT key not found)
-            $scope.MEETCOMP_TEST_RESULT = contractData.data[0].MEETCOMP_TEST_RESULT; 
-            $scope.COST_TEST_RESULT = contractData.data[0].COST_TEST_RESULT; 
+            $scope.MEETCOMP_TEST_RESULT = contractData.data[0].MEETCOMP_TEST_RESULT;
+            $scope.COST_TEST_RESULT = contractData.data[0].COST_TEST_RESULT;
         } else {
             $scope.MEETCOMP_TEST_RESULT = "";
-            $scope.COST_TEST_RESULT = ""; 
+            $scope.COST_TEST_RESULT = "";
         }
-        
+
         $scope.selectedTAB = 'PTR'; // Tender Deals
         $scope._tabDetails = []; // Tender Deals
         $scope.templates = $scope.templates || templateData.data;
@@ -49,10 +49,10 @@
         $scope.helpTopicContractAndDealViews = HelpTopicEnum.ContractManager_ContractAndDealViews;
         $scope.helpTopicGroupingExclusions = HelpTopicEnum.ContractManager_GroupingExclusions;
         $scope.contractHeaderMaxCharWidth = 55;
-        $scope.isSuper = window.isSuper;  
+        $scope.isSuper = window.isSuper;
         $scope.isErrorWarning = false;
         $scope.forceNavigation = false;
-        
+
         // custom Contract Titles
         $scope.isTenderContract = isTender;
         $scope.contractType = "Contract";
@@ -64,6 +64,9 @@
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
+
+        //Tender only columns for PRC_TBL_ROW
+        $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -360,12 +363,12 @@
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if ($scope.isTenderContract && ( $scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE' )  && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
-                        $scope.isPtr = false;                        
+                    if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                        $scope.isPtr = false;
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
                     }
                     else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'PTR') {
-                        $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically                          
+                        $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
                         $scope.publishWipDealsFromTab();
                     }
                     else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'MC' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
@@ -436,7 +439,7 @@
         }
         $scope.contractData.CUST_ACCNT_DIV_UI = "";
         // Contract detail page initializations
-        if ($scope.isContractDetailsPage || ($scope.isTenderContract && isTender )) {
+        if ($scope.isContractDetailsPage || ($scope.isTenderContract && isTender)) {
             var today = moment().format('l');
 
             // Set dates Max and Min Values for numeric text box
@@ -765,8 +768,7 @@
             }, 300);
 
             $timeout(function () {
-                if ($scope.contractData.DC_ID > 0)
-                {
+                if ($scope.contractData.DC_ID > 0) {
                     $(".radCustAccpt input[type=radio]").attr('disabled', true);
                 }
             });
@@ -2110,7 +2112,7 @@
                         $scope.reloadPage();
                     },
                     function (response) {
-                        logger.error("Could not Rollback the "+ $scope.ptTitle + " " + pt.DC_ID, response, response.statusText);
+                        logger.error("Could not Rollback the " + $scope.ptTitle + " " + pt.DC_ID, response, response.statusText);
                         $scope.setBusy("", "");
                     }
                 );
@@ -2814,13 +2816,13 @@
                             }
                             $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                         }
-                    }                    
-                    if (!anyWarnings || !forceValidation) {                        
+                    }
+                    if (!anyWarnings || !forceValidation) {
                         $scope.stealthMode = true;
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.$broadcast('saveComplete', data);
                         $scope.resetDirty();
-                        
+
                         $scope.delPtrIds = [];
 
                         if (!!toState) {
@@ -2834,18 +2836,18 @@
                                 $scope.stealthMode = false;
                             }, 1000);
                         }
-                        if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE' )) {
-                            $scope.forceNavigation = true; //Purpose: If No Error/Warning go to Meet Comp Automatically-After Refreshing Contract                           
+                        if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE')) {
+                            $scope.forceNavigation = true; //Purpose: If No Error/Warning go to Meet Comp Automatically-After Refreshing Contract
                         }
                         else {
                             $scope.forceNavigation = false;
                         }
-                        
-                    } else { 
+
+                    } else {
                         if ($scope.isTenderContract && $scope.selectedTAB == 'PTR') {
-                            $scope.forceNavigation = false; //Purpose: If No Error/Warning go to PTR Automatically-After Refreshing Contract                            
+                            $scope.forceNavigation = false; //Purpose: If No Error/Warning go to PTR Automatically-After Refreshing Contract
                         }
-                        
+
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
                         $timeout(function () {
@@ -3153,7 +3155,7 @@
                 if (!$scope.isPivotable()) return 1;
 
                 if (dataItem === undefined) {
-                    return $scope.curPricingTable[pivotFieldName] === undefined ? 1 :parseInt($scope.curPricingTable[pivotFieldName]);
+                    return $scope.curPricingTable[pivotFieldName] === undefined ? 1 : parseInt($scope.curPricingTable[pivotFieldName]);
                 }
 
                 if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb
@@ -3168,12 +3170,46 @@
             return 1;   //num of pivot is 1 for undim deal types
         }
 
+        // If Tender and ECAP get the CAP value from Product JSON, if more than one product assign CAP, YCS2 value of first product only.
+        $scope.assignProductProprties = function (data) {
+            if ($scope.isTenderContract && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+                for (var d = 0; d < data.length; d++) {
+
+                    if (angular.equals(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null) continue;;
+
+                    // product JSON
+                    var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
+                    var sysProduct = [];
+
+                    var productArray = [];
+                    for (var key in productJSON) {
+                        if (productJSON.hasOwnProperty(key)) {
+                            angular.forEach(productJSON[key], function (item) {
+                                sysProduct.push(item);
+                            });
+                        }
+                    }
+                    // Take the first product
+                    var contractProduct = data[d]["PTR_USER_PRD"].split(',')[0];
+                    sysProduct = sysProduct.filter(function (x) {
+                        return x.USR_INPUT === contractProduct || x.HIER_VAL_NM === contractProduct;
+                    });
+
+                    data[d]["CAP"] = sysProduct.length !== 0 ? sysProduct[0]["CAP"] : "";
+                    data[d]["YCS2"] = sysProduct.length !== 0 ? sysProduct[0]["YCS2"] : "";
+                }
+            }
+            return data;
+        }
+
         $scope.pivotData = function (data) {        //convert how we save data in MT to UI spreadsheet consumable format
+            data = $scope.assignProductProprties(data);
             if (!$scope.isPivotable()) return data;
             var newData = [];
 
             for (var d = 0; d < data.length; d++) {
                 // Tiered data
+                var productJSON = data[d]["PTR_SYS_PRD"] !== undefined && data[d]["PTR_SYS_PRD"] !== null && data[d]["PTR_SYS_PRD"] !== "" ? JSON.parse(data[d]["PTR_SYS_PRD"]) : [];
                 var numTiers = $scope.numOfPivot(data[d]);
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
@@ -3213,6 +3249,10 @@
 
                         lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
                         lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true);
+                        if (productJSON.length !== 0) {
+                            lData["CAP"] = productJSON[data[d][["PRD_BCKT" + "_____20___" + (t - 1)]]][0]["CAP"];
+                            lData["YCS2"] = productJSON[data[d][["PRD_BCKT" + "_____20___" + (t - 1)]]][0]["YCS2"];
+                        }
                     }
                     newData.push(lData);
                 }
@@ -3424,7 +3464,7 @@
         }
         $scope.createTenderContract = function (ct) {
             //Adding TENDER_PUBLISHED for Tender Contract
-            ct.TENDER_PUBLISHED = 1===0;
+            ct.TENDER_PUBLISHED = 1 === 0;
 
             //Cloning PS
             var ps = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
@@ -3478,7 +3518,7 @@
             }
 
             objsetService.createTenderContract($scope.getCustId(), $scope.contractData.DC_ID, data).then(
-                function (data) {                    
+                function (data) {
                     $scope.updateResults(data.data.CNTRCT, ct);
 
                     $scope.updateResults(data.data.PRC_ST, ps);
@@ -4084,8 +4124,8 @@
         //setting a few constants for the strings that occur a lot
         var GEO = "GEO_COMBINED";
         var MRKT_SEG = "MRKT_SEG";
-        
-        
+
+
         //watch for user changing global auto-fill default values
         $scope.$watch('newPricingTable._defaultAtrbs', function (newValue, oldValue, el) {
             if (oldValue === newValue) return;
@@ -4106,7 +4146,7 @@
                         if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
-                    
+
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
@@ -4439,10 +4479,10 @@
             }
             else {
                 return false;
-            }            
+            }
         }
-        
-        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {            
+
+        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {
             var isFired = false;
             if (_tabName == 'PTR') {
                 isFired = true;
@@ -4462,10 +4502,10 @@
                 else {
                     logger.stickyError("Validate all your product(s) to open Deal Editor.");
                 }
-                
+
             }
 
-            if (_tabName == 'MC' ) {
+            if (_tabName == 'MC') {
                 if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isPTRPartiallyComplete() == true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
@@ -4485,15 +4525,15 @@
                         $scope.selectedTAB = "DE"; // Send it to Deal Editor
                         _actionName = 'publishWipDealsFromTab';
                     }
-                    
+
                 }
                 else {
-                    logger.stickyError("Validate all your product(s) to open Deal Editor.");                    
+                    logger.stickyError("Validate all your product(s) to open Deal Editor.");
                 }
 
             }
 
-            if (_tabName == 'PD' ) {
+            if (_tabName == 'PD') {
                 if ($scope.isPTRPartiallyComplete('PD') == false) {
                     if (!!$scope.child) {
                         $scope.child.validateSavepublishWipDeals();
@@ -4505,7 +4545,7 @@
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                     $scope.isPtr = false;
-                }                
+                }
                 else if (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && $scope.isPTRPartiallyComplete('PD') == true) {
                     isFired = true;
                     $scope.selectedTAB = 'MC';
@@ -4523,29 +4563,29 @@
                 }
 
             }
-            
+
             if (angular.isFunction($scope[_actionName]) && isFired)
-                $scope[_actionName]();            
+                $scope[_actionName]();
         }
 
         $scope.publishTenderDeal = function () {
             $scope.setBusy("Publishing deals", "Converting into individuals deals. Then we will redicrt you to Tender Dashboard.");
             objsetService.publishTenderDeals($scope.contractData.DC_ID).then(
                 function (data) {
-                    
-                    if (data) { 
+
+                    if (data) {
                         if (data.data == true) {
                             $scope.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
-                            document.location.href = "/advancedSearch#/tenderSearch";                            
+                            document.location.href = "/advancedSearch#/tenderSearch";
                         } else {
                             logger.stickyError("Publishing deals failed. Contact Administrator.");
                         }
                         $scope.setBusy("", "");
                     }
                     else {
-                        logger.stickyError("Publishing deals failed. Contact Administrator.");                       
+                        logger.stickyError("Publishing deals failed. Contact Administrator.");
                     }
-                    
+
                 },
                 function (result) {
                     logger.stickyError("Could not publish deals.", result, result.statusText);

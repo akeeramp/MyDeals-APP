@@ -194,6 +194,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
+        // Remove tender only columns when its a non tender deal
+        if (!root.isTenderContract && ptTemplate !== undefined && ptTemplate !== null) {
+            for (var i = ptTemplate.columns.length - 1; i >= 0; i--) {
+                if (root.tenderOnlyColumns.indexOf(ptTemplate.columns[i].field) !== -1 && !$scope.isTenderContract) {
+                    ptTemplate.columns.splice(i, 1);
+                }
+            }
+        }
+
+        // Remove tender only columns for non tender deals.
+        if (!root.isTenderContract) {
+            root.tenderOnlyColumns.forEach(function (x) {
+                delete ptTemplate.model.fields[x];
+            });
+        }
+
+        root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD] = ptTemplate;
+
         columns = vm.getColumns(ptTemplate);
 
         ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
@@ -364,7 +382,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (hideOperatorForAtrbs.indexOf(e.field) >= 0) {
                 var firstValueDropDown = e.container.find("select:eq(0)").data("kendoDropDownList");
                 var infoMsg = e.container.find(".k-filter-help-text");
-                setTimeout(function() {
+                setTimeout(function () {
                     infoMsg.hide();
                     firstValueDropDown.wrapper.hide();
                 });
@@ -769,17 +787,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					            myRow[colName] = value.value;
 					        }
 
-					    	// Update Total Discount per line if DSCNT_PER_LN or QTY are changed
+					        // Update Total Discount per line if DSCNT_PER_LN or QTY are changed
 					        if (colIndex == dscntPerLnIndex || colIndex == qtyIndex) {
-					        	// Transform negative numbers into positive
-					        	if (colIndex == qtyIndex) {
-					        	    var intVal = parseInt(value.value);
-					        		myRow["QTY"] = (isNaN(intVal) ? 1 : Math.abs(intVal));
-					        	}
-					        	if (colIndex == dscntPerLnIndex) {
-					        	    myRow["DSCNT_PER_LN"] = (Math.abs(parseFloat(value.value).toFixed(2) || 0) || 0);
-					        	}
-					        	myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
+					            // Transform negative numbers into positive
+					            if (colIndex == qtyIndex) {
+					                var intVal = parseInt(value.value);
+					                myRow["QTY"] = (isNaN(intVal) ? 1 : Math.abs(intVal));
+					            }
+					            if (colIndex == dscntPerLnIndex) {
+					                myRow["DSCNT_PER_LN"] = (Math.abs(parseFloat(value.value).toFixed(2) || 0) || 0);
+					            }
+					            myRow["TEMP_TOTAL_DSCNT_PER_LN"] = root.calculateTotalDsctPerLine(myRow["DSCNT_PER_LN"], myRow["QTY"]);
 					        }
 
 					        // Logic to apply to merge cells (multiple tiers)
@@ -899,106 +917,106 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             confirmationModal.showModal({}, modalOptions)
                                 .then(function (result) { // Merge existing row with currently-changing row
                                     var originalExistingCopy = null;
-							        var originalExistingIndex = null;   //note: not zero-based - index X corresponds to the Xth kit grouping
-							        var prevValues = [];
-							        var root = $scope.$parent.$parent;	// Access to parent scope
-							        var sourceData = root.pricingTableData.PRC_TBL_ROW;
-							        var data = root.spreadDs.data();
-							        var numOfExistingTiers = 0;
+                                    var originalExistingIndex = null;   //note: not zero-based - index X corresponds to the Xth kit grouping
+                                    var prevValues = [];
+                                    var root = $scope.$parent.$parent;	// Access to parent scope
+                                    var sourceData = root.pricingTableData.PRC_TBL_ROW;
+                                    var data = root.spreadDs.data();
+                                    var numOfExistingTiers = 0;
 
-							        // Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
-							        for (var i = 0; i < data.length; i++) {
-							            if (data[i] !== undefined && originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) === 1 && data[i]["DC_ID"] === confirmationModPerDealGrp[result.key].existingDcID) {
-							                // get the original existing copy to merge everything into
-							                originalExistingCopy = angular.copy(data[i]);
-							                originalExistingIndex = i;
-							                break;
-							            }
-							        }
-							        // Find/get all occurances with deal-grp-nm
-							        for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-							            if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
-							                for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM values (not null), so we want to backtrack to include the other tiers within that group.  The reason the other tiers are null is because when a user changes a merged cell, kendo will only update the first row and keep the others in the merge group null.  we need to remember this and thus also enforce this behavior in applySpreadsheetMerge to make sure the data source is consistent in reflecting kendo's behavior
-							                    prevValues.push(angular.copy(data[j]));
+                                    // Find the existing's index since the original existing index can be located below one of the merging-into rows, which were spliced
+                                    for (var i = 0; i < data.length; i++) {
+                                        if (data[i] !== undefined && originalExistingCopy == null && parseInt(data[i]["TIER_NBR"]) === 1 && data[i]["DC_ID"] === confirmationModPerDealGrp[result.key].existingDcID) {
+                                            // get the original existing copy to merge everything into
+                                            originalExistingCopy = angular.copy(data[i]);
+                                            originalExistingIndex = i;
+                                            break;
+                                        }
+                                    }
+                                    // Find/get all occurances with deal-grp-nm
+                                    for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
+                                        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+                                            for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1) ; j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM values (not null), so we want to backtrack to include the other tiers within that group.  The reason the other tiers are null is because when a user changes a merged cell, kendo will only update the first row and keep the others in the merge group null.  we need to remember this and thus also enforce this behavior in applySpreadsheetMerge to make sure the data source is consistent in reflecting kendo's behavior
+                                                prevValues.push(angular.copy(data[j]));
 
-							                    if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
-							                        // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
-							                        //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
+                                                if (data[j]["DC_ID"] == confirmationModPerDealGrp[result.key].existingDcID) {
+                                                    // HACK: Note that we cannot splice the existing rows that we'd later to merge into, or else sourceData will not sync correctly.
+                                                    //		The reason is that Kendo will think that the a row with the same DC_ID and TIER_NBR is an Update() instead of a Create() and therefore not update the data correctly
 
-							                        numOfExistingTiers++;
+                                                    numOfExistingTiers++;
 
-							                        if (parseInt(data[j]["TIER_NBR"]) == 1) {
-							                            continue;
-							                        }
-							                    }
-							                    else {
-							                        if (j < originalExistingIndex) {
-							                            // the original index will decrease if the row we are currently examining is above the original and gets spliced out for merging
-							                            originalExistingIndex -= 1;
-							                        }
-							                        // "delete" the rows to merge
-							                        data.splice(j, 1);
-							                    }
-							                }
-							            }
-							        }
-							        var numOfDuplicates = 0;
-							        // Check for and remove duplicates
-							        var duplicateCheckerDict = {};
-							        for (var i = prevValues.length - 1; i >= 0; i--) {
-							            if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
-							                prevValues.splice(i, 1);
-							                numOfDuplicates++;
-							            } else {
-							                duplicateCheckerDict[formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
-							            }
-							        }
+                                                    if (parseInt(data[j]["TIER_NBR"]) == 1) {
+                                                        continue;
+                                                    }
+                                                }
+                                                else {
+                                                    if (j < originalExistingIndex) {
+                                                        // the original index will decrease if the row we are currently examining is above the original and gets spliced out for merging
+                                                        originalExistingIndex -= 1;
+                                                    }
+                                                    // "delete" the rows to merge
+                                                    data.splice(j, 1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    var numOfDuplicates = 0;
+                                    // Check for and remove duplicates
+                                    var duplicateCheckerDict = {};
+                                    for (var i = prevValues.length - 1; i >= 0; i--) {
+                                        if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
+                                            prevValues.splice(i, 1);
+                                            numOfDuplicates++;
+                                        } else {
+                                            duplicateCheckerDict[formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
+                                        }
+                                    }
 
-							        prevValues = prevValues.reverse();
+                                    prevValues = prevValues.reverse();
 
-							        // Update the row to have merged deal grp names
-							        for (var i = 0; i < numOfExistingTiers; i++) {
-							            var updateIndex = originalExistingIndex + i;
-							            data[updateIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
-							            data[updateIndex]["PTR_SYS_PRD"] = null; // force revalidation
-							            data[updateIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
-							            data[updateIndex]['dirty'] = true;
-							        }
+                                    // Update the row to have merged deal grp names
+                                    for (var i = 0; i < numOfExistingTiers; i++) {
+                                        var updateIndex = originalExistingIndex + i;
+                                        data[updateIndex]["PTR_USER_PRD"] = prevValues.map(function (e) { return e["PRD_BCKT"] }).join(",");
+                                        data[updateIndex]["PTR_SYS_PRD"] = null; // force revalidation
+                                        data[updateIndex]["NUM_OF_TIERS"] = parseInt(prevValues.length);
+                                        data[updateIndex]['dirty'] = true;
+                                    }
 
-							        cleanupData(data); // Cleanup to get KIT re-tiering
-							        sheet.batch(function (e) {
-							            // TODO: disable numOfDuplicates below data
-							            // Disable user editable columns
-							            disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
+                                    cleanupData(data); // Cleanup to get KIT re-tiering
+                                    sheet.batch(function (e) {
+                                        // TODO: disable numOfDuplicates below data
+                                        // Disable user editable columns
+                                        disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
 
-							            // Re-enable Product column
-							            var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + (data.length + 2 + numOfDuplicates));
-							            prdRange.enable(true);
-							            prdRange.background(null);
-							        });
-							        // Re-put old merged dimensionalized values into the new merged rows
-							        for (var i = 0; i < parseInt(prevValues.length) ; i++) {
-							            var newRowIndex = originalExistingIndex + i; // data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
-							            for (var d = 0; d < root.kitDimAtrbs.length; d++) {
-							                if (root.kitDimAtrbs[d] == "TIER_NBR") {
-							                    continue;
-							                }
-							                data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
-							            }
-							        }
-							        // Recalculate KIT Rebate
-							        // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
-							        data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(data[originalExistingIndex]["NUM_OF_TIERS"]), false);
+                                        // Re-enable Product column
+                                        var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + (data.length + 2 + numOfDuplicates));
+                                        prdRange.enable(true);
+                                        prdRange.background(null);
+                                    });
+                                    // Re-put old merged dimensionalized values into the new merged rows
+                                    for (var i = 0; i < parseInt(prevValues.length) ; i++) {
+                                        var newRowIndex = originalExistingIndex + i; // data.length - (parseInt(prevValues.length) - i); // + existingNumTiers to start at new numTiers index
+                                        for (var d = 0; d < root.kitDimAtrbs.length; d++) {
+                                            if (root.kitDimAtrbs[d] == "TIER_NBR") {
+                                                continue;
+                                            }
+                                            data[newRowIndex][root.kitDimAtrbs[d]] = prevValues[i][root.kitDimAtrbs[d]];
+                                        }
+                                    }
+                                    // Recalculate KIT Rebate
+                                    // TODO:  NOTE: this only sets the correct TEMP_KIT_REBATE value to the first row. If we need to set all the TEMP_KIT_REBATE values of each row, then we should revisit this
+                                    data[originalExistingIndex]["TEMP_KIT_REBATE"] = root.calculateKitRebate(data, originalExistingIndex, parseInt(data[originalExistingIndex]["NUM_OF_TIERS"]), false);
 
-							        data[originalExistingIndex]['dirty'] = true;
-							        sourceData[originalExistingIndex]['dirty'] = true;
+                                    data[originalExistingIndex]['dirty'] = true;
+                                    sourceData[originalExistingIndex]['dirty'] = true;
 
-							        //sync
-							        spreadDsSync();
-							        clearUndoHistory();
-							        root.child.setRowIdStyle(data);
+                                    //sync
+                                    spreadDsSync();
+                                    clearUndoHistory();
+                                    root.child.setRowIdStyle(data);
 
-							    }
+                                }
 							    , function (response) { // Cancel Merge
 							        // Find all occurances with deal-grp-nm
 							        for (var i = data.length - 1; i >= 0; i--) {
@@ -1370,6 +1388,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         if (data[n]["PTR_USER_PRD"] !== null) {
             var products = data[n]["PTR_USER_PRD"].replace(/,,/g, ',').split(",");
+            var proudctJSON = (data[n]["PTR_SYS_PRD"] === undefined || data[n]["PTR_SYS_PRD"] === "" || data[n]["PTR_SYS_PRD"] === null)
+                ? [] : JSON.parse(data[n]["PTR_SYS_PRD"]);
             if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && isInt(parseInt(masterData[n].DC_ID))) {
                 // Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
                 // Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
@@ -1423,18 +1443,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             for (var a = 0; a < numTier; a++) {
                 if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
+                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, proudctJSON);
                     continue;
                 }
                     // Update existing rows, offset number of deleted rows
                 else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
-                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a);
+                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, proudctJSON);
                     numExistingRows--;
                 } else {
                     if (rowDeleted == 0 && offSetRows > 0) {
                         // adding products / new rows
                         var copy = angular.copy(data[n - rowDeleted]);
-                        copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a);
+                        copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a, proudctJSON);
                         data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
                         // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
                         data[n + a - (offset - 1)].id = null;
@@ -1443,7 +1463,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     } else {
                         // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
                         data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
-                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a);
+                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, proudctJSON);
                     }
                 }
             }
@@ -1461,7 +1481,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         newFirstTierRow['TEMP_KIT_REBATE'] = oldFirstTierRow['TEMP_KIT_REBATE'];
     }
 
-    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber) {
+    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber, proudctJSON) {
         var row = angular.copy(row);
 
         // Case
@@ -1470,7 +1490,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }, true);
 
         if (buckProd.length === 0) { // no corresponding row (essentially a new row)
-            row.PRD_BCKT = productBcktName;
+            row["PRD_BCKT"] = productBcktName;
+
+            // Tender only colums
+            row["CAP"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
+            row["YCS2"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
+
             // Clear out any tiered values because this is an essentially new row.  Do not clear out unless it comes from a relevant user action - we don't want this to happen when the product corrects in-place to what we have defined in the system (i.e. after user manual copy paste or typed entry).
             row["ECAP_PRICE"] = 0;
             row["DSCNT_PER_LN"] = 0;
@@ -1478,6 +1503,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
         } else {
             row = buckProd[0]; //Select the first one even of there are duplicates
+            row["CAP"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
+            row["YCS2"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].YCS2 : "";
         }
         row["NUM_OF_TIERS"] = numTier;
         row["TIER_NBR"] = tierNumber + 1;
@@ -1492,8 +1519,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function cleanupData(data) {
         var dcIdDict = {};
         var dictId = 0;
-        var copyOfData = angular.copy(data);
 
+        // For Tender ECAP deals assign product proerties(CAP, YCS2 etc.) to spreadsheet columns
+        data = root.assignProductProprties(data);
+
+        var copyOfData = angular.copy(data);
         // clear validations for KIT in case the user added or removed a product from the PTR_USER_PRD csv. Otheriwse red validation flags will show on the wrong rows from dynamic tiering.
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             root.clearValidations();
@@ -2763,7 +2793,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var msg = isError ? beh.validMsg["PTR_USER_PRD"] : "";
         sheet.range(root.colToLetter['PTR_USER_PRD'] + (row + 1)).validation(root.myDealsValidation(isError, msg, false));
     }
-    
+
     function ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         var pcUi = new perfCacheBlock("Validate Products", "UI");
 

@@ -804,7 +804,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckCeilingVolume(params object[]  args)
+        public static void CheckCeilingVolume(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;

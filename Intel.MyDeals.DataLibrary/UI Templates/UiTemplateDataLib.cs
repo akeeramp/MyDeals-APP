@@ -437,6 +437,28 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 29,
+                AtrbCd = AttributeCodes.CAP,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
+                Width = 100,
+                Label = "CAP",
+                IsDimKey = false,
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "YCS2",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
+                Width = 100,
+                Label = "YCS2",
+                IsDimKey = false,
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 20,
                 AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -520,6 +542,28 @@ namespace Intel.MyDeals.DataLibrary
                 IsDimKey = true,
                 IsReadOnly = true,
                 DataType = "string"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "CAP",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                Width = 100,
+                Label = "CAP",
+                IsDimKey = true,
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "YCS2",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
+                Width = 100,
+                Label = "YCS2",
+                IsDimKey = true,
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -613,6 +657,49 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "dropdownName",
                 LookupValue = "dropdownName",
                 IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3678,
+                AtrbCd = AttributeCodes.QLTR_BID_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 180,
+                UiType = "MULTISELECT",
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_BID_GEO')#",
+                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
+                IsFilterable = true,
+                DataType = "string",
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3347,
+                AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 110,
+                IsFilterable = true,
+                IsSortable = true,
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'SERVER_DEAL_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3568,
+                AtrbCd = AttributeCodes.QLTR_PROJECT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                DataType = "string",
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
+                IsFilterable = true,
+                IsSortable = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -818,7 +905,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.DC_ID,
                 IsKey = true,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM},
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 IsFilterable = true,
                 IsSortable = true,
                 DataType = "number",
