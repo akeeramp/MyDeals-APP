@@ -146,6 +146,10 @@
                         $scope.$parent.refreshContractData();
                         if (response.data.length > 0) {
                             response.data.forEach(function (obj) {
+                                if ($scope.isAdhoc == 1) {
+                                    $scope.$parent.resetDirty();
+                                }
+                                
                                 obj.IS_SELECTED = false;
 
                                 //Setting COMP_PRC to null. Its nullable Int

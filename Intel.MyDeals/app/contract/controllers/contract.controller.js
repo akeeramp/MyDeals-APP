@@ -51,8 +51,11 @@
         $scope.contractHeaderMaxCharWidth = 55;
         $scope.isSuper = window.isSuper;
         $scope.isErrorWarning = false;
-        $scope.forceNavigation = false;
-
+        $scope.forceNavigation = false;        
+        $scope.usrRole = window.usrRole;
+        $scope.actualClikedTabName = 'PTR';
+        $scope.currentTAB = 'PTR';
+        
         // custom Contract Titles
         $scope.isTenderContract = isTender;
         $scope.contractType = "Contract";
@@ -308,6 +311,7 @@
 
         if ($state.current.name == 'contract.manager.strategy.wip') {
             $scope.selectedTAB = 'DE'; // DE- Deal Editor
+            $scope.currentTAB = 'DE'; // DE- Deal Editor
         }
 
         $scope.saveBtnName = function () {
@@ -363,17 +367,19 @@
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
-                        $scope.isPtr = false;
+                    if ($scope.actualClikedTabName == 'MC' && $scope.isTenderContract && ( $scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE' )  && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                        $scope.isPtr = false;                        
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
-                    }
-                    else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'PTR') {
-                        $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
-                        $scope.publishWipDealsFromTab();
-                    }
-                    else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'MC' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.resetDirty();
+                    }
+                    else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.selectedTAB == 'PTR') {
+                        $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
+                        $scope.resetDirty();
+                        $scope.publishWipDealsFromTab();                        
+                    }
+                    else if ($scope.actualClikedTabName =='PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'MC' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+                        $scope.resetDirty();
                     }
                 }
             });
@@ -3471,7 +3477,12 @@
             ps.DC_ID = $scope.uid--;
             ps.DC_PARENT_ID = ct.DC_ID;
             ps.PRC_TBL = [];
-            ps.TITLE = "_PS1_" + ct.Customer.CUST_NM; //Have to change Based on the Naming Convention in MT
+            if (typeof (ct.Customer.CUST_NM) != 'undefined') {
+                ps.TITLE = "_PS1_" + ct.Customer.CUST_NM;
+            }
+            else {
+                ps.TITLE = "_PS1_";
+            }           
 
             // Clone base model and populate changes
             var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
@@ -3485,7 +3496,12 @@
             pt.DC_ID = $scope.uid--;
             pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
             pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
-            pt.TITLE = "_PT1_" + ct.Customer.CUST_NM; //Have to change Based on the Naming Convention in MT
+            if (typeof (ct.Customer.CUST_NM) != 'undefined') {
+                pt.TITLE = "_PT1_" + ct.Customer.CUST_NM;
+            }
+            else {
+                pt.TITLE = "_PT1_"; 
+            }
 
             for (var atrb in $scope.newPricingTable._extraAtrbs) {
                 if ($scope.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
@@ -4460,7 +4476,7 @@
 
         $scope.isPTRPartiallyComplete = function (selectedTab) {
             var isPtrDirty = false;
-            //$scope.pricingTableData.PRC_TBL_ROW.length
+            var rootScopeDirty = $scope._dirty;
             if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined && $scope.pricingTableData.PRC_TBL_ROW.length > 0) {
                 var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
                     function (x) {
@@ -4471,33 +4487,58 @@
             else {
                 isPtrDirty = true;
             }
-            if (selectedTab == 'PD') {
-                return !isPtrDirty;
-            }
-            if (!isPtrDirty && !$scope._dirty) {
+            //IF DE
+            if (selectedTab == 'DE') {
+                var isDirty = $("button.notdirty");
+                if (isDirty !== undefined && isDirty.length > 0) {
+                    $scope._dirty = false;
+                    rootScopeDirty = false;
+                }
+            }           
+
+            if (!isPtrDirty && !rootScopeDirty) {
                 return true;
             }
             else {
                 return false;
             }
         }
-
-        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {
+        
+        $scope.tenderWidgetPathManager = function (_actionName, _tabName) {            
+            
             var isFired = false;
-            if (_tabName == 'PTR') {
-                isFired = true;
+            var isPartiallyValid = true;
+
+            $scope.actualClikedTabName = _tabName;
+
+            if ($scope.currentTAB == _tabName) {
+                return;
             }
-            if (_tabName == 'DE') {
-                if ($scope.isPTRPartiallyComplete() == false) {
+
+            if (_tabName == 'PTR') {                
+                isFired = true;                
+            }
+
+            if ($scope.currentTAB == 'PTR' && _tabName != 'PTR') {
+                isPartiallyValid = $scope.isPTRPartiallyComplete('PTR');
+            }
+
+            if ($scope.currentTAB == 'DE' && _tabName != 'DE') {
+                isPartiallyValid = $scope.isPTRPartiallyComplete('DE');
+            }
+
+            if (_tabName == 'DE') {                
+                if (isPartiallyValid == false) {
                     if (!!$scope.child) {
                         $scope.child.validateSavepublishWipDeals();
                     } else {
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || $scope.isPTRPartiallyComplete() == true) && $scope.enableDealEditorTab() === true) {
+                else if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || isPartiallyValid == true) && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
+                    $scope.currentTAB = _tabName;
                 }
                 else {
                     logger.stickyError("Validate all your product(s) to open Deal Editor.");
@@ -4505,27 +4546,29 @@
 
             }
 
-            if (_tabName == 'MC') {
-                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isPTRPartiallyComplete() == true) {
+            if (_tabName == 'MC') {                
+                if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && isPartiallyValid == true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
-                    $scope.isPtr = false;
+                    $scope.currentTAB = _tabName;
+                    $scope.isPtr = false;                    
                 }
-                else if ($scope.isPTRPartiallyComplete() == false) {
+                else if (isPartiallyValid == false) {
                     if (!!$scope.child) {
+                        $scope.backToPricingTable();
                         $scope.child.validateSavepublishWipDeals();
                     } else {
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if ($scope.isPTRPartiallyComplete() == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
+                else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     $scope.isPtr = false;
                     if ($scope.selectedTAB != 'DE') {
                         $scope.selectedTAB = "DE"; // Send it to Deal Editor
+                        $scope.currentTAB = 'DE';
                         _actionName = 'publishWipDealsFromTab';
-                    }
-
+                    }                    
                 }
                 else {
                     logger.stickyError("Validate all your product(s) to open Deal Editor.");
@@ -4533,28 +4576,32 @@
 
             }
 
-            if (_tabName == 'PD') {
-                if ($scope.isPTRPartiallyComplete('PD') == false) {
+            if (_tabName == 'PD' ) {
+                if (isPartiallyValid == false) {
                     if (!!$scope.child) {
+                        
                         $scope.child.validateSavepublishWipDeals();
                     } else {
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet' && $scope.isPTRPartiallyComplete('PD') == true) {
+                else if ((window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet')) && isPartiallyValid == true) {
                     isFired = true;
-                    $scope.selectedTAB = _tabName;
+                    $scope.selectedTAB = _tabName;                    
+                    $scope.currentTAB = _tabName;
+                    $scope.isPtr = false;
+                }                
+                else if (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
+                    isFired = true;
+                    $scope.selectedTAB = 'MC';                    
+                    $scope.currentTAB = 'MC';
                     $scope.isPtr = false;
                 }
-                else if (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && $scope.isPTRPartiallyComplete('PD') == true) {
-                    isFired = true;
-                    $scope.selectedTAB = 'MC';
-                    $scope.isPtr = false;
-                }
-                else if ($scope.isPTRPartiallyComplete('PD') == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
+                else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     if ($scope.selectedTAB != 'DE') {
                         $scope.selectedTAB = "DE"; // Send it to Deal Editor
+                        $scope.currentTAB = 'DE';
                         _actionName = 'publishWipDealsFromTab';
                     }
                 }
