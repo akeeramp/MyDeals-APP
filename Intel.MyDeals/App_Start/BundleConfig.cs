@@ -166,6 +166,7 @@ namespace Intel.MyDeals
                 , "~/app/advancedSearch/advancedSearch.route.js"
                 , "~/app/advancedSearch/advancedSearch.controller.js"
                 , "~/app/advancedSearch/attributeSearch.controller.js"
+                , "~/app/advancedSearch/tenderDashboard.controller.js"
                 , "~/app/advancedSearch/dealSearch.controller.js"
                 , "~/app/advancedSearch/globalSearch.directive.js"
                 , "~/app/advancedSearch/globalSearchResults.directive.js"

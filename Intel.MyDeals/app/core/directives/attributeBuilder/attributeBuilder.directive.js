@@ -10,7 +10,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
         scope: {
             gridId: '=',
             operatorSettings: '=',
-            attributeSettings: '='
+            attributeSettings: '=',
+            customSettings: '='
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/attributeBuilder/attributeBuilder.directive.html',
@@ -24,6 +25,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.currentRuleColumns = "";
             $scope.lookupDs = {};
 
+            $scope.tenderAttributeBuilder = ($scope.customSettings == "TenderDashboard");
+            
             for (var i = 0; i < $scope.attributeSettings.length; i++) {
                 $scope.fieldDict[$scope.attributeSettings[i].field] = $scope.attributeSettings[i].type;
             }
@@ -35,16 +38,30 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             });
 
             if ($scope.data.length === 0) {
-                $scope.data = [
-                    {
-                        field: "",
-                        operator: "",
-                        value: "",
-                        source: new kendo.data.DataSource({
-                            data: $scope.attributeSettingsCopy
-                        })
-                    }
-                ];
+                if ($scope.tenderAttributeBuilder == true) {
+                    //tender dashboard requires deal type as preset required search attribute
+                    $scope.data = [
+                        {
+                            field: "OBJ_SET_TYPE_CD",
+                            operator: "=",
+                            value: "",
+                            source: new kendo.data.DataSource({
+                                data: $scope.attributeSettingsCopy
+                            })
+                        }
+                    ];
+                } else {
+                    $scope.data = [
+                        {
+                            field: "",
+                            operator: "",
+                            value: "",
+                            source: new kendo.data.DataSource({
+                                data: $scope.attributeSettingsCopy
+                            })
+                        }
+                    ];
+                }
             }
 
             $scope.loadMyRules = function() {
@@ -288,6 +305,45 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
                         html = '';
                         html += '<select kendo-multi-select ';
+                        html += 'k-data-text-field="\'' + field.lookupText + '\'" ';
+                        html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
+                        html += 'k-filter="\'contains\'" ';
+                        html += 'k-auto-bind="true" ';
+                        html += 'k-tag-mode="\'single\'" ';
+                        html += 'k-value-primitive="true" ';
+                        html += 'k-ng-model="dataItem.value" ';
+                        html += 'k-auto-close="false" ';
+                        html += 'k-data-source="lookupDs.' + key + '" ';
+                        html += 'class="opUiContainer sm" ';
+                        html += 'style="min-width: 200px; max-width: 400px;"></select>{{dataItem.value}}';
+                    }
+                    else if (fieldType === "singleselect") {
+
+                        var key = field.field.replace(/\./g, "_");
+                        if ($scope.lookupDs[key] === undefined) {
+
+                            // by url
+                            if (field.lookupUrl !== undefined && field.lookupUrl !== "") {
+                                $scope.lookupDs[key] = new kendo.data.DataSource({
+                                    transport: {
+                                        read: {
+                                            url: field.lookupUrl,
+                                            dataType: "json"
+                                        }
+                                    }
+                                });
+                            }
+
+                            // by local data
+                            if (field.lookups !== undefined && field.lookups.length > 0) {
+                                $scope.lookupDs[key] = new kendo.data.DataSource({
+                                    data: field.lookups
+                                });
+                            }
+                        }
+
+                        html = '';
+                        html += '<select kendo-drop-down-list ';
                         html += 'k-data-text-field="\'' + field.lookupText + '\'" ';
                         html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
                         html += 'k-filter="\'contains\'" ';

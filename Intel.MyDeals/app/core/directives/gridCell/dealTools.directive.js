@@ -53,9 +53,19 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
-            if (!$scope.$parent.contractData) {
-                rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+
+            if (!rootScope.saveCell) {
+                rootScope = $scope.$parent;
+                while (!rootScope.saveCell) {
+                    rootScope = rootScope.$parent;
+
+                    if (rootScope == null) {
+                        rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+                        break;   //something went horribly wrong and we never found the root scope, so we just set it to the hard-coded value before I "refactored" this :)
+                    }
+                }
             }
+
             $scope.rootScope = rootScope;
 
             $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false: rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);

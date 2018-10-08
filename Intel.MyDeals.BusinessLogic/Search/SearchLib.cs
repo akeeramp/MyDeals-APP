@@ -502,6 +502,21 @@ namespace Intel.MyDeals.BusinessLogic
             MyRulesTrigger.OnDealListLoad);
         }
 
+        /// <summary>
+        /// Get the Non Tender Deal List
+        /// </summary>
+        /// <param name="data">SearchParams: Start/End Date, Search Text and Search conditions</param>
+        /// <returns></returns>
+        public SearchResultPacket GetTenderDashboardList(SearchParams data)
+        {
+            return GetDealList(data,
+                new List<int>(),
+                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" },
+                new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
+                true,
+                MyRulesTrigger.OnDealListLoad);
+        }
+
         public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType)
         {
             List<int> atrbs = new List<int>

@@ -68,6 +68,15 @@
                 }
             },
             {
+                state: 'advancedSearch.tenderDashboard',
+                abstract: false,
+                config: {
+                    templateUrl: '/app/advancedSearch/tenderDashboard.html',
+                    url: 'tenderDashboard',
+                    controller: 'tenderDashboardController'
+                }
+            },
+            {
                 state: 'advancedSearch.tenderSearch',
                 abstract: false,
                 config: {

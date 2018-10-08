@@ -37,7 +37,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.numColsLocked = 0;
             $scope.wrapEnabled = false;
             $scope.fontSize = 'md';
-            $scope.parentRoot = $scope.$parent.$parent.$parent.$parent.$parent;
+            
 
             $timeout(function () {
                 $scope.tabStripDelay = true;
@@ -109,6 +109,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.root = $scope.$parent;
                 while (d < depth && !$scope.root.saveCell) {
                     $scope.root = $scope.root.$parent;
+
+                    if ($scope.root == null) break;
                 }
             }
 
@@ -691,6 +693,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                         // on success
                         util.console("contractDs read Ended");
+
+                        $scope.broadcast("grid-datasource-read-complete");
+
                         e.success(source);
                     },
                     create: function (e) {

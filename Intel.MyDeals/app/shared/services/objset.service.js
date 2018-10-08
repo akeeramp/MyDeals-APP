@@ -16,6 +16,7 @@ function objsetService($http, dataService, logger, $q, $location) {
     var apiBaseTenderUrl = "/api/Tenders/v1/";
     var apiBaseEmailUrl = "/api/Email/";
     var dropDownApiUrl = "/api/Dropdown/";
+    var apiBaseSearchUrl = "/api/Search/"
 
     var service = {
         createTenderContract: createTenderContract,
@@ -50,6 +51,7 @@ function objsetService($http, dataService, logger, $q, $location) {
 
         readTender: readTender,
         readTenderChildren: readTenderChildren,
+        searchTender: searchTender,
 
         deletePricingTableRow: deletePricingTableRow,
         rollbackPricingTableRow: rollbackPricingTableRow,
@@ -180,6 +182,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function readTenderChildren(id) {
         return dataService.get(apiBaseTenderUrl + 'GetChildren/' + id);
+    }
+    function searchTender(st, en, searchText) {
+        return dataService.get(apiBaseSearchUrl + "GetTenderDashboardList/" + st + "/" + en + "/" + searchText.replace(/\./g, '&per;'))
     }
 
 

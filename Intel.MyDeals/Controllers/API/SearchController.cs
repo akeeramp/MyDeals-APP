@@ -92,6 +92,37 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetTenderDashboardList/{st}/{en}/{searchText}")]
+        [HttpGet]
+        public PageResult<OpDataCollectorFlattenedItem> GetTenderDashboardList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, string searchText)
+        {
+            return SafeExecutor(() =>
+            {
+                int maxLength = 5000;
+                if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
+
+                SearchResultPacket rtn = _searchLib.GetTenderDashboardList(new SearchParams
+                {
+                    StrStart = st,
+                    StrEnd = en,
+                    Customers = string.IsNullOrEmpty(searchText) ? new List<string>() : searchText.Split(',').ToList(),
+                    StrSorts = options.RawValues.OrderBy ?? "",
+                    StrFilters = options.Filter == null ? "" : options.Filter.RawValue ?? "",
+                    Skip = options.RawValues.Skip == null ? 0 : int.Parse(options.RawValues.Skip),
+                    Take = options.RawValues.Top == null || options.RawValues.Top == "all" ? maxLength : int.Parse(options.RawValues.Top)
+                });
+
+                return new PageResult<OpDataCollectorFlattenedItem>(
+                    rtn.SearchResults,
+                    Request.ODataProperties().NextLink,
+                    rtn.SearchCount);
+            }
+                , $"Unable to get Search Results"
+            );
+
+        }
+
+        [Authorize]
         [Route("GetTenderList/{st}/{en}/{actv}/{searchText}")]
         [HttpGet]
         public PageResult<OpDataCollectorFlattenedItem> GetTenderList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, int actv, string searchText)

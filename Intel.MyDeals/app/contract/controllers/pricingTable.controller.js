@@ -414,7 +414,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.wipOptions.numSoftWarn = numWarn;
 
         root.wipData = root.pricingTableData.WIP_DEAL;
-
+        
         // If no data was returned, we should redirect back to PTR
         if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
             $state.go('contract.manager.strategy',

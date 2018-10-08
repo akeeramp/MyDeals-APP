@@ -3,17 +3,18 @@
 
     angular
         .module('app.advancedSearch')
-        .controller('attributeSearchController', attributeSearchController)
+        .controller('tenderDashboardController', tenderDashboardController)
         .run(SetRequestVerificationToken);
 
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    attributeSearchController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq'];
+    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate'];
 
-    function attributeSearchController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
+        document.title = "Tender Dashboard - My Deals";
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
@@ -83,6 +84,10 @@
                     "uiType": "combobox"
                 },
                 {
+                    "type": "singleselect",
+                    "uiType": "combobox"
+                },
+                {
                     "type": "bool",
                     "uiType": "checkbox"
                 }
@@ -107,6 +112,10 @@
                 {
                     type: "list",
                     operator: ["=", "LIKE"]
+                },
+                {
+                    type: "singleselect",
+                    operator: ["="]
                 },
                 {
                     type: "bool",
@@ -220,7 +229,7 @@
             }, {
                 field: "OBJ_SET_TYPE_CD",
                 title: "Deal Type",
-                type: "list",
+                type: "singleselect",
                 width: 130,
                 filterable: {
                     ui: function (element) {
@@ -228,9 +237,7 @@
                             dataSource: {
                                 data: [
                                     "ECAP",
-                                    "KIT",
-                                    "PROGRAM",
-                                    "VOL_TIER"
+                                    "KIT"       //tenders only have ecap/kit deal type
                                 ]
                             },
                             optionLabel: "--Select Value--"
@@ -242,9 +249,7 @@
                 lookupValue: "OBJ_SET_TYPE_CD",
                 lookups: [
                     { OBJ_SET_TYPE_CD: "ECAP", OBJ_SET_TYPE_NM: "ECAP" },
-                    { OBJ_SET_TYPE_CD: "PROGRAM", OBJ_SET_TYPE_NM: "PROGRAM" },
-                    { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" },
-                    { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }
+                    { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" }
                 ]
             }, {
                 field: "START_DT",
@@ -567,33 +572,6 @@
             }
         ];
 
-        $scope.options = {
-            "messages": {
-                "help": "<div style=\"margin-bottom: 5px; \"><b>Search Tip</b></div>Search by Deal #, Customer, Product or Tracker #<br/><div style=\"color: #666666; margin: 5px 0;\">Example: <i>i7-5*, HPI</i></div>"
-            },
-            "busy": {
-                "search": {
-                    "title": "Searching...",
-                    "message": "Searching for Deals"
-                },
-                "export": {
-                    "title": "Exporting to Excel...",
-                    "message": "Please be aware this may take some time."
-                }
-            },
-            "customToolbarTemplate": "custom-toolbar",
-            "url": function () {
-                var st = $scope.startDt.replace(/\//g, '-');
-                var en = $scope.endDt.replace(/\//g, '-');
-                var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
-
-                var url = "/api/Search/GetDealList/" + st + "/" + en + "/" + searchText.replace(/\./g, '&per;');
-                
-                $scope.savingToExcel = false;
-                return url;
-            }
-        };
-
         $scope.$storage = $localStorage;
 
         $scope.$storage = $localStorage.$default({
@@ -641,27 +619,208 @@
             return $scope.customers.join(", ");
         }
 
-        $scope.$on('attribute-datasource-end', function (event, data) {
-            for (var d = 0; d < data.length; d++) {
-                var cVol = data[d]["CREDIT_VOLUME"] === undefined || data[d]["CREDIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["CREDIT_VOLUME"]);
-                var dVol = data[d]["DEBIT_VOLUME"] === undefined || data[d]["DEBIT_VOLUME"] === "" ? 0 : parseFloat(data[d]["DEBIT_VOLUME"]);
-                var cAmt = data[d]["CREDIT_AMT"] === undefined || data[d]["CREDIT_AMT"] === "" ? 0 : parseFloat(data[d]["CREDIT_AMT"]);
-                var dAmt = data[d]["DEBIT_AMT"] === undefined || data[d]["DEBIT_AMT"] === "" ? 0 : parseFloat(data[d]["DEBIT_AMT"]);
+        $scope.wipOptions = {};
+        $scope.wipOptions.default = {};
+        $scope.helpTopic = HelpTopicEnum.DealEditor_Features;
+        $scope.wipData = [];
 
-                data[d]["NET_VOL_PAID"] = cVol - dVol !== 0 ? cVol - dVol : "";
-                data[d]["TOT_QTY_PAID"] = cAmt + dAmt !== 0 ? cAmt + dAmt : "";
+        ////// 
+        ////// contract controller root override functions - these are the functions that opGrid expects to have in the parent scope.  Most are for now a copy paste from contract.controller.js
+        //////
+
+        $scope.saveCell = function (args) {
+            //TODO
+        }
+
+        $scope.setBusy = function (msg, detail, msgType, isShowFunFact, isInstant) { // msgType can be Success, Error, Warning, and Info
+            if (isInstant == null) {
+                isInstant = false;
             }
-        });
+
+            if (isInstant) {
+                $scope.setBusyBase(msg, detail, msgType, isShowFunFact);
+            } else {
+                $timeout(function () {
+                    $scope.setBusyBase(msg, detail, msgType, isShowFunFact);
+                });
+            }
+        }
+
+        $scope.setBusyBase = function (msg, detail, msgType, isShowFunFact) {
+            var newState = msg != undefined && msg !== "";
+            if (isShowFunFact == null) { isShowFunFact = false; }
+
+            // if no change in state, simple update the text
+            if ($scope.isBusy === newState) {
+                $scope.isBusyMsgTitle = msg;
+                $scope.isBusyMsgDetail = !detail ? "" : detail;
+                $scope.isBusyType = msgType;
+                $scope.isBusyShowFunFact = isShowFunFact;
+                return;
+            }
+
+            $scope.isBusy = newState;
+            if ($scope.isBusy) {
+                $scope.isBusyMsgTitle = msg;
+                $scope.isBusyMsgDetail = !detail ? "" : detail;
+                $scope.isBusyType = msgType;
+                $scope.isBusyShowFunFact = isShowFunFact;
+            } else {
+                $timeout(function () {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                }, 500);
+            }
+        }
+
+        $scope.contractData = {}    //placeholder
+
+        $scope.canDeleteAttachment = function (wf_st_cd) {
+            return true; //TODO
+        }
+
+        $scope.$on('OpGridDataBound',
+            function (event, args) {
+                ////TODO
+                ////found in managerExcludeGroups.controller.js
+                //if (!$scope.firstGridLoaded) {
+                //    if ($scope.pctFilterEnabled) {
+                //        $timeout(function () {
+
+                //            // if allowed... add tab to go back to PCT tab
+                //            $scope.filterPct();
+
+                //            var html = '<li ng-click="gotoPct()" class="k-item k-state-default"><span unselectable="on" class="k-link" title="Click to go back to Price Cost Test">Price Cost Test</span></li>';
+                //            var template = angular.element(html);
+                //            var linkFunction = $compile(template);
+                //            linkFunction($scope);
+
+                //            $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
+                //        },
+                //            500);
+                //    }
+                //}
+                //$scope.firstGridLoaded = true;
+            });
+
+        //////
+        //////      end section of code that replaces contract.controller functions
+        //////
+
 
         $scope.$on('invoke-search-datasource', function (event, args) {
             $scope.ruleData = args.rule;
-            $scope.$broadcast('reload-search-dataSource', args);
+
+            if ($scope.ruleData[0].value == "ECAP" || $scope.ruleData[0].value == "KIT") {
+                //reset wip options
+                $scope.wipOptions = {};
+                $scope.wipOptions.default = {};
+                $scope.helpTopic = HelpTopicEnum.DealEditor_Features;
+                $scope.wipData = [];
+                //$('#dealEditor').data('kendoGrid').destroy().empty();   //TODO: new search, murder the grid to create a new one?  Do we need to clean up?
+
+                var st = $scope.startDt.replace(/\//g, '-');
+                var en = $scope.endDt.replace(/\//g, '-');
+                var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
+
+                $scope.setBusy("Searching...","Search speed depends on how specific your search options are.", "Info", true, true)
+                $q.all([templatesService.readTemplates(), objsetService.searchTender(st, en, searchText)])
+                .then(function (responses) {
+                    
+                    $scope.templateData = responses[0].data;
+                    $scope.wipData = responses[1].data.Items;
+                    $scope.dealType = $scope.ruleData[0].value;
+
+                    //reset wip options
+                    $scope.wipOptions = {
+                        "default": {},
+                        "isLayoutConfigurable": true,
+                        //"isPricingTableEnabled": true,
+                        "isVisibleAdditionalDiscounts": true,
+                        "isExportable": true,
+                        "isEditable": true,
+                        "initSearchStr": "", //initSearchValue,
+                        "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
+                    };
+
+                    $scope.wipOptions.columns = $scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].columns;
+                    $scope.wipOptions.model = $scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model;
+
+                    $scope.wipOptions.default.groups = opGridTemplate.groups[$scope.dealType];
+                    $scope.wipOptions.default.groupColumns = opGridTemplate.templates[$scope.dealType];
+
+                    //insert tender bid actions to deal editor
+                    $scope.wipOptions.columns.splice(3, 0, {
+                        "bypassExport": true,
+                        "field": "bid_actions",
+                        "hidden": false,
+                        "isDimKey": false,
+                        "isRequired": false,
+                        "lockable": false,
+                        "locked": true,
+                        "lookupText": "",
+                        "lookupUrl": "",
+                        "lookupValue": "",
+                        "mjrMnrChg": null,
+                        "sortable": false,
+                        "template": "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
+                        "excelTemplate": "#=gridUtils.getBidActionsLabel(data)#</div>",
+                        //"type": "string",
+                        "filterable": false,
+                        //"filterable": {
+                        //    ui: function (element) {
+                        //        element.kendoDropDownList({
+                        //            dataSource: {
+                        //                data: [
+                        //                    "Lost",
+                        //                    "Won",
+                        //                    "Offer"
+                        //                ]
+                        //            },
+                        //            optionLabel: "--Select Value--"
+                        //        });
+                        //    },
+                        //    extra: false
+                        //},
+                        "title": "Bid Action",
+                        "width": 110
+                    });
+                    $scope.wipOptions.model.fields.bid_actions = {
+                        "editable": false,
+                        "field": "bid_actions",
+                        "label": "Bid Action",
+                        "nullable": true,
+                        "opLookupText": "",
+                        "opLookupUrl": "",
+                        "opLookupValue": "",
+                        "type": "string",       //TODO: is is a number? object? what is this bound to?
+                        "validMsg": ""
+                    };
+                    $scope.wipOptions.default.groupColumns.bid_actions = {
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "Payment"]     //we add bid actions to be locked on all tab groups
+                    };
+
+                    $scope.wipOptions.groups = $scope.wipOptions.default.groups
+                    $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;
+
+                }).catch(function (data) {
+                    console.log('Tender Search Failed');
+                });
+            } else {
+                //TODO: user did not specify a deal type, maybe pop out a popup? let them know somehow that we did not kick off the search\
+                kendo.alert("Please specify a Tender Deal Type");
+            }
         });
 
         $scope.$on('search-rules-updated', function (event, args) {
             $scope.$broadcast('reload-search-rules', args);
         });
         
+        $scope.$on("grid-datasource-read-complete", function (event, args) {
+            resizeGrid();
+        });
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;
@@ -669,17 +828,17 @@
         }
 
         function resizeGrid() {
-            var h = window.innerHeight - $(".navbar").height() - $("#search-info-container").height() - 15;
-            $("#attributeGrid").css("height", h);
-            var grid = $("#attributeGrid .k-grid").data("kendoGrid");
+            var h = window.innerHeight - $(".navbar").height() - $("#search-info-container").height() - 100;
+            $("#dealEditor").css("height", h);
+            var grid = $("#dealEditor").data("kendoGrid");
             if (grid !== undefined && grid !== null) grid.resize();
         }
 
         $($window).resize(function () {
-            document.title = "Advanced Search - My Deals";
             resizeGrid();
+            $scope.setBusy("", "");
         });
-
+        
         $timeout(function () {
             resizeGrid();
         }, 500);

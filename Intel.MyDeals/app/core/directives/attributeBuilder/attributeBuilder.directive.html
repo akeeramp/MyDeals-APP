@@ -27,10 +27,11 @@
 
         <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
 
-        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)"><i class="intelicon-minus-max"></i></span>
+        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!tenderAttributeBuilder || !$first"><i class="intelicon-minus-max"></i></span>
 
-        <span class="fl ">
+        <span class="fl " ng-class="{'disabled-dropdown':$first}">
             <select kendo-drop-down-list
+                    ng-disabled="tenderAttributeBuilder && $first"
                     k-placeholder="'Select field'"
                     k-data-text-field="'title'"
                     k-data-value-field="'field'"
@@ -45,8 +46,9 @@
                     style="width: 200px;"></select>
         </span>
 
-        <span class="fl abOperator" ng-hide="dataItem.field === ''">
+        <span class="fl abOperator" ng-class="{'disabled-dropdown':$first}" ng-hide="dataItem.field === ''">
             <select kendo-drop-down-list
+                    ng-disabled="tenderAttributeBuilder && $first"
                     k-data-text-field="'label'"
                     k-data-value-field="'operator'"
                     k-ng-model="dataItem.operator"
