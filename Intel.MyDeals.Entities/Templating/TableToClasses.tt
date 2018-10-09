@@ -349,9 +349,14 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "Funfact";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	//Fun Facts
+	//Subscribed Notification
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_MNG_NOTIF_USR_MAP @USER_WWID=11579289, @mode='SELECT'");
 	ds.Tables[0].TableName = "UserSubscribedNotification";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//Notifications List
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_LD_NOTIF_LOG @USER_WWID=11579289, @mode='SELECT'");
+	ds.Tables[0].TableName = "Notification";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();

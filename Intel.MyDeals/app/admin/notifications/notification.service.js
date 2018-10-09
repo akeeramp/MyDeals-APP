@@ -13,11 +13,30 @@
 
         return {
             getUserSubscriptions: getUserSubscriptions,
-            updateUserSubscriptions: updateUserSubscriptions
+            updateUserSubscriptions: updateUserSubscriptions,
+            getUnreadNotificationCount: getUnreadNotificationCount,
+            getNotification: getNotification,
+            manageNotifications: manageNotifications
+        }
+
+        function getUnreadNotificationCount() {
+            return dataService.get(apiBaseUrl + 'GetUnreadNotificationCount');
+        }
+
+        function manageNotifications(mode, isRead, ids) {
+            return dataService.post(apiBaseUrl + 'manageNotifications/' + mode + '/' + isRead, ids);
+        }
+
+        function getNotification(mode) {
+            return dataService.get(apiBaseUrl + 'GetNotification/' + mode);
         }
 
         function getUserSubscriptions() {
             return dataService.get(apiBaseUrl + 'GetUserSubscriptions');
+        }
+
+        function updateUserSubscriptions(subscriptions) {
+            return dataService.post(apiBaseUrl + 'UpdateUserSubscriptions', subscriptions);
         }
 
         function updateUserSubscriptions(subscriptions) {

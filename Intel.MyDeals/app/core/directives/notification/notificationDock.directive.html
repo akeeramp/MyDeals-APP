@@ -1,17 +1,28 @@
 ﻿<div>
     <div>
-        <div class="dropdown">
-            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="">
-                <span class="badge badge-docking" ng-show="ids.length > 0">{{ids.length}}</span>
+        <div class="dropdown notificationDock">
+            <a id="dLabel" role="button" ng-click="getNotification('SELECT')" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="">
+                <span class="badge badge-docking" ng-show="unreadMessages > 0">{{unreadMessages}}</span>
                 <i class="intelicon-notification" style="font-size:20px"></i>
             </a>
-            <ul class="dropdown-menu scaleTopAnim multi-level" role="menu" aria-labelledby="dropdownMenu">
-                <li style="width: 500px; color: #000000;font-size:18px">
-                    <b>Notifications</b>
-                    <span title="Settings" ng-click="gotoNotificationSettings()" style="padding-right:10px;font-size:18px" class="fr">
-                            <i class="intelicon-settings-solid"></i>
+            <ul class="dropdown-menu scaleTopAnim multi-level" role="menu" style="width: 500px;padding-top:0px;padding-bottom:0px;width: 500px;" aria-labelledby="dropdownMenu">
+                <li style="background-color: #0071C5;color: #fff;font-size:18px;padding:2px; padding-bottom:6px;">
+                    &nbsp;Notifications
+                    <span title="Settings" ng-click="gotoNotificationSettings()" style="padding-right:9px;font-size:18px" class="fr">
+                        <i class="intelicon-settings-solid"></i>
                     </span>
-                    <hr />
+                </li>
+                <li ng-class="{'unread':!msg.IS_READ_IND, 'read':msg.IS_READ_IND}" ng-repeat="msg in notifications">
+                    {{msg.NOTIF_SHR_DSC}}
+                </li>
+                <li ng-if="notifications.length === 0">
+                    No messages
+                </li>
+                <li ng-if="notifications.length === 0">
+                    No messages
+                </li>
+                <li class="text-center" ng-click="seeAllNotifications()" style="color: #0071C5;height:25px">
+                    See All
                 </li>
             </ul>
         </div>
@@ -19,3 +30,16 @@
     <div style="position: absolute; top: 0; z-index: 1000; left: 0px;">
     </div>
 </div>
+<style>
+    .notificationDock .unread {
+        color: #00AEEF;
+        padding: 2px;
+        font-size: 12px;
+    }
+
+    .notificationDock.read {
+        color: #000;
+        padding: 2px;
+        font-size: 12px;
+    }
+</style>

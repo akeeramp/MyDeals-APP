@@ -256,6 +256,15 @@
                     , url: 'legalexceptions'
 					, controller: 'legalExceptionsController as vm'
                 }
+            },
+            {
+                state: 'admin.notifications',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/notifications/notifications.html'
+                    , url: 'notifications'
+					, controller: 'notificationsController as vm'
+                }
             }
         ];
     }

@@ -12,5 +12,11 @@ namespace Intel.MyDeals.IDataLibrary
         IList<UserSubscribedNotification> GetUserSubscriptions(int wwid);
 
         bool UpdateUserSubscriptions(IList<NotificationSubscriptions> notificationSubscriptions);
+
+        IList<Notification> GetNotifications(string mode);
+
+        bool ManageNotifications(string mode, bool isRead, IList<int> notificationIds);
+
+        int GetUnreadNotificationCount();
     }
 }

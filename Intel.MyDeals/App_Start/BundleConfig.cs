@@ -132,6 +132,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/iCostProducts/admin.iCostProducts.controller.js"
                 , "~/app/admin/legalExceptions/legalExceptions.service.js"
                 , "~/app/admin/legalExceptions/admin.legalException.controller.js"
+                , "~/app/admin/notifications/notifications.controller.js"
                 , "~/app/admin/notifications/notificationsSettings.controller.js"
                 , "~/app/admin/notifications/notification.service.js"
                 , "~/app/admin/productCategories/admin.productCategories.controller.js"

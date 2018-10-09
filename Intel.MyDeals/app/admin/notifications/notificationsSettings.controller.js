@@ -3,14 +3,14 @@
 
     angular
         .module('app.admin')
-        .controller('notificationsController', notificationsController)
+        .controller('notificationsSettingsController', notificationsSettingsController)
         .run(SetRequestVerificationToken);
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    notificationsController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService'];
+    notificationsSettingsController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService'];
 
-    function notificationsController($scope, dataService, $uibModalInstance, notificationsService) {
+    function notificationsSettingsController($scope, dataService, $uibModalInstance, notificationsService) {
 
         $scope.role = window.usrRole;
         $scope.wwid = window.usrWwid;

@@ -1,0 +1,62 @@
+﻿<div class="col-md-12">
+    <h2>Notifications</h2>
+</div>
+
+<div class="col-md-12" style="padding-top: 20px;">
+    <div kendo-grid="notificationsGrid" class="table" expand-k-grid options="vm.gridOptions"></div>
+</div>
+<style>
+    input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+        input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 20px;
+            letter-spacing: 10px;
+            color: #00AEEF;
+            margin-left: 10px;
+        }
+
+        input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
+        }
+
+        input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
+        input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #C4D600;
+            margin-left: 10px;
+        }
+
+        input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+            color: #C4D600;
+        }
+
+        .unread{
+           color: #00AEEF;
+        }
+
+        .searchNotif {
+            color:black;
+            padding-top:0px !important;
+            padding-bottom:0px !important;
+        }
+</style>

@@ -18,6 +18,16 @@ namespace Intel.MyDeals.BusinessLogic
             _notificationsDataLib = notificationsDataLib;
         }
 
+        public IList<Notification> GetNotifications(string mode)
+        {
+            return _notificationsDataLib.GetNotifications(mode);
+        }
+
+        public int GetUnreadNotificationCount()
+        {
+            return _notificationsDataLib.GetUnreadNotificationCount();
+        }
+
         /// <summary>
         /// GetUserSubscriptions
         /// </summary>
@@ -26,6 +36,11 @@ namespace Intel.MyDeals.BusinessLogic
         public IList<UserSubscribedNotification> GetUserSubscriptions(int wwid)
         {
             return _notificationsDataLib.GetUserSubscriptions(wwid);
+        }
+
+        public bool ManageNotifications(string mode, bool isRead, IList<int> notificationIds)
+        {
+            return _notificationsDataLib.ManageNotifications(mode, isRead, notificationIds);
         }
 
         /// <summary>

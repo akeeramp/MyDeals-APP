@@ -37,5 +37,47 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to update subscription values"
             );
         }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        [Route("GetNotification/{mode}")]
+        public IList<Notification> GetNotification(string mode)
+        {
+            return SafeExecutor(() => _notificationsLib.GetNotifications(mode)
+                , "Unable to GetNotification"
+            );
+        }
+
+        /// <summary>
+        /// Get unread notification count
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        [Route("GetUnreadNotificationCount")]
+        public int GetUnreadNotificationCount()
+        {
+            return SafeExecutor(() => _notificationsLib.GetUnreadNotificationCount()
+                , "Unable to Get Unread Notification Count"
+            );
+        }
+
+        /// <summary>
+        /// Manage Notifications
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost]
+        [AntiForgeryValidate]
+        [Route("ManageNotifications/{mode}/{isRead}")]
+        public bool ManageNotifications(string mode, bool isRead, [FromBody] IList<int> notificatIds)
+        {
+            return SafeExecutor(() => _notificationsLib.ManageNotifications(mode, isRead, notificatIds)
+                , $"Unable to {mode} notifications"
+            );
+        }
     }
 }
