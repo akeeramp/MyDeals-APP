@@ -246,7 +246,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="data">SearchParams: Start/End Date, Search Text and Search conditions</param>
         /// <returns></returns>
-        public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, bool useCustSecurity, MyRulesTrigger? rulesTrigger)
+        public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, bool useCustSecurity, MyRulesTrigger? rulesTrigger, bool getGridBehaviors = false)
         {
             List<SearchFilter> customSearchOption = customSearchOptionUserPref == null 
                 ? new List<SearchFilter>()
@@ -308,7 +308,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Convert data to Client-Ready format
             OpDataCollectorFlattenedList rtn = myDealsData
-                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false)
+                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, getGridBehaviors)
                 .ToHierarchialList(OpDataElementType.WIP_DEAL);
 
             // Get a list of My Customers (the ones I have access)
@@ -456,7 +456,8 @@ namespace Intel.MyDeals.BusinessLogic
             new List<string> { SearchTools.BuildCustSecurityWhere() },
             new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
             true,
-            MyRulesTrigger.OnDealListLoad);
+            MyRulesTrigger.OnDealListLoad,
+            false);
         }
 
         /// <summary>
@@ -499,7 +500,8 @@ namespace Intel.MyDeals.BusinessLogic
             new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" + actvstr },
             null,
             false,
-            MyRulesTrigger.OnDealListLoad);
+            MyRulesTrigger.OnDealListLoad,
+            false);
         }
 
         /// <summary>
@@ -514,7 +516,8 @@ namespace Intel.MyDeals.BusinessLogic
                 new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" },
                 new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
                 true,
-                MyRulesTrigger.OnDealListLoad);
+                MyRulesTrigger.OnDealListLoad,
+                true);
         }
 
         public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType)

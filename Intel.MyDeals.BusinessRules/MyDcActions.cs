@@ -815,7 +815,7 @@ namespace Intel.MyDeals.BusinessRules
             string cVol = r.Dc.GetDataElementValue(AttributeCodes.VOLUME);
             IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
 
-            if (rType.ToUpper() == "TENDER") // Tender Deals Force Volume Check
+            if (rType.ToUpper() == "TENDER" && de != null) // Tender Deals Force Volume Check   //TODO: the 'de != null' check prevents system from throwing exceptions on the tenderDashboard for tenders created when this was not required... need to go clean up existing data and then we can remove this additional check (though leaving it in doesn't hurt either)
             {
                 if (cVol == null || cVol == "")
                 {
