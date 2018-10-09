@@ -23,7 +23,7 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel" ng-class="{'complete': curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' || (usrRole === 'FSE' && curPricingStrategy.PASSED_VALIDATION == 'Complete')}">
+        <div class="wizard-panel" ng-class="{'complete': ((curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet') || isMCActiveForFSE) || (usrRole === 'FSE' && curPricingStrategy.PASSED_VALIDATION == 'Complete')}">
             <span id="tenderWidMC" class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'MC', 'isDisabled': curPricingStrategy.PASSED_VALIDATION != 'Complete'}" ng-click="tenderWidgetPathManager('', 'MC')">3</span>
         </div>
         <a ng-class="{'isDisabled': curPricingStrategy.PASSED_VALIDATION != 'Complete'}" ng-click="tenderWidgetPathManager('', 'MC')">

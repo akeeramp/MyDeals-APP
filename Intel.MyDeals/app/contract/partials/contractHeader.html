@@ -1,13 +1,18 @@
 ﻿<div style="margin: 0;">
     <div ng-if="!isNewContract" class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
     <div class="pricing-strategy-status-bar fl" ng-if="!('contract.details' | isState) && isTenderContract == true" style="margin-left: -5px;position: absolute;left: 0px;">
-        <div class="valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 5px 8px;">
-            <span class="contractHeaderId">#{{ contractData.DC_ID }}</span>
+        <div class="valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 5px 8px;float:left">
+            
+			<span class="contractHeaderId">#{{ contractData.DC_ID }}</span>
             <span>{{contractData.Customer.CUST_NM}}:</span>
-            <span>{{contractData.TITLE}}</span>
+            <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;					
         </div>
-
+		 <button class="ng-scope btn btn-primary deleteContract" ng-click="deleteContract()" ng-if="contractData.DC_ID && contractData.DC_ID > 0 && C_DELETE_CONTRACT" title='Delete Contract'>
+			<i class="intelicon-cut deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
+		</button>
+		
     </div>
+	
     <!--<div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}" ng-if="!('contract.details' | isState)">
         <div class="fl">{{ pageTitle }}</div>
         <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
@@ -48,7 +53,45 @@
 </div>
 
 <style>
-    
+	#hideMe {
+    -moz-animation: cssAnimation 0s ease-in 5s forwards !important;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 5s forwards !important;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 5s forwards !important;
+    /* Opera */
+    animation: cssAnimation 0s ease-in 5s forwards !important;
+    -webkit-animation-fill-mode: forwards !important;
+    animation-fill-mode: forwards !important;
+	}
+	@keyframes cssAnimation {
+		to {
+			width:0;
+			height:0;
+			overflow:hidden;
+		}
+	}
+	@-webkit-keyframes cssAnimation {
+		to {
+			width:0;
+			height:0;
+			visibility:hidden;
+		}
+	}
+	.deleteIcon:hover{
+		color:orange !important;
+	}
+    .deleteContract{
+		    cursor: pointer !important;
+			font-size: 14px !important;
+			float: right !important;
+			padding: 2px !important;
+			text-transform: none !important;
+			border: none;
+			color: #fafafa !important;
+			background: #707a02 !important;
+			border-radius: 0px;
+	}
     .contractHeader .isReadOnly {
         background-color: #ffffff !important;
     }

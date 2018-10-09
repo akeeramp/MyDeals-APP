@@ -55,6 +55,7 @@
         $scope.usrRole = window.usrRole;
         $scope.actualClikedTabName = 'PTR';
         $scope.currentTAB = 'PTR';
+        $scope.isMCActiveForFSE = false;
         
         // custom Contract Titles
         $scope.isTenderContract = isTender;
@@ -300,7 +301,7 @@
                 $scope.contractData["IS_TENDER"] = "1";
             }
         }
-        if ($state.current.name == 'contract.manager' && ($scope.isTenderContract)) {
+        if ($state.current.name == 'contract.manager' && $scope.isTenderContract) {
             $state.go('contract.manager.strategy', {
                 cid: $scope.contractData.DC_ID,
                 sid: $scope.contractData.PRC_ST[0].DC_ID,
@@ -309,9 +310,14 @@
 
         }
 
-        if ($state.current.name == 'contract.manager.strategy.wip') {
+        if ($state.current.name == 'contract.manager.strategy.wip' && $scope.isTenderContract ) {
             $scope.selectedTAB = 'DE'; // DE- Deal Editor
             $scope.currentTAB = 'DE'; // DE- Deal Editor
+        }
+
+        if ($scope.contractData.TENDER_PUBLISHED == 1 && $scope.isTenderContract) {
+            $scope.$storage.selectedContractID = scope.selectedCustomerIds;
+            $scope.$storage.selectedDealType = '';
         }
 
         $scope.saveBtnName = function () {
@@ -3477,13 +3483,7 @@
             ps.DC_ID = $scope.uid--;
             ps.DC_PARENT_ID = ct.DC_ID;
             ps.PRC_TBL = [];
-            if (typeof (ct.Customer.CUST_NM) != 'undefined') {
-                ps.TITLE = "_PS1_" + ct.Customer.CUST_NM;
-            }
-            else {
-                ps.TITLE = "_PS1_";
-            }           
-
+            
             // Clone base model and populate changes
             var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
             if (!pt) {
@@ -3496,13 +3496,7 @@
             pt.DC_ID = $scope.uid--;
             pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
             pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
-            if (typeof (ct.Customer.CUST_NM) != 'undefined') {
-                pt.TITLE = "_PT1_" + ct.Customer.CUST_NM;
-            }
-            else {
-                pt.TITLE = "_PT1_"; 
-            }
-
+            
             for (var atrb in $scope.newPricingTable._extraAtrbs) {
                 if ($scope.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
                     //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
@@ -4483,9 +4477,12 @@
                         return (x.PASSED_VALIDATION === 'Dirty');
                     }).ToArray();
                 if (dirtyItems.length > 0) isPtrDirty = true;
+
+                $scope.isMCActiveForFSE = true;
             }
             else {
                 isPtrDirty = true;
+                $scope.isMCActiveForFSE = false;
             }
             //IF DE
             if (selectedTab == 'DE') {
@@ -4623,7 +4620,7 @@
                     if (data) {
                         if (data.data == true) {
                             $scope.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
-                            document.location.href = "/advancedSearch#/tenderSearch";
+                            document.location.href = "/advancedSearch#/tenderDashboard/";
                         } else {
                             logger.stickyError("Publishing deals failed. Contact Administrator.");
                         }
