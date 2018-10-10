@@ -2249,6 +2249,30 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'BLLG_DT', \"date:'MM/dd/yyyy'\")#",
                 ExcelTemplate = "#=gridUtils.formatDate(BLLG_DT)#"
             });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3651,
+                AtrbCd = AttributeCodes.MEETCOMP_TEST_RESULT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                Width = 150,
+                IsFilterable = true,
+                IsReadOnly = true,
+                IsSortable = true,
+                Template = "#=gridUtils.getResultSingleIcon(data, 'MEETCOMP_TEST_RESULT')#",
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3651,
+                AtrbCd = AttributeCodes.COST_TEST_RESULT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                Width = 150,
+                IsFilterable = true,
+                IsReadOnly = true,
+                IsSortable = true,
+                Template = "#=gridUtils.getResultSingleIcon(data, 'COST_TEST_RESULT')#",
+            });
 
             #endregion WIP DEAL
 

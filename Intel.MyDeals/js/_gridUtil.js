@@ -118,6 +118,14 @@ gridUtils.uiReadonlyDimExcelControlWrapper = function (passedData, field, dim, f
     //return tmplt;
 }
 
+gridUtils.getResultSingleIcon = function (passedData, field) {
+    var style = "font-size: 20px !important;"
+    var result = passedData[field];
+    var iconNm = gridPctUtils.getResultSingleIcon(result, style);
+    //return iconNm;
+    return '<div class="text-center">' + iconNm + '</div>';
+}
+
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
 }
@@ -148,7 +156,7 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
-gridUtils.getTotalDealVolume = function(passedData) {
+gridUtils.getTotalDealVolume = function (passedData) {
 
     var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === "" || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
         ? 0
@@ -172,7 +180,7 @@ gridUtils.getTotalDealVolume = function(passedData) {
     }
 }
 
-gridUtils.numberWithCommas = function(x) {
+gridUtils.numberWithCommas = function (x) {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
@@ -978,10 +986,10 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
             }
             var qty = 1;
             if (items["QTY"] && items["QTY"] != null) {
-            	qty = parseInt(items["QTY"][dimkey] || 0);
+                qty = parseInt(items["QTY"][dimkey] || 0);
             }
             if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
-            	total += qty * parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
+                total += qty * parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
             }
             if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
                 total += qty * items["DSCNT_PER_LN"][dimkey];
@@ -1150,12 +1158,11 @@ gridUtils.getDimLabel = function (key) {
 
 gridUtils.tender = function (dataItem, field, format) {
     var ar = dataItem[field];
-    
+
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
-    if (ar === undefined || ar === null)
-    {
+    if (ar === undefined || ar === null) {
         return dataItem["WF_STG_CD"] === "no access" ? "<div class='noaccess'>no access</div>" : "";
     }
 
@@ -1296,8 +1303,7 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
         {
             return "<span class='ng-binding' style='padding: 0 4px; color: #0071C5; cursor: pointer;' ng-click='openEmployeeCustomers(dataItem)' ng-bind='dataItem.USR_CUST'></span>"; // Edit enabled
         }
-        else
-        {
+        else {
             return "All Customers"; // Edit turned off
         }
     }
@@ -1334,7 +1340,7 @@ gridUtils.dialogShow = function () {
     dialog.open();
 }
 
-gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
+gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
     var rows = [{ cells: [] }];
     var rowsProd = [{ cells: [] }];
     var gridColumns = grid.columns;
@@ -1370,7 +1376,7 @@ gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
             colList.push(gridColumns[i].field);
 
             if (gridColumns[i].width !== undefined) {
-                colWidths.push({ width: parseInt(gridColumns[i].width )});
+                colWidths.push({ width: parseInt(gridColumns[i].width) });
             } else {
                 colWidths.push({ autoWidth: true });
             }
@@ -1447,7 +1453,7 @@ gridUtils.dsToExcel = function(grid, ds, title, onlyVisible) {
                     val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
 
                     cells.push({
-                        value: val, 
+                        value: val,
                         wrap: true
                     });
 
@@ -1706,7 +1712,7 @@ gridUtils.initPrdBktDimFilter = function (e, kendoGrid, field) {
     filterContext.container.off();
     filterContext.container.empty();
 
-    // Create custom filter UI using a template 
+    // Create custom filter UI using a template
     var template = kendo.template($("#filterMenuChecklistTemplate").html());
     var result = template({});
     filterContext.container.html(result);
@@ -1725,7 +1731,7 @@ gridUtils.initPrdBktDimFilter = function (e, kendoGrid, field) {
 };
 
 gridUtils.onPrdBktDimSubmit = function (e) {
-    // the context here is the filteringContext  
+    // the context here is the filteringContext
     e.preventDefault();
     e.stopPropagation();
 
@@ -1739,7 +1745,7 @@ gridUtils.onPrdBktDimSubmit = function (e) {
 
 gridUtils.applyPrdBktDimFilter = function (dataSource, field, val) {
 
-    // Create custom filter 
+    // Create custom filter
     var newFilter = {
         field: field,
         operator: gridUtils.filterByPrdBktDim,
@@ -1751,7 +1757,7 @@ gridUtils.applyPrdBktDimFilter = function (dataSource, field, val) {
     dataSource.filter(masterFilter);
 };
 
-gridUtils.filterByPrdBktDim = function(dataItem, value) {
+gridUtils.filterByPrdBktDim = function (dataItem, value) {
     var dimFootprint = "20___";
     if (dataItem !== undefined) {
         for (var k in dataItem) {
@@ -1764,8 +1770,8 @@ gridUtils.filterByPrdBktDim = function(dataItem, value) {
     }
 };
 
-gridUtils.onFilterReset = function(e) {
-    // the context here is the filteringContext  
+gridUtils.onFilterReset = function (e) {
+    // the context here is the filteringContext
     e.preventDefault();
     e.stopPropagation();
 
@@ -1773,13 +1779,13 @@ gridUtils.onFilterReset = function(e) {
     this.popup.close();
 };
 
-gridUtils.removeFilterForField = function(dataSource, field) {
+gridUtils.removeFilterForField = function (dataSource, field) {
     var masterFilter = dataSource.filter();
     if (!masterFilter) {
         return;
     }
 
-    // Get existing filters for the field 
+    // Get existing filters for the field
     var existingFilters = jQuery.grep(masterFilter.filters, function (item, index) {
         return item.field === field;
     });
