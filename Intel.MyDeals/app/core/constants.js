@@ -308,6 +308,12 @@
                     },
                     "BLLG_DT": {
                         "Groups": ["Payment"]
+                    },
+                    "MEETCOMP_TEST_RESULT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "COST_TEST_RESULT": {
+                        "Groups": ["Deal Info"]
                     }
                 },
                 "VOL_TIER": {
@@ -929,6 +935,12 @@
                     },
                     "BLLG_DT": {
                         "Groups": ["Payment"]
+                    },
+                    "MEETCOMP_TEST_RESULT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "COST_TEST_RESULT": {
+                        "Groups": ["Deal Info"]
                     }
                 }
             }

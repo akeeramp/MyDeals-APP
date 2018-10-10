@@ -9,15 +9,23 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate'];
+    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate', 'colorDictionary'];
 
-    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate, colorDictionary) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
+
+        $scope.getColorStyle = function (c) {
+            var k = 'pct';
+            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                return colorDictionary[k][c];
+            }
+            return "#aaaaaa";
+        }
 
         $scope.operatorSettings = {
             "operators": [
@@ -286,7 +294,7 @@
                 type: "list",
                 width: 140,
                 filterable: {
-                    ui: function(element) {
+                    ui: function (element) {
                         element.kendoDropDownList({
                             dataSource: new kendo.data.DataSource({
                                 type: 'json',
@@ -624,7 +632,7 @@
         $scope.helpTopic = HelpTopicEnum.DealEditor_Features;
         $scope.wipData = [];
 
-        ////// 
+        //////
         ////// contract controller root override functions - these are the functions that opGrid expects to have in the parent scope.  Most are for now a copy paste from contract.controller.js
         //////
 
@@ -725,10 +733,10 @@
                 var en = $scope.endDt.replace(/\//g, '-');
                 var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
 
-                $scope.setBusy("Searching...","Search speed depends on how specific your search options are.", "Info", true, true)
+                $scope.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true, true)
                 $q.all([templatesService.readTemplates(), objsetService.searchTender(st, en, searchText)])
                 .then(function (responses) {
-                    
+
                     $scope.templateData = responses[0].data;
                     $scope.wipData = responses[1].data.Items;
                     $scope.dealType = $scope.ruleData[0].value;
@@ -817,7 +825,7 @@
         $scope.$on('search-rules-updated', function (event, args) {
             $scope.$broadcast('reload-search-rules', args);
         });
-        
+
         $scope.$on("grid-datasource-read-complete", function (event, args) {
             resizeGrid();
         });
@@ -838,7 +846,7 @@
             resizeGrid();
             $scope.setBusy("", "");
         });
-        
+
         $timeout(function () {
             resizeGrid();
         }, 500);

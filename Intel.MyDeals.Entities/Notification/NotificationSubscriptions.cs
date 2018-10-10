@@ -14,4 +14,11 @@ namespace Intel.MyDeals.Entities
 
         public bool IN_TOOL_IND { get; set; }
     }
+
+    public enum NotificationEvents
+    {
+        SubmittedToApproved = 1,
+        DealModifiedByOtherUser = 2,
+        TenderSubmittedToOffer = 3
+    }
 }
