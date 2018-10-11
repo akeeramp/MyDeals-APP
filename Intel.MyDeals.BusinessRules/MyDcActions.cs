@@ -1044,9 +1044,11 @@ namespace Intel.MyDeals.BusinessRules
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), ptrStage, OpDataElementType.PRC_ST);
             var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
             // if there isn't a future stage, then it isn't redealable
             // TO DO - WE NEED TO ADD IN PARENT PS STAGE FOR THIS CHECK
-            if (futureStage == null && wipStage != WorkFlowStages.Pending && wipStage != WorkFlowStages.Active && wipStage != WorkFlowStages.Won) return; // DE19865 - Place end stages that DO force redeal here
+            if (futureStage == null && wipStage != WorkFlowStages.Pending && wipStage != WorkFlowStages.Active
+                && wipStage != WorkFlowStages.Won && wipStage != WorkFlowStages.Offer) return; // DE19865 - Place end stages that DO force redeal here (including Offer)
 
             // We should not call this function for ECAP Front End YCS2, if we are here then something went wrong. Correct it here(partially) do not redeal
             if (wipStage == WorkFlowStages.Active && dealType == OpDataElementSetType.ECAP.ToString() && programPayment.Contains("Frontend YCS2")) return;
