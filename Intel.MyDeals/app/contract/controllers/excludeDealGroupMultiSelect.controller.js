@@ -128,7 +128,8 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		},
 		sort: [
             { field: "EXCLD_DEAL_FLAG", dir: "desc" },
-            { field: "CST_MCP_DEAL_FLAG", dir: "desc" }
+            { field: "CST_MCP_DEAL_FLAG", dir: "desc" },
+            { field: "OVLP_WF_STG_CD", dir: "desc" }
 		],
         group: {
             field: "GRP_BY"
@@ -266,7 +267,13 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                 var data = e.sender.dataSource.data();
 		        for (var d = 0; d < data.length; d++) {
 		            if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 0 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
-                        //data[d].set("_disabled", true); // Commented due to PERF hike
+                        data[d].set("_disabled", true); // Commented due to PERF hike
+                        $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
+                        $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
+                        $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
+                    }
+                    else if (data[d]["OVLP_WF_STG_CD"] !== undefined && data[d]["OVLP_WF_STG_CD"] == 'Active' && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
+                        data[d].set("_disabled", true); // Commented due to PERF hike
                         $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
                         $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
