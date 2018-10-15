@@ -389,6 +389,7 @@
                         $scope.publishWipDealsFromTab();
                     }
                     else if ($scope.actualClikedTabName =='PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                        $scope.isPtr = false;
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                         $scope.resetDirty();
                     }
