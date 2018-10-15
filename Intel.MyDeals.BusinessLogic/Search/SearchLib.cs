@@ -230,6 +230,7 @@ namespace Intel.MyDeals.BusinessLogic
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_OBJ_SID", "CNTRCT_OBJ_SID");
             rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
+            rtn = rtn.Replace("WIP_DEAL_PRC_ST_OBJ_SID", "PRC_ST_OBJ_SID");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
 
             // If no found filters... return
@@ -248,7 +249,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, bool useCustSecurity, MyRulesTrigger? rulesTrigger, bool getGridBehaviors = false)
         {
-            List<SearchFilter> customSearchOption = customSearchOptionUserPref == null 
+            List<SearchFilter> customSearchOption = customSearchOptionUserPref == null
                 ? new List<SearchFilter>()
                 : JsonConvert.DeserializeObject<IEnumerable<SearchFilter>>(customSearchOptionUserPref.PRFR_VAL).ToList();
 
@@ -326,7 +327,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 int dcId = int.Parse(item[AttributeCodes.DC_ID].ToString());
                 item["SortOrder"] = idSort[dcId];
-                
+
                 item["CNTRCT_OBJ_SID"] = decoderById[dcId].CNTRCT_OBJ_SID;
                 item["CNTRCT_TITLE"] = decoderById[dcId].CNTRCT_TITLE;
                 item["CNTRCT_C2A_DATA_C2A_ID"] = decoderById[dcId].CNTRCT_C2A_DATA_C2A_ID;

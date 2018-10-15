@@ -9,15 +9,16 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate', 'colorDictionary'];
+    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate', 'colorDictionary', '$location'];
 
-    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate, colorDictionary) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate, colorDictionary, $location) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
+        $scope.runSearch = false;
 
         $scope.getColorStyle = function (c) {
             var k = 'pct';
@@ -169,13 +170,13 @@
                 width: 140
             }, {
                 field: "CNTRCT_TITLE",
-                title: "Contract Title",
+                title: "Folio Title",
                 type: "string",
                 width: 140,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
                 field: "CNTRCT_OBJ_SID",
-                title: "Contract Id",
+                title: "Folio Id",
                 type: "string",
                 width: 110,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_OBJ_SID#</a>"
@@ -186,10 +187,12 @@
                 width: 140,
                 template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
             }, {
-                field: "CNTRCT_C2A_DATA_C2A_ID",
-                title: "C2A Id",
-                type: "string",
-                width: 100
+                field: "PRC_ST_OBJ_SID",
+                title: "Pricing Strategy Id",
+                type: "number",
+                filterable: "numObjFilter",
+                width: 140,
+                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_OBJ_SID#</a>"
             }, {
                 field: "DC_ID",
                 title: "Deal",
@@ -581,6 +584,61 @@
         ];
 
         $scope.$storage = $localStorage;
+
+        $scope.customSettings = [];
+
+        var qm = $location.search();
+        angular.forEach(qm, function (value, key) {
+            if (key.toLowerCase() == "dealtype") {
+                $scope.customSettings.push({
+                    field: "OBJ_SET_TYPE_CD",
+                    operator: "=",
+                    value: value.toUpperCase(),
+                    source: null
+                });
+            }
+            if (key.toLowerCase() == "folioid") {
+                $scope.customSettings.push({
+                    field: "CNTRCT_OBJ_SID",
+                    operator: "=",
+                    value: value,
+                    source: null
+                });
+            }
+            if (key.toLowerCase() == "psid") {
+                $scope.customSettings.push({
+                    field: "PRC_ST_OBJ_SID",
+                    operator: "=",
+                    value: parseInt(value),
+                    source: null
+                });
+            }
+            if (key.toLowerCase() == "deal") {
+                $scope.customSettings.push({
+                    field: "DC_ID",
+                    operator: "=",
+                    value: parseInt(value),
+                    source: null
+                });
+            }
+            if (key.toLowerCase() == "search") {
+                $scope.runSearch = true
+            }
+        });
+
+        if ($scope.customSettings.length === 0) {
+            $scope.customSettings = [{
+                field: "OBJ_SET_TYPE_CD",
+                operator: "=",
+                value: "ECAP",
+                source: null
+            }, {
+                field: "END_CUSTOMER_RETAIL",
+                operator: "=",
+                value: "",
+                source: null
+            }];
+        }
 
         $scope.$storage = $localStorage.$default({
             startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),

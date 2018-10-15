@@ -15,10 +15,7 @@
                 <li ng-class="{'unread':!msg.IS_READ_IND, 'read':msg.IS_READ_IND}" ng-repeat="msg in notifications">
                     {{msg.NOTIF_SHR_DSC}}
                 </li>
-                <li ng-if="notifications.length === 0">
-                    No messages
-                </li>
-                <li ng-if="notifications.length === 0">
+                <li class="read" ng-if="notifications.length === 0">
                     No messages
                 </li>
                 <li class="text-center" ng-click="seeAllNotifications()" style="color: #0071C5;height:25px">

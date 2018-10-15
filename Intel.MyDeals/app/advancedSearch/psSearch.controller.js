@@ -22,8 +22,8 @@
 
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
-            	var newState = msg != undefined && msg !== "";
-            	if (isShowFunFact == null) { isShowFunFact = false; }
+                var newState = msg != undefined && msg !== "";
+                if (isShowFunFact == null) { isShowFunFact = false; }
 
                 // if no change in state, simple update the text
                 if ($scope.isBusy === newState) {
@@ -65,9 +65,13 @@
 
             // Found it... redirect
             var url = "/Contract#/manager/" + response.data.ContractId;
-            if (window.usrRole === "DA") {
+            if (response.data.IsTenderPublished && response.data.PricingTableId > 0) {
+                url = "/advancedSearch#/tenderDashboard?DealType=" + response.data.DealType + "&PsId=" + response.data.PricingStrategyId + "&search";
+            }
+            else if (window.usrRole === "DA") {
                 url += "/summary?searchTxt=" + response.data.PricingStrategyTitle;
-            } else if (response.data.PricingTableId > 0) {
+            }
+            else if (response.data.PricingTableId > 0) {
                 url += "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId + "/wip";
             }
 

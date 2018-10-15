@@ -16,6 +16,8 @@
         public int PricingTableRowId { get; set; }
         public int WipDealId { get; set; }
         public int CustMbrSid { get; set; }
+        public string DealType { get; set; }
+        public bool IsTenderPublished { get; set; }
         public string Message { get; set; }
     }
 }

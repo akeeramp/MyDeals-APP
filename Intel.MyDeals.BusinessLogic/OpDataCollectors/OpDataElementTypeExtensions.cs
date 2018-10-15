@@ -9,7 +9,6 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataElementTypeExtensions
     {
-
         /// <summary>
         /// Get an object tree from its user displayed ID
         /// </summary>
@@ -103,7 +102,9 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
-                Attributes.TITLE.ATRB_SID
+                Attributes.TITLE.ATRB_SID,
+                Attributes.TENDER_PUBLISHED.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID
             });
 
             DcPath dcPath = new DcPath();
@@ -117,7 +118,18 @@ namespace Intel.MyDeals.BusinessLogic
             dcPath.CustMbrSid = myDealsData[OpDataElementType.CNTRCT].AllDataElements
                 .Where(s => s.AtrbCd == AttributeCodes.CUST_MBR_SID)
                 .Select(s => int.Parse(s.AtrbValue.ToString())).FirstOrDefault();
-            
+
+            dcPath.IsTenderPublished = myDealsData[OpDataElementType.CNTRCT].AllDataElements
+                .Where(s => s.AtrbCd == AttributeCodes.TENDER_PUBLISHED)
+                .Select(s => (s.AtrbValue.ToString()) == "1").FirstOrDefault();
+
+            if (dcPath.IsTenderPublished)
+            {
+                dcPath.DealType = myDealsData[OpDataElementType.PRC_TBL].AllDataElements
+                    .Where(s => s.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD)
+                    .Select(s => s.AtrbValue.ToString()).FirstOrDefault();
+            }
+
             while (opDataElementType != OpDataElementType.ALL_OBJ_TYPE)
             {
                 switch (opDataElementType)
@@ -126,23 +138,26 @@ namespace Intel.MyDeals.BusinessLogic
                         dcPath.ContractId = dcId;
                         dcPath.ContractTitle = myDealsData[OpDataElementType.CNTRCT].AllDataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
                         break;
+
                     case OpDataElementType.PRC_ST:
                         dcPath.PricingStrategyId = dcId;
                         if (dcPath.PricingTableId == 0)
                             dcPath.PricingTableId = myDealsData[OpDataElementType.PRC_TBL].AllDataElements.Where(s => s.DcParentID == dcId).Select(s => s.DcID).FirstOrDefault();
                         dcPath.PricingStrategyTitle = myDealsData[OpDataElementType.PRC_ST].AllDataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
                         break;
+
                     case OpDataElementType.PRC_TBL:
                         dcPath.PricingTableId = dcId;
                         dcPath.PricingTableTitle = myDealsData[OpDataElementType.PRC_TBL].AllDataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
                         break;
+
                     case OpDataElementType.PRC_TBL_ROW:
                         dcPath.PricingTableRowId = dcId;
                         break;
+
                     case OpDataElementType.WIP_DEAL:
                         dcPath.WipDealId = dcId;
                         break;
-
                 }
                 dcId = myDealsData[opDataElementType].AllDataElements.Select(s => s.DcParentID).FirstOrDefault();
 
@@ -230,8 +245,6 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData.EnsureBatchIDs();
 
             return myDealsData.Save(contractToken);
-
         }
-
     }
 }

@@ -11,11 +11,12 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             gridId: '=',
             operatorSettings: '=',
             attributeSettings: '=',
-            customSettings: '='
+            customSettings: '=',
+            runSearch: '='
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/attributeBuilder/attributeBuilder.directive.html',
-        controller: ['$scope', '$http', function($scope, $http) {
+        controller: ['$scope', '$http', function ($scope, $http) {
 
             $scope.root = $scope.$parent;
             $scope.data = [];
@@ -25,8 +26,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.currentRuleColumns = "";
             $scope.lookupDs = {};
 
-            $scope.tenderAttributeBuilder = ($scope.customSettings == "TenderDashboard");
-            
+            $scope.tenderAttributeBuilder = ($scope.customSettings !== undefined && $scope.customSettings.length) > 0;
+
             for (var i = 0; i < $scope.attributeSettings.length; i++) {
                 $scope.fieldDict[$scope.attributeSettings[i].field] = $scope.attributeSettings[i].type;
             }
@@ -38,18 +39,13 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             });
 
             if ($scope.data.length === 0) {
-                if ($scope.tenderAttributeBuilder == true) {
+                if ($scope.tenderAttributeBuilder) {
                     //tender dashboard requires deal type as preset required search attribute
-                    $scope.data = [
-                        {
-                            field: "OBJ_SET_TYPE_CD",
-                            operator: "=",
-                            value: "",
-                            source: new kendo.data.DataSource({
-                                data: $scope.attributeSettingsCopy
-                            })
-                        }
-                    ];
+                    angular.forEach($scope.customSettings, function (val) {
+                        val.source = $scope.attributeSettingsCopy;
+                    });
+                    $scope.data = $scope.customSettings;
+
                 } else {
                     $scope.data = [
                         {
@@ -64,7 +60,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 }
             }
 
-            $scope.loadMyRules = function() {
+            $scope.loadMyRules = function () {
                 userPreferencesService.getActions("DealSearch", "SearchRules")
                     .then(function (data) {
                         $scope.myRules = data.data.length > 0 ? JSON.parse(data.data[0].PRFR_VAL) : [];
@@ -79,8 +75,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 data: $scope.attributeSettingsCopy
             });
 
-            $scope.changeField = function(e) {
-                e.sender.$angular_scope.$apply(function() {
+            $scope.changeField = function (e) {
+                e.sender.$angular_scope.$apply(function () {
                     var dataItem = e.sender.$angular_scope.dataItem;
                     dataItem.operatorDataSource = $scope.getOperDatasource(dataItem.field);
                     dataItem.value = "";
@@ -92,7 +88,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             }
 
             $scope.changeOper = function (e) {
-                e.sender.$angular_scope.$apply(function() {
+                e.sender.$angular_scope.$apply(function () {
                     var el = $(e.sender.element).closest(".filterRow").find(".abValue");
                     $scope.drawValueControl(el, e.sender.$angular_scope);
                 });
@@ -111,7 +107,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 if ($scope.isGlobal()) return true;
 
                 var invalidRows = $linq.Enumerable().From($scope.data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.field === "" || x.operator === "" || x.value === "");
                     }).ToArray();
 
@@ -123,14 +119,14 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 return true;
             }
 
-            $scope.fixRules = function() {
+            $scope.fixRules = function () {
                 var invalidRows = $scope.validateRules();
                 for (var i = 0; i < invalidRows.length; i++) {
                     $scope.removeRow(invalidRows[i]);
                 }
             }
 
-            $scope.generateCurrentRule = function() {
+            $scope.generateCurrentRule = function () {
                 return $linq.Enumerable().From($scope.data)
                     .Select(function (x) {
                         return {
@@ -153,7 +149,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 var curRule = $linq.Enumerable().From($scope.myRules)
                     .Where(function (x) {
                         return (x.title.toUpperCase() === $scope.currentRule.toUpperCase());
-                }).ToArray()[0];
+                    }).ToArray()[0];
 
                 curRule.rule = $scope.data;
                 curRule.columns = $scope.getColumns();
@@ -178,14 +174,14 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         if (title === "") {
                             kendo.confirm("Please enter a name for the rule.  Would you like to try again?").then(function () {
                                 $scope.saveRule();
-                            }, function () {});
+                            }, function () { });
                             return;
                         }
 
                         if ($linq.Enumerable().From($scope.myRules)
-                            .Where(function(x) {
+                            .Where(function (x) {
                                 return (x.title.toUpperCase() === title.toUpperCase());
-                            }).ToArray().length > 0) {
+                        }).ToArray().length > 0) {
                             kendo.confirm("The title was already used.  Would you like to enter a different nam?").then(function () {
                                 $scope.saveRule();
                             }, function () { });
@@ -208,7 +204,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                 logger.error("Unable to save Search Rule.", response, response.statusText);
                             });
                     },
-                    function () {});
+                    function () { });
             };
 
             $scope.removeCustomRule = function () {
@@ -222,6 +218,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             }
 
             $scope.runRule = function () {
+                if (!$scope.validateRules()) return;
                 userPreferencesService.updateAction("DealSearch", "SearchOptions", "CustomSearch", JSON.stringify($scope.generateCurrentRule()))
                     .then(function (response) {
                         var runRule = {
@@ -235,7 +232,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     });
             }
 
-            $scope.getColumns = function() {
+            $scope.getColumns = function () {
                 // locate grid and get columns
                 var grid = $("#" + $scope.gridId).find(".search-grid").data("kendoGrid");
                 var cols = [];
@@ -496,7 +493,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.runRule();
             });
 
-            $scope.initRules = function() {
+            $scope.initRules = function () {
                 for (var a = 0; a < $scope.data.length; a++) {
                     var item = $scope.data[a];
                     item.operatorDataSource = $scope.getOperDatasource(item.field);
@@ -514,7 +511,11 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.loadMyRules();
             $scope.removeCustomRule();
             $scope.initRules();
-
+            if ($scope.runSearch) {
+                $timeout(function () {
+                    $scope.runRule();
+                });
+            }
         }],
         link: function (scope, element, attr) {
         }

@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-7">SELECT ALL</div>
         <div class="col-md-2 text-center">
-            <toggle class="toggle-accept"
+            <toggle class="toggle-notification"
                     ng-model="selectAllDefaults.EMAIL_IND"
                     off="OFF"
                     on="ON"
@@ -24,7 +24,7 @@
                     style="width: 140px !important"></toggle>
         </div>
         <div class="col-md-2 text-center">
-            <toggle class="toggle-accept"
+            <toggle class="toggle-notification"
                     ng-model="selectAllDefaults.IN_TOOL_IND"
                     off="OFF"
                     on="ON"
@@ -38,7 +38,7 @@
     <div class="row" ng-repeat="s in subScriptions" style="padding-bottom:6px;">
         <div class="col-md-7" title="{{s.NOTIF_DESC}}">{{::s.NOTIF_NM}}</div>
         <div class="col-md-2 text-center">
-            <toggle class="toggle-accept"
+            <toggle class="toggle-notification"
                     ng-model="s.EMAIL_IND"
                     off="OFF"
                     on="ON"
@@ -47,7 +47,7 @@
                     style="width: 140px !important"></toggle>
         </div>
         <div class="col-md-2 text-center">
-            <toggle class="toggle-accept"
+            <toggle class="toggle-notification"
                     ng-model="s.IN_TOOL_IND"
                     off="OFF"
                     on="ON"
@@ -70,27 +70,27 @@
         color: #ffffff;
     }
 
-    .toggle-accept .toggle {
+    .toggle-notification .toggle {
         width: 60px !important;
         border-radius: 4px;
         height: 19px !important;
     }
 
-        .toggle-accept .toggle .btn-success {
+        .toggle-notification .toggle .btn-success {
             background-color: #00AEEF;
             color: #ffffff;
             font-size: 14px;
             line-height: 1.2em;
         }
 
-        .toggle-accept .toggle .btn-default {
+        .toggle-notification .toggle .btn-default {
             background-color: #C4D600;
             color: #ffffff;
             font-size: 14px;
             line-height: 1.2em;
         }
 
-        .toggle-accept .toggle .toggle-handle {
+        .toggle-notification .toggle .toggle-handle {
             background-color: #eeeeee;
         }
 </style>
