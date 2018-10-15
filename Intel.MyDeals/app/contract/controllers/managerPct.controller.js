@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    managerPctController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window'];
+    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window','contractData'];
 
-    function managerPctController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window) {
+    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData) {
 
         var root = $scope.$parent;	// Access to parent scope
         $scope.root = root;
@@ -29,9 +29,9 @@
 
         // change negative values in grid from "()" to "-"
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
-
-        var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
-        var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
+        
+        var hasNoPermission = !($scope.root.CAN_EDIT_COST_TEST == undefined ? securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper) : $scope.root.CAN_EDIT_COST_TEST);
+        var hasNoPermissionOvr = hasNoPermission && window.usrRole !== "Legal";
         var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || (window.usrRole === "SA" && window.isSuper);
         // This variable gives Super GA to see RTL_PULL_DLR and CAP (CAP column only for ECAP deals)
         var hasSpecialPricePermission = (hasPermissionPrice || (window.usrRole === "GA" && window.isSuper));
@@ -47,6 +47,19 @@
             $scope.$apply();
         }, 50);
 
+        if (root.contractData == undefined) {
+            root.contractData = contractData;
+            root.contractData.CUST_ACCNT_DIV_UI = "";
+            root.contractData = util.findInArray($scope.contractData.PRC_ST, contractData.PRC_PS[0].DC_ID);
+            root.contractData = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+
+            $scope.$broadcast('refreshContractDataComplete');
+
+            $timeout(function () {
+                $scope.$apply();
+            });            
+        }
+
         $scope.selTab = function (tabName) {
             $scope.pctFilter = tabName === "All" ? "" : tabName;
 
@@ -58,6 +71,11 @@
                 ds.read();
             });
         }
+
+        $scope.dismissPopup = function () {
+            $uibModalStack.dismissAll();
+        }
+
         $scope.getFilters = function () {
             if ($scope.pctFilter === "") return [];
             return [{ field: "PRC_CST_TST_STS", operator: "eq", value: $scope.pctFilter }];

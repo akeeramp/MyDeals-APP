@@ -15,7 +15,7 @@
     <AssemblyName>Intel.MyDeals</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
@@ -412,6 +412,7 @@
     <Content Include="app\blocks\uiControls\partials\horizontalButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
+    <Content Include="app\contract\controllers\meetComp.controller.js" />
     <Content Include="app\contract\controllers\dealTimelineModal.controller.js" />
     <Content Include="app\contract\controllers\dropdownModal.controller.js" />
     <Content Include="app\contract\controllers\ecapTrackerAutoFillModal.controller.js" />
@@ -443,6 +444,8 @@
     <Content Include="app\contract\partials\contractSummaryExcludeGroups.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
     <Content Include="app\contract\partials\meetCompTab.html" />
+    <Content Include="app\contract\partials\ptModals\managerPctModal.html" />
+    <Content Include="app\contract\partials\ptModals\meetCompModal.html" />
     <Content Include="app\contract\partials\publishTender.html" />
     <Content Include="app\contract\partials\tenderWidget.html" />
     <Content Include="app\contract\partials\lnavFlowMini.html" />

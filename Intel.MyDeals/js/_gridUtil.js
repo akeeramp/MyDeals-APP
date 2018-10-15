@@ -123,7 +123,13 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     var result = passedData[field];
     var iconNm = gridPctUtils.getResultSingleIcon(result, style);
     //return iconNm;
-    return '<div class="text-center">' + iconNm + '</div>';
+    if (field === 'MEETCOMP_TEST_RESULT') {
+        return '<div class="text-center" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+    }
+    else {
+        return '<div class="text-center" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+    }
+    
 }
 
 gridUtils.booleanDisplay = function (passedData, field) {

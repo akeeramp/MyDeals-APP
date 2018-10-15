@@ -84,7 +84,7 @@
 
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
-
+        $scope.CAN_VIEW_PUBL_BTN = (window.usrRole == 'FSE' || window.usrRole == 'GA') ? true : false;
         $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
         $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper); // Can go to cost test screen and make changes
         $scope.CAN_RUN_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || ((window.usrRole === "GA" || window.usrRole === "SA") && window.isSuper); // Can view the pass/fail
@@ -388,16 +388,29 @@
                         $scope.resetDirty();
                         $scope.publishWipDealsFromTab();
                     }
-                    else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && $scope.isTenderContract && $scope.selectedTAB == 'MC' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                    else if ($scope.actualClikedTabName =='PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                         $scope.resetDirty();
                     }
+                    else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet')) {
+                        $scope.isPtr = false;
+                        $scope.actualClikedTabName = 'MC';
+                        $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                        $scope.resetDirty();
+                    }
+
+                    if ($scope.contractData.TENDER_PUBLISHED == "True") {
+                        $scope.goToTenderDashboard();
+                    }
+                    
                 }
             });
         }
+
         $scope.setForceNavigationForMC = function () {
             $scope.forceNavigation = true;
         }
+
         $scope.deleteContract = function () {
 
             // TODO need to check if there are any tracker numbers
@@ -3192,7 +3205,7 @@
             if ($scope.isTenderContract && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
                 for (var d = 0; d < data.length; d++) {
 
-                    if (angular.equals(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;
+                    if (angular.equals(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
 
                     // product JSON
                     var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
@@ -4379,7 +4392,7 @@
 
             modalInstance.result.then(function () { }, function () { });
         }
-
+        
         $scope.toggleTerms = function () {
             var splitter = $("#k-splitter").data("kendoSplitter");
             if (splitter.options.panes[1].collapsed) {
@@ -4483,7 +4496,12 @@
                     }).ToArray();
                 if (dirtyItems.length > 0) isPtrDirty = true;
 
-                $scope.isMCActiveForFSE = true;
+                var anySucessfulProduct = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+                    function (x) {
+                        return (x.PASSED_VALIDATION === 'Complete');
+                    }).ToArray();
+                if (anySucessfulProduct.length > 0) $scope.isMCActiveForFSE = true;;
+                
             }
             else {
                 isPtrDirty = true;

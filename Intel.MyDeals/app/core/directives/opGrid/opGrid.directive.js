@@ -49,11 +49,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.assignVal = function (field, defval) {
                 var item = $scope.opOptions[field];
                 return (item === undefined || item === null) ? defval : item;
-            }
-
-            $scope.openDealProducts = function(dataItem) {
-                return $scope.parentRoot.openDealProducts(dataItem);
-            }
+            }           
 
             $scope.displayFrontEndDateMessage = function (dataItem) {
                 var today = new Date();
@@ -118,6 +114,96 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.parentRoot = $scope.root;
             //$scope.parentRoot = !!$scope.opOptions.rootParentScope ? $scope.opOptions.rootParentScope : $scope.$parent.$parent.$parent.$parent.$parent;
 
+            $scope.openDealProducts = function (dataItem) {
+                return $scope.parentRoot.openDealProducts(dataItem);
+            }
+
+            $scope.openPCTScreen = function (dataItem) {
+                objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
+                    $scope.contractData = data.data[0];
+                    $scope.contractData.CUST_ACCNT_DIV_UI = "";
+                    $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
+                    $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+
+                    $scope.$broadcast('refreshContractDataComplete');
+
+                    $timeout(function () {
+                        $scope.$apply();
+                    });
+
+                    var modal = $uibModal.open({
+                        backdrop: 'static',
+                        templateUrl: 'app/contract/partials/ptModals/managerPctModal.html',
+                        controller: 'managerPctController',
+                        //controllerAs: 'contract',
+                        size: 'lg',
+                        windowClass: 'tenderPctFolio-modal-window',
+                        resolve: {
+                            contractData: function () {
+                                return $scope.contractData;
+                            },
+                            PRC_ST_OBJ_SID: function () {
+                                return dataItem.PRC_ST_OBJ_SID;
+                            },
+                            parentScope: function () {
+                                return $scope;
+                            }
+                        }
+                    });
+
+                    modal.result.then(
+                        function () {
+                            //Close Event will come here
+                        },
+                        function () {
+                            // Do Nothing on cancel
+                        });
+                });
+            }
+
+            $scope.openMCTScreen = function (dataItem) {
+                objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
+                    $scope.contractData = data.data[0];
+                    $scope.contractData.CUST_ACCNT_DIV_UI = "";
+                    $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
+                    $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+                        
+                    $scope.$broadcast('refreshContractDataComplete');
+
+                    $timeout(function () {
+                        $scope.$apply();
+                    });
+
+                    var modal = $uibModal.open({
+                        backdrop: 'static',
+                        templateUrl: 'app/contract/partials/ptModals/meetCompModal.html',
+                        controller: 'MeetCompController',
+                        //controllerAs: 'contract',
+                        size: 'lg',
+                        windowClass: 'tenderFolio-modal-window',
+                        resolve: {
+                            contractData: function () {
+                                return $scope.contractData;
+                            },
+                            PRC_ST_OBJ_SID: function () {
+                                return dataItem.PRC_ST_OBJ_SID;
+                            },                                
+                            parentScope: function () {
+                                return $scope;
+                            }
+                        }
+                    });
+
+                    modal.result.then(
+                        function () {
+                            //Close Event will come here
+                        },
+                        function () {
+                            // Do Nothing on cancel
+                        });
+                });
+
+            }
             $scope.showHelpTopicHelper = function (dataItem) {
                 showHelpTopic($scope.opHelp);
             }

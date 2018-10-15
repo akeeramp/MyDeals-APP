@@ -1,0 +1,51 @@
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact" ng-show="isBusy"></loading-panel>
+
+<nav class="navbar navbar-default" style="">	
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+	<div class="navbar-header">          
+          <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px;    color: white;"></i>
+          <a class="navbar-brand" href="#">Meet Comp </a>
+        </div>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><i class="intelicon-minus-max"></i></a></li>
+            <li><a href="#"><i class="intelicon-empty-box"></i></a></li>
+            <li><a href="" ng-click="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
+          </ul>
+        </div>		</nav>
+        <div id="secBasicContainerWrapper" style="padding:0px;min-height:500px">
+            <div id="secContainer">
+
+       
+            
+      <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
+				<div class="container-fluid">
+					
+
+            <div class="row">
+                <div class="col-md-12">                    					 
+					<meet-comp obj-sid="PRC_ST_OBJ_SID" is-adhoc="1" obj-type-id="2" last_meet_comp_run="contractData.LAST_COST_TEST_RUN"></meet-comp>
+                </div>                    
+            </div>
+					
+		</div>
+            </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<style>
+.tenderFolio-modal-window .modal-dialog{
+	width:1200px;
+	margin:auto;
+	MIN-HEIGHT:500PX;
+}
+.k-grid td {    
+    padding-right: 0px !important;
+}
+</style>

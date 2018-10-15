@@ -16,6 +16,78 @@
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
 
+        $scope.contractData = [];
+
+        $scope.refreshContractData = function (id, ptId) {
+            objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
+                $scope.contractData = $scope.initContract(data);
+                $scope.contractData.CUST_ACCNT_DIV_UI = "";
+
+                // if the current strategy was changed, update it
+                if (id != undefined && $scope.curPricingStrategyId === id) {
+                    $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, id);
+                    if (id != undefined && $scope.curPricingTableId === ptId && !!$scope.curPricingStrategy) {
+                        $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, ptId);
+                    }
+                }
+
+                //$scope.OverrideDeleteContract();
+
+                $scope.$broadcast('refreshContractDataComplete');
+
+                $timeout(function () {
+                    $scope.$apply();
+                });                
+            });
+        }
+
+
+        $scope.openMCTScreen = function (dataItem) {
+
+            objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
+                $scope.contractData = $scope.initContract(data);
+                $scope.contractData.CUST_ACCNT_DIV_UI = "";
+
+                // if the current strategy was changed, update it
+
+                $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
+                $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+                 
+                
+                $timeout(function () {
+                    $scope.$apply();
+                });
+
+                var modal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/partials/ptModals/meetCompModal.html',
+                    controller: 'MeetCompController',
+                    //controllerAs: 'contract',
+                    size: 'lg',
+                    windowClass: 'tenderFolio-modal-window',
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
+                        },
+                        parentScope: function () {
+                            return $scope;
+                        }
+                    }
+                });
+
+                modal.result.then(
+                    function () {
+                        //Close Event will come here
+                    },
+                    function () {
+                        // Do Nothing on cancel
+                    });
+            });
+
+            
+        }
+
+
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
         $scope.runSearch = false;
