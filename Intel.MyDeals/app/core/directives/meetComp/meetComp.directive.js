@@ -85,7 +85,6 @@
 
                         var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
-
                         var timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
                         var hh = Math.abs(timeDiff.asHours());
                         var mm = Math.abs(timeDiff.asMinutes());
@@ -141,7 +140,7 @@
                     $scope.$parent.IsFirstLoad = true;
                     $scope.IsMeetCompRun = false;
                     $scope.lastMeetCompRunCalc();
-
+                    
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE + "/" + $scope.objTypeId).then(function (response) {
                         $scope.$parent.refreshContractData();
                         if (response.data.length > 0) {
@@ -1421,7 +1420,7 @@
                             }
                             $scope.updateMeetComp = function () {
                                 $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
-                                dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid, $scope.tempUpdatedList).then(function (response) {
+                                dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid + "/" + $scope.objTypeId, $scope.tempUpdatedList).then(function (response) {
                                     $scope.meetCompMasterdata = response.data;
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
                                     if (usrRole == "GA") {
@@ -1444,6 +1443,7 @@
                             }
                             $scope.forceRunMeetComp = function () {
                                 $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+                                
                                 dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + 'A' + "/" + $scope.objTypeId).then(function (response) {
                                     $scope.meetCompMasterdata = response.data;
                                     $scope.meetCompUnchangedData = angular.copy(response.data);

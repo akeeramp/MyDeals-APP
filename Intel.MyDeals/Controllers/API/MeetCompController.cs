@@ -87,12 +87,12 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="CNTRCT_OBJ_SID"></param>
         /// <returns></returns>
         [Authorize]
-        [Route("UpdateMeetCompProductDetails/{CNTRCT_OBJ_SID}")]
+        [Route("UpdateMeetCompProductDetails/{CNTRCT_OBJ_SID}/{OBJ_TYPE_ID}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu)
+        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID,int OBJ_TYPE_ID, List<MeetCompUpdate> mcu)
         {
-            return SafeExecutor(() => _meetCompLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, mcu)
+            return SafeExecutor(() => _meetCompLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, OBJ_TYPE_ID, mcu)
                 , $"Unable to {"update Meet Comp"}"
             );
         }

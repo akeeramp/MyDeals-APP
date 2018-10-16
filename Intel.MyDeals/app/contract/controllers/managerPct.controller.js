@@ -9,13 +9,30 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window','contractData'];
+    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData', 'isToolReq'];
 
-    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData) {
+    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, isToolReq) {
 
         var root = $scope.$parent;	// Access to parent scope
-        $scope.root = root;
+        if (root.contractData == undefined) {
+            root.contractData = contractData;
+            root.contractData.CUST_ACCNT_DIV_UI = "";
+            root.contractData = util.findInArray($scope.contractData.PRC_ST, contractData.PRC_PS[0].DC_ID);
+            root.contractData = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
 
+            $scope.$broadcast('refreshContractDataComplete');
+
+            $timeout(function () {
+                $scope.$apply();
+            });
+        }
+        $scope.root = root;
+        if (isToolReq == undefined) {
+            $scope.isToolReq = true;
+        }
+        else {
+            $scope.isToolReq = isToolReq;
+        }
         $scope.pctFilter = "";
         $scope.$parent.isSummaryHidden = false;
         gridPctUtils.columns = {};
@@ -45,20 +62,7 @@
             $("#overlapDiv").removeClass("active");
             $("#groupExclusionDiv").removeClass("active");
             $scope.$apply();
-        }, 50);
-
-        if (root.contractData == undefined) {
-            root.contractData = contractData;
-            root.contractData.CUST_ACCNT_DIV_UI = "";
-            root.contractData = util.findInArray($scope.contractData.PRC_ST, contractData.PRC_PS[0].DC_ID);
-            root.contractData = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-
-            $scope.$broadcast('refreshContractDataComplete');
-
-            $timeout(function () {
-                $scope.$apply();
-            });            
-        }
+        }, 50);       
 
         $scope.selTab = function (tabName) {
             $scope.pctFilter = tabName === "All" ? "" : tabName;
@@ -244,8 +248,11 @@
         // Get the hroup header checkbox a unique id
         function getColumnTemplateByObjType(pt){
             var template = angular.copy($scope.templates.columns[pt.OBJ_SET_TYPE_CD]);
-            if (template[0].field === "TOOLS") {
+            if (template[0].field === "TOOLS" && $scope.isToolReq) {
                 template[0].headerTemplate = template[0].headerTemplate.replace(/PT_ID/g, pt.DC_ID);
+            }
+            else if (template[0].field === "TOOLS" && !$scope.isToolReq) {
+                    template.splice(0, 1);
             }
             return template;
         }
@@ -312,6 +319,9 @@
 
                         //if (!gridPctUtils.columns[item.DEAL_ID]) {
                         var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
+                        if (cols[0].field === "TOOLS" && !$scope.isToolReq) {
+                            cols.splice(0, 1);
+                        }
                         var tmplt = "<table style='float: left; margin-top: -20px;'>"; // <colgroup><col style='width: 30px;'>
                         var trLocked = "<td style='width: 30px;'></td>";
                         var trUnLocked = "";

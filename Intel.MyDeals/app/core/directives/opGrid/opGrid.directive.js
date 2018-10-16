@@ -147,6 +147,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             },
                             parentScope: function () {
                                 return $scope;
+                            },
+                            isToolReq: function () {
+                                return false;
                             }
                         }
                     });

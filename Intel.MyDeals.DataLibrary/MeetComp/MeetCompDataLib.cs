@@ -273,7 +273,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu)
+        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, int OBJ_TYPE_ID, List<MeetCompUpdate> mcu)
         {
             OpLog.Log("GetMeetCompProductDetails");
 
@@ -287,6 +287,7 @@ namespace Intel.MyDeals.DataLibrary
                 Procs.dbo.PR_MYDL_UI_SAVE_MEET_COMP cmd = new Procs.dbo.PR_MYDL_UI_SAVE_MEET_COMP
                 {
                     @ID = CNTRCT_OBJ_SID,
+                    @OBJ_TYPE_ID = @OBJ_TYPE_ID,
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
                     @var_meet_comp = dt

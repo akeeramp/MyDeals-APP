@@ -55,7 +55,15 @@
                         },
                         'contractWrapperView': {
                             templateUrl: '/app/contract/partials/contractSummaryPct.html',
-                            controller: 'managerPctController'
+                            controller: 'managerPctController',
+                            resolve: {
+                                contractData: function () {
+                                    return '';
+                                },
+                                isToolReq: function () {
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }

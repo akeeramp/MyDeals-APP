@@ -84,7 +84,7 @@
 
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
-        $scope.CAN_VIEW_PUBL_BTN = (window.usrRole == 'FSE' || window.usrRole == 'GA') ? true : false;
+        $scope.C_CREATE_CONTRACT = securityService.chkDealRules('C_CREATE_CONTRACT', window.usrRole, null, null, null);
         $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
         $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper); // Can go to cost test screen and make changes
         $scope.CAN_RUN_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || ((window.usrRole === "GA" || window.usrRole === "SA") && window.isSuper); // Can view the pass/fail
@@ -301,7 +301,7 @@
                 $scope.contractData["IS_TENDER"] = "1";
             }
         }
-        if ($state.current.name == 'contract.manager' && $scope.isTenderContract) {
+        if (($state.current.name == 'contract.manager' || $state.current.name == 'contract.summary' ) && $scope.isTenderContract) {
             $state.go('contract.manager.strategy', {
                 cid: $scope.contractData.DC_ID,
                 sid: $scope.contractData.PRC_ST[0].DC_ID,

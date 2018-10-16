@@ -15,6 +15,7 @@ function MeetCompController($scope, $uibModalStack, $state, $stateParams, $filte
     $scope.contractData = contractData;
     $scope.parent = parentScope;
     $scope.PRC_ST_OBJ_SID = PRC_ST_OBJ_SID;
+    $scope.OBJ_SID = contractData.DC_ID;
     $scope.forceRun = function () {
         var data = $scope.contractData.PRC_ST;
         if (data !== undefined) {
