@@ -50,27 +50,27 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-				new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
                 {
-					Title="Readonly if Tracker Exists Table Row Only",
-					ActionRule = MyDcActions.ExecuteActions,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-					InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
-					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
-					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-					{
-						new OpRuleAction<IOpDataElement>
-						{
-							Action = BusinessLogicDeActions.SetReadOnly,
-							Target = new[] {
-								AttributeCodes.PROD_INCLDS,
-								AttributeCodes.PTR_USER_PRD,
+                    Title="Readonly if Tracker Exists Table Row Only",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.PROD_INCLDS,
+                                AttributeCodes.PTR_USER_PRD,
                                 AttributeCodes.QTY,
                                 AttributeCodes.DEAL_GRP_NM}
-						}
-					}
-				},
+                        }
+                    }
+                },
                 //new MyOpRule
                 //{
                 //    Title="Readonly if contract # is positive",
@@ -109,7 +109,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null
                         && String.Equals(de.AtrbValue.ToString(),"Backend", StringComparison.OrdinalIgnoreCase) && dc.DcID > 0).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -187,7 +187,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.AtrbValue != null
                         && !String.Equals(de.AtrbValue.ToString(),"TENDER", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -211,7 +211,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null
                         && String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -227,7 +227,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly if Frontend Deal",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue() 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()
                         && !String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -252,7 +252,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.EXPIRE_YCS2) && de.HasValue() 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.EXPIRE_YCS2) && de.HasValue()
                         && string.Equals(de.AtrbValue.ToString(), "Yes", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -272,14 +272,14 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRODUCT_CATEGORIES) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRODUCT_CATEGORIES) && de.AtrbValue != null
                         && !de.AtrbValue.ToString().Contains("CS") && dc.DcID > 0).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] 
+                            Target = new[]
                             {
                                 AttributeCodes.CS_SHIP_AHEAD_STRT_DT,
                                 AttributeCodes.CS_SHIP_AHEAD_END_DT

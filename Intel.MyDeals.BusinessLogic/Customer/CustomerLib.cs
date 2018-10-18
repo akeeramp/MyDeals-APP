@@ -76,10 +76,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <input>string type which is what will be filtered against</input>
         /// <returns>list of customer division data of specified type</returns>
-        public List<CustomerDivision> GetCustomerDivisionsByType(string type)
-        {
-            return GetCustomerDivisions().Where(c => c.CUST_TYPE == type).ToList();
-        }
+        //public List<CustomerDivision> GetCustomerDivisionsByType(string type)
+        //{
+        //    return GetCustomerDivisions().Where(c => c.CUST_TYPE == type).ToList();
+        //}
 
         public List<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
         {
@@ -101,10 +101,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <input>string cat which is what will be filtered against</input>
         /// <returns>list of customer division data of specified category</returns>
-        public List<CustomerDivision> GetCustomerDivisionsByCategory(string cat)
-        {
-            return GetCustomerDivisions().Where(c => c.CUST_CAT == cat).ToList();
-        }
+        //public List<CustomerDivision> GetCustomerDivisionsByCategory(string cat)
+        //{
+        //    return GetCustomerDivisions().Where(c => c.CUST_CAT == cat).ToList();
+        //}
 
         #endregion Customer Divisions
 
@@ -126,7 +126,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return DataCollections.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2003 && c.CUST_LVL_SID == custNmSid).ToList();
+            return DataCollections.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2003 && c.CUST_SID == custNmSid).ToList();
         }
 
 

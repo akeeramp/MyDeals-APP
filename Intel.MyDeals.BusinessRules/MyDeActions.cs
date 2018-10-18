@@ -145,6 +145,8 @@ namespace Intel.MyDeals.BusinessRules
                     dc?.Message.WriteMessage(OpMsg.MessageType.Error, geo + " is not a valid Geo.");
 
                     var myDealsData = (MyDealsData)args[1];
+                    // TO DO: This is the point of tossing a "System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary" message
+                    // because item is not coming in as PRC_TBL_ROW, fixing it for PRC_TBL just blows up in pricingTable.controller.js line 47
                     myDealsData?[OpDataElementType.PRC_TBL_ROW].Messages.WriteMessage(OpMsg.MessageType.Error, geo + " is not a valid Geo.");
                 }
             }

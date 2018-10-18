@@ -18,75 +18,55 @@ namespace Intel.MyDeals.BusinessLogic.Test
         #region Get Geos
 
         [TestMethod]
-        public void GeosGetAll()
+        public void GeoLib_GetGeoCalls()
         {
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensions();
-            Assert.IsTrue(results.Any());
-        }
+            // Check Get all geos
+            IEnumerable<GeoDimension> geosListResults = new GeosLib().GetGeoDimensions();
+            Assert.IsTrue(geosListResults.Any());
 
-        [TestMethod]
-        public void GeosGetActive()
-        {
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionsActive();
-            Assert.IsTrue(results.Any());
-        }
+            // Check fetching only active geos
+            geosListResults = new GeosLib().GetGeoDimensionsActive();
+            Assert.IsTrue(geosListResults.Any());
+            Assert.IsFalse(geosListResults.Where(g => g.ACTV_IND == false).Any());
 
-        //TODO: The below have tentatively hardcoded sid/name/etc values that the tests search for.  We need to inject our own test data that is guaranteed to be in the db every time the test is run.
+            // Check single item back
+            int peruGeoDimSid = 56; // Sid 56 = 'Peru'
+            GeoDimension singleGeoResults = new GeosLib().GetGeoDimension(peruGeoDimSid);
+            Assert.IsTrue(singleGeoResults != null && singleGeoResults.GEO_MBR_SID == peruGeoDimSid);
 
-        [TestMethod]
-        public void GeosGetSpecific()
-        {
-            int sid = 1; //TODO: replace with test data value
-            GeoDimension results = new GeosLib().GetGeoDimension(sid);
-            Assert.IsTrue(results != null && results.GEO_MBR_SID == sid);
-        }
+            // Check pulling list of all items within a geo by name
+            string geoName = "APAC"; 
+            geosListResults = new GeosLib().GetGeoDimensionByGeoName(geoName);
+            Assert.IsTrue(geosListResults.Any());
+            Assert.IsFalse(geosListResults.Any() && geosListResults.Where(r => r.GEO_NM != geoName).Any());
 
-        [TestMethod]
-        public void GeosGetByGeoName()
-        {
-            string name = "APAC"; //TODO: replace with test data value
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionByGeoName(name);
-            Assert.IsTrue(results.Any() && results.Where(r => r.GEO_NM == name).Count() == results.Count());
-        }
-
-        [TestMethod]
-        public void GeosGetByGeoSid()
-        {
-            int sid = 7; //TODO: replace with test data value
+            // Check pulling list of all items within a geo by sid
+            int sid = 7; // APAC
             IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionByGeoSid(sid);
-            Assert.IsTrue(results.Any() && results.Where(r => r.GEO_NM_SID == sid).Count() == results.Count());
-        }
+            Assert.IsTrue(geosListResults.Any());
+            Assert.IsFalse(geosListResults.Any() && geosListResults.Where(r => r.GEO_NM != "APAC").Any());
 
-        [TestMethod]
-        public void GeosGetByRegionName()
-        {
-            string name = "Latin Amer"; //TODO: replace with test data value
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionByRegionName(name);
-            Assert.IsTrue(results.Any() && results.Where(r => r.RGN_NM == name).Count() == results.Count());
-        }
+            // Check get item by Region Name
+            string rngName = "Latin Amer";
+            geosListResults = new GeosLib().GetGeoDimensionByRegionName(rngName);
+            Assert.IsTrue(geosListResults.Any());
+            Assert.IsFalse(geosListResults.Any() && geosListResults.Where(g => g.RGN_NM != rngName).Any());
 
-        [TestMethod]
-        public void GeosGetByRegionSid()
-        {
-            int sid = 9; //TODO: replace with test data value
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionByRegionSid(sid);
-            Assert.IsTrue(results.Any() && results.Where(r => r.RGN_NM_SID == sid).Count() == results.Count());
-        }
+            // Check get item by Region Sid
+            int rgnSid = 9; // Sid 9 = Latin America
+            geosListResults = new GeosLib().GetGeoDimensionByRegionSid(rgnSid);
+            Assert.IsTrue(geosListResults.Any());
+            Assert.IsFalse(geosListResults.Any() && geosListResults.Where(g => g.RGN_NM_SID != rgnSid).Any());
 
-        [TestMethod]
-        public void GeosGetByCountryName()
-        {
-            string name = "Peru"; //TODO: replace with test data value
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionByCountryName(name);
-            Assert.IsTrue(results.Any() && results.Where(r => r.CTRY_NM == name).Count() == results.Count());
-        }
+            // Check get item by Country Name
+            string peruName = "Peru";
+            geosListResults = new GeosLib().GetGeoDimensionByCountryName(peruName);
+            Assert.IsTrue(geosListResults.Any() && geosListResults.Where(r => r.CTRY_NM == peruName).Any());
 
-        [TestMethod]
-        public void GeosGetByCountrySid()
-        {
-            int sid = 56; //TODO: replace with test data value
-            IEnumerable<GeoDimension> results = new GeosLib().GetGeoDimensionByCountrySid(sid);
-            Assert.IsTrue(results.Any() && results.Where(r => r.CTRY_NM_SID == sid).Count() == results.Count());
+            // Check get item by Country Name Sid
+            int peruCtryNmSid = 56; // Country Name Sid 56 = 'Peru'
+            geosListResults = new GeosLib().GetGeoDimensionByCountrySid(peruCtryNmSid);
+            Assert.IsTrue(geosListResults.Any() && geosListResults.Where(r => r.CTRY_NM_SID == peruCtryNmSid).Any());
         }
 
         #endregion

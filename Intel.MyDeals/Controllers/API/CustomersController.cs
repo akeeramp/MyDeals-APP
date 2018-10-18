@@ -60,14 +60,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Authorize]
-		[Route("GetCustomerByCategory/{category}")]
-		public IEnumerable<CustomerDivision> GetCustomerByCategory(string category)
-		{
-            return SafeExecutor(() => _customerLib.GetCustomerDivisionsByCategory(category)
-                , "Unable to get Customers"
-            );
-		}
+  //      [Authorize]
+		//[Route("GetCustomerByCategory/{category}")]
+		//public IEnumerable<CustomerDivision> GetCustomerByCategory(string category)
+		//{
+  //          return SafeExecutor(() => _customerLib.GetCustomerDivisionsByCategory(category)
+  //              , "Unable to get Customers"
+  //          );
+		//}
 
 		[Authorize]
 		[Route("GetCustomerByGeo/{geo}")]
@@ -78,14 +78,14 @@ namespace Intel.MyDeals.Controllers.API
             );
 		}
 
-		[Authorize]
-		[Route("GetCustomerByType/{type}")]
-		public IEnumerable<CustomerDivision> GetCustomerByType(string type)
-		{
-            return SafeExecutor(() => _customerLib.GetCustomerDivisionsByType(type)
-                , "Unable to get Customers"
-            );
-		}
+		//[Authorize]
+		//[Route("GetCustomerByType/{type}")]
+		//public IEnumerable<CustomerDivision> GetCustomerByType(string type)
+		//{
+  //          return SafeExecutor(() => _customerLib.GetCustomerDivisionsByType(type)
+  //              , "Unable to get Customers"
+  //          );
+		//}
 
         [Authorize]
         [Route("GetMyCustomers")]

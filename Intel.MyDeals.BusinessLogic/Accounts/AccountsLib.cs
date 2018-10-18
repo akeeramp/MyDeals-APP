@@ -1,5 +1,4 @@
-﻿using Intel.MyDeals.DataLibrary;
-using Intel.Opaque;
+﻿using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic
 {

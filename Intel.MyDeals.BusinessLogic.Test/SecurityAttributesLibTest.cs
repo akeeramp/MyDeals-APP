@@ -86,6 +86,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 //PERFORM_CTST = false,
                 ACTV_IND = false
             };
+            // This next call dies normally since insert is expecting an OBJ_SET_TYPE_SID
             AdminDealType insertResult = new SecurityAttributesLib().ManageAdminDealType(dealType, CrudModes.Insert);
 
             Assert.IsTrue(

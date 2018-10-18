@@ -5,7 +5,6 @@ using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.IBusinessLogic;
-using System;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -28,7 +27,13 @@ namespace Intel.MyDeals.BusinessLogic
             _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
-        #region ToolConstants
+        public ConstantsLookupsLib()
+        {
+            _constantLookupDataLib = new ConstantLookupDataLib();
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
+
+        #region Tool Constants
 
         public AdminConstant GetConstantsByName(string constant)
         {
@@ -48,7 +53,9 @@ namespace Intel.MyDeals.BusinessLogic
                 .FirstOrDefault();
         }
 
-        #endregion ToolConstants
+        #endregion Tool Constants
+
+        #region Get Lookups
 
         public List<LookupItem> GetLookups()
         {
@@ -57,9 +64,9 @@ namespace Intel.MyDeals.BusinessLogic
 
         public IQueryable<LookupItem> GetLookups(string name)
         {
-            return name.Replace(" ", "").IndexOf(",") <= 0
+            return name.Replace(" ", "").IndexOf(",") >= 0
                 ? GetLookups()
-                    .Where(l => name.Split(',').Contains(l.ATRB_COL_NM))
+                    .Where(l => name.Replace(" ", "").Split(',').Any(singleName => singleName == l.ATRB_COL_NM))
                     .OrderBy(l => l.ATRB_COL_NM).ThenBy(l => l.ORD).ThenBy(l => l.DROP_DOWN).AsQueryable()
                 : GetLookups()
                     .Where(l => l.ATRB_COL_NM == name)
@@ -71,9 +78,11 @@ namespace Intel.MyDeals.BusinessLogic
             dealType = dealType.ToUpper();
             atrbCd = atrbCd.ToUpper();
             return GetLookups()
-                .Where(l => l.ATRB_COL_NM.ToUpper() == atrbCd && ("ALL" == dealType || l.DEAL_TYPE_CD.ToUpper() == "ALL DEALS" || l.DEAL_TYPE_CD.ToUpper() == dealType))
+                .Where(l => l.ATRB_COL_NM.ToUpper() == atrbCd && (dealType == "ALL" || l.DEAL_TYPE_CD.ToUpper() == "ALL DEALS" || l.DEAL_TYPE_CD.ToUpper() == dealType))
                 .OrderBy(l => l.DROP_DOWN).ToList();
         }
+
+        #endregion Get Lookups
 
         #region Constants Admin
 
