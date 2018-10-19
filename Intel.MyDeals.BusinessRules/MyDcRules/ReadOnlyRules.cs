@@ -41,7 +41,6 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.QTY,
                                 AttributeCodes.ON_ADD_DT,
                                 AttributeCodes.QLTR_BID_GEO,
-                                AttributeCodes.END_CUSTOMER_RETAIL,
                                 AttributeCodes.DEAL_SOLD_TO_ID,
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PRD_EXCLDS,

@@ -409,7 +409,6 @@ namespace Intel.MyDeals.Entities
                 OpLogPerf.Log(ex);
 #endif
             }
-
             return false;
         }
 
@@ -451,7 +450,6 @@ namespace Intel.MyDeals.Entities
                 OpLogPerf.Log(ex);
 #endif
             }
-
             return false;
         }
 
