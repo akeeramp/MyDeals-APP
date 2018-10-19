@@ -1108,7 +1108,7 @@
 
         $scope.checkPctMctPriorToActioning = function (data, result) {
             // check for running MCP or PCT
-            debugger;
+            //debugger;
             var ids = $scope.getIdsToPctMct(data);
             if (ids.length > 0) {
                 $(".iconRunPct").addClass("fa-spin grn");
