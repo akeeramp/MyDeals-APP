@@ -228,7 +228,7 @@
                     },
                     pageable: {
                         refresh: false,
-                        pageSizes: [25, 50, 100],
+                        pageSizes: [25, 50, 100, 250, 500],
                         buttonCount: 5
                     },
                     columns: [

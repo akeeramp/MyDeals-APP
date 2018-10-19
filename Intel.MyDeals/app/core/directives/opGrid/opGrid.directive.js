@@ -89,7 +89,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.resizable = $scope.assignVal("resizable", true);
             $scope.pageable = $scope.assignVal("pageable", {
                 refresh: true,
-                pageSizes: [25, 50, 100],
+                pageSizes: [25, 50, 100, 250, 500],
                 buttonCount: 5
             });
             $scope.openCAPBreakOut = openCAPBreakOut;
@@ -2144,7 +2144,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 reorderable: true,
                 pageable: {
                     refresh: true,
-                    pageSizes: [25, 50, 100],
+                    pageSizes: [25, 50, 100, 250, 500],
                     buttonCount: 5
                 },
                 columns: [
