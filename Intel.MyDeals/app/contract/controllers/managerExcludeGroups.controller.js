@@ -433,6 +433,7 @@
             $("#historyDiv").removeClass("active");
             $("#overlapDiv").removeClass("active");
             $("#groupExclusionDiv").addClass("active");
+            $("#dealProducts").removeClass("active");
             $scope.$apply();
         }, 50);
     }

@@ -35,6 +35,7 @@
         $scope.canActionIcon = true;
         $scope.hasVertical = false;
         $scope.canEmailIcon = true;
+        $scope.userRole = window.usrRole;
 
         $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
 
@@ -52,6 +53,22 @@
 
         }
 
+        $scope.getmissingCapCostTitle = function (item) {
+            var ret = "";
+            if (item.CAP_MISSING_FLG !== undefined && item.CAP_MISSING_FLG == "0") {
+                ret += "Your strategy/deal is missing CAP and Division Approver will not be able to approve till this is fixed.\n" +
+                    "Missing CAP issues are handled currently with PriceOps via a weekly DQ process. \nIf there is urgency in getting this deal approved" +
+                    "please raise a TAC ticket in service now";
+            }
+            if (item.COST_MISSING_FLG !== undefined && item.COST_MISSING_FLG == "0") {
+                ret !== "" ? ret += "<br/>" : ret;
+                ret += "Your strategy/deal is missing Cost and Division Approver will not be able to approve till this is fixed.\n" +
+                    "Missing Cost issues are handled currently with iCost team via a weekly DQ process.\nIf there is urgency in getting this deal approved" +
+                    "please raise a TAC ticket in service now";
+            }
+            return ret;
+        }
+
         $timeout(function () {
             $("#approvalDiv").addClass("active");
             $("#pctDiv").removeClass("active");
@@ -60,6 +77,7 @@
             $("#historyDiv").removeClass("active");
             $("#overlapDiv").removeClass("active");
             $("#groupExclusionDiv").removeClass("active");
+            $("#dealProducts").removeClass("active");
             $scope.$apply();
         }, 50);
 
@@ -98,17 +116,16 @@
             var psHasUserVerticals = true;
             //if (dataItem.dc_type === "PRC_ST")
             //{
-                if (window.usrRole === "DA") {
-                    if (window.usrVerticals.length > 0)
-                    {
-                        var user = window.usrVerticals.split(",");
-                        var blah = dataItem.VERTICAL_ROLLUP.split(",");
+            if (window.usrRole === "DA") {
+                if (window.usrVerticals.length > 0) {
+                    var user = window.usrVerticals.split(",");
+                    var blah = dataItem.VERTICAL_ROLLUP.split(",");
 
-                        psHasUserVerticals = blah.some(r=> user.indexOf(r) >= 0)
-                    }
-                    return psHasUserVerticals;
-                    // else, DA is All Verticals and gets a free pass
+                    psHasUserVerticals = blah.some(r=> user.indexOf(r) >= 0)
                 }
+                return psHasUserVerticals;
+                // else, DA is All Verticals and gets a free pass
+            }
             //}
             return psHasUserVerticals;
         }
@@ -484,7 +501,7 @@
                                 width: "200px",
                                 locked: true,
                                 template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
-                                headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, "+ gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
+                                headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
                             }, {
@@ -632,8 +649,7 @@
                         }
                     },
                     requestEnd: function (e) {
-                        for (var i = 0; i < e.response.length; i++)
-                        {
+                        for (var i = 0; i < e.response.length; i++) {
                             if (e.response[i].WF_STG_CD === "Draft") e.response[i].WF_STG_CD = e.response[i].PS_WF_STG_CD;
                         }
 
@@ -700,7 +716,7 @@
                                 hidden: !root.CAN_VIEW_COST_TEST,
                                 filterable: { multi: true, search: true }
                             }, {
-                                                                field: "COMP_SKU",
+                                field: "COMP_SKU",
                                 title: "Comp SKU",
                                 template: "#= gridUtils.getFormatedDim(data, 'COMP_SKU', '20___0', 'string') #", // NOTE: this works because it's an ECAP (only 1 dimension/tier ever)
                                 width: "100px",

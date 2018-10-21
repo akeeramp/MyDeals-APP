@@ -97,6 +97,7 @@ function exportController($scope, $state, objsetService, logger, $timeout, dataS
         $("#historyDiv").removeClass("active");
         $("#overlapDiv").removeClass("active");
         $("#groupExclusionDiv").removeClass("active");
+        $("#dealProducts").removeClass("active");
         $scope.$apply();
     }, 50);
 

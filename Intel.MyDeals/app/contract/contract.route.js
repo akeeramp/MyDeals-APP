@@ -28,7 +28,7 @@
                                 }],
                                 templateData: ['$stateParams', 'templatesService', function ($stateParams, templatesService) {
                                     return templatesService.readTemplates();
-                                }],isNewContract: ['$stateParams', function ($stateParams) {
+                                }], isNewContract: ['$stateParams', function ($stateParams) {
                                     return $stateParams.cid <= 0;
                                 }],
                                 securityLoaded: ['securityService', function (securityService) {
@@ -183,6 +183,23 @@
                         'contractWrapperView': {
                             templateUrl: '/app/contract/partials/contractSummaryTimeline.html',
                             controller: 'managerTimelineController'
+                        }
+                    }
+                }
+            }, {
+                state: 'contract.dealproducts',
+                config: {
+                    url: '/dealproducts',
+                    views: {
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractSummaryDealProducts.html',
+                            controller: 'dealProductsController'
                         }
                     }
                 }

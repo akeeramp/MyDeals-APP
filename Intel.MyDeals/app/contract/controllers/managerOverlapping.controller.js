@@ -26,6 +26,7 @@
             $("#historyDiv").removeClass("active");
             $("#overlapDiv").addClass("active");
             $("#groupExclusionDiv").removeClass("active");
+            $("#dealProducts").removeClass("active");
             $scope.$apply();
         }, 50);
 

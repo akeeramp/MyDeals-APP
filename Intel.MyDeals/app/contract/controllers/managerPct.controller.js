@@ -46,7 +46,7 @@
 
         // change negative values in grid from "()" to "-"
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
-        
+
         var hasNoPermission = !($scope.root.CAN_EDIT_COST_TEST == undefined ? securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper) : $scope.root.CAN_EDIT_COST_TEST);
         var hasNoPermissionOvr = hasNoPermission && window.usrRole !== "Legal";
         var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || (window.usrRole === "SA" && window.isSuper);
@@ -61,8 +61,9 @@
             $("#historyDiv").removeClass("active");
             $("#overlapDiv").removeClass("active");
             $("#groupExclusionDiv").removeClass("active");
+            $("#dealProducts").removeClass("active");
             $scope.$apply();
-        }, 50);       
+        }, 50);
 
         $scope.selTab = function (tabName) {
             $scope.pctFilter = tabName === "All" ? "" : tabName;

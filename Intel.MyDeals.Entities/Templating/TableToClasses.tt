@@ -359,6 +359,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "Notification";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Notifications List
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEAL_GRP_PRD @IN_OBJ_SID=504014, @IN_CUST_MBR_SID=4088, @IN_OBJ_TYPE_SID=5, @IN_MISSING_FLG=0");
+	ds.Tables[0].TableName = "DealProducts";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

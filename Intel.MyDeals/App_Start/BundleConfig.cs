@@ -181,6 +181,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/contract.controller.js"
                 , "~/app/contract/controllers/meetComp.controller.js"
                 , "~/app/contract/controllers/datePickerModal.controller.js"
+                , "~/app/contract/controllers/dealProducts.controller.js"
                 , "~/app/contract/controllers/dealProductsModal.controller.js"
                 , "~/app/contract/controllers/dealTimelineModal.controller.js"
                 , "~/app/contract/controllers/dropdownModal.controller.js"

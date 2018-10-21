@@ -137,6 +137,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
         $("#historyDiv").removeClass("active");
         $("#overlapDiv").removeClass("active");        
         $("#groupExclusionDiv").removeClass("active");
+        $("#dealProducts").removeClass("active");
         $scope.$apply();
     }, 50);
 

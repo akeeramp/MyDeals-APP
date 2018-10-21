@@ -15,7 +15,7 @@
     <AssemblyName>Intel.MyDeals</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
@@ -412,6 +412,7 @@
     <Content Include="app\blocks\uiControls\partials\horizontalButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
+    <Content Include="app\contract\controllers\dealProducts.controller.js" />
     <Content Include="app\contract\controllers\meetComp.controller.js" />
     <Content Include="app\contract\controllers\dealTimelineModal.controller.js" />
     <Content Include="app\contract\controllers\dropdownModal.controller.js" />
@@ -439,6 +440,7 @@
     <Content Include="app\contract\partials\contractComplianceHeader.html" />
     <Content Include="app\contract\partials\contractExport.html" />
     <Content Include="app\contract\partials\contractExportHeader.html" />
+    <Content Include="app\contract\partials\contractSummaryDealProducts.html" />
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
     <Content Include="app\contract\partials\contractSummaryOverlapping.html" />
     <Content Include="app\contract\partials\contractSummaryExcludeGroups.html" />

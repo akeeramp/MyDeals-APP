@@ -1,8 +1,8 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"  msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
 <div ng-include="'/app/core/directives/gridCell/dealToolsHelper.html'"></div>
 <div ng-include="'app/contract/partials/ptModals/actionSummaryModal.html'"></div>
 <div ng-include="'app/contract/partials/ptModals/emailModal.html'"></div>
-<div ng-include="'app/contract/partials/ptModals/selectPricingTableModal.html'"></div> 
+<div ng-include="'app/contract/partials/ptModals/selectPricingTableModal.html'"></div>
 
 <div id="perfMs"></div>
 <div id="perfLegend"></div>
@@ -222,7 +222,7 @@
                     <td style="width: 500px; text-align: right; padding-right: 2px;">
 
                         <div class="dropdown clearfix fr" style="padding-top: 5px;">
-                            <button class="btn btn-skyblue dropdown-toggle" id="dropActionss"type="button" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests or send an email" ng-show="canEdit">Submit</button>
+                            <button class="btn btn-skyblue dropdown-toggle" id="dropActionss" type="button" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests or send an email" ng-show="canEdit">Submit</button>
                         </div>
 
                     </td>
@@ -241,6 +241,7 @@
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td style="line-height: 1.1em;">{{psTitle}} / {{ptTitle}}</td>
                     <!--<td style="width: 100px; text-align: center;"># of Tables</td>-->
+                    <td style="width: 150px; text-align: center;" ng-if="userRole == 'GA'">Missing Cost/CAP</td>
                     <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                         <btn-run-pct-mct ng-model="root"
                                          contract-id="root.contractData.DC_ID"
@@ -258,7 +259,7 @@
                                          run-if-stale-by-hours="3"
                                          enabled="enablePCT"
                                          force-run="root.forceRun()"
-                                         btn-type ="'mct'"
+                                         btn-type="'mct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
 
                     </td>
@@ -328,6 +329,10 @@
                             <!--<td style="width: 100px; text-align: center;">
                                 <div ng-bind="ps.PRC_TBL.length" class="bolder"></div>
                             </td>-->
+                            <td style="width: 160px; text-align: center;" ng-if="userRole == 'GA'">
+                                <!--<i ng-if="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid bigIcon"></i>-->
+                                <i ng-if="ps.CAP_MISSING_FLG ==='0' || ps.COST_MISSING_FLG ==='0'" style="color:#f3d54e" class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
+                            </td>
                             <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                 <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
                                     <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-edit="CAN_EDIT_COST_TEST" icon-class="'bigIcon'"></icon-mct-pct>
@@ -357,7 +362,10 @@
                                 <td>
                                     <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the {{ptTitle}} in the {{contractType}} Editor"></div>
                                 </td>
-                                <td style="width: 100px;"></td>
+                                <td style="width: 160px; text-align: center;" ng-if="userRole == 'GA'">
+                                    <!--<i ng-if="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i>-->
+                                    <i ng-if="pt.CAP_MISSING_FLG ==='0' || pt.COST_MISSING_FLG ==='0'" style="color:#f3d54e" title="{{::getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i>
+                                </td>
                                 <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                     <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
                                         <icon-mct-pct ng-model="pt.COST_TEST_RESULT" can-edit="CAN_EDIT_COST_TEST" icon-class="'medIcon'"></icon-mct-pct>
@@ -370,7 +378,7 @@
                                 </td>
                             </tr>
                         </table>
-                        
+
                         <div uib-collapse="!isPtCollapsed">
                             <div style="margin-left: 0;">
                                 <div id="sumWipGrid_{{pt.DC_ID}}" class="opUiContainer md dashboard"></div>
@@ -386,9 +394,10 @@
 
 
 <style>
-	.sumGridOptionsExpand{
-		height: auto !important;
-	}
+    .sumGridOptionsExpand {
+        height: auto !important;
+    }
+
     .k-dialog .k-content {
         margin-top: 0 !important;
     }
@@ -400,6 +409,7 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
+
     #sum-header {
         height: 100px;
         margin-top: -100px;
@@ -413,6 +423,7 @@
         margin-left: 0;
         margin-right: 0;
     }
+
     #sum-container {
         height: 100%;
         overflow: auto;
@@ -423,30 +434,34 @@
         opacity: 1;
     }
 
-    .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
-        color: #0071C5 !important;
-    }
+        .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
+            color: #0071C5 !important;
+        }
 
 
     .md-icon {
         padding: 4px 2px 0 5px;
     }
-    .md-icon i {
-        color: #00AEEF;
-    }
-    .md-icon a, .md-icon a:hover {
-        text-decoration: none;
-    }
-    .md-icon i:hover {
-        color: #003C71 !important;
-    }
+
+        .md-icon i {
+            color: #00AEEF;
+        }
+
+        .md-icon a, .md-icon a:hover {
+            text-decoration: none;
+        }
+
+        .md-icon i:hover {
+            color: #003C71 !important;
+        }
 
     .md-icon-disabled {
         padding: 4px 2px 0 5px;
     }
-    .md-icon-disabled i {
-        color: #00AEEF;
-    }
+
+        .md-icon-disabled i {
+            color: #00AEEF;
+        }
 
     .divStg {
         width: 60px;
@@ -472,11 +487,10 @@
     .opUiContainer.k-grid .k-grid-header th.k-header {
         color: #000000;
         font-weight: 400;
-
         background: #fdfdfd; /* Old browsers */
-        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
     }
 
@@ -491,12 +505,12 @@
     .k-dialog .k-dialog-title, .k-dialog .k-window-title {
         display: none !important;
     }
-    .k-dialog .k-content  {
+
+    .k-dialog .k-content {
         margin-top: -30px;
     }
 
     .psCheck {
-        
     }
 
     #sum-container .k-textbox.k-space-left {
@@ -505,69 +519,77 @@
 
     .btn-skyblue {
         background-color: #00AEEF;
-        border: 1px solid  #00AEEF;
+        border: 1px solid #00AEEF;
         color: #ffffff;
         border-radius: 4px;
     }
-    .btn-skyblue:hover {
-        background-color: #0071C5;
-        border: 1px solid  #0071C5;
-        color: #ffffff;
-    }
-    .btn-skyblue i {
-        font-size: 20px;
-        margin-right: 6px;
-    }
+
+        .btn-skyblue:hover {
+            background-color: #0071C5;
+            border: 1px solid #0071C5;
+            color: #ffffff;
+        }
+
+        .btn-skyblue i {
+            font-size: 20px;
+            margin-right: 6px;
+        }
 
     .btn-skyblue-sm {
         background-color: #00AEEF;
-        border: 1px solid  #00AEEF;
+        border: 1px solid #00AEEF;
         color: #ffffff;
         border-radius: 4px;
         padding: 2px !important;
     }
-    .btn-skyblue-sm:hover {
-        background-color: #0071C5;
-        border: 1px solid  #0071C5;
-        color: #ffffff;
-    }
-    .btn-skyblue-sm i {
-        font-size: 20px;
-        margin: 0;
-        padding: 0;
-    }
+
+        .btn-skyblue-sm:hover {
+            background-color: #0071C5;
+            border: 1px solid #0071C5;
+            color: #ffffff;
+        }
+
+        .btn-skyblue-sm i {
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+        }
 
     .btn-grey {
         background-color: #e4e9ea;
-        border: 1px solid  #e4e9ea;
+        border: 1px solid #e4e9ea;
         color: #70706e;
         border-radius: 4px;
     }
-    .btn-grey:hover {
-        background-color: #00AEEF;
-        border: 1px solid  #00AEEF;
-        color: #ffffff;
-    }
-    .btn-grey i {
-        font-size: 20px;
-        margin-right: 6px;
-    }
+
+        .btn-grey:hover {
+            background-color: #00AEEF;
+            border: 1px solid #00AEEF;
+            color: #ffffff;
+        }
+
+        .btn-grey i {
+            font-size: 20px;
+            margin-right: 6px;
+        }
 
     .btn-negative {
         background-color: #FC4C02;
-        border: 1px solid  #FC4C02;
+        border: 1px solid #FC4C02;
         color: #ffffff;
         border-radius: 4px;
     }
-    .btn-negative:hover {
-        background-color: #FFA300;
-        border: 1px solid  #FFA300;
-        color: #ffffff;
-    }
-    .btn-negative i {
-        font-size: 20px;
-        margin-right: 6px;
-    }
+
+        .btn-negative:hover {
+            background-color: #FFA300;
+            border: 1px solid #FFA300;
+            color: #ffffff;
+        }
+
+        .btn-negative i {
+            font-size: 20px;
+            margin-right: 6px;
+        }
 
     .chevron {
         color: #00AEEF;
@@ -575,7 +597,7 @@
     }
 
     table td {
-         border: 0px solid #ccc;
+        border: 0px solid #ccc;
     }
 
     .tbl-header {
@@ -606,18 +628,18 @@
         border: 0 solid #e4e4e4;
         border-left: 1px solid #e4e4e4;
         border-right: 1px solid #e4e4e4;
-        background-color: #eeeeee; 
+        background-color: #eeeeee;
         height: 50px;
         padding: 5px 2px;
         font-size: 14px;
         font-family: "Intel Clear";
-
         background: #fdfdfd; /* Old browsers */
-        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
     }
+
     .sum-main-body .tbl-header {
         margin-top: 6px;
     }
@@ -634,30 +656,34 @@
         font-size: 14px;
         line-height: 1em;
     }
+
     .sum-main-body .bolder {
         color: #00AEEF;
         font-weight: bold;
         font-size: 16px;
         line-height: 1em;
     }
+
     .linkable {
         cursor: pointer;
     }
-    .linkable:hover {
-        color: #003C71;
-    }
+
+        .linkable:hover {
+            color: #003C71;
+        }
 
     .sum-main-body label {
         margin-bottom: 0;
     }
 
     .sum-main-body .stage {
-        text-align: center; 
+        text-align: center;
     }
-    .sum-main-body .stage div {
-        margin: 0 10px;
-        padding: 4px 4px;
-    }
+
+        .sum-main-body .stage div {
+            margin: 0 10px;
+            padding: 4px 4px;
+        }
 
     input[type=radio].with-font,
     input[type=checkbox].with-font {
@@ -670,45 +696,49 @@
         position: absolute;
         width: 1px;
     }
-    
-    input[type=radio].with-font + label:before,
-    input[type=checkbox].with-font + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f096";
-        font-size: 20px;
-        letter-spacing: 10px;
-        color: #00AEEF;
-        margin-left: 10px;
-    }
-    input[type=radio].with-font:hover + label:before,
-    input[type=checkbox].with-font:hover + label:before {
-        color: #003C71;
-        cursor: pointer;
-    }
-    input[type=radio].with-font.disabled + label:before,
-    input[type=checkbox].with-font.disabled + label:before {
-        color: #cccccc;
-        cursor: default;
-    }
-    
-    input[type=radio].with-font:checked + label:before,
-    input[type=checkbox].with-font:checked + label:before {
-        content: "\f046";
-        font-size: 20px;
-        letter-spacing: 5px;
-        color: #C4D600;
-        margin-left: 10px;
-    }
-    input[type=radio].with-font:focus + label:before,
-    input[type=checkbox].with-font:focus + label:before {
-        font-weight: bold;
-        color:#C4D600;
-    }
+
+        input[type=radio].with-font + label:before,
+        input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 20px;
+            letter-spacing: 10px;
+            color: #00AEEF;
+            margin-left: 10px;
+        }
+
+        input[type=radio].with-font:hover + label:before,
+        input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
+        }
+
+        input[type=radio].with-font.disabled + label:before,
+        input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
+        input[type=radio].with-font:checked + label:before,
+        input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #C4D600;
+            margin-left: 10px;
+        }
+
+        input[type=radio].with-font:focus + label:before,
+        input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+            color: #C4D600;
+        }
 
     .bigIcon {
         font-size: 26px;
     }
+
     .medIcon {
         font-size: 18px;
     }
@@ -719,10 +749,10 @@
 
 
 
-        
-    
-    
-    
+
+
+
+
     .gradTab.k-tabstrip {
         background: #ffffff; /* Old browsers */
         border-bottom: 0 solid transparent;
@@ -730,10 +760,12 @@
         font-size: 14px;
         font-family: "Intel Clear";
     }
+
     .gradTab .k-tabstrip-items .k-item {
         background: #fdfdfd; /* Old browsers */
         border: 0 solid transparent;
     }
+
     .gradTab .k-tabstrip-items {
         border-color: transparent;
         border-width: 1px;
@@ -743,52 +775,59 @@
         border-bottom-width: 0;
         border-radius: 4px 4px 0 0;
     }
-    .gradTab .k-tabstrip-items .k-state-active {
-        background-color: #fff;
-        border-color: #b1babf;
-        border-width: 1px;
-        border-left-width: 1px;
-        border-top-width: 1px;
-        border-right-width: 1px;
-        border-bottom-width: 0;
-        border-radius: 4px 4px 0 0;
-    }
-    .gradTab .k-tabstrip-top>.k-tabstrip-items>.k-item {
+
+        .gradTab .k-tabstrip-items .k-state-active {
+            background-color: #fff;
+            border-color: #b1babf;
+            border-width: 1px;
+            border-left-width: 1px;
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 0;
+            border-radius: 4px 4px 0 0;
+        }
+
+    .gradTab .k-tabstrip-top > .k-tabstrip-items > .k-item {
         border-bottom-width: 0;
         border: 0 solid transparent;
     }
+
     .gradTab.k-tabstrip .k-tabstrip-items .k-link {
         background: #fdfdfd; /* Old browsers */
-        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
-        color: #003C71;    
+        color: #003C71;
         padding: 0.6em !important;
         text-transform: none !important;
         background-color: #fff;
         border-bottom-width: 0;
     }
+
     .gradTab.k-tabstrip .k-tabstrip-items .k-state-active .k-link {
         color: #00AEEF;
         background-color: #ffffff;
         background: #ffffff; /* Old browsers */
-        background: -moz-linear-gradient(top,  #ffffff 0%, #ffffff 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #ffffff 0%,#ffffff 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #ffffff 0%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #ffffff 0%,#ffffff 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #ffffff 0%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
     }
+
     .gradTab.k-tabstrip .k-tabstrip-items .k-state-hover .k-link {
         background: #d9d9d9; /* Old browsers */
-        background: -moz-linear-gradient(top,  #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: -moz-linear-gradient(top, #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#fdfdfd',GradientType=0 ); /* IE6-9 */
         color: #003C71;
     }
+
     .gradTab.k-tabstrip .k-tabstrip-items {
         padding: 2px 10px;
     }
+
     .gradTab.k-tabstrip:focus {
         box-shadow: none !important;
     }
@@ -808,10 +847,12 @@
         background-color: transparent;
         margin-left: 4px;
     }
-    .gradTab i:first-child:hover {
-        color: #FFFFFF;
-        background-color: #00AEEF;
-    }
+
+        .gradTab i:first-child:hover {
+            color: #FFFFFF;
+            background-color: #00AEEF;
+        }
+
     .gradTab i.active {
         color: #FFFFFF;
         background-color: #003C71;
@@ -821,33 +862,36 @@
         font-size: 16px;
         color: #00AEEF;
         margin-left: 6px;
-        margin-right: 4px
+        margin-right: 4px;
     }
-    .gradTab i.closeGrp:hover {
-        color: #FC4C02;
-    }
+
+        .gradTab i.closeGrp:hover {
+            color: #FC4C02;
+        }
 
     .gradTab .badge {
         vertical-align: top;
     }
-    .gradTab .badge.error {
-        background-color: #FC4C02;
-    }
+
+        .gradTab .badge.error {
+            background-color: #FC4C02;
+        }
 
     .toolbar {
         border: 0 solid #b1babf;
         height: 55px;
         padding: 2px 10px 3px 10px;
     }
-    .toolbar .btn {
-        border: 1px solid transparent;
-        color: #00AEEF;
-    }
 
-    .toolbar .btn-default.disabled {
-        background-color: transparent !important;
-        color: #dddddd !important;
-    }
+        .toolbar .btn {
+            border: 1px solid transparent;
+            color: #00AEEF;
+        }
+
+        .toolbar .btn-default.disabled {
+            background-color: transparent !important;
+            color: #dddddd !important;
+        }
 
     a.lnkIcon {
         text-decoration: none;
@@ -862,52 +906,61 @@
         border-radius: 4px;
         height: 19px !important;
     }
-    .toggle-accept .toggle .btn-success {
-        background-color: #00AEEF;
-        color: #ffffff;
-        font-size: 14px;
-        line-height: 1.2em;
-    }
-    .toggle-accept .toggle .btn-default {
-        background-color: #C4D600;
-        color: #ffffff;
-        font-size: 14px;
-        line-height: 1.2em;
-    }
-    .toggle-accept .toggle .toggle-handle {
-        background-color: #eeeeee;        
-    }
+
+        .toggle-accept .toggle .btn-success {
+            background-color: #00AEEF;
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.2em;
+        }
+
+        .toggle-accept .toggle .btn-default {
+            background-color: #C4D600;
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.2em;
+        }
+
+        .toggle-accept .toggle .toggle-handle {
+            background-color: #eeeeee;
+        }
+
     .dialogPending.k-content {
         padding: 0;
         background-color: #003C71;
         color: #ffffff;
         margin-top: -50px !important;
-        height: 310px !important;    
+        height: 310px !important;
     }
-    .dialogPending.k-content p {
-        font-size: 14px;
-    }
+
+        .dialogPending.k-content p {
+            font-size: 14px;
+        }
+
     .wrn-red {
         background-color: #fc3741;
         color: #ffffff;
         padding: 4px 10px;
     }
+
     .k-widget.k-upload.k-header {
         border: 0 solid transparent;
     }
+
     .k-upload-files {
         height: 110px;
         overflow: auto;
     }
+
     ul.cur-pointer li {
         cursor: pointer;
     }
 
-    .contract-status-bar.valid_Valid, 
-    .contract-status-bar.valid_Finalizing, 
-    .contract-status-bar.valid_Complete, 
-    .contract-status-bar.valid_, 
-    .contract-status-bar.valid_0, 
+    .contract-status-bar.valid_Valid,
+    .contract-status-bar.valid_Finalizing,
+    .contract-status-bar.valid_Complete,
+    .contract-status-bar.valid_,
+    .contract-status-bar.valid_0,
     .contract-status-bar.valid_Dirty {
         background: #ffffff;
     }
@@ -917,12 +970,13 @@
         position: absolute;
         bottom: 30px;
         right: 10px;
-        color: #000000; 
+        color: #000000;
         font-family: verdana;
-        font-size: 10px; 
-        margin-top: 5px; 
+        font-size: 10px;
+        margin-top: 5px;
         z-index: 1000;
     }
+
     #perfLegend {
         position: absolute;
         bottom: 3px;
@@ -932,6 +986,7 @@
         z-index: 1000;
         color: #666666;
     }
+
     #perfDetails {
         position: absolute;
         bottom: 50px;
@@ -941,38 +996,46 @@
         z-index: 1000;
         background-color: #ffffff;
     }
-    #perfDetails th {
-        padding: 2px 4px;
-        color: #0071C5;
-    }
-    #perfDetails td {
-        padding: 2px 4px;
-        color: #333333;
-    }
+
+        #perfDetails th {
+            padding: 2px 4px;
+            color: #0071C5;
+        }
+
+        #perfDetails td {
+            padding: 2px 4px;
+            color: #333333;
+        }
+
     .closePerf {
         color: #cccccc;
         font-size: 16px;
         cursor: pointer;
     }
-    .closePerf:hover {
-        color: #FC4C02;
-    }
+
+        .closePerf:hover {
+            color: #FC4C02;
+        }
+
     .legKey {
         width: 10px;
         height: 10px;
         border: 1px solid #bebebe;
     }
+
     .legData {
         margin-left: 4px;
         margin-right: 10px;
         margin-top: -2px;
     }
+
     .showMore {
         font-size: 18px;
         color: #00AEEF;
         cursor: pointer;
     }
-    .showMore:hover {
-        color: #0071C5;
-    }
+
+        .showMore:hover {
+            color: #0071C5;
+        }
 </style>

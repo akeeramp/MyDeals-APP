@@ -476,7 +476,6 @@ namespace Intel.MyDeals.Controllers.API
                     , $"Unable to translate products"
                 );
 
-
                 lock (rtn)
                 { // lock the list to avoid race conditions
                     rtn.Add(new ProductLookupPacket
@@ -682,10 +681,10 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <param name="dealId"></param>
         /// <returns></returns>
-        [Route("GetDealProducts/{dealId}/{custId}")]
-        public List<ProductSelectionResults> GetDealProducts(int dealId, int custId)
+        [Route("GetDealProducts/{objSid}/{objTypeSid}/{custId}/{isMissingFlag:bool?}")]
+        public List<Entities.Custom.DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag = true)
         {
-            return SafeExecutor(() => _productsLib.GetDealProducts(dealId, custId)
+            return SafeExecutor(() => _productsLib.GetDealProducts(objSid, objTypeSid, custId, isMissingFlag)
                 , $"Unable to get Product details"
             );
         }

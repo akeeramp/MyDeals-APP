@@ -1,0 +1,56 @@
+﻿<div ng-if="loading" style="padding-top: 200px; width: 100%; text-align: center;">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+    <div style="font-size: 30px;" ng-bind="msg"></div>
+    <div class="ss-icon-lg" ng-if="msg == 'Done'">
+        <i class="intelicon-passed-completed-solid sky-blue"></i>
+    </div>
+
+</div>
+
+<div ng-if="!loading" id="sum-wrapper" style="padding: 0 20px 20px 20px;">
+    <div id="sum-header">
+        <div ui-view="summaryContentView"></div>
+        <h4>Missing CAP/Cost</h4>
+        <hr />
+    </div>
+
+    <div id="sum-container">
+        <div class="sum-main-body">
+            <div class="sum-main-container">
+                <kendo-grid options="gridOptions" class="grid-dealproducts" id="grid-dealproducts"></kendo-grid>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .btn-skyblue, .btn-skyblue:hover, .btn-skyblue:focus, .btn-skyblue.focus {
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+
+    .grid-dealproducts.k-grid tbody tr {
+        height: 28px;
+    }
+
+    .grid-dealproducts.k-grid th {
+        font-size: 11px;
+    }
+
+    .grid-dealproducts.k-grid td {
+        font-size: 11px;
+        padding: 0 8px;
+        height: 28px;
+    }
+
+    #contractContainer {
+        overflow: hidden;
+    }
+</style>
