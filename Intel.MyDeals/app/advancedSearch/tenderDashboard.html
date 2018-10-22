@@ -1,4 +1,5 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
+﻿<div ng-include="'/app/core/directives/gridCell/dealToolsHelper.html'"></div>
+<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
 
 <div class="show-hide-options">
     <span ng-show="showSearchFilters" ng-click="toggleFilters()">
@@ -217,4 +218,5 @@
     .validf_, .validf_0, .validf_Dirty {
         color: #f9521a;
     }
+
 </style>
