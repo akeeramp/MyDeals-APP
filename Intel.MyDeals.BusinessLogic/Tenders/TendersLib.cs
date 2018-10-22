@@ -14,10 +14,12 @@ namespace Intel.MyDeals.BusinessLogic
     public class TendersLib : ITendersLib
     {
         private readonly IOpDataCollectorLib _dataCollectorLib;
+        private readonly IContractsLib _contractsLib;
 
-        public TendersLib(IOpDataCollectorLib dataCollectorLib)
+        public TendersLib(IOpDataCollectorLib dataCollectorLib, IContractsLib contractsLib)
         {
             _dataCollectorLib = dataCollectorLib;
+            _contractsLib = contractsLib;
         }
 
         public MyDealsData GetTenderMaster(int id, bool inclusive = false)
@@ -291,6 +293,11 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return opMsgQueue;
+        }
+
+        public OpDataCollectorFlattenedDictList BulkTenderUpdate(ContractToken contractToken, ContractTransferPacket tenderData)
+        {
+            return _contractsLib.SaveContractAndPricingTable(contractToken, tenderData, forceValidation: true, forcePublish: true);
         }
 
     }

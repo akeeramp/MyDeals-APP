@@ -307,6 +307,11 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            if (getGridBehaviors)   //when true this indicates we are coming in from the Tender Dashboard stack of calls.  we want to fill in missing elements so that we retrieve atrb security for those as well.
+            {
+                myDealsData.FillInHolesFromAtrbTemplate();
+            }
+
             // Convert data to Client-Ready format
             OpDataCollectorFlattenedList rtn = myDealsData
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, getGridBehaviors)
@@ -514,7 +519,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return GetDealList(data,
                 new List<int>(),
-                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" },
+                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" },    //AND TENDER_PUBLISHED = '1'
                 new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
                 true,
                 MyRulesTrigger.OnDealListLoad,

@@ -509,7 +509,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             }
 
             $scope.loadMyRules();
-            $scope.removeCustomRule();
+            if ($scope.customSettings == undefined || $scope.customSettings == null) {      //removeCustomRule triggers a validateRules call which we don't want when coming in from the tender search page as we will be creating it with a blank end customer.  need to potentially re-visit tender page interaction with user saved rules.
+                $scope.removeCustomRule();
+            }
             $scope.initRules();
             if ($scope.runSearch) {
                 $timeout(function () {

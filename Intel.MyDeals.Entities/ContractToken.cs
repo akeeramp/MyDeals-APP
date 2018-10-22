@@ -39,6 +39,7 @@ namespace Intel.MyDeals.Entities
         public OpDataElementType CopyFromObjType { get; set; }
         public bool NeedToCheckForDelete { get; set; }
         public List<TimeFlowItem> TimeFlow { get; set; }
+        public bool BulkTenderUpdate { get; set; }
 
         public void MarkTimeFlow()
         {

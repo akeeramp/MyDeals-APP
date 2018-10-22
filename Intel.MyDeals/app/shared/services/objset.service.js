@@ -52,6 +52,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         readTender: readTender,
         readTenderChildren: readTenderChildren,
         searchTender: searchTender,
+        bulkTenderUpdate: bulkTenderUpdate,
 
         deletePricingTableRow: deletePricingTableRow,
         rollbackPricingTableRow: rollbackPricingTableRow,
@@ -185,6 +186,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function searchTender(st, en, searchText) {
         return dataService.get(apiBaseSearchUrl + "GetTenderDashboardList/" + st + "/" + en + "/" + searchText.replace(/\./g, '&per;'))
+    }
+    function bulkTenderUpdate(data) {
+        return dataService.post(apiBaseTenderUrl + "BulkTenderUpdate", data);
     }
 
 

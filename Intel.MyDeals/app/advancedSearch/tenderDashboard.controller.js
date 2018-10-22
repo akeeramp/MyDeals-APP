@@ -16,7 +16,11 @@
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
 
+        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
+        var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"]; //TODO: this is a copy of a hard-coded list of strings from contract.controller.js - ideally we move this into some sort of global file and reference from there at least.
+
         $scope.contractData = [];
+        $scope.templateData = [];
 
         $scope.refreshContractData = function (id, ptId) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
@@ -37,10 +41,17 @@
 
                 $timeout(function () {
                     $scope.$apply();
-                });                
+                });
             });
         }
 
+        templatesService.readTemplates()
+            .then(function (response) {
+                $scope.templateData = response.data;
+            })
+            .catch(function (data) {
+                console.log('Template Retrieval Failed');
+            });
 
         $scope.openMCTScreen = function (dataItem) {
 
@@ -52,8 +63,7 @@
 
                 $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
                 $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-                 
-                
+
                 $timeout(function () {
                     $scope.$apply();
                 });
@@ -84,7 +94,7 @@
                     });
             });
 
-            
+
         }
 
 
@@ -763,11 +773,264 @@
         $scope.wipData = [];
 
         //////
-        ////// contract controller root override functions - these are the functions that opGrid expects to have in the parent scope.  Most are for now a copy paste from contract.controller.js
+        ////// contract controller root override functions - these are the functions that opGrid expects to have in the parent scope.  Most are a copy paste from contract.controller.js and then modified for this context
         //////
 
-        $scope.saveCell = function (args) {
-            //TODO
+        $scope.saveCell = function (dataItem, newField) {
+            if (dataItem._behaviors === undefined) dataItem._behaviors = {};
+            if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
+            dataItem._behaviors.isDirty[newField] = true;
+            dataItem._dirty = true;
+            $scope._dirty = true;
+        }
+
+        $scope.validateWipDeals = function (callback) {
+            $scope.saveWIPBase(callback);
+        }
+
+        //createWIPContractBase is a slimmed down version of contract.controller's createEntireContractBase where everything except the wipdeal logic is cut
+        $scope.createWIPBase = function () {
+            var gData = $scope.wipData;
+            var errs = {};
+            var needPrdVld = [];
+
+            var curPricingTableData = [];
+
+            // Wip Deal
+            if (gData !== undefined && gData !== null) {
+                for (var i = 0; i < gData.length; i++) {
+
+                    if (gData[i]["_dirty"] == undefined || gData[i]["_dirty"] == null) { continue; }   //we filter out everything without the dirty flag later anyways so let's just ignore and not process that data
+
+                    // convert array types to strings which the middle tier expects
+                    // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
+                    if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
+                    if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
+                    if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
+
+                    var fields = $scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model.fields;
+                    for (var key in fields) {
+                        if (fields.hasOwnProperty(key)) {
+                            if (fields[key].type === "date") {
+                                gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
+                            }
+                        }
+                    }
+
+                    // This is silly hardcoding because these are not in our template and they are used by DSA only - set them to proper dates.
+                    if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
+                    if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
+                    if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
+                }
+            }
+
+
+            return {
+                "Contract": [],
+                "PricingStrategy": [],
+                "PricingTable": [],
+                "PricingTableRow": [],
+                "WipDeals": gData === undefined ? [] : gData.filter(function (a) { return a._dirty }),
+                "EventSource": "WIP_DEAL",
+                "Errors": errs
+            }
+        }
+
+        $scope.saveWIPBase = function (callback) {
+            // if save already started saving... exit
+            // if validate triggers from product translation continue..validating data
+            if ($scope.isBusyMsgTitle !== "Saving your data..." && $scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Overlapping Deals...") {
+                if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
+            }
+
+            $scope.saveWIPRoot(callback);
+
+            return;
+        }
+
+        $scope.saveWIPRoot = function (callback) {
+
+            //if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Controller", "");
+            //var pc = new perfCacheBlock("Save Contract Root", "UX");
+            //var pcUi = new perfCacheBlock("Gather data to pass", "UI");
+
+            //if (forceValidation === undefined || forceValidation === null) forceValidation = false;
+            //if (forcePublish === undefined || forcePublish === null) forcePublish = false;
+
+            //$scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
+
+            var data = $scope.createWIPBase();
+            //pc.mark("Built data structure");
+
+            // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
+            if (!!data.Errors && !angular.equals(data.Errors, {})) {
+                logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
+                $scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////
+                $scope.setBusy("", "");
+                return;
+            }
+
+            var copyData = util.deepClone(data);
+
+
+            //pc.add(pcUi.stop());
+            //var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
+
+            objsetService.bulkTenderUpdate(copyData).then(
+                function (results) {
+
+                    var data = results.data.Data;
+
+                    //pcService.addPerfTimes(results.data.PerformanceTimes);
+                    //pc.add(pcService.stop());
+                    //var pcUI = new perfCacheBlock("Processing returned data", "UI");
+                    //util.console("updateContractAndCurPricingTable Returned");
+
+                    $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
+
+                    var anyWarnings = false;
+
+                    //pc.mark("Constructing returnset");
+                    
+                    if (!!data.WIP_DEAL) {
+                            for (i = 0; i < data.WIP_DEAL.length; i++) {
+                                var dataItem = data.WIP_DEAL[i];
+                                if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
+
+                                if (anyWarnings) {
+                                    var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
+                                    var isKit = 0;
+                                    var relevantAtrbs = tierAtrbs;
+                                    var tierCount = dataItem.NUM_OF_TIERS;
+
+                                    if ($scope.dealType === "KIT") {
+                                        if (dataItem.PRODUCT_FILTER === undefined) { continue; }
+                                        dimStr = "_20___";
+                                        isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
+                                        relevantAtrbs = kitDimAtrbs;
+                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
+                                    }
+                                    // map tiered warnings
+                                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                                        for (var a = 0; a < relevantAtrbs.length; a++) {
+                                            mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
+                                        }
+                                    }
+                                }
+                            }
+                            $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                    }
+
+                    if (!anyWarnings) {
+                        //$scope.stealthMode = true;
+                        $scope.setBusy("Save Successful", "Saved the contract", "Success");
+                        $scope.$broadcast('saveComplete', data);
+                        $scope.resetDirty();
+
+                        //$scope.delPtrIds = [];
+
+                        //if (!!toState) {
+                        //    $scope.stealthMode = false;
+                        //    if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
+                        //    $state.go(toState, toParams, { reload: true });
+                        //} else {
+                            $timeout(function () {
+                                //if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
+                                    $scope.setBusy("", "");
+                                //$scope.stealthMode = false;
+                            }, 1000);
+                        //}
+                        //if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE')) {
+                        //    $scope.forceNavigation = true; //Purpose: If No Error/Warning go to Meet Comp Automatically-After Refreshing Contract
+                        //}
+                        //else {
+                        //    $scope.forceNavigation = false;
+                        //}
+
+                    } else {
+                        //if ($scope.isTenderContract && $scope.selectedTAB == 'PTR') {
+                        //    $scope.forceNavigation = false; //Purpose: If No Error/Warning go to PTR Automatically-After Refreshing Contract
+                        //}
+
+                        $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
+                        $scope.$broadcast('saveWithWarnings', data);
+                        //JEFFTODO: save with warning broadcast, make sure it touches opgrid
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 2000);
+                    }
+
+                    //if (toState === undefined || toState === null || toState === "") {
+
+                        $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);  //JEFFTODO: investigate, do we need this?
+                    //}
+                    //$scope.isAutoSaving = false;
+
+                    //util.console("updateContractAndCurPricingTable Complete");
+
+                    //if a callback function is provided, invoke it now once everything else is completed
+                    if (!!callback && typeof callback === "function") {
+                        callback();
+                        //pc.add(pcUI.stop());
+                        //if ($scope.$root.pc !== null) $scope.$root.pc.add(pc.stop());
+                    //} else {
+                        //pc.add(pcUI.stop());
+                        //if ($scope.$root.pc !== null) {
+                        //    $scope.$root.pc.add(pc.stop());
+                        //    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        //    $scope.$root.pc = null;
+                        //}
+                    }
+
+                },
+                function (response) {
+                    $scope.setBusy("Error", "Could not save the contract.", "Error");
+                    logger.error("Could not save tenders.", response, response.statusText);
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);
+                    //$scope.isAutoSaving = false;
+                }
+            );
+        }
+
+        $scope.resetDirty = function () {
+            $scope._dirty = false;
+            //$scope._dirtyContractOnly = false;
+        }
+
+        function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
+            // Tie warning message (valid message and red highlight) to its specific tier
+            // NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
+            if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
+                if (dataItem._behaviors.validMsg[atrbName] != null) {
+                    try {
+                        // Parse the Dictionary json
+                        var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                            // KIT ECAP
+                            if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
+                                dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
+                                dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                            }
+                        }
+
+                        if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
+                            // Set the validation message
+                            dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                            dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                        } else {
+                            // Delete the tier-specific validation if it doesn't tie to this specific tier
+                            delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                            delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                        }
+                    } catch (e) {
+                        // not Valid Json String
+                        console.log("map tiered warnings - invalid json string")
+                    }
+                }
+            }
         }
 
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact, isInstant) { // msgType can be Success, Error, Warning, and Info
@@ -813,14 +1076,18 @@
             }
         }
 
-        $scope.contractData = {}    //placeholder
+        $scope.updateResults = function (wipData, pricingTableWipData) { //TODO: import function if needed
+            console.log("TODO: A")
+        }
 
         $scope.canDeleteAttachment = function (wf_st_cd) {
+            console.log("TODO: B");
             return true; //TODO
         }
 
         $scope.$on('OpGridDataBound',
             function (event, args) {
+                console.log("TODO: C");
                 ////TODO
                 ////found in managerExcludeGroups.controller.js
                 //if (!$scope.firstGridLoaded) {
@@ -864,13 +1131,15 @@
                 var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
 
                 $scope.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true, true)
-                $q.all([templatesService.readTemplates(), objsetService.searchTender(st, en, searchText)])
-                .then(function (responses) {
-
-                    $scope.templateData = responses[0].data;
-                    $scope.wipData = responses[1].data.Items;
+                objsetService.searchTender(st, en, searchText)
+                .then(function (response) {
+                    $scope.wipData = response.data.Items;
                     $scope.dealType = $scope.ruleData[0].value;
 
+                    if ($scope.wipData.length == 0) {
+                        $scope.setBusy("", "");
+                        kendo.alert("No results found.  Try changing your search options.");
+                    }
                     //reset wip options
                     $scope.wipOptions = {
                         "default": {},
@@ -891,8 +1160,8 @@
 
                     //insert tender bid actions to deal editor
                     $scope.wipOptions.columns.splice(3, 0, {
-                        "bypassExport": true,
                         "field": "bid_actions",
+                        "bypassExport": true,
                         "hidden": false,
                         "isDimKey": false,
                         "isRequired": false,
@@ -926,8 +1195,8 @@
                         "width": 110
                     });
                     $scope.wipOptions.model.fields.bid_actions = {
-                        "editable": false,
                         "field": "bid_actions",
+                        "editable": false,
                         "label": "Bid Action",
                         "nullable": true,
                         "opLookupText": "",
@@ -947,7 +1216,6 @@
                     console.log('Tender Search Failed');
                 });
             } else {
-                //TODO: user did not specify a deal type, maybe pop out a popup? let them know somehow that we did not kick off the search\
                 kendo.alert("Please specify a Tender Deal Type");
             }
         });

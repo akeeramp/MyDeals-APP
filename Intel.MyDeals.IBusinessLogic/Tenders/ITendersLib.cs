@@ -13,5 +13,7 @@ namespace Intel.MyDeals.IBusinessLogic
         SearchResultPacket GetTenderList(SearchParams data);
 
         OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn);
+
+        OpDataCollectorFlattenedDictList BulkTenderUpdate(ContractToken contractToken, ContractTransferPacket contractAndPricingTable);
     }
 }

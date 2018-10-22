@@ -7,6 +7,7 @@ using System.Web.Http.OData.Query;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -85,6 +86,35 @@ namespace Intel.MyDeals.Controllers.API
             {
                 Data = result,
                 PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Action Tender Deals", contractToken.TimeFlow)
+            };
+        }
+
+        [Authorize]
+        [Route("BulkTenderUpdate")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedDictListPacket BulkTenderUpdate(ContractTransferPacket tenderData)
+        {
+            DateTime start = DateTime.Now;
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - BulkTenderUpdate")
+            {
+                CustId = -1,
+                ContractId = -1,
+                //DeleteAllPTR = delPtr,
+                BulkTenderUpdate = true
+            };
+
+            tenderData.EventSource = OpDataElementType.WIP_DEAL.ToString(); //tenders are bulk edited from the tender dashboard in only wip deal form
+
+            OpDataCollectorFlattenedDictList result = SafeExecutor(() => _tenderLib.BulkTenderUpdate(contractToken, tenderData)
+                , "Unable to save the Tenders"
+            );
+
+            return new OpDataCollectorFlattenedDictListPacket
+            {
+                Data = result,
+                PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Tenders", contractToken.TimeFlow)
             };
         }
     }
