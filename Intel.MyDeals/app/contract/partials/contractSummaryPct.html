@@ -47,7 +47,7 @@
         </div>
         <table style="width: 100%;" class="tbl-header">
             <tr>
-                <td style="width: 170px; text-align: center; padding-left: 6px; line-height: 1em;">
+                <td style="width: 170px; text-align: center; padding-left: 6px; line-height: 1em;" ng-if="root.forceRun()">
                     <btn-run-pct-mct ng-model="root"
                                      contract-id="root.contractData.DC_ID"
                                      last-run="root.contractData.LAST_COST_TEST_RUN"

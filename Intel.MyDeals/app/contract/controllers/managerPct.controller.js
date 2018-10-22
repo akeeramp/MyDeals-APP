@@ -135,7 +135,7 @@
 
             for (var d = 0; d < root.contractData.PRC_ST.length; d++) {
                 var stg = root.contractData.PRC_ST[d].WF_STG_CD;
-                if (stg !== "Pending" && stg !== "Approved") {
+                if (stg !== "Pending" && stg !== "Approved" && isToolReq) {
                     root.enablePCT = true;
                 }
             }

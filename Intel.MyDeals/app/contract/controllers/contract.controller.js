@@ -56,6 +56,7 @@
         $scope.actualClikedTabName = 'PTR';
         $scope.currentTAB = 'PTR';
         $scope.isMCActiveForFSE = false;
+        $scope.isTenderWidgetVisible = false;
 
         // custom Contract Titles
         $scope.isTenderContract = isTender;
@@ -308,6 +309,9 @@
                 pid: $scope.contractData.PRC_ST[0].PRC_TBL[0].DC_ID
             }, { reload: true });
 
+        }
+        if ($state.current.name == 'contract.manager.strategy' && $scope.isTenderContract) {
+            $scope.isTenderWidgetVisible = true;
         }
 
         if ($state.current.name == 'contract.manager.strategy.wip' && $scope.isTenderContract) {
@@ -4551,10 +4555,16 @@
             if (_tabName == 'DE') {
                 if (isPartiallyValid == false) {
                     if (!!$scope.child) {
-                        $scope.child.validateSavepublishWipDeals();
+                        if ($scope.currentTAB == 'PTR') {
+                            $scope.child.validateSavepublishWipDeals();
+                        }
+                        else if ($scope.currentTAB == 'DE') {
+                            $scope.$broadcast('fireSaveAndValidateGrid');
+                        }
+
                     } else {
                         $scope.publishWipDealsBase();
-                    }
+                    } 
                 }
                 else if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || isPartiallyValid == true) && $scope.enableDealEditorTab() === true) {
                     isFired = true;
@@ -4576,11 +4586,16 @@
                 }
                 else if (isPartiallyValid == false) {
                     if (!!$scope.child) {
-                        $scope.backToPricingTable();
-                        $scope.child.validateSavepublishWipDeals();
+                        if ($scope.currentTAB == 'PTR') {
+                            $scope.child.validateSavepublishWipDeals();
+                        }
+                        else if ($scope.currentTAB == 'DE') {
+                            $scope.$broadcast('fireSaveAndValidateGrid');
+                        }
+
                     } else {
                         $scope.publishWipDealsBase();
-                    }
+                    }  
                 }
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
@@ -4600,20 +4615,26 @@
             if (_tabName == 'PD') {
                 if (isPartiallyValid == false) {
                     if (!!$scope.child) {
+                        if ($scope.currentTAB == 'PTR') {
+                            $scope.child.validateSavepublishWipDeals();
+                        }
+                        else if ($scope.currentTAB == 'DE') {
+                            $scope.$broadcast('fireSaveAndValidateGrid');
+                        }
 
-                        $scope.child.validateSavepublishWipDeals();
                     } else {
                         $scope.publishWipDealsBase();
-                    }
+                    }  
                 }
                 else if ((window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet')) && isPartiallyValid == true) {
-                    isFired = true;
+                    isFired = true;                    
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
                     $scope.isPtr = false;
                 }
                 else if (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
                     isFired = true;
+                    logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
                     $scope.selectedTAB = 'MC';
                     $scope.currentTAB = 'MC';
                     $scope.isPtr = false;
@@ -4621,7 +4642,7 @@
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     if ($scope.selectedTAB != 'DE') {
-                        $scope.selectedTAB = "DE"; // Send it to Deal Editor
+                        $scope.selectedTAB = "DE"; 
                         $scope.currentTAB = 'DE';
                         _actionName = 'publishWipDealsFromTab';
                     }

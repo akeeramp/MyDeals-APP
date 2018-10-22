@@ -2537,6 +2537,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
+            $scope.$on('fireSaveAndValidateGrid', function (event, args) {
+                $scope.saveAndValidateGrid();
+            });
+
             $scope.saveAndValidateGrid = function () {
                 if (!$scope._dirty) return;
 

@@ -95,7 +95,7 @@
         $scope.getColorStyle = function (c) {
             var k = 'pct';
             if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                return colorDictionary[k][c];
+                return { color: colorDictionary[k][c] };
             }
             return "#aaaaaa";
         }
