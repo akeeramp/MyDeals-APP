@@ -1,35 +1,53 @@
+using System;
+using NUnit.Framework;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 
 {
-    [TestClass]
+    [TestFixture]
     public class OpUserTokenHelpers
     {
         private readonly OpUserToken _opUserToken = null;
 
-        public OpUserTokenHelpers()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
-            // UnitTester is NOT SA/Developer or Tester
+            Console.WriteLine("Started OpUserTokenHelpers tests.");
             OpUserStack.EmulateUnitTester();
-            _opUserToken = OpUserStack.MyOpUserToken;
+            //_opUserToken = OpUserStack.MyOpUserToken;
             UnitTestHelpers.SetDbConnection();
         }
 
-        [TestMethod]
-        public void OpUserToken_UserHasExtendedAttributes()
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed OpUserTokenHelpers tests.");
+        }
+
+        [TestCase]
+        public void OpUserToken_IsSuper()
         {
             Assert.IsFalse(_opUserToken.IsSuper());
+        }
+
+        [TestCase]
+        public void OpUserToken_IsDeveloper()
+        {
             Assert.IsFalse(_opUserToken.IsDeveloper());
+        }
+
+        [TestCase]
+        public void OpUserToken_IsTester()
+        {
             Assert.IsFalse(_opUserToken.IsTester());
         }
 
-        [TestMethod]
-        public void AccountsLib_SetUserAccessLevel()
+        [TestCase]
+        public void OpUserToken_SetUserAccessLevel()
         {
             // TO DO: Once AccountsLib is fleshed out, put meaningful test cases in place here
             // Check GetCustomerDivisions returns as expected
@@ -37,9 +55,8 @@ namespace Intel.MyDeals.BusinessLogic.Test
             Assert.IsTrue(1 == 1);
         }
 
-
-        [TestMethod]
-        public void CacheLib_UserHasExtendedAttributes()
+        [TestCase]
+        public void OpUserToken_UserHasExtendedAttributes()
         {
             // Check CheckCache returns as expected
             IEnumerable<CacheItem> cacheReturn = new CacheLib().CheckCache();

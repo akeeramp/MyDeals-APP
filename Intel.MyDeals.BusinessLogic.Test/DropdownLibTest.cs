@@ -1,120 +1,158 @@
-﻿using Intel.MyDeals.DataLibrary.Test;
+﻿using System;
+using NUnit.Framework;
+using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestClass]
+    [TestFixture]
     public class DropdownLibTest
     {
-        public DropdownLibTest()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
-            Console.WriteLine("Started Dropdown Library Tests");
+            Console.WriteLine("Started Dropdown Library Tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
 
-        [TestMethod]
-        public void DropDnLib_GetDropdowns()
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
         {
-            // Check Basic get call
+            Console.WriteLine("Completed Dropdown Library Tests.");
+        }
+
+
+        [TestCase]
+        public void DropDnLib_GetBasicDropdowns()
+        {
             List<BasicDropdown> basicDropDownList = new DropdownLib().GetBasicDropdowns();
             Assert.IsTrue(basicDropDownList.Any());
+        }
+        
+        [TestCase]
+        public void DropDnLib_GetDropdowns()
+        {
+            IEnumerable<Dropdown> dropDownIEnum = new DropdownLib().GetDropdowns();
+            Assert.IsTrue(dropDownIEnum.Any());
+        }
 
-            string atrbCd = "REBATE_TYPE";
+        [TestCase("REBATE_TYPE")]
+        public void DropDnLib_GetDropdowns(string atrbCd)
+        {
             IEnumerable<BasicDropdown> basicDropDownIEnum = new DropdownLib().GetDropdowns(atrbCd);
             Assert.IsTrue(basicDropDownIEnum.Any());
             Assert.IsFalse(basicDropDownIEnum.Where(d => d.ATRB_CD != atrbCd).Any());
+        }
 
-            basicDropDownIEnum = new DropdownLib().GetDistinctDropdownCodes(atrbCd);
-            Assert.IsTrue(basicDropDownIEnum.Any());
-
-            string dealType = "ECAP";
-            basicDropDownIEnum = new DropdownLib().GetDropdowns(atrbCd, dealType);
+        [TestCase("REBATE_TYPE", "ECAP")]
+        public void DropDnLib_GetDropdowns(string atrbCd, string dealType)
+        {
+            IEnumerable<BasicDropdown> basicDropDownIEnum = new DropdownLib().GetDropdowns(atrbCd, dealType);
             Assert.IsTrue(basicDropDownIEnum.Any());
             Assert.IsFalse(basicDropDownIEnum.Where(d => d.ATRB_CD != atrbCd && (d.OBJ_SET_TYPE_CD != dealType || d.OBJ_SET_TYPE_CD != "ALL_DEALS")).Any());
 
+        }
 
-            // Check Get Specific Dropdown list calls
+        [TestCase("REBATE_TYPE")]
+        public void DropDnLib_GetDistinctDropdownCodes(string atrbCd)
+        {
+            IEnumerable<BasicDropdown> basicDropDownIEnum = new DropdownLib().GetDistinctDropdownCodes(atrbCd);
+            Assert.IsTrue(basicDropDownIEnum.Any());
+        }
+
+        [TestCase("ECAP")]
+        public void DropDnLib_GetDealTypesDropdown(string testValue)
+        {
             List<Dropdown> dropDownList = new DropdownLib().GetDealTypesDropdown();
             Assert.IsTrue(dropDownList.Any()); // Nothing that you can really specifically target other then one match
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "ECAP").Any()); // Find one deal type match = ECAP
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue).Any()); // Find one deal type match = ECAP
+        }
 
-            dropDownList = new DropdownLib().GetRoleTypesDropdown();
+        [TestCase("GA")]
+        public void DropDnLib_GetRoleTypesDropdown(string testValue)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetRoleTypesDropdown();
             Assert.IsTrue(dropDownList.Any());
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "GA").Any()); // Find one role match = GA
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue).Any()); // Find one role match = GA
+        }
 
-            dropDownList = new DropdownLib().GetSecurityActionsDropdown();
+        [TestCase("C_VIEW_ATTACHMENTS")]
+        public void DropDnLib_GetSecurityActionsDropdown(string testValue)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetSecurityActionsDropdown();
             Assert.IsTrue(dropDownList.Any());
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "C_VIEW_ATTACHMENTS").Any()); // Find one security action match = C_VIEW_ATTACHMENTS
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue).Any()); // Find one security action match = C_VIEW_ATTACHMENTS
+        }
 
-            dropDownList = new DropdownLib().GetNumTiersDropdown();
+        [TestCase("5")]
+        public void DropDnLib_GetNumTiersDropdown(string testValue)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetNumTiersDropdown();
             Assert.IsTrue(dropDownList.Any());
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "5").Any()); // Find one tier match = 5
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue).Any()); // Find one tier match = 5
             Assert.IsTrue(dropDownList.Count() == 10); // Expect 10 tiers
+        }
 
-            dropDownList = new DropdownLib().GetGeosDropdown();
+        [TestCase("APAC")]
+        public void DropDnLib_GetGeosDropdown(string testValue)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetGeosDropdown();
             Assert.IsTrue(dropDownList.Any());
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "APAC").Any()); // Find one Geo match = APAC
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue).Any()); // Find one Geo match = APAC
+        }
 
-            dropDownList = new DropdownLib().GetProductLevelDropdown();
+        [TestCase("COST_TEST_RESULT")]
+        public void DropDnLib_GetDropdownGroups(string testValue)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetDropdownGroups();
             Assert.IsTrue(dropDownList.Any());
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "Deal Product name" && d.dropdownID == 7007).Any()); // Find one product level match = 7007, Deal Product name
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue).Any()); // Find one dropdown group match = COST_TEST_RESULT
+        }
 
-            dropDownList = new DropdownLib().GetDropdownGroups();
+        [TestCase("Deal Product name", 7007)]
+        public void DropDnLib_GetDropdownGroups(string testValue, int level)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetProductLevelDropdown();
             Assert.IsTrue(dropDownList.Any());
-            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == "COST_TEST_RESULT").Any()); // Find one dropdown group match = COST_TEST_RESULT
+            Assert.IsTrue(dropDownList.Where(d => d.dropdownName == testValue && d.dropdownID == level).Any()); // Find one product level match = 7007, Deal Product name
+        }
 
-
-            // Check GetSoldToIdDropdown variations
-            int custId = 2982; // HPI
-            IEnumerable<string> geos = new string[] { "APAC", "ASMO" };
-            IEnumerable<string> custDivs = new string[] { "HPI IPG", "HPI CPC" };
-            dropDownList = new DropdownLib().GetSoldToIdDropdown(custId, geos, custDivs);
+        [TestCase(2982, new string[] { "APAC", "ASMO" }, new string[] { "HPI IPG", "HPI CPC" })]
+        [TestCase(2982, null, new string[] { "HPI IPG", "HPI CPC" })]
+        [TestCase(2982, new string[] { "APAC", "ASMO" }, null)]
+        [TestCase(2982, null, null)]
+        [TestCase(2982, new string[] { "Worldwide" }, new string[] { "HPI IPG", "HPI CPC" })]
+        public void DropDnLib_GetDropdownGroups(int custId, string[] geos, string[] custDivs)
+        {
+            List<Dropdown> dropDownList = new DropdownLib().GetSoldToIdDropdown(custId, geos, custDivs);
             Assert.IsTrue(dropDownList.Any());
+        }
 
-            dropDownList = new DropdownLib().GetSoldToIdDropdown(custId, null, custDivs);
-            Assert.IsTrue(dropDownList.Any());
-
-            dropDownList = new DropdownLib().GetSoldToIdDropdown(custId, geos, null);
-            Assert.IsTrue(dropDownList.Any());
-
-            dropDownList = new DropdownLib().GetSoldToIdDropdown(custId, null, null);
-            Assert.IsTrue(dropDownList.Any());
-
-            geos = new string[] { "Worldwide" };
-            dropDownList = new DropdownLib().GetSoldToIdDropdown(custId, geos, custDivs);
-            Assert.IsTrue(dropDownList.Any());
-
-
-            // Check GetDropdowns returns list as expected
-            IEnumerable<Dropdown> dropDownIEnum = new DropdownLib().GetDropdowns();
-            Assert.IsTrue(dropDownIEnum.Any());
-
-
-            // Check Hierarchy calls
-            string prnt = "MRKT_SEG";
+        [TestCase("MRKT_SEG")]
+        public void DropDnLib_GetDropdownHierarchy(string prnt)
+        {
             DropdownHierarchy[] dropDownHierarchy = new DropdownLib().GetDropdownHierarchy(prnt);
             Assert.IsTrue(dropDownHierarchy.Any());
+        }
 
-            prnt = "ASMO";
-            dropDownHierarchy = new DropdownLib().GetGeoDropdownHierarchy(prnt);
+        [TestCase("ASMO")]
+        public void DropDnLib_GetGeoDropdownHierarchy(string prnt)
+        {
+            DropdownHierarchy[] dropDownHierarchy = new DropdownLib().GetGeoDropdownHierarchy(prnt);
             Assert.IsTrue(dropDownHierarchy.Any());
             if (dropDownHierarchy.Length > 0)
             {
                 Assert.IsTrue(dropDownHierarchy[0].items.Any());
-                // Check that only ASMO items came down.
                 Assert.IsFalse(dropDownHierarchy[0].items.Where(g => g.DROP_DOWN.Contains(prnt)).Count() != dropDownHierarchy[0].items.Count());
             }
         }
 
-        [TestMethod]
-        public void DropDnLib_AdminItems()
+        [TestCase("COMP_MISSING_FLG")]
+        public void DropDnLib_ManageBasicDropdowns(string atrbCd)
         {
-            string atrbCd = "COMP_MISSING_FLG";
             IEnumerable<BasicDropdown> basicDropDowns = new DropdownLib().GetDropdowns(atrbCd);
             if (basicDropDowns.Where(d => d.DROP_DOWN == "TestingComp").Any())
             {
@@ -155,11 +193,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
             //Assert.IsFalse(basicDropDowns.Where(d => d.DROP_DOWN == "TestingComp").Any());
         }
 
-        [TestMethod]
-        public void DropDnLib_GetDropdownOverlapping()
+        private static object[] _sourceLists = { new object[] { new List<int> { 232605 } } };
+
+        [Test, TestCaseSource("_sourceLists")] // Old DCS deal with many overlaps
+        public void DropDnLib_GetDealGroupDropdown(List<int> deals)
         {
-            // Check GetDealGroupDropdown variations
-            List<int> deals = new List<int> { 232605 }; // Old DCS deal with many overlaps
             List<OverlappingDeal> overlappingList = new DropdownLib().GetDealGroupDropdown(OpDataElementType.WIP_DEAL, deals);
             Assert.IsTrue(overlappingList.Any());
         }

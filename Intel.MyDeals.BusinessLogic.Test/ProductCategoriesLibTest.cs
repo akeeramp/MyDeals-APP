@@ -1,54 +1,44 @@
-﻿using Intel.MyDeals.BusinessLogic;
-using Intel.MyDeals.DataLibrary.Test;
+﻿using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using Intel.MyDeals.IDataLibrary;
-using Moq;
-using NUnit.Framework;
 using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestFixture]
+    [TestClass]
     public class ProductCategoriesLibTest
     {
-		[OneTimeSetUp]
-		public void SetupUserAndDatabase()
-		{
-			Console.WriteLine("Started Product Catgeories Library Tests.");
-			OpUserStack.EmulateUnitTester();
-			UnitTestHelpers.SetDbConnection();
-		}
-
-		[OneTimeTearDown]
-		public void AfterTheCurrentTextFixture()
-		{
-			Console.WriteLine("Completed Product Catgeories Library Tests.");
-		}
-		
+        public ProductCategoriesLibTest()
+        {
+            Console.WriteLine("Started Product Catgeories Library Tests.");
+            OpUserStack.EmulateUnitTester();
+            UnitTestHelpers.SetDbConnection();
+        }
 				
 		#region helper functions
 
 		private ProductCategory MakeNewProductCategory(int stepNumber = 0)
 		{
-			string testString = "UNIT TEST - UploadDbLogPerfLogs";
 			DateTime now = DateTime.UtcNow;
-			var user = OpUserStack.MyOpUserToken.Usr;
-			
-			return new ProductCategory {
-				ACTV_IND = true
-				, CHG_DTM = now
-				, CHG_EMP_NM = user.FullName
-				, DEAL_PRD_TYPE = testString
-				, DIV_NM = testString
-				, GDM_PRD_TYPE_NM = testString
-				, GDM_VRT_NM = testString
-				, OP_CD = testString
-				, PRD_CAT_MAP_SID = 1 // TODO: This is hard coded. Replace with new ids, once we have the AddProductCategories functionaility in a future sprint
-				, PRD_CAT_NM = testString
-			};
-		}
+            string testString = "UNIT TEST - UploadDbLogPerfLogs [" + now.ToString() + "]";
+            var user = OpUserStack.MyOpUserToken.Usr;
+
+            return new ProductCategory
+            {
+                ACTV_IND = true,
+                CHG_DTM = now,
+                CHG_EMP_NM = user.FullName,
+                DEAL_PRD_TYPE = testString,
+                DIV_NM = testString,
+                GDM_PRD_TYPE_NM = testString,
+                GDM_VRT_NM = testString,
+                OP_CD = testString,
+                PRD_CAT_MAP_SID = 1, // TODO: This is hard coded. Replace with new ids, once we have the AddProductCategories functionaility in a future sprint
+                PRD_CAT_NM = testString
+            };
+        }
 
 
 		private List<ProductCategory> MakeMulitpleNewProductCategories(int count)
@@ -61,31 +51,33 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			return list;
 		}
 
-		#endregion
+        #endregion
 
-		
-		[TestCase]
-        public void ProductCategoriesGetAll()
+
+        [TestMethod]
+        public void ProdCatLib_GetProductCategories()
 		{
-			// Arrange, ACT
 			List<ProductCategory> results = new ProductCategoriesLib().GetProductCategories();
 			
-			// Assert
 			Assert.IsTrue(results.Any());
 		}
 
-		[TestCase(1)]
-        //[TestCase(2)] // TODO: Test other counts once we are able to add new product Verticals and replace the hard cded Ids
-        public void ProductCategoriesUpdate(int count)
+        [TestMethod]
+        public void ProdCatLib_MakeNewProductCategory()
 		{
-			// ARRANGE
-			List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
-			
-			// ACT
-			List<ProductCategory> results = new ProductCategoriesLib().UpdateProductCategories(pcList);
+            //[TestCase(2)] // TODO: Test other counts once we are able to add new product Verticals and replace the hard coded Ids
+            List<int> testData = new List<int> { 1 };
 
-			// ASSERT
-			Assert.IsTrue(results.Any());
+            List<ProductCategory> results = new List<ProductCategory>();
+
+            foreach (int count in testData)
+            {
+                List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
+
+                results = new ProductCategoriesLib().UpdateProductCategories(pcList);
+
+                Assert.IsTrue(results.Any());
+            }
         }
 		
     }

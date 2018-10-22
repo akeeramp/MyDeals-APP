@@ -1,6 +1,6 @@
-﻿using Intel.MyDeals.Entities;
+﻿using System;
 using NUnit.Framework;
-using System;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.DataLibrary.Test
 {

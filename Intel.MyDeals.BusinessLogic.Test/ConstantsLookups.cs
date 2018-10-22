@@ -1,92 +1,99 @@
 ﻿using System;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestClass]
+    [TestFixture]
     public class ConstantsLookupsLibTests
     {
-        public ConstantsLookupsLibTests()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
-            Console.WriteLine("Started Constants Lookups Lib tests");
+            Console.WriteLine("Started Constants Lookups Lib tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
 
-        [TestMethod]
-        public void CnstLib_GetToolConstants()
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
         {
-            AdminConstant results = new ConstantsLookupsLib().GetConstantsByName("ENV");
-            Assert.IsTrue(results.CNST_NM == "ENV");
-
-            results = new ConstantsLookupsLib().GetConstantsByName("ENV", true);
-            Assert.IsTrue(results.CNST_NM == "ENV");
-
-            // Check existing constant value returns as expected
-            string resultsValue = new ConstantsLookupsLib().GetToolConstantValue("ENV");
-            Assert.IsFalse(string.IsNullOrEmpty(resultsValue));
-
-            // Check that non-existant constant value returns gracefully
-            resultsValue = new ConstantsLookupsLib().GetToolConstantValue("GARBAGE");
-            Assert.IsTrue(string.IsNullOrEmpty(resultsValue));
+            Console.WriteLine("Completed Constants Lookups Lib tests.");
         }
 
-        [TestMethod]
-        public void CnstLib_GetLookups()
+
+        [Test,
+            TestCase("ENV", null, true),
+            TestCase("ENV", true, true),
+            TestCase("GARBAGE", null, false)
+            ]
+        public void CnstLib_GetToolConstants(string testString, bool nonCachedData, bool expectedResult)
         {
-            // Check all lookup returns as expected
-            List<LookupItem> results = new ConstantsLookupsLib().GetLookups();
+            AdminConstant results = new ConstantsLookupsLib().GetConstantsByName(testString, nonCachedData);
+            string value = results != null ? results.CNST_NM : "";
+            Assert.IsTrue((value == testString) == expectedResult);
+
+            string resultsValue = new ConstantsLookupsLib().GetToolConstantValue(testString);
+            Assert.IsFalse(string.IsNullOrEmpty(resultsValue) == expectedResult);
+        }
+
+        [Test,
+            TestCase(null, null, ">", 0),
+            TestCase("NUM_TIERS", null, "=", 9), // We have 9 tiers
+            TestCase("NUM_TIERS,DROPDOWN", null, ">", 9), // We have 9 tiers and unknown dropdowns
+            TestCase("NUM_JUNK", null, "=", 0), // Garbage Request
+            TestCase("ALL DEALS", "NUM_TIERS", "=", 9), // We have 9 tiers for all deals
+            TestCase("ALL", "NUM_TIERS", "=", 9), // We have 9 tiers for all deals
+            TestCase("ALL_JUNK", "NUM_JUNK", "=", 0) // Garbage Request
+            ]
+        public void CnstLib_GetLookups(string testString1, string testString2, string opCheck, int value)
+        {
+            List<LookupItem> results;
+            if (testString2 == null) // single test string/no test string passed
+            {
+                if (testString1 == null) // no test string passed
+                {
+                    results = new ConstantsLookupsLib().GetLookups();
+                }
+                else // single test string passed
+                {
+                    results = new ConstantsLookupsLib().GetLookups(testString1).ToList();
+                }
+            }
+            else // 2 test strings passed
+            {
+                results = new ConstantsLookupsLib().GetLookups(testString1, testString2);
+            }
+
+            Assert.IsTrue(opCheck == ">" ? results.Count() > value : results.Count() == value);
+        }
+
+        [TestCase]
+        public void CnstLib_GetAdminConstants()
+        {
+            List<AdminConstant> results = new ConstantsLookupsLib().GetAdminConstants();
             Assert.IsTrue(results.Count() > 0);
 
-            // Check existing lookup returns as expected
-            IEnumerable<LookupItem> results2 = new ConstantsLookupsLib().GetLookups("NUM_TIERS");
-            Assert.IsTrue(results2.Count() == 9); // We have 9 tiers
+            results = new ConstantsLookupsLib().GetAdminConstants(true); // Get cached results = true
+            Assert.IsTrue(results.Count() > 0);
 
-            // Check existing lookup returns as expected
-            results2 = new ConstantsLookupsLib().GetLookups("NUM_TIERS,DROPDOWN");
-            Assert.IsTrue(results2.Count() > 9); // We have 9 tiers and unknown dropdowns
-
-            // Check non-existant lookup returns gracefully
-            results2 = new ConstantsLookupsLib().GetLookups("NUM_JUNK");
-            Assert.IsTrue(results2.Count() == 0); // Garbage Request
-
-            // Check existing lookup returns as expected
-            results = new ConstantsLookupsLib().GetLookups("ALL DEALS", "NUM_TIERS");
-            Assert.IsTrue(results.Count() == 9); // We have 9 tiers for all deals
-
-            // Check existing lookup returns as expected (Deal Type Where clause)
-            results = new ConstantsLookupsLib().GetLookups("ALL", "NUM_TIERS");
-            Assert.IsTrue(results.Count() == 9); // We have 9 tiers for all deals
-
-            // Check for non-existant lookup returns gracefully
-            results = new ConstantsLookupsLib().GetLookups("ALL_JUNK", "NUM_JUNK");
-            Assert.IsTrue(results.Count() == 0); // Garbage Request
+            results = new ConstantsLookupsLib().GetAdminConstants(false); // Get cached results = false
+            Assert.IsTrue(results.Count() > 0);
         }
 
-        [TestMethod]
-        public void CnstLib_ConstantsAdmin()
+        [TestCase]
+        public void CnstLib_ConstantsAdminOperations()
         {
             // Check that we can pull constants and that testing value is not there
             List<AdminConstant> results = new ConstantsLookupsLib().GetAdminConstants();
-            Assert.IsTrue(results.Count() > 0);
             if (results.Where(c => c.CNST_NM == "ToBeRemovedConstantTest").Count() > 0) // Clean up old data if need be
             {
                 AdminConstant removeOldTestData = results.FirstOrDefault(c => c.CNST_NM == "ToBeRemovedConstantTest");
                 new ConstantsLookupsLib().DeleteAdminConstant(removeOldTestData);
             }
-
-            results = new ConstantsLookupsLib().GetAdminConstants(true);
-            Assert.IsTrue(results.Count() > 0);
-            Assert.IsFalse(results.Where(c => c.CNST_NM == "ToBeRemovedConstantTest").Count() > 0); // Check that next test value isn't already in DB
-
-            results = new ConstantsLookupsLib().GetAdminConstants(false);
-            Assert.IsTrue(results.Count() > 0);
-            Assert.IsFalse(results.Where(c => c.CNST_NM == "ToBeRemovedConstantTest").Count() > 0); // Check that next test value isn't already in DB
-
 
             // Check adding a new constant
             AdminConstant testCnst = new AdminConstant()
@@ -98,8 +105,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 UI_UPD_FLG = true
             };
 
+            // Create a new constant
             AdminConstant newCnstResults = new ConstantsLookupsLib().CreateAdminConstant(testCnst);
             Assert.IsNotNull(newCnstResults);
+
+            // Verify that creating a null is graceful
             newCnstResults = new ConstantsLookupsLib().CreateAdminConstant(null);
             Assert.IsNull(newCnstResults);
 
@@ -111,7 +121,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             testCnst.CNST_SID = newCnstSid;
 
 
-            // Check updating existing constant value
+            // Update the new constant
             testCnst.CNST_VAL_TXT = "UpdatedValueForToBeRemovedConstantData";
             AdminConstant updCnstResults = new ConstantsLookupsLib().UpdateAdminConstant(testCnst);
             results = new ConstantsLookupsLib().GetAdminConstants();
@@ -145,7 +155,8 @@ namespace Intel.MyDeals.BusinessLogic.Test
             results = new ConstantsLookupsLib().GetAdminConstants();
             Assert.IsTrue(results.Where(c => c.CNST_VAL_TXT == "ToBeRemovedConstantData").Count() == 0); // Value is gone now
 
-            new ConstantsLookupsLib().DeleteAdminConstant(null); // doesn't die hard
+            // Verify that deleting a null is graceful
+            new ConstantsLookupsLib().DeleteAdminConstant(null); 
         }
 
     }

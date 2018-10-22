@@ -1,32 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestClass]
+    [TestFixture]
     public class SecurityAttributesLibTest
 	{
-        public SecurityAttributesLibTest()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
+            Console.WriteLine("Started Security Attributes Lib tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
-		}
-		
-		#region Security Mapping
+        }
 
-		[TestMethod]
-		public void SecurityEngineObjAtrbsGet()
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed Security Attributes Lib tests.");
+        }
+
+        #region Security Mapping
+
+        [TestCase]
+        public void SecAtrbLib_SecurityEngineObjAtrbsGet()
 		{
 			//// TODO: This test keeps failing because of the _dataCollectionsDataLib call in GetObjAtrbs(). Figure out how to work around that.
 			//Dictionary<string, Dictionary<string, List<string>>> results = new SecurityAttributesLib().GetObjAtrbs();
 			//Assert.IsTrue(results.Any());
 		}
 
-		[TestMethod]
-		public void SecurityMappingsSave()
+        [TestCase]
+        public void SecAtrbLib_SecurityMappingsSave()
 		{
 			List<SecurityMapSave> saveMappings = new List<SecurityMapSave>();
 
@@ -50,8 +59,8 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			Assert.IsTrue(deleteResult);
 		}
 
-		[TestMethod]
-		public void SecurityMasksGet()
+        [TestCase]
+        public void SecAtrbLib_SecurityMasksGet()
 		{
 			SecurityWrapper results = new SecurityAttributesLib().GetSecurityMasks();
 			Assert.IsTrue(results.SecurityAttributes.Any());
@@ -60,15 +69,15 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
         #region DealTypes
 
-        [TestMethod]
-        public void AdminDealTypesGet()
+        [TestCase]
+        public void SecAtrbLib_AdminDealTypesGet()
         {
             IEnumerable<AdminDealType> results = new SecurityAttributesLib().GetAdminDealTypes();
             Assert.IsTrue(results.Any());
         }
 
-        [TestMethod]
-        public void AdminDealTypesManage()
+        [TestCase]
+        public void SecAtrbLib_AdminDealTypesManage()
         {
             //INSERT
             string testString = "UNIT TEST - InsertAdminDealTypes";

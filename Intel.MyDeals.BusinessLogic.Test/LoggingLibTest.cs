@@ -1,25 +1,32 @@
-﻿using Intel.MyDeals.DataLibrary.Test;
+﻿using System;
+using NUnit.Framework;
+using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
-using System;
 using System.Collections.Generic;
 using Intel.MyDeals.IDataLibrary;
 using Moq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestClass]
+    [TestFixture]
     public class LoggingLibTest
     {
-        public LoggingLibTest()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
             Console.WriteLine("Started Logging Library Tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
 
-        [TestMethod]
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed Logging Library Tests.");
+        }
+
+        [TestCase]
         public void LogLib_GetLogConfig()
         {
             var mockLoggingDataLib = new Mock<ILoggingDataLib>();
@@ -44,7 +51,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void LogLib_UploadDbLogPerfLogs()
         {
             var mockLoggingDataLib = new Mock<ILoggingDataLib>();

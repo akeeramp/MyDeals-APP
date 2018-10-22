@@ -1,21 +1,22 @@
 ﻿using System;
+using NUnit.Framework;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
-    [TestClass]
+    [TestFixture]
     public class CustomerLibTests
     {
         private OpUserToken PersonalizedOpUserToken { get; set; }
 
-        public CustomerLibTests()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
-            Console.WriteLine("Started Customer Lib tests");
+            Console.WriteLine("Started Customer Lib tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
 
@@ -35,12 +36,18 @@ namespace Intel.MyDeals.BusinessLogic.Test
             };
         }
 
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed Customer Lib tests.");
+        }
+
+
         #region Get Customers
 
-        [TestMethod]
-        public void CustLib_GetCustomers()
+        [TestCase]
+        public void CustLib_GetCustomerDivisions()
         {
-            // Check GetCustomerDivisions returns as expected
             IEnumerable<CustomerDivision> customersList = new CustomerLib().GetCustomerDivisions();
             Assert.IsTrue(customersList.Any());
 
@@ -49,82 +56,98 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             customersList = new CustomerLib().GetCustomerDivisions(false);
             Assert.IsTrue(customersList.Any());
+        }
 
+        [TestCase]
+        public void CustLib_GetCustomerDivisionsActive()
+        {
+            IEnumerable<CustomerDivision> customersList = new CustomerLib().GetCustomerDivisionsActive();
+            Assert.IsTrue(customersList.Where(c => c.ACTV_IND == true).Count() == customersList.Count());
+        }
 
-            // Check GetCustomerDivisionsActive returns only active customers only as expected
-            customersList = new CustomerLib().GetCustomerDivisionsActive();
-            Assert.IsTrue(customersList.Any());
-            Assert.IsFalse(customersList.Where(c => c.ACTV_IND == false).Any());
-
-
-            // Check GetCustomerDivision by sid returns a single customer as expected
-            int sid = 504; //504 = Lenovo first division level ID
+        [TestCase(504)] //504 = Lenovo first division level ID
+        public void CustLib_GetCustomerDivision(int sid)
+        {
             CustomerDivision singleCustomer = new CustomerLib().GetCustomerDivision(sid);
             Assert.IsTrue(singleCustomer != null && singleCustomer.CUST_MBR_SID == sid);
+        }
 
+        [TestCase(2, "=", "Acer")] // 2 = Acer (Single Division)
+        [TestCase(503, ">", "Lenovo")] //503 = Lenovo(Multi Division)
+        public void CustLib_GetCustomerDivisionsByCustNmId(int sid, string op, string custNm)
+        {
+            IEnumerable<CustomerDivision> customersList = new CustomerLib().GetCustomerDivisionsByCustNmId(sid);
+            Assert.IsTrue(customersList != null 
+                && (op == ">"? customersList.Count() > 1: customersList.Count() == 1) 
+                && customersList.FirstOrDefault(c => c.CUST_NM_SID == sid).CUST_NM == custNm);
+        }
 
-            // Check GetCustomerDivisionsByCustNmId 4 test cases
-            // GetCustomerDivisionsByCustNmId returns all items, no active check
-            sid = 2; // 2 = Acer (Single Division)
-            customersList = new CustomerLib().GetCustomerDivisionsByCustNmId(sid);
-            Assert.IsTrue(customersList != null && customersList.Count() == 1 && customersList.FirstOrDefault(c => c.CUST_NM_SID == sid).CUST_NM == "Acer");
+        [TestCase(2, "Acer")] // 2 = Acer (Single Division)
+        [TestCase(694, null)] // 694 = IT Test Harness Quote Letter (Single Inactive Division)
+        public void CustLib_GetCustomerDivisionsByCustNmSid(int sid, string custNm)
+        {
+            IEnumerable<CustomerDivision> customersList = new CustomerLib().GetCustomerDivisionsByCustNmSid(sid);
+            if (custNm == null)
+            {
+                Assert.IsTrue(customersList != null && customersList.Count() == 0);
+            }
+            else
+            {
+                Assert.IsTrue(customersList != null && customersList.FirstOrDefault(c => c.CUST_NM_SID == sid).CUST_NM == custNm);
+            }
+        }
 
-            sid = 503; //503 = Lenovo(Multi Division)
-            customersList = new CustomerLib().GetCustomerDivisionsByCustNmId(sid);
-            Assert.IsTrue(customersList != null && customersList.Count() > 1 && customersList.FirstOrDefault(c => c.CUST_NM_SID == sid).CUST_NM == "Lenovo");
-
-            // GetCustomerDivisionsByCustNmSid returns only active items
-            sid = 2; // 2 = Acer (Single Active Division)
-            customersList = new CustomerLib().GetCustomerDivisionsByCustNmSid(sid);
-            Assert.IsTrue(customersList != null && customersList.FirstOrDefault(c => c.CUST_NM_SID == sid).CUST_NM == "Acer");
-
-            sid = 694; // 694 = IT Test Harness Quote Letter (Single Inactive Division)
-            customersList = new CustomerLib().GetCustomerDivisionsByCustNmSid(sid);
-            Assert.IsTrue(customersList != null && customersList.Count() == 0);
-
-
-            // Check GetCustomerDivisionsByHostedGeo returns list of only one geo as expected
-            string geo = "APAC"; //TODO: replace with test data value
-            customersList = new CustomerLib().GetCustomerDivisionsByHostedGeo(geo);
+        [TestCase("APAC")] 
+        public void CustLib_GetCustomerDivisionsByCustNmSid(string geo)
+        {
+            IEnumerable<CustomerDivision> customersList = new CustomerLib().GetCustomerDivisionsByHostedGeo(geo);
             Assert.IsTrue(customersList.Any() && customersList.Count(r => r.HOSTED_GEO == geo) == customersList.Count());
-            Assert.IsFalse(customersList.Any() && customersList.Where(r => r.HOSTED_GEO != geo).Any());
         }
 
         #endregion
 
         #region Get My Customers
 
-        [TestMethod]
+        [TestCase]
         public void CustLib_GetMyCustomers()
         {
-            // Check GetMyCustomers normal call
             OpUserStack.EmulateUnitTester(PersonalizedOpUserToken);
             MyCustomerDetailsWrapper results = new CustomerLib().GetMyCustomers();
             Assert.IsTrue(results.CustomerInfo.Any());
+        }
 
-
-            // Check GetMyCustomers names
+        [TestCase]
+        public void CustLib_GetMyCustomerNames()
+        {
+            OpUserStack.EmulateUnitTester(PersonalizedOpUserToken);
             List<MyCustomersInformation> myCustomersList = new CustomerLib().GetMyCustomerNames();
             Assert.IsTrue(myCustomersList.Count() > 0);
+        }
 
-
-            // Check GetMyCustomers by sid single division
-            int sid = 2; // 2 = Acer (Single Division)
-            myCustomersList = new CustomerLib().GetMyCustomerDivsByCustNmSid(sid);
+        [TestCase(2)]
+        public void CustLib_GetMyCustomerDivsByCustNmSid(int sid)
+        {
+            OpUserStack.EmulateUnitTester(PersonalizedOpUserToken);
+            List<MyCustomersInformation> myCustomersList = new CustomerLib().GetMyCustomerDivsByCustNmSid(sid);
             Assert.IsTrue(myCustomersList.Count() > 0);
+        }
 
-
-            // Check GetMyCustomersInfo various modes
-            IEnumerable<MyCustomersInformation> myCustomersEnum = new CustomerLib().GetMyCustomersInfo();
-            Assert.IsTrue(myCustomersEnum.Any());
-
-            sid = 2; // 2 = Acer (Single Division)
-            MyCustomersInformation singleCustomerInfo = new CustomerLib().GetMyCustomersInfo(sid);
-            Assert.IsNotNull(singleCustomerInfo);
-
-            sid = 98694; // 98694 = Garbage (Single Division)
-            singleCustomerInfo = new CustomerLib().GetMyCustomersInfo(sid);
-            Assert.IsNull(singleCustomerInfo);
+        [TestCase(null, true)] // General list
+        [TestCase(2, true)] // 2 = Acer (Single Division)
+        [TestCase(98694, false)] // 98694 = Garbage (Single Division)
+        public void CustLib_GetMyCustomersInfo(int? sid, bool expectedResult)
+        {
+            OpUserStack.EmulateUnitTester(PersonalizedOpUserToken);
+            if (sid == null)
+            {
+                List<MyCustomersInformation> myCustomers = new CustomerLib().GetMyCustomersInfo();
+                Assert.IsTrue((myCustomers != null) == expectedResult);
+            }
+            else
+            {
+                MyCustomersInformation myCustomers = new CustomerLib().GetMyCustomersInfo((int)sid);
+                Assert.IsTrue((myCustomers != null) == expectedResult);
+            }
         }
 
         //[TestMethod]

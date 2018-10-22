@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using Force.DeepCloner;
 using Intel.MyDeals.BusinessRules;
-using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;

@@ -1,44 +1,54 @@
 ﻿using System;
+using NUnit.Framework;
 using System.Collections.Generic;
 using Intel.MyDeals.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.DataLibrary.Test
 {
-    [TestClass]
+    [TestFixture]
     public class ConstantLookupTests
     {
-        public ConstantLookupTests()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
+            Console.WriteLine("Started Constant Lookup Data Library Tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
 
-        [TestMethod]
-        public void GetToolContants()
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed Constant Lookup Data Library Tests.");
+        }
+
+
+        [TestCase]
+        public void CnstLkupLib_GetToolContants()
         {
             List<AdminConstant> constants = new ConstantLookupDataLib().GetAdminConstants();
             Assert.IsTrue(constants.Count > 0);
         }
 
-        [TestMethod]
-        public void GetToolContant()
+        [Test, 
+            TestCase("DB_LOGGING", true),
+            TestCase("THIS_DOES_NOT_EXIST", false)
+            ]
+        public void CnstLkupLib_GetToolContant(string testString, bool expectedResult)
         {
-            string value = new ConstantLookupDataLib().GetAdminToolConst("DB_LOGGING");
-            Assert.IsFalse(string.IsNullOrEmpty(value));
-
-            value = new ConstantLookupDataLib().GetAdminToolConst("THIS_DOES_NOT_EXIST");
-            Assert.IsTrue(string.IsNullOrEmpty(value));
+            string value = new ConstantLookupDataLib().GetAdminToolConst(testString);
+            Assert.IsTrue(string.IsNullOrEmpty(value) != expectedResult);
         }
 
-        [TestMethod]
-        public void GetToolConstInt()
+        [Test,
+            TestCase("EXPIRE_CUTOFF_DAYS", true),
+            TestCase("THIS_DOES_NOT_EXIST", false)
+            ]
+        public void CnstLkupLib_GetToolConstInt(string testString, bool expectedResult)
         {
-            int intValue = new ConstantLookupDataLib().GetAdminToolConstInt("EXPIRE_CUTOFF_DAYS");
-            Assert.IsTrue(intValue > 0);
-
-            intValue = new ConstantLookupDataLib().GetAdminToolConstInt("THIS_DOES_NOT_EXIST");
-            Assert.IsTrue(intValue == 0);
+            int intValue = new ConstantLookupDataLib().GetAdminToolConstInt(testString);
+            Assert.IsTrue((intValue > 0) == expectedResult);
         }
+
     }
 }
