@@ -310,7 +310,7 @@
             }, { reload: true });
 
         }
-        if ($state.current.name == 'contract.manager.strategy' && $scope.isTenderContract) {
+        if (($state.current.name == 'contract.manager.strategy' || $state.current.name == 'contract.manager.strategy.wip') && $scope.isTenderContract) {
             $scope.isTenderWidgetVisible = true;
         }
 
@@ -4665,7 +4665,8 @@
                     if (data) {
                         if (data.data == true) {
                             $scope.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
-                            $scope.goToTenderDashboard();
+                            $scope._dirty = false;
+                            $scope.goToTenderDashboard();                            
                             return;
                         } else {
                             logger.stickyError("Publishing deals failed. Contact Administrator.");
