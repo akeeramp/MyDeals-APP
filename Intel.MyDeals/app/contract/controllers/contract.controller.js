@@ -302,7 +302,7 @@
                 $scope.contractData["IS_TENDER"] = "1";
             }
         }
-        if (($state.current.name == 'contract.manager' || $state.current.name == 'contract.summary' ) && $scope.isTenderContract) {
+        if (($state.current.name == 'contract.manager' || $state.current.name == 'contract.summary') && $scope.isTenderContract) {
             $state.go('contract.manager.strategy', {
                 cid: $scope.contractData.DC_ID,
                 sid: $scope.contractData.PRC_ST[0].DC_ID,
@@ -392,7 +392,7 @@
                         $scope.resetDirty();
                         $scope.publishWipDealsFromTab();
                     }
-                    else if ($scope.actualClikedTabName =='PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                    else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.isPtr = false;
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                         $scope.resetDirty();
@@ -407,7 +407,7 @@
                     if ($scope.contractData.TENDER_PUBLISHED == "True") {
                         $scope.goToTenderDashboard();
                     }
-                    
+
                 }
             });
         }
@@ -1134,8 +1134,7 @@
 
             if (oldValue["CUST_ACCNT_DIV_UI"].toString() !== newValue["CUST_ACCNT_DIV_UI"].toString()) {
                 $timeout(function () {
-                    $scope.contractData.CUST_ACCNT_DIV = newValue["CUST_ACCNT_DIV_UI"].toString();
-                        .replace(/,/g, '/');
+                    $scope.contractData.CUST_ACCNT_DIV = newValue["CUST_ACCNT_DIV_UI"].toString().replace(/,/g, '/');
                 }, 1);
             }
 
@@ -4398,7 +4397,7 @@
 
             modalInstance.result.then(function () { }, function () { });
         }
-        
+
         $scope.toggleTerms = function () {
             var splitter = $("#k-splitter").data("kendoSplitter");
             if (splitter.options.panes[1].collapsed) {
@@ -4507,7 +4506,7 @@
                         return (x.PASSED_VALIDATION === 'Complete');
                     }).ToArray();
                 if (anySucessfulProduct.length > 0) $scope.isMCActiveForFSE = true;;
-                
+
             }
             else {
                 isPtrDirty = true;
@@ -4565,7 +4564,7 @@
 
                     } else {
                         $scope.publishWipDealsBase();
-                    } 
+                    }
                 }
                 else if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || isPartiallyValid == true) && $scope.enableDealEditorTab() === true) {
                     isFired = true;
@@ -4596,7 +4595,7 @@
 
                     } else {
                         $scope.publishWipDealsBase();
-                    }  
+                    }
                 }
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
@@ -4625,10 +4624,10 @@
 
                     } else {
                         $scope.publishWipDealsBase();
-                    }  
+                    }
                 }
                 else if ((window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet')) && isPartiallyValid == true) {
-                    isFired = true;                    
+                    isFired = true;
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
                     $scope.isPtr = false;
@@ -4643,7 +4642,7 @@
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     if ($scope.selectedTAB != 'DE') {
-                        $scope.selectedTAB = "DE"; 
+                        $scope.selectedTAB = "DE";
                         $scope.currentTAB = 'DE';
                         _actionName = 'publishWipDealsFromTab';
                     }
