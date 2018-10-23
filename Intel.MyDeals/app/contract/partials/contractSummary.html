@@ -331,7 +331,7 @@
                             </td>-->
                             <td style="width: 160px; text-align: center;" ng-if="userRole == 'GA'">
                                 <!--<i ng-if="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid bigIcon"></i>-->
-                                <i ng-if="ps.CAP_MISSING_FLG ==='0' || ps.COST_MISSING_FLG ==='0'" style="color:#f3d54e" class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
+                                <i ng-if="ps.CAP_MISSING_FLG ==='1' || ps.COST_MISSING_FLG ==='1'" style="color:#f3d54e" class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
                             </td>
                             <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                 <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
@@ -364,7 +364,7 @@
                                 </td>
                                 <td style="width: 160px; text-align: center;" ng-if="userRole == 'GA'">
                                     <!--<i ng-if="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i>-->
-                                    <i ng-if="pt.CAP_MISSING_FLG ==='0' || pt.COST_MISSING_FLG ==='0'" style="color:#f3d54e" title="{{::getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i>
+                                    <i ng-if="pt.CAP_MISSING_FLG ==='1' || pt.COST_MISSING_FLG ==='1'" style="color:#f3d54e" title="{{::getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i>
                                 </td>
                                 <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                     <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
