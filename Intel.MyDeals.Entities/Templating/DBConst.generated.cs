@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/21/2018 5:14:25 PM
+File Updated: 10/23/2018 9:44:48 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -176,15 +176,6 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
-		/// ATRB_SID: 7094
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string BOX_SPEC_CD = "BOX_SPEC_CD";
-
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
 		/// ATRB_SID: 7082
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -334,6 +325,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string CONSUMPTION_REASON_CMNT = "CONSUMPTION_REASON_CMNT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3702
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string COST_MISSING_FLG = "COST_MISSING_FLG";
 
 		///<summary>
 		/// DIM_SID: 30
@@ -685,15 +685,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DEVICE_TYPE = "DEVICE_TYPE";
-
-		///<summary>
-		/// DIM_SID: 2
-		/// DIM_CD: CUST
-		/// ATRB_SID: 2023
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
-		///</summary>
-		public const string DFLT_Q_SPEC_FLG = "DFLT_Q_SPEC_FLG";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1866,15 +1857,6 @@ namespace Intel.MyDeals.Entities {
 		public const string PRD_STRT_DTM = "PRD_STRT_DTM";
 
 		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 3710
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string PRE_SLS_IND = "PRE_SLS_IND";
-
-		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7073
@@ -1954,15 +1936,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string PTR_USER_PRD = "PTR_USER_PRD";
-
-		///<summary>
-		/// DIM_SID: 2
-		/// DIM_CD: CUST
-		/// ATRB_SID: 2024
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
-		///</summary>
-		public const string Q_SPEC_FLG = "Q_SPEC_FLG";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2219,24 +2192,6 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
-		/// ATRB_SID: 3708
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string SPEC_CD_FLTR = "SPEC_CD_FLTR";
-
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7096
-		/// TGT_COL_TYPE: DATETIME
-		/// DOT_NET_DATA_TYPE: System.DateTime
-		///</summary>
-		public const string SPEC_XFER_DT = "SPEC_XFER_DT";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
 		/// ATRB_SID: 3319
 		/// TGT_COL_TYPE: DATETIME
 		/// DOT_NET_DATA_TYPE: System.DateTime
@@ -2332,15 +2287,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string TOTAL_DOLLAR_AMOUNT = "TOTAL_DOLLAR_AMOUNT";
-
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7095
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string TRAY_SPEC_CD = "TRAY_SPEC_CD";
 
 		///<summary>
 		/// DIM_SID: 7

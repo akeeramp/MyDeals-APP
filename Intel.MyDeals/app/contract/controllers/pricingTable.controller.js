@@ -3571,7 +3571,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 cellCurrVal = cellCurrVal.split(',');
 
                 // Trim the front space (if exists) so that the multiselect controls know the correct selection
-                // TODO: Figure out how to make pre-selected values non case-sensitive (harder han it sounds unfortunately)
+                // TODO: Figure out how to make pre-selected values non case-sensitive (harder than it sounds unfortunately)
                 for (var i = 0; i < cellCurrVal.length; i++) {
                     cellCurrVal[i] = cellCurrVal[i].trim();
                 }

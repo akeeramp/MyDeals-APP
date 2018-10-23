@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/18/2018 6:04:32 PM
+File Updated: 10/23/2018 9:45:17 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -553,6 +553,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COST_MISSING_FLG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COST_MISSING_FLG",
+			ATRB_DESC = "Cost Missing Flag",
+			ATRB_LBL = "Cost Missing",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3702,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "NA",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute COST_TEST_FAIL_OVERRIDE = new MyDealsAttribute()
 		{
