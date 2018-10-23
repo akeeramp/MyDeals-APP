@@ -312,9 +312,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (savePacket.MyContractToken != null && savePacket.MyContractToken.BulkTenderUpdate == true)      //This is the route for saving tenders in bulk from the tender dashboard
             {
-                secondaryOpDataElementTypes = new List<OpDataElementType>();
-                secondaryOpDataElementTypes.Add(OpDataElementType.WIP_DEAL);
-
                 foreach (KeyValuePair<OpDataElementType, OpDataCollectorFlattenedList> kvp in data)             //because there is no pricing table on the tender dashboard, it would not have found for assigned secondaryIds
                 {
                     if (kvp.Key == OpDataElementType.WIP_DEAL)

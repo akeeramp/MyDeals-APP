@@ -105,6 +105,15 @@ namespace Intel.MyDeals.Controllers.API
                 BulkTenderUpdate = true
             };
 
+            contractToken.ContractIdList = new List<int>();     // contractIdList is only used by this tender dashboard update function
+
+            for (var i = 0; i < tenderData.WipDeals.Count; i++) // here we update our contractIdList to add all unique contract IDs of the deals being updated to our contractToken to be used later in the save routine
+            {
+                if (!contractToken.ContractIdList.Contains(int.Parse(tenderData.WipDeals[i]["CNTRCT_OBJ_SID"].ToString()))) {
+                    contractToken.ContractIdList.Add(int.Parse(tenderData.WipDeals[i]["CNTRCT_OBJ_SID"].ToString()));
+                }
+            }
+
             tenderData.EventSource = OpDataElementType.WIP_DEAL.ToString(); //tenders are bulk edited from the tender dashboard in only wip deal form
 
             OpDataCollectorFlattenedDictList result = SafeExecutor(() => _tenderLib.BulkTenderUpdate(contractToken, tenderData)
