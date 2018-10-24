@@ -47,13 +47,13 @@
         </div>
         <table style="width: 100%;" class="tbl-header">
             <tr>
-                <td style="width: 170px; text-align: center; padding-left: 6px; line-height: 1em;" ng-if="root.forceRun()">
+                <td style="width: 170px; text-align: center; padding-left: 6px; line-height: 1em;" >
                     <btn-run-pct-mct ng-model="root"
                                      contract-id="root.contractData.DC_ID"
                                      last-run="root.contractData.LAST_COST_TEST_RUN"
                                      run-if-stale-by-hours="3"
                                      enabled="enablePCT"
-                                     force-run="root.forceRun()"
+                                     force-run="isFroceRunPresent"
                                      btn-type="'pct'"
                                      btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
                 </td>
@@ -68,7 +68,7 @@
         <div class="sum-main-body">
             <div class="sum-main-container">
                 <div ng-repeat="ps in contractData.PRC_ST | filter: customFilter" class="sumPsContainer">
-                    <table style="width: 100%;">
+                    <table style="width: 100%;" ng-class="{'opacityZero' : !isToolReq}">
                         <tr>
                             <td style="width: 30px; height: 30px;" ng-click="isCollapsed = !isCollapsed">
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
@@ -87,9 +87,9 @@
                     </table>
 
                     <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL | filter: customFilter">
-                        <table style="width: 100%;">
+                        <table style="width: 100%;" ng-class="{'opacityZero' : !isToolReq}">
                             <tr>
-                                <td style="width: 30px; height: 30px;" ng-click="pt.isPtCollapsed = !pt.isPtCollapsed; togglePt(ps, pt)">
+                                <td class="tenderAutoClick" style="width: 30px; height: 30px;" ng-click="pt.isPtCollapsed = !pt.isPtCollapsed; togglePt(ps, pt)">
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': pt.isPtCollapsed, 'intelicon-right-next': !pt.isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 140px; color: #000000; text-align: center;">
@@ -106,8 +106,8 @@
                         </table>
 
                         <div uib-collapse="!pt.isPtCollapsed">
-                            <div style="margin-left: 30px;">
-                                <div id="sumWipGrid_exp_{{pt.DC_ID}}" style="position: relative; top: 14px; margin-bottom: -17px; z-index: 1000; left: 3px; height: 25px; width: 25px;">
+                            <div ng-class="{'marginThrity': isToolReq}">
+                                <div class="tenderAutoExpandGrid" id="sumWipGrid_exp_{{pt.DC_ID}}" style="position: relative; top: 14px; margin-bottom: -17px; z-index: 1000; left: 3px; height: 25px; width: 25px;">
                                     <i class="k-icon k-i-expand" style="font-size: 26px; cursor: pointer; color: #00AEEF;" ng-click="expColAll(pt.DC_ID)" title="Click to expand/collapse all items"></i>
                                 </div>
                                 <div id="sumWipGrid_{{pt.DC_ID}}" class="opUiContainer md dashboard"></div>
@@ -115,16 +115,44 @@
                         </div>
 
                     </div>
-
+					
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-
+<script>
+$( document ).ready(function() {
+	var scope = angular.element(document.getElementById("sum-wrapper")).scope();	
+	if(!scope.isToolReq){	
+		$(".intelicon-fast-forward").click();
+		setTimeout(  function() {}, 1000);
+		$(".tenderAutoClick").click();
+		setTimeout(  function() {}, 1000);
+		$('.opacityZero').css('display','none');
+		var foundCollaps = false;
+		
+		
+		var result = window.setInterval(function(){		  
+		  $('.k-i-expand').click();
+		  if($( "a" ).hasClass('k-i-collapse')){
+			clearInterval(result);
+		  }
+		}, 1500);		
+	}
+	
+});
+	
+</script>
 
 <style>
+.opacityZero{
+	opacity:0;
+}
+.marginThrity{
+	margin-left: 30px;
+}
 .sumGridOptionsExpand{
 		height: auto !important;
 	}

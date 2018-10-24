@@ -121,6 +121,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.openPCTScreen = function (dataItem) {
                 objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
                     $scope.contractData = data.data[0];
+                    var tempcontractDataPS = {};
+                    for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
+                        if ($scope.contractData.PRC_ST[i].DC_ID === dataItem.PRC_ST_OBJ_SID) {
+                            tempcontractDataPS = ($scope.contractData.PRC_ST[i]);
+                        }
+                    }
+                    $scope.contractData.PRC_ST = [];
+                    $scope.contractData.PRC_ST.push(tempcontractDataPS);
                     $scope.contractData.CUST_ACCNT_DIV_UI = "";
                     $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
                     $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);

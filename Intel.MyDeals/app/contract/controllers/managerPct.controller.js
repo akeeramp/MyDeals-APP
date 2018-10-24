@@ -14,25 +14,22 @@
     function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, isToolReq) {
 
         var root = $scope.$parent;	// Access to parent scope
-        if (root.contractData == undefined) {
+        if (!isToolReq) {
             root.contractData = contractData;
-            root.contractData.CUST_ACCNT_DIV_UI = "";
-            root.contractData = util.findInArray($scope.contractData.PRC_ST, contractData.PRC_PS[0].DC_ID);
-            root.contractData = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-
-            $scope.$broadcast('refreshContractDataComplete');
-
-            $timeout(function () {
-                $scope.$apply();
-            });
         }
         $scope.root = root;
+        $scope.isFroceRunPresent = typeof root.forceRun !== 'undefined' && typeof root.forceRun === 'function' ? 'root.forceRun()' : false; 
+
         if (isToolReq == undefined) {
             $scope.isToolReq = true;
+            var container = angular.element(".sumPsContainer");
+            container.scope().isCollapsed = true;
+            $scope.isAllCollapsed = true;
         }
         else {
             $scope.isToolReq = isToolReq;
         }
+
         $scope.pctFilter = "";
         $scope.$parent.isSummaryHidden = false;
         gridPctUtils.columns = {};
@@ -135,7 +132,7 @@
 
             for (var d = 0; d < root.contractData.PRC_ST.length; d++) {
                 var stg = root.contractData.PRC_ST[d].WF_STG_CD;
-                if (stg !== "Pending" && stg !== "Approved" && isToolReq) {
+                if (stg !== "Pending" && stg !== "Approved") {
                     root.enablePCT = true;
                 }
             }

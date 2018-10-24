@@ -109,22 +109,30 @@ function btnRunPctMct(logger, objsetService, $timeout, $state) {
                     function (e) {
                         if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
                         $scope.root.$broadcast('ExecutionPctMctComplete', $scope.runViaButton);
-
+                        
                         $timeout(function () {
-                            $scope.root.setBusy("", "");
+                            if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
+                                $scope.root.setBusy("", "");
+                            }
                             $(".iconRunPct").removeClass("fa-spin grn");
-                        }, 2000);
+                            }, 2000);
+                       
                         $scope.runViaButton = false;
                     },
                     function (response) {
-                        if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
-                        $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
-                        logger.error("Could not run Cost Test for contract " + $scope.contractId, response, response.statusText);
+                        if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});                        
 
+                        if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
+                            $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
+                        }
+                        logger.error("Could not run Cost Test for contract " + $scope.contractId, response, response.statusText);
                         $timeout(function () {
-                            $scope.root.setBusy("", "");
+                            if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
+                                $scope.root.setBusy("", "");
+                            }
                             $(".iconRunPct").removeClass("fa-spin grn");
                         }, 2000);
+                        
                         $scope.runViaButton = false;
                     }
                 );
