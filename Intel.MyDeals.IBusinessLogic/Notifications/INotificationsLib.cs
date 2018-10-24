@@ -14,5 +14,15 @@ namespace Intel.MyDeals.IBusinessLogic
         IList<Notification> GetNotifications(string mode);
 
         bool ManageNotifications(string mode, bool isRead, IList<int> notificationIds);
+
+        bool CreateNotificationLog(IList<NotificationLog> logs, int wwid);
+
+        List<NotificationEmailTable> GetNotificationEmails(List<int> ids = null);
+
+        bool UpdateNotificationEmails(List<int> ids);
+
+        void SendEmailNotifications();
+
+        string GetEmailBodyTemplateUI(int nltId);
     }
 }

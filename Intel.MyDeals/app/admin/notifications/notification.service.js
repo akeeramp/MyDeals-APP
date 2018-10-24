@@ -16,7 +16,8 @@
             updateUserSubscriptions: updateUserSubscriptions,
             getUnreadNotificationCount: getUnreadNotificationCount,
             getNotification: getNotification,
-            manageNotifications: manageNotifications
+            manageNotifications: manageNotifications,
+            getEmailBodyTemplateUI: getEmailBodyTemplateUI
         }
 
         function getUnreadNotificationCount() {
@@ -39,8 +40,8 @@
             return dataService.post(apiBaseUrl + 'UpdateUserSubscriptions', subscriptions);
         }
 
-        function updateUserSubscriptions(subscriptions) {
-            return dataService.post(apiBaseUrl + 'UpdateUserSubscriptions', subscriptions);
+        function getEmailBodyTemplateUI(id) {
+            return dataService.get(apiBaseUrl + 'GetEmailBodyTemplateUI/' + id);
         }
     }
 })();

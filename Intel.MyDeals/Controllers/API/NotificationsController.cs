@@ -79,5 +79,14 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to {mode} notifications"
             );
         }
+
+        [Authorize]
+        [Route("GetEmailBodyTemplateUI/{notificatId}")]
+        public string GetEmailBodyTemplateUI(int notificatId)
+        {
+            return SafeExecutor(() => _notificationsLib.GetEmailBodyTemplateUI(notificatId)
+                , $"Unable to get notifications email body"
+            );
+        }
     }
 }

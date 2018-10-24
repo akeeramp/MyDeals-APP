@@ -7,11 +7,19 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using System.Linq;
 using Intel.Opaque.Tools;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Configuration;
+using System.Threading.Tasks;
 
 namespace Intel.MyDeals.DataLibrary
 {
     public class NotificationsDataLib : INotificationsDataLib
     {
+        private static string messageCenterTokenUrl = string.Empty;
+        private static string messageCenterToken = string.Empty;
+        private static string env = string.Empty;
+
         /// <summary>
         /// Get User subscribed notification
         /// </summary>
@@ -65,7 +73,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         /// <summary>
-        ///
+        /// GetNotifications
         /// </summary>
         /// <param name="mode"></param>
         /// <param name="isRead"></param>
@@ -124,7 +132,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         /// <summary>
-        ///
+        /// ManageNotifications
         /// </summary>
         /// <param name="mode"></param>
         /// <param name="isRead"></param>
@@ -219,6 +227,184 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
             }
             return count;
+        }
+
+        /// <summary>
+        ///  Create Notification Log
+        /// </summary>
+        /// <param name="logs"></param>
+        /// <returns></returns>
+        public bool CreateNotificationLog(IList<NotificationLog> logs, int wwid)
+        {
+            OpLog.Log("CreateNotificationLog");
+            try
+            {
+                // Make datatable
+                T_NOTIF_INFO dt = new T_NOTIF_INFO();
+                dt.AddRows(logs);
+
+                var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_MNG_NOTIF_LOG
+                {
+                    USER_WWID = wwid,
+                    mode = "MODIFY",
+                    Info = dt
+                };
+
+                using (DataAccess.ExecuteDataSet(cmd))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// SetMessage center end points
+        /// </summary>
+        public static void SetMessageCenterEndPoints()
+        {
+            if (messageCenterTokenUrl == string.Empty || messageCenterToken == string.Empty || env == string.Empty)
+            {
+                Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/Intel.MyDeals");
+                messageCenterTokenUrl = rootWebConfig.AppSettings.Settings["messageCenterTokenUrl"].Value;
+                messageCenterToken = rootWebConfig.AppSettings.Settings["messageCenterToken"].Value;
+                env = rootWebConfig.AppSettings.Settings["Environment"].Value;
+            }
+        }
+
+        /// <summary>
+        /// Get notification email list
+        /// </summary>
+        /// <returns></returns>
+        public List<NotificationEmailTable> GetNotificationEmails(List<int> ids)
+        {
+            OpLog.Log("GetUnreadNotificationCount");
+            var ret = new List<NotificationEmailTable>();
+            try
+            {
+                var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_MNG_NOTIF_EMAIL
+                {
+                    MODE = "SELECT"
+                };
+                if (ids != null)
+                {
+                    cmd.TYPE_INT_LIST = new type_int_list(ids.ToArray());
+                }
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_CHG_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "CHG_EMAIL_ADDR");
+                    int IDX_CNTRCT_NM = DB.GetReaderOrdinal(rdr, "CNTRCT_NM");
+                    int IDX_CNTRCT_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_SID");
+                    int IDX_NLT_ID = DB.GetReaderOrdinal(rdr, "NLT_ID");
+                    int IDX_NOTIF_ID = DB.GetReaderOrdinal(rdr, "NOTIF_ID");
+                    int IDX_NOTIF_LONG_DSC = DB.GetReaderOrdinal(rdr, "NOTIF_LONG_DSC");
+                    int IDX_NOTIF_SHR_DSC = DB.GetReaderOrdinal(rdr, "NOTIF_SHR_DSC");
+                    int IDX_NOTIFD_EMP_ADDR = DB.GetReaderOrdinal(rdr, "NOTIFD_EMP_ADDR");
+                    int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+                    int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+                    int IDX_PRICING_STRTAEGY_NAME = DB.GetReaderOrdinal(rdr, "PRICING_STRTAEGY_NAME");
+                    int IDX_SUBJECT = DB.GetReaderOrdinal(rdr, "SUBJECT");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new NotificationEmailTable
+                        {
+                            CHG_EMAIL_ADDR = (IDX_CHG_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_CHG_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_EMAIL_ADDR),
+                            CNTRCT_NM = (IDX_CNTRCT_NM < 0 || rdr.IsDBNull(IDX_CNTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTRCT_NM),
+                            CNTRCT_SID = (IDX_CNTRCT_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_SID),
+                            NLT_ID = (IDX_NLT_ID < 0 || rdr.IsDBNull(IDX_NLT_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NLT_ID),
+                            NOTIF_ID = (IDX_NOTIF_ID < 0 || rdr.IsDBNull(IDX_NOTIF_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_NOTIF_ID),
+                            NOTIF_LONG_DSC = (IDX_NOTIF_LONG_DSC < 0 || rdr.IsDBNull(IDX_NOTIF_LONG_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTIF_LONG_DSC),
+                            NOTIF_SHR_DSC = (IDX_NOTIF_SHR_DSC < 0 || rdr.IsDBNull(IDX_NOTIF_SHR_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTIF_SHR_DSC),
+                            NOTIFD_EMP_ADDR = (IDX_NOTIFD_EMP_ADDR < 0 || rdr.IsDBNull(IDX_NOTIFD_EMP_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTIFD_EMP_ADDR),
+                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+                            OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
+                            PRICING_STRTAEGY_NAME = (IDX_PRICING_STRTAEGY_NAME < 0 || rdr.IsDBNull(IDX_PRICING_STRTAEGY_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRICING_STRTAEGY_NAME),
+                            SUBJECT = (IDX_SUBJECT < 0 || rdr.IsDBNull(IDX_SUBJECT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUBJECT)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+            return ret;
+        }
+
+        /// <summary>
+        ///UpdateNotificationEmails
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public bool UpdateNotificationEmails(List<int> ids)
+        {
+            OpLog.Log("UpdateNotificationEmails");
+            var ret = new List<NotificationEmailTable>();
+            try
+            {
+                var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_MNG_NOTIF_EMAIL
+                {
+                    MODE = "UPDATE",
+                    TYPE_INT_LIST = new type_int_list(ids.ToArray())
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Send message to message center
+        /// </summary>
+        /// <param name="notfEvent"></param>
+        /// <param name="payload"></param>
+        public async Task SendPayLoadToMsgCenter(NotificationEvents notfEvent, MessageCenterPayload payload)
+        {
+            try
+            {
+                SetMessageCenterEndPoints();
+                // if non prod environment send it to forward only email, recipients will be ignored
+                if (!env.Equals("PROD", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    payload.sent_test_email = false;
+                }
+                HttpResponseMessage response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log("Message center: " + ex);
+            }
+        }
+
+        /// <summary>
+        /// HttpClinet for message center
+        /// </summary>
+        private static HttpClient MsgCenterClient
+        {
+            get
+            {
+                HttpClientHandler handler = new HttpClientHandler();
+                HttpClient client = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(messageCenterTokenUrl)
+                };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", messageCenterToken);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                return client;
+            }
         }
     }
 }

@@ -364,6 +364,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "DealProducts";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Notifications Email table
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_MNG_NOTIF_EMAIL");
+	ds.Tables[0].TableName = "NotificationEmailTable";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

@@ -18,7 +18,22 @@ namespace Intel.MyDeals.Entities
     public enum NotificationEvents
     {
         SubmittedToApproved = 1,
-        DealModifiedByOtherUser = 2,
-        TenderSubmittedToOffer = 3
+        CapUpdateToDeal = 2,
+        CostUpdateToDeal = 3,
+        DealModifiedByOtherUser = 4,
+        PSInPendingStage = 5,
+        ContractPendingStage = 6,
+        TenderSubmittedToOffer = 7
+    }
+
+    public class NotificationLog
+    {
+        public int CONTRACT_SID { get; set; }
+
+        public int NOTIF_ID { get; set; }
+
+        public int OBJ_SID { get; set; }
+
+        public int OBJ_TYPE_SID { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
 
@@ -18,5 +15,13 @@ namespace Intel.MyDeals.IDataLibrary
         bool ManageNotifications(string mode, bool isRead, IList<int> notificationIds);
 
         int GetUnreadNotificationCount();
+
+        bool CreateNotificationLog(IList<NotificationLog> logs, int wwid);
+
+        List<NotificationEmailTable> GetNotificationEmails(List<int> ids);
+
+        Task SendPayLoadToMsgCenter(NotificationEvents notfEvent, MessageCenterPayload payload);
+
+        bool UpdateNotificationEmails(List<int> ids);
     }
 }

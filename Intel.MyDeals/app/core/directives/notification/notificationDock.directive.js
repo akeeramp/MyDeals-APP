@@ -40,6 +40,30 @@ function notificationDock($compile, $timeout, objsetService, $uibModal, $locatio
                     })
                 }
 
+                $scope.openMessage = function (dataItem) {
+
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'app/admin/notifications/notificationsModal.html',
+                        controller: 'notificationsModalController',
+                        controllerAs: 'vm',
+                        size: 'lg',
+                        resolve: {
+                            dataItem: function () {
+                                return dataItem;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {
+                        dataItem.IS_READ_IND = true;
+                    }, function () {
+                        dataItem.IS_READ_IND = true;
+                    });
+                }
+
                 $scope.getNotification = function (mode) {
                     notificationsService.getNotification(mode).then(function (response) {
                         $scope.notifications = response.data;

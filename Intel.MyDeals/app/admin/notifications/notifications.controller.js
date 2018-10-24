@@ -8,9 +8,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    notificationsController.$inject = ['$scope', 'dataService', 'notificationsService', 'gridConstants'];
+    notificationsController.$inject = ['$scope', 'dataService', 'notificationsService', 'gridConstants', '$uibModal'];
 
-    function notificationsController($scope, dataService, notificationsService, gridConstants) {
+    function notificationsController($scope, dataService, notificationsService, gridConstants, $uibModal) {
         var vm = this;
 
         vm.gridData = [];
@@ -109,6 +109,30 @@
             });
         }
 
+        $scope.openMessage = function (dataItem) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'app/admin/notifications/notificationsModal.html',
+                controller: 'notificationsModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                dataItem.IS_READ_IND = true;
+            }, function () {
+                dataItem.IS_READ_IND = true;
+            });
+        }
+
         var toolbar = '<a role="button" class="k-button k-button-icontext" ng-click=markAsRead($event)><span class="fa fa-eye"></span> MARK AS READ</a>' +
                       '<a role="button" class="k-button k-button-icontext" ng-click=markAsUnRead($event)><span class="fa fa-eye-slash"></span> MARK AS UNREAD</a>' +
                       '<a role="button" class="k-button k-button-icontext" ng-click=delete($event)><span class="fa fa-trash-o"></span> DELETE</a>' +
@@ -145,7 +169,7 @@
             },
             {
                 field: "NOTIF_SHR_DSC",
-                template: "<div ng-class='{unread: !dataItem.IS_READ_IND }'>{{dataItem.NOTIF_SHR_DSC}}</div>",
+                template: "<div ng-click='openMessage(dataItem)' role='hand' ng-class='{unread: !dataItem.IS_READ_IND }'>{{dataItem.NOTIF_SHR_DSC}}</div>",
                 title: "Message",
                 filterable: false
             },

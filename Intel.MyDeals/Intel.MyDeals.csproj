@@ -345,6 +345,8 @@
     <Content Include="app\admin\notifications\notification.service.js" />
     <Content Include="app\admin\notifications\notifications.controller.js" />
     <Content Include="app\admin\notifications\notifications.html" />
+    <Content Include="app\admin\notifications\notificationsModal.controller.js" />
+    <Content Include="app\admin\notifications\notificationsModal.html" />
     <Content Include="app\admin\notifications\notificationsSettings.html" />
     <Content Include="app\admin\notifications\notificationsSettings.controller.js" />
     <Content Include="app\admin\oplog\admin.oplog.controller.js" />

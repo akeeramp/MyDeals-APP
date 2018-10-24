@@ -6,16 +6,19 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Intel.MyDeals.DataLibrary;
+using System.Threading;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public class PricingStrategiesLib : IPricingStrategiesLib
     {
         private readonly IOpDataCollectorLib _dataCollectorLib;
+        private readonly INotificationsLib _notificationsLib;
 
-        public PricingStrategiesLib(IOpDataCollectorLib dataCollectorLib)
+        public PricingStrategiesLib(IOpDataCollectorLib dataCollectorLib, INotificationsLib notificationsLib)
         {
             _dataCollectorLib = dataCollectorLib;
+            _notificationsLib = notificationsLib;
         }
 
         public MyDealsData GetPricingStrategy(int id, bool inclusive = false)
@@ -33,7 +36,7 @@ namespace Intel.MyDeals.BusinessLogic
                     OpDataElementType.PRC_ST
                 };
 
-            return OpDataElementType.PRC_ST.GetByIDs(new List<int> {id}, opDataElementTypes);
+            return OpDataElementType.PRC_ST.GetByIDs(new List<int> { id }, opDataElementTypes);
         }
 
         public OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id)
@@ -71,7 +74,6 @@ namespace Intel.MyDeals.BusinessLogic
                 contractToken);
         }
 
-
         public OpMsg DeletePricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies)
         {
             // Remove this pricing strategy with a hard delete
@@ -97,7 +99,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }).ToList()
             };
 
-            var allActnItems =  ActionPricingStrategies(contractToken, actnPs); // PS and all WIP items that get stage change
+            var allActnItems = ActionPricingStrategies(contractToken, actnPs); // PS and all WIP items that get stage change
 
             // make a DB call - Get WIP data
             MyDealsData myDealsData = OpDataElementType.PRC_ST.GetByIDs(actnPs[WorkFlowActions.Cancel].Select(d => d.DC_ID).ToList(),
@@ -124,6 +126,8 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> psGoingPending = new List<int>();
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
             List<int> auditableDealIds = new List<int>();
+            List<NotificationLog> notifications = new List<NotificationLog>();
+            var wwid = OpUserStack.MyOpUserToken.Usr.WWID;
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
@@ -172,7 +176,6 @@ namespace Intel.MyDeals.BusinessLogic
             contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
             List<int> needsPctMctDealIds = new List<int>();
-
 
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
             {
@@ -225,7 +228,6 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
-
                 // Brought this block back in to force DA into having to re-run PCT/MCT on approval for Jyoti's "Change Cost in DB after user does PCT" defect (DE19996)
                 // Meet Comp Test / Price Cost Test Check
                 bool needToRunMct = actn == "Approve" && hasL1 && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
@@ -263,10 +265,8 @@ namespace Intel.MyDeals.BusinessLogic
 
                         return opMsgQueue;
                     }
-
                 }
                 // END DE19996 block...
-
 
                 // Check for pending stage... might need to bypass it
                 if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending")
@@ -305,11 +305,9 @@ namespace Intel.MyDeals.BusinessLogic
                     KeyIdentifiers = new[] { dc.DcID }
                 });
                 dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
-
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
             }
-
 
             List<int> dealIds = new List<int>();
             List<int> pendingDealIds = new List<int>();
@@ -374,7 +372,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
                     deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
-                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft) 
+                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)
                         || d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Pending)).ToList();
                     dealIds = deals.Select(d => d.DcID).ToList();
 
@@ -391,7 +389,7 @@ namespace Intel.MyDeals.BusinessLogic
                         .Where(d => dealIds.Contains(d.DcID) && d.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD && quotableTypes.Contains(d.AtrbValue.ToString()))
                         .Select(d => d.DcID).ToList();
 
-                    if (psGoingActive.Any())                        
+                    if (psGoingActive.Any())
                     {
                         foreach (OpDataElement de in deals)
                         {
@@ -407,24 +405,29 @@ namespace Intel.MyDeals.BusinessLogic
                                 else
                                 {
                                     de.SetAtrbValue(WorkFlowStages.Offer);
+
+                                    // For tneder deals Sumbitted to offer notification logged at deal level
+                                    AddNotificationLog(notifications, contractToken.ContractId, de.DcID, OpDataElementType.WIP_DEAL, NotificationEvents.TenderSubmittedToOffer);
                                 }
                             }
                             else
                             {
                                 de.SetAtrbValue(WorkFlowStages.Active);
                             }
-
                         }
                     }
 
+                    // For non tender deals notification is logged at PS level, (Assumption if there are no Tneder deal noifications then all of them are non tender PS)
+                    if (!notifications.Any())
+                    {
+                        psGoingActive.ForEach(psId => AddNotificationLog(notifications, contractToken.ContractId, psId, OpDataElementType.PRC_ST, NotificationEvents.SubmittedToApproved));
+                    }
                 }
             }
 
-
-
             myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
             myDealsData[OpDataElementType.PRC_ST].GroupID = -101; // Whatever the real ID of this object is
-            
+
             // Back to normal operations, clear out the messages and all.
             myDealsData[OpDataElementType.PRC_ST].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
             myDealsData[OpDataElementType.PRC_ST].Messages.Messages.RemoveAll(r => true);
@@ -434,7 +437,7 @@ namespace Intel.MyDeals.BusinessLogic
             //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
             myDealsData[OpDataElementType.PRC_ST].AddAuditActions(auditableDealIds);
 
-             if (dealIds.Any() || pendingDealIds.Any() || tenderWonDealsIds.Any())
+            if (dealIds.Any() || pendingDealIds.Any() || tenderWonDealsIds.Any())
             {
                 myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
                 myDealsData[OpDataElementType.WIP_DEAL].GroupID = -102; // Whatever the real ID of this object is
@@ -453,14 +456,38 @@ namespace Intel.MyDeals.BusinessLogic
                     myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(nonTenderIds.Union(tenderWonDealsIds).ToList()); // not sure if we need it in both places or just the PS
                     myDealsData[OpDataElementType.WIP_DEAL].AddQuoteLetterActions(quotableDealIds); // not sure if we need it in both places or just the PS
                 }
-
             }
 
             myDealsData.EnsureBatchIDs();
             myDealsData.Save(contractToken);
 
+            // After save insert into notification log
+            if (notifications.Any())
+            {
+                Thread notificationThread = new Thread(() => _notificationsLib.CreateNotificationLog(notifications, wwid));
+                notificationThread.Start();
+            }
+
             return opMsgQueue;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <param name="contractId"></param>
+        /// <param name="obj_sid"></param>
+        /// <param name="opdataElementType"></param>
+        /// <param name="notfEvent"></param>
+        private void AddNotificationLog(IList<NotificationLog> notification, int contractId, int obj_sid, OpDataElementType opdataElementType, NotificationEvents notfEvent)
+        {
+            notification.Add(new NotificationLog
+            {
+                CONTRACT_SID = contractId,
+                OBJ_SID = obj_sid,
+                OBJ_TYPE_SID = (int)opdataElementType,
+                NOTIF_ID = (int)notfEvent
+            });
+        }
     }
 }

@@ -1,0 +1,16 @@
+﻿<div class="modal-header modalBlueBody">
+    <h5 class="modal-title" id="modal-title">Notification({{role}}) <small>{{dataItem.NOTIF_NM}}</small><img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /><i role="button" title="Close" class="intelicon-close-max fr" ng-click="close()"></i></h5>
+</div>
+<div class="modal-body content" style="margin:15px;overflow-x:auto;min-height:300px;" id="modal-body">
+    <div class="row">
+        <b>{{dataItem.NOTIF_SHR_DSC}}</b>
+    </div>
+    <br />
+    <div class="row" ng-bind-html="emailTable"></div>
+</div>
+<style>
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+</style>

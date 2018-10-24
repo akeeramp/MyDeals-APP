@@ -12,7 +12,7 @@
                         <i class="intelicon-settings-solid"></i>
                     </span>
                 </li>
-                <li ng-class="{'unread':!msg.IS_READ_IND, 'read':msg.IS_READ_IND}" ng-repeat="msg in notifications">
+                <li ng-click="openMessage(msg)" ng-class="{'unread':!msg.IS_READ_IND, 'read':msg.IS_READ_IND}" ng-repeat="msg in notifications">
                     {{msg.NOTIF_SHR_DSC}}
                 </li>
                 <li class="read" ng-if="notifications.length === 0">
@@ -32,6 +32,7 @@
         color: #00AEEF;
         padding: 2px;
         font-size: 12px;
+        font-weight:bold;
     }
 
     .notificationDock .read {
