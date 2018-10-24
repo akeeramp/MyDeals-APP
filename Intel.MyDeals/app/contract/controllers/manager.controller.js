@@ -326,10 +326,14 @@
             $scope.root.deleteContract();
         }
 
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+        }
+
         $scope.summaryFilter = function (ps) {
             return (
                 ($scope.dealTypeFilter === undefined || $scope.dealTypeFilter === '' || ps.dealType === undefined || ps.dealType.indexOf($scope.dealTypeFilter) >= 0) &&
-                ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0 || $scope.titleInPt(ps)) &&
+                ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0 || $scope.titleInPt(ps)) &&
                 $scope.stageInPs(ps)
                 );
         }
@@ -337,7 +341,7 @@
         $scope.titleInPt = function (ps) {
             if (ps.PRC_TBL === undefined || $scope.titleFilter === '') return ps;
             for (var i = 0; i < ps.PRC_TBL.length; i++) {
-                if (ps.PRC_TBL[i].TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0) return ps;
+                if (ps.PRC_TBL[i].TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0) return ps;
             }
             return null;
         }

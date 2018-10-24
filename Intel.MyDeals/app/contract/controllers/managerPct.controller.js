@@ -208,17 +208,21 @@
             }, function () { });
         }
 
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+        }
+
         $scope.customFilter = function (ps) {
             return (
                 ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT.toUpperCase() === $scope.pctFilter.toUpperCase()) &&
-                ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0 || $scope.titleInPt(ps))
+                ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0 || $scope.titleInPt(ps))
                 );
         }
 
         $scope.titleInPt = function (ps) {
             if (ps.PRC_TBL === undefined || $scope.titleFilter === '') return ps;
             for (var i = 0; i < ps.PRC_TBL.length; i++) {
-                if (ps.PRC_TBL[i].TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0) return ps;
+                if (ps.PRC_TBL[i].TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0) return ps;
             }
             return null;
         }
