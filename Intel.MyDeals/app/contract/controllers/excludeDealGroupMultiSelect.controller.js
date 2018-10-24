@@ -31,6 +31,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     if (excludeOutliers) {
         filter = { field: "GRP_BY", operator: "eq", value: 0 }
     }
+
     function trimString(item, propertyName) {
         var tempString = '';
         if (propertyName == 'OVLP_CNTRCT_NM') {
@@ -205,6 +206,11 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		);
 	}
 
+	function rplcString(value) {
+	    return value;
+	    //return value.replace("'", "\'").replace("#", "\#");
+	}
+
 	vm.gridOptionsSuggested = {
 		dataSource: dataSourceSuggested,
 		enableHorizontalScrollbar: true,
@@ -227,7 +233,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    },
 			{ field: "OVLP_DEAL_ID", title: "Deal Id", width: "80px" },
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type", width: "120px" },
-            { field: "OVLP_CNTRCT_NM", title: "Contract", width: "250px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNTRCT_NM#">{{vm.trimString(dataItem,"OVLP_CNTRCT_NM")}}</div>'},
+            { field: "OVLP_CNTRCT_NM", title: "Contract", width: "250px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNTRCT_NM#">{{vm.trimString(dataItem,"OVLP_CNTRCT_NM")}}</div>' },
 			{ field: "OVLP_WF_STG_CD", title: "Stage", width: "90px" },
 			{ field: "OVLP_DEAL_STRT_DT", title: "Deal Start", width: "120px", template: "#= moment(OVLP_DEAL_STRT_DT).format('MM/DD/YYYY') #" },
 			{ field: "OVLP_DEAL_END_DT", title: "Deal End", width: "120px", template: "#= moment(OVLP_DEAL_END_DT).format('MM/DD/YYYY') #" },
@@ -249,6 +255,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    items.each(function () {
 		        var row = $(this);
 		        var dataItem = e.sender.dataItem(row);
+		        dataItem["OVLP_CNTRCT_NM"] = dataItem["OVLP_CNTRCT_NM"].replace('#', 'xx').replace('’', '.');
 		        if (dataItem["OVLP_ECAP_PRC"] === 0) {
 		            dataItem["OVLP_ECAP_PRC"] = "";
 
