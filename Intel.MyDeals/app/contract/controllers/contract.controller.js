@@ -3285,8 +3285,12 @@
                         lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
                         lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true);
                         if (productJSON.length !== 0) {
-                            lData["CAP"] = productJSON[data[d][["PRD_BCKT" + "_____20___" + (t - 1)]]][0]["CAP"];
-                            lData["YCS2"] = productJSON[data[d][["PRD_BCKT" + "_____20___" + (t - 1)]]][0]["YCS2"];
+                            angular.forEach(productJSON, function (value, key) {
+                                if (key.toUpperCase() === (data[d]["PRD_BCKT" + "_____20___" + (t - 1)]).toUpperCase()) {
+                                    lData["CAP"] = value[0]["CAP"];
+                                    lData["YCS2"] = value[0]["YCS2"];
+                                }
+                            });
                         }
                     }
                     newData.push(lData);
@@ -4666,7 +4670,7 @@
                         if (data.data == true) {
                             $scope.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
                             $scope._dirty = false;
-                            $scope.goToTenderDashboard();                            
+                            $scope.goToTenderDashboard();
                             return;
                         } else {
                             logger.stickyError("Publishing deals failed. Contact Administrator.");
