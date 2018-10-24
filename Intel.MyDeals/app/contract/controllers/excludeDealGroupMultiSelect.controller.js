@@ -255,10 +255,9 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		    items.each(function () {
 		        var row = $(this);
 		        var dataItem = e.sender.dataItem(row);
-		        dataItem["OVLP_CNTRCT_NM"] = dataItem["OVLP_CNTRCT_NM"].replace('#', 'xx').replace('’', '.');
+		        //dataItem["OVLP_CNTRCT_NM"] = dataItem["OVLP_CNTRCT_NM"].replace('#', 'xx').replace('’', '.');
 		        if (dataItem["OVLP_ECAP_PRC"] === 0) {
 		            dataItem["OVLP_ECAP_PRC"] = "";
-
 		        }
 		        //if (dataItem.OVLP_DEAL_ID === vm.DC_ID) {
 		        //    var item = row.clone();

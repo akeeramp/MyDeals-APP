@@ -1030,9 +1030,11 @@
                 var stItem = $scope.root.contractData.PRC_ST[a];
                 if (!!stItem && ids.indexOf(stItem.DC_ID) >= 0) {
                     var item = {
+                        "CUST_NM": $scope.root.contractData.Customer.CUST_NM,
+                        "VERTICAL_ROLLUP": stItem.VERTICAL_ROLLUP,
                         "CNTRCT": "#" + $scope.root.contractData.DC_ID + " " + $scope.root.contractData.TITLE,
                         "DC_ID": stItem.DC_ID,
-                        "WF_STG_CD": stItem.WF_STG_CD,
+                        "NEW_STG": stItem.WF_STG_CD,
                         "TITLE": stItem.TITLE,
                         "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID
                     };
@@ -1043,6 +1045,12 @@
             if (items.length === 0) {
                 kendo.alert("No items were selected to email.");
                 return;
+            }
+
+            var custNames = [];
+            for (var x = 0; x < items.length; x++) {
+                if (custNames.indexOf(items[x].CUST_NM) < 0)
+                    custNames.push(items[x].CUST_NM);
             }
 
             var data = {
@@ -1057,7 +1065,7 @@
             var dataItem = {
                 from: "mydeals.notification@intel.com",
                 to: "",
-                subject: "My Deals Action Required!",
+                subject: "My Deals Action Required for " + custNames.join(', ') + "!",
                 body: msg
             };
             var modalInstance = $uibModal.open({
