@@ -33,7 +33,7 @@
                 <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left" ng-if="!vm.hasCheckbox">
                     Deals marked with "x" are excluded: 
                 </div>
-				<div style='color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left' ng-if="vm.hasCheckbox">
+				<div style='color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left'>
 					<label class="switch" title='Excluded/Included by USER'>
 					  <input type="checkbox" ng-click="vm.filterData(IS_SELECTED)" ng-model='IS_SELECTED' title='Click to see Excluded/Included by USER' checked>
 					  <span class="slider" title='Click to see Excluded/Included by USER'><p class={{vm.toggleClass}}>{{vm.toggleMessage}}</p></span>
