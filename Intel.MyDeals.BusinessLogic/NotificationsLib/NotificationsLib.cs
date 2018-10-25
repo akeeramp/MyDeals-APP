@@ -227,27 +227,27 @@ namespace Intel.MyDeals.BusinessLogic
             var url = MyDealsWebApiUrl.ROOT_URL;
             var template = "@{ var rootUrl =\"" + url + "\";}";
 
-            // TODO: Move this to constant
+            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
             template += @"<table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
                                                         <tbody>
                                                             <tr>
-                                                                <th style='TEXT-ALIGN: left'>Contract</th>
-                                                                <th style='TEXT-ALIGN: left'>Strategy #</th>
-                                                                <th style='TEXT-ALIGN: left'>Strategy Name</th>
-                                                                <th style='TEXT-ALIGN: left'>Action</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Contract</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy #</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
                                                             </tr>
                                                         </tbody>
                                                         <tbody>
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                    <td style='TEXT-ALIGN: left'>@(item.CNTRCT_SID + "":"" +item.CNTRCT_NM)</td>
-                                                                    <td style='TEXT-ALIGN: left'>
-                                                                        <p><a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*</p>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
                                                                     </td>
-                                                                    <td style='TEXT-ALIGN: left'>@item.PRICING_STRTAEGY_NAME</td>
-                                                                    <td style='TEXT-ALIGN: left'>
-                                                                        <p><a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>View PricingStrategy</a>*</p>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>View PricingStrategy</a>*
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -274,25 +274,25 @@ namespace Intel.MyDeals.BusinessLogic
             var url = MyDealsWebApiUrl.ROOT_URL;
             var template = "@{ var rootUrl =\"" + url + "\";}";
 
-            // TODO: Move this to constant
+            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
             template += @"<table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
                                                         <tbody>
                                                             <tr>
-                                                                <th style='TEXT-ALIGN: left'>Folio</th>
-                                                                <th style='TEXT-ALIGN: left'>Deal #</th>
-                                                                <th style='TEXT-ALIGN: left'>Action</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Folio</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
                                                             </tr>
                                                         </tbody>
                                                         <tbody>
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                    <td style='TEXT-ALIGN: left'>@(item.CNTRCT_SID + "":"" +item.CNTRCT_NM)</td>
-                                                                    <td style='TEXT-ALIGN: left'>
-                                                                        <p><a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*</p>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
                                                                     </td>
-                                                                    <td style='TEXT-ALIGN: left'>
-                                                                        <p><a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*</p>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -319,21 +319,21 @@ namespace Intel.MyDeals.BusinessLogic
             var url = MyDealsWebApiUrl.ROOT_URL;
             var template = "@{ var rootUrl =\"" + url + "\";}";
 
-            // TODO: Move this to constant
+            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
             template += @"<table style='FONT-SIZE: 11pt;BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
                                                         <tbody>
                                                             <tr>
-                                                                <th style='TEXT-ALIGN: left'>Strategy Name</th>
-                                                                <th style='TEXT-ALIGN: left'>Action</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
                                                             </tr>
                                                         </tbody>
                                                         <tbody>
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                    <td style='TEXT-ALIGN: left'>@item.PRICING_STRTAEGY_NAME</td>
-                                                                    <td style='TEXT-ALIGN: left'>
-                                                                        <p><a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*</p>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -360,21 +360,21 @@ namespace Intel.MyDeals.BusinessLogic
             var url = MyDealsWebApiUrl.ROOT_URL;
             var template = "@{ var rootUrl =\"" + url + "\";}";
 
-            // TODO: Move this to constant
+            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
             template += @"<table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
                                                         <tbody>
                                                             <tr>
-                                                                <th style='TEXT-ALIGN: left'>Contract #</th>
-                                                                <th style='TEXT-ALIGN: left'>Action</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Contract #</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
                                                             </tr>
                                                         </tbody>
                                                         <tbody>
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                     <td style='TEXT-ALIGN: left'>@(item.CNTRCT_SID + "":"" +item.CNTRCT_NM)</td>
-                                                                    <td style='TEXT-ALIGN: left'>
-                                                                        <p><a href='@(rootUrl +""Contract#/manager/"" + item.CNTRCT_SID)'>View Contract</a>*</p>
+                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""Contract#/manager/"" + item.CNTRCT_SID)'>View Contract</a>*
                                                                     </td>
                                                                 </tr>
                                                             }

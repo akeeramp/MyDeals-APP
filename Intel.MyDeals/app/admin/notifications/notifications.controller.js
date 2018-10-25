@@ -169,7 +169,7 @@
             },
             {
                 field: "NOTIF_SHR_DSC",
-                template: "<div ng-click='openMessage(dataItem)' role='hand' ng-class='{unread: !dataItem.IS_READ_IND }'>{{dataItem.NOTIF_SHR_DSC}}</div>",
+                template: "<div ng-click='openMessage(dataItem)' role='button' title='Click here to read.' ng-class='{unread: !dataItem.IS_READ_IND }'>{{dataItem.NOTIF_SHR_DSC}}</div>",
                 title: "Message",
                 filterable: false
             },

@@ -8,9 +8,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    notificationsModalController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService', 'dataItem'];
+    notificationsModalController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService', 'dataItem', '$sce'];
 
-    function notificationsModalController($scope, dataService, $uibModalInstance, notificationsService, dataItem) {
+    function notificationsModalController($scope, dataService, $uibModalInstance, notificationsService, dataItem, $sce) {
         $scope.role = window.usrRole;
         $scope.wwid = window.usrWwid;
         $scope.dataItem = dataItem;
@@ -34,7 +34,7 @@
 
         function loadEmailBody(){
             notificationsService.getEmailBodyTemplateUI(dataItem.NLT_ID).then(function (response) {
-                $scope.emailTable = response.data;
+                $scope.emailTable = $sce.trustAsHtml(response.data);
             });
         }
 
