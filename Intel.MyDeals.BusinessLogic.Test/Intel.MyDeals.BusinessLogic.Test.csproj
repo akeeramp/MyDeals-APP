@@ -108,6 +108,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="EmployeeLibTests.cs" />
     <Compile Include="CustomerCalendarLibTests.cs" />
     <Compile Include="JmsTesting.cs" />
     <Compile Include="LoggingLibTest.cs" />

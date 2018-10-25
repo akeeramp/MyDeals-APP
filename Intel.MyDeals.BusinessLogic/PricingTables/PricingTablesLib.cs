@@ -427,6 +427,13 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
                 string stageIn = id2stageMapping[dc.DcID];
+
+                // Check to get around Manage Tab sending PS WF stage for WIP deals instead of normal WF stage
+                if ((stageIn == WorkFlowStages.Requested || stageIn == WorkFlowStages.Submitted) && dc.DcType == OpDataElementType.WIP_DEAL.ToString())
+                {
+                    stageIn = WorkFlowStages.Draft;
+                }
+
                 string actn = id2actnMapping[dc.DcID];
                 string costTestInDB = dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
                 string meetCompInDB = dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);

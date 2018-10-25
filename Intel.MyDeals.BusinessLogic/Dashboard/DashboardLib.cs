@@ -96,8 +96,9 @@ namespace Intel.MyDeals.BusinessLogic
             int mctVal = 0;
             int pctVal = 0;
 
-            string mct = item["MEETCOMP_TEST_RESULT"].ToString().ToUpper();
-            string pct = item["COST_TEST_RESULT"].ToString().ToUpper();
+            // Check to see if key exists first, was throwing key not found errors
+            string mct = item.ContainsKey("MEETCOMP_TEST_RESULT")? item["MEETCOMP_TEST_RESULT"].ToString().ToUpper(): "NOT RUN YET";
+            string pct = item.ContainsKey("COST_TEST_RESULT") ? item["COST_TEST_RESULT"].ToString().ToUpper(): "NOT RUN YET";
 
             switch (mct)
             {
