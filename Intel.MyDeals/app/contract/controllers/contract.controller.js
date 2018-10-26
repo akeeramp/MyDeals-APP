@@ -4637,7 +4637,7 @@
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' || $scope.inCompleteCapMissing ) && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet')) && isPartiallyValid == true) {
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' || $scope.inCompleteCapMissing ) && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet')) && isPartiallyValid == true) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
