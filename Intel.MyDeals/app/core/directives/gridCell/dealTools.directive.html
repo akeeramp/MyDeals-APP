@@ -78,6 +78,11 @@
         <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
     </div>
+	
+	<!-- Copy Contract for TENDER -->
+    <div class='fl md-icon' ng-if="isTenderContract == true" >
+        <i class='intelicon-copy-outlined' style="font-size: 20px !important;cursor:pointer" ng-click="copyTenderContract(dataItem)"></i>
+    </div>
 
     <div class='clearboth'></div>
 </div>

@@ -42,7 +42,7 @@
                 $scope.setUpdateFlag = false;
                 $scope.runIfStaleByHours = 3;
                 $scope.MC_MODE = "D";
-
+                
                 $scope.meetCompMasterdata = [];
 
                 $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
@@ -144,6 +144,26 @@
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE + "/" + $scope.objTypeId).then(function (response) {
                         $scope.$parent.refreshContractData();
                         if (response.data.length > 0) {
+                            //Calculate InComplete due to CAP Missing
+                            var isTrueOnce = false;
+                            var inCompleteDueToCAPMissing = function (data) {
+                                for(var i = 0; i < data.length; i++){
+                                    if (data[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                                        if (data[i].COMP_SKU.trim().length == 0 && data[i].COMP_PRC == 0 && ((data[i].PRD_CAT_NM.toLowerCase() == "svrws" && data[i].IA_BNCH == 0 && data[i].COMP_BNCH == 0) || data[i].PRD_CAT_NM.toLowerCase() != "svrws")) {
+                                            $scope.$parent.inCompleteDueToCapMissing(false);
+                                            break;
+                                        }
+                                        else if (!isTrueOnce) {
+                                            $scope.$parent.inCompleteDueToCapMissing(true);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($scope.isAdhoc == 1) {
+                                inCompleteDueToCAPMissing(response.data);
+                            }                           
+
                             response.data.forEach(function (obj) {
                                 if ($scope.isAdhoc == 1) {
                                     $scope.$parent.resetDirty();
@@ -1418,11 +1438,18 @@
                                     $scope.dataSourceParent.read();
                                 }
                             }
+                            
                             $scope.updateMeetComp = function () {
                                 $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
                                 dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid + "/" + $scope.objTypeId, $scope.tempUpdatedList).then(function (response) {
                                     $scope.meetCompMasterdata = response.data;
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
+
+                                    var isTrueOnce = false;
+                                    if ($scope.isAdhoc == 1) {
+                                        inCompleteDueToCAPMissing(response.data);
+                                    }
+
                                     if (usrRole == "GA") {
                                         var isValid = isModelValid($scope.meetCompMasterdata);
                                     }
@@ -1447,6 +1474,12 @@
                                 dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + 'A' + "/" + $scope.objTypeId).then(function (response) {
                                     $scope.meetCompMasterdata = response.data;
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
+
+                                    var isTrueOnce = false;
+                                    if ($scope.isAdhoc == 1) {
+                                        inCompleteDueToCAPMissing(response.data);
+                                    }
+
                                     if (usrRole == "GA") {
                                         var isValid = isModelValid($scope.meetCompMasterdata);
                                     }

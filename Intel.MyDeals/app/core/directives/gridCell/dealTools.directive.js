@@ -74,6 +74,63 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 $scope.isDeleteEnabled = false;
             }
 
+            $scope.copyTenderContract = function (dataItem) {
+                objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
+                    $scope.contractData = data.data[0];
+                    var tempcontractDataPS = {};
+                    for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
+                        if ($scope.contractData.PRC_ST[i].DC_ID === dataItem.PRC_ST_OBJ_SID) {
+                            tempcontractDataPS = ($scope.contractData.PRC_ST[i]);
+                        }
+                    }
+                    $scope.contractData.PRC_ST = [];
+                    $scope.contractData.PRC_ST.push(tempcontractDataPS);
+                    $scope.copyObj(tempcontractDataPS.TITLE, tempcontractDataPS, tempcontractDataPS.DC_ID, $scope.contractData.CUST_MBR_SID, $scope.contractData.DC_ID);
+                    
+                });
+            }
+
+            $scope.copyObj = function (objType, objTypes, id, CUST_MBR_SID, DC_ID) {
+                $scope.rootScope.setBusy("Copying", "Copying the " + objType);
+                $scope._dirty = false;                
+
+                var item = util.clone(objTypes);
+                if (!item) {
+                    kendo.alert("Unable to copy the " + objType);
+                    $scope.setBusy("", "");
+                    return;
+                }
+
+                // clear values
+                item.DC_ID = -100;
+                item.HAS_TRACKER = "0";
+                item.COST_TEST_RESULT = "Not Run Yet";
+                item.MEETCOMP_TEST_RESULT = "Not Run Yet";
+
+                // define new TITLE
+                item.TITLE += " (copy)";
+               
+                // Add to DB first... then add to screen
+                objsetService.copyPricingStrategy(CUST_MBR_SID, DC_ID, id, item).then(
+                    function (data) {
+                        // reload the left nav to show the new details
+                        logger.success("Copied the " + objType + ".", data, "Copy Successful");
+                        //$scope.refreshContractData();
+                        $scope.rootScope.setBusy("", "");
+
+                        $state.go('contract.manager.strategy', {
+                            cid: $scope.contractData.DC_ID,
+                            sid: $scope.contractData.PRC_ST[0].DC_ID,
+                            pid: $scope.contractData.PRC_ST[0].PRC_TBL[0].DC_ID
+                        }, { reload: true });
+                    },
+                    function (response) {
+                        logger.error("Could not copy the " + objType + ".", response, response.statusText);
+                        $scope.rootScope.setBusy("", "");
+                    }
+                );
+            }
+
             $scope.stgOneChar = function () {
                 return gridUtils.stgOneChar($scope.dataItem);
             }
