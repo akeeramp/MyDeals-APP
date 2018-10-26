@@ -88,7 +88,7 @@ namespace Intel.MyDeals.DataLibrary
                 var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_LD_NOTIF_LOG
                 {
                     USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    mode = mode
+                    MODE = mode
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -154,8 +154,8 @@ namespace Intel.MyDeals.DataLibrary
                 var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_LD_NOTIF_LOG
                 {
                     USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    mode = mode,
-                    List = opPair
+                    MODE = mode,
+                    TYPE_INT_PAIR = opPair
                 };
 
                 using (var rdr = DataAccess.ExecuteDataSet(cmd))
@@ -216,7 +216,7 @@ namespace Intel.MyDeals.DataLibrary
                 var cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_LD_NOTIF_LOG
                 {
                     USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    mode = "COUNT"
+                    MODE = "COUNT"
                 };
 
                 var ret = DataAccess.ExecuteScalar(cmd);

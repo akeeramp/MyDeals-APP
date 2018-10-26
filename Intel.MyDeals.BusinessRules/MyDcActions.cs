@@ -647,6 +647,25 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        /// <summary>
+        /// End customer required for Tender
+        /// </summary>
+        /// <param name="args"></param>
+        public static void RequiredEndCustomer(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string deDealTypeValue = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            if (deRebateTypeValue == "TENDER")
+            {
+                IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+                if (deEndCustomer != null) deEndCustomer.IsRequired = true;
+            }
+        }
+
         public static void ValidateServerDealType(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -1062,7 +1081,7 @@ namespace Intel.MyDeals.BusinessRules
 
             var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
-            // Find DE item changes that trigger a true re-deal/stage change here 
+            // Find DE item changes that trigger a true re-deal/stage change here
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDifferentFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedDecreaseDes = r.Dc.GetDataElementsWhere(d => onChangeDecreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDecreasedFromOrig(atrbMstr)).ToList();

@@ -8,9 +8,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    notificationsSettingsController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService'];
+    notificationsSettingsController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService', '$filter'];
 
-    function notificationsSettingsController($scope, dataService, $uibModalInstance, notificationsService) {
+    function notificationsSettingsController($scope, dataService, $uibModalInstance, notificationsService, $filter) {
 
         $scope.role = window.usrRole;
         $scope.wwid = window.usrWwid;
@@ -34,9 +34,18 @@
         var getUserSubscription = function () {
             notificationsService.getUserSubscriptions().then(function (response) {
                 $scope.subScriptions = response.data;
+                $scope.setSelectAllValues();
             }, function (response) {
                 logger.error("Unable to get user subscription.", response, response.statusText);
             });
+        }
+
+        $scope.setSelectAllValues = function () {
+            var emailON = $filter('where')($scope.subScriptions, { 'EMAIL_IND': true });
+            $scope.selectAllDefaults.EMAIL_IND = emailON.length > 0;
+
+            var inToolON = $filter('where')($scope.subScriptions, { 'IN_TOOL_IND': true });
+            $scope.selectAllDefaults.IN_TOOL_IND = inToolON.length > 0;
         }
 
         // Save data and close

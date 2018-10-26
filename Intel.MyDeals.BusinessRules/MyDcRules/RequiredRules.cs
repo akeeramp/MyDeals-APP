@@ -112,6 +112,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="End customer Required if Tender Deal",
+                    ActionRule = MyDcActions.RequiredEndCustomer,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="MUST BE LAST RULE: Fix Required if readonly or hidden",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
@@ -129,5 +136,4 @@ namespace Intel.MyDeals.BusinessRules
             };
         }
     }
-
 }
