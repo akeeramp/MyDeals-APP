@@ -266,6 +266,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             cols[c].editor = $scope.multiDimEditor;
                         } else if (cols[c].editor === "scheduleEditor") {
                             cols[c].editor = $scope.scheduleEditor;
+                        } else if (cols[c].editor === "BID_ACTNS") {
+                            cols[c].editor = $scope.bidActnsEditor
                         }
                     } else if (cols[c].lookupUrl !== undefined && cols[c].lookupUrl !== "") {
                         cols[c].editor = $scope.lookupEditor;
@@ -1102,7 +1104,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //    openDealGroupModal(container, col);
                     //}
 
-                } else {
+                }  else {
                     $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
@@ -1272,6 +1274,56 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }                    
                 }
 
+
+                $(el).appendTo(container);
+            }
+
+            $scope.bidActnsEditor = function (container, options) {
+                var el = "";
+                var approveActions = [
+                    { text: "Action", value: "Action" },
+                    { text: "Approve", value: "Approve" },
+                    { text: "Revise", value: "Revise" },
+                ]
+
+                if (options.model["BID_ACTNS"].length === 0 || options.model["BID_ACTNS"].length === 1) {   //won/canceled/draft
+                    if (options.model["BID_ACTNS"].length === 0 && options.model["WF_STG_CD"] != "Cancelled") {
+                        //Approval actions
+                        //TODO: make sure user has correct role and make sure it only is editable if deal is not marked dirty
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "text",
+                            dataValueField: "value",
+                            dataSource: approveActions,
+                            index: 0,
+                            value: "Action",
+                            text: "Action",
+                            change: function (e) {
+                                $scope.broadcast("approval-actions-updated", { newValue: this.value(), dataItem: options.model });
+                            }
+                        });
+                    } else {    //no actions possible, just display same
+                        el = "<div id='cb_actn_#=data.DC_ID#'>" + gridUtils.getBidActions(options.model) + "</div>";
+                    }
+                } else {
+                    //Select traditional bid action
+                    var ind = options.model["BID_ACTNS"].map(function(e){return e.BidActnName;}).indexOf(options.model["WF_STG_CD"]);
+                    if (ind == -1) ind = 0;
+                    $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "BidActnName",
+                            dataValueField: "BidActnValue",
+                            dataSource: options.model["BID_ACTNS"],
+                            index: ind,
+                            value: options.model["BID_ACTNS"][ind].BidActnValue,
+                            text: options.model["BID_ACTNS"][ind].BidActnName,
+                            change: function (e) {
+                                $scope.broadcast("bid-actions-updated", { newValue: this.value(), dataItem: options.model });
+                            }
+                        });
+                }
 
                 $(el).appendTo(container);
             }

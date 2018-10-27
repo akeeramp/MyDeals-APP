@@ -1619,18 +1619,20 @@ gridUtils.getBidActions = function (data) {
     data["orig_WF_STG_CD"] = data.WF_STG_CD;
     data.BID_ACTNS = bidActns;
 
-    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is currently being negotiated and is not approved yet.  Once the deal gets approved, it will be available to action.'>(<i>Not Actionable</i>)</div></div>";
-    if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}</div>";
+    if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>Action</div>";
+    if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i>Not Actionable</i>)</div></div>";
 
-    return '<select kendo-drop-down-list id="ddListStat_' + data.DC_ID + '" ng-model="(dataItem.WF_STG_CD)" ' +
-        'k-data-text-field="\'BidActnName\'" ' +
-        'k-data-value-field="\'BidActnValue\'" ' +
-        'k-data-source="dataItem.BID_ACTNS" ' +
-        'k-change="changeBidAction" ' +
-        'style="width: 100%;"></select>';
+    //return '<select kendo-drop-down-list id="ddListStat_' + data.DC_ID + '" ng-model="(dataItem.WF_STG_CD)" ' +
+    //    'k-data-text-field="\'BidActnName\'" ' +
+    //    'k-data-value-field="\'BidActnValue\'" ' +
+    //    'k-data-source="dataItem.BID_ACTNS" ' +
+    //    'k-change="changeBidAction" ' +
+    //    'style="width: 100%;"></select>';
+
+    return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}</div>"
 }
 
-gridUtils.showBidStatusWip = function (data) {
+gridUtils.showBidStatusWip = function (data) {  //JEFFTODO: investigate this
     //if (data.WF_STG_CD === "Draft") return data.REBATE_TYPE === "TENDER" ? "<i>Not Actionable</i>" : "";
     // new requirement... show blank for tender also
     if (data.WF_STG_CD === "Draft") return "";

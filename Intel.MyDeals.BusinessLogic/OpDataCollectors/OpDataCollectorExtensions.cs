@@ -121,7 +121,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // remove items from the source that do not exist in the template -> need to prevent bringing in unsupported items
             IEnumerable<string> allTemplateCds = templateSource.Select(t => t.AtrbCd).Distinct();
-            dc.DataElements.RemoveAll(d => !allTemplateCds.Contains(d.AtrbCd));
+            dc.DataElements.RemoveAll(d => !allTemplateCds.Contains(d.AtrbCd) && d.AtrbCd != "BID_ACTNS");
         }
 
         /// <summary>

@@ -15,11 +15,13 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly IOpDataCollectorLib _dataCollectorLib;
         private readonly IContractsLib _contractsLib;
+        private readonly IPricingStrategiesLib _pricingStrategiesLib;
 
-        public TendersLib(IOpDataCollectorLib dataCollectorLib, IContractsLib contractsLib)
+        public TendersLib(IOpDataCollectorLib dataCollectorLib, IContractsLib contractsLib, IPricingStrategiesLib pricingStrategiesLib)
         {
             _dataCollectorLib = dataCollectorLib;
             _contractsLib = contractsLib;
+            _pricingStrategiesLib = pricingStrategiesLib;
         }
 
         public MyDealsData GetTenderMaster(int id, bool inclusive = false)
@@ -254,6 +256,39 @@ namespace Intel.MyDeals.BusinessLogic
             };
         }
 
+        public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)
+        {
+            //modify contract token with necessary PS/Contract information
+            //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
+            contractToken.CustId = data[0].CUST_MBR_SID;
+            contractToken.ContractId = data[0].CNTRCT_OBJ_SID;
+            contractToken.CustAccpt = "Accepted";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
+
+            //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
+            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
+
+            List<OpDataElementType> includeTypes = new List<OpDataElementType>();
+            List<int> ids = new List<int>();
+
+            ids.Add(data[0].DC_ID); //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
+            //includeTypes.Add(OpDataElementType.CNTRCT);
+            includeTypes.Add(OpDataElementType.PRC_ST);
+            //includeTypes.Add(OpDataElementType.WIP_DEAL);
+
+            MyDealsData upperContract = OpDataElementType.WIP_DEAL.GetByIDs(ids, includeTypes);
+
+            //TODO: need to modify for bulk data updates
+            List<WfActnItem> wfActnList = new List<WfActnItem>();
+            WfActnItem item = new WfActnItem();
+            item.DC_ID = upperContract[OpDataElementType.PRC_ST].AllDataCollectors.FirstOrDefault().DcID;   //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
+            item.WF_STG_CD = data[0].WF_STG_CD;     //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
+            wfActnList.Add(item);
+
+            actnPs[actn] = wfActnList;
+
+            return _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs);
+        }
+
         public OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
@@ -267,29 +302,41 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (List<TenderActionItem> item in contractDecoder.Values)
             {
-                contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
-                contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
-                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
-
                 // Get new Tender Action List
                 List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
 
-                List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
-
-                Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
-                foreach (OpDataElement de in trkrs)
+                //if the actn does not match anything in the tender action list, this means we are setting an approval action from the tender dashboard
+                if (actions.Count() == 0)
                 {
-                    if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
-                    dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
+                    //Code flows through here when the "actn" is not Offer, Won, or Lost - we expect it to be an approval action such as Approve/Revise
+                    opMsgQueue = ActionTenderApprovals(contractToken, data, actn);
                 }
-
-                // Apply messaging
-                opMsgQueue.Messages.Add(new OpMsg
+                else
                 {
-                    MsgType = OpMsg.MessageType.Info,
-                    Message = "Action List",
-                    ExtraDetails = actn == WorkFlowStages.Won ? (object) dictTrkrs : actions
-                });
+                    //Standard code flow for applying a bid action (Offer, Won, Lost) to a tender deal
+                    contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
+                    contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
+                    MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
+
+
+
+                    List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
+
+                    Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
+                    foreach (OpDataElement de in trkrs)
+                    {
+                        if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
+                        dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
+                    }
+
+                    // Apply messaging
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        MsgType = OpMsg.MessageType.Info,
+                        Message = "Action List",
+                        ExtraDetails = actn == WorkFlowStages.Won ? (object)dictTrkrs : actions
+                    });
+                }
             }
 
             return opMsgQueue;

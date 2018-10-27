@@ -880,6 +880,7 @@
                 function (results) {
 
                     var data = results.data.Data;
+                    //TODO: confirm why response data isn't being updated to be shown in the grid, do db modification test to confirm
 
                     //pcService.addPerfTimes(results.data.PerformanceTimes);
                     //pc.add(pcService.stop());
@@ -1076,18 +1077,65 @@
             }
         }
 
-        $scope.updateResults = function (wipData, pricingTableWipData) { //TODO: import function if needed
-            console.log("TODO: A")
+        $scope.updateResults = function (data, source) {
+            //TODO: in the tender Dashboard the majority of code in this function that we imported from contract controller doesn't appear to be reachable.  need to research what their original intended purposes were.
+            $scope.renameMapping = {};
+            var i, p;
+            if (data !== undefined && data !== null) {
+                // look for actions -> this has to be first because remapping might happen
+                for (i = 0; i < data.length; i++) {
+                    if (data[i]["_actions"] !== undefined) {
+                        var actions = data[i]["_actions"];
+                        for (var a = 0; a < actions.length; a++) {
+                            if (actions[a]["Action"] === "ID_CHANGE") {
+                                if (Array.isArray(source)) {
+                                    for (p = 0; p < source.length; p++) {
+                                        $scope.mapActionIdChange(source[p], actions[a]);
+                                    }
+                                } else {
+                                    $scope.mapActionIdChange(source, actions[a]);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Now look for items that need to be updated
+                for (i = 0; i < data.length; i++) {
+                    if (data[i]["DC_ID"] !== undefined && data[i]["DC_ID"] !== null) {
+                        if (Array.isArray(source)) {
+                            for (p = 0; p < source.length; p++) {
+                                if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
+                                if (data[i]["DC_ID"] === source[p]["DC_ID"]) {
+                                    $scope.mapProperty(source[p], data[i]);
+                                }
+                            }
+                        } else {
+                            if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
+                            if (data[i]["DC_ID"] === source["DC_ID"]) $scope.mapProperty(source, data[i]);
+                        }
+                    }
+                }
+            }
         }
 
+        $scope.mapActionIdChange = function (args) {
+            console.log("TODO: A");
+        }
+
+        $scope.mapProperty = function (args) {
+            console.log("TODO: C");
+        }
+
+
         $scope.canDeleteAttachment = function (wf_st_cd) {
-            console.log("TODO: B");
+            console.log("TODO: 2");
             return true; //TODO
         }
 
         $scope.$on('OpGridDataBound',
             function (event, args) {
-                console.log("TODO: C");
+                console.log("TODO: 1");
                 ////TODO
                 ////found in managerExcludeGroups.controller.js
                 //if (!$scope.firstGridLoaded) {
@@ -1152,11 +1200,11 @@
                         "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
                     };
 
-                    $scope.wipOptions.columns = $scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].columns;
-                    $scope.wipOptions.model = $scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model;
+                    $scope.wipOptions.columns = angular.copy($scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
+                    $scope.wipOptions.model = angular.copy($scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model);
 
-                    $scope.wipOptions.default.groups = opGridTemplate.groups[$scope.dealType];
-                    $scope.wipOptions.default.groupColumns = opGridTemplate.templates[$scope.dealType];
+                    $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
+                    $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
 
                     //insert tender bid actions to deal editor
                     $scope.wipOptions.columns.splice(3, 0, {
@@ -1173,8 +1221,9 @@
                         "mjrMnrChg": null,
                         "sortable": false,
                         "template": "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
-                        "excelTemplate": "#=gridUtils.getBidActionsLabel(data)#</div>",
+                        "excelTemplate": "<div>#=gridUtils.getBidActionsLabel(data)#</div>",
                         //"type": "string",
+                        "editor": "BID_ACTNS",
                         "filterable": false,
                         //"filterable": {
                         //    ui: function (element) {
@@ -1191,18 +1240,19 @@
                         //    },
                         //    extra: false
                         //},
-                        "title": "Bid Action",
+                        "title": "Action",
                         "width": 110
                     });
                     $scope.wipOptions.model.fields.bid_actions = {
                         "field": "bid_actions",
-                        "editable": false,
-                        "label": "Bid Action",
+                        "editable": true,
+                        "label": "Action",
                         "nullable": true,
                         "opLookupText": "",
                         "opLookupUrl": "",
                         "opLookupValue": "",
-                        "type": "string",       //TODO: is is a number? object? what is this bound to?
+                        //"type": "string",
+                        "editor": "BID_ACTNS",
                         "validMsg": ""
                     };
                     $scope.wipOptions.default.groupColumns.bid_actions = {
@@ -1227,6 +1277,170 @@
         $scope.$on("grid-datasource-read-complete", function (event, args) {
             resizeGrid();
         });
+
+        $scope.$on("bid-actions-updated", function (event, args) {
+            var newValue = args.newValue;
+            var dataItem = args.dataItem;
+            if (newValue == dataItem.WF_STG_CD) return; //user selected the same item, aka we do nothing here and break out
+
+            $scope.changeBidAction(dataItem, newValue);
+        });
+
+        $scope.$on("approval-actions-updated", function (event, args) {
+            var newValue = args.newValue;
+            var dataItem = args.dataItem;
+            if (newValue == "Action") return;   //user selected the default non-item action so we break out here.
+
+            $scope.changeBidAction(dataItem, newValue);
+        });
+
+        $scope.changeBidAction = function (dataItem, newVal) {
+            //var newVal = dataItem.WF_STG_CD;
+            var dsData = $scope.wipData;
+            var tenders = [];
+
+            // now update all checked items if the current one is checked
+            //if (dataItem.isLinked) {
+            //    for (var d = 0; d < dsData.length; d++) {
+            //        if (dsData[d].isLinked) {
+            //            dsData[d].WF_STG_CD = newVal;
+            //            tenders.push({
+            //                DC_ID: dsData[d].DC_ID,
+            //                CNTRCT_OBJ_SID: dsData[d].CNTRCT_OBJ_SID,
+            //                CUST_MBR_SID: dsData[d].CUST_MBR_SID
+            //            });
+            //        }
+            //    }
+            //} else {
+                tenders.push({
+                    DC_ID: dataItem.DC_ID,
+                    CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
+                    CUST_MBR_SID: dataItem.CUST_MBR_SID,
+                    WF_STG_CD: dataItem.WF_STG_CD
+                });
+            //}
+
+            var plural = tenders.length > 1 ? "s" : "";
+            var msg = "";
+            if (newVal === "Won") msg = "Would you like to mark the Tender Deal" + plural + " as 'Won'?  This will generate a Tracker Number.";
+            if (newVal === "Lost") msg = "Would you like to mark the Tender Deal" + plural + " as 'Lost'?";
+            if (newVal === "Offer") msg = "Would you like to re-open the Tender Deal" + plural + " and set to 'Offer'?";
+
+            if (newVal === "Approve") msg = "Would you like approve the Tender Deal" + plural + " and set to 'Approved'?";
+            if (newVal === "Revise") msg = "Would you like to edit the Tender Deal" + plural + " and set to 'Revise'?";
+
+            kendo.confirm(msg)
+                .then(function () {
+                    //Save the changes
+                    $scope.actionTenderDeals(tenders, newVal);
+                },
+                function () {
+                    //var dropdownlist, indx, lis, i;
+
+                    //if (dataItem.isLinked) {
+                    //    for (var d = 0; d < dsData.length; d++) {
+                    //        if (dsData[d].isLinked) {
+                    //            dsData[d].WF_STG_CD = dataItem["orig_WF_STG_CD"];
+                    //            dropdownlist = $("#ddListStat_" + dsData[d].DC_ID).data("kendoDropDownList");
+                    //            indx = 0;
+                    //            lis = dropdownlist.ul.children();
+                    //            for (i = 0; i < lis.length; i++) {
+                    //                if (lis[i].textContent === dsData[d]["orig_WF_STG_CD"]) indx = i;
+                    //            }
+                    //            dsData[d]['isLinked'] = false;
+                    //            dropdownlist.select(indx);
+                    //        }
+                    //    }
+                    //} else {
+                    //    dropdownlist = $("#ddListStat_" + dataItem.DC_ID).data("kendoDropDownList");
+                    //    indx = 0;
+                    //    lis = dropdownlist.ul.children();
+                    //    for (i = 0; i < lis.length; i++) {
+                    //        if (lis[i].textContent === dataItem["orig_WF_STG_CD"]) indx = i;
+                    //    }
+                    //    dropdownlist.select(indx);
+                    //}
+
+                });
+
+        }
+
+        $scope.actionTenderDeals = function (tenders, actn) {
+            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Action Tenders", "");
+            var pc = new perfCacheBlock("Action tenders", "UX");
+
+            $scope.setBusy("Updating Tender Deals...", "Please wait as we update the Tender Deals!");
+            var pcService = new perfCacheBlock("Update Actions to Tenders", "MT");
+            objsetService.actionTenderDeals(tenders, actn).then(
+                function (results) {
+                    //pcService.addPerfTimes(results.data.PerformanceTimes);
+                    //pc.add(pcService.stop());
+                    //var pcUI = new perfCacheBlock("Processing returned data", "UI");
+
+                    //var foundIt = false;
+                    //var noDeals = [];
+                    //$scope.messages = results.data.Data.Messages;
+
+                    //var dsData = $scope.wipData;
+                    //var singleRowUpdate = [];
+                    //if (tenders.length === 1) {
+                    //    singleRowUpdate[tenders[0]["DC_ID"]] = tenders[0]["DC_ID"];
+                    //}
+                    //for (var m = 0; m < $scope.messages.length; m++) {
+                    //    if ($scope.messages[m].Message === "Action List") {
+                    //        foundIt = true;
+                    //        var details = $scope.messages[m].ExtraDetails;
+                    //        for (var d = 0; d < dsData.length; d++) {
+                    //            if (details[dsData[d].DC_ID] !== undefined) {
+                    //                $("#trk_" + dsData[d].DC_ID).html(details[dsData[d].DC_ID].join(", "));
+                    //                $("#cb_actn_" + dsData[d].DC_ID).html('<div style="text-align: center; width: 100%;" class="ng-binding">Won</div>');
+                    //                $("#dealTool_" + dsData[d].DC_ID).html('');
+                    //                dsData[d]['isLinked'] = false;
+                    //            } else if (singleRowUpdate[dsData[d].DC_ID] !== undefined) {
+                    //                updateBidStatusDropDownSource(dsData[d]);
+                    //                break;
+                    //            }
+
+                    //            // if linked, clear out the check boxes
+                    //            if (dsData[d].isLinked) {
+                    //                updateBidStatusDropDownSource(dsData[d]);
+                    //            }
+
+                    //        }
+                    //    }
+                    //    else if ($scope.messages[m].Message === "No Deal") {
+                    //        noDeals.push($scope.messages[m].ExtraDetails);
+                    //    }
+                    //}
+
+                    //pc.add(pcUI.stop());
+                    //if ($scope.$root.pc !== null) {
+                    //    $scope.$root.pc.add(pc.stop());
+                    //    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                    //    $scope.$root.pc = null;
+                    //}
+
+                    //if (noDeals.length > 0) {
+                    //    kendo.alert("It looks like one or more deals were deleted.  We need to refresh the data.");
+                    //    $scope.$broadcast('reload-search-dataSource');
+                    //} else if (foundIt) {
+                    //    $scope.curLinkedVal = "";
+                        //$timeout(function () {
+                    $scope.setBusy("Tender Deals Updated... But Jeff hasn't implemented Grid refresh yet.", "Your approval/action should have gone through.  Please refresh the page and pull up your tenders again.  Sorry :(");
+                        //}, 50);
+                        //////scope.ds.read(); // we rely on the DS post load to close down the busy indicator
+                    //} else {
+                    //    $timeout(function () {
+                    //        $scope.setBusy("", "");
+                    //    }, 50);
+                    //}
+
+                },
+                function (result) {
+                    //debugger;
+                }
+            );
+        }
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;
