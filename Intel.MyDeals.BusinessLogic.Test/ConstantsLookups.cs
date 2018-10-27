@@ -24,13 +24,26 @@ namespace Intel.MyDeals.BusinessLogic.Test
             Console.WriteLine("Completed Constants Lookups Lib tests.");
         }
 
+        [Test,
+    TestCase("ENV", true),
+    TestCase("GARBAGE", false)
+    ]
+        public void CnstLib_GetToolConstants(string testString, bool expectedResult)
+        {
+            AdminConstant results = new ConstantsLookupsLib().GetConstantsByName(testString);
+            string value = results != null ? results.CNST_NM : "";
+            Assert.IsTrue((value == testString) == expectedResult);
+
+            string resultsValue = new ConstantsLookupsLib().GetToolConstantValue(testString);
+            Assert.IsFalse(string.IsNullOrEmpty(resultsValue) == expectedResult);
+        }
 
         [Test,
             TestCase("ENV", null, true),
             TestCase("ENV", true, true),
             TestCase("GARBAGE", null, false)
             ]
-        public void CnstLib_GetToolConstants(string testString, bool nonCachedData, bool expectedResult)
+        public void CnstLib_GetToolConstantsCached(string testString, bool nonCachedData, bool expectedResult)
         {
             AdminConstant results = new ConstantsLookupsLib().GetConstantsByName(testString, nonCachedData);
             string value = results != null ? results.CNST_NM : "";

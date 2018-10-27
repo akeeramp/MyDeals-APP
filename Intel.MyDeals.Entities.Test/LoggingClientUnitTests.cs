@@ -1,10 +1,6 @@
-﻿using Intel.MyDeals.Entities;
+﻿using System;
 using NUnit.Framework;
-using System;
 using Intel.MyDeals.Entities.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using Intel.Opaque;
 
 namespace Intel.MyDeals.Entities.Test
 {

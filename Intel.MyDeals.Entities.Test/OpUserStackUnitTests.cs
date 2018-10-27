@@ -1,19 +1,27 @@
-﻿using System.Threading;
+﻿using System;
+using NUnit.Framework;
+using System.Threading;
 using Intel.Opaque;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.Entities.Test
 {
-    [TestClass]
+    [TestFixture]
     public class OpUserStackUnitTests
     {
-
-        public OpUserStackUnitTests()
+        [TestFixtureSetUp]
+        public void SetupUserAndDatabase()
         {
+            Console.WriteLine("Started OpUserStackUnit tests.");
             OpUserStack.EmulateUnitTester();
         }
 
-        [TestMethod]
+        [TestFixtureTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed OpUserStackUnit tests.");
+        }
+
+        [TestCase]
         public void TestEmulateAuthentication()
         {
             string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper();
@@ -21,7 +29,7 @@ namespace Intel.MyDeals.Entities.Test
             Assert.AreEqual(opUserToken.Usr.Idsid.ToUpper(), authenticatedName);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetMySettings()
         {
             string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper();

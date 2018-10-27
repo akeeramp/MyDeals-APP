@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc;
-using Intel.MyDeals.Controllers;
+﻿using System;
+using NUnit.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.Tests.Controllers
 {
-    [TestClass]
+    [TestFixture]
     public class HomeControllerTest
     {
         //[TestMethod]

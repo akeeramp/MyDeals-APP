@@ -38,10 +38,11 @@ namespace Intel.MyDeals.BusinessLogic.Employees
 
 
             string env = OpLog.GetEnv();
+
             if (env != "PROD")
             {
                 disclaimer = "If this was in Production, the email would have gone to: " + string.Join(", ", toDistinctList) + "<br/><br/>";
-                toDistinctList = new List<string> { OpUserStack.MyOpUserToken.Usr.Email };
+                toDistinctList = new List<string> { OpUserStack.MyOpUserToken.Usr.Email != null? OpUserStack.MyOpUserToken.Usr.Email: "michael.h.tipping@intel.com" }; // Testing incomplete token safety net
             }
             var message = new MailMessage
             {
@@ -59,8 +60,8 @@ namespace Intel.MyDeals.BusinessLogic.Employees
 
             if (env != "PROD")
             {
-                message.CC.Add(OpUserStack.MyOpUserToken.Usr.Email);
-            }
+                message.CC.Add(OpUserStack.MyOpUserToken.Usr.Email != null ? OpUserStack.MyOpUserToken.Usr.Email : "michael.h.tipping@intel.com"); // Testing incomplete token safety net
+        }
 
             using (var client = new SmtpClient())
             {

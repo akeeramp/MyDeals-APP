@@ -125,7 +125,7 @@ namespace Intel.MyDeals.DataLibrary
 
         }
 
-        private string GetDeltaTime(DateTime dt)
+        public string GetDeltaTime(DateTime dt)
         {
             if (dt <= (new DateTime(1900, 1, 1))) { return String.Empty; }
 
@@ -140,12 +140,12 @@ namespace Intel.MyDeals.DataLibrary
             {
                 txt = $"{hh} Hour{(hh == 1 ? "" : "s")} Ago";
             }
-            else if (hh > (365 * 24 * 2))
+            else if (hh > (365 * 24)) // Was (hh > (365 * 24 * 2), but never returned anything short of 2 years..
             {
                 var yy = (int)Math.Floor((double)hh / (24 * 365));
                 txt = $"{yy} Year{(yy == 1 ? "" : "s")} Ago";
             }
-            else if (hh > (365 * 24))
+            else if (hh > (30 * 24)) // Was (hh > (365 * 24), but never returned anything short of 13 months..
             {
                 var mm = (int)Math.Floor((double)hh / (24 * 30));
                 txt = $"{mm} Month{(mm == 1 ? "" : "s")} Ago";
@@ -172,9 +172,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_CUSTOM_ERRMSG
                 {
-                    Msg = "Purposefully Calling PR_CUSTOM_ERRMSG",
-                    RaiseError = true,
-                    //SourceObjectID = null,
+                    Msg = "Purposefully Calling PR_CUSTOM_ERRMSG"
+                    //RaiseError = true, // Default value on SP
+                    //SourceObjectID = null // Default value on SP
                 }))
                 {
 

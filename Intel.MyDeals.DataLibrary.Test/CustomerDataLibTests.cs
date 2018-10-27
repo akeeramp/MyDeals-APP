@@ -1,28 +1,38 @@
-﻿using Intel.MyDeals.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using NUnit.Framework;
+using Intel.MyDeals.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.DataLibrary.Test
 {
-    [TestClass]
+    [TestFixture]
     public class CustomerDataLibTests
     {
-        public CustomerDataLibTests()
+        [OneTimeSetUp]
+        public void SetupUserAndDatabase()
         {
+            Console.WriteLine("Starting CustomerDataLibTests Tests.");
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
-        
-        [TestMethod]
+
+        [OneTimeTearDown]
+        public void AfterTheCurrentTextFixture()
+        {
+            Console.WriteLine("Completed CustomerDataLibTests Tests.");
+        }
+
+
+        [TestCase]
         public void CustomersGet()
         {
             IEnumerable<CustomerDivision> results = new CustomerDataLib().GetCustomerDivisions();
             Assert.IsTrue(results.Any());
         }
 
-        [TestMethod]
+        [TestCase]
         public void CustomersGetMy()
         {
             OpUserStack.EmulateUnitTester(new OpUserToken
@@ -43,5 +53,6 @@ namespace Intel.MyDeals.DataLibrary.Test
             Assert.IsTrue(results.CustomerInfo.Any());
             //Assert.IsTrue(results.CustomerSoldTo.Any());
         }
+
     }
 }

@@ -31,7 +31,9 @@ namespace Intel.MyDeals.BusinessLogic.Test
             TestCase(70, null, null, null),
             TestCase(70, null, null, (short)4),
             TestCase(70, null, (short)2017, null),
-            TestCase(70, 1, (short)2017, null)
+            TestCase(70, 1, null,null),
+            TestCase(70, 1, (short)2017, null),
+            TestCase(70, 1, null, (short)4)
             ]
         public void CalLib_GetCustomerQuarterFailTesting(int? customerMemberSid, int? minDateCheck, short? year, short? quarterNo)
         {
