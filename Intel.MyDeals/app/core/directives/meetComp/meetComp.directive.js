@@ -164,7 +164,7 @@
                                 }
                             }
 
-                            if ($scope.isAdhoc == 1) {
+                            if ($scope.isAdhoc == 1 && typeof $scope.$parent.inCompleteDueToCapMissing != 'undefined') {
                                 inCompleteDueToCAPMissing(response.data);
                             }                           
 
