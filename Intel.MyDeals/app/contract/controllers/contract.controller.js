@@ -57,7 +57,8 @@
         $scope.currentTAB = 'PTR';
         $scope.isMCActiveForFSE = false;
         $scope.isTenderWidgetVisible = false;
-        $scope.inCompleteCapMissing = false;        
+        $scope.inCompleteCapMissing = false;     
+        $scope.enablePTRReload = false;
         // custom Contract Titles
         $scope.isTenderContract = isTender;
         $scope.contractType = "Contract";
@@ -326,6 +327,7 @@
         $scope.goToTenderDashboard = function () {
             $localStorage.selectedContractID = $scope.contractData.DC_ID;
             $localStorage.selectedDealType = $scope.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
+            $scope._dirty = false;             
             document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + $localStorage.selectedDealType + "&FolioId=" + $scope.contractData.DC_ID + "&search";
         }
 
@@ -386,25 +388,31 @@
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if ($scope.actualClikedTabName == 'MC' && $scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    if ($scope.actualClikedTabName == 'MC' && !$scope.inCompleteCapMissing && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
                         $scope.isPtr = false;
-                        $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                        $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
+                        $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
+                        $scope.setBusy("", "");
                         $scope.resetDirty();
                     }
                     else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.selectedTAB == 'PTR') {
                         $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
+                        $scope.currentTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
                         $scope.resetDirty();
                         $scope.publishWipDealsFromTab();
                     }
-                    else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                    else if (($scope.actualClikedTabName == 'PD' || $scope.inCompleteCapMissing ) && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.isPtr = false;
+                        $scope.setBusy("", "");
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+                        $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                         $scope.resetDirty();
                     }
                     else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet')) {
                         $scope.isPtr = false;
                         $scope.actualClikedTabName = 'MC';
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                        $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
                         $scope.resetDirty();
                     }
 
@@ -2866,8 +2874,11 @@
 
                         if (!!toState) {
                             $scope.stealthMode = false;
-                            if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
-                            $state.go(toState, toParams, { reload: true });
+                            if (!$scope.isTenderContract || $scope.enablePTRReload ==  true) {
+                                if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
+                                $state.go(toState, toParams, { reload: true });
+                            }
+                            
                         } else {
                             $timeout(function () {
                                 if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
@@ -2894,7 +2905,7 @@
                         }, 2000);
                     }
 
-                    if (toState === undefined || toState === null || toState === "") {
+                    if (toState === undefined || toState === null || toState === "" || $scope.isTenderContract) {
 
                         $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
                     }
@@ -4550,6 +4561,7 @@
 
             if (_tabName == 'PTR') {
                 isFired = true;
+                $scope.enablePTRReload = true;
             }
 
             if ($scope.currentTAB == 'PTR' && _tabName != 'PTR') {
@@ -4561,6 +4573,7 @@
             }
 
             if (_tabName == 'DE') {
+                $scope.enablePTRReload = true;
                 if (isPartiallyValid == false) {
                     if (!!$scope.child) {
                         $scope.inCompleteCapMissing = false;
@@ -4592,8 +4605,10 @@
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
                     $scope.isPtr = false;
+                    $scope.enablePTRReload = false;
                 }
                 else if (isPartiallyValid == false) {
+                    $scope.enablePTRReload = true;
                     if (!!$scope.child) {
                         $scope.inCompleteCapMissing = false;
                         if ($scope.currentTAB == 'PTR') {
@@ -4610,6 +4625,7 @@
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     $scope.isPtr = false;
+                    $scope.enablePTRReload = true;
                     if ($scope.selectedTAB != 'DE') {
                         $scope.selectedTAB = "DE"; // Send it to Deal Editor
                         $scope.currentTAB = 'DE';
@@ -4625,6 +4641,7 @@
             if (_tabName == 'PD') {
                 if (isPartiallyValid == false) {
                     $scope.inCompleteCapMissing = false;
+                    $scope.enablePTRReload = true;
                     if (!!$scope.child) {
                         if ($scope.currentTAB == 'PTR') {
                             $scope.child.validateSavepublishWipDeals();
@@ -4637,24 +4654,35 @@
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' || $scope.inCompleteCapMissing ) && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet')) && isPartiallyValid == true) {
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet') || $scope.inCompleteCapMissing) && isPartiallyValid == true)) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
                     $scope.isPtr = false;
+                    $scope.enablePTRReload = false;
                 }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
                     isFired = true;
                     logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
                     $scope.selectedTAB = 'MC';
                     $scope.currentTAB = 'MC';
                     $scope.isPtr = false;
+                    $scope.enablePTRReload = false;
+                }
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
+                    isFired = true;
+                    logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
+                    $scope.selectedTAB = 'MC';
+                    $scope.currentTAB = 'MC';
+                    $scope.isPtr = false;
+                    $scope.enablePTRReload = false;
                 }
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     if ($scope.selectedTAB != 'DE') {
                         $scope.selectedTAB = "DE";
                         $scope.currentTAB = 'DE';
+                        $scope.enablePTRReload = true;
                         _actionName = 'publishWipDealsFromTab';
                     }
                 }
@@ -4669,7 +4697,7 @@
         }
 
         $scope.publishTenderDeal = function () {
-            $scope.setBusy("Publishing deals", "Converting into individuals deals. Then we will redicrt you to Tender Dashboard.");
+            $scope.setBusy("Publishing deals", "Converting into individual deals. Then we will redirect you to Tender Dashboard.");
             objsetService.publishTenderDeals($scope.contractData.DC_ID).then(
                 function (data) {
 

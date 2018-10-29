@@ -142,7 +142,11 @@
                     $scope.lastMeetCompRunCalc();
                     
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE + "/" + $scope.objTypeId).then(function (response) {
+                        if (response.data.length == 0 && $scope.isAdhoc == 1) {
+                            $scope.$parent.inCompleteDueToCapMissing(true);
+                        }
                         $scope.$parent.refreshContractData();
+                        
                         if (response.data.length > 0) {
                             //Calculate InComplete due to CAP Missing
                             var isTrueOnce = false;
@@ -1845,7 +1849,9 @@
                             };
                         }
                         else {
-                            kendo.alert("No Meet Comp data available for product(s) in this Contract");
+                            if ($scope.isAdhoc == 0) {
+                                kendo.alert("No Meet Comp data available for product(s) in this Contract");
+                            }                            
                             $scope.isBusy = false;
                             return;
                         }
