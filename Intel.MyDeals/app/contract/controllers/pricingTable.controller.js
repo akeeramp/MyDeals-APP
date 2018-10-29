@@ -197,7 +197,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // Remove tender only columns when its a non tender deal
         if (!root.isTenderContract && ptTemplate !== undefined && ptTemplate !== null) {
             for (var i = ptTemplate.columns.length - 1; i >= 0; i--) {
-                if (root.tenderOnlyColumns.indexOf(ptTemplate.columns[i].field) !== -1 && !$scope.isTenderContract) {
+                if (root.tenderOnlyColumns.indexOf(ptTemplate.columns[i].field) !== -1 && !root.isTenderContract) {
                     ptTemplate.columns.splice(i, 1);
                 }
             }
@@ -340,7 +340,33 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             "initSearchStr": initSearchValue,
             "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
         };
+
         root.wipOptions.columns = wipTemplate.columns;
+
+        for (var i = wipTemplate.columns.length - 1; i >= 0; i--) {
+            // For tender deals hide these columns
+            if (opGridTemplate.hideForTender.indexOf(wipTemplate.columns[i].field) !== -1 && root.isTenderContract) {
+                wipTemplate.columns.splice(i, 1);
+            }
+            // For non tender deals hide these columns
+            if (opGridTemplate.hideForNonTender.indexOf(wipTemplate.columns[i].field) !== -1 && !root.isTenderContract) {
+                wipTemplate.columns.splice(i, 1);
+            }
+        }
+
+        // Remove tender only columns for non tender deals.
+        if (!root.isTenderContract) {
+            opGridTemplate.hideForNonTender.forEach(function (x) {
+                delete wipTemplate.model.fields[x];
+            });
+        } else {
+            opGridTemplate.hideForTender.forEach(function (x) {
+                delete wipTemplate.model.fields[x];
+            });
+        }
+
+        root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD] = wipTemplate;
+
         root.wipOptions.model = wipTemplate.model;
         root.wipOptions.default = {};
         root.wipOptions.default.groups = opGridTemplate.groups[root.curPricingTable.OBJ_SET_TYPE_CD];
@@ -414,7 +440,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.wipOptions.numSoftWarn = numWarn;
 
         root.wipData = root.pricingTableData.WIP_DEAL;
-        
+
         // If no data was returned, we should redirect back to PTR
         if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
             $state.go('contract.manager.strategy',

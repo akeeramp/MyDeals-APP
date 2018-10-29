@@ -892,34 +892,34 @@
                     var anyWarnings = false;
 
                     //pc.mark("Constructing returnset");
-                    
+
                     if (!!data.WIP_DEAL) {
-                            for (i = 0; i < data.WIP_DEAL.length; i++) {
-                                var dataItem = data.WIP_DEAL[i];
-                                if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
+                        for (i = 0; i < data.WIP_DEAL.length; i++) {
+                            var dataItem = data.WIP_DEAL[i];
+                            if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
 
-                                if (anyWarnings) {
-                                    var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
-                                    var isKit = 0;
-                                    var relevantAtrbs = tierAtrbs;
-                                    var tierCount = dataItem.NUM_OF_TIERS;
+                            if (anyWarnings) {
+                                var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
+                                var isKit = 0;
+                                var relevantAtrbs = tierAtrbs;
+                                var tierCount = dataItem.NUM_OF_TIERS;
 
-                                    if ($scope.dealType === "KIT") {
-                                        if (dataItem.PRODUCT_FILTER === undefined) { continue; }
-                                        dimStr = "_20___";
-                                        isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
-                                        relevantAtrbs = kitDimAtrbs;
-                                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
-                                    }
-                                    // map tiered warnings
-                                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
-                                        for (var a = 0; a < relevantAtrbs.length; a++) {
-                                            mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
-                                        }
+                                if ($scope.dealType === "KIT") {
+                                    if (dataItem.PRODUCT_FILTER === undefined) { continue; }
+                                    dimStr = "_20___";
+                                    isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
+                                    relevantAtrbs = kitDimAtrbs;
+                                    tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
+                                }
+                                // map tiered warnings
+                                for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                                        mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
                                     }
                                 }
                             }
-                            $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                        }
+                        $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                     }
 
                     if (!anyWarnings) {
@@ -935,11 +935,11 @@
                         //    if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
                         //    $state.go(toState, toParams, { reload: true });
                         //} else {
-                            $timeout(function () {
-                                //if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
-                                    $scope.setBusy("", "");
-                                //$scope.stealthMode = false;
-                            }, 1000);
+                        $timeout(function () {
+                            //if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
+                            $scope.setBusy("", "");
+                            //$scope.stealthMode = false;
+                        }, 1000);
                         //}
                         //if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE')) {
                         //    $scope.forceNavigation = true; //Purpose: If No Error/Warning go to Meet Comp Automatically-After Refreshing Contract
@@ -963,7 +963,7 @@
 
                     //if (toState === undefined || toState === null || toState === "") {
 
-                        $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);  //JEFFTODO: investigate, do we need this?
+                    $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);  //JEFFTODO: investigate, do we need this?
                     //}
                     //$scope.isAutoSaving = false;
 
@@ -974,7 +974,7 @@
                         callback();
                         //pc.add(pcUI.stop());
                         //if ($scope.$root.pc !== null) $scope.$root.pc.add(pc.stop());
-                    //} else {
+                        //} else {
                         //pc.add(pcUI.stop());
                         //if ($scope.$root.pc !== null) {
                         //    $scope.$root.pc.add(pc.stop());
@@ -1201,7 +1201,17 @@
                     };
 
                     $scope.wipOptions.columns = angular.copy($scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
+                    for (var i = $scope.wipOptions.columns.length - 1; i >= 0; i--) {
+                        if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
+                            $scope.wipOptions.columns.splice(i, 1);
+                        }
+                    }
+
                     $scope.wipOptions.model = angular.copy($scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model);
+
+                    opGridTemplate.hideForTender.forEach(function (x) {
+                        delete $scope.wipOptions.model.fields[x];
+                    });
 
                     $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
                     $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
@@ -1312,12 +1322,12 @@
             //        }
             //    }
             //} else {
-                tenders.push({
-                    DC_ID: dataItem.DC_ID,
-                    CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
-                    CUST_MBR_SID: dataItem.CUST_MBR_SID,
-                    WF_STG_CD: dataItem.WF_STG_CD
-                });
+            tenders.push({
+                DC_ID: dataItem.DC_ID,
+                CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
+                CUST_MBR_SID: dataItem.CUST_MBR_SID,
+                WF_STG_CD: dataItem.WF_STG_CD
+            });
             //}
 
             var plural = tenders.length > 1 ? "s" : "";
@@ -1425,10 +1435,10 @@
                     //    $scope.$broadcast('reload-search-dataSource');
                     //} else if (foundIt) {
                     //    $scope.curLinkedVal = "";
-                        //$timeout(function () {
+                    //$timeout(function () {
                     $scope.setBusy("Tender Deals Updated... But Jeff hasn't implemented Grid refresh yet.", "Your approval/action should have gone through.  Please refresh the page and pull up your tenders again.  Sorry :(");
-                        //}, 50);
-                        //////scope.ds.read(); // we rely on the DS post load to close down the busy indicator
+                    //}, 50);
+                    //////scope.ds.read(); // we rely on the DS post load to close down the busy indicator
                     //} else {
                     //    $timeout(function () {
                     //        $scope.setBusy("", "");
