@@ -42,4 +42,11 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         public string table { get; set; }
     }
+
+    public class ApiToken
+    {
+        public string data { get; set; }
+
+        public string token { get; set; }
+    }
 }

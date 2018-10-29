@@ -378,13 +378,26 @@ namespace Intel.MyDeals.DataLibrary
                 if (!env.Equals("PROD", StringComparison.InvariantCultureIgnoreCase))
                 {
                     payload.sent_test_email = false;
+                    payload.recipient = "mydeals.dq.notification@intel.com";
                 }
-                HttpResponseMessage response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
+                var response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    await SetApiToken();
+                    var result = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
+                }
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log("Message center: " + ex);
             }
+        }
+
+        private static async Task SetApiToken()
+        {
+            var result = await MsgCenterTokenClient.GetAsync("/v1/getAPIToken/");
+            ApiToken token = result.Content.ReadAsAsync<ApiToken>().Result;
+            messageCenterToken = token.token;
         }
 
         /// <summary>
@@ -403,6 +416,22 @@ namespace Intel.MyDeals.DataLibrary
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
+                return client;
+            }
+        }
+
+        private static HttpClient MsgCenterTokenClient
+        {
+            get
+            {
+                HttpClientHandler handler = new HttpClientHandler();
+                HttpClient client = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(messageCenterTokenUrl)
+                };
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add("user_id", "mbiradar");
+                client.DefaultRequestHeaders.Add("user_pw", "********");
                 return client;
             }
         }

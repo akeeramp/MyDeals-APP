@@ -191,6 +191,7 @@ namespace Intel.MyDeals.BusinessLogic
                     break;
 
                 case NotificationEvents.ContractPendingStage:
+                    emailTable = GetContractTable(model);
                     break;
 
                 case NotificationEvents.TenderSubmittedToOffer:
@@ -247,7 +248,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                                     </td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>View PricingStrategy</a>*
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>View Pricing Strategy</a>*
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -324,6 +325,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                         <tbody>
                                                             <tr>
                                                                 <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
                                                                 <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
                                                             </tr>
                                                         </tbody>
@@ -332,6 +334,9 @@ namespace Intel.MyDeals.BusinessLogic
                                                             {
                                                                 <tr>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
+                                                                    </td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>
                                                                         <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
                                                                     </td>

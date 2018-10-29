@@ -8,9 +8,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    notificationsModalController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService', 'dataItem', '$sce'];
+    notificationsModalController.$inject = ['$scope', 'dataService', '$uibModalInstance', 'notificationsService', 'dataItem', '$sce', '$rootScope'];
 
-    function notificationsModalController($scope, dataService, $uibModalInstance, notificationsService, dataItem, $sce) {
+    function notificationsModalController($scope, dataService, $uibModalInstance, notificationsService, dataItem, $sce, $rootScope) {
         $scope.role = window.usrRole;
         $scope.wwid = window.usrWwid;
         $scope.dataItem = dataItem;
@@ -27,12 +27,13 @@
             if (!dataItem.IS_READ_IND) {
                 notificationsService.manageNotifications("UPDATE", true, ids).then(function () {
                     // Marked as Read
+                    $rootScope.$broadcast('refreshUnreadCount', null);
                 });
             }
         }
         $scope.emailTable = "loading...";
 
-        function loadEmailBody(){
+        function loadEmailBody() {
             notificationsService.getEmailBodyTemplateUI(dataItem.NLT_ID).then(function (response) {
                 $scope.emailTable = $sce.trustAsHtml(response.data);
             });

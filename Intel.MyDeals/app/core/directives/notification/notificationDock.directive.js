@@ -68,7 +68,7 @@ function notificationDock($compile, $timeout, objsetService, $uibModal, $locatio
                     notificationsService.getNotification(mode).then(function (response) {
                         $scope.notifications = response.data;
                     }, function (response) {
-                        logger.error("Unable to get user unread messages.", response, response.statusText);
+                        //logger.error("Unable to get user unread messages.", response, response.statusText);
                     })
                 }
 
@@ -77,6 +77,11 @@ function notificationDock($compile, $timeout, objsetService, $uibModal, $locatio
                 }
 
                 getUnreadNotification();
+
+                $scope.$on('refreshUnreadCount', function (event, data) {
+                    debugger;
+                    getUnreadNotification();
+                });
 
             }],
         link: function (scope, element, attr) {

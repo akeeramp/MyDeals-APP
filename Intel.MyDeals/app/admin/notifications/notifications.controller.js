@@ -8,9 +8,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    notificationsController.$inject = ['$scope', 'dataService', 'notificationsService', 'gridConstants', '$uibModal'];
+    notificationsController.$inject = ['$scope', 'dataService', 'notificationsService', 'gridConstants', '$uibModal', '$rootScope'];
 
-    function notificationsController($scope, dataService, notificationsService, gridConstants, $uibModal) {
+    function notificationsController($scope, dataService, notificationsService, gridConstants, $uibModal, $rootScope) {
         var vm = this;
 
         vm.gridData = [];
@@ -42,6 +42,7 @@
                             .then(function (response) {
                                 vm.gridData = response.data;
                                 vm.dataSource.read();
+                                $rootScope.$broadcast('refreshUnreadCount', null);
                             }, function (response) {
                                 logger.error("Unable to get Notifications.", response, response.statusText);
                             });
