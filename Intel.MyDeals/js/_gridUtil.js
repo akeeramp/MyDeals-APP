@@ -132,6 +132,24 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
 
 }
 
+gridUtils.getMissingCostCapIcon = function (data) {
+    var title = '';
+    if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
+        title += 'Your deal is missing CAP and Division Approver will not be able to approve till this is fixed.\n' +
+               'Missing CAP issues are handled currently with PriceOps via a weekly DQ process. If there is urgency in \n' +
+               'getting this deal approved please raise a TAC ticket in service now';
+    }
+    if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
+        title !== '' ? title += ' \n' : title;
+        title += 'Your deal is missing Cost and Division Approver will not be able to approve till this is fixed.\n' +
+                'Missing Cost issues are handled currently with iCost team via a weekly DQ process. If there is urgency in \n' +
+                'getting this deal approved please raise a TAC ticket in service now';
+    }
+    // if title is emptu send blank, this mplies cst or cap is not missing
+    if (title === '') return;
+    return '<div class="text-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div>';
+}
+
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
 }
@@ -1108,7 +1126,6 @@ gridUtils.lookupEditor = function (container, options) {
     }
 
     if (col.uiType === "ComboBox") {
-        //debugger;
         $('<input required name="' + options.field + '"/>')
             .appendTo(container)
             .kendoComboBox({
@@ -1569,7 +1586,7 @@ gridUtils.getBidActionsList = function (data) {
         for (var i = 0; i < data.BID_ACTNS.length; i++) {
             if (data.BID_ACTNS[i]['BidActnName'] === 'Offer' || data.BID_ACTNS[i]['BidActnName'] === 'Won'
                 || data.BID_ACTNS[i]['BidActnName'] === 'Lost') {
-            //do nothing... perhaps we should structure this if block better.
+                //do nothing... perhaps we should structure this if block better.
             } else {
                 bidActns.push({
                     "BidActnName": data.BID_ACTNS[i],

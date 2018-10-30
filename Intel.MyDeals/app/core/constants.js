@@ -314,6 +314,9 @@
                     },
                     "COST_TEST_RESULT": {
                         "Groups": ["Deal Info"]
+                    },
+                    "MISSIG_CAP_COST_INFO": {
+                        "Groups": ["Deal Info"]
                     }
                 },
                 "VOL_TIER": {
@@ -384,7 +387,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "NUM_OF_TIERS": {
-                        "Groups": [ "All"]
+                        "Groups": ["All"]
                     },
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
@@ -488,13 +491,13 @@
                         "Groups": ["Deal Info"]
                     },
                     "TOTAL_DOLLAR_AMOUNT": {
-                    	"Groups": ["Deal Info"]
+                        "Groups": ["Deal Info"]
                     },
                     "ORIG_ECAP_TRKR_NBR": {
-                    	"Groups": ["Deal Info"]
+                        "Groups": ["Deal Info"]
                     },
                     "ADJ_ECAP_UNIT": {
-                    	"Groups": ["Deal Info"]
+                        "Groups": ["Deal Info"]
                     },
                     "CUST_MBR_SID": {
                         "Groups": ["Deal Info"]
@@ -533,7 +536,7 @@
                         "Groups": ["Deal Info", "RPU"]
                     },
                     "DEAL_COMB_TYPE": {
-                    	"Groups": ["Deal Info"]
+                        "Groups": ["Deal Info"]
                     },
                     //"DEAL_GRP_EXCLDS": {
                     //	"Groups": ["Deal Info"]
