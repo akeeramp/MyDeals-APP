@@ -133,7 +133,6 @@ namespace Intel.MyDeals.BusinessLogic
             //return rtn;
         }
 
-
         /// <summary>
         /// Get the Tender Deal List
         /// </summary>
@@ -141,7 +140,6 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetTenderList(SearchParams data)
         {
-
             // Build where clause from start/end date and search text
             string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL);
 
@@ -154,12 +152,12 @@ namespace Intel.MyDeals.BusinessLogic
             // Build Search Packet from DB... will return a list of dc_ids and count
             // This will take in consideration the Skip and Take for performance
             SearchPacket res = new SearchLib().GetAdvancedSearchResults(whereClause, orderBy, OpDataElementType.WIP_DEAL.ToString(), data.Skip, data.Take);
-            
+
             // Get return list of dc_ids
             List<int> dcIds = res.SearchResults.OrderBy(s => s.SORT_ORD).Select(s => s.OBJ_SID).ToList();
 
             // Now get the actual data based on the "slice" of matching data... this is based on the dc_ids list
-            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds, 
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
                 new List<OpDataElementType>
                 {
                     OpDataElementType.WIP_DEAL
@@ -187,10 +185,9 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.GEO_COMBINED.ATRB_SID
                 });
 
-
             // Get all the products in a collection base on the PRODUCT_FILTER
             // Note: the first hit is a performance dog as the product cache builds for the first time
-            List <int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+            List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
                 .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER)
                 .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
             List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
@@ -211,7 +208,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> mtCustIds = custLib.GetMyCustomersInfo().Select(c => c.CUST_DIV_SID).ToList();
 
             int sortCnt = 0;
-            Dictionary<int,int> idSort = new Dictionary<int, int>();
+            Dictionary<int, int> idSort = new Dictionary<int, int>();
             foreach (int dcId in dcIds)
             {
                 idSort[dcId] = sortCnt++;
@@ -223,7 +220,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Need to convert CUST_MBR_SID to Customer Object
                 CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
-                
+
                 item["Customer"] = cust;
 
                 // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
@@ -280,9 +277,12 @@ namespace Intel.MyDeals.BusinessLogic
             //TODO: need to modify for bulk data updates
             List<WfActnItem> wfActnList = new List<WfActnItem>();
             WfActnItem item = new WfActnItem();
-            item.DC_ID = upperContract[OpDataElementType.PRC_ST].AllDataCollectors.FirstOrDefault().DcID;   //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
-            item.WF_STG_CD = data[0].WF_STG_CD;     //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
-            wfActnList.Add(item);
+            foreach (OpDataCollector dc in upperContract[OpDataElementType.PRC_ST].AllDataCollectors)
+            {
+                item.WF_STG_CD = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+                item.DC_ID = dc.DcID;
+                wfActnList.Add(item);
+            }
 
             actnPs[actn] = wfActnList;
 
@@ -318,8 +318,6 @@ namespace Intel.MyDeals.BusinessLogic
                     contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
                     MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
 
-
-
                     List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
 
                     Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
@@ -346,7 +344,5 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _contractsLib.SaveContractAndPricingTable(contractToken, tenderData, forceValidation: true, forcePublish: true);
         }
-
     }
-
 }

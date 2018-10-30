@@ -129,11 +129,19 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     else {
         return '<div class="text-center" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
     }
-    
+
 }
 
 gridUtils.booleanDisplay = function (passedData, field) {
     return passedData[field] === true ? "<i class='intelicon-passed-completed-solid' style='font-size: 26px; color:#C4D600;'></i>" : "";
+}
+
+gridUtils.lockedCell = function (e) {
+    var lockedTable = e.container.closest(".k-grid-content-locked");
+    if (lockedTable.length) {
+        return true;
+    }
+    return false;
 }
 
 gridUtils.uiParentControlWrapper = function (dataItem) {

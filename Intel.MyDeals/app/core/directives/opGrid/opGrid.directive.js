@@ -37,7 +37,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.numColsLocked = 0;
             $scope.wrapEnabled = false;
             $scope.fontSize = 'md';
-            
+
 
             $timeout(function () {
                 $scope.tabStripDelay = true;
@@ -49,7 +49,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.assignVal = function (field, defval) {
                 var item = $scope.opOptions[field];
                 return (item === undefined || item === null) ? defval : item;
-            }           
+            }
 
             $scope.displayFrontEndDateMessage = function (dataItem) {
                 var today = new Date();
@@ -178,7 +178,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.contractData.CUST_ACCNT_DIV_UI = "";
                     $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
                     $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-                        
+
                     $scope.$broadcast('refreshContractDataComplete');
 
                     $timeout(function () {
@@ -198,7 +198,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             },
                             PRC_ST_OBJ_SID: function () {
                                 return dataItem.PRC_ST_OBJ_SID;
-                            },                                
+                            },
                             parentScope: function () {
                                 return $scope;
                             }
@@ -613,7 +613,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //    $scope.reorderGridColumns(customColumnOrderArr);
                 //    $scope.grid.dataSource.pageSize(pageSize);
                 //}, 10);
-               //Apply the settings.
+                //Apply the settings.
                 $timeout(function () {
                     $scope.validateGrid();
                 }, 10);
@@ -855,6 +855,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             var triedToApplyCustomLayout = false;
             var disableCellsBasedOnAnotherCellValue;
+
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 columns: $scope.opOptions.columns,
@@ -889,7 +890,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 edit: function (e) {
                     var grid = this;
                     var isDetailTemplate = !!grid.detailTemplate ? 1 : 0;
-                    var fieldName = grid.columns[e.container.index() - isDetailTemplate + $scope.numColsLocked].field;
+                    var fieldName = "";
+                    if (gridUtils.lockedCell(e)) {
+                        fieldName = grid.columns[e.container.index()].field
+                    } else {
+                        fieldName = grid.columns[e.container.index() - isDetailTemplate + $scope.numColsLocked].field;
+                    }
                     // TODO - Make the tempalte have a "Modeled after" field and replace the next line with that replacment
                     if (fieldName === "KIT_ECAP") fieldName = "ECAP_PRICE"; // Broken out special purpose field needs to be renamed back to ECAP PRICE
                     if (e.model._behaviors.isReadOnly[fieldName] === true || e.model._behaviors.isHidden[fieldName] === true) {
@@ -947,10 +953,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     // select the first column
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     if (!!tabStrip) {
-                    	tabStrip.select(0);
-                    	if ($scope.opOptions.groups !== undefined) {
-                    		$scope.showCols($scope.curGroup);
-                    		$scope.root.setBusy("", "");
+                        tabStrip.select(0);
+                        if ($scope.opOptions.groups !== undefined) {
+                            $scope.showCols($scope.curGroup);
+                            $scope.root.setBusy("", "");
                         }
                     }
                 }, 10);
@@ -1104,7 +1110,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //    openDealGroupModal(container, col);
                     //}
 
-                }  else {
+                } else {
                     $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
@@ -1168,55 +1174,55 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.updateDirty = function (dataItem, field) {
 
-            	// default QTY value
+                // default QTY value
                 if (field == "QTY") {   //additional dirty updates needed? -> hide the logic for a CAP_____20_____1 thing in here?
                     var kit_key = "20_____1";
                     var capKitSum = 0;
                     var ycs2KitSum = 0;
 
-            		for (var i = 0; i < 10; i++) {
-            			var key = "20___" + i;
-            			if (!dataItem[field].hasOwnProperty(key)) {
-            				break;
-            			}
-            			else {
-            				if (dataItem[field][key] === null) {
-            					dataItem[field][key] = 1;
-            				}
-            			}
+                    for (var i = 0; i < 10; i++) {
+                        var key = "20___" + i;
+                        if (!dataItem[field].hasOwnProperty(key)) {
+                            break;
+                        }
+                        else {
+                            if (dataItem[field][key] === null) {
+                                dataItem[field][key] = 1;
+                            }
+                        }
 
-            		    // if quantity changes, we also need to update the CAP Kit and YCS2 Kit column values that we save/display
-            			if (dataItem["CAP"].hasOwnProperty(key) && !isNaN(dataItem["CAP"][key]) && dataItem["CAP"][key] != null) {
+                        // if quantity changes, we also need to update the CAP Kit and YCS2 Kit column values that we save/display
+                        if (dataItem["CAP"].hasOwnProperty(key) && !isNaN(dataItem["CAP"][key]) && dataItem["CAP"][key] != null) {
                             capKitSum += (dataItem["CAP"][key] * dataItem[field][key]);
-            			}
-            			if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(key) && !isNaN(dataItem["YCS2_PRC_IRBT"][key]) && dataItem["YCS2_PRC_IRBT"][key] != null) {
-            			    ycs2KitSum += (dataItem["YCS2_PRC_IRBT"][key] * dataItem[field][key]);
-            			}
-            		}
+                        }
+                        if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(key) && !isNaN(dataItem["YCS2_PRC_IRBT"][key]) && dataItem["YCS2_PRC_IRBT"][key] != null) {
+                            ycs2KitSum += (dataItem["YCS2_PRC_IRBT"][key] * dataItem[field][key]);
+                        }
+                    }
                     //set CAP Kit and YCS2 Kit values
-            		if (dataItem["CAP"].hasOwnProperty(kit_key)) {
-            		    dataItem["CAP"][kit_key] = capKitSum;
-            		}
-            		if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(kit_key)) {
-            		    dataItem["YCS2_PRC_IRBT"][kit_key] = ycs2KitSum;
-            		}
-            	}
-            	// default DSCNT_PER_LN value
-            	if (field == "DSCNT_PER_LN") {
-            		for (var i = 0; i < 10; i++) {
-            			var key = "20___" + i;
-            			if (!dataItem[field].hasOwnProperty(key)) {
-            				break;
-            			}
-            			else {
-            				if (dataItem[field][key] === null) {
-            					dataItem[field][key] = 0;
-            				}
-            			}
-            		}
-            	}
+                    if (dataItem["CAP"].hasOwnProperty(kit_key)) {
+                        dataItem["CAP"][kit_key] = capKitSum;
+                    }
+                    if (dataItem["YCS2_PRC_IRBT"].hasOwnProperty(kit_key)) {
+                        dataItem["YCS2_PRC_IRBT"][kit_key] = ycs2KitSum;
+                    }
+                }
+                // default DSCNT_PER_LN value
+                if (field == "DSCNT_PER_LN") {
+                    for (var i = 0; i < 10; i++) {
+                        var key = "20___" + i;
+                        if (!dataItem[field].hasOwnProperty(key)) {
+                            break;
+                        }
+                        else {
+                            if (dataItem[field][key] === null) {
+                                dataItem[field][key] = 0;
+                            }
+                        }
+                    }
+                }
 
-				// update
+                // update
                 $scope.saveFunctions(dataItem, field, dataItem[field])
             }
 
@@ -1271,7 +1277,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             el += $scope.createEditEl(options.field, field.uiType, dim_base + dim_index, field.format);
                             dim_index++;
                         }
-                    }                    
+                    }
                 }
 
 
@@ -1281,11 +1287,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.bidActnsEditor = function (container, options) {
                 var el = "";
                 var approveActions = [];
-                approveActions.push({text: "Action", value: "Action"})  //placeholder dummy for a user non-selection
+                approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection
                 for (var actn in options.model["_parentActionsPS"]) {
                     if (options.model["_parentActionsPS"].hasOwnProperty(actn)) {
                         if (options.model["_parentActionsPS"][actn] == true && actn != "Cancel" && actn != "Hold") {   //the manage screen does not display checkboxes for Cancel or Hold so we will avoid that here as well
-                            approveActions.push({text: actn, value: actn})
+                            approveActions.push({ text: actn, value: actn })
                         }
                     }
                 }
@@ -1642,7 +1648,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 $scope.$root.$broadcast('receiveOpGridDirtyRows', rows);
             });
-            
+
             $scope.$on('resetOpGridDirtyRows', function (event, args) {
                 var data = $scope.contractDs.data();
                 for (var d = 0; d < data.length; d++) {
@@ -1779,8 +1785,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
-            $scope.showBool = function(val) {
-                return val === "1" ? "Yes": " ";
+            $scope.showBool = function (val) {
+                return val === "1" ? "Yes" : " ";
             }
 
             $scope.findDataItemById = function (id) {
@@ -2488,10 +2494,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                         $scope.$applyAsync();
 
-                        $timeout(function() {
-                                $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                                $scope.configureSortableTab();
-                            },
+                        $timeout(function () {
+                            $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                            $scope.configureSortableTab();
+                        },
                             100);
                     }
                 }
@@ -2521,7 +2527,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         "Maximize",
                         "Close"
                     ],
-                    close: function() {
+                    close: function () {
                         $("#smbWindow").html("");
                     }
                 }).data("kendoWindow").center().open();
@@ -2546,88 +2552,88 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     //Calling WEBAPI
                     objsetService.getOverlappingDealsFromPricingTable(pricingTableID)
-                        .then(function(response) {
-                                pcService.addPerfTimes(response.data.PerformanceTimes);
+                        .then(function (response) {
+                            pcService.addPerfTimes(response.data.PerformanceTimes);
 
-                                var pcUi = new perfCacheBlock("Overlapping Tab Processing", "UI");
-                                util.console("Overlapping Deals Returned");
-                                if (response.data) {
-                                    var data = response.data.Data;
-                                    if (data.length > 0) {
+                            var pcUi = new perfCacheBlock("Overlapping Tab Processing", "UI");
+                            util.console("Overlapping Deals Returned");
+                            if (response.data) {
+                                var data = response.data.Data;
+                                if (data.length > 0) {
 
-                                        $scope.isOverlapping = true;
+                                    $scope.isOverlapping = true;
 
-                                        //Checking TAB already exist or not
-                                        $scope.addTabRequired();
+                                    //Checking TAB already exist or not
+                                    $scope.addTabRequired();
 
-                                        //Calculate Error count
-                                        $scope.ovlpErrorCounter(data);
+                                    //Calculate Error count
+                                    $scope.ovlpErrorCounter(data);
 
-                                        //Assigning Data to Overlapping GRID
-                                        $scope.ovlpData = data;
+                                    //Assigning Data to Overlapping GRID
+                                    $scope.ovlpData = data;
 
-                                        //Data massaging for END_DT
-                                        for (var i = 0; i < $scope.ovlpData.length; i++) {
-                                            //START DT massaging
-                                            var d = new Date($scope.ovlpData[i].START_DT);
-                                            $scope.ovlpData[i]
-                                                .START_DT =
-                                                d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+                                    //Data massaging for END_DT
+                                    for (var i = 0; i < $scope.ovlpData.length; i++) {
+                                        //START DT massaging
+                                        var d = new Date($scope.ovlpData[i].START_DT);
+                                        $scope.ovlpData[i]
+                                            .START_DT =
+                                            d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
 
-                                            //END DT massaging
-                                            var d = new Date($scope.ovlpData[i].END_DT);
-                                            $scope.ovlpData[i]
-                                                .END_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
-                                        }
-
-                                        $scope.ovlpDataSource.read();
-
-                                        //Saving data for RedoUndo
-                                        $scope.ovlpDataRep = angular.copy($scope.ovlpData);
-
-                                        //Hiding Column Preference and Grid Preferences
-                                        $scope.isLayoutConfigurable = false;
-
-                                        $scope.$root.$broadcast('refreshContractData', true);
-                                    } else {
-                                        //Remove overlapping tab
-                                        util.console("Remove overlapping tab");
-                                        $scope.removeOverlapTab();
-                                        var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
-                                        if (!!tabStrip && $scope.curGroup === "Overlapping") {
-                                            tabStrip.select(0);
-                                            if ($scope.opOptions.groups !== undefined) {
-                                                $scope.showCols($scope.opOptions.groupColumns.tools.Groups[0]);
-                                            }
-                                        }
-
-                                        // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
-                                        var wips = $scope.parentRoot.pricingTableData.WIP_DEAL;
-                                        for (var w = 0; w < wips.length; w++) {
-                                            if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
-                                        }
-
-                                        $scope.$root.$broadcast('refreshContractData', false);
-
-                                        util.console("Remove overlapping tab DONE");
+                                        //END DT massaging
+                                        var d = new Date($scope.ovlpData[i].END_DT);
+                                        $scope.ovlpData[i]
+                                            .END_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
                                     }
-                                }
-                                pcService.add(pcUi.stop());
 
+                                    $scope.ovlpDataSource.read();
+
+                                    //Saving data for RedoUndo
+                                    $scope.ovlpDataRep = angular.copy($scope.ovlpData);
+
+                                    //Hiding Column Preference and Grid Preferences
+                                    $scope.isLayoutConfigurable = false;
+
+                                    $scope.$root.$broadcast('refreshContractData', true);
+                                } else {
+                                    //Remove overlapping tab
+                                    util.console("Remove overlapping tab");
+                                    $scope.removeOverlapTab();
+                                    var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+                                    if (!!tabStrip && $scope.curGroup === "Overlapping") {
+                                        tabStrip.select(0);
+                                        if ($scope.opOptions.groups !== undefined) {
+                                            $scope.showCols($scope.opOptions.groupColumns.tools.Groups[0]);
+                                        }
+                                    }
+
+                                    // Cleanup... if the deals HAD overlapp, they do not any more.  So reset the OVERLAP_RESULT to Pass
+                                    var wips = $scope.parentRoot.pricingTableData.WIP_DEAL;
+                                    for (var w = 0; w < wips.length; w++) {
+                                        if (wips[w].OVERLAP_RESULT === "Fail") wips[w].OVERLAP_RESULT = "Pass";
+                                    }
+
+                                    $scope.$root.$broadcast('refreshContractData', false);
+
+                                    util.console("Remove overlapping tab DONE");
+                                }
+                            }
+                            pcService.add(pcUi.stop());
+
+                            if ($scope.$root.pc !== null) {
+                                $scope.$root.pc.add(pcService.stop());
+                                $scope.$root.pc.stop();
+                            }
+                            $scope.$parent.$parent.setBusy("", "");
+                            $timeout(function () {
                                 if ($scope.$root.pc !== null) {
-                                    $scope.$root.pc.add(pcService.stop());
-                                    $scope.$root.pc.stop();
+                                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                                    $scope.$root.pc = null;
                                 }
-                                $scope.$parent.$parent.setBusy("", "");
-                                $timeout(function () {
-                                    if ($scope.$root.pc !== null) {
-                                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                                        $scope.$root.pc = null;
-                                    } 
-                                },2000);
+                            }, 2000);
 
-                            },
-                            function(response) {
+                        },
+                            function (response) {
                                 //empty after moving sync and validate to happen before the getOverlappingDeals call is made
                                 $scope.$parent.$parent.setBusy("", "");
                             });
