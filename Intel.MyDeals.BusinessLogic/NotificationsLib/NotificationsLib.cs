@@ -31,7 +31,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (result)
             {
                 // Trigger notification emails after logging into tables
-                // SendEmailNotifications();
+                SendEmailNotifications();
             }
             return result;
         }
@@ -108,8 +108,10 @@ namespace Intel.MyDeals.BusinessLogic
                     await SendPayLoadToMsgCenter((NotificationEvents)notification.NOTIF_ID, payLoad.DeepClone());
                 }
             }
-
-            UpdateNotificationsAsProcessed(emails);
+            if (emails.Any())
+            {
+                UpdateNotificationsAsProcessed(emails);
+            }
         }
 
         /// <summary>
@@ -133,7 +135,6 @@ namespace Intel.MyDeals.BusinessLogic
             var msgPayload = new MessageCenterPayload()
             {
                 recipient = notification.NOTIFD_EMP_ADDR,
-                sent_test_email = false,
                 payload = new List<PayLoad>()
             };
 
@@ -377,9 +378,9 @@ namespace Intel.MyDeals.BusinessLogic
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""Contract#/manager/"" + item.CNTRCT_SID)'>View Contract</a>*
+                                                                        <a href='@(rootUrl +""/Contract#/manager/"" + item.CNTRCT_SID)'>View Contract</a>*
                                                                     </td>
                                                                 </tr>
                                                             }

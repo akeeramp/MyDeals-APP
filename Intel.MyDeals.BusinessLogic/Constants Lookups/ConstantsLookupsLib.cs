@@ -20,11 +20,14 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
+        private readonly INotificationsLib _notificationsLib;
+
         public ConstantsLookupsLib(IConstantLookupDataLib constantLookupDataLib,
-            IDataCollectionsDataLib dataCollectionsDataLib)
+            IDataCollectionsDataLib dataCollectionsDataLib, INotificationsLib notificationsLib)
         {
             _constantLookupDataLib = constantLookupDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
+            _notificationsLib = notificationsLib;
         }
 
         public ConstantsLookupsLib()
@@ -101,7 +104,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         public AdminConstant UpdateAdminConstant(AdminConstant data)
-        {      
+        {
             var result = _constantLookupDataLib.SetAdminConstants(CrudModes.Update, data);
             if (data.CNST_NM == "VERBOSE_LOG_TO_DB")
             {
@@ -113,6 +116,9 @@ namespace Intel.MyDeals.BusinessLogic
         public void UpdateRecycleCacheConstants(string cnstName, string cnstVal)
         {
             _constantLookupDataLib.UpdateRecycleCacheConstants(cnstName, cnstVal);
+
+            // After the batch is complete process the email notifications
+            _notificationsLib.SendEmailNotifications();
         }
 
         public void DeleteAdminConstant(AdminConstant data)

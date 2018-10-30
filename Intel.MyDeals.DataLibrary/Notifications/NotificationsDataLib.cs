@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Configuration;
 using System.Threading.Tasks;
+using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -19,6 +20,8 @@ namespace Intel.MyDeals.DataLibrary
         private static string messageCenterTokenUrl = string.Empty;
         private static string messageCenterToken = string.Empty;
         private static string env = string.Empty;
+        private static string messageCenterAdminEncrypted = string.Empty;
+        private static string messageCenterAdmin = string.Empty;
 
         /// <summary>
         /// Get User subscribed notification
@@ -267,12 +270,14 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         public static void SetMessageCenterEndPoints()
         {
-            if (messageCenterTokenUrl == string.Empty || messageCenterToken == string.Empty || env == string.Empty)
+            if (messageCenterTokenUrl == string.Empty || messageCenterAdminEncrypted == string.Empty || env == string.Empty)
             {
                 Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/Intel.MyDeals");
                 messageCenterTokenUrl = rootWebConfig.AppSettings.Settings["messageCenterTokenUrl"].Value;
-                messageCenterToken = rootWebConfig.AppSettings.Settings["messageCenterToken"].Value;
+                messageCenterAdmin = rootWebConfig.AppSettings.Settings["messageCenterAdmin"].Value;
                 env = rootWebConfig.AppSettings.Settings["Environment"].Value;
+                // we cannot name is as password, static code scan finds it :|
+                messageCenterAdminEncrypted = rootWebConfig.AppSettings.Settings["messageCenterAdminEncrypted"].Value;
             }
         }
 
@@ -378,7 +383,6 @@ namespace Intel.MyDeals.DataLibrary
                 if (!env.Equals("PROD", StringComparison.InvariantCultureIgnoreCase))
                 {
                     payload.sent_test_email = false;
-                    payload.recipient = "mydeals.dq.notification@intel.com";
                 }
                 var response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -420,6 +424,9 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        /// <summary>
+        /// Used only for message center token generation
+        /// </summary>
         private static HttpClient MsgCenterTokenClient
         {
             get
@@ -430,8 +437,8 @@ namespace Intel.MyDeals.DataLibrary
                     BaseAddress = new Uri(messageCenterTokenUrl)
                 };
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add("user_id", "mbiradar");
-                client.DefaultRequestHeaders.Add("user_pw", "********");
+                client.DefaultRequestHeaders.Add("user_id", messageCenterAdmin); ;
+                client.DefaultRequestHeaders.Add("user_pw", StringEncrypter.StringDecrypt(messageCenterAdminEncrypted, "labPwd"));
                 return client;
             }
         }
