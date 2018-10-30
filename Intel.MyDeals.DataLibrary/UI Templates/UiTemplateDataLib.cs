@@ -958,7 +958,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 DataType = "object",
-                Label = "Actions v2",
+                Label = "Actions",
                 Width = 110,
                 IsSortable = false,
                 IsFilterable = false,

@@ -258,29 +258,21 @@ namespace Intel.MyDeals.BusinessLogic
             //modify contract token with necessary PS/Contract information
             //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
             contractToken.CustId = data[0].CUST_MBR_SID;
+            //contractToken.CustId = -1;        //TODO: confirm the approval stack is not dependent on having a defined custID
             contractToken.ContractId = data[0].CNTRCT_OBJ_SID;
+            //contractToken.ContractId = -1;    //TODO: confirm the approval stack is not dependent on having a defined contractID
             contractToken.CustAccpt = "Accepted";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
 
             //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
 
-            List<OpDataElementType> includeTypes = new List<OpDataElementType>();
-            List<int> ids = new List<int>();
-
-            ids.Add(data[0].DC_ID); //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
-            //includeTypes.Add(OpDataElementType.CNTRCT);
-            includeTypes.Add(OpDataElementType.PRC_ST);
-            //includeTypes.Add(OpDataElementType.WIP_DEAL);
-
-            MyDealsData upperContract = OpDataElementType.WIP_DEAL.GetByIDs(ids, includeTypes);
-
-            //TODO: need to modify for bulk data updates
             List<WfActnItem> wfActnList = new List<WfActnItem>();
+
             WfActnItem item = new WfActnItem();
-            foreach (OpDataCollector dc in upperContract[OpDataElementType.PRC_ST].AllDataCollectors)
+            foreach (TenderActionItem tai in data)
             {
-                item.WF_STG_CD = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-                item.DC_ID = dc.DcID;
+                item.WF_STG_CD = tai.PS_WF_STG_CD;
+                item.DC_ID = tai.PS_ID;
                 wfActnList.Add(item);
             }
 
@@ -308,7 +300,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //if the actn does not match anything in the tender action list, this means we are setting an approval action from the tender dashboard
                 if (actions.Count() == 0)
                 {
-                    //Code flows through here when the "actn" is not Offer, Won, or Lost - we expect it to be an approval action such as Approve/Revise
+                    //Code flows through here when the "actn" is not Offer, Won, or Lost - therefore we expect it to be an approval action such as Approve/Revise
                     opMsgQueue = ActionTenderApprovals(contractToken, data, actn);
                 }
                 else

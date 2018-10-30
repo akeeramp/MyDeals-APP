@@ -6,5 +6,7 @@
         public int CNTRCT_OBJ_SID { get; set; }
         public int CUST_MBR_SID { get; set; }
         public string WF_STG_CD { get; set; }
+        public string PS_WF_STG_CD { get; set; }
+        public int PS_ID { get; set; }
     }
 }

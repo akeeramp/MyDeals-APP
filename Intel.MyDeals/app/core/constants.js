@@ -138,6 +138,9 @@
                     "DC_ID": {
                         "Groups": ["Deal Info"]
                     },
+                    "tender_actions": {
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit", "Payment"]
+                    },
                     "DC_PARENT_ID": {
                         "Groups": ["Deal Info"]
                     },
@@ -708,6 +711,9 @@
                     "DC_ID": {
                         "Groups": ["Deal Info"]
                     },
+                    "tender_actions": {
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit", "Payment"]
+                    },
                     "DC_PARENT_ID": {
                         "Groups": ["Deal Info"]
                     },
@@ -948,6 +954,6 @@
                 }
             },
             "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2"],
-            "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
+            "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "tender_actions"],
         });
 })();

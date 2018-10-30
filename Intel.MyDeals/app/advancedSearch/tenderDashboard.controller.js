@@ -880,7 +880,6 @@
                 function (results) {
 
                     var data = results.data.Data;
-                    //TODO: confirm why response data isn't being updated to be shown in the grid, do db modification test to confirm
 
                     //pcService.addPerfTimes(results.data.PerformanceTimes);
                     //pc.add(pcService.stop());
@@ -955,7 +954,6 @@
 
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
-                        //JEFFTODO: save with warning broadcast, make sure it touches opgrid
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 2000);
@@ -1216,59 +1214,6 @@
                     $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
                     $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
 
-                    //insert tender bid actions to deal editor
-                    $scope.wipOptions.columns.splice(3, 0, {
-                        "field": "bid_actions",
-                        "bypassExport": true,
-                        "hidden": false,
-                        "isDimKey": false,
-                        "isRequired": false,
-                        "lockable": false,
-                        "locked": true,
-                        "lookupText": "",
-                        "lookupUrl": "",
-                        "lookupValue": "",
-                        "mjrMnrChg": null,
-                        "sortable": false,
-                        "template": "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
-                        "excelTemplate": "<div>#=gridUtils.getBidActionsLabel(data)#</div>",
-                        //"type": "string",
-                        "editor": "BID_ACTNS",
-                        "filterable": false,
-                        //"filterable": {
-                        //    ui: function (element) {
-                        //        element.kendoDropDownList({
-                        //            dataSource: {
-                        //                data: [
-                        //                    "Lost",
-                        //                    "Won",
-                        //                    "Offer"
-                        //                ]
-                        //            },
-                        //            optionLabel: "--Select Value--"
-                        //        });
-                        //    },
-                        //    extra: false
-                        //},
-                        "title": "Action v1",
-                        "width": 110
-                    });
-                    $scope.wipOptions.model.fields.bid_actions = {
-                        "field": "bid_actions",
-                        "editable": true,
-                        "label": "Actions v1",
-                        "nullable": true,
-                        "opLookupText": "",
-                        "opLookupUrl": "",
-                        "opLookupValue": "",
-                        //"type": "string",
-                        "editor": "BID_ACTNS",
-                        "validMsg": ""
-                    };
-                    $scope.wipOptions.default.groupColumns.bid_actions = {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "Payment"]     //we add bid actions to be locked on all tab groups
-                    };
-
                     $scope.wipOptions.groups = $scope.wipOptions.default.groups
                     $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;
 
@@ -1326,7 +1271,9 @@
                 DC_ID: dataItem.DC_ID,
                 CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
                 CUST_MBR_SID: dataItem.CUST_MBR_SID,
-                WF_STG_CD: dataItem.WF_STG_CD
+                WF_STG_CD: dataItem.WF_STG_CD,
+                PS_WF_STG_CD: dataItem.PS_WF_STG_CD,
+                PS_ID: dataItem._parentIdPS
             });
             //}
 
@@ -1386,7 +1333,7 @@
                     //pcService.addPerfTimes(results.data.PerformanceTimes);
                     //pc.add(pcService.stop());
                     //var pcUI = new perfCacheBlock("Processing returned data", "UI");
-
+                    
                     //var foundIt = false;
                     //var noDeals = [];
                     //$scope.messages = results.data.Data.Messages;
