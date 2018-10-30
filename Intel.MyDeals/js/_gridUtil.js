@@ -146,7 +146,7 @@ gridUtils.getMissingCostCapIcon = function (data) {
                 'getting this deal approved please raise a TAC ticket in service now';
     }
     // if title is emptu send blank, this mplies cst or cap is not missing
-    if (title === '') return;
+    if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
     return '<div class="text-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div>';
 }
 
