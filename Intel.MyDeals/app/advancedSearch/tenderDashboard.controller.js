@@ -1250,13 +1250,13 @@
                         //    },
                         //    extra: false
                         //},
-                        "title": "Action",
+                        "title": "Action v1",
                         "width": 110
                     });
                     $scope.wipOptions.model.fields.bid_actions = {
                         "field": "bid_actions",
                         "editable": true,
-                        "label": "Action",
+                        "label": "Actions v1",
                         "nullable": true,
                         "opLookupText": "",
                         "opLookupUrl": "",
@@ -1436,7 +1436,8 @@
                     //} else if (foundIt) {
                     //    $scope.curLinkedVal = "";
                     //$timeout(function () {
-                    $scope.setBusy("Tender Deals Updated... But Jeff hasn't implemented Grid refresh yet.", "Your approval/action should have gone through.  Please refresh the page and pull up your tenders again.  Sorry :(");
+                    $scope.setBusy("", "");
+                    kendo.alert("Tender Deals Updated... But Jeff hasn't implemented Grid refresh after Action yet.  Run your search rules again to see your changes.");
                     //}, 50);
                     //////scope.ds.read(); // we rely on the DS post load to close down the busy indicator
                     //} else {

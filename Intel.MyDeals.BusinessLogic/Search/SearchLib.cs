@@ -247,7 +247,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="data">SearchParams: Start/End Date, Search Text and Search conditions</param>
         /// <returns></returns>
-        public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, bool useCustSecurity, MyRulesTrigger? rulesTrigger, bool getGridBehaviors = false)
+        public SearchResultPacket GetDealList(SearchParams data, List<int> atrbs, List<string> initSearchCriteria, UserPreferences customSearchOptionUserPref, bool useCustSecurity, MyRulesTrigger? rulesTrigger, bool fromTenderDashboard = false)
         {
             List<SearchFilter> customSearchOption = customSearchOptionUserPref == null
                 ? new List<SearchFilter>()
@@ -280,14 +280,28 @@ namespace Intel.MyDeals.BusinessLogic
                 decoderById[item.OBJ_SID] = item;
             }
 
+            MyDealsData myDealsData;
+
             // Now get the actual data based on the "slice" of matching data... this is based on the dc_ids list
-            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
+            if (!fromTenderDashboard)
+            {
+                myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
                 new List<OpDataElementType>
                 {
                     OpDataElementType.WIP_DEAL
                 },
                 atrbs);
-
+            }
+            else
+            {
+                //from the tender dashboard so we need to retrieve some PRC_ST information as well
+                myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
+                new List<OpDataElementType>
+                {
+                    OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
+                },
+                atrbs);
+            }
 
             // Get all the products in a collection base on the PRODUCT_FILTER
             // Note: the first hit is a performance dog as the product cache builds for the first time
@@ -305,17 +319,40 @@ namespace Intel.MyDeals.BusinessLogic
                     dc.ApplyRules((MyRulesTrigger) rulesTrigger, null, prods);
                     prodMap[dc.DcID] = dc.GetDataElements(AttributeCodes.PRODUCT_FILTER).Select(d => (ProductEngName) d.PrevAtrbValue).ToList();
                 }
+
+                if (fromTenderDashboard)
+                {
+                    foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
+                    {
+                        dc.ApplyRules((MyRulesTrigger)rulesTrigger, null, prods);
+                    }
+                }
             }
 
-            if (getGridBehaviors)   //when true this indicates we are coming in from the Tender Dashboard stack of calls.  we want to fill in missing elements so that we retrieve atrb security for those as well.
+            if (fromTenderDashboard)   //when true this indicates we are coming in from the Tender Dashboard stack of calls.  we want to fill in missing elements so that we retrieve atrb security for those as well.
             {
                 myDealsData.FillInHolesFromAtrbTemplate();
             }
 
             // Convert data to Client-Ready format
             OpDataCollectorFlattenedList rtn = myDealsData
-                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, getGridBehaviors)
+                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, fromTenderDashboard)
                 .ToHierarchialList(OpDataElementType.WIP_DEAL);
+
+            if (fromTenderDashboard)
+            {
+                OpDataCollectorFlattenedList prc_st_data = myDealsData
+                    .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, fromTenderDashboard)
+                    .ToHierarchialList(OpDataElementType.PRC_ST);
+
+                //we need a few pricing strategy level details on the tender dashboard so let's set them here.
+                for (var i = 0; i < prc_st_data.Count(); i++)
+                {
+                    //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
+                    rtn[i]["_parentActionsPS"] = prc_st_data[i]["_actions"];
+                    rtn[i]["_parentIdPS"] = prc_st_data[i]["DC_ID"];
+                }
+            }
 
             // Get a list of My Customers (the ones I have access)
             CustomerLib custLib = new CustomerLib();

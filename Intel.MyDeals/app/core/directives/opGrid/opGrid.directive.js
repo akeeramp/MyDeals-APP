@@ -1282,9 +1282,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var el = "";
                 var approveActions = [];
                 approveActions.push({text: "Action", value: "Action"})  //placeholder dummy for a user non-selection
-                for (var actn in options.model["_actions"]) {
-                    if (options.model["_actions"].hasOwnProperty(actn)) {
-                        if (options.model["_actions"][actn] == true && actn != "Cancel") {
+                for (var actn in options.model["_parentActionsPS"]) {
+                    if (options.model["_parentActionsPS"].hasOwnProperty(actn)) {
+                        if (options.model["_parentActionsPS"][actn] == true && actn != "Cancel" && actn != "Hold") {   //the manage screen does not display checkboxes for Cancel or Hold so we will avoid that here as well
                             approveActions.push({text: actn, value: actn})
                         }
                     }
@@ -1295,7 +1295,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //    { text: "Revise", value: "Revise" },
                 //]
 
-                if (Object.keys(options.model["_actions"]).length > 1) {
+                if (approveActions.length > 1) {    // checking >1 instead of 0 because of the "Actions" placeholder we put in
                     //Approval actions
                     $('<input required name="' + options.field + '"/>')
                     .appendTo(container)
@@ -1310,7 +1310,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $scope.broadcast("approval-actions-updated", { newValue: this.value(), dataItem: options.model });
                         }
                     });
-                } else if (options.model["BID_ACTNS"].length > 1) {
+                } else if (options.model["BID_ACTNS"].length > 1) { // checking >1 because if only 1 available it is meaningless to set to same bid status
                     //Select traditional bid action
                     var ind = options.model["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(options.model["WF_STG_CD"]);
                     if (ind == -1) ind = 0;

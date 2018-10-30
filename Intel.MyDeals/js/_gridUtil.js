@@ -1608,7 +1608,7 @@ gridUtils.goToObject = function (data, accessCheckField, field, title) {
 }
 
 gridUtils.getBidActions = function (data) {
-    if (data.BID_ACTNS === undefined || data._actions === undefined) return "";
+    if (data.BID_ACTNS === undefined || data._parentActionsPS === undefined) return "";
 
     var ar = data["WF_STG_CD"];
     if (ar !== undefined && ar !== null && ar === "no access") {
@@ -1620,7 +1620,7 @@ gridUtils.getBidActions = function (data) {
     data.BID_ACTNS = bidActns;
 
     //remove the cancelled action as we do not want that in our dropdown so we won't consider it when deciding what to display
-    var actions = angular.copy(data._actions);
+    var actions = angular.copy(data._parentActionsPS);
     if (actions["Cancel"] == true) {
         delete actions["Cancel"];
     }
@@ -1628,20 +1628,20 @@ gridUtils.getBidActions = function (data) {
 
     //If cancelled, no actions avalable
     if (data.WF_STG_CD == "Cancelled") {
-        return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is cancelled.'>(<i>Not Actionable</i>)</div></div>";
+        return "<div is-editable='true' style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is cancelled.'>(<i>Not Actionable</i>)</div></div>";
     }
     if (bidActns.length == 0) {
         if (numActions === 0) {
             //no actions available to this user for this deal
-            return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='No Actions available.'>(<i>Not Actionable</i>)</div></div>";
+            return "<div is-editable='true' style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='No Actions available.'>(<i>Not Actionable</i>)</div></div>";
         } else {
-            return "<div style='text-align: center; width: 100%;'>Action</div>";
+            return "<div is-editable='true' style='text-align: center; width: 100%;'>Action</div>";
         }
     } else {
         //Bid Action = Won will have one listed action so no point allowing user to change it
-        if (bidActns.length === 1) return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i>Not Actionable</i>)</div></div>";
+        if (bidActns.length === 1) return "<div is-editable='true' style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i>Not Actionable</i>)</div></div>";
         //all other cases is bid action size 2 or 3, aka Lost/Offer.
-        return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}</div>"
+        return "<div is-editable='true' style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}</div>"
     }
     //if (bidActns.length === 1 || data.WF_STG_CD == "Cancelled") return "<div style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i>Not Actionable</i>)</div></div>";
     //if (bidActns.length === 0) return "<div style='text-align: center; width: 100%; line-height: 1.1em;'>Action</div>";

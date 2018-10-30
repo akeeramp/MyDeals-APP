@@ -950,6 +950,25 @@ namespace Intel.MyDeals.DataLibrary
                 HeaderTemplate = "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>",
                 BypassExport = true
             });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 10003,
+                AtrbCd = "tender_actions",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                DataType = "object",
+                Label = "Actions v2",
+                Width = 110,
+                IsSortable = false,
+                IsFilterable = false,
+                IsReadOnly = false,
+                Locked = true,
+                Lockable = false,
+                Template = "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
+                BypassExport = true,
+                Editor = "BID_ACTNS"
+            });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3668,
