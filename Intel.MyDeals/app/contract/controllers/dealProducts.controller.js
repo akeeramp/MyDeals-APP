@@ -34,7 +34,7 @@
                 parse: function (data) {
                     if (!hasPermissionPrice) {
                         for (var d = 0; d < data.length; d++) {
-                            if (data[d].PRD_COST !== null) {
+                            if (data[d].PRD_COST !== "No Cost" || data[d].PRD_COST != "NA") {
                                 data[d]["PRD_COST"] = "No access";
                             }
                         }
@@ -95,7 +95,7 @@
                 title: "Cost",
                 width: "110px",
                 template: function (dataItem) {
-                    if (dataItem.PRD_COST === null) {
+                    if (dataItem.PRD_COST === 'No Cost') {
                         return '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;"><div style="font-family: arial; text-align: center;font-weight:600">No Cost</div></div>'
                     }
                     return '<div style="text-align: center;">' + dataItem.PRD_COST + '</div>';

@@ -1359,7 +1359,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="dealId"></param>
         /// <returns></returns>
-        public List<Entities.Custom.DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag)
+        public List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag)
         {
             return _productDataLib.GetDealProducts(objSid, objTypeSid, custId, isMissingFlag);
         }

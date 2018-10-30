@@ -682,7 +682,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="dealId"></param>
         /// <returns></returns>
         [Route("GetDealProducts/{objSid}/{objTypeSid}/{custId}/{isMissingFlag:bool?}")]
-        public List<Entities.Custom.DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag = true)
+        public List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag = true)
         {
             return SafeExecutor(() => _productsLib.GetDealProducts(objSid, objTypeSid, custId, isMissingFlag)
                 , $"Unable to get Product details"

@@ -35,6 +35,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<ProductEngName> GetEngProducts(List<int> prds);
 
-        List<Entities.Custom.DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
+        List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
     }
 }

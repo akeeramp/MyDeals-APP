@@ -81,6 +81,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         IList<SearchString> GetLegalExceptionProducts(string filter);
 
-        List<Entities.Custom.DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
+        List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
     }
 }

@@ -83,7 +83,6 @@
     <Compile Include="DashboardFilter.cs" />
     <Compile Include="DcPath.cs" />
     <Compile Include="DcPathTitle.cs" />
-    <Compile Include="DealProducts.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
     <Compile Include="CrudModes.cs" />

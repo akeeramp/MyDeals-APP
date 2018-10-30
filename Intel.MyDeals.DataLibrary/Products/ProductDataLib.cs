@@ -1141,10 +1141,10 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="dealId"></param>
         /// <returns></returns>
-        public List<Entities.Custom.DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag)
+        public List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag)
         {
             OpLog.Log("ProductSelectionResults");
-            var ret = new List<Entities.Custom.DealProducts>();
+            var ret = new List<DealProducts>();
 
             try
             {
@@ -1201,7 +1201,7 @@ namespace Intel.MyDeals.DataLibrary
 
                     while (rdr.Read())
                     {
-                        ret.Add(new Entities.Custom.DealProducts
+                        ret.Add(new DealProducts
                         {
                             BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
                             CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP),
@@ -1234,7 +1234,7 @@ namespace Intel.MyDeals.DataLibrary
                             PRC_TBL_SID = (IDX_PRC_TBL_SID < 0 || rdr.IsDBNull(IDX_PRC_TBL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_TBL_SID),
                             PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ATRB_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
-                            PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_PRD_COST),
+                            PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_COST),
                             PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
                             PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
