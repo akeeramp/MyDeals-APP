@@ -352,6 +352,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (opGridTemplate.hideForNonTender.indexOf(wipTemplate.columns[i].field) !== -1 && !root.isTenderContract) {
                 wipTemplate.columns.splice(i, 1);
             }
+            // For standard deal editor hide these columns
+            if (opGridTemplate.hideForStandardDealEditor.indexOf(wipTemplate.columns[i].field) !== -1) {
+                wipTemplate.columns.splice(i, 1);
+            }
         }
 
         // Remove tender only columns for non tender deals.
@@ -364,6 +368,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 delete wipTemplate.model.fields[x];
             });
         }
+
+        // Remove columns that we only want to appear in the tender dashboard and not the standard deal editor
+        opGridTemplate.hideForStandardDealEditor.forEach(function (x) {
+            delete wipTemplate.model.fields[x];
+        })
 
         root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD] = wipTemplate;
 

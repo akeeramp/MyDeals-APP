@@ -954,6 +954,7 @@
                 }
             },
             "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2"],
-            "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "tender_actions"],
+            "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
+            "hideForStandardDealEditor": ["tender_actions"],
         });
 })();
