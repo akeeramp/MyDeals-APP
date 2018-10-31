@@ -1,18 +1,16 @@
-﻿<script type="text/ng-template" id="dealTimelineModal">
-    <div class="modal-header modalBlueBody">
-        <h5 class="modal-title" id="modal-title">Timeline for deal {{dataItem.DC_ID}} <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
-    </div>
-    <div class="modal-body modalBlueBody" id="modal-body">
+﻿<div class="modal-header modalBlueBody">
+    <h5 class="modal-title" id="modal-title">Timeline for deal {{dataItem.DC_ID}} <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+</div>
+<div class="modal-body modalBlueBody" id="modal-body">
 
-        <kendo-grid options="gridOptions" class="opUiContainer md" style="height: 300px; margin-bottom: 20px;"></kendo-grid>
+    <kendo-grid options="gridOptions" class="opUiContainer md" style="height: 300px; margin-bottom: 20px;"></kendo-grid>
 
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-primary" type="button" style="width: 100%;" ng-click="ok()">Close</button>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" style="width: 100%;" ng-click="ok()">Close</button>
         </div>
     </div>
-</script>
+</div>
 
 <style>
     .excelText {
@@ -21,7 +19,12 @@
         float: right;
     }
 
-    .excelText span {
-        text-align: left;
+        .excelText span {
+            text-align: left;
+        }
+
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
     }
 </style>

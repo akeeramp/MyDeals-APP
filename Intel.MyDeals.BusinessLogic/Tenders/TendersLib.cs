@@ -261,16 +261,16 @@ namespace Intel.MyDeals.BusinessLogic
             //contractToken.CustId = -1;        //TODO: confirm the approval stack is not dependent on having a defined custID
             contractToken.ContractId = data[0].CNTRCT_OBJ_SID;
             //contractToken.ContractId = -1;    //TODO: confirm the approval stack is not dependent on having a defined contractID
-            contractToken.CustAccpt = "Accepted";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
+            contractToken.CustAccpt = "Acceptance Not Required in C2A";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
 
             //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
 
             List<WfActnItem> wfActnList = new List<WfActnItem>();
 
-            WfActnItem item = new WfActnItem();
             foreach (TenderActionItem tai in data)
             {
+                var item = new WfActnItem();
                 item.WF_STG_CD = tai.PS_WF_STG_CD;
                 item.DC_ID = tai.PS_ID;
                 wfActnList.Add(item);

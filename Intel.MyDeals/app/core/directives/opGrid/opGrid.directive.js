@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage', '$rootScope'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage, $rootScope) {
 
     return {
         scope: {
@@ -12,11 +12,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             opOptions: '=',
             opHelp: '=',
             opRootScope: '=',
-            opRootParentScope: '='
+            opRootParentScope: '=',
+            opIsTender: '@'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
-        controller: ['$scope', '$http', function ($scope, $http) {
+        controller: ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
             $scope.$storage = $localStorage;
 
             $scope.$storage = $localStorage.$default({
@@ -1410,6 +1411,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
                 return false;
+            }
+
+            $scope.sendEmail = function () {
+                var rootUrl = window.location.protocol + "//" + window.location.host;
+                var gridDs = $scope.contractDs.data();
+                var items = [];
+                for (var i = 0; i < gridDs.length - 1; i++) {
+                    if (gridDs[i].isLinked) {
+                        var item = {
+                            "CUST_NM": gridDs[i].Customer !== undefined ? gridDs[i].Customer.CUST_NM : "",
+                            "VERTICAL_ROLLUP": gridDs[i].PRODUCT_CATEGORIES,
+                            "CNTRCT": gridDs[i].CNTRCT_OBJ_SID + " " + gridDs[i].CNTRCT_TITLE,
+                            "DC_ID": gridDs[i]._parentIdPS,
+                            "NEW_STG": gridDs[i].PS_WF_STG_CD,
+                            "END_CUSTOMER_RETAIL": gridDs[i].END_CUSTOMER_RETAIL,
+                            "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i]._parentIdPS
+                        };
+                        items.push(item);
+                    }
+                }
+                $rootScope.$broadcast('send-notification', items);
             }
 
             $scope.showCols = function (grpName) {

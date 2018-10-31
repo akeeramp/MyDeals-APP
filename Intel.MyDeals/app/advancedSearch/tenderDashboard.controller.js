@@ -53,50 +53,6 @@
                 console.log('Template Retrieval Failed');
             });
 
-        $scope.openMCTScreen = function (dataItem) {
-
-            objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
-                $scope.contractData = $scope.initContract(data);
-                $scope.contractData.CUST_ACCNT_DIV_UI = "";
-
-                // if the current strategy was changed, update it
-
-                $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
-                $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-
-                $timeout(function () {
-                    $scope.$apply();
-                });
-
-                var modal = $uibModal.open({
-                    backdrop: 'static',
-                    templateUrl: 'app/contract/partials/ptModals/meetCompModal.html',
-                    controller: 'MeetCompController',
-                    //controllerAs: 'contract',
-                    size: 'lg',
-                    windowClass: 'tenderFolio-modal-window',
-                    resolve: {
-                        dataItem: function () {
-                            return dataItem;
-                        },
-                        parentScope: function () {
-                            return $scope;
-                        }
-                    }
-                });
-
-                modal.result.then(
-                    function () {
-                        //Close Event will come here
-                    },
-                    function () {
-                        // Do Nothing on cancel
-                    });
-            });
-
-
-        }
-
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
@@ -1349,7 +1305,7 @@
                     //pcService.addPerfTimes(results.data.PerformanceTimes);
                     //pc.add(pcService.stop());
                     //var pcUI = new perfCacheBlock("Processing returned data", "UI");
-                    
+
                     //var foundIt = false;
                     //var noDeals = [];
                     //$scope.messages = results.data.Data.Messages;
@@ -1418,7 +1374,7 @@
                                             "BidActnValue": msgArray[i].ExtraDetails[actionLength],
                                         })
                                     }
-                                    
+
                                     //TODO: will this error out for bulk updates?  reading phils old code it seems extra details may come back structured differently if multiple tenders are passed in.
                                     if ($scope.wipData[dsIndex]["bid_actions"].length == 3) $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
                                     if ($scope.wipData[dsIndex]["bid_actions"].length == 2) $scope.wipData[dsIndex]["WF_STG_CD"] = "Lost";
@@ -1434,7 +1390,7 @@
                                 } else {
                                     //found the index of a tender we actioned
                                     //TODO: this doesnt account for failure messages... there surely must be a better way than string parsing...
-                                    var message = msgArray[i].Message.trim();                  //for approval action updates, these will contain a message indicating the stage change... assuming everything went smoothly. 
+                                    var message = msgArray[i].Message.trim();                  //for approval action updates, these will contain a message indicating the stage change... assuming everything went smoothly.
                                     message = message.substring(0, message.length - 1);
                                     var messageArr = message.trim().split(" ");
                                     $scope.wipData[dsIndex]["PS_WF_STG_CD"] = messageArr[messageArr.length - 1];    //TODO: would this need to also update WF_STG_CD as well? when would it?
@@ -1458,7 +1414,7 @@
                     $scope.setBusy("", "");
                     $scope.actionType = "";
 
-                    
+
                     //}, 50);
                     //////scope.ds.read(); // we rely on the DS post load to close down the busy indicator
                     //} else {
@@ -1491,9 +1447,57 @@
             $scope.setBusy("", "");
         });
 
+        $scope.$on("send-notification", function (event, items) {
+            openEmailMsg(items);
+        });
+
+        var openEmailMsg = function (items) {
+            if (items.length === 0) {
+                kendo.alert("No items were selected to email.");
+                return;
+            }
+
+            var custNames = [];
+            for (var x = 0; x < items.length; x++) {
+                if (custNames.indexOf(items[x].CUST_NM) < 0)
+                    custNames.push(items[x].CUST_NM);
+            }
+
+            var data = {
+                from: window.usrEmail,
+                items: items
+            }
+
+            var actnList = [];
+            actnList.push(kendo.template($("#emailItemTemplateTender").html())(data));
+            var msg = actnList.join("\n\n");
+
+            var dataItem = {
+                from: "mydeals.notification@intel.com",
+                to: "",
+                subject: "My Deals Action Required for " + custNames.join(', ') + "!",
+                body: msg
+            };
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'emailModal',
+                controller: 'emailModalCtrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+            }, function () { });
+        }
+
         $timeout(function () {
             resizeGrid();
         }, 500);
-
     }
 })();
