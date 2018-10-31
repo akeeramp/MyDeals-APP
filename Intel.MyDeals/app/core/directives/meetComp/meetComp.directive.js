@@ -143,9 +143,14 @@
                     
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE + "/" + $scope.objTypeId).then(function (response) {
                         if (response.data.length == 0 && $scope.isAdhoc == 1) {
+                            $scope.isBusy = false;                            
                             $scope.$parent.inCompleteDueToCapMissing(true);
+                            $scope.$parent.goToPublished();
                         }
-                        $scope.$parent.refreshContractData();
+
+                        if ($scope.isAdhoc == 0) {
+                            $scope.$parent.refreshContractData();      
+                        }                                                             
                         
                         if (response.data.length > 0) {
                             //Calculate InComplete due to CAP Missing

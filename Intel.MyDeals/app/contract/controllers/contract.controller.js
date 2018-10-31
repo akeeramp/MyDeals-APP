@@ -327,7 +327,8 @@
         $scope.goToTenderDashboard = function () {
             $localStorage.selectedContractID = $scope.contractData.DC_ID;
             $localStorage.selectedDealType = $scope.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
-            $scope._dirty = false;             
+            $scope._dirtyContractOnly = false;
+            $scope._dirty = false;            
             document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + $localStorage.selectedDealType + "&FolioId=" + $scope.contractData.DC_ID + "&search";
         }
 
@@ -388,7 +389,7 @@
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if ($scope.actualClikedTabName == 'MC' && !$scope.inCompleteCapMissing && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    if ($scope.actualClikedTabName == 'MC' && !$scope.inCompleteCapMissing && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
                         $scope.isPtr = false;
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
                         $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
@@ -400,6 +401,7 @@
                         $scope.currentTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
                         $scope.resetDirty();
                         $scope.publishWipDealsFromTab();
+                        $scope.setBusy("", "");
                     }
                     else if (($scope.actualClikedTabName == 'PD' || $scope.inCompleteCapMissing ) && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.isPtr = false;
@@ -407,12 +409,14 @@
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                         $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                         $scope.resetDirty();
+                        $scope.setBusy("", "");
                     }
                     else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet')) {
                         $scope.isPtr = false;
                         $scope.actualClikedTabName = 'MC';
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
                         $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+                        $scope.setBusy("", "");
                         $scope.resetDirty();
                     }
 
@@ -422,6 +426,13 @@
 
                 }
             });
+        }
+        $scope.goToPublished = function () {
+            $scope.isPtr = false;
+            $scope.setBusy("", "");
+            $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+            $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+            $scope.resetDirty();
         }
 
         $scope.setForceNavigationForMC = function () {
@@ -4553,7 +4564,8 @@
 
             var isFired = false;
             var isPartiallyValid = true;
-
+            var isPTREmpty = $scope.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+           
             $scope.actualClikedTabName = _tabName;
 
             if ($scope.currentTAB == _tabName) {
@@ -4578,10 +4590,10 @@
                 if (isPartiallyValid == false) {
                     if (!!$scope.child) {
                         $scope.inCompleteCapMissing = false;
-                        if ($scope.currentTAB == 'PTR') {
+                        if ($scope.currentTAB == 'PTR' && !isPTREmpty) {
                             $scope.child.validateSavepublishWipDeals();
                         }
-                        else if ($scope.currentTAB == 'DE') {
+                        else if ($scope.currentTAB == 'DE' && !isPTREmpty) {
                             $scope.$broadcast('fireSaveAndValidateGrid');
                         }
 
@@ -4608,14 +4620,14 @@
                     $scope.isPtr = false;
                     $scope.enablePTRReload = false;
                 }
-                else if (isPartiallyValid == false) {
-                    $scope.enablePTRReload = true;
+                else if (isPartiallyValid == false) {                    
                     if (!!$scope.child) {
                         $scope.inCompleteCapMissing = false;
-                        if ($scope.currentTAB == 'PTR') {
+                        if ($scope.currentTAB == 'PTR' && !isPTREmpty) {
                             $scope.child.validateSavepublishWipDeals();
                         }
-                        else if ($scope.currentTAB == 'DE') {
+                        else if ($scope.currentTAB == 'DE' && !isPTREmpty) {
+                            $scope.enablePTRReload = true;
                             $scope.$broadcast('fireSaveAndValidateGrid');
                         }
 
@@ -4642,13 +4654,14 @@
             if (_tabName == 'PD') {
                 if (isPartiallyValid == false) {
                     $scope.inCompleteCapMissing = false;
-                    $scope.enablePTRReload = true;
+                    
                     if (!!$scope.child) {
-                        if ($scope.currentTAB == 'PTR') {
+                        if ($scope.currentTAB == 'PTR' && !isPTREmpty) {
                             $scope.child.validateSavepublishWipDeals();
                         }
-                        else if ($scope.currentTAB == 'DE') {
+                        else if ($scope.currentTAB == 'DE' && !isPTREmpty) {
                             $scope.$broadcast('fireSaveAndValidateGrid');
+                            $scope.enablePTRReload = true;
                         }
 
                     } else {
@@ -4664,20 +4677,12 @@
                 }
                 else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
                     isFired = true;
-                    logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
+                    //logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
                     $scope.selectedTAB = 'MC';
                     $scope.currentTAB = 'MC';
                     $scope.isPtr = false;
                     $scope.enablePTRReload = false;
-                }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
-                    isFired = true;
-                    logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
-                    $scope.selectedTAB = 'MC';
-                    $scope.currentTAB = 'MC';
-                    $scope.isPtr = false;
-                    $scope.enablePTRReload = false;
-                }
+                }                
                 else if (isPartiallyValid == true && $scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.enableDealEditorTab() === true) {
                     isFired = true;
                     if ($scope.selectedTAB != 'DE') {
@@ -4691,6 +4696,10 @@
                     logger.stickyError("Meet Comp is not passed. You can not Publish this deal yet.");
                 }
 
+            }
+
+            if (isPTREmpty) {
+                $scope.enablePTRReload = false;
             }
 
             if (angular.isFunction($scope[_actionName]) && isFired)
