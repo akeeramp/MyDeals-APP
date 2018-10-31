@@ -19,6 +19,7 @@
         $scope.loading = true;
         $scope.msg = "Loading Missing CAP/Cost Deal Products";
         $scope.$parent.isSummaryHidden = false;
+
         var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || (window.usrRole === "SA" && window.isSuper);
 
         $scope.dealproductsDs = new kendo.data.DataSource({
@@ -34,7 +35,14 @@
                 parse: function (data) {
                     if (!hasPermissionPrice) {
                         for (var d = 0; d < data.length; d++) {
-                            if (data[d].PRD_COST !== "No Cost" || data[d].PRD_COST != "NA") {
+                            if (data[d].PRD_COST !== "No Cost" && data[d].PRD_COST !== "NA") {
+                                data[d]["PRD_COST"] = "No access";
+                            }
+                        }
+                    }
+                    if (hasPermissionPrice && usrVerticals.length > 0) {
+                        for (var d = 0; d < data.length; d++) {
+                            if (usrVerticals.indexOf(data[d].PRD_CAT_NM) === -1 && (data[d].PRD_COST !== "No Cost" && data[d].PRD_COST !== "NA")) {
                                 data[d]["PRD_COST"] = "No access";
                             }
                         }

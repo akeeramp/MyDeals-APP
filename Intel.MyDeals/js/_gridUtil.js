@@ -124,10 +124,10 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     var iconNm = gridPctUtils.getResultSingleIcon(result, style);
     //return iconNm;
     if (field === 'MEETCOMP_TEST_RESULT') {
-        return '<div class="text-center" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+        return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
     }
     else {
-        return '<div class="text-center" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+        return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
     }
 
 }
@@ -147,7 +147,7 @@ gridUtils.getMissingCostCapIcon = function (data) {
     }
     // if title is emptu send blank, this mplies cst or cap is not missing
     if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
-    return '<div class="text-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div>';
+    return '<div class="text-center uiControlDiv isReadOnlyCell"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div>';
 }
 
 gridUtils.booleanDisplay = function (passedData, field) {
