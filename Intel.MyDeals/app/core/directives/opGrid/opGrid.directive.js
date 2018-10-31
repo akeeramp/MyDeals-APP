@@ -1308,7 +1308,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         value: "Action",
                         text: "Action",
                         change: function (e) {
-                            $scope.broadcast("approval-actions-updated", { newValue: this.value(), dataItem: options.model });
+                            $scope.broadcast("approval-actions-updated", { newValue: this.value(), dataItem: options.model, gridDS: $scope.contractDs.data() });
                         }
                     });
                 } else if (options.model["BID_ACTNS"].length > 1) { // checking >1 because if only 1 available it is meaningless to set to same bid status
@@ -1325,7 +1325,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             value: options.model["BID_ACTNS"][ind].BidActnValue,
                             text: options.model["BID_ACTNS"][ind].BidActnName,
                             change: function (e) {
-                                $scope.broadcast("bid-actions-updated", { newValue: this.value(), dataItem: options.model });
+                                $scope.broadcast("bid-actions-updated", { newValue: this.value(), dataItem: options.model, gridDS: $scope.contractDs.data() });
                             }
                         });
                 } else {    //no actions possible, just display same

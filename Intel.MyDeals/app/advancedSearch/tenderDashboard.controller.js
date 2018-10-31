@@ -1240,46 +1240,58 @@
         $scope.$on("bid-actions-updated", function (event, args) {
             var newValue = args.newValue;
             var dataItem = args.dataItem;
+            var gridDS = args.gridDS;
             if (newValue == dataItem.WF_STG_CD) return; //user selected the same item, aka we do nothing here and break out
             $scope.actionType = "BID";
-            $scope.changeBidAction(dataItem, newValue);
+            $scope.changeBidAction(dataItem, newValue, gridDS);
         });
 
         $scope.$on("approval-actions-updated", function (event, args) {
             var newValue = args.newValue;
             var dataItem = args.dataItem;
+            var gridDS = args.gridDS;
             if (newValue == "Action") return;   //user selected the default non-item action so we break out here.
             $scope.actionType = "PS";
-            $scope.changeBidAction(dataItem, newValue);
+            $scope.changeBidAction(dataItem, newValue, gridDS);
         });
 
-        $scope.changeBidAction = function (dataItem, newVal) {
+        $scope.changeBidAction = function (dataItem, newVal, gridDS) {
             //var newVal = dataItem.WF_STG_CD;
-            var dsData = $scope.wipData;
+            //var dsData = $scope.wipData;
             var tenders = [];
 
-            // now update all checked items if the current one is checked
-            //if (dataItem.isLinked) {
-            //    for (var d = 0; d < dsData.length; d++) {
-            //        if (dsData[d].isLinked) {
-            //            dsData[d].WF_STG_CD = newVal;
-            //            tenders.push({
-            //                DC_ID: dsData[d].DC_ID,
-            //                CNTRCT_OBJ_SID: dsData[d].CNTRCT_OBJ_SID,
-            //                CUST_MBR_SID: dsData[d].CUST_MBR_SID
-            //            });
-            //        }
-            //    }
-            //} else {
-            tenders.push({
-                DC_ID: dataItem.DC_ID,
-                CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
-                CUST_MBR_SID: dataItem.CUST_MBR_SID,
-                WF_STG_CD: dataItem.WF_STG_CD,
-                PS_WF_STG_CD: dataItem.PS_WF_STG_CD,
-                PS_ID: dataItem._parentIdPS
-            });
-            //}
+            // if item is checked (linked) then we need to make sure all linked items are in the same stages otherwise we disallow the action
+            if (dataItem.isLinked) {
+                for (var d = 0; d < gridDS.length; d++) {
+                    if (gridDS[d].isLinked) {
+                        if (gridDS[d].WF_STG_CD != dataItem.WF_STG_CD || gridDS[d].PS_WF_STG_CD != dataItem.PS_WF_STG_CD) {
+                            //mismatch detected, end execution and warn user
+                            kendo.alert("The selected deals must be in the same Stage in order to do Actions in bulk.");
+                            return;
+                        } else {
+                            //no mismatch, therefore we push it into the packet that we will send to the middle tier
+                            tenders.push({
+                                DC_ID: gridDS[d].DC_ID,
+                                CNTRCT_OBJ_SID: gridDS[d].CNTRCT_OBJ_SID,
+                                CUST_MBR_SID: gridDS[d].CUST_MBR_SID,
+                                WF_STG_CD: gridDS[d].WF_STG_CD,
+                                PS_WF_STG_CD: gridDS[d].PS_WF_STG_CD,
+                                PS_ID: gridDS[d]._parentIdPS
+                            });
+                        }
+                    }
+                }
+            } else {
+                //not linked, so we will just push the single data item to the middle tier
+                tenders.push({
+                    DC_ID: dataItem.DC_ID,
+                    CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
+                    CUST_MBR_SID: dataItem.CUST_MBR_SID,
+                    WF_STG_CD: dataItem.WF_STG_CD,
+                    PS_WF_STG_CD: dataItem.PS_WF_STG_CD,
+                    PS_ID: dataItem._parentIdPS
+                });
+            }
 
             var plural = tenders.length > 1 ? "s" : "";
             var msg = "";
@@ -1430,6 +1442,13 @@
                                     //TODO: the _parentActionsPS also need to be updated accordingly... not sure where to get that data from
                                 }
                             }
+                        }
+                    }
+
+                    //go through and remove all checkboxes / unlink everything
+                    for (var d = 0; d < $scope.wipData.length; d++) {
+                        if ($scope.wipData[d].isLinked) {
+                            $scope.wipData[d].isLinked = false;
                         }
                     }
 
