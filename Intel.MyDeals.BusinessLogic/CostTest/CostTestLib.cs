@@ -46,6 +46,11 @@ namespace Intel.MyDeals.BusinessLogic
             return RunPct(OpDataElementType.PRC_ST.ToId(), new List<int> { id });
         }
 
+        public OpMsg RunPctBulkPricingStrategy(List<int> psIds)
+        {
+            return RunPct(OpDataElementType.PRC_ST.ToId(), psIds);
+        }
+
         public OpMsg RunPctPricingTable(int id)
         {
             return RunPct(OpDataElementType.PRC_TBL.ToId(), new List<int> { id });

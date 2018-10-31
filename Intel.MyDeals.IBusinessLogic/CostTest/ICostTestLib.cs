@@ -10,6 +10,7 @@ namespace Intel.MyDeals.IBusinessLogic
         PctOverrideReason SetPctOverrideReason(PctOverrideReason data);
         OpMsg RunPctContract(int id);
         OpMsg RunPctPricingStrategy(int id);
+        OpMsg RunPctBulkPricingStrategy(List<int> psIds); 
         OpMsg RunPctPricingTable(int id);
         OpMsg RunPctDeals(List<int> ids);
 

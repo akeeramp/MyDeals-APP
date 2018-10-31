@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage', '$rootScope'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage', 'securityService'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage, $rootScope) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage, securityService) {
 
     return {
         scope: {
@@ -101,6 +101,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.isGridDataLoaded = false;
             $scope.isLayoutConfigurablePrev = $scope.isLayoutConfigurable;
 
+            $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
+            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
+            
             $scope.root = !!$scope.opOptions.rootScope ? $scope.opOptions.rootScope : $scope.$parent.$parent.$parent;
             if (!$scope.root || !$scope.root.saveCell) { // possible this directive is called from nested parent hierarchy
                 $scope.root = $scope.$parent;
@@ -171,6 +174,29 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             // Do Nothing on cancel
                         });
                 });
+            }
+
+            $scope.runPCTMCT = function (mode) {                
+                var data = $scope.contractDs.data();
+                if (data.length > 0) {
+                    var selectedItem = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].isLinked == true) {
+                            selectedItem.push(data[i].PRC_ST_OBJ_SID);
+                        }
+                    }
+                    if (selectedItem.length > 0) {  
+                        $(".iconRunPct").addClass("fa-spin grn");
+                        $scope.root.$broadcast('btnPctMctRunning', {});
+                        objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
+                            logger.success(data.data.Message + ". Please refresh the page to see updated result.");                            
+                            $scope.contractDs.read();                            
+                            $scope.root.$broadcast('btnPctMctComplete', {});                            
+                            $(".iconRunPct").removeClass("fa-spin grn");
+                        });
+                    }                    
+                }
+                
             }
 
             $scope.openMCTScreen = function (dataItem) {
@@ -1905,7 +1931,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $timeout(function () {
                     $scope.grid.autoFitColumn(2);
                 }, 0);
-            }
+            }            
 
             $scope.clkSearchGrid = function (e) {
                 if (e.keyCode === 13)

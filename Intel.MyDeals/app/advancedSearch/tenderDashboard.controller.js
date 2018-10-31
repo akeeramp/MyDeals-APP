@@ -21,7 +21,16 @@
 
         $scope.contractData = [];
         $scope.templateData = [];
+        $scope.$on('btnPctMctRunning', function (event, args) {
+            $scope.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
+        });
 
+        $scope.$on('btnPctMctComplete', function (event, args) {
+            $scope.setBusy("Complete", "Reloading the page now.", "Success");
+            $timeout(function () {
+                $scope.setBusy("", "");
+            }, 2000);
+        });
         $scope.refreshContractData = function (id, ptId) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
                 $scope.contractData = $scope.initContract(data);

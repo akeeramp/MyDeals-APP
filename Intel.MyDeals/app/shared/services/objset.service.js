@@ -77,6 +77,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         getPctDetails: getPctDetails,
         setPctOverride: setPctOverride,
         runPctContract: runPctContract,
+        runBulkPctPricingStrategy: runBulkPctPricingStrategy,
         getOverlappingDealsFromContract: getOverlappingDealsFromContract,
         getOverlappingDealsFromPricingStrategy: getOverlappingDealsFromPricingStrategy,
         getOverlappingDealsFromPricingTable: getOverlappingDealsFromPricingTable,
@@ -278,6 +279,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function runPctContract(id) {
         return dataService.get(apiBaseCostTestUrl + 'RunPctContract/' + id);
+    }
+    function runBulkPctPricingStrategy(psIDS) {
+        return dataService.post(apiBaseCostTestUrl + 'RunBulkPctPricingStrategy', psIDS);
     }
 
     // #### Overlapping CRUD operation ####
