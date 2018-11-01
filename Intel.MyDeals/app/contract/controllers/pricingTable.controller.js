@@ -236,7 +236,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.syncCellValidationsOnAllRows(root.pricingTableData.PRC_TBL_ROW);
 
+        //  Kannans Division issue - replace next line with:
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
+            // if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.filter(c => c["ACTV_IND"] === true).length <= 1) {
             // hide Cust Div
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
         }
@@ -345,15 +347,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         for (var i = wipTemplate.columns.length - 1; i >= 0; i--) {
             // For tender deals hide these columns
-            if (opGridTemplate.hideForTender.indexOf(wipTemplate.columns[i].field) !== -1 && root.isTenderContract) {
+            if (typeof wipTemplate.columns[i] !== "undefined" && opGridTemplate.hideForTender.indexOf(wipTemplate.columns[i].field) !== -1 && root.isTenderContract) {
                 wipTemplate.columns.splice(i, 1);
             }
             // For non tender deals hide these columns
-            if (opGridTemplate.hideForNonTender.indexOf(wipTemplate.columns[i].field) !== -1 && !root.isTenderContract) {
+            if (typeof wipTemplate.columns[i] !== "undefined" && opGridTemplate.hideForNonTender.indexOf(wipTemplate.columns[i].field) !== -1 && !root.isTenderContract) {
                 wipTemplate.columns.splice(i, 1);
             }
             // For standard deal editor hide these columns
-            if (opGridTemplate.hideForStandardDealEditor.indexOf(wipTemplate.columns[i].field) !== -1) {
+            if (typeof wipTemplate.columns[i] !== "undefined" && opGridTemplate.hideForStandardDealEditor.indexOf(wipTemplate.columns[i].field) !== -1) {
                 wipTemplate.columns.splice(i, 1);
             }
         }
