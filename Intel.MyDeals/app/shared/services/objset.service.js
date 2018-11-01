@@ -23,6 +23,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         publishTenderDeals: publishTenderDeals,
         createContract: createContract,
         copyContract: copyContract,
+        copyTenderFolioContract: copyTenderFolioContract,
         copyContractPivot: copyContractPivot,
         readContract: readContract,
         readCopyContract:readCopyContract,
@@ -104,6 +105,10 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function copyContractPivot(custId, contractId, srcContractId, ct) {
         return dataService.post(apiBaseContractUrl + 'CopyContractPivot/' + custId + '/' + contractId + '/' + srcContractId, [ct]);
+    }
+    function copyTenderFolioContract(ct, dealIds) {
+        ct[0].dealIds = dealIds;
+        return dataService.post(apiBaseContractUrl + 'CopyTenderFolioContract', ct);
     }
     function readContract(id) {
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()

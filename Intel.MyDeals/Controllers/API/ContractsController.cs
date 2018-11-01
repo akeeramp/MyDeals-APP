@@ -10,6 +10,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.MyDeals.Helpers;
 using Intel.Opaque.Data;
+using Intel.MyDeals.BusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -125,6 +126,27 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to copy the Contract"
             );
         }
+
+        [Authorize]
+        [Route("CopyTenderFolioContract")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public OpDataCollectorFlattenedDictList CopyTenderFolioContract(OpDataCollectorFlattenedList contracts)
+        {
+            int j = 1;
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - OpDataCollectorFlattenedDictList")
+            {
+                CustId = int.Parse(contracts[0]["CUST_MBR_SID"].ToString()),
+                ContractId = int.Parse(contracts[0]["DC_ID"].ToString())//,
+                //CopyFromId = srcContractId, //contracts[0]["TITLE"]
+                //CopyFromObjType = OpDataElementType.CNTRCT
+            });
+            return SafeExecutor(() => _contractsLib.CreateTenderFolio(contracts, savePacket).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted)
+                , "Unable to copy the Contract"
+            );
+        }
+
+        //copyTenderFolioContract
 
         [Authorize]
         [Route("CopyContractPivot/{custId}/{contractId}/{srcContractId}")]

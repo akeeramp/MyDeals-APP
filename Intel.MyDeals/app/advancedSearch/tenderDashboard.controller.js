@@ -15,6 +15,7 @@
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
+        $scope.uid = -101;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"]; //TODO: this is a copy of a hard-coded list of strings from contract.controller.js - ideally we move this into some sort of global file and reference from there at least.
@@ -1455,6 +1456,203 @@
             resizeGrid();
             $scope.setBusy("", "");
         });
+
+        $scope.$on("copy-tender-deals", function (event, items) {
+            $scope.copyDeals(items);
+        });
+
+        $scope.copyDeals = function (items) {
+            debugger;
+            $scope.$root.copyItems = items;
+            //$scope.broadcast('copy-tender-deals', $scope.copyItems);
+            var modal = $uibModal.open({
+                backdrop: 'static',
+                templateUrl: '/app/contract/partials/ptModals/tenderFolio.html',
+                controller: 'tenderDashboardController',
+                controllerAs: 'contract',
+                size: 'lg',
+                windowClass: 'tenderFolio-modal-window'
+            });
+
+            modal.result.then(
+            function () {
+                debugger;
+                //Close Event will come here
+            },
+            function () {
+                debugger;
+                // Do Nothing on cancel
+            });
+        }
+
+        $scope.contractData = {
+            WF_STG_CD: "InComplete",
+            DC_ID: -101,
+            TITLE: "",
+            CUST_MBR_SID: null,
+            CUST_ACCNT_DIV: null,
+            CUST_ACCNT_DIV_UI: "",
+            COMP_MISSING_FLG: 0,
+            HAS_ATTACHED_FILES: 0,
+            OBJ_SET_TYPE_CD: "ALL_TYPES",
+            TENDER_PUBLISHED: "False",
+            START_DT: "10/31/2018", // TO DO: fix start and end dates
+            END_DT: "12/29/2018",
+            C2A_DATA_C2A_ID: "Tender Folio Auto-Filled",
+            MEETCOMP_TEST_RESULT: "Not Run Yet",
+            COST_TEST_RESULT: "Not Run Yet",
+            CUST_ACCPT: "Acceptance Not Required in C2A",
+            PASSED_VALIDATION: "Dirty",
+            HAS_TRACKER: 0,
+            OVERLAP_RESULT: "Not Run Yet",
+            COST_MISSING_FLG: 0,
+            SYS_COMMENTS: 0,
+            CAP_MISSING_FLG: 0,
+            IN_REDEAL: 0,
+            IS_TENDER: 1,
+            _behaviors: {
+                isRequired:
+                    {
+                        "CUST_MBR_SID": true,
+                        "TITLE": true
+                    },
+                isHidden:
+                    {
+                        "CUST_ACCNT_DIV_UI": true
+                    }
+            }
+        }
+
+
+        $scope.customContractValidate = function () {
+            debugger;
+            $scope.isValid = true;
+            var ct = $scope.contractData;
+
+            // If user has clicked on save, that means he has accepted the default contract name set, make it dirty to avoid any changes to dates making a change to contract name.
+            if (!ct._behaviors) ct._behaviors = {};
+
+            if (!ct.CUST_MBR_SID) {
+                ct._behaviors.validMsg["CUST_MBR_SID"] = "Please select a valid customer";
+                ct._behaviors.isError["CUST_MBR_SID"] = true;
+                $scope.isValid = false;
+            } else {
+                ct._behaviors.validMsg["CUST_MBR_SID"] = "";
+                ct._behaviors.isError["CUST_MBR_SID"] = false;
+            }
+
+            // Clear all values
+            angular.forEach(ct,
+                function (value, key) {
+                    // Do not clear the custom validations user has to correct them e.g contract name duplicate
+                    if (ct._behaviors.validMsg[key] === "" ||
+                        ct._behaviors.validMsg[key] === "* field is required" ||
+                        ct._behaviors.validMsg[key] === undefined) {
+                        ct._behaviors.validMsg[key] = "";
+                        ct._behaviors.isError[key] = false;
+                        if (ct[key] === null) ct[key] = "";
+                        // Special handling for CUST_MBR_SID only field where user can make it null by clearing combobox
+                    }
+                });
+
+            // Check required
+            angular.forEach(ct,
+                function (value, key) {
+                    if (key[0] !== '_' &&
+                        value !== undefined &&
+                        value !== null &&
+                        !Array.isArray(value) &&
+                        typeof (value) !== "object" &&
+                        (typeof (value) === "string" && value.trim() === "") &&
+                        ct._behaviors.isRequired[key] === true &&
+                        ct._behaviors.validMsg[key] === "") {
+                        ct._behaviors.validMsg[key] = "* field is required";
+                        ct._behaviors.isError[key] = true;
+                        $scope.isValid = false;
+                    }
+                    if (ct._behaviors.validMsg[key] !== "") {
+                        $scope.isValid = false;
+                    }
+                });
+
+            ct._behaviors.isError["CUST_ACCNT_DIV_UI"] = ct._behaviors
+                .isError["CUST_ACCNT_DIV"];
+            ct._behaviors.validMsg["CUST_ACCNT_DIV_UI"] = ct._behaviors
+                .validMsg["CUST_ACCNT_DIV"];
+
+            // Check for duplicated titles..
+            objsetService.isDuplicateContractTitle(ct.DC_ID, ct.TITLE).then(function (response) {
+                ct._behaviors.isError['TITLE'] = response.data;
+                ct._behaviors.validMsg['TITLE'] = "";
+                if (response.data) {
+                    debugger;
+                   ct._behaviors
+                        .validMsg['TITLE'] = "This contract name already exists in another contract.";
+                }
+                else { // If it passes, do this
+                    debugger;
+                    if ($scope.isValid) {
+                        $scope.copyTenderFolioContract();
+                    } else {
+                        $timeout(function () {
+                            if (!!$("input.isError")[0]) $("input.isError")[0].focus();
+                        },
+                            300);
+                    }
+                }
+            });
+
+        }
+
+        $scope.copyTenderFolioContract = function () {
+            $scope.setBusy("Copy Tender Folio", "Copying the Contract Information");
+
+            // Contract Data
+            var ct = $scope.contractData;
+
+            // check for NEW contract
+            if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
+
+            debugger;
+            // Add to DB first... then add to screen //$scope.$root.copyItems
+            objsetService.copyTenderFolioContract([ct], "1,504689,502671").then(
+                function (data) {
+                    debugger;
+                    //$scope.updateResults(data.data.CNTRCT, ct);
+
+                    ////Check for errors
+                    //if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                    //    $scope.setBusy("Copy Unsuccessful", "Could not copy the contract", "Error");
+                    //    $timeout(function () {
+                    //        $scope.setBusy("", "");
+                    //    }, 4000);
+                    //    return;
+                    //};
+
+                    //$scope.setBusy("Copy Successful", "Copied the contract", "Success");
+
+                    //$timeout(function () {
+                    //    $scope._dirty = false; // don't want to kick of listeners
+                    //    $state.go('contract.manager',
+                    //        {
+                    //            cid: $scope.contractData.DC_ID
+                    //        },
+                    //        { reload: true });
+                    //});
+
+                    $scope.setBusy("", "");
+                },
+                function (result) {
+                    logger.error("Could not create the contract.", result, result.statusText);
+                    $scope.setBusy("", "");
+                }
+            );
+        }
+
+        $scope.saveBtnName = function () {
+            return "COPY";
+        }
+
 
         $scope.$on("send-notification", function (event, items) {
             openEmailMsg(items);

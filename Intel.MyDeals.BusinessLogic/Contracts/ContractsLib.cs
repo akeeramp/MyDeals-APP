@@ -227,6 +227,212 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
+        public MyDealsData CreateTenderFolio (OpDataCollectorFlattenedList data, SavePacket savePacket)
+        {
+            List<int> dealIds = data[0]["dealIds"].ToString().Split(',').Select(Int32.Parse).ToList();
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dealIds, new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW });
+
+            List<MyDealsAttribute> cntrctAtrbs = new List<MyDealsAttribute>
+            {
+                Attributes.WF_STG_CD,
+                Attributes.TITLE,
+                Attributes.COMP_MISSING_FLG,
+                Attributes.HAS_ATTACHED_FILES,
+                Attributes.OBJ_SET_TYPE_CD,
+                Attributes.TENDER_PUBLISHED,
+                Attributes.CUST_MBR_SID,
+                Attributes.START_DT,
+                Attributes.END_DT,
+                Attributes.C2A_DATA_C2A_ID,
+                Attributes.CUST_ACCNT_DIV,
+                Attributes.MEETCOMP_TEST_RESULT,
+                Attributes.COST_TEST_RESULT,
+                Attributes.CUST_ACCPT,
+                Attributes.PASSED_VALIDATION,
+                Attributes.HAS_TRACKER,
+                Attributes.OVERLAP_RESULT,
+                Attributes.COST_MISSING_FLG,
+                Attributes.SYS_COMMENTS,
+                Attributes.CAP_MISSING_FLG,
+                Attributes.IN_REDEAL,
+                Attributes.IS_TENDER
+            };
+
+            List<KeyValuePair<MyDealsAttribute, string>> psAtrbs = new List<KeyValuePair<MyDealsAttribute, string>>();
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.WF_STG_CD, "Requested")); // TO DO Set stage according to user
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.TITLE, data[0]["TITLE"] + " PS"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COMP_MISSING_FLG, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OBJ_SET_TYPE_CD, "ALL_TYPES"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.MEETCOMP_TEST_RESULT, "Not Run Yet"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COST_TEST_RESULT, "Not Run Yet"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PASSED_VALIDATION, "Dirty"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.HAS_TRACKER, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OVERLAP_RESULT, "Not Run Yet"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COST_MISSING_FLG, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.CAP_MISSING_FLG, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.IN_REDEAL, "0"));
+
+            List<KeyValuePair<MyDealsAttribute, string>> ptAtrbs = new List<KeyValuePair<MyDealsAttribute, string>>();
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.REBATE_TYPE, "TENDER")); 
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.TITLE, data[0]["TITLE"] + " PT"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COMP_MISSING_FLG, "0"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PAYOUT_BASED_ON, "Consumption"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OBJ_SET_TYPE_CD, "ECAP")); // TO DO Or KIT
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.MRKT_SEG, "Corp"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PROGRAM_PAYMENT, "Backend"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.GEO_COMBINED, "Worldwide"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PROD_INCLDS, "Tray"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PASSED_VALIDATION, "Dirty"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.HAS_TRACKER, "0"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COST_MISSING_FLG, "0"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "0"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.CAP_MISSING_FLG, "0"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.IN_REDEAL, "0"));
+
+            List <OpDataElement> cntrctDEs = new List<OpDataElement>();
+            foreach (MyDealsAttribute atrb in cntrctAtrbs)
+            {
+                if (data[0].ContainsKey(atrb.ATRB_COL_NM))
+                {
+                    cntrctDEs.Add(new OpDataElement
+                    {
+                        DcID = -101,
+                        DcType = OpDataElementTypeConverter.StringToId(OpDataElementType.CNTRCT.ToString()),
+                        DcParentType = 0,
+                        DcParentID = 0,
+                        AtrbID = atrb.ATRB_SID,
+                        AtrbValue = data[0][atrb.ATRB_COL_NM].ToString(),
+                        OrigAtrbValue = String.Empty,
+                        PrevAtrbValue = String.Empty,
+                        AtrbCd = atrb.ATRB_COL_NM,
+                        State = OpDataElementState.Modified
+                    });
+                }
+            }
+
+            List<OpDataElement> psDEs = new List<OpDataElement>();
+            foreach (KeyValuePair<MyDealsAttribute, string> item in psAtrbs)
+            {
+                psDEs.Add(new OpDataElement
+                {
+                    DcID = -201,
+                    DcType = OpDataElementTypeConverter.StringToId(OpDataElementType.PRC_ST.ToString()),
+                    DcParentType = OpDataElementTypeConverter.StringToId(OpDataElementType.CNTRCT.ToString()),
+                    DcParentID = -101,
+                    AtrbID = item.Key.ATRB_SID,
+                    AtrbValue = item.Value,
+                    OrigAtrbValue = String.Empty,
+                    PrevAtrbValue = String.Empty,
+                    AtrbCd = item.Key.ATRB_COL_NM,
+                    State = OpDataElementState.Modified
+                });
+            }
+
+            List<OpDataElement> ptDEs = new List<OpDataElement>();
+            foreach (KeyValuePair<MyDealsAttribute, string> item in ptAtrbs)
+            {
+                ptDEs.Add(new OpDataElement
+                {
+                    DcID = -301,
+                    DcType = OpDataElementTypeConverter.StringToId(OpDataElementType.PRC_TBL.ToString()),
+                    DcParentType = OpDataElementTypeConverter.StringToId(OpDataElementType.PRC_ST.ToString()),
+                    DcParentID = -201,
+                    AtrbID = item.Key.ATRB_SID,
+                    AtrbValue = item.Value,
+                    OrigAtrbValue = String.Empty,
+                    PrevAtrbValue = String.Empty,
+                    AtrbCd = item.Key.ATRB_COL_NM,
+                    State = OpDataElementState.Modified
+                });
+            }
+
+            int uid = -401;
+            List<OpDataCollector> ptrDCs = new List<OpDataCollector>();
+            foreach (OpDataCollector ptr in myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors)
+            {
+                ptr.DcID = uid--;
+                ptr.DcParentID = -301;
+                foreach (OpDataElement de in ptr.DataElements)
+                {
+                    de.DcID = ptr.DcID;
+                    de.DcParentID = ptr.DcParentID;
+                    de.State = OpDataElementState.Modified;
+                    de.PrevAtrbValue = "";
+                    de.OrigAtrbValue = "";
+                }
+                ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
+                ptrDCs.Add(ptr);
+            }
+
+            MyDealsData myDealsDataNewObject = new MyDealsData();
+            myDealsDataNewObject[OpDataElementType.CNTRCT] = new OpDataPacket<OpDataElementType>()
+            {
+                Data =
+                            {
+                                [-101] = new OpDataCollector
+                                {
+                                    DcID = -101,
+                                    DcParentID = 0,
+                                    DcParentType = "ALL_OBJ_TYPE",
+                                    DcType = OpDataElementType.CNTRCT.ToString(),
+                                    DataElements = cntrctDEs
+                                }
+                            },
+                BatchID = Guid.NewGuid(),
+                PacketType = OpDataElementType.CNTRCT,
+                GroupID = -101
+            };
+            myDealsDataNewObject[OpDataElementType.CNTRCT].AddSaveActions();
+
+            myDealsDataNewObject[OpDataElementType.PRC_ST] = new OpDataPacket<OpDataElementType>()
+            {
+                Data =
+                            {
+                                [-201] = new OpDataCollector
+                                {
+                                    DcID = -201,
+                                    DcParentID = -101,
+                                    DcParentType = OpDataElementType.CNTRCT.ToString(),
+                                    DcType = OpDataElementType.PRC_ST.ToString(),
+                                    DataElements = psDEs
+                                }
+                            },
+                BatchID = Guid.NewGuid(),
+                PacketType = OpDataElementType.PRC_ST,
+                GroupID = -201
+            };
+            myDealsDataNewObject[OpDataElementType.PRC_ST].AddSaveActions();
+
+            myDealsDataNewObject[OpDataElementType.PRC_TBL] = new OpDataPacket<OpDataElementType>()
+            {
+                Data =
+                            {
+                                [-301] = new OpDataCollector
+                                {
+                                    DcID = -301,
+                                    DcParentID = -201,
+                                    DcParentType = OpDataElementType.PRC_ST.ToString(),
+                                    DcType = OpDataElementType.PRC_TBL.ToString(),
+                                    DataElements = ptDEs
+                                }
+                            },
+                BatchID = Guid.NewGuid(),
+                PacketType = OpDataElementType.PRC_TBL,
+                GroupID = -301
+            };
+            myDealsDataNewObject[OpDataElementType.PRC_TBL].AddSaveActions();
+
+            myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW] = new OpDataPacket<OpDataElementType>();
+            myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].Data.AddRange(ptrDCs);
+            myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].BatchID = Guid.NewGuid();
+            myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].PacketType = OpDataElementType.PRC_TBL_ROW;
+            myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].GroupID = -401;
+            myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].AddSaveActions();
+
+            return myDealsDataNewObject.Save(savePacket.MyContractToken);
+        }
+
         /// <summary>
         /// Save a contract header
         /// </summary>

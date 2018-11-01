@@ -14,6 +14,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket data);
 
+        MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket);
+
         MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, SavePacket savePacket);
 
         OpMsg DeleteContract(ContractToken contractToken);

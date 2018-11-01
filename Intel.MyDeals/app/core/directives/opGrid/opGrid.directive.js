@@ -1460,6 +1460,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $rootScope.$broadcast('send-notification', items);
             }
 
+            $scope.copyDeals = function () {
+                var rootUrl = window.location.protocol + "//" + window.location.host;
+                var gridDs = $scope.contractDs.data();
+                var dealIds = [];
+                for (var i = 0; i < gridDs.length - 1; i++) {
+                    if (gridDs[i].isLinked) {
+                        dealIds.push(gridDs[i].DC_ID);
+                    }
+                }
+                $rootScope.$broadcast('copy-tender-deals', dealIds);
+            }
+
             $scope.showCols = function (grpName) {
 
                 if ($scope.contractDs.filter() !== undefined) $scope.contractDs.filter({});
