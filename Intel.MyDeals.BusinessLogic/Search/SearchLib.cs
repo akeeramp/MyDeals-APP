@@ -554,13 +554,33 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public SearchResultPacket GetTenderDashboardList(SearchParams data)
         {
-            return GetDealList(data,
+            SearchResultPacket ret= GetDealList(data,
                 new List<int>(),
                 new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" },    //AND TENDER_PUBLISHED = '1'
                 new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
                 true,
                 MyRulesTrigger.OnDealListLoad,
                 true);
+
+            //the advanced search functions we take advantage of with the tender dashboard gets some data we dont need and dont want to have accidentally updated so we strip them here.
+            List<string> removeAttrs = new List<string>
+            {
+                AttributeCodes.FSE_APPROVED_BY,
+                AttributeCodes.GEO_APPROVED_BY,
+                AttributeCodes.DIV_APPROVED_BY
+            };
+            foreach (OpDataCollectorFlattenedItem item in ret.SearchResults)
+            {
+                foreach (string remove in removeAttrs)
+                {
+                    if (item.ContainsKey(remove))
+                    {
+                        item.Remove(remove);
+                    }
+                }
+            }
+
+            return ret;
         }
 
         public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType)
