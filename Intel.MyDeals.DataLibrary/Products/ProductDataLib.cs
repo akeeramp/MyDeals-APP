@@ -963,6 +963,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_FLAG_PICK = DB.GetReaderOrdinal(rdr, "FLAG_PICK");
                     int IDX_GEO_MBR_SID = DB.GetReaderOrdinal(rdr, "GEO_MBR_SID");
+                    int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
                     int IDX_Level4 = DB.GetReaderOrdinal(rdr, "Level4");
                     int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
@@ -986,6 +987,7 @@ namespace Intel.MyDeals.DataLibrary
                             CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             FLAG_PICK = (IDX_FLAG_PICK < 0 || rdr.IsDBNull(IDX_FLAG_PICK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLAG_PICK),
                             GEO_MBR_SID = (IDX_GEO_MBR_SID < 0 || rdr.IsDBNull(IDX_GEO_MBR_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_MBR_SID),
+                            HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
                             Level4 = (IDX_Level4 < 0 || rdr.IsDBNull(IDX_Level4)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Level4),
                             MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
