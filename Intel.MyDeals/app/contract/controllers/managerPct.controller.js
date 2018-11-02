@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData', 'isToolReq'];
+    managerPctController.$inject = ['$scope', '$uibModalInstance', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData', 'isToolReq'];
 
-    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, isToolReq) {
+    function managerPctController($scope, $uibModalInstance, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, isToolReq) {
 
         var root = $scope.$parent;	// Access to parent scope
         if (!isToolReq) {
@@ -19,12 +19,13 @@
         }
         $scope.root = root;
         $scope.isFroceRunPresent = typeof root.forceRun !== 'undefined' && typeof root.forceRun === 'function' ? 'root.forceRun()' : false; 
-
+        
         if (isToolReq == undefined) {
             $scope.isToolReq = true;
             var container = angular.element(".sumPsContainer");
             container.scope().isCollapsed = true;
             $scope.isAllCollapsed = true;
+            
         }
         else {
             $scope.isToolReq = isToolReq;
@@ -75,7 +76,7 @@
         }
 
         $scope.dismissPopup = function () {
-            $uibModalStack.dismissAll();
+            $uibModalInstance.close($scope.contractData);//$uibModalStack.dismissAll();
         }
 
         $scope.getFilters = function () {

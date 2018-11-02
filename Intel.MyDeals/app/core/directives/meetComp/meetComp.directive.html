@@ -20,7 +20,7 @@
                 </table>
             </button>
 
-            <div class="fr" style="padding: 0 5px; width: auto;">
+            <div ng-if="PAGE_NM != 'MCTPOPUP'" class="fr" style="padding: 0 5px; width: auto;">
                 <div ng-bind="lastMeetCompRunCalc()" class="btnLastRun meetCompbtnLastRun" style="font-size: 15px" title="{{lastMetCompRunLocalTime}}"></div>
             </div>
 
@@ -37,7 +37,7 @@
 
 <script>
     function openDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
-        var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
+	        var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
         scope.$apply(function () {
             scope.getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE);
         });

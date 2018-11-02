@@ -122,6 +122,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return $scope.parentRoot.openDealProducts(dataItem);
             }
 
+            $scope.$on('refreshMCTData', function (event, data) {                
+                for (var i = 0; i < data.length; i++) {
+                    for (var j = 0; j < $scope.opData.length; j++) {
+                        if ($scope.opData[j].DC_ID == data[i].DEAL_OBJ_SID) {
+                            $scope.opData[j].MEETCOMP_TEST_RESULT = data[i].MEET_COMP_STS;
+                            break;
+                        }                            
+                    }
+                        
+                }
+                $scope.contractDs.read(); 
+            });
+
             $scope.openPCTScreen = function (dataItem) {
                 objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
                     $scope.contractData = data.data[0];
@@ -134,11 +147,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.contractData.PRC_ST = [];
                     $scope.contractData.PRC_ST.push(tempcontractDataPS);
                     $scope.contractData.CUST_ACCNT_DIV_UI = "";
-                    $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
-                    $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-
-                    $scope.$broadcast('refreshContractDataComplete');
-
+                    
                     $timeout(function () {
                         $scope.$apply();
                     });
@@ -167,8 +176,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
 
                     modal.result.then(
-                        function () {
+                        function (data) {
                             //Close Event will come here
+                            if (data.PRC_ST.length > 0) {
+                                for (var j = 0; j < $scope.opData.length; j++) {
+                                    if ($scope.opData[j].PRC_ST_OBJ_SID == data.PRC_ST[0].DC_ID) {
+                                        $scope.opData[j].COST_TEST_RESULT = data.PRC_ST[0].COST_TEST_RESULT;
+                                        break;
+                                    }
+                                }
+                                $scope.contractDs.read();
+                            }
                         },
                         function () {
                             // Do Nothing on cancel
@@ -200,46 +218,30 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.openMCTScreen = function (dataItem) {
-                objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
-                    $scope.contractData = data.data[0];
-                    $scope.contractData.CUST_ACCNT_DIV_UI = "";
-                    $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
-                    $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
-
-                    $scope.$broadcast('refreshContractDataComplete');
-
-                    $timeout(function () {
-                        $scope.$apply();
-                    });
-
-                    var modal = $uibModal.open({
-                        backdrop: 'static',
-                        templateUrl: 'app/contract/partials/ptModals/meetCompModal.html',
-                        controller: 'MeetCompController',
-                        //controllerAs: 'contract',
-                        size: 'lg',
-                        windowClass: 'tenderFolio-modal-window',
-                        resolve: {
-                            contractData: function () {
-                                return $scope.contractData;
-                            },
-                            PRC_ST_OBJ_SID: function () {
-                                return dataItem.PRC_ST_OBJ_SID;
-                            },
-                            parentScope: function () {
-                                return $scope;
-                            }
-                        }
-                    });
-
-                    modal.result.then(
-                        function () {
-                            //Close Event will come here
+                var modal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/partials/ptModals/meetCompModal.html',
+                    controller: 'MeetCompController',
+                    //controllerAs: 'contract',
+                    size: 'lg',
+                    windowClass: 'tenderFolio-modal-window',
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
                         },
-                        function () {
-                            // Do Nothing on cancel
-                        });
+                        parentScope: function () {
+                            return $scope;
+                        }
+                    }
                 });
+
+                modal.result.then(
+                    function () {
+                        //Close Event will come here
+                    },
+                    function () {
+                        // Do Nothing on cancel
+                    });                
 
             }
             $scope.showHelpTopicHelper = function (dataItem) {

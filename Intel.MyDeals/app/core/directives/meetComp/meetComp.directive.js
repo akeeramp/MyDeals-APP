@@ -14,7 +14,8 @@
                 objSid: '=',
                 isAdhoc: '=',
                 objTypeId: '=',
-                lastMeetCompRun: '='
+                lastMeetCompRun: '=',
+                pageNm: '='
             },
             restrict: 'AE',
             transclude: true,
@@ -42,6 +43,7 @@
                 $scope.setUpdateFlag = false;
                 $scope.runIfStaleByHours = 3;
                 $scope.MC_MODE = "D";
+                $scope.PAGE_NM = $scope.pageNm;
                 
                 $scope.meetCompMasterdata = [];
 
@@ -80,8 +82,12 @@
                     if (!!LAST_MEET_COMP_RUN) {
                         var localTime = gridUtils.convertLocalToPST(new Date());
                         var lastruntime = moment(LAST_MEET_COMP_RUN);
-
-                        var forceRun = $scope.$parent.forceRun();
+                        if (typeof $scope.$parent.forceRun != 'undefined') {
+                            var forceRun = $scope.$parent.forceRun();
+                        }
+                        else {
+                            var forceRun = true;
+                        }                        
 
                         var serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
@@ -140,8 +146,11 @@
                     $scope.$parent.IsFirstLoad = true;
                     $scope.IsMeetCompRun = false;
                     $scope.lastMeetCompRunCalc();
-                    
+                   
                     dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid + "/" + $scope.MC_MODE + "/" + $scope.objTypeId).then(function (response) {
+                        if (typeof $scope.$parent.setIsBusyFalse != 'undefined') {
+                            $scope.$parent.setIsBusyFalse();
+                        }
                         if (response.data.length == 0 && $scope.isAdhoc == 1) {
                             $scope.isBusy = false;                            
                             $scope.$parent.inCompleteDueToCapMissing(true);
@@ -1467,10 +1476,18 @@
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
                                     
-                                    if ($scope.isAdhoc == 1) {
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM != 'MCTPOPUP') {
                                         $scope.$parent.setForceNavigationForMC();
                                     }
-                                    $scope.$root.$broadcast('refreshContractData');
+
+                                    if ($scope.PAGE_NM == 'MCTPOPUP') {
+                                        $scope.$parent.$parent.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
+                                            .Where(function (x) {
+                                                return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
+                                            })
+                                            .OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());
+                                    }
+                                    
                                 },
                                     function (response) {
                                         logger.error("Unable to save UpdateMeetCompProductDetails data", response, response.statusText);
@@ -1496,7 +1513,14 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-                                    $scope.$root.$broadcast('refreshContractData');
+
+                                    if ($scope.PAGE_NM == 'MCTPOPUP') {
+                                        $scope.$parent.parentScope.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
+                                            .Where(function (x) {
+                                                return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
+                                            })
+                                            .OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());
+                                    }
                                 },
                                     function (response) {
                                         logger.error("Unable to get GetMeetCompProductDetails data", response, response.statusText);

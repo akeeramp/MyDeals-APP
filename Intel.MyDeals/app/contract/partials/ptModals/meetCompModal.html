@@ -1,4 +1,4 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact" ng-show="isBusy"></loading-panel>
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy"></loading-panel>
 
 <nav class="navbar navbar-default" style="">	
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
@@ -12,7 +12,7 @@
             <li><a href="" ng-click="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
           </ul>
         </div>		</nav>
-        <div id="secBasicContainerWrapper" style="padding:0px;min-height:500px">
+        <div id="secBasicContainerWrapper" style="padding:0px;min-height:380px">
             <div id="secContainer">
 
        
@@ -23,7 +23,7 @@
 
             <div class="row">
                 <div class="col-md-12">                    					 
-					<meet-comp obj-sid="PRC_ST_OBJ_SID" is-adhoc="1" obj-type-id="2" last_meet_comp_run="LAST_MEET_COMP_RUN"></meet-comp>
+					<meet-comp obj-sid="PRC_ST_OBJ_SID" is-adhoc="1" obj-type-id="2" last-meet-comp-run="LAST_MEET_COMP_RUN" page-nm="PAGE_NM"></meet-comp>
                 </div>                    
             </div>
 					
@@ -49,6 +49,8 @@ function openDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
 	.ss-loading-panel{
 		margin-left: 40% !important;
 	}
+	#grid {height:288px !important}
+	#grid>.k-grid-content {height: 200px !important;}
 </style>
 
 
@@ -58,7 +60,7 @@ function openDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
 
 <style>
 .tenderFolio-modal-window .modal-dialog{
-	width:1200px;
+	width:90% !important;
 	margin:auto;
 	MIN-HEIGHT:500PX;
 }
