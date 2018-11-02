@@ -66,6 +66,7 @@ namespace Intel.MyDeals.BusinessRules
             Stopwatch stopwatch = new Stopwatch();
             if (EN.GLOBAL.DEBUG >= 3) stopwatch.Start();
 
+            if (dc.DcType == null) return new OpMsgQueue(); // Put this is because we found "Missing ObjSet (ALL_OBJ_TYPE) or ObjSetType (Unknown)" passing a no typed DC
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
             string objsetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 

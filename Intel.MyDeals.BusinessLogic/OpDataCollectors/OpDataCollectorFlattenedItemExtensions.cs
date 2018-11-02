@@ -18,7 +18,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             List<string> infoMsgs = new List<string>();
             List<string> warnMsgs = new List<string>();
 
-            if (!data.ContainsKey(AttributeCodes.DC_ID)) return;
+            if (!data.ContainsKey(AttributeCodes.DC_ID) || data[AttributeCodes.dc_type] == null) return;
             OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(data[AttributeCodes.dc_type]);
 
             var msgCol = myDealsData[opDataElementType].Messages.Messages.Where(m =>

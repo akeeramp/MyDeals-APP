@@ -334,6 +334,12 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList BulkTenderUpdate(ContractToken contractToken, ContractTransferPacket tenderData)
         {
+            List<int> dealIds = tenderData.WipDeals.Select(w => int.Parse(w["DC_ID"].ToString())).ToList();
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dealIds, new List<OpDataElementType> { OpDataElementType.PRC_TBL }, 
+                new List<int> { Attributes.WF_STG_CD.ATRB_SID, Attributes.OBJ_SET_TYPE_CD.ATRB_SID });
+            var myDealsDataFlattened = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted); //myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.to;
+            //tenderData.PricingStrategy = myDealsDataFlattened[OpDataElementType.PRC_ST];
+            tenderData.PricingTable = myDealsDataFlattened[OpDataElementType.PRC_TBL];
             return _contractsLib.SaveContractAndPricingTable(contractToken, tenderData, forceValidation: true, forcePublish: true);
         }
     }

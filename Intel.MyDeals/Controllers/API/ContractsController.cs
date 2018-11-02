@@ -46,6 +46,8 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUpperContract/{id}")]
         public OpDataCollectorFlattenedList GetUpperContract(int id)
         {
+            if (id <= 0) return new OpDataCollectorFlattenedList();
+
             OpDataCollectorFlattenedList rtn = SafeExecutor(() => _contractsLib.GetUpperContract(id)
                 , $"Unable to get Contract {id}"
             );
