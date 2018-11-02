@@ -87,6 +87,18 @@ util.isEmpty = function(map)
     return true;
 }
 
+/**
+ * @description determine if an array contains one or more items from another array.  Vanilla safe JS.
+ * @param {array} haystack the array to search.
+ * @param {array} arr the array providing items to check for in the haystack.
+ * @return {boolean} true|false if haystack contains at least one item from arr.
+ */
+util.findOne = function (haystack, arr) {
+    return arr.some(function (v) {
+        return haystack.indexOf(v) >= 0;
+    });
+};
+
 util.findInArray = function (input, id) {
     var len = input.length;
     for (var i = 0; i < len; i++) {

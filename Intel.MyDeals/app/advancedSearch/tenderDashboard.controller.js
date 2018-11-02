@@ -1149,12 +1149,26 @@
                 $scope.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true, true)
                 objsetService.searchTender(st, en, searchText)
                 .then(function (response) {
+
+                    // For DA check if he has access to Product vertical //Mike's managetab code
+                    if (window.usrRole === "DA" && window.usrVerticals.length > 0) {
+                        var userVerticals = window.usrVerticals.split(",");
+                        for (var i = response.data.Items.length - 1; i >= 0; i--) {
+                            // For tender deals hide these columns
+                            var dataVerticals = response.data.Items[i].PRODUCT_CATEGORIES.split(",");
+                            if (!util.findOne(dataVerticals, userVerticals)) {
+                                response.data.Items.splice(i, 1);
+                            }
+                        }
+                    }
+
                     $scope.wipData = response.data.Items;
                     $scope.dealType = $scope.ruleData[0].value;
 
                     if ($scope.wipData.length == 0) {
+                        var message = window.usrRole === "DA" ? "No results found. Try changing your search options or check your product category access." : "No results found. Try changing your search options."
                         $scope.setBusy("", "");
-                        kendo.alert("No results found.  Try changing your search options.");
+                        kendo.alert(message);
                     }
                     //reset wip options
                     $scope.wipOptions = {
@@ -1586,8 +1600,8 @@
                 ct._behaviors.validMsg['TITLE'] = "";
                 if (response.data) {
                     debugger;
-                   ct._behaviors
-                        .validMsg['TITLE'] = "This contract name already exists in another contract.";
+                    ct._behaviors
+                         .validMsg['TITLE'] = "This contract name already exists in another contract.";
                 }
                 else { // If it passes, do this
                     debugger;

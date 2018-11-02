@@ -103,7 +103,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
             $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
-            
+
             $scope.root = !!$scope.opOptions.rootScope ? $scope.opOptions.rootScope : $scope.$parent.$parent.$parent;
             if (!$scope.root || !$scope.root.saveCell) { // possible this directive is called from nested parent hierarchy
                 $scope.root = $scope.$parent;
@@ -176,7 +176,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 });
             }
 
-            $scope.runPCTMCT = function (mode) {                
+            $scope.runPCTMCT = function (mode) {
                 var data = $scope.contractDs.data();
                 if (data.length > 0) {
                     var selectedItem = [];
@@ -185,18 +185,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             selectedItem.push(data[i].PRC_ST_OBJ_SID);
                         }
                     }
-                    if (selectedItem.length > 0) {  
+                    if (selectedItem.length > 0) {
                         $(".iconRunPct").addClass("fa-spin grn");
                         $scope.root.$broadcast('btnPctMctRunning', {});
                         objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
-                            logger.success(data.data.Message + ". Please refresh the page to see updated result.");                            
-                            $scope.contractDs.read();                            
-                            $scope.root.$broadcast('btnPctMctComplete', {});                            
+                            logger.success(data.data.Message + ". Please refresh the page to see updated result.");
+                            $scope.contractDs.read();
+                            $scope.root.$broadcast('btnPctMctComplete', {});
                             $(".iconRunPct").removeClass("fa-spin grn");
                         });
-                    }                    
+                    }
                 }
-                
+
             }
 
             $scope.openMCTScreen = function (dataItem) {
@@ -1443,7 +1443,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var rootUrl = window.location.protocol + "//" + window.location.host;
                 var gridDs = $scope.contractDs.data();
                 var items = [];
-                for (var i = 0; i < gridDs.length - 1; i++) {
+                for (var i = 0; i <= gridDs.length - 1; i++) {
                     if (gridDs[i].isLinked) {
                         var item = {
                             "CUST_NM": gridDs[i].Customer !== undefined ? gridDs[i].Customer.CUST_NM : "",
@@ -1451,6 +1451,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             "CNTRCT": gridDs[i].CNTRCT_OBJ_SID + " " + gridDs[i].CNTRCT_TITLE,
                             "DC_ID": gridDs[i]._parentIdPS,
                             "NEW_STG": gridDs[i].PS_WF_STG_CD,
+                            "DEAL_ID": gridDs[i].DC_ID,
                             "END_CUSTOMER_RETAIL": gridDs[i].END_CUSTOMER_RETAIL,
                             "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i]._parentIdPS
                         };
@@ -1943,7 +1944,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $timeout(function () {
                     $scope.grid.autoFitColumn(2);
                 }, 0);
-            }            
+            }
 
             $scope.clkSearchGrid = function (e) {
                 if (e.keyCode === 13)
