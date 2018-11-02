@@ -533,7 +533,8 @@
                                 width: "150px",
                                 locked: true,
                                 template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
-                                filterable: { multi: true, search: true }
+                                sortable: false,
+                                filterable: false //{ multi: true, search: true }
                             }, {
                                 field: "OBJ_SET_TYPE_CD",
                                 title: "Type",
@@ -703,7 +704,8 @@
                                 width: "150px",
                                 locked: true,
                                 template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#",
-                                filterable: { multi: true, search: true }
+                                sortable: false,
+                                filterable: false //{ multi: true, search: true }
                             }, {
                                 field: "OBJ_SET_TYPE_CD",
                                 title: "Type",
