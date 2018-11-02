@@ -473,7 +473,7 @@ namespace Intel.MyDeals.BusinessRules
 
             int custId = (int)r.ExtraArgs[0];
 
-            if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "") return;
+            if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "" || custId == 0) return; // we also return on custId = 0 (All Customers) because that's what we ustilize for the tender dashboard
 
             //int custId = Convert.ToInt32(strCustId);
             var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId);

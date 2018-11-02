@@ -204,6 +204,12 @@ namespace Intel.MyDeals.BusinessLogic
                     if (!items.ContainsKey(de.AtrbCd)) continue;
 
                     if (de.DataType == "System.DateTime" && items[de.AtrbCd] != null &&
+                        items[de.AtrbCd].ToString() == "Invalid date" && de.OrigAtrbValue == "")
+                    {
+                        items[de.AtrbCd] = "";
+                    }
+
+                        if (de.DataType == "System.DateTime" && items[de.AtrbCd] != null &&
                         !string.IsNullOrEmpty(items[de.AtrbCd].ToString().Replace("Invalid date", "")))
                     {
                         DateTime date = Convert.ToDateTime(items[de.AtrbCd]);
@@ -245,6 +251,10 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         if (dictValues.ContainsKey(uniqDimBaseKey))
                         {
+                            if (de.DataType == "System.DateTime" && dictValues[uniqDimBaseKey].ToString() == "Invalid date" && de.OrigAtrbValue == "")
+                            {
+                                dictValues[uniqDimBaseKey] = "";
+                            }
                             if (de.DataType == "System.DateTime" &&
                                 !String.IsNullOrEmpty(dictValues[uniqDimBaseKey].ToString().Replace("Invalid date", "")))
                                 dictValues[uniqDimBaseKey] = DateTime.Parse(dictValues[uniqDimBaseKey].ToString().Replace("Invalid date", "")).ToString("MM/dd/yyyy");

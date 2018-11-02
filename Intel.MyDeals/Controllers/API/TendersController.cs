@@ -99,7 +99,7 @@ namespace Intel.MyDeals.Controllers.API
 
             ContractToken contractToken = new ContractToken("ContractToken Created - BulkTenderUpdate")
             {
-                CustId = -1,
+                CustId = 0,
                 ContractId = -1,
                 //DeleteAllPTR = delPtr,
                 BulkTenderUpdate = true
