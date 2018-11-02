@@ -689,6 +689,9 @@
                 var yearValue = isTender == true ? new Date().getFullYear() : null;
                 var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, value, qtrValue, yearValue)
                     .then(function (response) {
+                        if (response.data.QTR_END < response.data.QTR_STRT) {
+                            response.data.QTR_END = moment(response.data.QTR_END).add(1, 'year');
+                        }
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
                         if (dateType == 'START_DT') {
@@ -719,6 +722,9 @@
                 var yearValue = isTender == true ? new Date().getFullYear() : null;
                 var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
                     .then(function (response) {
+                        if (response.data.QTR_END < response.data.QTR_STRT) {
+                            response.data.QTR_END = moment(response.data.QTR_END).add(365, 'days').format('l');
+                        }
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
                         $scope.contractData.START_QTR = $scope.contractData.END_QTR = response.data.QTR_NBR;
