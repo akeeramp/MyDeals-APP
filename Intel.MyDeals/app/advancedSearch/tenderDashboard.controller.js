@@ -1373,7 +1373,7 @@
                         if ($scope.actionType == "BID") {
                             for (var i = 0; i < tenders.length; i++) {
                                 if (tenders[i].DC_ID != $scope.wipData[dsIndex].DC_ID) {
-                                    break;
+                                    continue;
                                 } else {
                                     //found the index of a tender we changed
                                     $scope.wipData[dsIndex]["bid_actions"] = msgArray[i].ExtraDetails;  //for bid_action updates, these will contain the new possible bid actions - 3 possible means offer, 2 possible means lost, 1 possible means won
@@ -1396,7 +1396,7 @@
                                 var keyIdentifiers = msgArray[i].KeyIdentifiers;    //for approval action updates, these will contain the pricing strategy IDs which can be used to identify the dataItem in wipData as tenders have a 1:1 relation to their pricing strategies
 
                                 if (keyIdentifiers.indexOf($scope.wipData[dsIndex]["_parentIdPS"]) == -1) {
-                                    break;  //dataItem's parent pricing strategy id not being present in return message's key identifiers indicate that it was not part of the changed set
+                                    continue;  //dataItem's parent pricing strategy id not being present in return message's key identifiers indicate that it was not part of the changed set
                                 } else {
                                     //found the index of a tender we actioned
                                     //TODO: this doesnt account for failure messages... there surely must be a better way than string parsing...
