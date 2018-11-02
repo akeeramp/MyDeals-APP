@@ -1479,6 +1479,9 @@
                                     if ($scope.isAdhoc == 1 && $scope.PAGE_NM != 'MCTPOPUP') {
                                         $scope.$parent.setForceNavigationForMC();
                                     }
+                                    if ($scope.PAGE_NM != 'MCTPOPUP') {
+                                        $scope.$root.$broadcast('refreshContractData');
+                                    }                                   
 
                                     if ($scope.PAGE_NM == 'MCTPOPUP') {
                                         $scope.$parent.$parent.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
@@ -1513,7 +1516,9 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-
+                                    if ($scope.PAGE_NM != 'MCTPOPUP') {
+                                        $scope.$root.$broadcast('refreshContractData');
+                                    }
                                     if ($scope.PAGE_NM == 'MCTPOPUP') {
                                         $scope.$parent.parentScope.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
                                             .Where(function (x) {
