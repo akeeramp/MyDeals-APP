@@ -75,7 +75,10 @@
         }
 
         $scope.dismissPopup = function () {
-            //$uibModalInstance.close($scope.contractData);
+            for (var dc_id in $scope.CostTestGroupDetails) {
+                $scope.$parent.$broadcast('refreshPCTData', $scope.sumGridOptions["dc" + dc_id].dataSource.data);
+                break;
+            }
             $uibModalStack.dismissAll();
         }
 

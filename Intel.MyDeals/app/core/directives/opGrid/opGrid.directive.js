@@ -135,6 +135,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.contractDs.read(); 
             });
 
+            $scope.$on('refreshPCTData', function (event, data) {
+                if (data.length > 0) {
+                    for (var j = 0; j < $scope.opData.length; j++) {
+                        if ($scope.opData[j].DC_ID == data[0].DC_ID) {
+                            $scope.opData[j].COST_TEST_RESULT = data[0].PRC_CST_TST_STS;
+                            break;
+                        }
+                    }
+                    $scope.contractDs.read();
+                }
+            });
+
             $scope.openPCTScreen = function (dataItem) {
                 objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
                     $scope.contractData = data.data[0];
@@ -176,17 +188,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
 
                     modal.result.then(
-                        function (data) {
-                            //Close Event will come here
-                            if (data.PRC_ST.length > 0) {
-                                for (var j = 0; j < $scope.opData.length; j++) {
-                                    if ($scope.opData[j].PRC_ST_OBJ_SID == data.PRC_ST[0].DC_ID) {
-                                        $scope.opData[j].COST_TEST_RESULT = data.PRC_ST[0].COST_TEST_RESULT;
-                                        break;
-                                    }
-                                }
-                                $scope.contractDs.read();
-                            }
+                        function () {
+                            //Close Event will come here                            
                         },
                         function () {
                             // Do Nothing on cancel
