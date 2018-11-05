@@ -2,10 +2,17 @@
                 <table style="width: 100%; height: 100%;">
                     <tr>
                         <td style="width: 100%;">
-                            <div class="done-title"><i class="intelicon-passed-completed-solid" style="font-size: 24px;color: #C4D600;"></i> Deals are ready to be Published </div>
+                            <div class="done-title">
+							
+							<i class="intelicon-passed-completed-solid" style="font-size: 24px;color: #C4D600;"></i> Deals are ready to be Published 
+							
+							
+							</div>
+							
                             <div>                                
                                 <button ng-if="C_CREATE_CONTRACT" class="btn btn-primary prdBtn" ng-click="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
                             </div>
+							<div class="showMCTag" ng-if="showMCTag">Meet Comp Status: <div class='textRunIcon readOnlyCell' style="padding-left: 5px;float:right"><i class='intelicon-information-solid notApplicableIcon' title='Meet comp is not applicable for the Products selected in the Tender Table editor' style='font-size:20px !important'></i></div></div>
                         </td>
                     </tr>
                 </table>
@@ -15,7 +22,25 @@
 </div>
 
 
+
 <style>
+.isReadOnlyCell{background: transparent !important;}
+
+.opUiContainer.md.k-grid td {
+    font-size: 12px !important;
+    height: 33px !important;
+    color: #000 !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.notApplicableIcon {
+        font-size: 20px !important;
+        color: #c7c7c7;
+    }
+.showMCTag{    float: right;
+    font-size: 14px;
+    font-weight: 800;
+    padding-top: 5px;}
 	#pubOpGrid>.op-grid-container-wrapper>.op-grid-header{display:none}
 	#pubOpGrid>.op-grid-container-wrapper{padding: 5px 0 0 0 !important;}
     #pubOpGrid>.op-grid-container-wrapper>.op-grid-container>#dealEditor>.k-grid-content{

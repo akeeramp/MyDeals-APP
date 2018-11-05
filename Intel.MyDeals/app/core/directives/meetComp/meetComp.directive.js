@@ -152,8 +152,10 @@
                             $scope.$parent.setIsBusyFalse();
                         }
                         if (response.data.length == 0 && $scope.isAdhoc == 1) {
+                            kendo.alert("Meet comp is not applicable for the Products selected in the Tender Table editor");
                             $scope.isBusy = false;                            
                             $scope.$parent.inCompleteDueToCapMissing(true);
+                            $scope.$parent.setMcTag(true);
                             $scope.$parent.goToPublished();
                         }
 
@@ -162,6 +164,7 @@
                         }                                                             
                         
                         if (response.data.length > 0) {
+                            $scope.$parent.setMcTag(false);
                             //Calculate InComplete due to CAP Missing
                             var isTrueOnce = false;
                             var inCompleteDueToCAPMissing = function (data) {

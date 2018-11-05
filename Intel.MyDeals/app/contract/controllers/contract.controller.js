@@ -59,6 +59,7 @@
         $scope.isTenderWidgetVisible = false;
         $scope.inCompleteCapMissing = false;     
         $scope.enablePTRReload = false;
+        $scope.showMCTag = false;
         // custom Contract Titles
         $scope.isTenderContract = isTender;
         $scope.contractType = "Contract";
@@ -322,6 +323,10 @@
         if ($state.current.name == 'contract.manager.strategy.wip' && $scope.isTenderContract) {
             $scope.selectedTAB = 'DE'; // DE- Deal Editor
             $scope.currentTAB = 'DE'; // DE- Deal Editor
+        }
+
+        $scope.setMcTag = function (bit){
+            $scope.showMCTag = bit;
         }
 
         $scope.goToTenderDashboard = function () {
@@ -4764,7 +4769,7 @@
                         { dealType: "PROGRAM", name: "Program" }
                     ];
                     var show = [
-                        "DC_ID", "DC_PARENT_ID", "MEETCOMP_TEST_RESULT","COST_TEST_RESULT", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "TRKR_NBR", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
+                        "DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSIG_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
                         "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE","DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
                         "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON", 
