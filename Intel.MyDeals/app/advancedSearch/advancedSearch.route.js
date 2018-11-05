@@ -108,23 +108,6 @@
                     templateUrl: '/app/advancedSearch/dealSearch.html',
                     controller: 'DealSearchController'
                 }
-            }, {
-                state: 'contract.grouping',
-                config: {
-                    url: '/grouping',
-                    views: {
-                        'lnavView': {
-                            templateUrl: '/app/contract/partials/lnavSummary.html'
-                        },
-                        'contractHeaderView': {
-                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
-                        },
-                        'contractWrapperView': {
-                            templateUrl: '/app/contract/partials/contractSummaryExcludeGroups.html',
-                            controller: 'managerExcludeGroupsController'
-                        }
-                    }
-                }
             }
         ];
     }
