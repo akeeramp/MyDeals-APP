@@ -1602,6 +1602,8 @@
                 ct._behaviors.isError["CUST_MBR_SID"] = false;
             }
 
+            ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV_UI.toString().replace(/,/g, '/');
+
             // Clear all values
             angular.forEach(ct,
                 function (value, key) {

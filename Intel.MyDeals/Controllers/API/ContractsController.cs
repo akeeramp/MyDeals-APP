@@ -138,7 +138,7 @@ namespace Intel.MyDeals.Controllers.API
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - OpDataCollectorFlattenedDictList")
             {
                 CustId = int.Parse(contracts[0]["CUST_MBR_SID"].ToString()),
-                ContractId = int.Parse(contracts[0]["DC_ID"].ToString())//,
+                ContractId = int.Parse(contracts[0]["DC_ID"].ToString())
                 //CopyFromId = srcContractId, //contracts[0]["TITLE"]
                 //CopyFromObjType = OpDataElementType.CNTRCT
             });

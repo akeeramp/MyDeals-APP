@@ -362,6 +362,7 @@ namespace Intel.MyDeals.BusinessLogic
                     de.OrigAtrbValue = "";
                 }
                 ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
+                ptr.DataElementDict[AttributeCodes.CUST_ACCNT_DIV + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue;
                 ptrDCs.Add(ptr);
             }
 
