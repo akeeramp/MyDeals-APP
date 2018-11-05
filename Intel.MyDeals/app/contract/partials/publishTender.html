@@ -1,13 +1,8 @@
-﻿<div class="publishDiv row allDone" style="margin: 10px 0 0 0;">
+﻿<div class="publishDiv row allDone" style="margin: 10px 0 0 0;padding-right: 17px;">
                 <table style="width: 100%; height: 100%;">
                     <tr>
                         <td style="width: 100%;">
-                            <i class="intelicon-passed-completed-solid" style="font-size: 40px; color: #C4D600; "></i>
-
-                            <div class="done-title">Deals are ready to be Published!!</div>                            
-                            <div class="done-confirm">
-                                Would you like to convert into individual deals?
-                            </div>
+                            <div class="done-title"><i class="intelicon-passed-completed-solid" style="font-size: 24px;color: #C4D600;"></i> Deals are ready to be Published </div>
                             <div>                                
                                 <button ng-if="C_CREATE_CONTRACT" class="btn btn-primary prdBtn" ng-click="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
                             </div>
@@ -15,13 +10,21 @@
                     </tr>
                 </table>
 </div>
+<div ng-if="!loading" style="padding: 5px; height: 100%;">
+    <div id="pubOpGrid" op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" op-help="helpTopicContractAndDealViews"></div>
+</div>
+
 
 <style>
+	#pubOpGrid>.op-grid-container-wrapper>.op-grid-header{display:none}
+	#pubOpGrid>.op-grid-container-wrapper{padding: 5px 0 0 0 !important;}
+    #pubOpGrid>.op-grid-container-wrapper>.op-grid-container>#dealEditor>.k-grid-content{
+		height: 300px !important;
+	}
 	.publishDiv{
 		width: 100%;
-		margin: 0 auto;
-		text-align: center;
-		margin-top: 200px !important;
+		text-align: right;
+		padding-right: 10px;
 	}
 	.prdBtn {
         font-size: 13px;
@@ -42,7 +45,9 @@
 	}
 	
 	.done-title {
-        font-size: 30px;
+        font-size: 24px;
+		float: left;
+		margin-left: 15px;
     }
 
     .done-body {
