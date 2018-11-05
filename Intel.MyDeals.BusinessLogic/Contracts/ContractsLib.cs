@@ -311,6 +311,13 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            // Assumption that this is middle tier located in Cali, so I don't have to set CultureInfo("en-US")
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, DateTime.Now, null, null);
+            var strtDt = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.START_DT);
+            var endDt = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.END_DT);
+            strtDt.AtrbValue = quarterDetails.QTR_STRT.ToString("d"); // This is likely in the past, just setting the post, might switch to today (DateTime.Now)
+            endDt.AtrbValue = quarterDetails.QTR_END.ToString("d");
+
             List<OpDataElement> psDEs = new List<OpDataElement>();
             foreach (KeyValuePair<MyDealsAttribute, string> item in psAtrbs)
             {

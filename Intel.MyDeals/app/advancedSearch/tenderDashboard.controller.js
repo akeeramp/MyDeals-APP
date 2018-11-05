@@ -1558,8 +1558,8 @@
             HAS_ATTACHED_FILES: 0,
             OBJ_SET_TYPE_CD: "ALL_TYPES",
             TENDER_PUBLISHED: "False",
-            START_DT: "10/31/2018", // TO DO: fix start and end dates
-            END_DT: "12/29/2018",
+            START_DT: "01/01/2018", // These are just set to whatever, switched out mid tier to current Q
+            END_DT: "04/30/2018", // These are just set to whatever, switched out mid tier to current Q
             C2A_DATA_C2A_ID: "Tender Folio Auto-Filled",
             MEETCOMP_TEST_RESULT: "Not Run Yet",
             COST_TEST_RESULT: "Not Run Yet",

@@ -1632,6 +1632,30 @@ gridUtils.goToObject = function (data, accessCheckField, field, title) {
     return ""; // Fail case just in case, shouldn't make it here if you actually set the above up with the correct FIELD
 }
 
+// Commented the gridUtils.hasVertical out as it seems to be impacting all contract loads (likely because those use VERTICAL_ROLLUP and Tender uses PRODUCT_CATEGORIES)
+// and the Tender Search page seesm to be blocking searches based on vertical anyhow, so it is a moot point to block control levels if everything already passed check.
+//gridUtils.findOne = function (haystack, arr) {
+//    return arr.some(function (v) {
+//        return haystack.indexOf(v) >= 0;
+//    });
+//};
+
+//gridUtils.hasVertical = function (dataItem) {
+//    var psHasUserVerticals = true;
+//    if (window.usrRole !== "DA") return true;
+//    if (window.usrVerticals.length > 0) {
+//        var userVerticals = window.usrVerticals.split(",");
+//        if (dataItem.PRODUCT_CATEGORIES !== undefined) { // Was VERTICAL_ROLLUP
+//            var dataVerticals = dataItem.PRODUCT_CATEGORIES.split(",");
+//            psHasUserVerticals = gridUtils.findOne(dataVerticals, userVerticals);
+//        }
+//        else {
+//            psHasUserVerticals = false;
+//        }
+//    }
+//    return psHasUserVerticals;
+//}
+
 gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined || data._parentActionsPS === undefined) return "";
 
@@ -1639,6 +1663,11 @@ gridUtils.getBidActions = function (data) {
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
+
+    //if (!gridUtils.hasVertical(data))
+    //{
+    //    return "<div class='noaccess'>no vertical access</div>";
+    //}
 
     var bidActns = gridUtils.getBidActionsList(data);
     data["orig_WF_STG_CD"] = data.WF_STG_CD;
