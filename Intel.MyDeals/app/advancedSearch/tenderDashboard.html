@@ -75,6 +75,8 @@
                      operator-settings="operatorSettings"
                      attribute-settings="attributeSettings"
                      custom-settings="customSettings"
+                     save-cat="'TenderDealSearch'"
+                     save-sub-cat="'TenderSearchRules'"
                      run-search="runSearch"></div>
             </div>
         </div>
@@ -82,6 +84,8 @@
     </div>
 
     <div op-grid
+         id="attributeGrid" 
+         class="'search-grid'"
          ng-if="wipData.length != 0"
          style="height: 100%;"
          op-data="wipData"
@@ -147,6 +151,14 @@
         border-style: solid;
         border-color: #0071C5 transparent transparent #0071C5;
         border-width: 3px;
+    }
+
+    .dealTag {
+        display: none;
+    }
+
+    .rule-dropdown-actions {
+        display: none;
     }
 
     .dealTools {

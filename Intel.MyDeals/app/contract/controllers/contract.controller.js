@@ -3318,7 +3318,8 @@
                         lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true);
                         if (productJSON.length !== 0) {
                             angular.forEach(productJSON, function (value, key) {
-                                if (key.toUpperCase() === (data[d]["PRD_BCKT" + "_____20___" + (t - 1)]).toUpperCase()) {
+                                var bckt = data[d]["PRD_BCKT" + "_____20___" + (t - 1)];
+                                if (bckt !== undefined && key.toUpperCase() === bckt.toUpperCase()) {
                                     lData["CAP"] = value[0]["CAP"];
                                     lData["YCS2"] = value[0]["YCS2"];
                                 }

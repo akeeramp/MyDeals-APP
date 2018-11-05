@@ -12,6 +12,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             operatorSettings: '=',
             attributeSettings: '=',
             customSettings: '=',
+            saveCat: '=',
+            saveSubCat: '=',
             runSearch: '='
         },
         restrict: 'AE',
@@ -25,6 +27,11 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.currentRule = "";
             $scope.currentRuleColumns = "";
             $scope.lookupDs = {};
+
+            $scope.cat = $scope.saveCat === undefined ? "DealSearch" : $scope.saveCat;
+            $scope.subcat = $scope.saveSubCat === undefined ? "SearchRules" : $scope.saveSubCat;
+            //$scope.cat = "DealSearch";
+            //$scope.subcat = "SearchRules";
 
             $scope.tenderAttributeBuilder = ($scope.customSettings !== undefined && $scope.customSettings.length) > 0;
 
@@ -61,7 +68,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             }
 
             $scope.loadMyRules = function () {
-                userPreferencesService.getActions("DealSearch", "SearchRules")
+                userPreferencesService.getActions($scope.cat, $scope.subcat)
                     .then(function (data) {
                         $scope.myRules = data.data.length > 0 ? JSON.parse(data.data[0].PRFR_VAL) : [];
                         $scope.root.$broadcast('search-rules-updated', $scope.myRules);
@@ -155,7 +162,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 curRule.columns = $scope.getColumns();
 
                 userPreferencesService
-                    .updateAction("DealSearch", "SearchRules", "Rules", JSON.stringify($scope.myRules))
+                    .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.myRules))
                     .then(function (response) {
                         $scope.root.$broadcast('search-rules-updated', $scope.myRules);
                         op.notifySuccess("The search rule saved.", "Saved");
@@ -180,9 +187,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
                         if ($linq.Enumerable().From($scope.myRules)
                             .Where(function (x) {
-                                return (x.title.toUpperCase() === title.toUpperCase());
+                                return (x.title !== undefined && x.title.toUpperCase() === title.toUpperCase());
                         }).ToArray().length > 0) {
-                            kendo.confirm("The title was already used.  Would you like to enter a different nam?").then(function () {
+                            kendo.confirm("The title was already used.  Would you like to enter a different name?").then(function () {
                                 $scope.saveRule();
                             }, function () { });
                             return;
@@ -195,7 +202,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         });
 
                         userPreferencesService
-                            .updateAction("DealSearch", "SearchRules", "Rules", JSON.stringify($scope.myRules))
+                            .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.myRules))
                             .then(function (response) {
                                 $scope.root.$broadcast('search-rules-updated', $scope.myRules);
                                 op.notifySuccess("The search rule saved.", "Saved");
@@ -210,7 +217,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.removeCustomRule = function () {
                 if (!$scope.validateRules()) return;
 
-                userPreferencesService.updateAction("DealSearch", "SearchOptions", "CustomSearch", "[]")
+                userPreferencesService.updateAction($scope.cat, $scope.subcat, "CustomSearch", "[]")
                     .then(function (response) {
                     }, function (response) {
                         logger.error("Unable to clear Custom Search Options.", response, response.statusText);
@@ -219,7 +226,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
             $scope.runRule = function () {
                 if (!$scope.validateRules()) return;
-                userPreferencesService.updateAction("DealSearch", "SearchOptions", "CustomSearch", JSON.stringify($scope.generateCurrentRule()))
+                userPreferencesService.updateAction($scope.cat, $scope.subcat, "CustomSearch", JSON.stringify($scope.generateCurrentRule()))
                     .then(function (response) {
                         var runRule = {
                             rule: $scope.data
@@ -234,7 +241,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
             $scope.getColumns = function () {
                 // locate grid and get columns
-                var grid = $("#" + $scope.gridId).find(".search-grid").data("kendoGrid");
+                var gridWrapper = $("#" + $scope.gridId).find(".search-grid");
+                if (gridWrapper.length === 0) gridWrapper = $("#" + $scope.gridId + " .op-grid");
+                var grid = gridWrapper.data("kendoGrid");
                 var cols = [];
 
                 for (var i = 0; i < grid.columns.length; i++)
@@ -431,7 +440,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 }
 
                 userPreferencesService
-                    .updateAction("DealSearch", "SearchRules", "Rules", JSON.stringify($scope.myRules))
+                    .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.myRules))
                     .then(function (response) {
                         $scope.root.$broadcast('search-rules-updated', $scope.myRules);
                         $scope.clearRule();

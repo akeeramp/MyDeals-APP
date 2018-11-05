@@ -21,7 +21,8 @@
         var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"]; //TODO: this is a copy of a hard-coded list of strings from contract.controller.js - ideally we move this into some sort of global file and reference from there at least.
 
         $scope.contractData = [];
-        $scope.templateData = [];
+        $scope.templates = [];
+
         $scope.$on('btnPctMctRunning', function (event, args) {
             $scope.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
         });
@@ -32,6 +33,7 @@
                 $scope.setBusy("", "");
             }, 2000);
         });
+
         $scope.refreshContractData = function (id, ptId) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
                 $scope.contractData = $scope.initContract(data);
@@ -57,7 +59,8 @@
 
         templatesService.readTemplates()
             .then(function (response) {
-                $scope.templateData = response.data;
+                $scope.templates = response.data;
+                $scope.addCustomToTemplates();
             })
             .catch(function (data) {
                 console.log('Template Retrieval Failed');
@@ -67,6 +70,28 @@
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
         $scope.runSearch = false;
+
+        $scope.filterDealTypes = function (items) {
+            var result = {};
+            var allow = ['ECAP', 'KIT'];
+            angular.forEach(items, function (value, key) {
+                if (allow.indexOf(value.name) >= 0) {
+                    result[key] = value;
+                }
+            });
+            return result;
+        }
+
+        $scope.clearPtTemplateIcons = function () {
+            angular.forEach($scope.templates.ModelTemplates.PRC_TBL,
+                function (value, key) {
+                    value._custom._active = false;
+                });
+        }
+        $scope.selectPtTemplateIcon = function (ptTmplt) {
+            $scope.clearPtTemplateIcons();
+            ptTmplt._custom._active = true;
+        }
 
         $scope.getColorStyle = function (c) {
             var k = 'pct';
@@ -774,7 +799,7 @@
                     if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                     if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
 
-                    var fields = $scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model.fields;
+                    var fields = $scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model.fields;
                     for (var key in fields) {
                         if (fields.hasOwnProperty(key)) {
                             if (fields[key].type === "date") {
@@ -1182,14 +1207,14 @@
                         "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
                     };
 
-                    $scope.wipOptions.columns = angular.copy($scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
+                    $scope.wipOptions.columns = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
                     for (var i = $scope.wipOptions.columns.length - 1; i >= 0; i--) {
                         if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
                             $scope.wipOptions.columns.splice(i, 1);
                         }
                     }
 
-                    $scope.wipOptions.model = angular.copy($scope.templateData.ModelTemplates.WIP_DEAL[$scope.dealType].model);
+                    $scope.wipOptions.model = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model);
 
                     opGridTemplate.hideForTender.forEach(function (x) {
                         delete $scope.wipOptions.model.fields[x];
@@ -1234,6 +1259,20 @@
             $scope.actionType = "PS";
             $scope.changeBidAction(dataItem, newValue, gridDS);
         });
+
+        $scope.addCustomToTemplates = function () {
+            angular.forEach($scope.templates.ModelTemplates.PRC_TBL,
+                function (value, key) {
+                    value._custom = {
+                        "ltr": value.name[0],
+                        "_active": false
+                    };
+                });
+        }
+
+        $scope.removeBlanks = function (val) {
+            return val.replace(/_/g, ' ');
+        }
 
         $scope.changeBidAction = function (dataItem, newVal, gridDS) {
             //var newVal = dataItem.WF_STG_CD;
@@ -1476,27 +1515,36 @@
         });
 
         $scope.copyDeals = function (items) {
-            debugger;
+            if (items.length === 0) {
+                kendo.alert("Please select a deal to copy by checking the checkbox next to each deal to be copied.");
+                return;
+            }
+
             $scope.$root.copyItems = items;
-            //$scope.broadcast('copy-tender-deals', $scope.copyItems);
+
             var modal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: '/app/contract/partials/ptModals/tenderFolio.html',
                 controller: 'tenderDashboardController',
                 controllerAs: 'contract',
                 size: 'lg',
-                windowClass: 'tenderFolio-modal-window'
+                windowClass: 'tenderFolio-modal-window',
+                resolve: {
+                    copyItems: function () {
+                        return items;
+                    }
+                }
             });
 
             modal.result.then(
-            function () {
-                debugger;
-                //Close Event will come here
-            },
-            function () {
-                debugger;
-                // Do Nothing on cancel
-            });
+                function () {
+                    debugger;
+                    //Close Event will come here
+                },
+                function () {
+                    debugger;
+                    // Do Nothing on cancel
+                });
         }
 
         $scope.contractData = {
@@ -1539,7 +1587,6 @@
 
 
         $scope.customContractValidate = function () {
-            debugger;
             $scope.isValid = true;
             var ct = $scope.contractData;
 
@@ -1599,19 +1646,16 @@
                 ct._behaviors.isError['TITLE'] = response.data;
                 ct._behaviors.validMsg['TITLE'] = "";
                 if (response.data) {
-                    debugger;
                     ct._behaviors
                          .validMsg['TITLE'] = "This contract name already exists in another contract.";
                 }
                 else { // If it passes, do this
-                    debugger;
                     if ($scope.isValid) {
                         $scope.copyTenderFolioContract();
                     } else {
                         $timeout(function () {
                             if (!!$("input.isError")[0]) $("input.isError")[0].focus();
-                        },
-                            300);
+                        }, 300);
                     }
                 }
             });
@@ -1623,37 +1667,30 @@
 
             // Contract Data
             var ct = $scope.contractData;
+            //$scope.templates.ModelTemplates.PRC_TBL
+            var objSetTypeCd = "";
+            angular.forEach($scope.templates.ModelTemplates.PRC_TBL,
+                function (value, key) {
+                    if (value._custom._active === true) {
+                        objSetTypeCd = key;
+                    }
+                });
+
+            $scope.contractData["OBJ_SET_TYPE_CD_target"] = objSetTypeCd;
 
             // check for NEW contract
             if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
 
-            debugger;
-            // Add to DB first... then add to screen //$scope.$root.copyItems
-            objsetService.copyTenderFolioContract([ct], "1,504689,502671").then(
+            // Add to DB first... then add to screen 
+            objsetService.copyTenderFolioContract([ct], $scope.$root.copyItems.join()).then(
                 function (data) {
-                    debugger;
-                    //$scope.updateResults(data.data.CNTRCT, ct);
-
-                    ////Check for errors
-                    //if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
-                    //    $scope.setBusy("Copy Unsuccessful", "Could not copy the contract", "Error");
-                    //    $timeout(function () {
-                    //        $scope.setBusy("", "");
-                    //    }, 4000);
-                    //    return;
-                    //};
-
-                    //$scope.setBusy("Copy Successful", "Copied the contract", "Success");
-
-                    //$timeout(function () {
-                    //    $scope._dirty = false; // don't want to kick of listeners
-                    //    $state.go('contract.manager',
-                    //        {
-                    //            cid: $scope.contractData.DC_ID
-                    //        },
-                    //        { reload: true });
-                    //});
-
+                    if (data.data === undefined || data.data.CNTRCT.length < 2) {
+                        kendo.alert("Unable to successfully create the Tender Copies.");
+                        $scope.setBusy("", "");
+                        return;
+                    }
+                    var id = data.data.CNTRCT[1].DC_ID;
+                    document.location.href = "http://localhost:55490/Contract#/manager/" + id
                     $scope.setBusy("", "");
                 },
                 function (result) {

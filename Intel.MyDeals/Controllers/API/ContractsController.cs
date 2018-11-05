@@ -135,7 +135,6 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpDataCollectorFlattenedDictList CopyTenderFolioContract(OpDataCollectorFlattenedList contracts)
         {
-            int j = 1;
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - OpDataCollectorFlattenedDictList")
             {
                 CustId = int.Parse(contracts[0]["CUST_MBR_SID"].ToString()),
