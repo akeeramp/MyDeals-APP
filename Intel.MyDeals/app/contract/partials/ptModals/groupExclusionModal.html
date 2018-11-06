@@ -1,0 +1,55 @@
+<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact" ng-show="isBusy"></loading-panel>
+<nav class="navbar navbar-default" style="">	
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+	<div class="navbar-header">          
+          <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px;    color: white;"></i>
+          <a class="navbar-brand" href="#">Group Exclusion</a>
+        </div>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><i class="intelicon-minus-max"></i></a></li>
+            <li><a href="#"><i class="intelicon-empty-box"></i></a></li>
+            <li><a href="" ng-click="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
+          </ul>
+        </div>		</nav>
+        <div id="secBasicContainerWrapper" style="padding:0px;min-height:500px">
+            <div id="secContainer">
+				<div class="container-fluid">
+					
+
+            <div class="row">
+                <div class="col-md-12">                    					 
+					<div ng-include="'app/contract/partials/contractSummaryExcludeGroups.html'"></div>
+					
+					
+                </div>                    
+            </div>
+					
+		</div>
+            </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<style>
+.btnGoToPCT{display:none !important}
+.op-grid-header{margin-top: -65px !important;height:65px !important}
+.modalPctToolbar{padding:1px 0px 0px !important}
+.op-grid-container-wrapper{padding: 65px 0 0 0 !important;}
+.k-tabstrip-wrapper{display: none !important;}
+.btnOverlappingDealCheck{display: none !important;}
+.toolbar{top: 1px !important;left: 15px !important;}
+.tenderFolio-modal-window .modal-dialog{
+	width:1200px;
+	margin:auto;
+	MIN-HEIGHT:500PX;
+}
+.k-grid td {    
+    padding-right: 0px !important;
+}
+</style>
