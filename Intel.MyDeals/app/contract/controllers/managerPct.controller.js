@@ -9,10 +9,10 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData', 'isToolReq'];
+    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData','PRC_ST_OBJ_SID', 'isToolReq'];
 
-    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, isToolReq) {
-
+    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, PRC_ST_OBJ_SID, isToolReq) {
+        $scope.PRC_ST_OBJ_SID = PRC_ST_OBJ_SID;
         var root = $scope.$parent;	// Access to parent scope
         if (!isToolReq) {
             root.contractData = contractData;
@@ -72,6 +72,21 @@
                 ds.filter($scope.getFilters());
                 ds.read();
             });
+
+        }
+
+        $scope.getColorStyle = function (c) {
+            return { color: $scope.getColorPct(c) };
+        }
+        $scope.getColorPct = function (d) {
+            if (!d) d = "InComplete";
+            return $scope.getColor('pct', d);
+        }
+        $scope.getColor = function (k, c) {
+            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                return colorDictionary[k][c];
+            }
+            return "#aaaaaa";
         }
 
         $scope.dismissPopup = function () {
@@ -661,7 +676,38 @@
         }
 
         $scope.gotoExclude = function () {
-            $state.go('contract.grouping');
+            if (!$scope.isToolReq) {
+                root.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, $scope.PRC_ST_OBJ_SID);
+                root.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+                var modal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/partials/ptModals/groupExclusionModal.html',
+                    controller: 'managerExcludeGroupsController',
+                    //controllerAs: 'contract',
+                    size: 'lg',
+                    windowClass: 'tenderPctFolio-modal-window',
+                    resolve: {
+                        isToolReq: function () {
+                            return false;
+                        }
+                    }
+                });
+
+                modal.result.then(
+                    function () {
+                        //Close Event will come here                            
+                    },
+                    function () {
+                        // Do Nothing on cancel
+                    });
+
+                
+            }
+            else {
+            //$scope.selectedTAB = 'GE';
+                $state.go('contract.grouping');
+            }
+            
         }
 
         // Global Settings
@@ -1135,7 +1181,8 @@
         $scope.calcNeedToRunStatus();
 
         $timeout(function () {
-            var html = '<li ng-click="gotoExclude()" class="k-item k-state-default"><span unselectable="on" class="k-link" style="width: 150px;" title="Click to Exclude Deals in Groupings">Grouping Exclusions</span></li>';
+            
+            var html = '<li class="btnGoToExclude" style="display: inline;" ng-click="gotoExclude()" class="k-item k-state-default"><span unselectable="on" class="k-link" style="width: 150px;" title="Click to Exclude Deals in Groupings">Grouping Exclusions</span></li>';
             var template = angular.element(html);
             var linkFunction = $compile(template);
             linkFunction($scope);

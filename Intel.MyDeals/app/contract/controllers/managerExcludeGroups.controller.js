@@ -11,11 +11,11 @@
 
     managerExcludeGroupsController.$inject = [
         '$scope', '$state', '$stateParams', '$filter', 'objsetService', 'confirmationModal', 'dataService', 'logger',
-        '$uibModal', '$timeout', '$compile'
+        '$uibModal', '$timeout', '$compile', '$uibModalStack', 'isToolReq'
     ];
 
     function managerExcludeGroupsController($scope,
-        $state,
+        $state,        
         $stateParams,
         $filter,
         objsetService,
@@ -24,8 +24,9 @@
         logger,
         $uibModal,
         $timeout,
-        $compile) {
-
+        $compile,        
+        $uibModalStack, isToolReq) {
+        //$scope.$uibModalInstance = $injector.get('$uibModalInstance');
 
         // Variables
         var root = $scope.$parent; // Access to parent scope
@@ -36,6 +37,24 @@
         $scope.msg = "Loading Deals";
         $scope.pctFilterEnabled = root.CAN_VIEW_COST_TEST;
         $scope._dirty = false;
+        $scope.getColorStyle = function (c) {
+            return { color: $scope.getColorPct(c) };
+        }
+        $scope.getColorPct = function (d) {
+            if (!d) d = "InComplete";
+            return $scope.getColor('pct', d);
+        }
+        $scope.getColor = function (k, c) {
+            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                return colorDictionary[k][c];
+            }
+            return "#aaaaaa";
+        }
+
+        $scope.dismissPopup = function () { 
+            var openedModal = $uibModalStack.getTop();
+            $uibModalStack.dismiss(openedModal.key);            
+        }
 
         $scope.$on('ManageExcludeGroups',
             function (event, dataItem) {
@@ -129,16 +148,18 @@
                 if (!$scope.firstGridLoaded) {
                     if ($scope.pctFilterEnabled) {
                         $timeout(function () {
+                            if ($scope.isToolReq) {
+                                // if allowed... add tab to go back to PCT tab
+                                $scope.filterPct();
 
-                            // if allowed... add tab to go back to PCT tab
-                            $scope.filterPct();
+                                var html = '<li class="btnGoToPCT" ng-click="gotoPct()" class="k-item k-state-default"><span unselectable="on" class="k-link" title="Click to go back to Price Cost Test">Price Cost Test</span></li>';
+                                var template = angular.element(html);
+                                var linkFunction = $compile(template);
+                                linkFunction($scope);
 
-                            var html = '<li ng-click="gotoPct()" class="k-item k-state-default"><span unselectable="on" class="k-link" title="Click to go back to Price Cost Test">Price Cost Test</span></li>';
-                            var template = angular.element(html);
-                            var linkFunction = $compile(template);
-                            linkFunction($scope);
-
-                            $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
+                                $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
+                            }
+                            
                         },
                             500);
                     }
@@ -154,7 +175,35 @@
             if (!$scope._dirty) return;
             $scope.$broadcast('requestOpGridDirtyRows');
         }
+        $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
+            $timeout(function () {
+                var newState = msg != undefined && msg !== "";
+                isShowFunFact = true; // Always show fun fact
+                // if no change in state, simple update the text
+                if ($scope.isBusy === newState) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                    return;
+                }
 
+                $scope.isBusy = newState;
+                if ($scope.isBusy) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                } else {
+                    $timeout(function () {
+                        $scope.isBusyMsgTitle = msg;
+                        $scope.isBusyMsgDetail = !detail ? "" : detail;
+                        $scope.isBusyType = msgType;
+                        $scope.isBusyShowFunFact = isShowFunFact;
+                    }, 100);
+                }
+            });
+        }
         $scope.$on('receiveOpGridDirtyRows',
             function (event, data) {
 
@@ -169,26 +218,33 @@
                     data[i]['START_DT'] = kendo.toString(new Date(data[i]['START_DT']), 'M/d/yyyy hh:mm');
                     data[i]['END_DT'] = kendo.toString(new Date(data[i]['END_DT']), 'M/d/yyyy hh:mm');
                 }
-
-                root.setBusy("Saving Groupings", "Please wait while we exclude the deals from the groups");
+                if (typeof root.setBusy != 'undefined') {
+                    root.setBusy("Saving Groupings", "Please wait while we exclude the deals from the groups");
+                }
+                
                 objsetService.updateWipDeals($scope.contractData.CUST_MBR_SID, $scope.contractData.DC_ID, data).then(
                     function (results) {
                         $scope._dirty = false;
                         $scope.$broadcast('resetOpGridDirtyRows');
-
-                        root.setBusy("Running Cost Test", "Currently running Price Cost Test");
+                        if (typeof root.setBusy != 'undefined') {
+                            root.setBusy("Running Cost Test", "Currently running Price Cost Test");
+                        } 
                         objsetService.runPctContract($scope.root.contractData.DC_ID).then(
                             function (e) {
                                 $scope.root.refreshContractData();
                                 $timeout(function () {
-                                    $scope.root.setBusy("", "");
+                                    if (typeof root.setBusy != 'undefined') {
+                                        $scope.root.setBusy("", "");
+                                    }
                                     $scope.msg = "Refreshing all Deals";
                                     $scope.loading = true;
                                     $scope.getWipDeals();
                                 }, 1000);
                             },
                             function (response) {
-                                $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
+                                if (typeof root.setBusy != 'undefined') {
+                                    $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
+                                }
                                 logger.error("Could not run Cost Test in Exclude Groups for contract " + $scope.root.contractData.DC_ID, response, response.statusText);
                                 $timeout(function () {
                                     $scope.root.setBusy("", "");

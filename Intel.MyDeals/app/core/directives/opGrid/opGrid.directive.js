@@ -144,6 +144,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                     $scope.contractDs.read();
+                    $('.btnGoToExclude').remove();                                                      
                 }
             });
 
@@ -160,8 +161,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.contractData.PRC_ST = [];
                         $scope.contractData.PRC_ST.push(tempcontractDataPS);
                         $scope.contractData.CUST_ACCNT_DIV_UI = "";
-                        //$scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
-                        //$scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+                        $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, dataItem.PRC_ST_OBJ_SID);
+                        $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
 
                         $timeout(function () {
                             $scope.$apply();
@@ -180,10 +181,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 },
                                 PRC_ST_OBJ_SID: function () {
                                     return dataItem.PRC_ST_OBJ_SID;
-                                },
-                                parentScope: function () {
-                                    return $scope;
-                                },
+                                },                                
                                 isToolReq: function () {
                                     return false;
                                 }
@@ -586,8 +584,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
             }
 
+            //$scope.getColorStyle = function (c) {
+            //    if (typeof $scope.root.getColorStyle != 'undefined') {
+            //        return $scope.root.getColorStyle(c);
+            //    }
+            //    else if ($scope.root.$parent.getColorStyle != 'undefined') {
+            //        return $scope.root.$parent.getColorStyle(c);
+            //    }                
+            //}
+
             $scope.getColorStyle = function (c) {
-                return $scope.root.getColorStyle(c);
+                return { color: $scope.getColorPct(c) };
+            }
+            $scope.getColorPct = function (d) {
+                if (!d) d = "InComplete";
+                return $scope.getColor('pct', d);
+            }
+            $scope.getColor = function (k, c) {
+                if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+                    return colorDictionary[k][c];
+                }
+                return "#aaaaaa";
             }
 
 
@@ -995,12 +1012,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         tabStrip.select(0);
                         if ($scope.opOptions.groups !== undefined) {
                             $scope.showCols($scope.curGroup);
-                            $scope.root.setBusy("", "");
+                            if ($scope.root) {
+                                $scope.root.setBusy("", ""); 
+                            }
+                                                                                  
                         }
                     }
                 }, 10);
             }
-
+            
             $scope.exportToExcelCustomColumns = function () {
                 gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", true);
             }
@@ -2534,30 +2554,32 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.objSids = [];
             $scope.objType = "PricingTable";
             $scope.openOverlappingDealCheck = function () {
+                if ($scope.parentRoot.curPricingTable) {
+                    var pricingTableId = $scope.parentRoot.curPricingTable.DC_ID;
+                    $scope.objSids = [pricingTableId];
+                    $scope.objType = "PricingTable";
+                    var html = "<overlapping-deals obj-sids='objSids' obj-type='objType' style='height: 100%;'></overlapping-deals>";
+                    var template = angular.element(html);
+                    $compile(template)($scope);
 
-                var pricingTableId = $scope.parentRoot.curPricingTable.DC_ID;
-                $scope.objSids = [pricingTableId];
-                $scope.objType = "PricingTable";
-                var html = "<overlapping-deals obj-sids='objSids' obj-type='objType' style='height: 100%;'></overlapping-deals>";
-                var template = angular.element(html);
-                $compile(template)($scope);
+                    $("#smbWindow").html(template);
 
-                $("#smbWindow").html(template);
-
-                $("#smbWindow").kendoWindow({
-                    width: "800px",
-                    height: "500px",
-                    title: "Overlapping Deals",
-                    visible: false,
-                    actions: [
-                        "Minimize",
-                        "Maximize",
-                        "Close"
-                    ],
-                    close: function () {
-                        $("#smbWindow").html("");
-                    }
-                }).data("kendoWindow").center().open();
+                    $("#smbWindow").kendoWindow({
+                        width: "800px",
+                        height: "500px",
+                        title: "Overlapping Deals",
+                        visible: false,
+                        actions: [
+                            "Minimize",
+                            "Maximize",
+                            "Close"
+                        ],
+                        close: function () {
+                            $("#smbWindow").html("");
+                        }
+                    }).data("kendoWindow").center().open();
+                }
+                
             }
 
             $scope.overlappingDealsSetup = function () {

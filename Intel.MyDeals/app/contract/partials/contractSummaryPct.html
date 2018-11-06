@@ -9,10 +9,10 @@
         <div kendo-tab-strip class="gradTab">
             <ul>
                 <li ng-click="selTab('All')" class="k-state-active">All</li>
-                <li ng-click="selTab('Fail')">Failures</li>
-                <li ng-click="selTab('Pass')">Passes</li>
-                <li ng-click="selTab('InComplete')">InCompletes</li>
-                <li ng-click="selTab('NA')">NA</li>
+                <li class="hidemetab" ng-click="selTab('Fail')">Failures</li>
+                <li class="hidemetab" ng-click="selTab('Pass')">Passes</li>
+                <li class="hidemetab" ng-click="selTab('InComplete')">InCompletes</li>
+                <li class="hidemetab" ng-click="selTab('NA')">NA</li>
             </ul>
             <input ng-model="pctFilter" type="hidden" />
         </div>
@@ -124,15 +124,15 @@
 <script>
 $( document ).ready(function() {
 	var scope = angular.element(document.getElementById("sum-wrapper")).scope();
+	
 	if(!scope.isToolReq){
 		$(".intelicon-fast-forward").click();
 		setTimeout(  function() {}, 1000);
 		$(".tenderAutoClick").click();
 		setTimeout(  function() {}, 1000);
 		$('.opacityZero').css('display','none');
+		$('.hidemetab').css('display','none');		
 		var foundCollaps = false;
-
-
 		var result = window.setInterval(function(){
 		  $('.k-i-expand').click();
 		  if($( "a" ).hasClass('k-i-collapse')){
@@ -546,7 +546,7 @@ $( document ).ready(function() {
     }
 
     .gradTab.k-tabstrip ul li.k-item .k-link {
-        width: 80px;
+        
         text-align: center;
     }
 

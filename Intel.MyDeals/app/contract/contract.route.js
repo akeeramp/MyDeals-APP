@@ -60,6 +60,9 @@
                                 contractData: function () {
                                     return '';
                                 },
+                                PRC_ST_OBJ_SID: function () {
+                                    return '';
+                                },
                                 isToolReq: function () {
                                     return true;
                                 }
@@ -165,7 +168,12 @@
                         },
                         'contractWrapperView': {
                             templateUrl: '/app/contract/partials/contractSummaryExcludeGroups.html',
-                            controller: 'managerExcludeGroupsController'
+                            controller: 'managerExcludeGroupsController',
+                            resolve: {
+                                isToolReq: function () {
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }

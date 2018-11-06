@@ -47,22 +47,7 @@
         var win = window.open("Contract#/manager/" + CNTRCT_OBJ_SID + "/" + PRC_ST_OBJ_SID + "/" + PRC_TBL_OBJ_SID + "/wip?searchTxt=" + DEAL_OBJ_SID, '_blank');
         win.focus();
     }
-	$( document ).ready(function() {
-		var result = window.setInterval(function(){	
-		  var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();		  
-		  if(typeof scope != 'undefined'){
-			  if(scope.isAdhoc == 1){				  
-				  $('.k-i-expand').click();
-				  if($( "a" ).hasClass('k-i-collapse')){
-					clearInterval(result);
-				  }
-				}else if(scope.isAdhoc == 0){
-					clearInterval(result);
-				}
-			}
-		}, 1500);
-		
-	});
+	
 </script>
 
 <style>

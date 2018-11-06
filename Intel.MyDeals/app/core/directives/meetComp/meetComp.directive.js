@@ -704,6 +704,10 @@
 
                                 },
                                 dataBound: function (e) {
+                                    if ($scope.isAdhoc == 1) {
+                                        this.expandRow(this.tbody.find("tr.k-master-row"));
+                                    }                                  
+                                    
                                     if ($scope.errorList.length > 0) {
                                         //// get the index of the UnitsInStock cell
                                         var columns = e.sender.columns;
