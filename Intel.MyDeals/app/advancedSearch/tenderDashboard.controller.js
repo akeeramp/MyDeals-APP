@@ -289,6 +289,9 @@
                                     "Submitted",
                                     "Pending",
                                     "Approved",
+                                    "Won",
+                                    "Offer",
+                                    "Lost",
                                     "Active",
                                     "Cancelled"
                                 ]
@@ -306,6 +309,9 @@
                     { Value: "Submitted" },
                     { Value: "Pending" },
                     { Value: "Approved" },
+                    { Value: "Won" },
+                    { Value: "Offer" },
+                    { Value: "Lost" },
                     { Value: "Active" },
                     { Value: "Cancelled" }
                 ]
@@ -707,10 +713,19 @@
                 source: null
             }, {
                 field: "END_CUSTOMER_RETAIL",
-                operator: "=",
+                operator: "LIKE",
                 value: "",
                 source: null
             }];
+        }
+
+        if (window.usrRole === "DA") {
+            $scope.customSettings.splice(1, 0, {
+                field: "WF_STG_CD",
+                operator: "=",
+                value: ["Submitted", "Approved", "Won", "Offer", "Lost"],
+                source: null
+            })
         }
 
         $scope.$storage = $localStorage.$default({
