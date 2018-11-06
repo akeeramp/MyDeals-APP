@@ -2791,8 +2791,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     dimKey = "20___0";
                 }
                 for (var p in dimProduct) {
+
                     if (dimProduct.hasOwnProperty(p) && p.lastIndexOf(dimKey) > -1) {
                         prd_mbr_sid = dimProduct[p];
+                        if (isNaN(prd_mbr_sid)) {
+                            var splitKey = p.split("___");
+                            if (splitKey.length > 1) {
+                                prd_mbr_sid = splitKey[1];
+                            }
+                            else {
+                                prd_mbr_sid = 0;
+                            }
+                        }
                         break;
                     }
                 }
