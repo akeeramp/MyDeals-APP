@@ -256,12 +256,11 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)
         {
             //modify contract token with necessary PS/Contract information
-            //TODO: for now we assume only one data item - need to update this to work in bulk somehow...
+            //TODO: bulk update seems to work even if we use the first dataItem's customer/contract information.  I suspect we have not fully adequately tested this.  need to confirm that the bulk approval steps are not at all dependant on there being a specific customer/contract id...
             contractToken.CustId = data[0].CUST_MBR_SID;
-            //contractToken.CustId = -1;        //TODO: confirm the approval stack is not dependent on having a defined custID
             contractToken.ContractId = data[0].CNTRCT_OBJ_SID;
-            //contractToken.ContractId = -1;    //TODO: confirm the approval stack is not dependent on having a defined contractID
             contractToken.CustAccpt = "Acceptance Not Required in C2A";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
+            contractToken.BulkTenderUpdate = true;  //we use this flag to indicate our actions are coming from the tender dashboard
 
             //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();

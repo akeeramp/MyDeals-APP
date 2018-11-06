@@ -7,6 +7,8 @@ using Intel.Opaque;
 using Intel.Opaque.Data;
 using Intel.MyDeals.DataLibrary;
 using System.Threading;
+using Intel.MyDeals.BusinessRules;
+using Intel.MyDeals.BusinessLogic.DataCollectors;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -297,13 +299,30 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
-                opMsgQueue.Messages.Add(new OpMsg
+                
+
+                if (contractToken.BulkTenderUpdate == true)
                 {
-                    Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
-                    MsgType = OpMsg.MessageType.Info,
-                    ExtraDetails = dc.DcType,
-                    KeyIdentifiers = new[] { dc.DcID }
-                });
+                    //tender dashboard approval, needs to store target stage in extradetails
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = new[] { targetStage },
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+                } else
+                {
+                    //standard manage screen approval
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+                }
+
                 dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
@@ -460,6 +479,38 @@ namespace Intel.MyDeals.BusinessLogic
 
             myDealsData.EnsureBatchIDs();
             myDealsData.Save(contractToken);
+
+            if (contractToken.BulkTenderUpdate)
+            {
+                //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions 
+
+                foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
+                }
+
+                OpDataCollectorFlattenedList prc_st_data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested).ToHierarchialList(OpDataElementType.PRC_ST);
+                
+                foreach (OpMsg om in opMsgQueue.Messages)
+                {
+                    for (var i = 0; i < prc_st_data.Count(); i++)
+                    {
+                        if (!(prc_st_data[i]).ContainsKey("DC_ID"))
+                        {
+                            continue;   //if the data collector doesn't have an ID, skip it.  This seems to happen sometimes when we have a SAVE action appended on as well.
+                        }
+                        if (om.KeyIdentifiers[0].ToString() == prc_st_data[i]["DC_ID"].ToString())
+                        {
+                            //IDs of datacollector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
+                            om.ExtraDetails = new object[] { ((IEnumerable<object>)om.ExtraDetails).ToArray()[0], prc_st_data[i]["_actions"] };
+                        } else
+                        {
+                            //returned ps data does not match id in this OpMsg so we continue
+                            continue;
+                        }
+                    }
+                }
+            }
 
             // After save insert into notification log
             if (notifications.Any())

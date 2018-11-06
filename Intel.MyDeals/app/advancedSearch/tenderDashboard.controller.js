@@ -1419,29 +1419,36 @@
                     //    $scope.curLinkedVal = "";
                     //$timeout(function () {
 
+                    //take the response opMsgQueue and update grid accordingly
                     var msgArray = results.data.Data.Messages;
                     for (var dsIndex = 0; dsIndex < $scope.wipData.length; dsIndex++) {
-
-
+                        //iterate through grid's dats in order to find entries that were updated
                         if ($scope.actionType == "BID") {
                             for (var i = 0; i < tenders.length; i++) {
                                 if (tenders[i].DC_ID != $scope.wipData[dsIndex].DC_ID) {
                                     continue;
                                 } else {
                                     //found the index of a tender we changed
-                                    $scope.wipData[dsIndex]["bid_actions"] = msgArray[i].ExtraDetails;  //for bid_action updates, these will contain the new possible bid actions - 3 possible means offer, 2 possible means lost, 1 possible means won
-                                    $scope.wipData[dsIndex]["BID_ACTNS"] = [];
-                                    for (var actionLength = 0; actionLength < msgArray[i].ExtraDetails.length; actionLength++) {
-                                        $scope.wipData[dsIndex]["BID_ACTNS"].push({
-                                            "BidActnName": msgArray[i].ExtraDetails[actionLength],
-                                            "BidActnValue": msgArray[i].ExtraDetails[actionLength],
-                                        })
-                                    }
 
-                                    //TODO: will this error out for bulk updates?  reading phils old code it seems extra details may come back structured differently if multiple tenders are passed in.
-                                    if ($scope.wipData[dsIndex]["bid_actions"].length == 3) $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
-                                    if ($scope.wipData[dsIndex]["bid_actions"].length == 2) $scope.wipData[dsIndex]["WF_STG_CD"] = "Lost";
-                                    if ($scope.wipData[dsIndex]["bid_actions"].length == 1) $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
+                                    if (msgArray[i].MsgType == 1) {
+                                        //opMsgyType = 1 is for "Info messages", aka the success scenario
+                                        $scope.wipData[dsIndex]["bid_actions"] = msgArray[i].ExtraDetails;  //for bid_action updates, these will contain the new possible bid actions - 3 possible means offer, 2 possible means lost, 1 possible means won
+                                        $scope.wipData[dsIndex]["BID_ACTNS"] = [];
+                                        for (var actionLength = 0; actionLength < msgArray[i].ExtraDetails.length; actionLength++) {
+                                            $scope.wipData[dsIndex]["BID_ACTNS"].push({
+                                                "BidActnName": msgArray[i].ExtraDetails[actionLength],
+                                                "BidActnValue": msgArray[i].ExtraDetails[actionLength],
+                                            })
+                                        }
+
+                                        //TODO: will this error out for bulk updates?  reading phils old code it seems extra details may come back structured differently if multiple tenders are passed in.
+                                        if ($scope.wipData[dsIndex]["bid_actions"].length == 3) $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
+                                        if ($scope.wipData[dsIndex]["bid_actions"].length == 2) $scope.wipData[dsIndex]["WF_STG_CD"] = "Lost";
+                                        if ($scope.wipData[dsIndex]["bid_actions"].length == 1) $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
+                                    } else {
+                                        //update failed for this data item
+                                        //TODO: create popup indicating warnings/failures
+                                    }
                                 }
                             }
                         } else if ($scope.actionType == "PS") {
@@ -1452,13 +1459,19 @@
                                     continue;  //dataItem's parent pricing strategy id not being present in return message's key identifiers indicate that it was not part of the changed set
                                 } else {
                                     //found the index of a tender we actioned
-                                    //TODO: this doesnt account for failure messages... there surely must be a better way than string parsing...
-                                    var message = msgArray[i].Message.trim();                  //for approval action updates, these will contain a message indicating the stage change... assuming everything went smoothly.
-                                    message = message.substring(0, message.length - 1);
-                                    var messageArr = message.trim().split(" ");
-                                    $scope.wipData[dsIndex]["PS_WF_STG_CD"] = messageArr[messageArr.length - 1];    //TODO: would this need to also update WF_STG_CD as well? when would it?
 
-                                    //TODO: the _parentActionsPS also need to be updated accordingly... not sure where to get that data from
+
+                                    if (msgArray[i].MsgType == 1) {
+                                        //opMsgyType = 1 is for "Info" messages, aka the success scenario
+                                        //TODO: this doesnt account for failure messages... there surely must be a better way than string parsing...
+                                        var message = msgArray[i].ExtraDetails[0];  //index 0 contains the stage that the deal was moved to
+                                        var ddOptions = msgArray[i].ExtraDetails[1]; //index 1 contains the dropdown approval options that will be available to the user at this new stage
+                                        $scope.wipData[dsIndex]["PS_WF_STG_CD"] = message;    //TODO: would we need to also update WIP level WF_STG_CD as well? when would it?
+                                        $scope.wipData[dsIndex]["_parentActionsPS"] = ddOptions
+                                    } else {
+                                        //update failed for this data item
+                                        //TODO: create popup indicating warnings/failures
+                                    }
                                 }
                             }
                         }

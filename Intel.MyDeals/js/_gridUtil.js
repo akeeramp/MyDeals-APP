@@ -135,15 +135,15 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
 gridUtils.getMissingCostCapIcon = function (data) {
     var title = '';
     if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
-        title += 'Your deal is missing CAP and Division Approver will not be able to approve till this is fixed.\n' +
-               'Missing CAP issues are handled currently with PriceOps via a weekly DQ process. If there is urgency in \n' +
-               'getting this deal approved please raise a TAC ticket in service now';
+        title += 'Your deal is missing CAP and Division Approver will not be able to approve until this is fixed.\n' +
+               'Missing CAP issues are currently handled with PriceOps via a weekly DQ process. If there is urgency in \n' +
+               'getting this deal approved please raise a TAC ticket in service now.';
     }
     if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
         title !== '' ? title += ' \n' : title;
-        title += 'Your deal is missing Cost and Division Approver will not be able to approve till this is fixed.\n' +
-                'Missing Cost issues are handled currently with iCost team via a weekly DQ process. If there is urgency in \n' +
-                'getting this deal approved please raise a TAC ticket in service now';
+        title += 'Your deal is missing Cost and Division Approver will not be able to approve until this is fixed.\n' +
+                'Missing Cost issues are currently handled with iCost team via a weekly DQ process. If there is urgency in \n' +
+                'getting this deal approved please raise a TAC ticket in service now.';
     }
     // if title is emptu send blank, this mplies cst or cap is not missing
     if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
