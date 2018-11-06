@@ -1634,27 +1634,34 @@ gridUtils.goToObject = function (data, accessCheckField, field, title) {
 
 // Commented the gridUtils.hasVertical out as it seems to be impacting all contract loads (likely because those use VERTICAL_ROLLUP and Tender uses PRODUCT_CATEGORIES)
 // and the Tender Search page seesm to be blocking searches based on vertical anyhow, so it is a moot point to block control levels if everything already passed check.
-//gridUtils.findOne = function (haystack, arr) {
-//    return arr.some(function (v) {
-//        return haystack.indexOf(v) >= 0;
-//    });
-//};
+gridUtils.findOne = function (haystack, arr) {
+    return arr.some(function (v) {
+        return haystack.indexOf(v) >= 0;
+    });
+};
 
-//gridUtils.hasVertical = function (dataItem) {
-//    var psHasUserVerticals = true;
-//    if (window.usrRole !== "DA") return true;
-//    if (window.usrVerticals.length > 0) {
-//        var userVerticals = window.usrVerticals.split(",");
-//        if (dataItem.PRODUCT_CATEGORIES !== undefined) { // Was VERTICAL_ROLLUP
-//            var dataVerticals = dataItem.PRODUCT_CATEGORIES.split(",");
-//            psHasUserVerticals = gridUtils.findOne(dataVerticals, userVerticals);
-//        }
-//        else {
-//            psHasUserVerticals = false;
-//        }
-//    }
-//    return psHasUserVerticals;
-//}
+gridUtils.hasVertical = function (dataItem) {
+    var psHasUserVerticals = true;
+    if (window.usrRole !== "DA") return true;
+    if (window.usrVerticals.length > 0) {
+        var userVerticals = window.usrVerticals.split(",");
+        if (dataItem.VERTICAL_ROLLUP !== undefined) { // Was VERTICAL_ROLLUP
+            var dataVerticals = dataItem.VERTICAL_ROLLUP.split(",");
+            psHasUserVerticals = gridUtils.findOne(dataVerticals, userVerticals);
+        }
+        else if (dataItem.PRODUCT_CATEGORIES !== undefined) { // Was VERTICAL_ROLLUP
+            var dataVerticals = dataItem.PRODUCT_CATEGORIES.split(",");
+            psHasUserVerticals = gridUtils.findOne(dataVerticals, userVerticals);
+        }
+        else
+        {
+            // Contract of Copy Tender doesn't have rollup values yet as they are driven from Deals, so any WORK IN PROGRESS tender contract is opened.
+            // Otherwise, we need to backwards calculate the Contract, PS, and PT levels of rollup values.
+            psHasUserVerticals = false; 
+        }
+    }
+    return psHasUserVerticals;
+}
 
 gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined || data._parentActionsPS === undefined) return "";
@@ -1664,10 +1671,10 @@ gridUtils.getBidActions = function (data) {
         return "<div class='noaccess'>no access</div>";
     }
 
-    //if (!gridUtils.hasVertical(data))
-    //{
-    //    return "<div class='noaccess'>no vertical access</div>";
-    //}
+    if (!gridUtils.hasVertical(data))
+    {
+        return "<div class='noaccess'>no vertical access</div>";
+    }
 
     var bidActns = gridUtils.getBidActionsList(data);
     data["orig_WF_STG_CD"] = data.WF_STG_CD;

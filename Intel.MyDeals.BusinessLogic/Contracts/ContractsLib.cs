@@ -227,7 +227,7 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
-        public MyDealsData CreateTenderFolio (OpDataCollectorFlattenedList data, SavePacket savePacket)
+        public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             List<int> dealIds = data[0]["dealIds"].ToString().Split(',').Select(Int32.Parse).ToList();
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dealIds, new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW });
@@ -255,7 +255,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.SYS_COMMENTS,
                 Attributes.CAP_MISSING_FLG,
                 Attributes.IN_REDEAL,
-                Attributes.IS_TENDER
+                Attributes.IS_TENDER,
+                Attributes.VERTICAL_ROLLUP
             };
 
             List<KeyValuePair<MyDealsAttribute, string>> psAtrbs = new List<KeyValuePair<MyDealsAttribute, string>>();
@@ -272,9 +273,10 @@ namespace Intel.MyDeals.BusinessLogic
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "0"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.CAP_MISSING_FLG, "0"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.IN_REDEAL, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.VERTICAL_ROLLUP, ""));
 
             List<KeyValuePair<MyDealsAttribute, string>> ptAtrbs = new List<KeyValuePair<MyDealsAttribute, string>>();
-            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.REBATE_TYPE, "TENDER")); 
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.REBATE_TYPE, "TENDER"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.TITLE, data[0]["TITLE"] + " PT"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COMP_MISSING_FLG, "0"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PAYOUT_BASED_ON, "Consumption"));
@@ -290,7 +292,7 @@ namespace Intel.MyDeals.BusinessLogic
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.CAP_MISSING_FLG, "0"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.IN_REDEAL, "0"));
 
-            List <OpDataElement> cntrctDEs = new List<OpDataElement>();
+            List<OpDataElement> cntrctDEs = new List<OpDataElement>();
             foreach (MyDealsAttribute atrb in cntrctAtrbs)
             {
                 if (data[0].ContainsKey(atrb.ATRB_COL_NM))
@@ -373,6 +375,25 @@ namespace Intel.MyDeals.BusinessLogic
                 ptrDCs.Add(ptr);
             }
 
+
+            // Construct a list of verticals at the contract/PS levels for vertical security workaround.
+            List<string> verts = new List<string>();
+            foreach (OpDataCollector dc in ptrDCs)
+            {
+                string tempVerts = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.VERTICAL_ROLLUP).AtrbValue.ToString();
+                List<string> vertsArry = tempVerts.Split(',').ToList();
+                foreach (string item in vertsArry)
+                {
+                    if (!verts.Contains(item)) verts.Add(item);
+                }
+            }
+            var cntrctVerts = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.VERTICAL_ROLLUP);
+            cntrctVerts.AtrbValue = string.Join(",", verts);
+            var psVerts = psDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.VERTICAL_ROLLUP);
+            cntrctVerts.AtrbValue = string.Join(",", verts);
+
+
+
             MyDealsData myDealsDataNewObject = new MyDealsData();
             myDealsDataNewObject[OpDataElementType.CNTRCT] = new OpDataPacket<OpDataElementType>()
             {
@@ -430,6 +451,7 @@ namespace Intel.MyDeals.BusinessLogic
                 GroupID = -301
             };
             myDealsDataNewObject[OpDataElementType.PRC_TBL].AddSaveActions();
+
 
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW] = new OpDataPacket<OpDataElementType>();
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].Data.AddRange(ptrDCs);

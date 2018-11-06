@@ -1572,6 +1572,7 @@
             CAP_MISSING_FLG: 0,
             IN_REDEAL: 0,
             IS_TENDER: 1,
+            VERTICAL_ROLLUP: "",
             _behaviors: {
                 isRequired:
                     {
