@@ -13,6 +13,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             opHelp: '=',
             opRootScope: '=',
             opRootParentScope: '=',
+            opName: '=',
             opIsTender: '@'
         },
         restrict: 'AE',
@@ -30,6 +31,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var depth = 5;
             var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+
+            if ($scope.opName === undefined) $scope.opName = "DealEditor";
 
             $scope.isOverlapping = false;
             $scope.isOvlpAccess = false;
@@ -260,21 +263,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return gridUtils.stgFullTitleChar(dataItem);
             }
 
+            $scope.opGridId = "";
             $scope.checkforCustomerLayout = function (dealType) {
                 var key = "CustomLayoutFor" + dealType;
-                if ($scope.$storage[key] !== undefined) {
+                if ($scope.$storage[$scope.opName + "_" + key] !== undefined && $scope.$storage[$scope.opName + "_" + key].length > 0) {
                     $timeout(function () {
-                        $scope.applyCustomLayoutToGrid($scope.$storage["CustomLayoutFor" + dealType]);
+                        $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_" + key]);
                         $scope.contractDs.read();
                     }, 10);
                     return;
                 }
 
-                userPreferencesService.getActions("DealEditor", key)
+                userPreferencesService.getActions($scope.opName, key)
                     .then(function (response) {
-                        $scope.$storage[key] = response.data;
+                        $scope.$storage[$scope.opName + "_" + key] = response.data;
                         $timeout(function () {
-                            $scope.applyCustomLayoutToGrid($scope.$storage["CustomLayoutFor" + dealType]);
+                            $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_" + key]);
                             $scope.contractDs.read();
                         }, 10);
                     }, function (response) {
@@ -564,14 +568,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 reportError = typeof reportError === 'undefined' ? true : reportError;
                 // Get the persisted grid settings.
 
-                if ($scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]] !== undefined) {
-                    $scope.applyCustomLayoutToGrid($scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]]);
+                if ($scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] !== undefined) {
+                    $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]]);
                     return;
                 }
 
-                userPreferencesService.getActions("DealEditor", "CustomLayoutFor" + $scope.dealTypes[0])
+                userPreferencesService.getActions($scope.opName, "CustomLayoutFor" + $scope.dealTypes[0])
                     .then(function (response) {
-                        $scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]] = response.data;
+                        $scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] = response.data;
                         if (response.data && response.data.length > 0) {
                             $scope.applyCustomLayoutToGrid(response.data);
                         } else {
@@ -701,7 +705,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 // Persist the current 'Groups' settings.
                 userPreferencesService.updateAction(
-                    "DealEditor", // CATEGORY
+                    $scope.opName, // CATEGORY
                     "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "Groups", // ID
                     JSON.stringify(groupSettings)) // VALUE
@@ -712,7 +716,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 // Persist the current 'GroupColumns' settings.
                 userPreferencesService.updateAction(
-                    "DealEditor", // CATEGORY
+                    $scope.opName, // CATEGORY
                     "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "GroupColumns", // ID
                     JSON.stringify($scope.opOptions.groupColumns)) // VALUE
@@ -723,7 +727,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 // Persist the current column order.
                 userPreferencesService.updateAction(
-                    "DealEditor", // CATEGORY
+                    $scope.opName, // CATEGORY
                     "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "ColumnOrder", // ID
                     JSON.stringify($scope.getColumnOrder($scope.grid))) // VALUE
@@ -734,7 +738,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 // Persist the page size.
                 userPreferencesService.updateAction(
-                    "DealEditor", // CATEGORY
+                    $scope.opName, // CATEGORY
                     "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "PageSize", // ID
                     JSON.stringify($scope.grid.dataSource.pageSize())) // VALUE
@@ -744,7 +748,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
 
                 // Clear out stored session... next time we will load it
-                $scope.$storage["CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
+                $scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
             }
 
             $scope.getColumnOrder = function () {
