@@ -4856,22 +4856,15 @@
             }
 
             // Get all WIP
-            if ($scope.pricingTableData.WIP_DEAL.length == 0) {
-                objsetService.readWipFromContract($scope.contractData.DC_ID).then(function (response) {
-                    if (response.data) {
-                        initGrid(response.data.WIP_DEAL);
-                        $scope.msg = "Drawing Grid";                        
-                    }
-                }, function (result) {
-                    logger.stickyError("Could not get deals.", result, result.statusText);
-                    $scope.setBusy("", "");
-                });
-            }
-            else {                
-                initGrid($scope.pricingTableData.WIP_DEAL);
-                $scope.msg = "Drawing Grid";                
-            }
-            
+            objsetService.readWipFromContract($scope.contractData.DC_ID).then(function (response) {
+                if (response.data) {
+                    initGrid(response.data.WIP_DEAL);
+                    $scope.msg = "Drawing Grid";                        
+                }
+            }, function (result) {
+                logger.stickyError("Could not get deals.", result, result.statusText);
+                $scope.setBusy("", "");
+            });            
         }
         
     }
