@@ -320,6 +320,12 @@
                     },
                     "BLLG_DT": {
                         "Groups": ["Payment"]
+                    },
+                    "GEO_APPROVED_BY": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DIV_APPROVED_BY": {
+                        "Groups": ["Deal Info"]
                     }
                 },
                 "VOL_TIER": {
@@ -950,11 +956,17 @@
                     },
                     "BLLG_DT": {
                         "Groups": ["Payment"]
+                    },
+                    "GEO_APPROVED_BY": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "DIV_APPROVED_BY": {
+                        "Groups": ["Deal Info"]
                     }
                 }
             },
-            "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2"],
+            "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
             "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
-            "hideForStandardDealEditor": ["tender_actions"],
+            "hideForStandardDealEditor": ["tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY"],
         });
 })();

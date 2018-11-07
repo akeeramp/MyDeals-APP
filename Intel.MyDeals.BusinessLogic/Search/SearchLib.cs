@@ -561,25 +561,7 @@ namespace Intel.MyDeals.BusinessLogic
                 true,
                 MyRulesTrigger.OnDealListLoad,
                 true);
-
-            //the advanced search functions we take advantage of with the tender dashboard gets some data we dont need and dont want to have accidentally updated so we strip them here.
-            List<string> removeAttrs = new List<string>
-            {
-                AttributeCodes.FSE_APPROVED_BY,
-                AttributeCodes.GEO_APPROVED_BY,
-                AttributeCodes.DIV_APPROVED_BY
-            };
-            foreach (OpDataCollectorFlattenedItem item in ret.SearchResults)
-            {
-                foreach (string remove in removeAttrs)
-                {
-                    if (item.ContainsKey(remove))
-                    {
-                        item.Remove(remove);
-                    }
-                }
-            }
-
+            
             return ret;
         }
 

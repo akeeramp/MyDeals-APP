@@ -256,15 +256,16 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)
         {
             //modify contract token with necessary PS/Contract information
-            //TODO: bulk update seems to work even if we use the first dataItem's customer/contract information.  I suspect we have not fully adequately tested this.  need to confirm that the bulk approval steps are not at all dependant on there being a specific customer/contract id...
-            contractToken.CustId = data[0].CUST_MBR_SID;
-            contractToken.ContractId = data[0].CNTRCT_OBJ_SID;
+            //TODO: once we update ActionPricingStrategies() to be independent of contract/customer information, we should uncomment to set these to 0 to indicate it is an action coming from the tender dashboard
+            //contractToken.CustId = 0;
+            //contractToken.ContractId = d0;
             contractToken.CustAccpt = "Acceptance Not Required in C2A";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
             contractToken.BulkTenderUpdate = true;  //we use this flag to indicate our actions are coming from the tender dashboard
 
             //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
 
+            OpMsgQueue ret = new OpMsgQueue();
             List<WfActnItem> wfActnList = new List<WfActnItem>();
 
             foreach (TenderActionItem tai in data)
@@ -273,11 +274,21 @@ namespace Intel.MyDeals.BusinessLogic
                 item.WF_STG_CD = tai.PS_WF_STG_CD;
                 item.DC_ID = tai.PS_ID;
                 wfActnList.Add(item);
+
+                //TODO: update and eventually remove the below lines
+                //for now we loop through calls of ActionPricingStrategies, so we stop data corruption, but we really need to modify the approval function stack to be contract/customer independent.
+                contractToken.CustId = tai.CUST_MBR_SID;
+                contractToken.ContractId = tai.CNTRCT_OBJ_SID;
+                actnPs[actn] = wfActnList;
+                ret.Messages.AddRange(_pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs).Messages);
+                wfActnList = new List<WfActnItem>();
             }
+            return ret;
 
-            actnPs[actn] = wfActnList;
-
-            return _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs);
+            //TODO: update and eventually uncomment the below lines
+            //for now we loop through calls of ActionPricingStrategies.  once we update the approval function stack  to be contract/customer agnostic, then we can reintroduce the single call of ActionPS.
+            //actnPs[actn] = wfActnList;
+            //return _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs);
         }
 
         public OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn)
@@ -291,18 +302,18 @@ namespace Intel.MyDeals.BusinessLogic
                 contractDecoder[item.CNTRCT_OBJ_SID].Add(item);
             }
 
-            foreach (List<TenderActionItem> item in contractDecoder.Values)
-            {
-                // Get new Tender Action List
-                List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
+            // Get new Tender Action List
+            List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
 
-                //if the actn does not match anything in the tender action list, this means we are setting an approval action from the tender dashboard
-                if (actions.Count() == 0)
-                {
-                    //Code flows through here when the "actn" is not Offer, Won, or Lost - therefore we expect it to be an approval action such as Approve/Revise
-                    opMsgQueue = ActionTenderApprovals(contractToken, data, actn);
-                }
-                else
+            //if the actn does not match anything in the tender action list, this means we are setting an approval action from the tender dashboard
+            if (actions.Count() == 0)
+            {
+                //Code flows through here when the "actn" is not Offer, Won, or Lost - therefore we expect it to be an approval action such as Approve/Revise
+                opMsgQueue = ActionTenderApprovals(contractToken, data, actn);
+            }
+            else
+            {
+                foreach (List<TenderActionItem> item in contractDecoder.Values)
                 {
                     //Standard code flow for applying a bid action (Offer, Won, Lost) to a tender deal
                     contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
@@ -327,7 +338,7 @@ namespace Intel.MyDeals.BusinessLogic
                     });
                 }
             }
-
+            
             return opMsgQueue;
         }
 
@@ -339,6 +350,25 @@ namespace Intel.MyDeals.BusinessLogic
             var myDealsDataFlattened = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted); //myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.to;
             //tenderData.PricingStrategy = myDealsDataFlattened[OpDataElementType.PRC_ST];
             tenderData.PricingTable = myDealsDataFlattened[OpDataElementType.PRC_TBL];
+
+            //the tender dashboard sends some data we dont need and dont want to have accidentally updated so we strip them here.
+            List<string> removeAttrs = new List<string>
+            {
+                AttributeCodes.FSE_APPROVED_BY,
+                AttributeCodes.GEO_APPROVED_BY,
+                AttributeCodes.DIV_APPROVED_BY
+            };
+            foreach (OpDataCollectorFlattenedItem item in tenderData.WipDeals)
+            {
+                foreach (string remove in removeAttrs)
+                {
+                    if (item.ContainsKey(remove))
+                    {
+                        item.Remove(remove);
+                    }
+                }
+            }
+
             return _contractsLib.SaveContractAndPricingTable(contractToken, tenderData, forceValidation: true, forcePublish: true);
         }
     }

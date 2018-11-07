@@ -1482,6 +1482,10 @@
                                         var message = msgArray[i].ExtraDetails[0];  //index 0 contains the stage that the deal was moved to
                                         var ddOptions = msgArray[i].ExtraDetails[1]; //index 1 contains the dropdown approval options that will be available to the user at this new stage
                                         $scope.wipData[dsIndex]["PS_WF_STG_CD"] = message;    //TODO: would we need to also update WIP level WF_STG_CD as well? when would it?
+                                        if ($scope.wipData[dsIndex]["PS_WF_STG_CD"] == "Approved") {
+                                            //if this is the DA setting it to Approved, we will need to update the wip deal WF_STG_CD as well.
+                                            $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
+                                        }
                                         $scope.wipData[dsIndex]["_parentActionsPS"] = ddOptions
                                     } else {
                                         //update failed for this data item

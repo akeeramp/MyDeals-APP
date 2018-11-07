@@ -2305,6 +2305,73 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.getResultSingleIcon(data, 'COST_TEST_RESULT')#",
             });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 0,
+                AtrbCd = AttributeCodes.GEO_APPROVED_BY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                Template = "#=gridUtils.uiControlWrapper(data, 'GEO_APPROVED_BY')#",
+                Label = "Geo Approved By",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150,
+                IsReadOnly = true,
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 0,
+                AtrbCd = AttributeCodes.DIV_APPROVED_BY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                Template = "#=gridUtils.uiControlWrapper(data, 'DIV_APPROVED_BY')#",
+                Label = "Div Approved By",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150,
+                IsReadOnly = true,
+            });
+            //items.Add(new UiTemplateContainerItem  // WIP All types
+            //{
+            //    Id = 0,
+            //    AtrbCd = AttributeCodes.WIP_DEAL_CRE_DTM,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+            //    Template = "#=gridUtils.uiStartDateWrapper(data, 'WIP_DEAL_CRE_DTM', \"date:'MM/dd/yyyy'\")#",
+            //    Label = "Created On",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Width = 100,
+            //    IsReadOnly = true,
+            //    ExcelTemplate = "#=gridUtils.formatDate(WIP_DEAL_CRE_DTM)#"
+            //});
+            //items.Add(new UiTemplateContainerItem  // WIP All types
+            //{
+            //    Id = 0,
+            //    AtrbCd = AttributeCodes.LAST_MOD_BY,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'LAST_MOD_BY')#",
+            //    Label = "Last Modified By",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Width = 150,
+            //    IsReadOnly = true,
+            //});
+            //items.Add(new UiTemplateContainerItem  // WIP All types
+            //{
+            //    Id = 0,
+            //    AtrbCd = AttributeCodes.LAST_MOD_DT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+            //    Template = "#=gridUtils.uiStartDateWrapper(data, 'LAST_MOD_DT', \"date:'MM/dd/yyyy'\")#",
+            //    Label = "Last Modified On",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Width = 100,
+            //    IsReadOnly = true,
+            //    ExcelTemplate = "#=gridUtils.formatDate(LAST_MOD_DT)#"
+            //});
 
             #endregion WIP DEAL
 
