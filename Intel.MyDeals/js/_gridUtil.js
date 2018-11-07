@@ -127,7 +127,14 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
         return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
     }
     else {
-        return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+        if (window.usrRole === 'DA')
+        {
+            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+        }
+        else
+        {
+            return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
+        }
     }
 
 }
