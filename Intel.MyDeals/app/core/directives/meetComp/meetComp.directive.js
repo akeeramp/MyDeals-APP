@@ -159,7 +159,7 @@
                                 $scope.$parent.setMcTag(false);
                             }
                             if (typeof $scope.$parent.goToPublished != 'undefined') {
-                                $scope.$parent.goToPublished('0');
+                                $scope.$parent.goToPublished();
                             }
                             
                         }
@@ -177,7 +177,7 @@
                             var inCompleteDueToCAPMissing = function (data) {
                                 var isCapSet = true;
                                 for(var i = 0; i < data.length; i++){
-                                    if (data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "Not Run Yet") {
+                                    if (data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet") {
                                         if (data[i].COMP_SKU.trim().length == 0 && data[i].COMP_PRC == 0 && ((data[i].PRD_CAT_NM.toLowerCase() == "svrws" && data[i].IA_BNCH == 0 && data[i].COMP_BNCH == 0) || data[i].PRD_CAT_NM.toLowerCase() != "svrws")) {
                                             $scope.$parent.inCompleteDueToCapMissing(false);
                                             isTrueOnce = false;
@@ -195,7 +195,7 @@
                             if ($scope.isAdhoc == 1 && typeof $scope.$parent.inCompleteDueToCapMissing != 'undefined') {
                                 var isCapMissed = inCompleteDueToCAPMissing(response.data);
                                 if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
-                                    $scope.$parent.goToPublished('1');
+                                    $scope.$parent.goToPublished();
                                 }               
                             }                           
 
@@ -1486,7 +1486,10 @@
 
                                     var isTrueOnce = false;
                                     if ($scope.isAdhoc == 1) {
-                                        inCompleteDueToCAPMissing(response.data);
+                                        var isCapMissed = inCompleteDueToCAPMissing(response.data);
+                                        if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
+                                            $scope.$parent.goToPublished();
+                                        }  
                                     }
 
                                     if (usrRole == "GA") {
@@ -1527,7 +1530,10 @@
 
                                     var isTrueOnce = false;
                                     if ($scope.isAdhoc == 1) {
-                                        inCompleteDueToCAPMissing(response.data);
+                                        var isCapMissed = inCompleteDueToCAPMissing(response.data);
+                                        if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
+                                            $scope.$parent.goToPublished();
+                                        }
                                     }
 
                                     if (usrRole == "GA") {

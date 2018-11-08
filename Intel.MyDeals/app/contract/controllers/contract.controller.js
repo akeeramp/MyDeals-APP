@@ -395,7 +395,7 @@
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if ($scope.actualClikedTabName == 'MC' && !$scope.inCompleteCapMissing && $scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    if (($scope.actualClikedTabName == 'MC' || $scope.actualClikedTabName == 'PD' ) && $scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
                         $scope.isPtr = false;
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
                         $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
@@ -409,7 +409,7 @@
                         $scope.publishWipDealsFromTab();
                         $scope.setBusy("", "");
                     }
-                    else if (($scope.actualClikedTabName == 'PD' || ($scope.inCompleteCapMissing && !$scope.isMCForceRunReq())) && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                    else if ($scope.actualClikedTabName == 'PD' && !$scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.isPtr = false;
                         $scope.setBusy("", "");
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
@@ -424,8 +424,7 @@
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
                         $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
                         $scope.setBusy("", "");
-                        $scope.resetDirty();
-                        $scope.loadPublishGrid();
+                        $scope.resetDirty();                        
                     }
 
                     if ($scope.contractData.TENDER_PUBLISHED == "True") {
@@ -435,10 +434,10 @@
                 }
             });
         }
-        $scope.goToPublished = function (mode) {
+        $scope.goToPublished = function () {
             $scope.isPtr = false;
             $scope.setBusy("", "");
-            if ($scope.actualClikedTabName == 'PD' || mode == '0') {
+            if ($scope.actualClikedTabName == 'PD') {
                 $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                 $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
                 $scope.loadPublishGrid();
