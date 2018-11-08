@@ -965,6 +965,7 @@
                     }
                 }
             },
+            "requiredForTender": ["VOLUME", "END_CUSTOMER_RETAIL"],
             "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
             "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
             "hideForStandardDealEditor": ["tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY"],

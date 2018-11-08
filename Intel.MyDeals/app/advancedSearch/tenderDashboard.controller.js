@@ -1227,6 +1227,10 @@
                         if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
                             $scope.wipOptions.columns.splice(i, 1);
                         }
+                        //if (opGridTemplate.requiredForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
+                        //    break;
+                        //    $scope.wipOptions.columns.splice(i, 1);
+                        //}
                     }
 
                     $scope.wipOptions.model = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model);

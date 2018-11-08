@@ -209,6 +209,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 delete ptTemplate.model.fields[x];
             });
         }
+        else
+        {
+            root.tenderRequiredColumns.forEach(function (x) {
+                ptTemplate.model.fields[x].label += " *";
+            });
+            for (i = 0; i < ptTemplate.columns.length; i++)
+            {
+                if (root.tenderRequiredColumns.indexOf(ptTemplate.columns[i].field) >= 0)
+                {
+                    ptTemplate.columns[i].title += " *";
+                }
+            }
+        }
 
         root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD] = ptTemplate;
 
@@ -328,7 +341,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     // Generates options that kendo's html directives will use
     function generateKendoGridOptions() {
-
         wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
         gTools.assignColSettings();
