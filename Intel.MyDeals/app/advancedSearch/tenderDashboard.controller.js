@@ -1729,7 +1729,7 @@
                         return;
                     }
                     var id = data.data.CNTRCT[1].DC_ID;
-                    document.location.href = "http://localhost:55490/Contract#/manager/" + id
+                    document.location.href = "/Contract#/manager/" + id
                     $scope.setBusy("", "");
                 },
                 function (result) {
