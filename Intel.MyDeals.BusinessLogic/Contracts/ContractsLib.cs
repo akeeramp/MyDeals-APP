@@ -371,7 +371,19 @@ namespace Intel.MyDeals.BusinessLogic
                     de.OrigAtrbValue = "";
                 }
                 ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
-                ptr.DataElementDict[AttributeCodes.CUST_ACCNT_DIV + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue;
+                if (ptr.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV) != null)
+                {
+                    ptr.DataElementDict[AttributeCodes.CUST_ACCNT_DIV + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue;
+                }
+                // This attribute doesn't exist at PTR level, so make a new one if the contract level has something in it.
+                else if (cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue.ToString() != "")
+                {
+                    var attrCollection = DataCollections.GetAttributeData();
+                    ptr.AddDataElement(AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
+                }
+
+                ptr.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, "");  // Force the products to be re-validated.
+
                 ptrDCs.Add(ptr);
             }
 
