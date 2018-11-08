@@ -221,6 +221,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     ptTemplate.columns[i].title += " *";
                 }
             }
+
+            // The thing about Tender contract, they can be created from a copy which will NOT create WIP deals and
+            // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
+            //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
+            for (var p = 0; p < pricingTableData.data.PRC_TBL_ROW.length; p++) {
+                var item = pricingTableData.data.PRC_TBL_ROW[p];
+                if (item !== undefined && item.PTR_SYS_PRD === "") {
+                    item.dirty = true;
+                    root._dirty = true;
+                }
+            }
         }
 
         root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD] = ptTemplate;
