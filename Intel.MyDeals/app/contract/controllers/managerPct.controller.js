@@ -9,13 +9,16 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData','PRC_ST_OBJ_SID', 'isToolReq'];
+    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData','dataItem', 'isToolReq'];
 
-    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, PRC_ST_OBJ_SID, isToolReq) {
-        $scope.PRC_ST_OBJ_SID = PRC_ST_OBJ_SID;
+    function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, dataItem, isToolReq) {
+               
         var root = $scope.$parent;	// Access to parent scope
         if (!isToolReq) {
             root.contractData = contractData;
+            $scope.PRC_ST_OBJ_SID = dataItem.PRC_ST_OBJ_SID;
+            $scope.dataItem = dataItem;
+            $scope.isToolReq = isToolReq;
         }
         $scope.root = root;
         $scope.isFroceRunPresent = typeof root.forceRun !== 'undefined' && typeof root.forceRun === 'function' ? 'root.forceRun()' : false; 
@@ -302,9 +305,22 @@
 
             objsetService.getPctDetails(pt.DC_ID).then(
                 function (e) {
-
+                    //Cherry Picking the Deal for Tender Dashboard
+                    if (!$scope.isToolReq) {
+                        var tempItem = {};
+                        e.data["CostTestDetailItems"].some(function (e, i) {
+                            if (e.DEAL_ID == $scope.dataItem.DC_ID) {
+                                tempItem = e;
+                                return true;
+                            }
+                        });
+                        if (tempItem.DEAL_ID) {
+                            e.data.CostTestDetailItems = [];
+                            e.data.CostTestDetailItems.push(tempItem);
+                        }                        
+                    }
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
-                    //$scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
+                    
                     var response = e.data["CostTestDetailItems"];
                     var rollupPctBydeal = {};
                     for (var j = 0; j < response.length; j++) {
@@ -687,6 +703,9 @@
                     size: 'lg',
                     windowClass: 'tenderPctFolio-modal-window',
                     resolve: {
+                        rootDataItem: function () {
+                            return dataItem;
+                        },
                         isToolReq: function () {
                             return false;
                         }

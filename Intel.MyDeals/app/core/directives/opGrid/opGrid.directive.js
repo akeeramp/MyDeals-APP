@@ -182,8 +182,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 contractData: function () {
                                     return $scope.contractData;
                                 },
-                                PRC_ST_OBJ_SID: function () {
-                                    return dataItem.PRC_ST_OBJ_SID;
+                                dataItem: function () {
+                                    return dataItem;
                                 },                                
                                 isToolReq: function () {
                                     return false;

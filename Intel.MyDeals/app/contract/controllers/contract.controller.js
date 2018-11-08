@@ -8,9 +8,9 @@
 
 
     SetRequestVerificationToken.$inject = ['$http'];
-    ContractController.$inject = ['$scope', '$uibModalStack', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'isTender', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary', '$q'];
+    ContractController.$inject = ['$scope', '$uibModalStack', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'isTender', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary', '$q', 'opGridTemplate'];
 
-    function ContractController($scope, $uibModalStack, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, isTender, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary, $q) {
+    function ContractController($scope, $uibModalStack, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, isTender, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary, $q, opGridTemplate) {
         // store template information ()
         if (contractData && contractData.data.length > 0) { // Safety check for user jumping to contract that they don't have access to tossing errors (MEETCOMP_TEST_RESULT key not found)
             $scope.MEETCOMP_TEST_RESULT = contractData.data[0].MEETCOMP_TEST_RESULT;
@@ -395,7 +395,7 @@
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if ($scope.actualClikedTabName == 'MC' && !$scope.inCompleteCapMissing && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    if ($scope.actualClikedTabName == 'MC' && !$scope.inCompleteCapMissing && $scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
                         $scope.isPtr = false;
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
                         $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
@@ -409,7 +409,7 @@
                         $scope.publishWipDealsFromTab();
                         $scope.setBusy("", "");
                     }
-                    else if (($scope.actualClikedTabName == 'PD' || $scope.inCompleteCapMissing ) && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
+                    else if (($scope.actualClikedTabName == 'PD' || ($scope.inCompleteCapMissing && !$scope.isMCForceRunReq())) && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
                         $scope.isPtr = false;
                         $scope.setBusy("", "");
                         $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
@@ -418,7 +418,7 @@
                         $scope.setBusy("", "");
                         $scope.loadPublishGrid();
                     }
-                    else if ($scope.actualClikedTabName == 'PD' && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet')) {
+                    else if ($scope.actualClikedTabName == 'PD' && $scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet')) {
                         $scope.isPtr = false;
                         $scope.actualClikedTabName = 'MC';
                         $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
@@ -435,12 +435,15 @@
                 }
             });
         }
-        $scope.goToPublished = function () {
+        $scope.goToPublished = function (mode) {
             $scope.isPtr = false;
             $scope.setBusy("", "");
-            $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
-            $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
-            $scope.loadPublishGrid();
+            if ($scope.actualClikedTabName == 'PD' || mode == '0') {
+                $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+                $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+                $scope.loadPublishGrid();
+            }
+            
             $scope.resetDirty();
         }
 
@@ -698,8 +701,8 @@
                 var yearValue = isTender == true ? new Date().getFullYear() : null;
                 var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, value, qtrValue, yearValue)
                     .then(function (response) {
-                        if (response.data.QTR_END < response.data.QTR_STRT) {
-                            response.data.QTR_END = moment(response.data.QTR_END).add(1, 'year');
+                        if (moment(response.data.QTR_END) < moment(new Date())) {
+                            response.data.QTR_END = moment(response.data.QTR_END).add(365, 'days').format('l');
                         }
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
@@ -731,9 +734,11 @@
                 var yearValue = isTender == true ? new Date().getFullYear() : null;
                 var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
                     .then(function (response) {
-                        if (response.data.QTR_END < response.data.QTR_STRT) {
+                        
+                        if (moment(response.data.QTR_END) < moment(new Date())) {
                             response.data.QTR_END = moment(response.data.QTR_END).add(365, 'days').format('l');
                         }
+                        
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
                         $scope.contractData.START_QTR = $scope.contractData.END_QTR = response.data.QTR_NBR;
@@ -4538,6 +4543,19 @@
             return (str.length >= limit);
         }
 
+        $scope.isMCForceRunReq = function () {
+            var mcForceRun = false;
+            if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined && $scope.pricingTableData.PRC_TBL_ROW.length > 0) {
+                var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+                    function (x) {
+                        return (x.MEETCOMP_TEST_RESULT === 'Not Run Yet' || x.MEETCOMP_TEST_RESULT === 'InComplete' || x.DC_ID <= 0);
+                    }).ToArray();
+                if (dirtyItems.length > 0) mcForceRun = true;
+
+                return mcForceRun;
+            }
+        }
+
         $scope.isPTRPartiallyComplete = function (selectedTab) {
             var isPtrDirty = false;
             var rootScopeDirty = $scope._dirty;
@@ -4581,7 +4599,7 @@
             var isFired = false;
             var isPartiallyValid = true;
             var isPTREmpty = $scope.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-           
+            var mcForceRunReq = $scope.isMCForceRunReq();
             $scope.actualClikedTabName = _tabName;
 
             if ($scope.currentTAB == _tabName) {
@@ -4619,8 +4637,14 @@
                 }
                 else if (($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' || isPartiallyValid == true) && $scope.enableDealEditorTab() === true) {
                     isFired = true;
+                    $scope.wipData = [];
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
+                    $state.go('contract.manager.strategy.wip', {
+                        cid: $scope.contractData.DC_ID,
+                        sid: $scope.contractData.PRC_ST[0].DC_ID,
+                        pid: $scope.contractData.PRC_ST[0].PRC_TBL[0].DC_ID
+                    }, { reload: true });                    
                 }
                 else {
                     logger.stickyError("Validate all your product(s) to open Deal Editor.");
@@ -4684,7 +4708,7 @@
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet') || $scope.inCompleteCapMissing) && isPartiallyValid == true)) {
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet' && !mcForceRunReq) || $scope.inCompleteCapMissing) && isPartiallyValid == true)) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
@@ -4692,7 +4716,7 @@
                     $scope.enablePTRReload = false;
                     $scope.loadPublishGrid();
                 }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet') && isPartiallyValid == true) {
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet' || mcForceRunReq) && isPartiallyValid == true) {
                     isFired = true;
                     //logger.stickyError("Please Validate Meet Comp. Meet Comp can not be InComplete.");
                     $scope.selectedTAB = 'MC';
@@ -4754,7 +4778,7 @@
         $scope.loadPublishGrid = function () {
             // Generates options that kendo's html directives will use
             var root = $scope;	// Access to parent scope
-            //root.curPricingTable.DC_ID = undefined;
+            
             root.wipData = [];
             $scope.loading = true;
             $scope.setBusy("Loading Deals...", "Please wait we are fetching WIP Deals...");
@@ -4764,32 +4788,32 @@
                 $timeout(function () {
                     var order = 0;
                     var dealTypes = [
-                        { dealType: "ECAP", name: "ECAP" },
-                        { dealType: "VOL_TIER", name: "Volume Tier" },
-                        { dealType: "KIT", name: "Kit" },
-                        { dealType: "PROGRAM", name: "Program" }
+                        { dealType: $scope.curPricingTable.OBJ_SET_TYPE_CD, name: $scope.curPricingTable.OBJ_SET_TYPE_CD },                        
+                                         
                     ];
                     var show = [
                         "DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSIG_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
                         "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE","DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
                         "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON", 
-                        "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
+                        "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
                     ];
                     var usedCols = [];
-                    var excludeCols = ["details", "tools"];
+                    var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID","tender_actions"];
 
                     root.wipOptions = {
                         "isLayoutConfigurable": false,
                         "isVisibleAdditionalDiscounts": false
                     };
+
                     root.wipOptions.isPinEnabled = false;
                     root.wipOptions.default = {};
-                    root.wipOptions.default.groups = [];
-                    root.wipOptions.default.groupColumns = {};
+                    root.wipOptions.default.groups = opGridTemplate.groups[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+                    root.wipOptions.default.groupColumns = opGridTemplate.templates[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+                    
                     root.wipOptions.columns = [];
-                    root.wipOptions.model = { fields: {}, id: "DC_ID" };
-
+                    root.wipOptions.model = { fields: {}, id: "DC_ID" };                    
+                    
                     var hasDeals = [];
                     for (var x = 0; x < data.length; x++) {
                         if (hasDeals.indexOf(data[x].OBJ_SET_TYPE_CD) < 0) hasDeals.push(data[x].OBJ_SET_TYPE_CD);
@@ -4798,7 +4822,7 @@
                     for (var d = 0; d < dealTypes.length; d++) {
                         var dealType = dealTypes[d];
                         if (hasDeals.indexOf(dealType.dealType) >= 0) {
-                            root.wipOptions.default.groups.push({ "name": dealType.name, "order": order++ });
+                            //root.wipOptions.default.groups.push({ "name": dealType.name, "order": order++ });
 
                             var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[dealType.dealType];
                             wipTemplate.columns.push({
@@ -4824,16 +4848,6 @@
                                         root.wipOptions.columns.push(col);
                                     }
 
-                                    // Add to group columns
-
-                                    if (root.wipOptions.default.groupColumns[col.field] === undefined)
-                                        root.wipOptions.default.groupColumns[col.field] = { Groups: [] };
-
-                                    if (!col.hidden) {
-                                        root.wipOptions.default.groupColumns[col.field].Groups.push(dealType.name);
-                                    }
-                                    if (root.wipOptions.default.groupColumns[col.field].Groups.indexOf("All") < 0)
-                                        root.wipOptions.default.groupColumns[col.field].Groups.push("All");
                                 }
                             }
 
@@ -4846,8 +4860,7 @@
                             }, wipTemplate.model.fields);
                         }
                     }
-                    root.wipOptions.default.groups.push({ "name": "All", "order": order++ });
-
+                    
                     root.wipData = data;
                 }, 10);
                 $timeout(function () {
@@ -4867,6 +4880,6 @@
                 $scope.setBusy("", "");
             });            
         }
-        
+
     }
 })();

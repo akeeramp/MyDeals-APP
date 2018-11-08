@@ -158,7 +158,10 @@
                             if (typeof $scope.$parent.setMcTag != 'undefined') {
                                 $scope.$parent.setMcTag(false);
                             }
-                            $scope.$parent.goToPublished();
+                            if (typeof $scope.$parent.goToPublished != 'undefined') {
+                                $scope.$parent.goToPublished('0');
+                            }
+                            
                         }
 
                         if ($scope.isAdhoc == 0) {
@@ -172,21 +175,28 @@
                             //Calculate InComplete due to CAP Missing
                             var isTrueOnce = false;
                             var inCompleteDueToCAPMissing = function (data) {
+                                var isCapSet = true;
                                 for(var i = 0; i < data.length; i++){
-                                    if (data[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                                    if (data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "Not Run Yet") {
                                         if (data[i].COMP_SKU.trim().length == 0 && data[i].COMP_PRC == 0 && ((data[i].PRD_CAT_NM.toLowerCase() == "svrws" && data[i].IA_BNCH == 0 && data[i].COMP_BNCH == 0) || data[i].PRD_CAT_NM.toLowerCase() != "svrws")) {
                                             $scope.$parent.inCompleteDueToCapMissing(false);
-                                            break;
+                                            isTrueOnce = false;
+                                            return false;
                                         }
                                         else if (!isTrueOnce) {
-                                            $scope.$parent.inCompleteDueToCapMissing(true);
+                                            $scope.$parent.inCompleteDueToCapMissing(true);                                            
+                                            isTrueOnce = true;
                                         }
                                     }
                                 }
+                                return true;
                             }
 
                             if ($scope.isAdhoc == 1 && typeof $scope.$parent.inCompleteDueToCapMissing != 'undefined') {
-                                inCompleteDueToCAPMissing(response.data);
+                                var isCapMissed = inCompleteDueToCAPMissing(response.data);
+                                if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
+                                    $scope.$parent.goToPublished('1');
+                                }               
                             }                           
 
                             response.data.forEach(function (obj) {

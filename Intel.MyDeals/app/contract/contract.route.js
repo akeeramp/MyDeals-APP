@@ -60,7 +60,7 @@
                                 contractData: function () {
                                     return '';
                                 },
-                                PRC_ST_OBJ_SID: function () {
+                                dataItem: function () {
                                     return '';
                                 },
                                 isToolReq: function () {
@@ -170,6 +170,9 @@
                             templateUrl: '/app/contract/partials/contractSummaryExcludeGroups.html',
                             controller: 'managerExcludeGroupsController',
                             resolve: {
+                                rootDataItem: function () {
+                                    return null;
+                                },
                                 isToolReq: function () {
                                     return true;
                                 }

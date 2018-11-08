@@ -17,8 +17,8 @@
                     </tr>
                 </table>
 </div>
-<div ng-if="!loading" style="padding: 5px; height: 100%;">
-    <div id="pubOpGrid" op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" op-help="helpTopicContractAndDealViews"></div>
+<div ng-if="!loading && selectedTAB == 'PD'" style="padding: 5px; height: 100%;">
+    <div id="pubOpGrid" op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" op-name="PUBLISH" op-is-tender=true op-help="helpTopicContractAndDealViews"></div>
 </div>
 
 

@@ -11,7 +11,7 @@
 
     managerExcludeGroupsController.$inject = [
         '$scope', '$state', '$stateParams', '$filter', 'objsetService', 'confirmationModal', 'dataService', 'logger',
-        '$uibModal', '$timeout', '$compile', '$uibModalStack', 'isToolReq'
+        '$uibModal', '$timeout', '$compile', '$uibModalStack', 'isToolReq', 'rootDataItem'
     ];
 
     function managerExcludeGroupsController($scope,
@@ -25,12 +25,17 @@
         $uibModal,
         $timeout,
         $compile,        
-        $uibModalStack, isToolReq) {
+        $uibModalStack, isToolReq, rootDataItem) {
         //$scope.$uibModalInstance = $injector.get('$uibModalInstance');
 
         // Variables
         var root = $scope.$parent; // Access to parent scope
-        root.curPricingTable.DC_ID = undefined;
+        $scope.rootDataItem = rootDataItem;
+        $scope.isToolReq = isToolReq;
+        if ($scope.isToolReq) {
+            root.curPricingTable.DC_ID = undefined;
+        }
+        
         root.wipData = [];
         $scope.root = root;
         $scope.loading = true;
@@ -229,8 +234,10 @@
                         if (typeof root.setBusy != 'undefined') {
                             root.setBusy("Running Cost Test", "Currently running Price Cost Test");
                         } 
-                        objsetService.runPctContract($scope.root.contractData.DC_ID).then(
-                            function (e) {
+                        if (!$scope.isToolReq) {
+                            var selectedItem = [];
+                            selectedItem.push($scope.rootDataItem.PRC_ST_OBJ_SID);
+                            objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
                                 $scope.root.refreshContractData();
                                 $timeout(function () {
                                     if (typeof root.setBusy != 'undefined') {
@@ -240,17 +247,33 @@
                                     $scope.loading = true;
                                     $scope.getWipDeals();
                                 }, 1000);
-                            },
-                            function (response) {
-                                if (typeof root.setBusy != 'undefined') {
-                                    $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
+                            });
+                        }
+                        else {
+                            objsetService.runPctContract($scope.root.contractData.DC_ID).then(
+                                function (e) {
+                                    $scope.root.refreshContractData();
+                                    $timeout(function () {
+                                        if (typeof root.setBusy != 'undefined') {
+                                            $scope.root.setBusy("", "");
+                                        }
+                                        $scope.msg = "Refreshing all Deals";
+                                        $scope.loading = true;
+                                        $scope.getWipDeals();
+                                    }, 1000);
+                                },
+                                function (response) {
+                                    if (typeof root.setBusy != 'undefined') {
+                                        $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
+                                    }
+                                    logger.error("Could not run Cost Test in Exclude Groups for contract " + $scope.root.contractData.DC_ID, response, response.statusText);
+                                    $timeout(function () {
+                                        $scope.root.setBusy("", "");
+                                    }, 2000);
                                 }
-                                logger.error("Could not run Cost Test in Exclude Groups for contract " + $scope.root.contractData.DC_ID, response, response.statusText);
-                                $timeout(function () {
-                                    $scope.root.setBusy("", "");
-                                }, 2000);
-                            }
-                        );
+                            );
+                        }
+                        
 
                     },
                     function (response) {
@@ -460,6 +483,12 @@
         $scope.getWipDeals = function () {
             objsetService.readWipExclusionFromContract($scope.contractData.DC_ID).then(function (response) {
                 if (response.data) {
+                    //Cherry Picking the Deal for Tender Dashboard
+                    if (!$scope.isToolReq) {
+                        var tempItem = $filter('where')(response.data.WIP_DEAL, { 'DC_ID': $scope.rootDataItem.DC_ID });
+                        response.data.WIP_DEAL = {};
+                        response.data.WIP_DEAL = tempItem;
+                    }
 
                     for (var d = 0; d < response.data.WIP_DEAL.length; d++) {
                         var item = response.data.WIP_DEAL[d];

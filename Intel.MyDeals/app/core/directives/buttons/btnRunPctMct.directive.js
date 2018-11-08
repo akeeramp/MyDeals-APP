@@ -26,6 +26,7 @@ function btnRunPctMct(logger, objsetService, $timeout, $state) {
             $scope.textMsg = "";
             $scope.needToRunPct = false;
             $scope.runViaButton = false;
+            $scope.isForceRun = $scope.forceRun;
 
             if ($scope.btnType === "mct") {
                 $scope.text = "Meet Comp Test";
@@ -104,38 +105,51 @@ function btnRunPctMct(logger, objsetService, $timeout, $state) {
 
                 $(".iconRunPct").addClass("fa-spin grn");
                 if ($scope.runViaButton && $scope.curState === $state.current.name) $scope.root.$broadcast('btnPctMctRunning', {});
-
-                objsetService.runPctContract($scope.contractId).then(
-                    function (e) {
+                if (!$scope.$parent.$parent.isToolReq) {
+                    var selectedItem = [];
+                    selectedItem.push($scope.$parent.$parent.PRC_ST_OBJ_SID);
+                    objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
                         if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
                         $scope.root.$broadcast('ExecutionPctMctComplete', $scope.runViaButton);
-                        
-                        $timeout(function () {
-                            if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
-                                $scope.root.setBusy("", "");
-                            }
-                            $(".iconRunPct").removeClass("fa-spin grn");
-                            }, 2000);
-                       
-                        $scope.runViaButton = false;
-                    },
-                    function (response) {
-                        if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});                        
+                        logger.success(data.data.Message + ". Please refresh the page to see updated result.");                        
+                        $scope.root.$broadcast('btnPctMctComplete', {});
+                        $(".iconRunPct").removeClass("fa-spin grn");
+                    });
+                }
+                else {
+                    objsetService.runPctContract($scope.contractId).then(
+                        function (e) {
+                            if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
+                            $scope.root.$broadcast('ExecutionPctMctComplete', $scope.runViaButton);
 
-                        if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
-                            $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
-                        }
-                        logger.error("Could not run Cost Test for contract " + $scope.contractId, response, response.statusText);
-                        $timeout(function () {
+                            $timeout(function () {
+                                if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
+                                    $scope.root.setBusy("", "");
+                                }
+                                $(".iconRunPct").removeClass("fa-spin grn");
+                            }, 2000);
+
+                            $scope.runViaButton = false;
+                        },
+                        function (response) {
+                            if ($scope.runViaButton) $scope.root.$broadcast('btnPctMctComplete', {});
+
                             if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
-                                $scope.root.setBusy("", "");
+                                $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
                             }
-                            $(".iconRunPct").removeClass("fa-spin grn");
-                        }, 2000);
-                        
-                        $scope.runViaButton = false;
-                    }
-                );
+                            logger.error("Could not run Cost Test for contract " + $scope.contractId, response, response.statusText);
+                            $timeout(function () {
+                                if (typeof $scope.root.setBusy != 'undefined' && typeof $scope.root.setBusy === 'function') {
+                                    $scope.root.setBusy("", "");
+                                }
+                                $(".iconRunPct").removeClass("fa-spin grn");
+                            }, 2000);
+
+                            $scope.runViaButton = false;
+                        }
+                    );
+                }
+                
             }
 
             $scope.$on('runPctMct', function (event, args) {
