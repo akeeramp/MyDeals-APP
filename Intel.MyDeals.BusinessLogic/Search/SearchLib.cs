@@ -497,7 +497,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.WF_STG_CD.ATRB_SID
             },
             new List<string> { SearchTools.BuildCustSecurityWhere() },
-            new UserPreferencesLib().GetUserPreference("DealSearch", "SearchOptions", "CustomSearch"),
+            new UserPreferencesLib().GetUserPreference("DealSearch", "SearchRules", "CustomSearch"),
             true,
             MyRulesTrigger.OnDealListLoad,
             false);
