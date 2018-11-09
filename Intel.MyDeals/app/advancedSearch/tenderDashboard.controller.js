@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'securityService', '$location', 'logger', '$window', 'opGridTemplate', '$linq', '$rootScope', 'colorDictionary', 'dataService'];
+    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$uibModalStack', '$timeout', '$q', 'objsetService', 'templatesService', 'securityService', '$location', 'logger', '$window', 'opGridTemplate', '$linq', '$rootScope', 'colorDictionary', 'dataService'];
 
-    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, securityService, $location, logger, $window, opGridTemplate, $linq, $rootScope, colorDictionary, dataService) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $uibModalStack, $timeout, $q, objsetService, templatesService, securityService, $location, logger, $window, opGridTemplate, $linq, $rootScope, colorDictionary, dataService) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
