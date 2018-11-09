@@ -11,7 +11,7 @@
 
     tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate', 'colorDictionary', 'dataService', 'securityService', '$location'];
 
-    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templadataService, securityService, $location) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templadataService, logger, $window, $linq, $rootScope, opGridTemplate, colorDictionary, dataService, securityService, $location) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
