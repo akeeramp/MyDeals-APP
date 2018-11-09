@@ -1313,7 +1313,7 @@
                                 CUST_MBR_SID: gridDS[d].CUST_MBR_SID,
                                 WF_STG_CD: gridDS[d].WF_STG_CD,
                                 PS_WF_STG_CD: gridDS[d].PS_WF_STG_CD,
-                                PS_ID: gridDS[d]._parentIdPS
+                                PS_ID: gridDS[d].PS_ID
                             });
                         }
                     }
@@ -1326,7 +1326,7 @@
                     CUST_MBR_SID: dataItem.CUST_MBR_SID,
                     WF_STG_CD: dataItem.WF_STG_CD,
                     PS_WF_STG_CD: dataItem.PS_WF_STG_CD,
-                    PS_ID: dataItem._parentIdPS
+                    PS_ID: dataItem.PS_ID
                 });
             }
 
@@ -1473,7 +1473,7 @@
                             for (var i = 0; i < msgArray.length; i++) {
                                 var keyIdentifiers = msgArray[i].KeyIdentifiers;    //for approval action updates, these will contain the pricing strategy IDs which can be used to identify the dataItem in wipData as tenders have a 1:1 relation to their pricing strategies
 
-                                if (keyIdentifiers.indexOf($scope.wipData[dsIndex]["_parentIdPS"]) == -1) {
+                                if (keyIdentifiers.indexOf($scope.wipData[dsIndex]["PS_ID"]) == -1) {
                                     continue;  //dataItem's parent pricing strategy id not being present in return message's key identifiers indicate that it was not part of the changed set
                                 } else {
                                     //found the index of a tender we actioned
@@ -1483,13 +1483,8 @@
                                         //opMsgyType = 1 is for "Info" messages, aka the success scenario
                                         //TODO: this doesnt account for failure messages... there surely must be a better way than string parsing...
                                         var message = msgArray[i].ExtraDetails[0];  //index 0 contains the stage that the deal was moved to
-                                        var ddOptions = msgArray[i].ExtraDetails[1]; //index 1 contains the dropdown approval options that will be available to the user at this new stage
-                                        $scope.wipData[dsIndex]["PS_WF_STG_CD"] = message;    //TODO: would we need to also update WIP level WF_STG_CD as well? when would it?
-                                        if ($scope.wipData[dsIndex]["PS_WF_STG_CD"] == "Approved") {
-                                            //if this is the DA setting it to Approved, we will need to update the wip deal WF_STG_CD as well.
-                                            $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
-                                        }
-                                        $scope.wipData[dsIndex]["_actionsPS"] = ddOptions
+                                        var updatedWIP = msgArray[i].ExtraDetails[1]; //index 1 contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
+                                        $scope.wipData[dsIndex] = updatedWIP;
                                     } else {
                                         //update failed for this data item
                                         //TODO: create popup indicating warnings/failures

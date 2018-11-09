@@ -484,13 +484,40 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions 
 
+                List<int> ps_ids = new List<int>();
+                MyDealsData myDealsTenderData;
+
+                //we need to gather the pricing strategy ids here so that we can also retrieve the corresponding tender wip deals
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
+                {
+                    ps_ids.Add(dc.DcID);
+                }
+
+                //get updated wip deals now that we have changed ps stage
+                myDealsTenderData = OpDataElementType.PRC_ST.GetByIDs(ps_ids,
+                    new List<OpDataElementType>
+                    {
+                        OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
+                    },
+                    new List<int>());
+
+                //apply rules on the PRC_ST and WIP_DEAL data collectors
+                foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.PRC_ST].AllDataCollectors)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
+                }
+                foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.WIP_DEAL].AllDataCollectors)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
                 }
 
-                OpDataCollectorFlattenedList prc_st_data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested).ToHierarchialList(OpDataElementType.PRC_ST);
-                
+                //fill in holes for any missing attributes that we use in the grid that isn't saved
+                myDealsTenderData.FillInHolesFromAtrbTemplate();
+
+                //convert to UI friendly data types
+                OpDataCollectorFlattenedList prc_st_data = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested).ToHierarchialList(OpDataElementType.PRC_ST);
+                OpDataCollectorFlattenedList wip_data = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested).ToHierarchialList(OpDataElementType.WIP_DEAL);
+
                 foreach (OpMsg om in opMsgQueue.Messages)
                 {
                     for (var i = 0; i < prc_st_data.Count(); i++)
@@ -502,7 +529,14 @@ namespace Intel.MyDeals.BusinessLogic
                         if (om.KeyIdentifiers[0].ToString() == prc_st_data[i]["DC_ID"].ToString())
                         {
                             //IDs of datacollector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
-                            om.ExtraDetails = new object[] { ((IEnumerable<object>)om.ExtraDetails).ToArray()[0], prc_st_data[i]["_actions"] };
+                            //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
+                            //IMPORTANT: the tender dashboard is very reliant on the wipData having these extra attributes added onto the wip data.  anywhere we send back wip data to the tender dashboard we need to make sure to append these as well!
+                            wip_data[i]["_actionsPS"] = prc_st_data[i]["_actions"];
+                            wip_data[i]["_actionReasonsPS"] = prc_st_data[i]["_actionReasons"];
+                            wip_data[i]["PS_ID"] = prc_st_data[i]["DC_ID"];
+
+                            //add wipData into the return msgQueue's extraDetails attribute
+                            om.ExtraDetails = new object[] { ((IEnumerable<object>)om.ExtraDetails).ToArray()[0], wip_data[i] };
                         } else
                         {
                             //returned ps data does not match id in this OpMsg so we continue

@@ -349,8 +349,9 @@ namespace Intel.MyDeals.BusinessLogic
                 for (var i = 0; i < prc_st_data.Count(); i++)
                 {
                     //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
-                    rtn[i]["_actionsPS"] = prc_st_data[i]["_actions"];                    
-                    rtn[i]["_parentIdPS"] = prc_st_data[i]["DC_ID"];
+                    rtn[i]["_actionsPS"] = prc_st_data[i]["_actions"];           
+                    rtn[i]["_actionReasonsPS"] = prc_st_data[i]["_actionReasons"];
+                    rtn[i]["PS_ID"] = prc_st_data[i]["DC_ID"];
                 }
             }
 

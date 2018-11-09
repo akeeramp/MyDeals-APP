@@ -1485,11 +1485,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             "CUST_NM": gridDs[i].Customer !== undefined ? gridDs[i].Customer.CUST_NM : "",
                             "VERTICAL_ROLLUP": gridDs[i].PRODUCT_CATEGORIES,
                             "CNTRCT": gridDs[i].CNTRCT_OBJ_SID + " " + gridDs[i].CNTRCT_TITLE,
-                            "DC_ID": gridDs[i]._parentIdPS,
+                            "DC_ID": gridDs[i].PS_ID,
                             "NEW_STG": gridDs[i].PS_WF_STG_CD,
                             "DEAL_ID": gridDs[i].DC_ID,
                             "END_CUSTOMER_RETAIL": gridDs[i].END_CUSTOMER_RETAIL,
-                            "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i]._parentIdPS
+                            "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i].PS_ID
                         };
                         items.push(item);
                     }
