@@ -11,7 +11,7 @@
                     <div ng-repeat="item in stages" class="stgLnk" id="fltr_{{item.Stage}}" ng-click="clkFilter('fltr_' + item.Stage)"><i class="intelicon-workflow-process-outlined"></i> {{item.Stage}} <span class="badge">{{item.Cnt}}</span></div>
                     <div ng-if="alertCount > 0" title="Contracts that contain deals with a start date within 48 hours and are not yet approved" id="fltr_HasAlert" class="stgLnk" ng-click="clkFilter('fltr_HasAlert')"><i class="intelicon-alert-outlined"></i> Alerts<span class="badge">{{alertCount}}</span></div>
                 </div>
-                <h6 style="margin-top: 30px;"><a href="/advancedSearch#/tenderSearch" style="color: #000000;" title="Click to view Tender Deals">Tenders</a></h6>
+                <h6 style="margin-top: 30px;"><a href="/advancedSearch#/tenderDashboard" style="color: #000000;" title="Click to search for Tender Deals">Tenders</a></h6>
             </div>
         </div>
 
