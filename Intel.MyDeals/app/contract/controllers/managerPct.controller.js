@@ -692,7 +692,7 @@
         }
 
         $scope.gotoExclude = function () {
-            if (!$scope.isToolReq) {
+            if (!$scope.isToolReq && typeof $scope.isToolReq != 'undefined') {
                 root.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, $scope.PRC_ST_OBJ_SID);
                 root.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
                 var modal = $uibModal.open({

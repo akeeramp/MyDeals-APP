@@ -234,7 +234,7 @@
                         if (typeof root.setBusy != 'undefined') {
                             root.setBusy("Running Cost Test", "Currently running Price Cost Test");
                         } 
-                        if (!$scope.isToolReq) {
+                        if (!$scope.isToolReq && typeof $scope.isToolReq != 'undefined') {
                             var selectedItem = [];
                             selectedItem.push($scope.rootDataItem.PRC_ST_OBJ_SID);
                             objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
