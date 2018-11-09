@@ -1489,7 +1489,7 @@
                                             //if this is the DA setting it to Approved, we will need to update the wip deal WF_STG_CD as well.
                                             $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
                                         }
-                                        $scope.wipData[dsIndex]["_parentActionsPS"] = ddOptions
+                                        $scope.wipData[dsIndex]["_actionsPS"] = ddOptions
                                     } else {
                                         //update failed for this data item
                                         //TODO: create popup indicating warnings/failures

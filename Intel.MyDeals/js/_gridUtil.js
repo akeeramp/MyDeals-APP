@@ -1671,7 +1671,7 @@ gridUtils.hasVertical = function (dataItem) {
 }
 
 gridUtils.getBidActions = function (data) {
-    if (data.BID_ACTNS === undefined || data._parentActionsPS === undefined) return "";
+    if (data.BID_ACTNS === undefined || data._actionsPS === undefined) return "";
 
     var ar = data["WF_STG_CD"];
     if (ar !== undefined && ar !== null && ar === "no access") {
@@ -1688,7 +1688,7 @@ gridUtils.getBidActions = function (data) {
     data.BID_ACTNS = bidActns;
 
     //remove the cancelled action as we do not want that in our dropdown so we won't consider it when deciding what to display
-    var actions = angular.copy(data._parentActionsPS);
+    var actions = angular.copy(data._actionsPS);
     if (actions["Cancel"] == true) {
         delete actions["Cancel"];
     }

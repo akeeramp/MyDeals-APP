@@ -1351,9 +1351,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var el = "";
                 var approveActions = [];
                 approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection
-                for (var actn in options.model["_parentActionsPS"]) {
-                    if (options.model["_parentActionsPS"].hasOwnProperty(actn)) {
-                        if (options.model["_parentActionsPS"][actn] == true && actn != "Cancel" && actn != "Hold") {   //the manage screen does not display checkboxes for Cancel or Hold so we will avoid that here as well
+                for (var actn in options.model["_actionsPS"]) {
+                    if (options.model["_actionsPS"].hasOwnProperty(actn)) {
+                        if (options.model["_actionsPS"][actn] == true && actn != "Cancel" && actn != "Hold") {   //the manage screen does not display checkboxes for Cancel or Hold so we will avoid that here as well
                             approveActions.push({ text: actn, value: actn })
                         }
                     }
