@@ -24,6 +24,7 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
         selectedDashboardId: '1',
         startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
         endDate: moment().add(6, 'months').format("MM/DD/YYYY"),
+        includeTenders: true,
         selectedCustomerIds: []
     });
 
@@ -32,6 +33,7 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
     $scope.startDate = $scope.$storage.startDate;
     $scope.endDate = $scope.$storage.endDate;
     $scope.selectedCustomerIds = $scope.$storage.selectedCustomerIds;
+    $scope.includeTenders = $scope.$storage.includeTenders;
     $scope.favContractIds = "";
 
     $scope.C_CREATE_CONTRACT = securityService.chkDealRules('C_CREATE_CONTRACT', window.usrRole, null, null, null);
@@ -364,7 +366,8 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
         var postData = {
             "CustomerIds": $scope.$storage.selectedCustomerIds,
             "StartDate": $scope.$storage.startDate,
-            "EndDate": $scope.$storage.endDate
+            "EndDate": $scope.$storage.endDate,
+            "DontIncludeTenders": $scope.includeTenders
         };
         dataService.post("/api/Dashboard/GetDashboardContractSummary", postData)
             .then(function (response) {

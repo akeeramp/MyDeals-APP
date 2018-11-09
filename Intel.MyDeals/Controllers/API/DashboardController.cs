@@ -38,16 +38,18 @@ namespace Intel.MyDeals.Controllers.API
         List<DashboardContractSummary> Temp(DashboardFilter data)
         {
             List<int> verticalIds = AppLib.GetMyVerticals(OpUserStack.MyOpUserToken).Select(v => v.Id).ToList();
-            List<DashboardContractSummary> y = _dashboardLib.GetDashboardContractSummary(data.CustomerIds, data.StartDate, data.EndDate, verticalIds);
-            //Random rnd = new Random();
-            //List<string> stages = new List<string> {"Complete", "InComplete", "Archived"};
-            
-            foreach (DashboardContractSummary item in y)
+            List<DashboardContractSummary> retItems = _dashboardLib.GetDashboardContractSummary(data.CustomerIds, data.StartDate, data.EndDate, verticalIds);
+
+            // Remove tender items if this is a copy contracts call.
+            List<DashboardContractSummary> contractSummaryItems = data.DontIncludeTenders ? retItems.Where(c => c.IS_TENDER != 1).ToList() : retItems.ToList();
+
+            foreach (DashboardContractSummary item in contractSummaryItems)
             {
                 //if (item.WF_STG_CD == string.Empty) item.WF_STG_CD = stages[rnd.Next(stages.Count)];
                 if (item.WF_STG_CD == string.Empty) item.WF_STG_CD = "InComplete"; //TODO: hook up to workflow
             }
-            return y;
+
+            return contractSummaryItems;
         }
 
         [Authorize]

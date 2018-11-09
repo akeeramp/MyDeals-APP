@@ -10,6 +10,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             custIds: '=',
             startDt: '=',
             endDt: '=',
+            includeTenders: '=',
             favContractIds: '='
         },
         restrict: 'AE',
@@ -70,7 +71,8 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                             return {
                                 "CustomerIds": $scope.custIds,
                                 "StartDate": $scope.startDt,
-                                "EndDate": $scope.endDt
+                                "EndDate": $scope.endDt,
+                                "DontIncludeTenders": $scope.includeTenders
                             };
                         }
                     }
@@ -270,6 +272,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 scope.custIds = args.custIds;
                 scope.startDt = args.startDate;
                 scope.endDt = args.endDate;
+                scope.includeTenders = true;
                 scope.initDsLoaded = false;
                 $scope.isLoaded = false;
                 scope.clkFilter('fltr_All');
