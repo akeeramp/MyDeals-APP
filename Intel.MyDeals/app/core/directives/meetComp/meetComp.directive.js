@@ -1547,7 +1547,7 @@
                                         $scope.$root.$broadcast('refreshContractData');
                                     }
                                     if ($scope.PAGE_NM == 'MCTPOPUP') {
-                                        $scope.$parent.parentScope.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
+                                        $scope.$parent.$parent.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
                                             .Where(function (x) {
                                                 return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
                                             })

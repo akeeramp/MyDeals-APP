@@ -2198,7 +2198,7 @@ gridPctUtils.getColumnTemplate = function (dealId) {
 gridPctUtils.getResultMappingIconClass = function (result) {
     if (result === "NA") {
         return "intelicon-information-solid";
-    } else if (result === "Pass") {
+    } else if (result === "Pass" || result === "Overridden") {
         return "intelicon-passed-completed-solid";
     } else if (result === "InComplete") {
         return "intelicon-help-solid";
