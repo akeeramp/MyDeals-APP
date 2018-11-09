@@ -280,7 +280,7 @@ namespace Intel.MyDeals.BusinessLogic
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.TITLE, data[0]["TITLE"] + " PT"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COMP_MISSING_FLG, "0"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PAYOUT_BASED_ON, "Consumption"));
-            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OBJ_SET_TYPE_CD, data[0][AttributeCodes.OBJ_SET_TYPE_CD + "_target"].ToString()));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OBJ_SET_TYPE_CD, data[0][AttributeCodes.OBJ_SET_TYPE_CD].ToString()));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.MRKT_SEG, "Corp"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PROGRAM_PAYMENT, "Backend"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.GEO_COMBINED, "Worldwide"));
@@ -357,11 +357,32 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             int uid = -401;
+            AttributeCollection attrCollection = DataCollections.GetAttributeData();
             List<OpDataCollector> ptrDCs = new List<OpDataCollector>();
             foreach (OpDataCollector ptr in myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors)
             {
                 ptr.DcID = uid--;
                 ptr.DcParentID = -301;
+
+                // Set values of PTR items as needed (customer, division, stage)
+
+                ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
+                //if (ptr.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV) != null)
+                //{
+                //    ptr.DataElementDict[AttributeCodes.CUST_ACCNT_DIV + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue;
+                //}
+                //// This attribute doesn't exist at PTR level, so make a new one if the contract level has something in it.
+                //else if (cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue.ToString() != "")
+                //{
+                //    ptr.AddDataElement(AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
+                //}
+                AddOrUpdateElementInPTR(ptr, AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
+                AddOrUpdateElementInPTR(ptr, AttributeCodes.WF_STG_CD, WorkFlowStages.Draft, attrCollection);
+                AddOrUpdateElementInPTR(ptr, AttributeCodes.PS_WF_STG_CD, psDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.WF_STG_CD).AtrbValue, attrCollection);
+
+                ptr.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, "");  // Force the products to be re-validated.
+
+                // Set important values within all DEs now
                 foreach (OpDataElement de in ptr.DataElements)
                 {
                     de.DcID = ptr.DcID;
@@ -370,22 +391,15 @@ namespace Intel.MyDeals.BusinessLogic
                     de.PrevAtrbValue = "";
                     de.OrigAtrbValue = "";
                 }
-                ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
-                if (ptr.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV) != null)
-                {
-                    ptr.DataElementDict[AttributeCodes.CUST_ACCNT_DIV + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue;
-                }
-                // This attribute doesn't exist at PTR level, so make a new one if the contract level has something in it.
-                else if (cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue.ToString() != "")
-                {
-                    var attrCollection = DataCollections.GetAttributeData();
-                    ptr.AddDataElement(AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
-                }
-
-                ptr.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, "");  // Force the products to be re-validated.
 
                 ptrDCs.Add(ptr);
             }
+
+            // Setting KIT or ECAP based on data passed
+            var ptTargetType = ptDEs.FirstOrDefault(p => p.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD);
+            ptTargetType.AtrbValue = ptrDCs.FirstOrDefault().GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            //ptAtrbs OBJ_SET_TYPE_CD update to PTR
 
 
             // Construct a list of verticals at the contract/PS levels for vertical security workaround.
@@ -473,6 +487,18 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].AddSaveActions();
 
             return myDealsDataNewObject.Save(savePacket.MyContractToken);
+        }
+
+        public void AddOrUpdateElementInPTR(OpDataCollector ptr, string fieldName, object setValue, AttributeCollection attrCollection)
+        {
+            if (ptr.DataElements.FirstOrDefault(d => d.AtrbCd == fieldName) != null)
+            {
+                ptr.DataElementDict[fieldName + "|0"].AtrbValue = setValue;
+            }
+            else
+            {
+                ptr.AddDataElement(fieldName, setValue, attrCollection);
+            }
         }
 
         /// <summary>

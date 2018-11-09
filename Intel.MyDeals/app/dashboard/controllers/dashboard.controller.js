@@ -507,10 +507,12 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
             });
 
     }
+
     //Adhoc Tender Manager popup close
     $scope.dismissPopup = function () {
         $uibModalStack.dismissAll();
     };
+
     $scope.onCopyCntrctCancelClick = function () {
         var dlg = $("#copyCntrctDlg").data("kendoDialog");
         dlg.close();

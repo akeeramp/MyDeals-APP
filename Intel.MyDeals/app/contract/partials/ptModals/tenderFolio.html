@@ -64,7 +64,7 @@
                                          op-label="'Tender Folio Name:'"
                                          op-is-form="true"
                                          op-ui-mode="'VERTICAL'"></div>
-                                    <div class="fl opUiLabel ng-binding isRequired" style="width:240px" ng-class="{isRequired: opIsRequired}">Select Tender Table Deal Type:</div>
+                                    <div class="fl opUiLabel ng-binding isRequired" style="width:240px" ng-if="filterDealTypes(templates.ModelTemplates.PRC_TBL).Keys.length > 0" ng-class="{isRequired: opIsRequired}">Select Tender Table Deal Type:</div>
                                     <div ng-repeat="(key, value) in filterDealTypes(templates.ModelTemplates.PRC_TBL)">
                                         <!--ang-if="value.name == 'ECAP'"-->
                                         <div id="btnSel{{removeBlanks(value.name)}}" class="fl circleWithText" ng-click="selectPtTemplateIcon(value, true)" ng-class="{active: value._custom._active}">
@@ -141,7 +141,14 @@ $( document ).ready(function() {
     $("#btnSelECAP").click();
 });
 	
-	
+function dismissPopup() {
+    var el = document.getElementById("createNewContract") // main page
+    if (el === null) el = document.getElementById("search-info-container") // Tender manager page
+    var scope = angular.element(el).scope();
+    scope.$apply(function () {
+        scope.dismissPopup();
+    });
+}
 </script>
 
 <style type="text/css">

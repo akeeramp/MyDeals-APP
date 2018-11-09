@@ -120,8 +120,9 @@
             ? "/Contract#/manager/0/details?tender=1"
             : "/Contract#/manager/0/details";
     }
-	function dismissPopup() {
-	 var scope = angular.element(document.getElementById("createNewContract")).scope();
+    function dismissPopup() {
+        var el = document.getElementById("createNewContract") // main page
+        var scope = angular.element(el).scope();
         scope.$apply(function () {
             scope.dismissPopup();
         });    

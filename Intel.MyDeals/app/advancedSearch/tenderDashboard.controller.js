@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate', 'colorDictionary', '$location'];
+    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModalStack', '$uibModal', '$timeout', '$q', 'objsetService', 'templatesService', 'logger', '$window', '$linq', '$rootScope', 'opGridTemplate', 'colorDictionary', 'dataService', '$location'];
 
-    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate, colorDictionary, $location) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModalStack, $uibModal, $timeout, $q, objsetService, templatesService, logger, $window, $linq, $rootScope, opGridTemplate, colorDictionary, dataService, $location) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
@@ -73,12 +73,6 @@
 
         $scope.filterDealTypes = function (items) {
             var result = {};
-            var allow = ['ECAP', 'KIT'];
-            angular.forEach(items, function (value, key) {
-                if (allow.indexOf(value.name) >= 0) {
-                    result[key] = value;
-                }
-            });
             return result;
         }
 
@@ -1546,6 +1540,46 @@
             $scope.setBusy("", "");
         });
 
+        $scope.$watch('contractData', function (newValue, oldValue, el) {
+            if (oldValue === newValue || $scope.stealthMode) return;
+
+            if (oldValue["CUST_MBR_SID"] != newValue["CUST_MBR_SID"]) {
+                $scope.contractData.CUST_ACCNT_DIV_UI = "";
+                $scope.updateCorpDivision(newValue["CUST_MBR_SID"]);
+            }
+
+            if (oldValue["CUST_ACCNT_DIV_UI"].toString() !== newValue["CUST_ACCNT_DIV_UI"].toString()) {
+                $timeout(function () {
+                    $scope.contractData.CUST_ACCNT_DIV = newValue["CUST_ACCNT_DIV_UI"].toString().replace(/,/g, '/');
+                }, 1);
+            }
+        }, true);
+
+        $scope.updateCorpDivision = function (custId) {
+            if (custId === "" || custId == null) return;
+            dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
+                // only show if more than 1 result
+                // TODO: This is a temp fix API is getting the 2002 and 2003 level records, fix the API
+                response.data = $filter('where')(response.data, { CUST_LVL_SID: 2003 });
+
+                if (response.data.length <= 1) {
+                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
+                    if ($scope.contractData.CUST_ACCNT_DIV_UI !== undefined) $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
+                } else {
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
+                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
+                }
+                if (!!$("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect")) {
+                    $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").dataSource.data(response.data);
+                    $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV_UI);
+                }
+            },
+                function (response) {
+                    logger.error("Unable to get Customer Divisions.", response, response.statusText);
+                });
+        }
+
         $scope.$on("copy-tender-deals", function (event, items) {
             $scope.copyDeals(items);
         });
@@ -1700,6 +1734,11 @@
             });
 
         }
+
+        //Adhoc Tender Manager popup close
+        $scope.dismissPopup = function () {
+            $uibModalStack.dismissAll();
+        };
 
         $scope.copyTenderFolioContract = function () {
             $scope.setBusy("Copy Tender Folio", "Copying the Contract Information");
