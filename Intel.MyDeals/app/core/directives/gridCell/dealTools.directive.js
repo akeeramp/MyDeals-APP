@@ -21,7 +21,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
         controller: ['$scope', '$http', function ($scope, $http) {
 
             if (typeof $scope.$parent.$parent.$parent.isTenderContract !== 'undefined') {
-                $scope.isTenderContract = $scope.$parent.$parent.$parent.isTenderContract == true;
+                $scope.isTenderContract = $scope.$parent.$parent.$parent.isTenderContract === true;
             }
 
             if ($scope.dataItem.PS_WF_STG_CD === undefined && $scope.dataItem.items !== undefined) {
@@ -59,7 +59,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 while (!rootScope.saveCell) {
                     rootScope = rootScope.$parent;
 
-                    if (rootScope == null) {
+                    if (rootScope === null) {
                         rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
                         break;   //something went horribly wrong and we never found the root scope, so we just set it to the hard-coded value before I "refactored" this :)
                     }

@@ -1692,6 +1692,12 @@ gridUtils.getBidActions = function (data) {
     if (actions["Cancel"] == true) {
         delete actions["Cancel"];
     }
+
+    // if contract is not published
+    if (data._contractPublished !== undefined && data._contractPublished === 0) {
+        return "<div class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/contract#/manager/" + data._contractId + "' target='_blank'>" + data._contractId + "</a><div style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>";
+    }
+
     var numActions = Object.keys(actions).length;
 
     //If cancelled, no actions avalable

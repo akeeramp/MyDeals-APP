@@ -1217,6 +1217,18 @@
                         $scope.setBusy("", "");
                         kendo.alert(message);
                     }
+
+                    for (var w = 0; w < $scope.wipData.length; w++) {
+                        var item = $scope.wipData[w];
+                        if (item._contractPublished !== undefined && item._contractPublished === 0) {
+                            for (var k in item) {
+                                if (typeof item[k] !== 'function' && k[0] !== '_') {
+                                    item._behaviors.isReadOnly[k] = true;
+                                }
+                            }
+                        }                        
+                    }
+
                     //reset wip options
                     $scope.wipOptions = {
                         "default": {},

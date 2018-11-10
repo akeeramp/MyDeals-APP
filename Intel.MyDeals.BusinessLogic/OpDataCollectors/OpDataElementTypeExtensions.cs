@@ -84,6 +84,98 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData;
         }
 
+        public static List<DcPath> GetDcPaths(this OpDataElementType opDataElementType, List<int> dcIds)
+        {
+            List<DcPath> ret = new List<DcPath>();
+            OpDataElementType initOpDataElementType = opDataElementType;
+
+            MyDealsData myDealsData = opDataElementType.GetByIDs(dcIds,
+                new List<OpDataElementType>
+                {
+                    OpDataElementType.CNTRCT,
+                    OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_TBL,
+                    OpDataElementType.PRC_TBL_ROW,
+                    OpDataElementType.WIP_DEAL,
+                },
+                new List<int>
+                {
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                    Attributes.CUST_MBR_SID.ATRB_SID,
+                    Attributes.TITLE.ATRB_SID,
+                    Attributes.TENDER_PUBLISHED.ATRB_SID,
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                });
+
+            if (!myDealsData.ContainsKey(opDataElementType) ||
+                !myDealsData[opDataElementType].AllDataCollectors.Any())
+            {
+                return ret;
+            }
+
+            foreach (int id in dcIds)
+            {
+                DcPath dcPath = new DcPath();
+                int dcId = id;
+                opDataElementType = initOpDataElementType;
+
+                while (opDataElementType != OpDataElementType.ALL_OBJ_TYPE)
+                {
+                    switch (opDataElementType)
+                    {
+                        case OpDataElementType.CNTRCT:
+                            dcPath.ContractId = dcId;
+                            List<OpDataElement> des = myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId).DataElements.ToList();
+                            dcPath.ContractTitle = des.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
+
+                            dcPath.CustMbrSid = des
+                                .Where(s => s.AtrbCd == AttributeCodes.CUST_MBR_SID)
+                                .Select(s => int.Parse(s.AtrbValue.ToString())).FirstOrDefault();
+
+                            dcPath.IsTenderPublished = des
+                                .Where(s => s.AtrbCd == AttributeCodes.TENDER_PUBLISHED)
+                                .Select(s => (s.AtrbValue.ToString()) == "1").FirstOrDefault();
+
+                            if (dcPath.IsTenderPublished)
+                            {
+                                dcPath.DealType = des
+                                    .Where(s => s.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD)
+                                    .Select(s => s.AtrbValue.ToString()).FirstOrDefault();
+                            }
+
+                            break;
+
+                        case OpDataElementType.PRC_ST:
+                            dcPath.PricingStrategyId = dcId;
+                            if (dcPath.PricingTableId == 0)
+                                dcPath.PricingTableId = myDealsData[OpDataElementType.PRC_TBL].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId).DataElements.Where(s => s.DcParentID == dcId).Select(s => s.DcID).FirstOrDefault();
+                            dcPath.PricingStrategyTitle = myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId).DataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
+                            break;
+
+                        case OpDataElementType.PRC_TBL:
+                            dcPath.PricingTableId = dcId;
+                            dcPath.PricingTableTitle = myDealsData[OpDataElementType.PRC_TBL].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId).DataElements.Where(s => s.AtrbCd == AttributeCodes.TITLE).Select(s => s.AtrbValue.ToString()).FirstOrDefault();
+                            break;
+
+                        case OpDataElementType.PRC_TBL_ROW:
+                            dcPath.PricingTableRowId = dcId;
+                            break;
+
+                        case OpDataElementType.WIP_DEAL:
+                            dcPath.WipDealId = dcId;
+                            break;
+                    }
+                    dcId = myDealsData[opDataElementType].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId).DataElements.Select(s => s.DcParentID).FirstOrDefault();
+
+                    opDataElementType = opDataElementType.GetParent();
+
+                    ret.Add(dcPath);
+                }
+            }
+
+            return ret;
+        }
+
         public static DcPath GetDcPath(this OpDataElementType opDataElementType, int dcId)
         {
             MyDealsData myDealsData = opDataElementType.GetByIDs(new List<int>

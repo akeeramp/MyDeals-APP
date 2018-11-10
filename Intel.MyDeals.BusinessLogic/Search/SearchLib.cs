@@ -298,7 +298,7 @@ namespace Intel.MyDeals.BusinessLogic
                 myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
                 new List<OpDataElementType>
                 {
-                    OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
+                    OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
                 },
                 atrbs);
             }
@@ -342,13 +342,33 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 OpDataCollectorFlattenedList prc_st_data = flatDictList.ToHierarchialList(OpDataElementType.PRC_ST);
 
-                //we need a few pricing strategy level details on the tender dashboard so let's set them here.
+                List<DcPath> paths = OpDataElementType.WIP_DEAL.GetDcPaths(dcIds);
+
+                // we need to check the contract to see if it was published... best way is to create a dictionary
+                Dictionary<int, int> cntrctPublished = new Dictionary<int, int>();
+                foreach (var de in myDealsData[OpDataElementType.CNTRCT].AllDataElements.Where(a => a.AtrbCd == AttributeCodes.TENDER_PUBLISHED))
+                {
+                    cntrctPublished[de.DcID] = de.AtrbValue.ToString() == "1" || de.AtrbValue.ToString().ToUpper() == "TRUE" ? 1 : 0;
+                }
+
+
+                // we need a few pricing strategy level details on the tender dashboard so let's set them here.
+                // we don't know if this is 1:1 or a mixture of Tender Deals or Tender Folios
+                Dictionary<int, OpDataCollectorFlattenedItem> psDecoder = new Dictionary<int, OpDataCollectorFlattenedItem>();
                 for (var i = 0; i < prc_st_data.Count(); i++)
                 {
-                    //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
-                    rtn[i]["_actionsPS"] = prc_st_data[i]["_actions"];           
-                    rtn[i]["_actionReasonsPS"] = prc_st_data[i]["_actionReasons"];
-                    rtn[i]["PS_ID"] = prc_st_data[i]["DC_ID"];
+                    psDecoder[(int)prc_st_data[i]["DC_ID"]] = prc_st_data[i];
+                }
+
+                for (var i = 0; i < rtn.Count(); i++)
+                {
+                    var myDcPath = paths.FirstOrDefault(p => p.WipDealId == (int)rtn[i]["DC_ID"]);
+                    var myPs = psDecoder[myDcPath.PricingStrategyId];
+
+                    rtn[i]["_actionsPS"] = myPs["_actions"];
+                    rtn[i]["_parentIdPS"] = myPs["DC_ID"];
+                    rtn[i]["_contractPublished"] = cntrctPublished.ContainsKey((int)myPs["DC_PARENT_ID"]) ? cntrctPublished[(int)myPs["DC_PARENT_ID"]] : 0;
+                    rtn[i]["_contractId"] = (int)myPs["DC_PARENT_ID"];
                 }
             }
 

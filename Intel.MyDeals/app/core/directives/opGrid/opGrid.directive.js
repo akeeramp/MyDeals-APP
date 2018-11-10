@@ -1350,6 +1350,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.bidActnsEditor = function (container, options) {
                 var el = "";
                 var approveActions = [];
+
+                if (options.model._contractPublished === 0) {
+                    $("<div style='padding-left: 4px;'>Loading Folio...</div>").appendTo(container);
+                    document.location.href = "/contract#/manager/" + options.model._contractId;
+                    return;
+                }
+
                 approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection
                 for (var actn in options.model["_actionsPS"]) {
                     if (options.model["_actionsPS"].hasOwnProperty(actn)) {
