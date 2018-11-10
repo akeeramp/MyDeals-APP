@@ -299,30 +299,16 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
+
+                //standard manage screen approval
+                opMsgQueue.Messages.Add(new OpMsg
+                {
+                    Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
+                    MsgType = OpMsg.MessageType.Info,
+                    ExtraDetails = dc.DcType,
+                    KeyIdentifiers = new[] { dc.DcID }
+                });
                 
-
-                if (contractToken.BulkTenderUpdate == true)
-                {
-                    //tender dashboard approval, needs to store target stage in extradetails
-                    opMsgQueue.Messages.Add(new OpMsg
-                    {
-                        Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
-                        MsgType = OpMsg.MessageType.Info,
-                        ExtraDetails = new[] { targetStage },
-                        KeyIdentifiers = new[] { dc.DcID }
-                    });
-                } else
-                {
-                    //standard manage screen approval
-                    opMsgQueue.Messages.Add(new OpMsg
-                    {
-                        Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
-                        MsgType = OpMsg.MessageType.Info,
-                        ExtraDetails = dc.DcType,
-                        KeyIdentifiers = new[] { dc.DcID }
-                    });
-                }
-
                 dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
@@ -514,9 +500,10 @@ namespace Intel.MyDeals.BusinessLogic
                 //fill in holes for any missing attributes that we use in the grid that isn't saved
                 myDealsTenderData.FillInHolesFromAtrbTemplate();
 
+                OpDataCollectorFlattenedDictList flatDictList = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
                 //convert to UI friendly data types
-                OpDataCollectorFlattenedList prc_st_data = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested).ToHierarchialList(OpDataElementType.PRC_ST);
-                OpDataCollectorFlattenedList wip_data = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested).ToHierarchialList(OpDataElementType.WIP_DEAL);
+                OpDataCollectorFlattenedList prc_st_data = flatDictList.ToHierarchialList(OpDataElementType.PRC_ST);
+                OpDataCollectorFlattenedList wip_data = flatDictList.ToHierarchialList(OpDataElementType.WIP_DEAL);
 
                 foreach (OpMsg om in opMsgQueue.Messages)
                 {
@@ -526,7 +513,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             continue;   //if the data collector doesn't have an ID, skip it.  This seems to happen sometimes when we have a SAVE action appended on as well.
                         }
-                        if (om.KeyIdentifiers[0].ToString() == prc_st_data[i]["DC_ID"].ToString())
+                        if (om.KeyIdentifier.ToString() == prc_st_data[i][AttributeCodes.DC_ID].ToString())
                         {
                             //IDs of datacollector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
                             //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
@@ -536,7 +523,8 @@ namespace Intel.MyDeals.BusinessLogic
                             wip_data[i]["PS_ID"] = prc_st_data[i]["DC_ID"];
 
                             //add wipData into the return msgQueue's extraDetails attribute
-                            om.ExtraDetails = new object[] { ((IEnumerable<object>)om.ExtraDetails).ToArray()[0], wip_data[i] };
+                            //om.ExtraDetails = new object[] { wip_data[i] };
+                            om.ExtraDetails = wip_data[i];
                         } else
                         {
                             //returned ps data does not match id in this OpMsg so we continue

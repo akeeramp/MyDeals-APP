@@ -1478,13 +1478,9 @@
                                 } else {
                                     //found the index of a tender we actioned
 
-
                                     if (msgArray[i].MsgType == 1) {
-                                        //opMsgyType = 1 is for "Info" messages, aka the success scenario
-                                        //TODO: this doesnt account for failure messages... there surely must be a better way than string parsing...
-                                        var message = msgArray[i].ExtraDetails[0];  //index 0 contains the stage that the deal was moved to
-                                        var updatedWIP = msgArray[i].ExtraDetails[1]; //index 1 contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
-                                        $scope.wipData[dsIndex] = updatedWIP;
+                                        //opMsgType = 1 is for "Info" messages, aka the success scenario
+                                        $scope.wipData[dsIndex] = msgArray[i].ExtraDetails; //extradetails contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
                                     } else {
                                         //update failed for this data item
                                         //TODO: create popup indicating warnings/failures

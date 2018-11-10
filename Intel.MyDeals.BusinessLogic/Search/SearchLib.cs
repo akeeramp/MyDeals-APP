@@ -334,16 +334,13 @@ namespace Intel.MyDeals.BusinessLogic
                 myDealsData.FillInHolesFromAtrbTemplate();
             }
 
+            OpDataCollectorFlattenedDictList flatDictList = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, fromTenderDashboard);
             // Convert data to Client-Ready format
-            OpDataCollectorFlattenedList rtn = myDealsData
-                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, fromTenderDashboard)
-                .ToHierarchialList(OpDataElementType.WIP_DEAL);
+            OpDataCollectorFlattenedList rtn = flatDictList.ToHierarchialList(OpDataElementType.WIP_DEAL);
 
             if (fromTenderDashboard)
             {
-                OpDataCollectorFlattenedList prc_st_data = myDealsData
-                    .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, fromTenderDashboard)
-                    .ToHierarchialList(OpDataElementType.PRC_ST);
+                OpDataCollectorFlattenedList prc_st_data = flatDictList.ToHierarchialList(OpDataElementType.PRC_ST);
 
                 //we need a few pricing strategy level details on the tender dashboard so let's set them here.
                 for (var i = 0; i < prc_st_data.Count(); i++)
