@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('dealTools', dealTools);
 
-dealTools.$inject = ['$timeout', 'logger', 'objsetService', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary', '$uibModal'];
+dealTools.$inject = ['$timeout', 'logger', 'objsetService', 'dataService', '$rootScope', '$compile', '$templateRequest', 'colorDictionary', '$uibModal', '$window'];
 
-function dealTools($timeout, logger, objsetService, dataService, $rootScope, $compile, $templateRequest, colorDictionary, $uibModal) {
+function dealTools($timeout, logger, objsetService, dataService, $rootScope, $compile, $templateRequest, colorDictionary, $uibModal, $window) {
     return {
         scope: {
             dataItem: '=ngModel',
@@ -68,9 +68,10 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.rootScope = rootScope;
 
-            $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false: rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
+            $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false : rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
+            $scope.C_DEL_DEALS = (window.usrRole === "FSE" || window.usrRole === "GA"); // This is taken from contract.controller.js line 105.  This definately is not coming in correctly from there...
 
-            if ($scope.rootScope.C_DEL_DEALS === false) {
+            if ($scope.C_DEL_DEALS === undefined || $scope.C_DEL_DEALS === false) { // In tenders screen for DA user, this is undefined but skipping over.
                 $scope.isDeleteEnabled = false;
             }
 
@@ -210,7 +211,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             }
 
 
-            // HOLD Items
+            // HOLD Items  
             $scope.getHoldValue = function (dataItem) {
                 if (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won') return 'NoShowHold';
 
@@ -254,6 +255,8 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.getHoldIcon = function (dataItem) {
                 return $scope.holdItems[$scope.getHoldValue(dataItem)].icon;
             };
+
+            // All of hold is broken for Tender dashboard because it is undefined since it has a scoping issue, but for tender deals, we SHOULD NOT HAVE HOLD anyhow..  It is 1:1 with PS.
             $scope.getHoldTitle = function (dataItem) {
                 if (!$scope.rootScope.C_HOLD_DEALS) {
                     return "";
@@ -261,6 +264,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     return $scope.holdItems[$scope.getHoldValue(dataItem)].title;
                 }
             };
+
             $scope.getHoldStyle = function (dataItem) {
                 if (!$scope.rootScope.C_HOLD_DEALS) {
                     return { color: "#dddddd" };

@@ -1134,10 +1134,18 @@
             console.log("TODO: C");
         }
 
+        $scope.rollbackPricingTableRow = function (dataItem) {
+            console.log("TODO: MIKE ROLLBACK rollbackPricingTableRow($scope.dataItem)");
+            //return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wf_st_cd);
+        }
+
+        $scope.downloadQuoteLetter = function (customerSid, objTypeSid, objSid) {
+            var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + customerSid + "/" + objTypeSid + "/" + objSid + "/0";
+            window.open(downloadPath, '_blank', '');
+        }
 
         $scope.canDeleteAttachment = function (wf_st_cd) {
-            console.log("TODO: 2");
-            return true; //TODO
+            return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wf_st_cd);
         }
 
         $scope.$on('OpGridDataBound',
