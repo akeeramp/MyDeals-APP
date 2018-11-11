@@ -393,14 +393,15 @@
                 $timeout(function () {
                     $scope.$apply();
                 });
-
+                                
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if (($scope.actualClikedTabName == 'MC' || $scope.actualClikedTabName == 'PD' ) && $scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
-                        $scope.isPtr = false;
-                        $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
-                        $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
-                        $scope.setBusy("", "");
-                        $scope.resetDirty();
+                    if (($scope.actualClikedTabName == 'MC' || $scope.actualClikedTabName == 'PD') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                        if ($scope.isMCForceRunReq() && !$scope.inCompleteCapMissing) {
+                            $scope.gotoMCPage();
+                        }
+                        else {
+                            $scope.gotoPDPage();
+                        }                        
                     }
                     else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.selectedTAB == 'PTR') {
                         $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
@@ -409,24 +410,7 @@
                         $scope.publishWipDealsFromTab();
                         $scope.setBusy("", "");
                     }
-                    else if ($scope.actualClikedTabName == 'PD' && !$scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || $scope.inCompleteCapMissing || ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet'))) {
-                        $scope.isPtr = false;
-                        $scope.setBusy("", "");
-                        $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
-                        $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
-                        $scope.resetDirty();
-                        $scope.setBusy("", "");
-                        $scope.loadPublishGrid();
-                    }
-                    else if ($scope.actualClikedTabName == 'PD' && $scope.isMCForceRunReq() && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ($scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' || $scope.curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet')) {
-                        $scope.isPtr = false;
-                        $scope.actualClikedTabName = 'MC';
-                        $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
-                        $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
-                        $scope.setBusy("", "");
-                        $scope.resetDirty();                        
-                    }
-
+                    
                     if ($scope.contractData.TENDER_PUBLISHED == "True") {
                         $scope.goToTenderDashboard();
                     }
@@ -434,13 +418,30 @@
                 }
             });
         }
+
+        $scope.gotoMCPage = function () {
+            $scope.isPtr = false;
+            $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically     
+            $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically             
+            $scope.setBusy("", "");
+            $scope.resetDirty();
+        }
+
+        $scope.gotoPDPage = function () {
+            $scope.isPtr = false;
+            $scope.setBusy("", "");
+            $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
+            $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals            
+            $scope.resetDirty();
+            $scope.setBusy("", "");
+            $scope.loadPublishGrid();
+        }
+
         $scope.goToPublished = function () {
             $scope.isPtr = false;
             $scope.setBusy("", "");
             if ($scope.actualClikedTabName == 'PD') {
-                $scope.selectedTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
-                $scope.currentTAB = "PD"; //Purpose: If not InComplete send it for publishing deals
-                $scope.loadPublishGrid();
+                $scope.gotoPDPage();
             }
             
             $scope.resetDirty();
@@ -4542,6 +4543,36 @@
             return (str.length >= limit);
         }
 
+        //MC SYNC for pricingTableData
+        $scope.$on('refreshPricingTableData', function (event, isCapMissed) {            
+            $scope.setBusy("Updating", "Pricing Table...");
+            objsetService.readPricingTable($scope.curPricingTable.DC_ID).then(
+                function (results) {
+                    $scope.pricingTableData = results.data;
+                    $scope.setBusy("Done", "Updation Complete.");
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);                    
+                    $scope.$broadcast('refreshContractData');                  
+                },
+                function (response) {
+                    $scope.setBusy("Error", "Could not update Pricing Table...", "Error");
+                    logger.error("Could not update Pricing Table.", response, response.statusText);
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);                
+                }
+            );
+            //for (var i = 0; i < data.length; i++) {
+            //    for (var j = 0; j < $scope.pricingTableData.PRC_TBL_ROW.length; j++) {
+            //        if ($scope.pricingTableData.PRC_TBL_ROW[j].DC_PARENT_ID == data[i].PRC_TBL_OBJ_SID && PTR_USER_PRD) {
+            //            $scope.pricingTableData.PRC_TBL_ROW[j].MEETCOMP_TEST_RESULT = data[i].MEET_COMP_STS;                        
+            //        }
+            //    }
+
+            //}            
+        });
+
         $scope.isMCForceRunReq = function () {
             var mcForceRun = false;
             if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined && $scope.pricingTableData.PRC_TBL_ROW.length > 0) {
@@ -4802,21 +4833,23 @@
 
                     root.wipOptions = {
                         "isLayoutConfigurable": false,
-                        "isVisibleAdditionalDiscounts": false
-                    };
+                        "isVisibleAdditionalDiscounts": false,
 
+                    };
+                    root.wipOptions.showMCPCT = true;
                     root.wipOptions.isPinEnabled = false;
                     root.wipOptions.default = {};
                     root.wipOptions.default.groups = opGridTemplate.groups[$scope.curPricingTable.OBJ_SET_TYPE_CD];
                     root.wipOptions.default.groupColumns = opGridTemplate.templates[$scope.curPricingTable.OBJ_SET_TYPE_CD];
                     
                     root.wipOptions.columns = [];
+
                     root.wipOptions.model = { fields: {}, id: "DC_ID" };                    
                     
                     var hasDeals = [];
                     for (var x = 0; x < data.length; x++) {
                         if (hasDeals.indexOf(data[x].OBJ_SET_TYPE_CD) < 0) hasDeals.push(data[x].OBJ_SET_TYPE_CD);
-                    }
+                    }                    
 
                     for (var d = 0; d < dealTypes.length; d++) {
                         var dealType = dealTypes[d];
@@ -4838,8 +4871,7 @@
                                 col.hidden = show.indexOf(col.field) < 0;
                                 col.locked = false;
 
-                                //col.template = undefined;
-
+                                
                                 if (excludeCols.indexOf(col.field) < 0) {
                                     // add to column
                                     if (usedCols.indexOf(col.field) < 0) {
@@ -4860,7 +4892,7 @@
                         }
                     }
                     
-                    root.wipData = data;
+                    root.wipData = data;                    
                 }, 10);
                 $timeout(function () {
                     $scope.msg = "Done";

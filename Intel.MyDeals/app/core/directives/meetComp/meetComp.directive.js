@@ -15,7 +15,7 @@
                 isAdhoc: '=',
                 objTypeId: '=',
                 lastMeetCompRun: '=',
-                pageNm: '='
+                pageNm: '@',
             },
             restrict: 'AE',
             transclude: true,
@@ -140,9 +140,7 @@
                     $scope.selectedCustomerText = '';
                     $scope.curentRow = '';
                     $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
-                    //WEB API call
-                    //var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_COST_TEST_RUN;
-
+                    
                     $scope.$parent.IsFirstLoad = true;
                     $scope.IsMeetCompRun = false;
                     $scope.lastMeetCompRunCalc();
@@ -160,8 +158,7 @@
                             }
                             if (typeof $scope.$parent.goToPublished != 'undefined') {
                                 $scope.$parent.goToPublished();
-                            }
-                            
+                            }                           
                         }
 
                         if ($scope.isAdhoc == 0) {
@@ -1485,11 +1482,9 @@
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
 
                                     var isTrueOnce = false;
+
                                     if ($scope.isAdhoc == 1) {
-                                        var isCapMissed = inCompleteDueToCAPMissing(response.data);
-                                        if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
-                                            $scope.$parent.goToPublished();
-                                        }  
+                                        var isCapMissed = inCompleteDueToCAPMissing(response.data);                                          
                                     }
 
                                     if (usrRole == "GA") {
@@ -1500,14 +1495,19 @@
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
                                     
-                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM != 'MCTPOPUP') {
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM != 'MCTPOPUP' && typeof $scope.$parent.setForceNavigationForMC != 'undefined') {
                                         $scope.$parent.setForceNavigationForMC();
                                     }
-                                    if ($scope.PAGE_NM != 'MCTPOPUP') {
-                                        $scope.$root.$broadcast('refreshContractData');
-                                    }                                   
 
-                                    if ($scope.PAGE_NM == 'MCTPOPUP') {
+                                    if ($scope.PAGE_NM != 'MCTPOPUP' && $scope.PAGE_NM != 'WIDGET') {
+                                        $scope.$root.$broadcast('refreshContractData');
+                                    }          
+
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM == 'WIDGET') {
+                                        $scope.$root.$broadcast('refreshPricingTableData', isCapMissed);
+                                    }
+
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM == 'MCTPOPUP') {
                                         $scope.$parent.$parent.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
                                             .Where(function (x) {
                                                 return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
@@ -1529,11 +1529,9 @@
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
 
                                     var isTrueOnce = false;
+
                                     if ($scope.isAdhoc == 1) {
-                                        var isCapMissed = inCompleteDueToCAPMissing(response.data);
-                                        if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
-                                            $scope.$parent.goToPublished();
-                                        }
+                                        var isCapMissed = inCompleteDueToCAPMissing(response.data);                                        
                                     }
 
                                     if (usrRole == "GA") {
@@ -1543,10 +1541,20 @@
                                     $scope.isBusy = false;
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
-                                    if ($scope.PAGE_NM != 'MCTPOPUP') {
+
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM != 'MCTPOPUP' && typeof $scope.$parent.setForceNavigationForMC !='undefined') {
+                                        $scope.$parent.setForceNavigationForMC();
+                                    }
+
+                                    if ($scope.PAGE_NM != 'MCTPOPUP' && $scope.PAGE_NM != 'WIDGET') {
                                         $scope.$root.$broadcast('refreshContractData');
                                     }
-                                    if ($scope.PAGE_NM == 'MCTPOPUP') {
+
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM == 'WIDGET') {
+                                        $scope.$root.$broadcast('refreshPricingTableData', isCapMissed);
+                                    }
+
+                                    if ($scope.isAdhoc == 1 && $scope.PAGE_NM == 'MCTPOPUP') {
                                         $scope.$parent.$parent.$broadcast('refreshMCTData', $linq.Enumerable().From($scope.meetCompMasterdata)
                                             .Where(function (x) {
                                                 return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
