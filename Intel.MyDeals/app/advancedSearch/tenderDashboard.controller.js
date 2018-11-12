@@ -1643,7 +1643,7 @@
             COMP_MISSING_FLG: 0,
             HAS_ATTACHED_FILES: 0,
             OBJ_SET_TYPE_CD: "ALL_TYPES",
-            TENDER_PUBLISHED: "False",
+            TENDER_PUBLISHED: "0",
             START_DT: "01/01/2018", // These are just set to whatever, switched out mid tier to current Q
             END_DT: "04/30/2018", // These are just set to whatever, switched out mid tier to current Q
             C2A_DATA_C2A_ID: "Tender Folio Auto-Filled",
