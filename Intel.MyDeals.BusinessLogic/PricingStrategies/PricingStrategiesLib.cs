@@ -239,37 +239,6 @@ namespace Intel.MyDeals.BusinessLogic
                     needsPctMctDealIds.Add(dc.DcID);
                 }
 
-                // Now let us test for PCT or MCT if needed
-                if (needsPctMctDealIds.Any())
-                {
-                    bool passMct, passPct;
-
-                    start = DateTime.Now;
-                    bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
-                    contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
-
-                    if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
-                    {
-                        string passMsg = !passMct && !passPct
-                            ? "Meet Comp and Cost Test"
-                            : !passMct ? "Meet Comp" : "Cost Test";
-
-                        foreach (int dcId in needsPctMctDealIds)
-                        {
-                            opMsgQueue.Messages.Add(new OpMsg
-                            {
-                                Message = $"Pricing Strategy did not pass {passMsg}.",
-                                MsgType = OpMsg.MessageType.Warning,
-                                ExtraDetails = dcId,
-                                KeyIdentifiers = new[] { dcId }
-                            });
-                        }
-
-                        return opMsgQueue;
-                    }
-                }
-                // END DE19996 block...
-
                 // Check for pending stage... might need to bypass it
                 if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending")
                 {
@@ -313,6 +282,40 @@ namespace Intel.MyDeals.BusinessLogic
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
             }
+
+
+
+            // Now let us test for PCT or MCT if needed
+            if (needsPctMctDealIds.Any())
+            {
+                bool passMct, passPct;
+
+                start = DateTime.Now;
+                bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
+                contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+                if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
+                {
+                    string passMsg = !passMct && !passPct
+                        ? "Meet Comp and Cost Test"
+                        : !passMct ? "Meet Comp" : "Cost Test";
+
+                    foreach (int dcId in needsPctMctDealIds)
+                    {
+                        opMsgQueue.Messages.Add(new OpMsg
+                        {
+                            Message = $"Pricing Strategy did not pass {passMsg}.",
+                            MsgType = OpMsg.MessageType.Warning,
+                            ExtraDetails = dcId,
+                            KeyIdentifiers = new[] { dcId }
+                        });
+                    }
+
+                    return opMsgQueue;
+                }
+            }
+            // END DE19996 block...
+
 
             List<int> dealIds = new List<int>();
             List<int> pendingDealIds = new List<int>();
