@@ -176,7 +176,7 @@ namespace Intel.MyDeals.BusinessRules
             objsetItem["_actions"] = objsetActionItem.Actions;
             objsetItem["_actionReasons"] = objsetActionItem.ActionReasons;
             objsetItem["_settings"] = objsetActionItem.Settings;
-        }
+         }
 
         public static void TranslateProductFilter(params object[] args)
         {

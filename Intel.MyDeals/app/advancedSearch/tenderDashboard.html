@@ -17,6 +17,13 @@
     </span>
 </div>
 
+<div id="perfMs"></div>
+<div id="perfLegend"></div>
+<div id="perfDetails"></div>
+<div style="position: absolute; bottom: -6px; right: 145px; z-index: 10;">
+    <div id="perfChart" style="height: 40px; padding: 0;"></div>
+</div>
+
 <div id="horizontal-search">
     <div id="search-info-container" ng-show="showSearchFilters">
 
@@ -84,7 +91,7 @@
     </div>
 
     <div op-grid
-         id="attributeGrid" 
+         id="attributeGrid"
          class="'search-grid'"
          ng-if="wipData.length != 0"
          style="height: 100%;"
@@ -99,339 +106,414 @@
 
 
 <style class="ng-scope">
-/*#dealEditor>.k-grid-content{max-height: 200px !important}
-#dealEditor>.k-grid-content-locked{max-height: 200px !important}*/
-    #notesDialog {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-    }
-
-        #notesDialog div {
-            padding: 0 8px;
+        /*#dealEditor>.k-grid-content{max-height: 200px !important}
+    #dealEditor>.k-grid-content-locked{max-height: 200px !important}*/
+        #notesDialog {
+            width: 100%;
+            height: 100%;
+            padding: 0;
         }
 
-            #notesDialog div textarea {
-                width: 440px;
-                height: 200px;
+            #notesDialog div {
+                padding: 0 8px;
             }
 
-    .k-dialog .notesDialog.k-content textarea {
-        width: 450px;
-        height: 250px;
-    }
+                #notesDialog div textarea {
+                    width: 440px;
+                    height: 200px;
+                }
 
-    .k-dialog .notesDialog.k-content .opUiContainer {
-        margin-top: -30px;
-    }
-
-    .k-dialog .promptUserDialog {
-        text-align: center;
-        padding: 10px 0 0 0;
-    }
-
-        .k-dialog .promptUserDialog h4 {
-            color: #003C71;
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 0;
+        .k-dialog .notesDialog.k-content textarea {
+            width: 450px;
+            height: 250px;
         }
 
-        .k-dialog .promptUserDialog p {
-            font-size: 12px;
-            padding: 10px 20px;
+        .k-dialog .notesDialog.k-content .opUiContainer {
+            margin-top: -30px;
         }
 
-    .rotate90 {
-        -ms-transform: rotate(90deg);
-        -webkit-transform: rotate(90deg);
-        transform: rotate(90deg);
-    }
-
-    .dirtyTip {
-        position: absolute;
-        left: 0;
-        border-style: solid;
-        border-color: #0071C5 transparent transparent #0071C5;
-        border-width: 3px;
-    }
-
-    .dealTag {
-        display: none;
-    }
-
-    .rule-dropdown-actions {
-        display: none;
-    }
-
-    .dealTools {
-        line-height: 1.8em;
-        height: 100% !important;
-        width: 100%;
-    }
-
-        .dealTools .gridStatusMarker {
-            font-family: arial;
+        .k-dialog .promptUserDialog {
+            text-align: center;
+            padding: 10px 0 0 0;
         }
 
-        .dealTools a {
-            text-decoration: none;
+            .k-dialog .promptUserDialog h4 {
+                color: #003C71;
+                font-size: 18px;
+                font-weight: 600;
+                margin-top: 0;
+            }
+
+            .k-dialog .promptUserDialog p {
+                font-size: 12px;
+                padding: 10px 20px;
+            }
+
+        .rotate90 {
+            -ms-transform: rotate(90deg);
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
-        .dealTools i:hover {
-            color: #003C71;
-        }
-	
-    .gridStatusMarker {
-        height: 100%;
-        width: 16px;
-        color: #000000;
-        background-color: #cccccc;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 6px 2px 6px 7px;
-        text-align: center;
-    }
-
-        .gridStatusMarker.Working {
-            color: #000000;
-            background-color: #FFA300;
+        .dirtyTip {
+            position: absolute;
+            left: 0;
+            border-style: solid;
+            border-color: #0071C5 transparent transparent #0071C5;
+            border-width: 3px;
         }
 
-        .gridStatusMarker.Active {
-            color: #000000;
-            background-color: #C4D600;
+        .dealTag {
+            display: none;
         }
 
-        .gridStatusMarker.Cancelled {
+        .rule-dropdown-actions {
+            display: none;
+        }
+
+        .dealTools {
+            line-height: 1.8em;
+            height: 100% !important;
+            width: 100%;
+        }
+
+            .dealTools .gridStatusMarker {
+                font-family: arial;
+            }
+
+            .dealTools a {
+                text-decoration: none;
+            }
+
+            .dealTools i:hover {
+                color: #003C71;
+            }
+
+        .gridStatusMarker {
+            height: 100%;
+            width: 16px;
             color: #000000;
             background-color: #cccccc;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 2px 6px 7px;
+            text-align: center;
         }
 
-    .dealTools .md-icon {
-        padding: 4px 0 0 5px;
-    }
-
-        .dealTools .md-icon i {
-            color: #00AEEF;
-        }
-
-            .dealTools .md-icon i:hover {
-                color: #003C71 !important;
+            .gridStatusMarker.Working {
+                color: #000000;
+                background-color: #FFA300;
             }
 
-    .dealTools .md-icon-disabled {
-        padding: 4px 2px 0 1px;
-    }
+            .gridStatusMarker.Active {
+                color: #000000;
+                background-color: #C4D600;
+            }
 
-        .dealTools .md-icon-disabled i {
-            color: #00AEEF;
+            .gridStatusMarker.Cancelled {
+                color: #000000;
+                background-color: #cccccc;
+            }
+
+        .dealTools .md-icon {
+            padding: 4px 0 0 5px;
         }
 
-    .dealTools input[type=radio].with-font,
-    .dealTools input[type=checkbox].with-font {
-        border: 0;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
+            .dealTools .md-icon i {
+                color: #00AEEF;
+            }
 
-        .dealTools input[type=radio].with-font + label:before,
-        .dealTools input[type=checkbox].with-font + label:before {
-            font-family: FontAwesome;
-            display: inline-block;
-            content: "\f096";
-            font-size: 20px;
-            letter-spacing: 10px;
-            color: #00AEEF;
-            margin-left: 10px;
+                .dealTools .md-icon i:hover {
+                    color: #003C71 !important;
+                }
+
+        .dealTools .md-icon-disabled {
+            padding: 4px 2px 0 1px;
         }
 
-        .dealTools input[type=radio].with-font:hover + label:before,
-        .dealTools input[type=checkbox].with-font:hover + label:before {
-            color: #003C71;
+            .dealTools .md-icon-disabled i {
+                color: #00AEEF;
+            }
+
+        .dealTools input[type=radio].with-font,
+        .dealTools input[type=checkbox].with-font {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+            .dealTools input[type=radio].with-font + label:before,
+            .dealTools input[type=checkbox].with-font + label:before {
+                font-family: FontAwesome;
+                display: inline-block;
+                content: "\f096";
+                font-size: 20px;
+                letter-spacing: 10px;
+                color: #00AEEF;
+                margin-left: 10px;
+            }
+
+            .dealTools input[type=radio].with-font:hover + label:before,
+            .dealTools input[type=checkbox].with-font:hover + label:before {
+                color: #003C71;
+                cursor: pointer;
+            }
+
+            .dealTools input[type=radio].with-font.disabled + label:before,
+            .dealTools input[type=checkbox].with-font.disabled + label:before {
+                color: #cccccc;
+                cursor: default;
+            }
+
+            .dealTools input[type=radio].with-font:checked + label:before,
+            .dealTools input[type=checkbox].with-font:checked + label:before {
+                content: "\f046";
+                font-size: 20px;
+                letter-spacing: 5px;
+                color: #C4D600;
+                margin-left: 10px;
+            }
+
+            .dealTools input[type=radio].with-font:focus + label:before,
+            .dealTools input[type=checkbox].with-font:focus + label:before {
+                font-weight: bold;
+                color: #00AEEF;
+            }
+
+            .dealTools input[type=radio].with-font:checked:focus + label:before,
+            .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+                font-weight: bold;
+                color: #C4D600;
+            }
+
+        .delete-attach-icon {
+            font-size: 16px;
             cursor: pointer;
         }
 
-        .dealTools input[type=radio].with-font.disabled + label:before,
-        .dealTools input[type=checkbox].with-font.disabled + label:before {
-            color: #cccccc;
-            cursor: default;
+            .delete-attach-icon:hover {
+                text-decoration: none;
+            }
+
+        .disabled-dropdown .k-dropdown .k-state-disabled .k-input,
+        .disabled-dropdown .k-dropdown .k-state-disabled .k-select,
+        .disabled-dropdown .k-dropdown .k-state-disabled .k-select .k-icon {
+            cursor: not-allowed;
         }
 
-        .dealTools input[type=radio].with-font:checked + label:before,
-        .dealTools input[type=checkbox].with-font:checked + label:before {
-            content: "\f046";
-            font-size: 20px;
-            letter-spacing: 5px;
-            color: #C4D600;
-            margin-left: 10px;
+        #horizontal-search {
+            border: 0 solid transparent;
+            height: 100%;
+            font-size: 12px;
+            margin-left: -8px;
+            margin-right: -8px;
         }
 
-        .dealTools input[type=radio].with-font:focus + label:before,
-        .dealTools input[type=checkbox].with-font:focus + label:before {
-            font-weight: bold;
+        #search-info-container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .search-toolbar {
+            padding: 0 15px;
+        }
+
+            .search-toolbar h5, #search-info-container h5 {
+                margin-top: 0;
+                color: #003C71;
+                font-weight: 600;
+            }
+
+        #search-info-container label {
+            font-weight: normal;
+            font-size: 16px;
+            margin-right: 10px;
+            width: 110px;
+        }
+
+        #search-info-container .left-container {
+            width: 420px;
+            float: left;
+        }
+
+        #search-info-container .left-inner-container {
+            border: 1px solid transparent;
+            border-radius: 6px;
+            padding: 0 10px 20px 10px;
+        }
+
+        #search-info-container .right-container {
+            padding: 20px 10px 20px 900px;
+            margin-left: -460px;
+        }
+
+        #search-info-container .right-inner-container {
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 10px;
+            height: 190px;
+        }
+
+        .btn-skyblue {
+            background-color: #00AEEF;
+            border-color: #00AEEF;
+            margin: 0 0 0 15px;
+        }
+
+            .btn-skyblue:hover {
+                background-color: #0071C5;
+            }
+
+        .show-hide-options {
+            color: #00AEEF;
+            cursor: pointer;
+            position: absolute;
+            top: 1px;
+            right: 20px;
+            z-index: 200;
+            font-size: 12px;
+        }
+
+            .show-hide-options:hover {
+                color: #0071C5;
+            }
+
+        .attrbMenu .k-link {
+            padding: 3px 20px !important;
+        }
+
+        .attrbMenu .k-state-hover .k-link {
+            background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
+        }
+
+        .k-multiselect {
+            width: 360px;
+        }
+
+        .objDealId {
+            cursor: pointer;
             color: #00AEEF;
         }
 
-        .dealTools input[type=radio].with-font:checked:focus + label:before,
-        .dealTools input[type=checkbox].with-font:checked:focus + label:before {
-            font-weight: bold;
+            .objDealId:hover {
+                color: #003C71;
+            }
+
+        .search-container {
+            padding: 25px 20px;
+        }
+
+        .valid_Valid {
+            background: #e8eaec;
+        }
+
+        .valid_Finalizing {
+            background: #e8eaec;
+        }
+
+        .valid_Complete {
+            background: #C4D600;
+        }
+
+        .valid_, .valid_0, .valid_Dirty {
+            background: #e8eaec;
+        }
+
+        .validf_Valid {
+            color: #e8eaec;
+        }
+
+        .validf_Finalizing {
+            color: #e8eaec;
+        }
+
+        .validf_Complete {
             color: #C4D600;
         }
 
-    .delete-attach-icon {
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-        .delete-attach-icon:hover {
-            text-decoration: none;
+        .validf_, .validf_0, .validf_Dirty {
+            color: #f9521a;
         }
 
-    .disabled-dropdown .k-dropdown .k-state-disabled .k-input,
-    .disabled-dropdown .k-dropdown .k-state-disabled .k-select,
-    .disabled-dropdown .k-dropdown .k-state-disabled .k-select .k-icon {
-        cursor: not-allowed;
-    }
-
-    #horizontal-search {
-        border: 0 solid transparent;
-        height: 100%;
-        font-size: 12px;
-        margin-left: -8px;
-        margin-right: -8px;
-    }
-
-    #search-info-container {
-        width: 100%;
-        margin: auto;
-    }
-
-    .search-toolbar {
-        padding: 0 15px;
-    }
-
-        .search-toolbar h5, #search-info-container h5 {
-            margin-top: 0;
-            color: #003C71;
-            font-weight: 600;
-        }
-
-    #search-info-container label {
-        font-weight: normal;
-        font-size: 16px;
-        margin-right: 10px;
-        width: 110px;
-    }
-
-    #search-info-container .left-container {
-        width: 420px;
-        float: left;
-    }
-
-    #search-info-container .left-inner-container {
-        border: 1px solid transparent;
-        border-radius: 6px;
-        padding: 0 10px 20px 10px;
-    }
-
-    #search-info-container .right-container {
-        padding: 20px 10px 20px 900px;
-        margin-left: -460px;
-    }
-
-    #search-info-container .right-inner-container {
-        border: 1px solid #e5e5e5;
-        border-radius: 6px;
-        padding: 10px;
-        height: 190px;
-    }
-
-    .btn-skyblue {
-        background-color: #00AEEF;
-        border-color: #00AEEF;
-        margin: 0 0 0 15px;
-    }
-
-        .btn-skyblue:hover {
-            background-color: #0071C5;
-        }
-
-    .show-hide-options {
-        color: #00AEEF;
-        cursor: pointer;
+    #perfMs {
         position: absolute;
-        top: 1px;
-        right: 20px;
-        z-index: 200;
-        font-size: 12px;
+        bottom: 22px;
+        right: 150px;
+        color: #000000;
+        font-family: verdana;
+        font-size: 10px;
+        margin-top: 5px;
+        z-index: 1000;
     }
 
-        .show-hide-options:hover {
+    #perfLegend {
+        position: absolute;
+        bottom: -1px;
+        right: 141px;
+        font-family: verdana;
+        font-size: 9px;
+        z-index: 1000;
+        color: #666666;
+    }
+
+    #perfDetails {
+        position: absolute;
+        bottom: 50px;
+        right: 150px;
+        font-family: verdana;
+        font-size: 10px;
+        z-index: 1000;
+        background-color: #ffffff;
+    }
+
+        #perfDetails th {
+            padding: 2px 4px;
             color: #0071C5;
         }
 
-    .attrbMenu .k-link {
-        padding: 3px 20px !important;
-    }
-
-    .attrbMenu .k-state-hover .k-link {
-        background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
-    }
-
-    .k-multiselect {
-        width: 360px;
-    }
-
-    .objDealId {
-        cursor: pointer;
-        color: #00AEEF;
-    }
-
-        .objDealId:hover {
-            color: #003C71;
+        #perfDetails td {
+            padding: 2px 4px;
+            color: #333333;
         }
 
-    .search-container {
-        padding: 25px 20px;
+    .closePerf {
+        color: #cccccc;
+        font-size: 16px;
+        cursor: pointer;
     }
 
-    .valid_Valid {
-        background: #e8eaec;
+        .closePerf:hover {
+            color: #FC4C02;
+        }
+
+    .legKey {
+        width: 10px;
+        height: 10px;
+        border: 1px solid #bebebe;
     }
 
-    .valid_Finalizing {
-        background: #e8eaec;
+    .legData {
+        margin-left: 4px;
+        margin-right: 10px;
+        margin-top: -2px;
     }
 
-    .valid_Complete {
-        background: #C4D600;
+    .showMore {
+        font-size: 18px;
+        color: #00AEEF;
+        cursor: pointer;
     }
 
-    .valid_, .valid_0, .valid_Dirty {
-        background: #e8eaec;
+    .showMore:hover {
+        color: #0071C5;
     }
 
-    .validf_Valid {
-        color: #e8eaec;
-    }
 
-    .validf_Finalizing {
-        color: #e8eaec;
-    }
-
-    .validf_Complete {
-        color: #C4D600;
-    }
-
-    .validf_, .validf_0, .validf_Dirty {
-        color: #f9521a;
-    }
 </style>
 <script id="emailItemTemplateTender" type="text/x-kendo-template">
 

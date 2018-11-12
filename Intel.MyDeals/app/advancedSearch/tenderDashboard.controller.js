@@ -1327,26 +1327,30 @@
                             return;
                         } else {
                             //no mismatch, therefore we push it into the packet that we will send to the middle tier
+                            var psId = gridDS[d].PS_ID;
+                            if (psId === undefined) psId = gridDS[d]._parentIdPS;
                             tenders.push({
                                 DC_ID: gridDS[d].DC_ID,
                                 CNTRCT_OBJ_SID: gridDS[d].CNTRCT_OBJ_SID,
                                 CUST_MBR_SID: gridDS[d].CUST_MBR_SID,
                                 WF_STG_CD: gridDS[d].WF_STG_CD,
                                 PS_WF_STG_CD: gridDS[d].PS_WF_STG_CD,
-                                PS_ID: gridDS[d].PS_ID
+                                PS_ID: psId
                             });
                         }
                     }
                 }
             } else {
                 //not linked, so we will just push the single data item to the middle tier
+                var psId = dataItem.PS_ID;
+                if (psId === undefined) psId = dataItem._parentIdPS;
                 tenders.push({
                     DC_ID: dataItem.DC_ID,
                     CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
                     CUST_MBR_SID: dataItem.CUST_MBR_SID,
                     WF_STG_CD: dataItem.WF_STG_CD,
                     PS_WF_STG_CD: dataItem.PS_WF_STG_CD,
-                    PS_ID: dataItem.PS_ID
+                    PS_ID: psId
                 });
             }
 
@@ -1396,7 +1400,7 @@
         }
 
         $scope.actionTenderDeals = function (tenders, actn) {
-            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Action Tenders", "");
+            if ($scope.$root.pc === null || $scope.$root.pc === undefined) $scope.$root.pc = new perfCacheBlock("Action Tenders", "");
             var pc = new perfCacheBlock("Action tenders", "UX");
 
             $scope.setBusy("Updating Tender Deals...", "Please wait as we update the Tender Deals!");
@@ -1457,6 +1461,10 @@
                     //    $scope.curLinkedVal = "";
                     //$timeout(function () {
 
+                    pcService.addPerfTimes(results.data.PerformanceTimes);
+                    pc.add(pcService.stop());
+                    var pcUI = new perfCacheBlock("Processing returned data", "UI");
+
                     //take the response opMsgQueue and update grid accordingly
                     var msgArray = results.data.Data.Messages;
                     for (var dsIndex = 0; dsIndex < $scope.wipData.length; dsIndex++) {
@@ -1468,24 +1476,41 @@
                                 } else {
                                     //found the index of a tender we changed
 
-                                    if (msgArray[i].MsgType == 1) {
-                                        //opMsgyType = 1 is for "Info messages", aka the success scenario
-                                        $scope.wipData[dsIndex]["bid_actions"] = msgArray[i].ExtraDetails;  //for bid_action updates, these will contain the new possible bid actions - 3 possible means offer, 2 possible means lost, 1 possible means won
-                                        $scope.wipData[dsIndex]["BID_ACTNS"] = [];
-                                        for (var actionLength = 0; actionLength < msgArray[i].ExtraDetails.length; actionLength++) {
-                                            $scope.wipData[dsIndex]["BID_ACTNS"].push({
-                                                "BidActnName": msgArray[i].ExtraDetails[actionLength],
-                                                "BidActnValue": msgArray[i].ExtraDetails[actionLength],
-                                            })
-                                        }
+                                    for (var m = 0; m < msgArray.length; m++) {
 
-                                        //TODO: will this error out for bulk updates?  reading phils old code it seems extra details may come back structured differently if multiple tenders are passed in.
-                                        if ($scope.wipData[dsIndex]["bid_actions"].length == 3) $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
-                                        if ($scope.wipData[dsIndex]["bid_actions"].length == 2) $scope.wipData[dsIndex]["WF_STG_CD"] = "Lost";
-                                        if ($scope.wipData[dsIndex]["bid_actions"].length == 1) $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
-                                    } else {
-                                        //update failed for this data item
-                                        //TODO: create popup indicating warnings/failures
+                                        if (msgArray[m].MsgType == 1) {
+                                            //opMsgyType = 1 is for "Info messages", aka the success scenario
+
+                                            if (msgArray[m].ExtraDetails.length === undefined) { // not and array... dictionary.  This means a WON bid
+                                                if (msgArray[m].Message === "Action List") {
+                                                    var details = msgArray[m].ExtraDetails;
+                                                    $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
+                                                    $scope.wipData[dsIndex]["bid_actions"] = [];
+                                                    $scope.wipData[dsIndex]["BID_ACTNS"] = [];
+                                                    $scope.wipData[dsIndex]["TRKR_NBR"] = { "20___0": details[$scope.wipData[dsIndex].DC_ID].join(", ") }
+                                                }
+
+                                            } else {
+
+                                                $scope.wipData[dsIndex]["bid_actions"] = msgArray[m].ExtraDetails;  //for bid_action updates, these will contain the new possible bid actions - 3 possible means offer, 2 possible means lost, 1 possible means won
+                                                $scope.wipData[dsIndex]["BID_ACTNS"] = [];
+                                                for (var actionLength = 0; actionLength < msgArray[m].ExtraDetails.length; actionLength++) {
+                                                    $scope.wipData[dsIndex]["BID_ACTNS"].push({
+                                                        "BidActnName": msgArray[m].ExtraDetails[actionLength],
+                                                        "BidActnValue": msgArray[m].ExtraDetails[actionLength],
+                                                    })
+                                                }
+
+                                                //TODO: will this error out for bulk updates?  reading phils old code it seems extra details may come back structured differently if multiple tenders are passed in.
+                                                if ($scope.wipData[dsIndex]["bid_actions"].length == 3) $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
+                                                if ($scope.wipData[dsIndex]["bid_actions"].length == 2) $scope.wipData[dsIndex]["WF_STG_CD"] = "Lost";
+                                                if ($scope.wipData[dsIndex]["bid_actions"].length == 1) $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
+                                            }
+
+                                        } else {
+                                            //update failed for this data item
+                                            //TODO: create popup indicating warnings/failures
+                                        }
                                     }
                                 }
                             }
@@ -1493,7 +1518,10 @@
                             for (var i = 0; i < msgArray.length; i++) {
                                 var keyIdentifiers = msgArray[i].KeyIdentifiers;    //for approval action updates, these will contain the pricing strategy IDs which can be used to identify the dataItem in wipData as tenders have a 1:1 relation to their pricing strategies
 
-                                if (keyIdentifiers.indexOf($scope.wipData[dsIndex]["PS_ID"]) == -1) {
+                                var psId = $scope.wipData[dsIndex]["PS_ID"];
+                                if (psId === undefined) psId = $scope.wipData[dsIndex]["_parentIdPS"];
+
+                                if (keyIdentifiers.indexOf(psId) == -1) {
                                     continue;  //dataItem's parent pricing strategy id not being present in return message's key identifiers indicate that it was not part of the changed set
                                 } else {
                                     //found the index of a tender we actioned
@@ -1517,6 +1545,13 @@
                         }
                     }
 
+                    pc.add(pcUI.stop());
+                    if ($scope.$root.pc !== null) {
+                        $scope.$root.pc.add(pc.stop());
+                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc = null;
+                    }
+
                     $("#dealEditor").data("kendoGrid").dataSource.read();
                     $("#dealEditor").data("kendoGrid").refresh();
 
@@ -1538,6 +1573,7 @@
                 }
             );
         }
+
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;
