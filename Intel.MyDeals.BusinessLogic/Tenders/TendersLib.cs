@@ -256,11 +256,11 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)
         {
             //modify contract token with necessary PS/Contract information
-            //TODO: once we update ActionPricingStrategies() to be independent of contract/customer information, we should uncomment to set these to 0 to indicate it is an action coming from the tender dashboard
-            //contractToken.CustId = 0;
-            //contractToken.ContractId = d0;
+            contractToken.CustId = 0;       //we send 0 custId for tenders. when the db sees a 0 on temp table translation it will pull the correct customer info
+            contractToken.ContractId = -1;  //we send -1 ContractId for tenders. when the db completes a save the middle tier will catch this -1 case and call a rollup proc that is necessary for approval actions. (see OpDataCollectorDataLib_Save.cs)
+            contractToken.ContractIdList = new List<int>(); //when ContractId = -1, we send a contractId List in its place when we call the rollup SP.  (see OpDataCollectorDataLib_Save.cs)
             contractToken.CustAccpt = "Acceptance Not Required in C2A";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
-            contractToken.BulkTenderUpdate = true;  //we use this flag to indicate our actions are coming from the tender dashboard
+            contractToken.BulkTenderUpdate = true;  //we use this flag to indicate our actions are coming from the tender dashboard.  flag is utilized througout save and approval function pipelines.
 
             //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
@@ -275,20 +275,14 @@ namespace Intel.MyDeals.BusinessLogic
                 item.DC_ID = tai.PS_ID;
                 wfActnList.Add(item);
 
-                //TODO: update and eventually remove the below lines
-                //for now we loop through calls of ActionPricingStrategies, so we stop data corruption, but we really need to modify the approval function stack to be contract/customer independent.
-                contractToken.CustId = tai.CUST_MBR_SID;
-                contractToken.ContractId = tai.CNTRCT_OBJ_SID;
-                actnPs[actn] = wfActnList;
-                ret.Messages.AddRange(_pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs).Messages);
-                wfActnList = new List<WfActnItem>();
+                if (!contractToken.ContractIdList.Contains(tai.CNTRCT_OBJ_SID))
+                {
+                    contractToken.ContractIdList.Add(tai.CNTRCT_OBJ_SID);
+                }
             }
-            return ret;
 
-            //TODO: update and eventually uncomment the below lines
-            //for now we loop through calls of ActionPricingStrategies.  once we update the approval function stack  to be contract/customer agnostic, then we can reintroduce the single call of ActionPS.
-            //actnPs[actn] = wfActnList;
-            //return _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs);
+            actnPs[actn] = wfActnList;
+            return _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs);
         }
 
         public OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn)
