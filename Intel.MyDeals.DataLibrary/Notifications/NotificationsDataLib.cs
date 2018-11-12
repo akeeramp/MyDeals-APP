@@ -382,7 +382,7 @@ namespace Intel.MyDeals.DataLibrary
                 // if non prod environment send it to forward only email, recipients will be ignored
                 if (!env.Equals("PROD", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    payload.sent_test_email = false;
+                    payload.sent_test_email = true;
                 }
                 var response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
