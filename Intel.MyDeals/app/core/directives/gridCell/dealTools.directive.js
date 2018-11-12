@@ -21,7 +21,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
         controller: ['$scope', '$http', function ($scope, $http) {
 
             if (typeof $scope.$parent.$parent.$parent.isTenderContract !== 'undefined') {
-                $scope.isTenderContract = $scope.$parent.$parent.$parent.isTenderContract === true;
+                $scope.isTenderContract = ($scope.$parent.$parent.$parent.isTenderContract == 1 || $scope.$parent.$parent.$parent.isTenderContract == true);               
             }
 
             if ($scope.dataItem.PS_WF_STG_CD === undefined && $scope.dataItem.items !== undefined) {
