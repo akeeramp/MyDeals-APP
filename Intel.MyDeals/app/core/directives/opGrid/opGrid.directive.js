@@ -142,7 +142,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (data.length > 0) {
                     for (var j = 0; j < $scope.opData.length; j++) {
                         if ($scope.opData[j].DC_ID == data[0].DC_ID) {
-                            $scope.opData[j].COST_TEST_RESULT = data[0].PRC_CST_TST_STS === "Overridden" ? "Pass" : data[0].PRC_CST_TST_STS;
+                            var CST_STS = data[0].PRC_CST_TST_STS;
+                            if ((data[0].PRC_CST_TST_STS == 'Fail' && data[0].COST_TEST_OVRRD_FLG == 'Yes') || data[0].PRC_CST_TST_STS === "Overridden") {
+                                CST_STS = 'Pass';
+                            }
+                            $scope.opData[j].COST_TEST_RESULT = CST_STS;
                             break;
                         }
                     }
