@@ -4,9 +4,9 @@
         .module('app.core')
         .directive('meetComp', meetComp);
 
-    meetComp.$inject = ['$compile', '$filter', 'dataService', 'securityService', '$timeout', 'logger', '$linq', '$uibModal'];
+    meetComp.$inject = ['$compile', '$filter', 'dataService', 'objsetService', 'securityService', '$timeout', 'logger', '$linq', '$uibModal'];
 
-    function meetComp($compile, $filter, dataService, securityService, $timeout, logger, $linq, $uibModal) {
+    function meetComp($compile, $filter, dataService, objsetService, securityService, $timeout, logger, $linq, $uibModal) {
         kendo.culture("en-US");
 
         return {
@@ -20,7 +20,7 @@
             restrict: 'AE',
             transclude: true,
             templateUrl: '/app/core/directives/meetComp/meetComp.directive.html',
-            controller: ['$scope', 'dataService', function ($scope, dataService) {
+            controller: ['$scope', 'dataService', 'objsetService', function ($scope, dataService) {
 
                 // TODO: Configure security mask, these all workflow stage sec setting, we need to define one more deal sec 'CAN_OVERRIDE_MEET_COMP'
                 var hideViewMeetCompResult = window.usrRole === "FSE";  //|| !$scope.root.CAN_VIEW_MEET_COMP;
@@ -134,6 +134,17 @@
                     
                 }
 
+                $scope.runPCTMCT = function (mode) {
+                    if ($scope.PAGE_NM === 'WIDGET') {
+                        objsetService.runPctContract($scope.objSid).then(function (data) {
+                            $scope.$parent.goToPublished();
+                            $scope.isBusy = false;
+                            return;
+                        });
+                    }                    
+                }
+
+
                 if (!!$scope.objSid) {
                     $scope.loading = true;
                     $scope.selectedCust = '';
@@ -150,15 +161,13 @@
                             $scope.$parent.setIsBusyFalse();
                         }
                         if (response.data.length == 0 && $scope.isAdhoc == 1) {
+                            $scope.runPCTMCT();
                             kendo.alert("Meet comp is not applicable for the Products selected in the Tender Table editor");
-                            $scope.isBusy = false;                            
+                            //$scope.isBusy = false;                            
                             $scope.$parent.inCompleteDueToCapMissing(true);
                             if (typeof $scope.$parent.setMcTag != 'undefined') {
                                 $scope.$parent.setMcTag(false);
-                            }
-                            if (typeof $scope.$parent.goToPublished != 'undefined') {
-                                $scope.$parent.goToPublished();
-                            }                           
+                            }                                                       
                         }
 
                         if ($scope.isAdhoc == 0) {
@@ -1484,6 +1493,7 @@
                                     var isTrueOnce = false;
 
                                     if ($scope.isAdhoc == 1) {
+                                        $scope.runPCTMCT();
                                         var isCapMissed = inCompleteDueToCAPMissing(response.data);                                          
                                     }
 
@@ -1491,7 +1501,11 @@
                                         var isValid = isModelValid($scope.meetCompMasterdata);
                                     }
                                     $scope.dataSourceParent.read();
-                                    $scope.isBusy = false;
+
+                                    if ($scope.PAGE_NM != 'WIDGET') {
+                                        $scope.isBusy = false;
+                                    }  
+                                    
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
                                     
@@ -1531,6 +1545,7 @@
                                     var isTrueOnce = false;
 
                                     if ($scope.isAdhoc == 1) {
+                                        $scope.runPCTMCT();
                                         var isCapMissed = inCompleteDueToCAPMissing(response.data);                                        
                                     }
 
@@ -1538,7 +1553,9 @@
                                         var isValid = isModelValid($scope.meetCompMasterdata);
                                     }
                                     $scope.dataSourceParent.read();
-                                    $scope.isBusy = false;
+                                    if ($scope.PAGE_NM != 'WIDGET') {
+                                        $scope.isBusy = false;
+                                    }  
                                     $scope.tempUpdatedList = [];
                                     $scope.meetCompUpdatedList = [];
 
@@ -1920,9 +1937,10 @@
                         else {
                             if ($scope.isAdhoc == 0) {
                                 kendo.alert("No Meet Comp data available for product(s) in this Contract");
+                                $scope.isBusy = false;
+                                return;
                             }                            
-                            $scope.isBusy = false;
-                            return;
+                           
                         }
                     },
                         function (response) {
