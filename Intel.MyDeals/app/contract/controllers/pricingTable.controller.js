@@ -3714,6 +3714,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
             var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
 
+            // check dates against contract - Tender contracts don't observe start/end date within contract.
+            var contractIsTender = "0";
+            if ($scope.contractData["IS_TENDER"] !== undefined) contractIsTender = $scope.contractData["IS_TENDER"];
+
             var modalInstance = $uibModal.open({
                 //animation: $ctrl.animationsEnabled,
                 ariaLabelledBy: 'modal-title',
@@ -3734,6 +3738,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     },
                     contractEndDate: function () {
                         return contractEndDate;
+                    },
+                    contractIsTender: function () {
+                        return contractIsTender;
                     }
                 }
             });

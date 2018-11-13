@@ -2496,7 +2496,11 @@
                                 if (dateFields[d] === "START_DT") {
                                     var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
                                     var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
-                                    if (moment(tblStartDate).isAfter(endDate)) {
+                                    var isTenderFlag = "0";
+                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -2508,8 +2512,12 @@
                                 }
                                 if (dateFields[d] === "END_DT") {
                                     var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                    var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");;
-                                    if (moment(tblEndDate).isBefore(startDate)) {
+                                    var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
+                                    var isTenderFlag = "0";
+                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -2558,6 +2566,8 @@
             if (stateName === "contract.manager.strategy.wip" && !bypassLowerContract) {
                 source = "WIP_DEAL";
                 gData = $scope.wipData;
+                var isTenderFlag = "0";
+                if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
                 //for (var iterator = 0; iterator < gData.length; iterator++) {
                 //    if (gData[iterator].EXPIRE_FLG === true) {
@@ -2581,9 +2591,8 @@
                         if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                         if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
 
-
-                        // check dates against contract
-                        if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT)) {
+                        // check dates against contract - Tender contracts don't observe start/end date within contract.
+                        if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT) && isTenderFlag !== "1") {
                             if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                             if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                             gData[i]._behaviors.isError['START_DT'] = true;
@@ -2592,7 +2601,8 @@
                             errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")");
                         }
 
-                        if (moment(gData[i]["END_DT"]).isBefore($scope.contractData.START_DT)) {
+                        // check dates against contract - Tender contracts don't observe start/end date within contract.
+                        if (moment(gData[i]["END_DT"]).isBefore($scope.contractData.START_DT) && isTenderFlag !== "1") {
                             if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
                                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                 if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};

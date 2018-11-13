@@ -9,10 +9,10 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate'];
+DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender'];
 
-function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate) {
-	var $ctrl = this;
+function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender) {
+    var $ctrl = this;
 	$ctrl.popupResult = cellCurrValues;
     $ctrl.placeholderText = "Click to Select...";
     $ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
@@ -50,11 +50,11 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 
 			$ctrl.isValidDate = true;
 
-            // date must overlapp contract range... not inside of the range
-			if ($ctrl.isStartDate && value > new Date(contractEndDate)) {
+		    // date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
+			if ($ctrl.isStartDate && value > new Date(contractEndDate) && contractIsTender !== "1") {
 			    $ctrl.isValidDate = false;
 			}
-			if (!$ctrl.isStartDate && value < new Date(contractStartDate)) {
+			if (!$ctrl.isStartDate && value < new Date(contractStartDate) && contractIsTender !== "1") {
 			    $ctrl.isValidDate = false;
 			}
 

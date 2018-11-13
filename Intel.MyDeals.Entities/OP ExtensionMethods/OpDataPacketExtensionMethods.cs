@@ -175,10 +175,10 @@ namespace Intel.MyDeals.Entities
             foreach (OpDataCollector dc in packet.AllDataCollectors.Where(d => dealIds.Contains(d.DcID)))
             {
                 IOpDataElement de = dc.GetDataElement(AttributeCodes.WF_STG_CD);
-                if (de != null && de.State == OpDataElementState.Modified)
-                {
-                    dc.AddTimelineComment($"Deal state changed from {de.OrigAtrbValue} to {de.AtrbValue}");
-                }
+                //if (de != null && de.State == OpDataElementState.Modified) // This message gets put on as "Stage changed from Offer to Won" at deal level elsewhere
+                //{
+                //    dc.AddTimelineComment($"Deal state changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                //}
                 dc.AddTimelineComment("Tracker number(s) generated");
             }
 
