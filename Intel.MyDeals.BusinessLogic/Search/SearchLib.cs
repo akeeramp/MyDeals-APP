@@ -577,7 +577,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             SearchResultPacket ret= GetDealList(data,
                 new List<int>(),
-                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM'" },    //AND TENDER_PUBLISHED = '1'
+                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND CNTRCT_TENDER_PUBLISHED = 1" },    //AND TENDER_PUBLISHED = '1'
                 new UserPreferencesLib().GetUserPreference("TenderDealSearch", "TenderSearchRules", "CustomSearch"),
                 true,
                 MyRulesTrigger.OnDealListLoad,
