@@ -1497,7 +1497,6 @@
                                                     })
                                                 }
 
-                                                //TODO: will this error out for bulk updates?  reading phils old code it seems extra details may come back structured differently if multiple tenders are passed in.
                                                 if ($scope.wipData[dsIndex]["bid_actions"].length == 3) $scope.wipData[dsIndex]["WF_STG_CD"] = "Offer";
                                                 if ($scope.wipData[dsIndex]["bid_actions"].length == 2) $scope.wipData[dsIndex]["WF_STG_CD"] = "Lost";
                                                 if ($scope.wipData[dsIndex]["bid_actions"].length == 1) $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
@@ -1523,7 +1522,11 @@
 
                                     if (msgArray[i].MsgType == 1) {
                                         //opMsgType = 1 is for "Info" messages, aka the success scenario
+
+                                        //the advanced search functions we take advantage of kindly gives us the contract obj sids of each wip deal which we utilize in the standard save routine.  however the wip data returned to us by actioning pricing strategies does not... so rather than elaborately retrieving contract data and passing it around as well, we just create a copy and reset it after we replace wipData as we know that is a value that should never change.
+                                        var contractId = $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"];
                                         $scope.wipData[dsIndex] = msgArray[i].ExtraDetails; //extradetails contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
+                                        $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"] = contractId;
                                     } else {
                                         //update failed for this data item
                                         //TODO: create popup indicating warnings/failures
