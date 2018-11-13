@@ -396,7 +396,7 @@
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
                     if (($scope.actualClikedTabName == 'MC' || $scope.actualClikedTabName == 'PD') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
-                        if ($scope.isMCForceRunReq() && !$scope.inCompleteCapMissing) {
+                        if ($scope.isMCForceRunReq() && !$scope.inCompleteCapMissing ) {
                             $scope.gotoMCPage();
                         }
                         else {
@@ -411,7 +411,7 @@
                         $scope.setBusy("", "");
                     }
 
-                    if ($scope.contractData.TENDER_PUBLISHED == "True") {
+                    if ($scope.contractData.TENDER_PUBLISHED == "1") {
                         $scope.goToTenderDashboard();
                     }
 
@@ -3550,7 +3550,7 @@
         }
         $scope.createTenderContract = function (ct) {
             //Adding TENDER_PUBLISHED for Tender Contract
-            ct.TENDER_PUBLISHED = 0; // 1 === 0, WTF???
+            ct.TENDER_PUBLISHED = 0;
 
             //Cloning PS
             var ps = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
@@ -4829,7 +4829,11 @@
                         "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
                     ];
                     var usedCols = [];
-                    var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID","tender_actions"];
+                    var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID", "tender_actions"];
+
+                    if (window.usrRole == 'FSE') {
+                        excludeCols.push("MEETCOMP_TEST_RESULT");                        
+                    }
 
                     root.wipOptions = {
                         "isLayoutConfigurable": false,
