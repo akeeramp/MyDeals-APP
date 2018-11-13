@@ -1327,30 +1327,26 @@
                             return;
                         } else {
                             //no mismatch, therefore we push it into the packet that we will send to the middle tier
-                            var psId = gridDS[d].PS_ID;
-                            if (psId === undefined) psId = gridDS[d]._parentIdPS;
                             tenders.push({
                                 DC_ID: gridDS[d].DC_ID,
                                 CNTRCT_OBJ_SID: gridDS[d].CNTRCT_OBJ_SID,
                                 CUST_MBR_SID: gridDS[d].CUST_MBR_SID,
                                 WF_STG_CD: gridDS[d].WF_STG_CD,
                                 PS_WF_STG_CD: gridDS[d].PS_WF_STG_CD,
-                                PS_ID: psId
+                                PS_ID: gridDS[d]._parentIdPS
                             });
                         }
                     }
                 }
             } else {
                 //not linked, so we will just push the single data item to the middle tier
-                var psId = dataItem.PS_ID;
-                if (psId === undefined) psId = dataItem._parentIdPS;
                 tenders.push({
                     DC_ID: dataItem.DC_ID,
                     CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
                     CUST_MBR_SID: dataItem.CUST_MBR_SID,
                     WF_STG_CD: dataItem.WF_STG_CD,
                     PS_WF_STG_CD: dataItem.PS_WF_STG_CD,
-                    PS_ID: psId
+                    PS_ID: dataItem._parentIdPS
                 });
             }
 
@@ -1518,8 +1514,7 @@
                             for (var i = 0; i < msgArray.length; i++) {
                                 var keyIdentifiers = msgArray[i].KeyIdentifiers;    //for approval action updates, these will contain the pricing strategy IDs which can be used to identify the dataItem in wipData as tenders have a 1:1 relation to their pricing strategies
 
-                                var psId = $scope.wipData[dsIndex]["PS_ID"];
-                                if (psId === undefined) psId = $scope.wipData[dsIndex]["_parentIdPS"];
+                                var psId = $scope.wipData[dsIndex]["_parentIdPS"];
 
                                 if (keyIdentifiers.indexOf(psId) == -1) {
                                     continue;  //dataItem's parent pricing strategy id not being present in return message's key identifiers indicate that it was not part of the changed set

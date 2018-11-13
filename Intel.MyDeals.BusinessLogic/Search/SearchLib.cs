@@ -367,6 +367,9 @@ namespace Intel.MyDeals.BusinessLogic
 
                     rtn[i]["_actionsPS"] = myPs["_actions"];
                     rtn[i]["_parentIdPS"] = myPs["DC_ID"];
+                    rtn[i]["_actionReasonsPS"] = myPs["_actionReasons"];
+
+                    //the below 2 are relics of when we would potentially see unpublished tender deals in the tender dashboard.  while they are no longer needed, it doesn't hurt to leave the logic here as a failsafe.
                     rtn[i]["_contractPublished"] = cntrctPublished.ContainsKey((int)myPs["DC_PARENT_ID"]) ? cntrctPublished[(int)myPs["DC_PARENT_ID"]] : 0;
                     rtn[i]["_contractId"] = (int)myPs["DC_PARENT_ID"];
                 }

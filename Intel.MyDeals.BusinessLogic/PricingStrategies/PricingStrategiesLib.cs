@@ -523,7 +523,7 @@ namespace Intel.MyDeals.BusinessLogic
                             //IMPORTANT: the tender dashboard is very reliant on the wipData having these extra attributes added onto the wip data.  anywhere we send back wip data to the tender dashboard we need to make sure to append these as well!
                             wip_data[i]["_actionsPS"] = prc_st_data[i]["_actions"];
                             wip_data[i]["_actionReasonsPS"] = prc_st_data[i]["_actionReasons"];
-                            wip_data[i]["PS_ID"] = prc_st_data[i]["DC_ID"];
+                            wip_data[i]["_parentIdPS"] = prc_st_data[i]["DC_ID"];
 
                             //add wipData into the return msgQueue's extraDetails attribute
                             //om.ExtraDetails = new object[] { wip_data[i] };
