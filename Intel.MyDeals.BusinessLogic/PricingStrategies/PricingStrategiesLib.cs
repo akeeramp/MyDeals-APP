@@ -412,6 +412,12 @@ namespace Intel.MyDeals.BusinessLogic
                                 }
                                 else
                                 {
+                                    if (de.AtrbValue.ToString() != WorkFlowStages.Offer)
+                                    {
+                                        myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors
+                                            .FirstOrDefault(d => d.DcID == de.DcID)
+                                            .AddTimelineComment($"Stage changed from {de.AtrbValue} to {WorkFlowStages.Offer}");
+                                    }
                                     de.SetAtrbValue(WorkFlowStages.Offer);
 
                                     // For tneder deals Sumbitted to offer notification logged at deal level
