@@ -829,15 +829,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					function (rowIndex, colIndex, value) {
 					    var myRowIndex = (rowIndex - 1);
 					    var myRow = data[myRowIndex];
-					    var myColLetter = String.fromCharCode(intA + (colIndex));
-					    var colName = root.letterToCol[myColLetter];
+					    var letter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex)
+                        // Get column name out of selected cell
+					    var colName = root.letterToCol[letter];
 
 					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 					        var prevValue = angular.copy(myRow[colName]);
 					        var numOfTiers = root.numOfPivot(myRow);
 
 					        // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
-					        var myColLetter = String.fromCharCode(intA + (colIndex));
+					        var myColLetter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex);
 					        var colName = root.letterToCol[myColLetter];
 					        var tierNbr = myRow["TIER_NBR"];
 					        if (ptTemplate.model.fields[colName].type == "number") {
@@ -1123,8 +1124,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
                         var myRow = data[(rowIndex - 1)];
-                        var myColLetter = String.fromCharCode(intA + (colIndex));
-                        var colName = root.letterToCol[myColLetter];
+
+                        var letter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex);
+                        // Get column name out of selected cell
+                        var colName = root.letterToCol[letter];
 
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 
@@ -3553,8 +3556,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var currColIndex = context.range._ref.col;
             var cellCurrVal = context.range.value();
 
+            var letter = (currColIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + currColIndex - 26) : String.fromCharCode(intA + currColIndex);
+
             // Get column name out of selected cell
-            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+            var colName = root.letterToCol[letter];
 
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
@@ -3605,8 +3610,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get selected cell
             var currColIndex = context.range._ref.col;
 
+            var letter = (currColIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + currColIndex - 26) : String.fromCharCode(intA + currColIndex);
+
             // Get column name out of selected cell
-            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)];
+            var colName = root.letterToCol[letter];
 
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
@@ -3693,7 +3700,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var currColIndex = context.range._ref.col;
 
             // Get column name out of selected cell
-            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+            var letter = (currColIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + currColIndex - 26) : String.fromCharCode(intA + currColIndex);
+
+            // Get column name out of selected cell
+            var colName = root.letterToCol[letter];
 
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
@@ -3755,7 +3765,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var cellCurrVal = context.range.value();
 
             // Get column name out of selected cell
-            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)];
 
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
