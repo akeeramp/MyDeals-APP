@@ -32,6 +32,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
 
+            $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
             if ($scope.opName === undefined) $scope.opName = "DealEditor";
 
             $scope.isOverlapping = false;

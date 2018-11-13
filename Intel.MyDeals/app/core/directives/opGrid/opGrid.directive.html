@@ -223,7 +223,7 @@
 
             <!-- TENDER DEALS COPY BUTTON -->
             <div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                <button class="btn btn-sm ssToolbarBtn" ng-if="opIsTender" ng-click="copyDeals()" title="Copy selected deals.">
+                <button class="btn btn-sm ssToolbarBtn" ng-if="opIsTender && opRoleCanCopyDeals" ng-click="copyDeals()" title="Copy selected deals.">
                     <table>
                         <tr>
                             <td>
