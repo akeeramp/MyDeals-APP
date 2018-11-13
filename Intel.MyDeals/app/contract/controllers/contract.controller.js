@@ -3550,7 +3550,7 @@
         }
         $scope.createTenderContract = function (ct) {
             //Adding TENDER_PUBLISHED for Tender Contract
-            ct.TENDER_PUBLISHED = 1 === 0;
+            ct.TENDER_PUBLISHED = 0; // 1 === 0, WTF???
 
             //Cloning PS
             var ps = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
