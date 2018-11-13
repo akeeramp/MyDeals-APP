@@ -1134,10 +1134,55 @@
             console.log("TODO: C");
         }
 
-        $scope.rollbackPricingTableRow = function (dataItem) {
-            console.log("TODO: MIKE ROLLBACK rollbackPricingTableRow($scope.dataItem)");
-            //return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wf_st_cd);
+        $scope.rollbackPricingTableRow = function (wip) {
+            $scope.$apply(function () {
+                $scope.setBusy("Rolling Back...", "Rolling Back the Deal");
+                $scope._dirty = false;
+
+                // Remove from DB first... then remove from screen
+                objsetService.rollbackPricingTableRow(wip.CUST_MBR_SID, wip._contractId, wip.DC_PARENT_ID).then(
+                    function (data) {
+                        if (data.data.MsgType !== 1) {
+                            $scope.setBusy("Rollback Failed", "Unable to Rollback the Deal", "Error");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        }
+
+                        $scope.setBusy("Rollback Successful", "Rollback of the Deal", "Success");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+
+                        // You changed the deals list, just reload it.
+                        //TODO need to issue a reload most likely
+                    },
+                    function (response) {
+                        logger.error("Could not Rollback the Deal " + wip.DC_ID, response, response.statusText);
+                        $scope.setBusy("", "");
+                    }
+                );
+            });
         }
+
+        $scope.actionWipDeal = function (wip, actn) {
+            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
+            objsetService.actionWipDeal(wip.CUST_MBR_SID, wip._contractId, wip, actn).then(
+                function (data) {
+                    $scope.syncHoldItems(data, { Cancel: [wip] });
+                    $scope.$broadcast('refreshStage', { Cancel: [wip] });
+                    $scope.setBusy("", "");
+
+                    // You changed the deals list, just reload it.
+                    //TODO need to issue a reload most likely
+                },
+                function (result) {
+                    $scope.setBusy("", "");
+                }
+            );
+        }
+
 
         $scope.downloadQuoteLetter = function (customerSid, objTypeSid, objSid) {
             var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + customerSid + "/" + objTypeSid + "/" + objSid + "/0";
