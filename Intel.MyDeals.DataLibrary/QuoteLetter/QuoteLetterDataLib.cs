@@ -192,6 +192,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_QUOTE_LETTER = DB.GetReaderOrdinal(rdr, "QUOTE_LETTER");
                     int IDX_REBATE_TYPE = DB.GetReaderOrdinal(rdr, "REBATE_TYPE");
                     int IDX_TRKR_NBR = DB.GetReaderOrdinal(rdr, "TRKR_NBR");
+                    int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
 
                     while (rdr.Read())
                     {
@@ -207,7 +208,8 @@ namespace Intel.MyDeals.DataLibrary
                             PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
                             QUOTE_LETTER = (IDX_QUOTE_LETTER < 0 || rdr.IsDBNull(IDX_QUOTE_LETTER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_QUOTE_LETTER),
                             REBATE_TYPE = (IDX_REBATE_TYPE < 0 || rdr.IsDBNull(IDX_REBATE_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_TYPE),
-                            TRKR_NBR = (IDX_TRKR_NBR < 0 || rdr.IsDBNull(IDX_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR)
+                            TRKR_NBR = (IDX_TRKR_NBR < 0 || rdr.IsDBNull(IDX_TRKR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR),
+                            WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD)
                         });
 
                         var quoteLetterData = quoteLetterDealInfoList.FirstOrDefault(qlData => qlData.ObjectSid == quoteLetterContentData.OBJ_SID.ToString());
@@ -285,6 +287,7 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             var inNegotiation = string.IsNullOrEmpty(quoteLetterData.ContentInfo.TRKR_NBR) || quoteLetterData.ContentInfo.TRKR_NBR.IndexOf("*") >= 0;
+            var isTenderOfferStg = quoteLetterData.ContentInfo.WF_STG_CD;
 
             if (quoteLetterData.ContentInfo.QUOTE_LETTER != null)
             {
@@ -309,7 +312,14 @@ namespace Intel.MyDeals.DataLibrary
                         textWatermark1.Position = Telerik.Reporting.Drawing.WatermarkPosition.Front;
                         textWatermark1.PrintOnFirstPage = true;
                         textWatermark1.PrintOnLastPage = true;
-                        textWatermark1.Text = "Not an Offer";
+                        if (isTenderOfferStg == "Offer")
+                        {
+                            textWatermark1.Text = "Offer for Customer";
+                        }
+                        else
+                        {
+                            textWatermark1.Text = "Not an Offer";
+                        }
                         textWatermark1.Opacity = 0.3D;
 
                         reportToExport.PageSettings.Watermarks.Add(textWatermark1);
