@@ -198,7 +198,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     if (scope.blend.blended) scope.value = convertToBlend(scope.value); //convert back to blended format
                     return ret;
                 } else {
-                    return (scope.value == lookupVal);
+                    return (scope.value.toLowerCase() == lookupVal.toString().toLowerCase());
                 }
             }
         }
