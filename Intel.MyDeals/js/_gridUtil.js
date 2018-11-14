@@ -124,15 +124,19 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     var iconNm = gridPctUtils.getResultSingleIcon(result, style);
     //return iconNm;
     if (field === 'MEETCOMP_TEST_RESULT') {
-        return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+        if (window.usrRole != 'FSE') {
+            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+        }
+        else {
+            return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
+        }
+
     }
     else {
-        if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper))
-        {
+        if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper)) {
             return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
         }
-        else
-        {
+        else {
             return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
         }
     }
@@ -143,14 +147,14 @@ gridUtils.getMissingCostCapIcon = function (data) {
     var title = '';
     if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
         title += 'Your deal is missing CAP and Division Approver will not be able to approve until this is fixed.\n' +
-               'Missing CAP issues are currently handled with PriceOps via a weekly DQ process. If there is urgency in \n' +
-               'getting this deal approved please raise a TAC ticket in service now.';
+            'Missing CAP issues are currently handled with PriceOps via a weekly DQ process. If there is urgency in \n' +
+            'getting this deal approved please raise a TAC ticket in service now.';
     }
     if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
         title !== '' ? title += ' \n' : title;
         title += 'Your deal is missing Cost and Division Approver will not be able to approve until this is fixed.\n' +
-                'Missing Cost issues are currently handled with iCost team via a weekly DQ process. If there is urgency in \n' +
-                'getting this deal approved please raise a TAC ticket in service now.';
+            'Missing Cost issues are currently handled with iCost team via a weekly DQ process. If there is urgency in \n' +
+            'getting this deal approved please raise a TAC ticket in service now.';
     }
     // if title is emptu send blank, this mplies cst or cap is not missing
     if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
@@ -1335,7 +1339,7 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
             return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
         }
     }
-        // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
+    // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
     else if (valCusts === "All Customers") {
         if (valRoles === "CBA" || valRoles === "FSE" || valRoles === "GA" || valRoles === "RA") // If customer based role, allow them to short cut to all cuatomers to default to geo filters
         {
@@ -1660,11 +1664,10 @@ gridUtils.hasVertical = function (dataItem) {
             var dataVerticals = dataItem.PRODUCT_CATEGORIES.split(",");
             psHasUserVerticals = gridUtils.findOne(dataVerticals, userVerticals);
         }
-        else
-        {
+        else {
             // Contract of Copy Tender doesn't have rollup values yet as they are driven from Deals, so any WORK IN PROGRESS tender contract is opened.
             // Otherwise, we need to backwards calculate the Contract, PS, and PT levels of rollup values.
-            psHasUserVerticals = false; 
+            psHasUserVerticals = false;
         }
     }
     return psHasUserVerticals;
@@ -1678,8 +1681,7 @@ gridUtils.getBidActions = function (data) {
         return "<div class='noaccess'>no access</div>";
     }
 
-    if (!gridUtils.hasVertical(data))
-    {
+    if (!gridUtils.hasVertical(data)) {
         return "<div class='noaccess'>no vertical access</div>";
     }
 

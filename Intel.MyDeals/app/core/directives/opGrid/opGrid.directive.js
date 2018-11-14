@@ -126,37 +126,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return $scope.parentRoot.openDealProducts(dataItem);
             }
 
-            $scope.$on('refreshMCTData', function (event, data) {                
+            $scope.$on('refreshMCTData', function (event, data) {
                 for (var i = 0; i < data.length; i++) {
                     for (var j = 0; j < $scope.opData.length; j++) {
                         if ($scope.opData[j].DC_ID == data[i].DEAL_OBJ_SID) {
                             $scope.opData[j].MEETCOMP_TEST_RESULT = data[i].MEET_COMP_STS === "Overridden" ? "Pass" : data[i].MEET_COMP_STS;
                             break;
-                        }                            
+                        }
                     }
-                        
+
                 }
-                $scope.contractDs.read(); 
+                $scope.contractDs.read();
             });
 
             $scope.$on('refreshPCTData', function (event, data) {
                 if (data.length > 0) {
-                    for (var j = 0; j < $scope.opData.length; j++) {
-                        if ($scope.opData[j].DC_ID == data[0].DC_ID) {
-                            var CST_STS = data[0].PRC_CST_TST_STS;
-                            if ((data[0].PRC_CST_TST_STS == 'Fail' && data[0].COST_TEST_OVRRD_FLG == 'Yes') || data[0].PRC_CST_TST_STS === "Overridden") {
-                                CST_STS = 'Pass';
-                            }
-                            $scope.opData[j].COST_TEST_RESULT = CST_STS;
-                            break;
-                        }
-                    }
-                    $scope.contractDs.read();
-                    $('.btnGoToExclude').remove();                                                      
+                    $scope.parentRoot.refreshGridRows([data[0].DC_ID], null);
                 }
             });
 
             $scope.openPCTScreen = function (dataItem) {
+                if (dataItem.PRC_ST_OBJ_SID === undefined) dataItem["PRC_ST_OBJ_SID"] = dataItem._parentIdPS;
                 if (dataItem.PRC_ST_OBJ_SID) {
                     objsetService.readContract(dataItem.CNTRCT_OBJ_SID).then(function (data) {
                         $scope.contractData = data.data[0];
@@ -189,7 +179,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 },
                                 dataItem: function () {
                                     return dataItem;
-                                },                                
+                                },
                                 isToolReq: function () {
                                     return false;
                                 }
@@ -205,7 +195,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             });
                     });
                 }
-                
+
             }
 
             $scope.runPCTMCT = function (mode) {
@@ -256,10 +246,32 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         },
                         function () {
                             // Do Nothing on cancel
-                        });      
-                }                        
+                        });
+                }
 
             }
+
+            $scope.openDealProducts = function (dataItem) {
+                $scope.context = dataItem;
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: 'app/contract/partials/ptModals/dealProductsModal.html',
+                    controller: 'dealProductsModalCtrl',
+                    controllerAs: '$ctrl',
+                    size: 'lg',
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () { }, function () { });
+            }
+
             $scope.showHelpTopicHelper = function (dataItem) {
                 showHelpTopic($scope.opHelp);
             }
@@ -1022,14 +1034,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         if ($scope.opOptions.groups !== undefined) {
                             $scope.showCols($scope.curGroup);
                             if ($scope.root) {
-                                $scope.root.setBusy("", ""); 
+                                $scope.root.setBusy("", "");
                             }
-                                                                                  
+
                         }
                     }
                 }, 10);
             }
-            
+
             $scope.exportToExcelCustomColumns = function () {
                 gridUtils.dsToExcel($scope.grid, $scope.ds.dataSource, "Deal Editor Export", true);
             }
@@ -1374,18 +1386,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (approveActions.length > 1) {    // checking >1 instead of 0 because of the "Actions" placeholder we put in
                     //Approval actions
                     $('<input required name="' + options.field + '"/>')
-                    .appendTo(container)
-                    .kendoDropDownList({
-                        dataTextField: "text",
-                        dataValueField: "value",
-                        dataSource: approveActions,
-                        index: 0,
-                        value: "Action",
-                        text: "Action",
-                        change: function (e) {
-                            $scope.broadcast("approval-actions-updated", { newValue: this.value(), dataItem: options.model, gridDS: $scope.contractDs.data() });
-                        }
-                    });
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "text",
+                            dataValueField: "value",
+                            dataSource: approveActions,
+                            index: 0,
+                            value: "Action",
+                            text: "Action",
+                            change: function (e) {
+                                $scope.broadcast("approval-actions-updated", { newValue: this.value(), dataItem: options.model, gridDS: $scope.contractDs.data() });
+                            }
+                        });
                 } else if (options.model["BID_ACTNS"].length > 1) { // checking >1 because if only 1 available it is meaningless to set to same bid status
                     //Select traditional bid action
                     var ind = options.model["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(options.model["WF_STG_CD"]);
@@ -2496,7 +2508,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 ]
             };
-
             $scope.addTabRequired = function () {
                 var data = "Overlapping";
                 var tabItems = $scope.opOptions.groups;
@@ -2595,7 +2606,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }).data("kendoWindow").center().open();
                 }
-                
+
             }
 
             $scope.overlappingDealsSetup = function () {
@@ -2698,10 +2709,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }, 2000);
 
                         },
-                            function (response) {
-                                //empty after moving sync and validate to happen before the getOverlappingDeals call is made
-                                $scope.$parent.$parent.setBusy("", "");
-                            });
+                        function (response) {
+                            //empty after moving sync and validate to happen before the getOverlappingDeals call is made
+                            $scope.$parent.$parent.setBusy("", "");
+                        });
                 } else {
                     if ($scope.$root.pc !== null) $scope.$root.pc.stop();
                     $timeout(function () {
