@@ -1894,9 +1894,12 @@
             }
 
             var custNames = [];
+            var rootUrl = window.location.protocol + "//" + window.location.host;
+
             for (var x = 0; x < items.length; x++) {
                 if (custNames.indexOf(items[x].CUST_NM) < 0)
                     custNames.push(items[x].CUST_NM);
+                items[x].url = rootUrl + "/advancedSearch#/gotoDeal/" + items[x].DEAL_ID;
             }
 
             var data = {
