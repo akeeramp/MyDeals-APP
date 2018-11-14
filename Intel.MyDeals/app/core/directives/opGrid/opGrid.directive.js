@@ -222,6 +222,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.openMCTScreen = function (dataItem) {
+                if (dataItem.PRC_ST_OBJ_SID === undefined) dataItem["PRC_ST_OBJ_SID"] = dataItem._parentIdPS;
                 if (dataItem.PRC_ST_OBJ_SID) {
                     var modal = $uibModal.open({
                         backdrop: 'static',
