@@ -108,6 +108,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Server Deal Type Required if Product is SvrWS and Tender Deal",
                     ActionRule = MyDcActions.RequiredServerDealType,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule

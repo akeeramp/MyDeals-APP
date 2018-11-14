@@ -219,11 +219,12 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Server Deal Type Read Only if Product is not SvrWS",
                     ActionRule = MyDcActions.ShowServerDealType,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule
                 {
-                    // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all 
+                    // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all
                     Title="Readonly if Backend Deal",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
@@ -434,7 +435,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null
                         && String.Equals(de.AtrbValue.ToString(), "Billings", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -451,7 +452,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null
                         && String.Equals(de.AtrbValue.ToString(), "Frontend YCS2", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -468,7 +469,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.AtrbValue != null 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.AtrbValue != null
                         && (String.Equals(de.AtrbValue.ToString() , "WW", StringComparison.OrdinalIgnoreCase) || String.Equals(de.AtrbValue.ToString(), "Worldwide", StringComparison.OrdinalIgnoreCase))).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -496,12 +497,7 @@ namespace Intel.MyDeals.BusinessRules
     //                    }
     //                }
     //            }
-
-
-
             };
         }
-
     }
-
 }

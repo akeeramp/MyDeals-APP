@@ -260,7 +260,10 @@ namespace Intel.MyDeals.BusinessLogic
             };
 
             List<KeyValuePair<MyDealsAttribute, string>> psAtrbs = new List<KeyValuePair<MyDealsAttribute, string>>();
-            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.WF_STG_CD, "Requested")); // TO DO Set stage according to user
+
+            // Only FSE and GA can create/copy tenders
+            var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.WF_STG_CD, stage.ToString())); // When we copy always set
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.TITLE, data[0]["TITLE"] + " PS"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COMP_MISSING_FLG, "0"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OBJ_SET_TYPE_CD, "ALL_TYPES"));
@@ -401,7 +404,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             //ptAtrbs OBJ_SET_TYPE_CD update to PTR
 
-
             // Construct a list of verticals at the contract/PS levels for vertical security workaround.
             List<string> verts = new List<string>();
             foreach (OpDataCollector dc in ptrDCs)
@@ -417,8 +419,6 @@ namespace Intel.MyDeals.BusinessLogic
             cntrctVerts.AtrbValue = string.Join(",", verts);
             var psVerts = psDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.VERTICAL_ROLLUP);
             cntrctVerts.AtrbValue = string.Join(",", verts);
-
-
 
             MyDealsData myDealsDataNewObject = new MyDealsData();
             myDealsDataNewObject[OpDataElementType.CNTRCT] = new OpDataPacket<OpDataElementType>()
@@ -477,7 +477,6 @@ namespace Intel.MyDeals.BusinessLogic
                 GroupID = -301
             };
             myDealsDataNewObject[OpDataElementType.PRC_TBL].AddSaveActions();
-
 
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW] = new OpDataPacket<OpDataElementType>();
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].Data.AddRange(ptrDCs);
@@ -869,12 +868,10 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
 
-
         public bool PublishTenderDeals(int CONTRACT_SID)
         {
             OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
             return opdc.PublishTenderDeals(CONTRACT_SID);
         }
     }
-    
 }
