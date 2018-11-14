@@ -77,7 +77,7 @@ namespace Intel.MyDeals.BusinessLogic
             return data;
         }
 
-        private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType)
+        public string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType)
         {
             return "";
             //string rtn = string.Empty;
@@ -133,209 +133,6 @@ namespace Intel.MyDeals.BusinessLogic
             //return rtn;
         }
 
-        /// <summary>
-        /// Get the Tender Deal List
-        /// </summary>
-        /// <param name="data">SearchParams: Start/End Date, Search Text and Search conditions</param>
-        /// <returns></returns>
-        public SearchResultPacket GetTenderList(SearchParams data)
-        {
-            // Build where clause from start/end date and search text
-            string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL);
-
-            // Build Order By
-            string orderBy = string.IsNullOrEmpty(data.StrSorts) ? "" : $"{OpDataElementType.WIP_DEAL}_{data.StrSorts}";
-            // Special case = DC_ID... need to replace
-            orderBy = orderBy.Replace(AttributeCodes.DC_ID, "OBJ_SID");
-            if (string.IsNullOrEmpty(orderBy)) orderBy = "WIP_DEAL_OBJ_SID desc";
-
-            // Build Search Packet from DB... will return a list of dc_ids and count
-            // This will take in consideration the Skip and Take for performance
-            SearchPacket res = new SearchLib().GetAdvancedSearchResults(whereClause, orderBy, OpDataElementType.WIP_DEAL.ToString(), data.Skip, data.Take);
-
-            // Get return list of dc_ids
-            List<int> dcIds = res.SearchResults.OrderBy(s => s.SORT_ORD).Select(s => s.OBJ_SID).ToList();
-
-            // Now get the actual data based on the "slice" of matching data... this is based on the dc_ids list
-            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dcIds,
-                new List<OpDataElementType>
-                {
-                    OpDataElementType.WIP_DEAL
-                },
-                new List<int>
-                {
-                    Attributes.TITLE.ATRB_SID,
-                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                    Attributes.CUST_MBR_SID.ATRB_SID,
-                    Attributes.CUST_ACCNT_DIV.ATRB_SID,
-                    Attributes.WF_STG_CD.ATRB_SID,
-                    Attributes.PS_WF_STG_CD.ATRB_SID,
-                    Attributes.TRKR_NBR.ATRB_SID,
-                    Attributes.PRODUCT_FILTER.ATRB_SID,
-                    Attributes.START_DT.ATRB_SID,
-                    Attributes.END_DT.ATRB_SID,
-                    Attributes.VOLUME.ATRB_SID,
-                    Attributes.REBATE_TYPE.ATRB_SID,
-                    Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
-                    Attributes.ECAP_PRICE.ATRB_SID,
-                    Attributes.CAP.ATRB_SID,
-                    Attributes.YCS2_PRC_IRBT.ATRB_SID,
-                    Attributes.QLTR_PROJECT.ATRB_SID,
-                    Attributes.QLTR_BID_GEO.ATRB_SID,
-                    Attributes.GEO_COMBINED.ATRB_SID
-                });
-
-            // Get all the products in a collection base on the PRODUCT_FILTER
-            // Note: the first hit is a performance dog as the product cache builds for the first time
-            List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
-                .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER)
-                .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
-            List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
-
-            // Apply Tender Rules
-            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
-            {
-                dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, prods);
-            }
-
-            // Convert data to Client-Ready format
-            OpDataCollectorFlattenedList rtn = myDealsData
-                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false)
-                .ToHierarchialList(OpDataElementType.WIP_DEAL);
-
-            // Get a list of My Customers (the ones I have access)
-            CustomerLib custLib = new CustomerLib();
-            List<int> mtCustIds = custLib.GetMyCustomersInfo().Select(c => c.CUST_DIV_SID).ToList();
-
-            int sortCnt = 0;
-            Dictionary<int, int> idSort = new Dictionary<int, int>();
-            foreach (int dcId in dcIds)
-            {
-                idSort[dcId] = sortCnt++;
-            }
-
-            foreach (OpDataCollectorFlattenedItem item in rtn)
-            {
-                item["SortOrder"] = idSort[int.Parse(item[AttributeCodes.DC_ID].ToString())];
-
-                // Need to convert CUST_MBR_SID to Customer Object
-                CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
-
-                item["Customer"] = cust;
-
-                // If user does not have access... modify the results.  This ONLY works because the grid is READ-ONLY
-                if (cust != null && !mtCustIds.Contains(cust.CUST_NM_SID))
-                {
-                    item[AttributeCodes.ECAP_PRICE] = "no access";
-                    item[AttributeCodes.CAP] = "no access";
-                    item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
-                    item[AttributeCodes.VOLUME] = "no access";
-                    item[AttributeCodes.CREDIT_VOLUME] = "no access";
-                    item[AttributeCodes.CREDIT_AMT] = "no access";
-                    item[AttributeCodes.DEBIT_VOLUME] = "no access";
-                    item[AttributeCodes.DEBIT_AMT] = "no access";
-                    item[AttributeCodes.YCS2_PRC_IRBT] = "no access";
-                    item[AttributeCodes.TRKR_NBR] = "no access";
-                    item["TOT_QTY_PAID"] = "no access";
-                    item["NET_VOL_PAID"] = "no access";
-                    item[AttributeCodes.DEAL_MSP_PRC] = "no access";
-                    //item[AttributeCodes.BLLG_DT] = "no access";
-                }
-            }
-
-            List<OpDataCollectorFlattenedItem> rtnOrdered = rtn.OrderBy(r => r["SortOrder"]).ToList();
-
-            // Return Data and Count
-            return new SearchResultPacket
-            {
-                SearchResults = rtnOrdered,
-                SearchCount = res.SearchCount
-            };
-        }
-
-        public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)
-        {
-            //modify contract token with necessary PS/Contract information
-            contractToken.CustId = 0;       //we send 0 custId for tenders. when the db sees a 0 on temp table translation it will pull the correct customer info
-            contractToken.ContractId = -1;  //we send -1 ContractId for tenders. when the db completes a save the middle tier will catch this -1 case and call a rollup proc that is necessary for approval actions. (see OpDataCollectorDataLib_Save.cs)
-            contractToken.ContractIdList = new List<int>(); //when ContractId = -1, we send a contractId List in its place when we call the rollup SP.  (see OpDataCollectorDataLib_Save.cs)
-            contractToken.CustAccpt = "Acceptance Not Required in C2A";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
-            contractToken.BulkTenderUpdate = true;  //we use this flag to indicate our actions are coming from the tender dashboard.  flag is utilized througout save and approval function pipelines.
-
-            //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
-            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
-
-            OpMsgQueue ret = new OpMsgQueue();
-            List<WfActnItem> wfActnList = new List<WfActnItem>();
-
-            foreach (TenderActionItem tai in data)
-            {
-                var item = new WfActnItem();
-                item.WF_STG_CD = tai.PS_WF_STG_CD;
-                item.DC_ID = tai.PS_ID;
-                wfActnList.Add(item);
-
-                if (!contractToken.ContractIdList.Contains(tai.CNTRCT_OBJ_SID))
-                {
-                    contractToken.ContractIdList.Add(tai.CNTRCT_OBJ_SID);
-                }
-            }
-
-            actnPs[actn] = wfActnList;
-            return _pricingStrategiesLib.ActionPricingStrategies(contractToken, actnPs);
-        }
-
-        public OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn)
-        {
-            OpMsgQueue opMsgQueue = new OpMsgQueue();
-
-            Dictionary<int, List<TenderActionItem>> contractDecoder = new Dictionary<int, List<TenderActionItem>>();
-            foreach (TenderActionItem item in data)
-            {
-                if (!contractDecoder.ContainsKey(item.CNTRCT_OBJ_SID)) contractDecoder[item.CNTRCT_OBJ_SID] = new List<TenderActionItem>();
-                contractDecoder[item.CNTRCT_OBJ_SID].Add(item);
-            }
-
-            // Get new Tender Action List
-            List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
-
-            //if the actn does not match anything in the tender action list, this means we are setting an approval action from the tender dashboard
-            if (actions.Count() == 0)
-            {
-                //Code flows through here when the "actn" is not Offer, Won, or Lost - therefore we expect it to be an approval action such as Approve/Revise
-                opMsgQueue = ActionTenderApprovals(contractToken, data, actn);
-            }
-            else
-            {
-                foreach (List<TenderActionItem> item in contractDecoder.Values)
-                {
-                    //Standard code flow for applying a bid action (Offer, Won, Lost) to a tender deal
-                    contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
-                    contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
-                    MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
-
-                    List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
-
-                    Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
-                    foreach (OpDataElement de in trkrs)
-                    {
-                        if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
-                        dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
-                    }
-
-                    // Apply messaging
-                    opMsgQueue.Messages.Add(new OpMsg
-                    {
-                        MsgType = OpMsg.MessageType.Info,
-                        Message = "Action List",
-                        ExtraDetails = actn == WorkFlowStages.Won ? (object)dictTrkrs : actions
-                    });
-                }
-            }
-            
-            return opMsgQueue;
-        }
-
         public OpDataCollectorFlattenedDictList BulkTenderUpdate(ContractToken contractToken, ContractTransferPacket tenderData)
         {
             List<int> dealIds = tenderData.WipDeals.Select(w => int.Parse(w["DC_ID"].ToString())).ToList();
@@ -350,7 +147,11 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 AttributeCodes.FSE_APPROVED_BY,
                 AttributeCodes.GEO_APPROVED_BY,
-                AttributeCodes.DIV_APPROVED_BY
+                AttributeCodes.DIV_APPROVED_BY,
+                AttributeCodes.COMP_MISSING_FLG,
+                AttributeCodes.OVERLAP_RESULT,
+                AttributeCodes.SYS_COMMENTS,
+                //AttributeCodes.CAP_STRT_DT
             };
             foreach (OpDataCollectorFlattenedItem item in tenderData.WipDeals)
             {
@@ -363,7 +164,12 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            return _contractsLib.SaveContractAndPricingTable(contractToken, tenderData, forceValidation: true, forcePublish: true);
+            OpDataCollectorFlattenedList flatDictList = _contractsLib.SaveContractAndPricingTable(contractToken, tenderData, forceValidation: true, forcePublish: true).ToHierarchialList(OpDataElementType.WIP_DEAL);
+            List<int> updatedIDs = flatDictList.Select(w => int.Parse(w["DC_ID"].ToString())).ToList();
+
+            OpDataCollectorFlattenedDictList ret = _pricingStrategiesLib.FetchTenderData(updatedIDs, OpDataElementType.WIP_DEAL);
+            return ret;
         }
+        
     }
 }

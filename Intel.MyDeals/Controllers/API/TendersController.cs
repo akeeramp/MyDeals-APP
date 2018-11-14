@@ -8,6 +8,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.MyDeals.Helpers;
+using System.Linq;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -15,9 +16,13 @@ namespace Intel.MyDeals.Controllers.API
     public class TendersController : BaseApiController
     {
         private readonly ITendersLib _tenderLib;
-        public TendersController(ITendersLib pricingTablesLib)
+        private readonly ISearchLib _searchLib;
+        private readonly IPricingStrategiesLib _pricingStrategiesLib;
+        public TendersController(ITendersLib pricingTablesLib, ISearchLib searchLib, IPricingStrategiesLib pricingStrategiesLib)
         {
             _tenderLib = pricingTablesLib;
+            _searchLib = searchLib;
+            _pricingStrategiesLib = pricingStrategiesLib;
         }
 
         [Authorize]
@@ -47,7 +52,7 @@ namespace Intel.MyDeals.Controllers.API
             int maxLength = 1000;
             if (string.IsNullOrEmpty(searchText) || searchText == "null") searchText = "";
 
-            SearchResultPacket rtn = _tenderLib.GetTenderList(new SearchParams
+            SearchResultPacket rtn = _searchLib.GetTenderList(new SearchParams
             {
                 StrStart = st,
                 StrEnd = en,
@@ -59,7 +64,7 @@ namespace Intel.MyDeals.Controllers.API
             });
 
             return new PageResult<OpDataCollectorFlattenedItem>(
-                rtn.SearchResults, 
+                rtn.SearchResults,
                 Request.ODataProperties().NextLink,
                 rtn.SearchCount);
         }
@@ -78,7 +83,7 @@ namespace Intel.MyDeals.Controllers.API
                 NeedToCheckForDelete = false
             };
 
-            OpMsgQueue result = SafeExecutor(() => _tenderLib.ActionTenders(contractToken, data, actn)
+            OpMsgQueue result = SafeExecutor(() => _pricingStrategiesLib.ActionTenders(contractToken, data, actn)
                 , "Unable to action the Tenders"
             );
 
@@ -109,7 +114,8 @@ namespace Intel.MyDeals.Controllers.API
 
             for (var i = 0; i < tenderData.WipDeals.Count; i++) // here we update our contractIdList to add all unique contract IDs of the deals being updated to our contractToken to be used later in the save routine
             {
-                if (!contractToken.ContractIdList.Contains(int.Parse(tenderData.WipDeals[i]["CNTRCT_OBJ_SID"].ToString()))) {
+                if (!contractToken.ContractIdList.Contains(int.Parse(tenderData.WipDeals[i]["CNTRCT_OBJ_SID"].ToString())))
+                {
                     contractToken.ContractIdList.Add(int.Parse(tenderData.WipDeals[i]["CNTRCT_OBJ_SID"].ToString()));
                 }
             }
@@ -125,6 +131,18 @@ namespace Intel.MyDeals.Controllers.API
                 Data = result,
                 PerformanceTimes = TimeFlowHelper.GetPerformanceTimes(start, "Save and Validation of Tenders", contractToken.TimeFlow)
             };
+        }
+
+        [Authorize]
+        [Route("GetTendersByIds/{ids}")]
+        [HttpGet]
+        public OpDataCollectorFlattenedList GetTendersByIds(string ids)
+        {
+            OpDataCollectorFlattenedList result = SafeExecutor(() => _pricingStrategiesLib.FetchTenderData(ids.Split(',').Select(int.Parse).ToList(), OpDataElementType.WIP_DEAL)[OpDataElementType.WIP_DEAL]
+                , "Unable to action the Tenders"
+            );
+
+            return result;
         }
     }
 }

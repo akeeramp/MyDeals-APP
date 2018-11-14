@@ -16,11 +16,13 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly IOpDataCollectorLib _dataCollectorLib;
         private readonly INotificationsLib _notificationsLib;
+        //private readonly ITendersLib _tendersLib;
 
         public PricingStrategiesLib(IOpDataCollectorLib dataCollectorLib, INotificationsLib notificationsLib)
         {
             _dataCollectorLib = dataCollectorLib;
             _notificationsLib = notificationsLib;
+            //_tendersLib = tendersLib;
         }
 
         public MyDealsData GetPricingStrategy(int id, bool inclusive = false)
@@ -480,7 +482,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions 
 
                 List<int> ps_ids = new List<int>();
-                MyDealsData myDealsTenderData;
+                //MyDealsData myDealsTenderData;
 
                 //we need to gather the pricing strategy ids here so that we can also retrieve the corresponding tender wip deals
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
@@ -489,28 +491,30 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 //get updated wip deals now that we have changed ps stage
-                myDealsTenderData = OpDataElementType.PRC_ST.GetByIDs(ps_ids,
-                    new List<OpDataElementType>
-                    {
-                        OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
-                    },
-                    new List<int>());
+                //myDealsTenderData = OpDataElementType.PRC_ST.GetByIDs(ps_ids,
+                //    new List<OpDataElementType>
+                //    {
+                //        OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
+                //    },
+                //    new List<int>());
 
                 //apply rules on the PRC_ST and WIP_DEAL data collectors
-                foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.PRC_ST].AllDataCollectors)
-                {
-                    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
-                }
-                foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.WIP_DEAL].AllDataCollectors)
-                {
-                    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
-                }
+                //foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.PRC_ST].AllDataCollectors)
+                //{
+                //    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
+                //}
+                //foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+                //{
+                //    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
+                //}
 
                 //fill in holes for any missing attributes that we use in the grid that isn't saved
-                myDealsTenderData.FillInHolesFromAtrbTemplate();
+                //myDealsTenderData.FillInHolesFromAtrbTemplate();
 
-                OpDataCollectorFlattenedDictList flatDictList = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
+                //OpDataCollectorFlattenedDictList flatDictList = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
                 //convert to UI friendly data types
+
+                OpDataCollectorFlattenedDictList flatDictList = FetchTenderData(ps_ids, OpDataElementType.PRC_ST);
                 OpDataCollectorFlattenedList prc_st_data = flatDictList.ToHierarchialList(OpDataElementType.PRC_ST);
                 OpDataCollectorFlattenedList wip_data = flatDictList.ToHierarchialList(OpDataElementType.WIP_DEAL);
 
@@ -526,13 +530,6 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             //IDs of datacollector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
                             //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
-                            //IMPORTANT: the tender dashboard is very reliant on the wipData having these extra attributes added onto the wip data.  anywhere we send back wip data to the tender dashboard we need to make sure to append these as well!
-                            wip_data[i]["_actionsPS"] = prc_st_data[i]["_actions"];
-                            wip_data[i]["_actionReasonsPS"] = prc_st_data[i]["_actionReasons"];
-                            wip_data[i]["_parentIdPS"] = prc_st_data[i]["DC_ID"];
-
-                            //add wipData into the return msgQueue's extraDetails attribute
-                            //om.ExtraDetails = new object[] { wip_data[i] };
                             om.ExtraDetails = wip_data[i];
                         } else
                         {
@@ -551,6 +548,165 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return opMsgQueue;
+        }
+
+        public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)
+        {
+            //modify contract token with necessary PS/Contract information
+            contractToken.CustId = 0;       //we send 0 custId for tenders. when the db sees a 0 on temp table translation it will pull the correct customer info
+            contractToken.ContractId = -1;  //we send -1 ContractId for tenders. when the db completes a save the middle tier will catch this -1 case and call a rollup proc that is necessary for approval actions. (see OpDataCollectorDataLib_Save.cs)
+            contractToken.ContractIdList = new List<int>(); //when ContractId = -1, we send a contractId List in its place when we call the rollup SP.  (see OpDataCollectorDataLib_Save.cs)
+            contractToken.CustAccpt = "Acceptance Not Required in C2A";   //TODO: for now I am assuming tender deals do not need customer acceptance - need to double check with Rabi/Meera
+            contractToken.BulkTenderUpdate = true;  //we use this flag to indicate our actions are coming from the tender dashboard.  flag is utilized througout save and approval function pipelines.
+
+            //create actnPs (a list of WfActnItem) which contains pricing strategy IDs and the current wf_stg_cds keyed against the actn (like "Approve")
+            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>();
+
+            OpMsgQueue ret = new OpMsgQueue();
+            List<WfActnItem> wfActnList = new List<WfActnItem>();
+
+            foreach (TenderActionItem tai in data)
+            {
+                var item = new WfActnItem();
+                item.WF_STG_CD = tai.PS_WF_STG_CD;
+                item.DC_ID = tai.PS_ID;
+                wfActnList.Add(item);
+
+                if (!contractToken.ContractIdList.Contains(tai.CNTRCT_OBJ_SID))
+                {
+                    contractToken.ContractIdList.Add(tai.CNTRCT_OBJ_SID);
+                }
+            }
+
+            actnPs[actn] = wfActnList;
+            return ActionPricingStrategies(contractToken, actnPs);
+        }
+
+        public OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn)
+        {
+            OpMsgQueue opMsgQueue = new OpMsgQueue();
+
+            Dictionary<int, List<TenderActionItem>> contractDecoder = new Dictionary<int, List<TenderActionItem>>();
+            foreach (TenderActionItem item in data)
+            {
+                if (!contractDecoder.ContainsKey(item.CNTRCT_OBJ_SID)) contractDecoder[item.CNTRCT_OBJ_SID] = new List<TenderActionItem>();
+                contractDecoder[item.CNTRCT_OBJ_SID].Add(item);
+            }
+
+            // Get new Tender Action List
+            List<string> actions = MyOpDataCollectorFlattenedItemActions.GetTenderActionList(actn);
+
+            //if the actn does not match anything in the tender action list, this means we are setting an approval action from the tender dashboard
+            if (actions.Count() == 0)
+            {
+                //Code flows through here when the "actn" is not Offer, Won, or Lost - therefore we expect it to be an approval action such as Approve/Revise
+                opMsgQueue = ActionTenderApprovals(contractToken, data, actn);
+            }
+            else
+            {
+                foreach (List<TenderActionItem> item in contractDecoder.Values)
+                {
+                    //Standard code flow for applying a bid action (Offer, Won, Lost) to a tender deal
+                    contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
+                    contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
+                    MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
+
+                    List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
+
+                    Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
+                    foreach (OpDataElement de in trkrs)
+                    {
+                        if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
+                        dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
+                    }
+
+                    // Apply messaging
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        MsgType = OpMsg.MessageType.Info,
+                        Message = "Action List",
+                        ExtraDetails = actn == WorkFlowStages.Won ? (object)dictTrkrs : actions
+                    });
+                }
+            }
+
+            return opMsgQueue;
+        }
+
+        //fetches data and formats it for tender deals dashboard. Inputs "ids" must be DC_IDs of element types "idTypes".  function put here due to circular referencing problems with keeping it in the tenderslib...
+        public OpDataCollectorFlattenedDictList FetchTenderData(List<int> ids, OpDataElementType idTypes)
+        {
+            MyDealsData myDealsData = idTypes.GetByIDs(ids,
+               new List<OpDataElementType>
+               {
+                    OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
+               });
+
+            // Get all the products in a collection base on the PRODUCT_FILTER
+            // Note: the first hit is a performance dog as the product cache builds for the first time
+            List<int> prodIds = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbValue.ToString() != "")
+                .Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
+            List<ProductEngName> prods = new ProductDataLib().GetEngProducts(prodIds);
+
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, prods);
+            }
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
+            {
+                dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, prods);
+            }
+
+            myDealsData.FillInHolesFromAtrbTemplate();
+
+            OpDataCollectorFlattenedDictList flatDictList = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
+
+            if (idTypes == OpDataElementType.PRC_ST)
+            {
+                //we want paths starting from wip deal, so we need to get their ids
+                //List<int> wip_ids = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                //.Where(d => d.AtrbCd == AttributeCodes.DC_ID)
+                //.Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
+
+                List<int> wip_ids = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                .Where(d => d.AtrbCdIs(AttributeCodes.DC_ID))
+                .Select(d => d.DcID).ToList();
+                //replace the ps_ids we originally passed in with the wip ids
+                ids = wip_ids;
+            }
+            //TODO: get dc paths also calls GetByIds - there ought to be a way to reduce our number of GetByIds calls.
+            List<DcPath> paths = OpDataElementType.WIP_DEAL.GetDcPaths(ids);
+
+            // we need to check the contract to see if it was published... best way is to create a dictionary
+            Dictionary<int, int> cntrctPublished = new Dictionary<int, int>();
+            foreach (var de in myDealsData[OpDataElementType.CNTRCT].AllDataElements.Where(a => a.AtrbCd == AttributeCodes.TENDER_PUBLISHED))
+            {
+                cntrctPublished[de.DcID] = de.AtrbValue.ToString() == "1" || de.AtrbValue.ToString().ToUpper() == "TRUE" ? 1 : 0;
+            }
+
+            // we don't know if this is 1:1 or a mixture of Tender Deals or Tender Folios
+            Dictionary<int, OpDataCollectorFlattenedItem> psDecoder = new Dictionary<int, OpDataCollectorFlattenedItem>();
+            for (var i = 0; i < flatDictList[OpDataElementType.PRC_ST].Count(); i++)
+            {
+                psDecoder[(int)flatDictList[OpDataElementType.PRC_ST][i]["DC_ID"]] = flatDictList[OpDataElementType.PRC_ST][i];
+            }
+
+            for (var i = 0; i < flatDictList[OpDataElementType.WIP_DEAL].Count(); i++)
+            {
+                var myDcPath = paths.FirstOrDefault(p => p.WipDealId == (int)flatDictList[OpDataElementType.WIP_DEAL][i]["DC_ID"]);
+                var myPs = psDecoder[myDcPath.PricingStrategyId];
+
+                flatDictList[OpDataElementType.WIP_DEAL][i]["_actionsPS"] = myPs["_actions"];
+                flatDictList[OpDataElementType.WIP_DEAL][i]["_parentIdPS"] = myPs["DC_ID"];
+                flatDictList[OpDataElementType.WIP_DEAL][i]["_actionReasonsPS"] = myPs["_actionReasons"];
+
+                //the below 2 are relics of when we would potentially see unpublished tender deals in the tender dashboard.  while they are no longer needed, it doesn't hurt to leave the logic here as a failsafe.
+                flatDictList[OpDataElementType.WIP_DEAL][i]["_contractPublished"] = cntrctPublished.ContainsKey((int)myPs["DC_PARENT_ID"]) ? cntrctPublished[(int)myPs["DC_PARENT_ID"]] : 0;
+                flatDictList[OpDataElementType.WIP_DEAL][i]["_contractId"] = (int)myPs["DC_PARENT_ID"];
+            }
+
+            return flatDictList;
         }
 
         /// <summary>

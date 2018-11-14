@@ -1692,13 +1692,24 @@ gridUtils.getBidActions = function (data) {
     if (actions["Cancel"] == true) {
         delete actions["Cancel"];
     }
+    if (actions["Hold"] == true) {
+        delete actions["Hold"];
+    }
 
     // if contract is not published
     if (data._contractPublished !== undefined && data._contractPublished === 0) {
         return "<div class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/contract#/manager/" + data._contractId + "' target='_blank'>" + data._contractId + "</a><div style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>";
     }
 
-    var numActions = Object.keys(actions).length;
+    var numActions = 0;
+
+    for (var k in actions) {
+        if (actions.hasOwnProperty(k)) {
+            if (actions[k] == true) {
+                numActions++;
+            }
+        }
+    }
 
     //If cancelled, no actions avalable
     if (data.WF_STG_CD == "Cancelled") {
@@ -1707,7 +1718,7 @@ gridUtils.getBidActions = function (data) {
     if (bidActns.length == 0) {
         if (numActions === 0) {
             //no actions available to this user for this deal
-            return "<div is-editable='true' style='text-align: center; width: 100%;'>{{dataItem.WF_STG_CD}}<div style='color: #aaaaaa;' title='No Actions available.'>(<i>Not Actionable</i>)</div></div>";
+            return "<div is-editable='true' style='text-align: center; width: 100%;'>" + gridUtils.stgFullTitleChar(data) + "<div style='color: #aaaaaa;' title='No Actions available.'>(<i>Not Actionable</i>)</div></div>";
         } else {
             return "<div is-editable='true' style='text-align: center; width: 100%;'>Action</div>";
         }

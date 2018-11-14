@@ -18,6 +18,9 @@ namespace Intel.MyDeals.IBusinessLogic
         SearchResultPacket GetTenderDashboardList(SearchParams data);
 
         OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType);
-        
+
+        SearchResultPacket GetTenderList(SearchParams data);
+
+
     }
 }

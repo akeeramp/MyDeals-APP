@@ -14,6 +14,9 @@ namespace Intel.MyDeals.IBusinessLogic
         OpMsg RollBackObject(OpDataElementType opDataElementType, ContractToken contractToken, int dcId);
         OpMsgQueue CancelPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies);
         OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs);
+        OpMsgQueue ActionTenders(ContractToken contractToken, List<TenderActionItem> data, string actn);
+        OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn);
         OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id);
+        OpDataCollectorFlattenedDictList FetchTenderData(List<int> ids, OpDataElementType idsType);
     }
 }

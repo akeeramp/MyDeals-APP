@@ -54,6 +54,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         readTenderChildren: readTenderChildren,
         searchTender: searchTender,
         bulkTenderUpdate: bulkTenderUpdate,
+        getTendersByIds: getTendersByIds,
 
         deletePricingTableRow: deletePricingTableRow,
         rollbackPricingTableRow: rollbackPricingTableRow,
@@ -195,6 +196,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function bulkTenderUpdate(data) {
         return dataService.post(apiBaseTenderUrl + "BulkTenderUpdate", data);
+    }
+    function getTendersByIds(ids) {
+        return dataService.get(apiBaseTenderUrl + "GetTendersByIds/" + ids)
     }
 
 

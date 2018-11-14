@@ -253,19 +253,6 @@
                 width: 110,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_OBJ_SID#</a>"
             }, {
-                field: "PRC_ST_TITLE",
-                title: "Pricing Strategy",
-                type: "string",
-                width: 140,
-                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
-            }, {
-                field: "PRC_ST_OBJ_SID",
-                title: "Pricing Strategy Id",
-                type: "number",
-                filterable: "numObjFilter",
-                width: 140,
-                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_OBJ_SID#</a>"
-            }, {
                 field: "DC_ID",
                 title: "Deal",
                 type: "number",
@@ -398,34 +385,6 @@
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
             }, {
-                field: "REBATE_TYPE",
-                title: "Rebate Type",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE"
-            }, {
                 field: "TRKR_NBR",
                 title: "Tracker #",
                 type: "string",
@@ -456,33 +415,6 @@
                 title: "Ceiling Vol",
                 type: "number",
                 width: 120
-            }, {
-                field: "STRT_VOL",
-                title: "Start Volume",
-                type: "number",
-                width: 170,
-                dimKey: 10,
-                format: "{0:n}",
-                filterable: "numObjFilter",
-                template: "#= gridUtils.tierDim(data, 'STRT_VOL', 'n') #"
-            }, {
-                field: "END_VOL",
-                title: "End Volume",
-                type: "number",
-                width: 170,
-                dimKey: 10,
-                format: "{0:n}",
-                filterable: "numObjFilter",
-                template: "#= gridUtils.tierDim(data, 'END_VOL', 'n') #"
-            }, {
-                field: "RATE",
-                title: "Rate",
-                type: "money",
-                width: 170,
-                dimKey: 10,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tierDim(data, 'RATE', 'c') #"
             }, {
                 field: "PROGRAM_PAYMENT",
                 title: "Program Payment",
@@ -572,13 +504,6 @@
                 title: "Geo",
                 type: "string",
                 width: 100
-            }, {
-                field: "TOTAL_DOLLAR_AMOUNT",
-                title: "Total Dollar Amount",
-                type: "number",
-                width: 170,
-                format: "{0:c}",
-                filterable: "moneyObjFilter"
             }, {
                 field: "CREDIT_VOLUME",
                 title: "Credit Vol",
@@ -968,8 +893,12 @@
 
                     $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);  //JEFFTODO: investigate, do we need this?
 
-                    $("#dealEditor").data("kendoGrid").dataSource.read();
-                    $("#dealEditor").data("kendoGrid").refresh();
+                    var wip_ids = [];
+                    for (var i = 0; i < data.WIP_DEAL.length; i++) {
+                        wip_ids.push(data.WIP_DEAL[i]["DC_ID"]);
+                    }
+
+                    $scope.refreshGridRows(wip_ids, data["WIP_DEAL"]);
 
                     //}
                     //$scope.isAutoSaving = false;
@@ -992,7 +921,7 @@
 
                 },
                 function (response) {
-                    $scope.setBusy("Error", "Could not save the contract.", "Error");
+                    $scope.setBusy("Error", "Could not save tenders.", "Error");
                     logger.error("Could not save tenders.", response, response.statusText);
                     $timeout(function () {
                         $scope.setBusy("", "");
@@ -1000,6 +929,46 @@
                     //$scope.isAutoSaving = false;
                 }
             );
+        }
+
+        //this function will trigger the grid to update information for the rows associated with the passed in array of wip deal ids.
+        //if wip data is not provided, it will go to the middle tier to retrieve it.
+        //make sure that if you do provide wip_data, it is wip data that has gone through the FetchTenderData() in PricingStrategiesLib.cs as that formats the data to how we need it.
+        $scope.refreshGridRows = function (wip_ids, wip_data) {
+            if (wip_data == null) {
+                //if no provided wip data, then we need to go to the middle tier and get it ourselves.
+                objsetService.getTendersByIds(wip_ids.join()).then(
+                    function (results) {
+                        $scope.refreshGridRowsHelper(wip_ids, results.data);
+                    },
+                    function (response) {
+                        $scope.setBusy("Error", "Could not refresh tenders.", "Error");
+                        logger.error("Could not refresh tenders dashboard.", response, response.statusText);
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 2000);
+                    }
+                );
+            } else {
+                $scope.refreshGridRowsHelper(wip_ids, wip_data);
+            }
+        }
+
+        $scope.refreshGridRowsHelper = function (wip_ids, wip_data) {
+            for (var dsIndex = 0; dsIndex < $scope.wipData.length; dsIndex++) {
+                for (var wipIndex = 0; wipIndex < wip_data.length; wipIndex++) {
+                    if ($scope.wipData[dsIndex]["DC_ID"] == wip_data[wipIndex]["DC_ID"]) {
+                        //found the updated wip deal in the bound datasource
+                        var contractId = $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"];
+                        $scope.wipData[dsIndex] = wip_data[wipIndex]; //extradetails contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
+                        $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"] = contractId;
+                        break;
+                    }
+                }
+            }
+
+            $("#dealEditor").data("kendoGrid").dataSource.read();
+            $("#dealEditor").data("kendoGrid").refresh();
         }
 
         $scope.resetDirty = function () {
