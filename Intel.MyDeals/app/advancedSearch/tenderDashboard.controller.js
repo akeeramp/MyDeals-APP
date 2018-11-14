@@ -1103,6 +1103,42 @@
             console.log("TODO: C");
         }
 
+        $scope.deletePricingTableRow = function (wip) {
+            $scope.$apply(function () {
+                debugger;
+                $scope.setBusy("Deleting...", "Deleting Tender Deal " + wip.DC_ID + " information");
+                $scope._dirty = false;
+
+                // Remove from DB first... then remove from screen
+                objsetService.deletePricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
+                // Would have been nice to take care of PT and PS as well, but seem to be missing those parts of the contract here.
+                //$scope.contractData.DC_ID = wip._contractId;
+                //objsetService.deletePricingStrategy(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip._parentIdPS).then(
+                    function (data) {
+                        if (data.data.MsgType !== 1) {
+                            $scope.setBusy("Delete Failed", "Unable to Delete Tender Deal " + wip.DC_ID, "Error");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        }
+
+                        $scope.$broadcast('removeRow', wip.DC_PARENT_ID);
+                        $scope.refreshContractData($scope.curPricingStrategyId);
+
+                        $scope.setBusy("Delete Successful", "Deleted Tender Deal " + wip.DC_ID + " information", "Success");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+                    },
+                    function (response) {
+                        logger.error("Could not delete the Tender Deal " + wip.DC_ID, response, response.statusText);
+                        $scope.setBusy("", "");
+                    }
+                );
+            });
+        }
+
         $scope.rollbackPricingTableRow = function (wip) {
             $scope.$apply(function () {
                 $scope.setBusy("Rolling Back...", "Rolling Back the Deal");
