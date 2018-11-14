@@ -1357,6 +1357,10 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBackDate = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
             if (deBackDate == null) return;
 
+            string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            List<string> blackListStages = new List<string> { WorkFlowStages.Submitted, WorkFlowStages.Lost, WorkFlowStages.Offer, WorkFlowStages.Won, WorkFlowStages.Pending };
+            if (blackListStages.Contains(wipStage)) return;
+
             string backDateTxt = r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN_TXT);
 
             if (backDateTxt != "" || !string.IsNullOrEmpty(deBackDate.AtrbValue.ToString()))
