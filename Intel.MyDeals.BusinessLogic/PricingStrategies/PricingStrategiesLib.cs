@@ -84,6 +84,15 @@ namespace Intel.MyDeals.BusinessLogic
             return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, contractToken, _dataCollectorLib);
         }
 
+        public OpMsg DeletePricingStrategyById(ContractToken contractToken, int dcId)
+        {
+            OpDataCollectorFlattenedDictList blah = OpDataElementType.PRC_ST.GetByIDs(new List<int> { dcId }).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, false);
+            OpDataCollectorFlattenedList pricingStrategies = blah[OpDataElementType.PRC_ST];
+            // Remove this pricing strategy with a hard delete
+            return DeletePricingStrategy(contractToken, pricingStrategies);
+        }
+
+
         public OpMsg RollBackObject(OpDataElementType opDataElementType, ContractToken contractToken, int dcId)
         {
             // Issue the needed rollbacks and deletes - this is generalized code that will figure out the level and act as needed.

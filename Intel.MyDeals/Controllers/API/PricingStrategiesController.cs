@@ -83,6 +83,21 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
+        [Route("DeletePricingStrategyById/{custId}/{contractId}/{dcId}")]
+        [HttpGet]
+        public OpMsg DeletePricingStrategyById(int custId, int contractId, int dcId)
+        {
+            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategyById(new ContractToken("ContractToken Created - DeletePricingStrategyById")
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, dcId)
+                , "Unable to delete the Pricing Strategy {id} by ID"
+            );
+        }
+
+
+        [Authorize]
         [Route("DeletePricingStrategy/{custId}/{contractId}")]
         [HttpPost]
         [AntiForgeryValidate]

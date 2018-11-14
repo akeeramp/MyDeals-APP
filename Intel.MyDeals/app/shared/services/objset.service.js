@@ -37,6 +37,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         readPricingStrategy: readPricingStrategy,
         updatePricingStrategy: updatePricingStrategy,
         deletePricingStrategy: deletePricingStrategy,
+        deletePricingStrategyById: deletePricingStrategyById,
         rollBackPricingStrategy: rollBackPricingStrategy,
         cancelPricingStrategy: cancelPricingStrategy,
 
@@ -151,6 +152,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function deletePricingStrategy(custId, contractId, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + custId + '/' + contractId, [ps]);
+    }
+    function deletePricingStrategyById(custId, contractId, dcId) {
+        return dataService.get(apiBasePricingStrategyUrl + 'DeletePricingStrategyById/' + custId + '/' + contractId + '/' + dcId);
     }
     function rollBackPricingStrategy(custId, contractId, dcId) {
         return dataService.get(apiBasePricingStrategyUrl + 'RollBackPricingStrategy/' + custId + '/' + contractId + '/' + dcId);
