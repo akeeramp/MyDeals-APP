@@ -12,7 +12,7 @@
     managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData','dataItem', 'isToolReq'];
 
     function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, dataItem, isToolReq) {
-               
+        if (isToolReq === undefined) isToolReq = true;
         var root = $scope.$parent;	// Access to parent scope
         if (!isToolReq) {
             root.contractData = contractData;
@@ -22,7 +22,7 @@
         }
         $scope.root = root;
         $scope.isFroceRunPresent = typeof root.forceRun !== 'undefined' && typeof root.forceRun === 'function' ? 'root.forceRun()' : false; 
-        
+        $scope.isRefreshReq = false;
         if (isToolReq == undefined) {
             $scope.isToolReq = true;
             var container = angular.element(".sumPsContainer");
@@ -163,11 +163,35 @@
         $scope.$on('ExecutionPctMctComplete', function (event, executedFromBtn) {
             objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
                 var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
-                var newContractData = $scope.root.initContract(data);
+
+                //Tender Dashboard Change
+                if (!isToolReq) {
+                    var tempcontractDataPS = {};
+                    for (var i = 0; i < data.data[0].PRC_ST.length; i++) {
+                        if (data.data[0].PRC_ST[i].DC_ID === dataItem.PRC_ST_OBJ_SID) {
+                            tempcontractDataPS = (data.data[0].PRC_ST[i]);
+                        }
+                    }
+                    data.data[0].PRC_ST = [];
+                    data.data[0].PRC_ST.push(tempcontractDataPS);
+                    $scope.curPricingStrategy = util.findInArray(data.data[0].PRC_ST, dataItem.PRC_ST_OBJ_SID);
+                    $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
+                    $scope.curPricingTable.isPtCollapsed = true;
+                }               
+
+                if (typeof $scope.root.initContract != 'undefined') {
+                    var newContractData = $scope.root.initContract(data);
+                }
+                else {
+                    var newContractData = data.data[0];                    
+                }
+                
 
                 var tmpNewPs = util.stripContractTree(newContractData, atrbs);
                 var tmpPs = util.stripContractTree($scope.root.contractData, atrbs);
                 var hasKeyDataChanged = angular.toJson(tmpNewPs) !== angular.toJson(tmpPs);
+                
+                
 
                 var anyExpanded = $(".chevron.intelicon-down").length > 0;
 
@@ -185,6 +209,12 @@
                         op.notifyInfo("Refresh the screen to see latest Cost Test Results", "Cost Test Complete");
                     }
 
+                }
+
+                //Update Grid
+                if (!isToolReq) {
+                    $scope.isRefreshReq = true;
+                    $scope.togglePt($scope.curPricingStrategy, $scope.curPricingTable);
                 }
             });
         });
@@ -307,7 +337,7 @@
                 function (e) {
                     //Cherry Picking the Deal for Tender Dashboard
                     if (!$scope.isToolReq) {
-                        var tempItem = {};
+                        var tempItem = {};                        
                         e.data["CostTestDetailItems"].some(function (e, i) {
                             if (e.DEAL_ID == $scope.dataItem.DC_ID) {
                                 tempItem = e;
@@ -316,7 +346,7 @@
                         });
                         if (tempItem.DEAL_ID) {
                             e.data.CostTestDetailItems = [];
-                            e.data.CostTestDetailItems.push(tempItem);
+                            e.data.CostTestDetailItems.push(tempItem);                               
                         }                        
                     }
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
@@ -415,8 +445,8 @@
                         //}
                     }
 
-                    if (!$scope.sumGridOptions) $scope.sumGridOptions = {};
-
+                    if (!$scope.sumGridOptions)  $scope.sumGridOptions = {};
+                    
                     $scope.sumGridOptions["dc" + pt.DC_ID] = {
                         dataSource: {
                             data: response,
@@ -520,7 +550,13 @@
                         $("#sumWipGrid_exp" + pt.DC_ID).show();
                         $("#sumWipGrid_" + pt.DC_ID).html(template);
                     }
-
+                    if ($scope.isRefreshReq == true) {
+                        $timeout(function () {
+                            reloadGrid();
+                            $scope.isRefreshReq = false;
+                        }, 2000);
+                    }
+                    
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not load data.");

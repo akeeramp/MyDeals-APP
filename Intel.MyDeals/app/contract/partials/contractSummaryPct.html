@@ -85,7 +85,7 @@
                         </tr>
                     </table>
 
-                    <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL | filter: customFilter">
+                    <div uib-collapse="!isCollapsed && isToolReq" ng-repeat="pt in ps.PRC_TBL | filter: customFilter">
                         <table style="width: 100%;" ng-class="{'opacityZero' : !isToolReq}">
                             <tr>
                                 <td class="tenderAutoClick" style="width: 30px; height: 30px;" ng-click="pt.isPtCollapsed = !pt.isPtCollapsed; togglePt(ps, pt)">
@@ -104,7 +104,7 @@
                             </tr>
                         </table>
 
-                        <div uib-collapse="!pt.isPtCollapsed">
+                        <div uib-collapse="!pt.isPtCollapsed && isToolReq">
                             <div ng-class="{'marginThrity': isToolReq}">
                                 <div class="tenderAutoExpandGrid" id="sumWipGrid_exp_{{pt.DC_ID}}" style="position: relative; top: 14px; margin-bottom: -17px; z-index: 1000; left: 3px; height: 25px; width: 25px;">
                                     <i class="k-icon k-i-expand" style="font-size: 26px; cursor: pointer; color: #00AEEF;" ng-click="expColAll(pt.DC_ID)" title="Click to expand/collapse all items"></i>
@@ -142,6 +142,27 @@ $( document ).ready(function() {
 	}
 
 });
+
+function reloadGrid(){
+
+	var scope = angular.element(document.getElementById("sum-wrapper")).scope();
+	
+	if(!scope.isToolReq){
+		$(".intelicon-fast-forward").click();
+		setTimeout(  function() {}, 1000);
+		$(".tenderAutoClick").click();
+		setTimeout(  function() {}, 1000);
+		$('.opacityZero').css('display','none');
+		$('.hidemetab').css('display','none');		
+		var foundCollaps = false;
+		var result = window.setInterval(function(){
+		  $('.k-i-expand').click();
+		  if($( "a" ).hasClass('k-i-collapse')){
+			clearInterval(result);
+		  }
+		}, 1500);
+	}
+}
 
 </script>
 
