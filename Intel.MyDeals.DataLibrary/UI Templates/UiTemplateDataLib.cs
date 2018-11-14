@@ -2287,7 +2287,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 150,
-                Label = "Missing Cost/Cap",
+                Label = "Missing Cost/CAP",
                 IsFilterable = true,
                 IsReadOnly = true,
                 IsSortable = true,
