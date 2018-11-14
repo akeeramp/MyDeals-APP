@@ -1053,6 +1053,35 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void MajorWrongWayChangeCheck(params object[] args)
+        {
+            // This rule added in because Kannan said that for wrong way major changes to properly generate a tracker, they were relying on tracker having "*" prior to gen-tracker call.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList() : new List<MyDealsAttribute>();
+
+            List<int> onChangeWrongWayIds = r.Dc.DataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
+            List<int> majorFieldNoRedealIds = r.Dc.DataElements
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeWrongWayIds.Contains(d.DcID))
+                .Select(d => d.DcID).ToList();
+
+            if (!majorFieldNoRedealIds.Any()) return; // If there are none to process, bail out
+
+            if (majorFieldNoRedealIds.Contains(r.Dc.DcID))
+            {
+                foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
+                {
+                    string tracker = de.AtrbValue.ToString();
+                    if (!string.IsNullOrEmpty(tracker) && !tracker.Contains('*')) // If there is a tracker number, put the WIP version in redeal visual state
+                    {
+                        de.AtrbValue = tracker + "*";
+                    }
+                }
+            }
+        }
+
         public static void MajorChangeCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

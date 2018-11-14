@@ -213,6 +213,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Check for Major Wrong Way Changes to Update Tracker",
+                    ActionRule = MyDcActions.MajorWrongWayChangeCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
+                },
+                new MyOpRule
+                {
                     Title="Check for Product changes in WIP",
                     ActionRule = MyDcActions.ModifiedProductCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
