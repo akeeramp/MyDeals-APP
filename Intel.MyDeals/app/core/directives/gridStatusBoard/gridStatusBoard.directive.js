@@ -10,7 +10,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             custIds: '=',
             startDt: '=',
             endDt: '=',
-            includeTenders: '=',
+            includeTenders: '=?',
             favContractIds: '='
         },
         restrict: 'AE',
