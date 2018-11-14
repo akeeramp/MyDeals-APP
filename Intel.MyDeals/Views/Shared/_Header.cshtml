@@ -8,6 +8,7 @@
     var usrRoleId = 0;
     var usrEmail = "";
     var usrVerticals = "";
+	var isEditableGrid = true;
     try
     {
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
@@ -354,7 +355,7 @@
 
         window.location = newPath;
     }
-
+	window.isEditableGrid = "True";
     window.usrRole = "@usrRole";
     window.usrRoleId = parseInt("@usrRoleId");
     window.usrName = "@usrName";

@@ -175,6 +175,18 @@
                         }                                                             
                         
                         if (response.data.length > 0) {
+                            if ($scope.PAGE_NM == "MCTPOPUP" && (window.usrRole === "GA" || window.usrRole === "FSE")) {
+                                var item = $linq.Enumerable().From(response.data)
+                                    .Where(function (x) {
+                                        return (x.GRP == "DEAL" && x.DEFAULT_FLAG == "D");
+                                    }).OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray();
+                                if (item.length > 0) {
+                                    if (item[0].PS_STATUS.toLowerCase() == "submitted") {
+                                        window.isEditableGrid = 'False'; //window.isEditableGrid == 'False' ? false : true
+                                    }
+                                }
+                            }
+
                             if (typeof $scope.$parent.setMcTag != 'undefined') {
                                 $scope.$parent.setMcTag(false);
                             }                            
@@ -619,7 +631,7 @@
                                 groupable: false,
                                 sort: function (e) { gridUtils.cancelChanges(e); },
                                 filter: function (e) { gridUtils.cancelChanges(e); },
-                                editable: true,
+                                editable: window.isEditableGrid == 'False' ? false : true,
                                 pageable: {
                                     refresh: true,
                                     pageSizes: [10, 25, 50, 100],
@@ -834,7 +846,7 @@
                                         field: "COMP_SKU",
                                         title: "Meet Comp SKU",
                                         width: 170,
-                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
+                                        template: "<div class='#if(usrRole == 'DA' || window.isEditableGrid == 'False'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompSKUEditor
                                     },
@@ -843,7 +855,7 @@
                                         title: "Meet Comp Price",
                                         width: 150,
                                         format: "{0:c}",
-                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
+                                        template: "<div class='#if(usrRole == 'DA' || window.isEditableGrid == 'False'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompPriceEditor
                                     },
@@ -1692,7 +1704,7 @@
                                     groupable: false,
                                     sort: function (e) { gridUtils.cancelChanges(e); },
                                     filter: function (e) { gridUtils.cancelChanges(e); },
-                                    editable: true,
+                                    editable: window.isEditableGrid == 'False' ? false : true,
                                     pageable: false,
                                     edit: function (e) {
                                         var input = e.container.find(".k-input");
@@ -1816,7 +1828,7 @@
                                             field: "COMP_SKU",
                                             title: "Meet Comp SKU",
                                             width: 170,
-                                            template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
+                                            template: "<div class='#if(usrRole == 'DA' || window.isEditableGrid == 'False'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                             filterable: { multi: true, search: true },
                                             editor: meetCompSKUEditor
                                         },
@@ -1825,7 +1837,7 @@
                                             title: "Meet Comp Price",
                                             width: 150,
                                             format: "{0:c}",
-                                            template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
+                                            template: "<div class='#if(usrRole == 'DA' || window.isEditableGrid == 'False'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0 || COMP_PRC == null){## ##} else {#$#:COMP_PRC##}#</div>",
                                             filterable: { multi: true, search: true },
                                             editor: meetCompPriceEditor
                                         },

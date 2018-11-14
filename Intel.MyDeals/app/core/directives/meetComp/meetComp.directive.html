@@ -32,10 +32,12 @@
         </div>
 
         <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard" ng-class="{'op-grid': isAdhoc != 1}" expand-k-grid options="gridOptions"></div>
+		<div id="isGridEditable" value=false></div>
     </div>	
 </div>
 
 <script>
+	window.isGridEditable = true;
     function openDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
 	        var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
         scope.$apply(function () {
