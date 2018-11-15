@@ -367,23 +367,16 @@ namespace Intel.MyDeals.BusinessLogic
                 ptr.DcID = uid--;
                 ptr.DcParentID = -301;
 
-                // Set values of PTR items as needed (customer, division, stage)
+                // Set values of PTR items as needed (customer, division, stage), clean out things that will harm us down the road as well..
 
                 ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
-                //if (ptr.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV) != null)
-                //{
-                //    ptr.DataElementDict[AttributeCodes.CUST_ACCNT_DIV + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue;
-                //}
-                //// This attribute doesn't exist at PTR level, so make a new one if the contract level has something in it.
-                //else if (cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue.ToString() != "")
-                //{
-                //    ptr.AddDataElement(AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
-                //}
                 AddOrUpdateElementInPTR(ptr, AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
                 AddOrUpdateElementInPTR(ptr, AttributeCodes.WF_STG_CD, WorkFlowStages.Draft, attrCollection);
                 AddOrUpdateElementInPTR(ptr, AttributeCodes.PS_WF_STG_CD, psDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.WF_STG_CD).AtrbValue, attrCollection);
-
                 ptr.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, "");  // Force the products to be re-validated.
+                ptr.SetDataElementsValue(AttributeCodes.HAS_TRACKER, ""); // copied items can't have a tracker
+                ptr.SetDataElementsValue(AttributeCodes.IN_REDEAL, ""); // copied items can't be in redeal
+                ptr.SetDataElementsValue(AttributeCodes.IS_CANCELLED, ""); // copied items can't be already cancelled
 
                 // Set important values within all DEs now
                 foreach (OpDataElement de in ptr.DataElements)
