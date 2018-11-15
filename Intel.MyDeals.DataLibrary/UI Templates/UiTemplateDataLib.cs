@@ -2283,7 +2283,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
                 Id = 3651,
-                AtrbCd = "MISSIG_CAP_COST_INFO",
+                AtrbCd = "MISSING_CAP_COST_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 150,

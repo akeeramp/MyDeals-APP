@@ -125,7 +125,7 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     //return iconNm;
     if (field === 'MEETCOMP_TEST_RESULT') {
         if (window.usrRole != 'FSE') {
-            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
         }
         else {
             return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
@@ -134,7 +134,7 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     }
     else {
         if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper)) {
-            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer">' + iconNm + '</div>';
+            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
         }
         else {
             return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
@@ -158,7 +158,7 @@ gridUtils.getMissingCostCapIcon = function (data) {
     }
     // if title is emptu send blank, this mplies cst or cap is not missing
     if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
-    return '<div class="text-center uiControlDiv isReadOnlyCell"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div>';
+    return '<div class="text-center uiControlDiv isReadOnlyCell"><div class="vert-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div></div>';
 }
 
 gridUtils.booleanDisplay = function (passedData, field) {
