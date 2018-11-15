@@ -960,8 +960,10 @@
                     if ($scope.wipData[dsIndex]["DC_ID"] == wip_data[wipIndex]["DC_ID"]) {
                         //found the updated wip deal in the bound datasource
                         var contractId = $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"];
+                        var psId = $scope.wipData[dsIndex]["PRC_ST_OBJ_SID"];
                         $scope.wipData[dsIndex] = wip_data[wipIndex]; //extradetails contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
                         $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"] = contractId;
+                        $scope.wipData[dsIndex]["PRC_ST_OBJ_SID"] = psId;
                         break;
                     }
                 }
