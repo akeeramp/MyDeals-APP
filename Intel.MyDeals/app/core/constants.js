@@ -153,7 +153,7 @@
                     "COST_TEST_RESULT": {
                         "Groups": ["Deal Info"]
                     },
-                    "MISSIG_CAP_COST_INFO": {
+                    "MISSING_CAP_COST_INFO": {
                         "Groups": ["Deal Info"]
                     },
                     "CUST_MBR_SID": {
@@ -730,6 +730,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "COST_TEST_RESULT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "MISSING_CAP_COST_INFO": {
                         "Groups": ["Deal Info"]
                     },
                     "CUST_MBR_SID": {
