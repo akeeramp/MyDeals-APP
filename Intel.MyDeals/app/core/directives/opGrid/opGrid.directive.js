@@ -196,19 +196,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var data = $scope.contractDs.data();
                 if (data.length > 0) {
                     var selectedItem = [];
+                    var selectedDeals = [];
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].isLinked == true) {
                             selectedItem.push(data[i].PRC_ST_OBJ_SID);
+                            selectedDeals.push(data[i].DC_ID);
                         }
                     }
                     if (selectedItem.length > 0) {
                         $(".iconRunPct").addClass("fa-spin grn");
                         $scope.root.$broadcast('btnPctMctRunning', {});
                         objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
-                            logger.success(data.data.Message + ". Please refresh the page to see updated result.");
-                            $scope.contractDs.read();
+                            $scope.parentRoot.refreshGridRows(selectedDeals, null);                                                        
                             $scope.root.$broadcast('btnPctMctComplete', {});
                             $(".iconRunPct").removeClass("fa-spin grn");
+                            logger.success("Please wait for the result to be updated...");
                         });
                     }
                 }
