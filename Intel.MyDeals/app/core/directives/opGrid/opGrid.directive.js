@@ -127,21 +127,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.$on('refreshMCTData', function (event, data) {
-                for (var i = 0; i < data.length; i++) {
-                    for (var j = 0; j < $scope.opData.length; j++) {
-                        if ($scope.opData[j].DC_ID == data[i].DEAL_OBJ_SID) {
-                            $scope.opData[j].MEETCOMP_TEST_RESULT = data[i].MEET_COMP_STS === "Overridden" ? "Pass" : data[i].MEET_COMP_STS;
-                            break;
-                        }
-                    }
-
-                }
-                $scope.contractDs.read();
+                if (data.length > 0) {
+                    $scope.parentRoot.refreshGridRows([data[0].DEAL_OBJ_SID], null);                    
+                }                
             });
 
             $scope.$on('refreshPCTData', function (event, data) {
                 if (data.length > 0) {
                     $scope.parentRoot.refreshGridRows([data[0].DC_ID], null);
+                    logger.success("Please wait for the result to be updated...");
                 }
             });
 
