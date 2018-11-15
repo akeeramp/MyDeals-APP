@@ -26,7 +26,8 @@
                 var hideViewMeetCompResult = window.usrRole === "FSE";  //|| !$scope.root.CAN_VIEW_MEET_COMP;
                 var hideViewMeetCompOverride = !(window.usrRole === "DA" || window.usrRole === "Legal"); //|| !$scope.root.CAN_VIEW_MEET_COMP;
                 var canUpdateMeetCompSKUPriceBench = (usrRole === "FSE" || usrRole === "GA");
-                
+                window.isEditableGrid = 'True'; 
+           
                 var columnIndex = {
                     COMP_SKU: 7,
                     COMP_PRC: 7,
@@ -182,9 +183,16 @@
                                     }).OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray();
                                 if (item.length > 0) {
                                     if (item[0].PS_STATUS.toLowerCase() == "submitted") {
-                                        window.isEditableGrid = 'False'; //window.isEditableGrid == 'False' ? false : true
+                                        window.isEditableGrid = 'False';
                                     }
                                 }
+                                else {
+                                    window.isEditableGrid = 'True';
+                                }
+
+                            }
+                            else {
+                                window.isEditableGrid = 'True'; 
                             }
 
                             if (typeof $scope.$parent.setMcTag != 'undefined') {
