@@ -41,12 +41,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            if (savePacket.MyContractToken != null && savePacket.MyContractToken.BulkTenderUpdate == true)      //This is the route for saving tenders in bulk from the tender dashboard
-            {
-                secondaryOpTypeGrp = OpDataElementType.PRC_TBL_ROW;                                             //Tenders passed in are not bound to a single pricing table, so we will use PRC_TBL_ROWS instead as our secondaryOpTypeGrp
-            }
 
-                if (secondaryIds.Any() && secondaryOpDataElementTypes.Any())
+            if (secondaryIds.Any() && secondaryOpDataElementTypes.Any())
             {
                 DateTime start = DateTime.Now;
                 MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data, savePacket);

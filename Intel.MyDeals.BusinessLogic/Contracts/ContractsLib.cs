@@ -583,19 +583,6 @@ namespace Intel.MyDeals.BusinessLogic
                 secondaryOpDataElementTypes.Add(OpDataElementType.WIP_DEAL);
             }
 
-            if (savePacket.MyContractToken != null && savePacket.MyContractToken.BulkTenderUpdate == true)      //This is the route for saving tenders in bulk from the tender dashboard
-            {
-                foreach (KeyValuePair<OpDataElementType, OpDataCollectorFlattenedList> kvp in data)             //because there is no pricing table on the tender dashboard, it would not have found for assigned secondaryIds
-                {
-                    if (kvp.Key == OpDataElementType.WIP_DEAL)
-                    {
-                        foreach (OpDataCollectorFlattenedItem flattenedDeal in kvp.Value)                       //secondaryIds should be empty at this point
-                        {
-                            secondaryIds.Add(Int32.Parse(flattenedDeal[AttributeCodes.DC_PARENT_ID].ToString()));
-                        }
-                    }
-                }
-            }
 
             MyDealsData rtn = _dataCollectorLib.SavePackets(
                 data, savePacket,
@@ -658,8 +645,36 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else if (isWipDealSource)
                 {
-                    OpDataCollectorFlattenedItem pt = (contractAndStrategy.PricingTable != null && contractAndStrategy.PricingTable.Count > 0) ? contractAndStrategy.PricingTable[0] : new OpDataCollectorFlattenedItem();
-                    translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl(pt);
+                    if (contractToken != null && contractToken.BulkTenderUpdate == true)    //tenders
+                    {
+                        //special actions taken for tender because all other regular deals assume the user would only be modifying a single pricing table at a time
+                        //we need to make sure the pricing table we pass in to TranslateToPrcTbl is the pricing table that correlates to the tender deal... which is tricky because we do not have PTR information (that's the whole point of calling Translate to PrcTbl after all.  Luckily we store pricing strategy information temporarily with every tender wip deal we pass in that we can use to match against pricing table parent ids
+                        string ps_id_str;
+                        OpDataCollectorFlattenedList tempWipList;
+                        foreach (OpDataCollectorFlattenedItem wipData in contractAndStrategy.WipDeals)
+                        {
+                            //we want to invoke translateToPrcTbl once for each wip deal so lets start by finding its psId and the single pricing table that has the same parentId (PS_ID).  
+                            //Here we make an ASSUMPTION that tender deals will always exist in a 1:1:1:1:1 Cntrct/PS/PT/PTR/WIP ratio
+                            ps_id_str = wipData["_parentIdPS"].ToString();
+                            foreach (OpDataCollectorFlattenedItem ptData in contractAndStrategy.PricingTable)
+                            {
+                                if (ptData["DC_PARENT_ID"].ToString() == ps_id_str)
+                                {
+                                    //entering this if means we found the pricing table that had a parent id (PS_ID) which matched the temp atrb pricing strategy id we passed in at wip deal level
+                                    tempWipList = new OpDataCollectorFlattenedList();
+                                    tempWipList.Add(wipData);
+                                    translatedFlattenedList.AddRange(tempWipList.TranslateToPrcTbl(ptData));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //all non-tender deal types go through here
+                        OpDataCollectorFlattenedItem pt = (contractAndStrategy.PricingTable != null && contractAndStrategy.PricingTable.Count > 0) ? contractAndStrategy.PricingTable[0] : new OpDataCollectorFlattenedItem();
+                        translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl(pt);
+                    }
                 }
             }
 

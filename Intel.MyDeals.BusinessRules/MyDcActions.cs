@@ -1228,12 +1228,21 @@ namespace Intel.MyDeals.BusinessRules
                 int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL)
                     ? myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID].DcParentID
                     : myDealsData[OpDataElementType.PRC_ST].Data.FirstOrDefault().Value.DcID;
-                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
+                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST)) // Dont have the PS, fetch it.
                 {
                     myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
                         new List<int> { dcPs },
                         new List<OpDataElementType> { OpDataElementType.PRC_ST },
                         new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
+                }
+                else if (!myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.Any(d => d.DcID == dcPs))
+                {
+                    MyDealsData blah = new MyDealsData();
+                    blah[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
+                        new List<int> { dcPs },
+                        new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                        new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
+                    myDealsData[OpDataElementType.PRC_ST].Data.AddRange(blah[OpDataElementType.PRC_ST].AllDataCollectors);
                 }
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcPs];
                 dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
@@ -1245,6 +1254,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0", "Deal is no longer expired");
             }
+            //throw new Exception("Fracking hell...");
         }
 
         public static void ValidateEcapPrice(params object[] args)
