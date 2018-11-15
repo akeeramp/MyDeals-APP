@@ -337,16 +337,15 @@
                 function (e) {
                     //Cherry Picking the Deal for Tender Dashboard
                     if (!$scope.isToolReq) {
-                        var tempItem = {};                        
+                        var tempItem = [];                        
                         e.data["CostTestDetailItems"].some(function (e, i) {
                             if (e.DEAL_ID == $scope.dataItem.DC_ID) {
-                                tempItem = e;
-                                return true;
+                                tempItem.push(e);                                
                             }
                         });
-                        if (tempItem.DEAL_ID) {
+                        if (tempItem.length > 0) {
                             e.data.CostTestDetailItems = [];
-                            e.data.CostTestDetailItems.push(tempItem);                               
+                            e.data.CostTestDetailItems=tempItem;                               
                         }                        
                     }
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
