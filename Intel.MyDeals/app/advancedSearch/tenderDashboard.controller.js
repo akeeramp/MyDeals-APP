@@ -1275,7 +1275,7 @@
                                     item._behaviors.isReadOnly[k] = true;
                                 }
                             }
-                        }                        
+                        }
                     }
 
                     //reset wip options
@@ -1858,7 +1858,7 @@
             // check for NEW contract
             if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
 
-            // Add to DB first... then add to screen 
+            // Add to DB first... then add to screen
             objsetService.copyTenderFolioContract([ct], $scope.$root.copyItems.join()).then(
                 function (data) {
                     if (data.data === undefined || data.data.CNTRCT.length < 2) {
@@ -1885,6 +1885,27 @@
         $scope.$on("send-notification", function (event, items) {
             openEmailMsg(items);
         });
+
+        $scope.openDealProducts = function (dataItem) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'app/contract/partials/ptModals/dealProductsModal.html',
+                controller: 'dealProductsModalCtrl',
+                controllerAs: '$ctrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () { }, function () { });
+        }
 
         var openEmailMsg = function (items) {
             if (items.length === 0) {

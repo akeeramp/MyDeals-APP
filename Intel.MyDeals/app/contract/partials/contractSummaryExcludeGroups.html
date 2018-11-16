@@ -1,5 +1,4 @@
 ﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
-<div ng-include="'app/contract/partials/ptModals/dealProductsModal.html'"></div>
 
 <div ng-if="loading" style="padding-top: 200px; width: 100%; text-align: center;">
     <div class="spinner">
@@ -37,7 +36,7 @@
             </table>
         </button>
     </div>
-    
+
     <div ng-if="root.CAN_VIEW_COST_TEST" class="fl" style="margin-left: 8px;">
         <button class="btn btn-sm ssToolbarBtn" ng-click="togglePctFilter()" ng-class="{'toggleSelect': pctFilterEnabled}" title="Show/Hide Only Price Cost Test Failures.">
             <table>

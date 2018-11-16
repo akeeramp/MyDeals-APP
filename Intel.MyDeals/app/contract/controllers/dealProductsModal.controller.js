@@ -15,10 +15,19 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
     $scope.showDealProducts = $scope.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || $scope.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM';
 
     var prdIds = [];
+
     var prods = $scope.dataItem.PRODUCT_FILTER;
-    angular.forEach(prods, function (value, key) {
-        prdIds.push(value);
-    });
+
+    if ($scope.dataItem._contractPublished !== undefined && $scope.dataItem._contractPublished == 1) {
+        prods = $scope.dataItem.products;
+        angular.forEach(prods, function (value, key) {
+            prdIds.push(value.PRD_MBR_SID);
+        });
+    } else {
+        angular.forEach(prods, function (value, key) {
+            prdIds.push(value);
+        });
+    }
 
     var prdData = {
         "PrdIds": prdIds

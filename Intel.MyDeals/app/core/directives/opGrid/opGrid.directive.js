@@ -128,8 +128,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.$on('refreshMCTData', function (event, data) {
                 if (data.length > 0) {
-                    $scope.parentRoot.refreshGridRows([data[0].DEAL_OBJ_SID], null);                    
-                }                
+                    $scope.parentRoot.refreshGridRows([data[0].DEAL_OBJ_SID], null);
+                }
             });
 
             $scope.$on('refreshPCTData', function (event, data) {
@@ -182,7 +182,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                         modal.result.then(
                             function () {
-                                //Close Event will come here                            
+                                //Close Event will come here
                             },
                             function () {
                                 // Do Nothing on cancel
@@ -207,7 +207,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $(".iconRunPct").addClass("fa-spin grn");
                         $scope.root.$broadcast('btnPctMctRunning', {});
                         objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
-                            $scope.parentRoot.refreshGridRows(selectedDeals, null);                                                        
+                            $scope.parentRoot.refreshGridRows(selectedDeals, null);
                             $scope.root.$broadcast('btnPctMctComplete', {});
                             $(".iconRunPct").removeClass("fa-spin grn");
                             logger.success("Please wait for the result to be updated...");
@@ -608,7 +608,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             //    }
             //    else if ($scope.root.$parent.getColorStyle != 'undefined') {
             //        return $scope.root.$parent.getColorStyle(c);
-            //    }                
+            //    }
             //}
 
             $scope.getColorStyle = function (c) {
