@@ -356,6 +356,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     }
                                 };
                             }
+                            if (cols[c]["field"] == "CUST_MBR_SID") {
+                                cols[c].filterable = {
+                                    multi: true,
+                                    search: true,
+                                    itemTemplate: function (e) {
+                                        if (e.field == "all") {
+                                            return '<li class="k-item"><label class="k-label"><input type="checkbox" class="k-check-all" value="Select All">Select All</label></li>';
+                                        } else {
+                                            return '<li class="k-item"><label class="k-label"><input type="checkbox" class="" value="#=data.CUST_MBR_SID#">#=Customer.CUST_NM#</label></li>'
+                                        }
+                                    }
+                                };
+                            }
                         }
                     }
                 }
@@ -1364,6 +1377,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.bidActnsEditor = function (container, options) {
                 var el = "";
                 var approveActions = [];
+                var bidActions = [];
 
                 if (options.model._contractPublished === 0) {
                     $("<div style='padding-left: 4px;'>Loading Folio...</div>").appendTo(container);
@@ -1398,13 +1412,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 } else if (options.model["BID_ACTNS"].length > 1) { // checking >1 because if only 1 available it is meaningless to set to same bid status
                     //Select traditional bid action
                     var ind = options.model["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(options.model["WF_STG_CD"]);
+                    bidActions = angular.copy(options.model["BID_ACTNS"]);  //we create a copy because we do not want what the dropdown to fully databind and potentially allow the user selection to have an effect on their possible bid actions
                     if (ind == -1) ind = 0;
                     $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
                             dataTextField: "BidActnName",
                             dataValueField: "BidActnValue",
-                            dataSource: options.model["BID_ACTNS"],
+                            dataSource: bidActions,
                             index: ind,
                             value: options.model["BID_ACTNS"][ind].BidActnValue,
                             text: options.model["BID_ACTNS"][ind].BidActnName,
@@ -1659,6 +1674,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.saveFunctions = function (model, col, newVal) {
+                if (col == "tender_actions") return;    //tender actions operate separetely from the grid in the tender dashboard if the user selects an action they are either doing nothing or triggering an independent save event that will reset the dirty flags anyways and so do not need the dirty flag modifiers to trigger. same chain of thought applies to linked deals and tender deals cannot be grouped so nothing in this function needs to execute.
 
                 model.dirty = true;
                 $scope._dirty = true;

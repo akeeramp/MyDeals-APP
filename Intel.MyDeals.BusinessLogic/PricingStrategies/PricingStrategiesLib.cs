@@ -674,10 +674,6 @@ namespace Intel.MyDeals.BusinessLogic
             if (idTypes == OpDataElementType.PRC_ST)
             {
                 //we want paths starting from wip deal, so we need to get their ids
-                //List<int> wip_ids = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
-                //.Where(d => d.AtrbCd == AttributeCodes.DC_ID)
-                //.Select(d => int.Parse(d.AtrbValue.ToString())).ToList();
-
                 List<int> wip_ids = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
                 .Where(d => d.AtrbCdIs(AttributeCodes.DC_ID))
                 .Select(d => d.DcID).ToList();

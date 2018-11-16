@@ -702,10 +702,6 @@
         $scope.helpTopic = HelpTopicEnum.DealEditor_Features;
         $scope.wipData = [];
 
-        //////
-        ////// contract controller root override functions - these are the functions that opGrid expects to have in the parent scope.  Most are a copy paste from contract.controller.js and then modified for this context
-        //////
-
         $scope.saveCell = function (dataItem, newField) {
             if (dataItem._behaviors === undefined) dataItem._behaviors = {};
             if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
@@ -784,9 +780,6 @@
             //var pc = new perfCacheBlock("Save Contract Root", "UX");
             //var pcUi = new perfCacheBlock("Gather data to pass", "UI");
 
-            //if (forceValidation === undefined || forceValidation === null) forceValidation = false;
-            //if (forcePublish === undefined || forcePublish === null) forcePublish = false;
-
             //$scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
 
             var data = $scope.createWIPBase();
@@ -857,39 +850,20 @@
                         $scope.$broadcast('saveComplete', data);
                         $scope.resetDirty();
 
-                        //$scope.delPtrIds = [];
-
-                        //if (!!toState) {
-                        //    $scope.stealthMode = false;
-                        //    if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
-                        //    $state.go(toState, toParams, { reload: true });
-                        //} else {
                         $timeout(function () {
                             //if ($scope.isBusyMsgTitle !== "Overlapping Deals...")
                             $scope.setBusy("", "");
                             //$scope.stealthMode = false;
                         }, 1000);
-                        //}
-                        //if ($scope.isTenderContract && ($scope.selectedTAB == 'PTR' || $scope.selectedTAB == 'DE')) {
-                        //    $scope.forceNavigation = true; //Purpose: If No Error/Warning go to Meet Comp Automatically-After Refreshing Contract
-                        //}
-                        //else {
-                        //    $scope.forceNavigation = false;
-                        //}
+
 
                     } else {
-                        //if ($scope.isTenderContract && $scope.selectedTAB == 'PTR') {
-                        //    $scope.forceNavigation = false; //Purpose: If No Error/Warning go to PTR Automatically-After Refreshing Contract
-                        //}
-
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 2000);
                     }
-
-                    //if (toState === undefined || toState === null || toState === "") {
 
                     $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);  //JEFFTODO: investigate, do we need this?
 
@@ -900,8 +874,7 @@
 
                     $scope.refreshGridRows(wip_ids, data["WIP_DEAL"]);
 
-                    //}
-                    //$scope.isAutoSaving = false;
+                    document.getElementById('chkDealTools').checked = false;    //as the save will automatically reset all checkboxes of deals that were saved, we will go ahead and uncheck the check-all box as well in the event that it was used.
 
                     //util.console("updateContractAndCurPricingTable Complete");
 
@@ -979,7 +952,7 @@
         }
 
         function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
-            // Tie warning message (valid message and red highlight) to its specific tier
+            // Tier warning message (valid message and red highlight) to its specific tier
             // NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
             if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
                 if (dataItem._behaviors.validMsg[atrbName] != null) {
@@ -1199,32 +1172,8 @@
 
         $scope.$on('OpGridDataBound',
             function (event, args) {
-                console.log("TODO: 1");
-                ////TODO
-                ////found in managerExcludeGroups.controller.js
-                //if (!$scope.firstGridLoaded) {
-                //    if ($scope.pctFilterEnabled) {
-                //        $timeout(function () {
-
-                //            // if allowed... add tab to go back to PCT tab
-                //            $scope.filterPct();
-
-                //            var html = '<li ng-click="gotoPct()" class="k-item k-state-default"><span unselectable="on" class="k-link" title="Click to go back to Price Cost Test">Price Cost Test</span></li>';
-                //            var template = angular.element(html);
-                //            var linkFunction = $compile(template);
-                //            linkFunction($scope);
-
-                //            $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
-                //        },
-                //            500);
-                //    }
-                //}
-                //$scope.firstGridLoaded = true;
+                ////TODO: investigate if we need to port any code over that happens on grid data bound.
             });
-
-        //////
-        //////      end section of code that replaces contract.controller functions
-        //////
 
 
         $scope.$on('invoke-search-datasource', function (event, args) {
@@ -1362,8 +1311,6 @@
         }
 
         $scope.changeBidAction = function (dataItem, newVal, gridDS) {
-            //var newVal = dataItem.WF_STG_CD;
-            //var dsData = $scope.wipData;
             var tenders = [];
 
             // if item is checked (linked) then we need to make sure all linked items are in the same stages otherwise we disallow the action
@@ -1409,37 +1356,21 @@
             if (newVal === "Revise") msg = "Would you like to edit the Tender Deal" + plural + " and set to 'Revise'?";
 
             kendo.confirm(msg)
-                .then(function () {
+                .then(
+                function () {
                     //Save the changes
                     $scope.actionTenderDeals(tenders, newVal);
                 },
                 function () {
-                    //var dropdownlist, indx, lis, i;
-
-                    //if (dataItem.isLinked) {
-                    //    for (var d = 0; d < dsData.length; d++) {
-                    //        if (dsData[d].isLinked) {
-                    //            dsData[d].WF_STG_CD = dataItem["orig_WF_STG_CD"];
-                    //            dropdownlist = $("#ddListStat_" + dsData[d].DC_ID).data("kendoDropDownList");
-                    //            indx = 0;
-                    //            lis = dropdownlist.ul.children();
-                    //            for (i = 0; i < lis.length; i++) {
-                    //                if (lis[i].textContent === dsData[d]["orig_WF_STG_CD"]) indx = i;
-                    //            }
-                    //            dsData[d]['isLinked'] = false;
-                    //            dropdownlist.select(indx);
-                    //        }
-                    //    }
-                    //} else {
-                    //    dropdownlist = $("#ddListStat_" + dataItem.DC_ID).data("kendoDropDownList");
-                    //    indx = 0;
-                    //    lis = dropdownlist.ul.children();
-                    //    for (i = 0; i < lis.length; i++) {
-                    //        if (lis[i].textContent === dataItem["orig_WF_STG_CD"]) indx = i;
-                    //    }
-                    //    dropdownlist.select(indx);
-                    //}
-
+                    //User hit cancel, reset Actions to default values
+                    if ($scope.actionType == "PS") {
+                        dataItem["tender_actions"].text = "Action";
+                        dataItem["tender_actions"].value = "Action";
+                    }
+                    if ($scope.actionType == "BID") {
+                        dataItem["tender_actions"].BidActnName = dataItem["WF_STG_CD"];
+                        dataItem["tender_actions"].BidActnValue = dataItem["WF_STG_CD"];
+                    }
                 });
 
         }
@@ -1452,60 +1383,7 @@
             var pcService = new perfCacheBlock("Update Actions to Tenders", "MT");
             objsetService.actionTenderDeals(tenders, actn).then(
                 function (results) {
-                    //pcService.addPerfTimes(results.data.PerformanceTimes);
-                    //pc.add(pcService.stop());
-                    //var pcUI = new perfCacheBlock("Processing returned data", "UI");
-
-                    //var foundIt = false;
-                    //var noDeals = [];
-                    //$scope.messages = results.data.Data.Messages;
-
-                    //var dsData = $scope.wipData;
-                    //var singleRowUpdate = [];
-                    //if (tenders.length === 1) {
-                    //    singleRowUpdate[tenders[0]["DC_ID"]] = tenders[0]["DC_ID"];
-                    //}
-                    //for (var m = 0; m < $scope.messages.length; m++) {
-                    //    if ($scope.messages[m].Message === "Action List") {
-                    //        foundIt = true;
-                    //        var details = $scope.messages[m].ExtraDetails;
-                    //        for (var d = 0; d < dsData.length; d++) {
-                    //            if (details[dsData[d].DC_ID] !== undefined) {
-                    //                $("#trk_" + dsData[d].DC_ID).html(details[dsData[d].DC_ID].join(", "));
-                    //                $("#cb_actn_" + dsData[d].DC_ID).html('<div style="text-align: center; width: 100%;" class="ng-binding">Won</div>');
-                    //                $("#dealTool_" + dsData[d].DC_ID).html('');
-                    //                dsData[d]['isLinked'] = false;
-                    //            } else if (singleRowUpdate[dsData[d].DC_ID] !== undefined) {
-                    //                updateBidStatusDropDownSource(dsData[d]);
-                    //                break;
-                    //            }
-
-                    //            // if linked, clear out the check boxes
-                    //            if (dsData[d].isLinked) {
-                    //                updateBidStatusDropDownSource(dsData[d]);
-                    //            }
-
-                    //        }
-                    //    }
-                    //    else if ($scope.messages[m].Message === "No Deal") {
-                    //        noDeals.push($scope.messages[m].ExtraDetails);
-                    //    }
-                    //}
-
-                    //pc.add(pcUI.stop());
-                    //if ($scope.$root.pc !== null) {
-                    //    $scope.$root.pc.add(pc.stop());
-                    //    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                    //    $scope.$root.pc = null;
-                    //}
-
-                    //if (noDeals.length > 0) {
-                    //    kendo.alert("It looks like one or more deals were deleted.  We need to refresh the data.");
-                    //    $scope.$broadcast('reload-search-dataSource');
-                    //} else if (foundIt) {
-                    //    $scope.curLinkedVal = "";
-                    //$timeout(function () {
-
+                    
                     pcService.addPerfTimes(results.data.PerformanceTimes);
                     pc.add(pcService.stop());
                     var pcUI = new perfCacheBlock("Processing returned data", "UI");
@@ -1590,6 +1468,7 @@
                         if ($scope.wipData[d].isLinked) {
                             $scope.wipData[d].isLinked = false;
                         }
+                        document.getElementById('chkDealTools').checked = false;
                     }
 
                     pc.add(pcUI.stop());
@@ -1604,15 +1483,6 @@
 
                     $scope.setBusy("", "");
                     $scope.actionType = "";
-
-
-                    //}, 50);
-                    //////scope.ds.read(); // we rely on the DS post load to close down the busy indicator
-                    //} else {
-                    //    $timeout(function () {
-                    //        $scope.setBusy("", "");
-                    //    }, 50);
-                    //}
 
                 },
                 function (result) {
