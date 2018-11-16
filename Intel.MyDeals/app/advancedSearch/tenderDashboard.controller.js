@@ -1218,6 +1218,15 @@
 
                     for (var w = 0; w < $scope.wipData.length; w++) {
                         var item = $scope.wipData[w];
+
+                        // Get missing cap... but the message is too long and has line breaks... this will cause issues in the grid filter. 
+                        // Could replace the \n with spaces, but the text for filtering probably only needs the first sentence... let's split on the first \n
+
+                        // -- first sentence version
+                        item["MISSING_CAP_COST_INFO"] = gridUtils.getMissingCostCapTitle(item).split('\n')[0];
+                        // -- Replace break version
+                        //item["MISSING_CAP_COST_INFO"] = gridUtils.getMissingCostCapTitle(item).replace(/(?:\r\n|\r|\n)/g, ' ');
+
                         if (item._contractPublished !== undefined && item._contractPublished === 0) {
                             for (var k in item) {
                                 if (typeof item[k] !== 'function' && k[0] !== '_') {

@@ -2279,6 +2279,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 IsSortable = true,
                 Template = "#=gridUtils.getResultSingleIcon(data, 'MEETCOMP_TEST_RESULT')#",
+                ExcelTemplate = "#=MEETCOMP_TEST_RESULT#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
@@ -2292,6 +2293,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 IsSortable = true,
                 Template = "#=gridUtils.getMissingCostCapIcon(data)#",
+                ExcelTemplate = "#=gridUtils.getMissingCostCapTitle(data)#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
@@ -2304,6 +2306,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 IsSortable = true,
                 Template = "#=gridUtils.getResultSingleIcon(data, 'COST_TEST_RESULT')#",
+                ExcelTemplate = "#=COST_TEST_RESULT#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {

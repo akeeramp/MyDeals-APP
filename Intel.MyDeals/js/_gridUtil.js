@@ -143,7 +143,7 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
 
 }
 
-gridUtils.getMissingCostCapIcon = function (data) {
+gridUtils.getMissingCostCapTitle = function (data) {
     var title = '';
     if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
         title += 'Your deal is missing CAP and Division Approver will not be able to approve until this is fixed.\n' +
@@ -156,7 +156,13 @@ gridUtils.getMissingCostCapIcon = function (data) {
             'Missing Cost issues are currently handled with iCost team via a weekly DQ process. If there is urgency in \n' +
             'getting this deal approved please raise a TAC ticket in service now.';
     }
-    // if title is emptu send blank, this mplies cst or cap is not missing
+    return title;
+}
+
+gridUtils.getMissingCostCapIcon = function (data) {
+    var title = gridUtils.getMissingCostCapTitle(data);
+
+    // if title is empty send blank, this implies cost or cap is not missing
     if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
     return '<div class="text-center uiControlDiv isReadOnlyCell"><div class="vert-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div></div>';
 }
