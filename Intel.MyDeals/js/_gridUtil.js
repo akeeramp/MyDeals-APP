@@ -133,7 +133,7 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
 
     }
     else {
-        if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper)) {
+        if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper || window.usrRole === 'SA')) { // Cost Test visable by Super GA, DA, and SA
             return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
         }
         else {
