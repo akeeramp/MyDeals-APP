@@ -339,18 +339,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _contractsLib.IsDuplicateContractTitle(dcId, title)
                 , "Unable to validate contract name {title}"
             );
-        }
-
-        [Authorize]
-        [Route("GetContractsStatus")]
-        [HttpPost]
-        [AntiForgeryValidate]
-        public dynamic GetContractsStatus([FromBody] DashboardFilter data)
-        {
-            return SafeExecutor(() => _contractsLib.GetContractsStatus(data)
-                , $"Unable to get Contracts Status"
-            );
-        }
+        }        
 
         [Authorize]
         [Route("GetWipFromContract/{id}")]
