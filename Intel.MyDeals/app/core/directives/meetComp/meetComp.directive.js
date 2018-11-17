@@ -422,7 +422,8 @@
                             }
 
                             var isValid = false;
-                            if (usrRole == "GA") {
+                            if (usrRole == "GA" || usrRole == "FSE") {
+                                debugger;
                                 isValid = isModelValid($scope.meetCompMasterdata);
                             }
 

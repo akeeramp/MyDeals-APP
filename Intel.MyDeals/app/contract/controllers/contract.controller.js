@@ -4615,7 +4615,7 @@
             }
             else {
                 isPtrDirty = true;
-                $scope.isMCActiveForFSE = false;
+                $scope.isMCActiveForFSE = true;
             }
             //IF DE
             if (selectedTab == 'DE') {
@@ -4748,7 +4748,7 @@
                         $scope.publishWipDealsBase();
                     }
                 }
-                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && (window.usrRole === "FSE" || (($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet' && !mcForceRunReq) || $scope.inCompleteCapMissing) && isPartiallyValid == true)) {
+                else if ($scope.curPricingStrategy.PASSED_VALIDATION == 'Complete' && ((($scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'InComplete' && $scope.curPricingStrategy.MEETCOMP_TEST_RESULT != 'Not Run Yet' && !mcForceRunReq) || $scope.inCompleteCapMissing) && isPartiallyValid == true)) {
                     isFired = true;
                     $scope.selectedTAB = _tabName;
                     $scope.currentTAB = _tabName;
