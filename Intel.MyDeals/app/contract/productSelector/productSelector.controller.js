@@ -40,7 +40,7 @@
         vm.selectedItems = [];
         vm.prdSelLvlAtrbsForCategory = [];
         vm.enableSplitProducts = enableSplitProducts && dealType !== 'KIT';
-        vm.splitProducts = false;
+        vm.splitProducts = ( isTender == 1 && vm.dealType === "ECAP" ) ? true : false;
         vm.openCAPBreakOut = openCAPBreakOut;
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;

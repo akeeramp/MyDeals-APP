@@ -422,8 +422,7 @@
                             }
 
                             var isValid = false;
-                            if (usrRole == "GA" || usrRole == "FSE") {
-                                debugger;
+                            if (usrRole == "GA" || (usrRole == "FSE" && $scope.isAdhoc == 1)) {                                
                                 isValid = isModelValid($scope.meetCompMasterdata);
                             }
 
@@ -1518,7 +1517,7 @@
                                         var isCapMissed = inCompleteDueToCAPMissing(response.data);                                          
                                     }
 
-                                    if (usrRole == "GA") {
+                                    if (usrRole == "GA" || (usrRole == "FSE" && $scope.isAdhoc == 1)) {
                                         var isValid = isModelValid($scope.meetCompMasterdata);
                                     }
                                     $scope.dataSourceParent.read();
@@ -1570,7 +1569,7 @@
                                         var isCapMissed = inCompleteDueToCAPMissing(response.data);                                        
                                     }
 
-                                    if (usrRole == "GA") {
+                                    if (usrRole == "GA" || (usrRole == "FSE" && $scope.isAdhoc == 1)) {
                                         var isValid = isModelValid($scope.meetCompMasterdata);
                                     }
                                     $scope.dataSourceParent.read();

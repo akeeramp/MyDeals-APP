@@ -4,7 +4,7 @@
 <div ng-include="'app/contract/partials/ptModals/selectPricingTableModal.html'"></div>
 
 <div id="sum-wrapper">
-    <div id="sum-header">
+    <div id="sum-header" ng-class="{'divHeight' : !isToolReq}">
         <div ui-view="summaryContentView"></div>
         <div kendo-tab-strip class="gradTab">
             <ul>
@@ -17,10 +17,10 @@
             <input ng-model="pctFilter" type="hidden" />
         </div>
 
-        <div class="sum-filter-bar toolbar">
+        <div class="sum-filter-bar toolbar" ng-class="{'displayNone' : !isToolReq}">
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 30px; height: 40px;" ng-click="toggleSum()" title="{{ isAllCollapsed ? 'Collapse All' : 'Expand All' }}">
+                    <td ng-class="{'opacityZero' : !isToolReq}" style="width: 30px; height: 40px;" ng-click="toggleSum()" title="{{ isAllCollapsed ? 'Collapse All' : 'Expand All' }}">
                         <div ng-class="{'rotate-90': !isAllCollapsed}">
                             <i class="chevron linkable intelicon-fast-forward"></i>
                         </div>
@@ -35,7 +35,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="k-textbox k-space-left" style="width: 340px; margin-top: -1px; margin-left: 15px;">
+                        <span ng-class="{'opacityZero' : !isToolReq}" class="k-textbox k-space-left" style="width: 340px; margin-top: -1px; margin-left: 15px;">
                             <input type="text" placeholder="Search for {{psTitle}}, {{ptTitle}} or names" ng-model="titleFilter" />
                             <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
                         </span>
@@ -170,9 +170,13 @@ function reloadGrid(){
 .opacityZero{
 	opacity:0;
 }
+.displayNone {
+	display:none;
+}
 .marginThrity{
 	margin-left: 30px;
 }
+.divHeight{height:90px !important}
 .sumGridOptionsExpand{
 		height: auto !important;
 	}

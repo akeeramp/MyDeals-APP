@@ -54,8 +54,7 @@
         $scope.forceNavigation = false;
         $scope.usrRole = window.usrRole;
         $scope.actualClikedTabName = 'PTR';
-        $scope.currentTAB = 'PTR';
-        $scope.isMCActiveForFSE = false;
+        $scope.currentTAB = 'PTR';        
         $scope.isTenderWidgetVisible = false;
         $scope.inCompleteCapMissing = false;
         $scope.enablePTRReload = false;
@@ -4604,18 +4603,10 @@
                     function (x) {
                         return (x.PASSED_VALIDATION === 'Dirty');
                     }).ToArray();
-                if (dirtyItems.length > 0) isPtrDirty = true;
-
-                var anySucessfulProduct = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
-                    function (x) {
-                        return (x.PASSED_VALIDATION === 'Complete');
-                    }).ToArray();
-                if (anySucessfulProduct.length > 0) $scope.isMCActiveForFSE = true;;
-
+                if (dirtyItems.length > 0) isPtrDirty = true;  
             }
             else {
-                isPtrDirty = true;
-                $scope.isMCActiveForFSE = true;
+                isPtrDirty = true;                
             }
             //IF DE
             if (selectedTab == 'DE') {

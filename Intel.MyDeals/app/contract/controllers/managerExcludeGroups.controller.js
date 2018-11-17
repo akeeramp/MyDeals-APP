@@ -29,6 +29,7 @@
         //$scope.$uibModalInstance = $injector.get('$uibModalInstance');
 
         // Variables
+        if (isToolReq === undefined) isToolReq = true;
         var root = $scope.$parent; // Access to parent scope
         $scope.rootDataItem = rootDataItem;
         $scope.isToolReq = isToolReq;
