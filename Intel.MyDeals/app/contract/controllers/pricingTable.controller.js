@@ -1557,7 +1557,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // Tender only colums
             row["CAP"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
-            row["YCS2"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
+            row["YCS2"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].YCS2 : "";
 
             // Clear out any tiered values because this is an essentially new row.  Do not clear out unless it comes from a relevant user action - we don't want this to happen when the product corrects in-place to what we have defined in the system (i.e. after user manual copy paste or typed entry).
             row["ECAP_PRICE"] = 0;

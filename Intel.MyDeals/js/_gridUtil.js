@@ -2176,10 +2176,14 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                     item._dirty = true;
                     // Remove the last matching row from the source data
                     if (!!item["PRD_BCKT"]) {
-                        source.splice(gTools.getLastIndexByDcId(item.DC_ID, source), 1);
+                        var idx = gTools.getLastIndexByDcId(item.DC_ID, source);
+                        if (idx == null) return; //If index is null we dont now what we are deleting, Root cause for null index delete triggering twice due to multiple sync calls
+
                     } else {
-                        source.splice(gTools.getIndexByDcId(item.DC_ID, source), 1);
+                        var idx = gTools.getIndexByDcId(item.DC_ID, source);
+                        if (idx == null) return; //If index is null we dont now what we are deleting, Root cause for null index delete triggering twice due to multiple sync calls
                     }
+                    source.splice(idx, 1);
                 }
                 // on success
                 e.success();
