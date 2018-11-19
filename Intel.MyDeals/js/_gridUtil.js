@@ -406,7 +406,7 @@ gridUtils.formatValue = function (val, format) {
 gridUtils.uiCustomerControlWrapper = function (passedData, field, altField) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv isReadOnlyCell">';
-    tmplt += '     <div class="ng-binding vert-center" ng-if="dataItem.CUST_ACCNT_DIV === \'\'" ng-bind="dataItem.Customer.CUST_NM"></div>';
+    tmplt += '     <div class="ng-binding vert-center" ng-if="dataItem.CUST_ACCNT_DIV === \'\' || dataItem.CUST_ACCNT_DIV === undefined" ng-bind="dataItem.Customer.CUST_NM"></div>';
     tmplt += '     <div class="ng-binding vert-center" ng-if="dataItem.CUST_ACCNT_DIV !== \'\'" ng-bind="dataItem.CUST_ACCNT_DIV"></div>';
     tmplt += '</div>';
     return tmplt;

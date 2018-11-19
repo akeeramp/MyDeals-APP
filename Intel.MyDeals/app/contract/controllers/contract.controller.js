@@ -4885,6 +4885,20 @@
                                     }
 
                                 }
+
+                                if (col["field"] == "CUST_MBR_SID") {
+                                    col.filterable = {
+                                        multi: true,
+                                        search: true,
+                                        itemTemplate: function (e) {
+                                            if (e.field == "all") {
+                                                return '<li class="k-item"><label class="k-label"><input type="checkbox" class="k-check-all" value="Select All">Select All</label></li>';
+                                            } else {
+                                                return '<li class="k-item"><label class="k-label"><input type="checkbox" class="" value="#=data.CUST_MBR_SID#">#=Customer.CUST_NM#</label></li>'
+                                            }
+                                        }
+                                    };
+                                }
                             }
 
 
