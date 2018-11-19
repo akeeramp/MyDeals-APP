@@ -21,13 +21,13 @@
             $scope.isToolReq = isToolReq;
         }
         $scope.root = root;
-        $scope.isFroceRunPresent = typeof root.forceRun !== 'undefined' && typeof root.forceRun === 'function' ? 'root.forceRun()' : false; 
+        $scope.isFroceRunPresent = typeof root.forceRun !== 'undefined' && typeof root.forceRun === 'function' ? 'root.forceRun()' : false;
         $scope.isRefreshReq = false;
         if (isToolReq == undefined) {
             $scope.isToolReq = true;
             var container = angular.element(".sumPsContainer");
             container.scope().isCollapsed = true;
-            $scope.isAllCollapsed = true;            
+            $scope.isAllCollapsed = true;
         }
         else {
             $scope.isToolReq = isToolReq;
@@ -177,21 +177,21 @@
                     $scope.curPricingStrategy = util.findInArray(data.data[0].PRC_ST, dataItem.PRC_ST_OBJ_SID);
                     $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, $scope.curPricingStrategy.PRC_TBL[0].DC_ID);
                     $scope.curPricingTable.isPtCollapsed = true;
-                }               
+                }
 
                 if (typeof $scope.root.initContract != 'undefined') {
                     var newContractData = $scope.root.initContract(data);
                 }
                 else {
-                    var newContractData = data.data[0];                    
+                    var newContractData = data.data[0];
                 }
-                
+
 
                 var tmpNewPs = util.stripContractTree(newContractData, atrbs);
                 var tmpPs = util.stripContractTree($scope.root.contractData, atrbs);
                 var hasKeyDataChanged = angular.toJson(tmpNewPs) !== angular.toJson(tmpPs);
-                
-                
+
+
 
                 var anyExpanded = $(".chevron.intelicon-down").length > 0;
 
@@ -337,19 +337,19 @@
                 function (e) {
                     //Cherry Picking the Deal for Tender Dashboard
                     if (!$scope.isToolReq) {
-                        var tempItem = [];                        
+                        var tempItem = [];
                         e.data["CostTestDetailItems"].some(function (e, i) {
                             if (e.DEAL_ID == $scope.dataItem.DC_ID) {
-                                tempItem.push(e);                                
+                                tempItem.push(e);
                             }
                         });
                         if (tempItem.length > 0) {
                             e.data.CostTestDetailItems = [];
-                            e.data.CostTestDetailItems=tempItem;                               
-                        }                        
+                            e.data.CostTestDetailItems=tempItem;
+                        }
                     }
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
-                    
+
                     var response = e.data["CostTestDetailItems"];
                     var rollupPctBydeal = {};
                     for (var j = 0; j < response.length; j++) {
@@ -445,7 +445,7 @@
                     }
 
                     if (!$scope.sumGridOptions)  $scope.sumGridOptions = {};
-                    
+
                     $scope.sumGridOptions["dc" + pt.DC_ID] = {
                         dataSource: {
                             data: response,
@@ -555,7 +555,7 @@
                             $scope.isRefreshReq = false;
                         }, 2000);
                     }
-                    
+
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not load data.");
@@ -749,20 +749,24 @@
 
                 modal.result.then(
                     function () {
-                        //Close Event will come here                            
+                        //Close Event will come here
                     },
                     function () {
                         // Do Nothing on cancel
                     });
 
-                
+
             }
             else {
             //$scope.selectedTAB = 'GE';
                 $state.go('contract.grouping');
             }
-            
+
         }
+
+        root["CAN_VIEW_COST_TEST"] = root.CAN_VIEW_COST_TEST === undefined ?
+            securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper)
+            : root.CAN_VIEW_COST_TEST; // Can view the pass/fail
 
         // Global Settings
         var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG || !dataItem.COST_TEST_OVRRD_CMT', 'dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_CMT', '', 'font-size: 20px !important;', INCMPL_COST_TEST_RSN) #" : "&nbsp;";
@@ -1235,7 +1239,7 @@
         $scope.calcNeedToRunStatus();
 
         $timeout(function () {
-            
+
             var html = '<li class="btnGoToExclude" style="display: inline;" ng-click="gotoExclude()" class="k-item k-state-default"><span unselectable="on" class="k-link" style="width: 150px;" title="Click to Exclude Deals in Groupings">Grouping Exclusions</span></li>';
             var template = angular.element(html);
             var linkFunction = $compile(template);

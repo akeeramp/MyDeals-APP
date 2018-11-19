@@ -11,11 +11,11 @@
 
     managerExcludeGroupsController.$inject = [
         '$scope', '$state', '$stateParams', '$filter', 'objsetService', 'confirmationModal', 'dataService', 'logger',
-        '$uibModal', '$timeout', '$compile', '$uibModalStack', 'isToolReq', 'rootDataItem'
+        '$uibModal', '$timeout', '$compile', '$uibModalStack', 'isToolReq', 'rootDataItem', 'securityService'
     ];
 
     function managerExcludeGroupsController($scope,
-        $state,        
+        $state,
         $stateParams,
         $filter,
         objsetService,
@@ -24,8 +24,8 @@
         logger,
         $uibModal,
         $timeout,
-        $compile,        
-        $uibModalStack, isToolReq, rootDataItem) {
+        $compile,
+        $uibModalStack, isToolReq, rootDataItem, securityService) {
         //$scope.$uibModalInstance = $injector.get('$uibModalInstance');
 
         // Variables
@@ -36,7 +36,7 @@
         if ($scope.isToolReq) {
             root.curPricingTable.DC_ID = undefined;
         }
-        
+
         root.wipData = [];
         $scope.root = root;
         $scope.loading = true;
@@ -57,9 +57,9 @@
             return "#aaaaaa";
         }
 
-        $scope.dismissPopup = function () { 
+        $scope.dismissPopup = function () {
             var openedModal = $uibModalStack.getTop();
-            $uibModalStack.dismiss(openedModal.key);            
+            $uibModalStack.dismiss(openedModal.key);
         }
 
         $scope.$on('ManageExcludeGroups',
@@ -114,6 +114,10 @@
                     });
             });
 
+        root["CAN_VIEW_COST_TEST"] = root.CAN_VIEW_COST_TEST === undefined ?
+            securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper)
+            : root.CAN_VIEW_COST_TEST; // Can view the pass/fail
+
         var pctTemplate = root.CAN_VIEW_COST_TEST
             ? "#= gridPctUtils.getResultMapping(data.COST_TEST_RESULT, 'true', '', '', '', 'font-size: 20px !important;', '', true) #"
             : "&nbsp;";
@@ -165,7 +169,7 @@
 
                                 $(".k-tabstrip-wrapper ul.k-tabstrip-items").append(template);
                             }
-                            
+
                         },
                             500);
                     }
@@ -227,14 +231,14 @@
                 if (typeof root.setBusy != 'undefined') {
                     root.setBusy("Saving Groupings", "Please wait while we exclude the deals from the groups");
                 }
-                
+
                 objsetService.updateWipDeals($scope.contractData.CUST_MBR_SID, $scope.contractData.DC_ID, data).then(
                     function (results) {
                         $scope._dirty = false;
                         $scope.$broadcast('resetOpGridDirtyRows');
                         if (typeof root.setBusy != 'undefined') {
                             root.setBusy("Running Cost Test", "Currently running Price Cost Test");
-                        } 
+                        }
                         if (!$scope.isToolReq && typeof $scope.isToolReq != 'undefined') {
                             var selectedItem = [];
                             selectedItem.push($scope.rootDataItem.PRC_ST_OBJ_SID);
@@ -274,7 +278,7 @@
                                 }
                             );
                         }
-                        
+
 
                     },
                     function (response) {

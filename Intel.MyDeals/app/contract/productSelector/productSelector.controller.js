@@ -40,7 +40,7 @@
         vm.selectedItems = [];
         vm.prdSelLvlAtrbsForCategory = [];
         vm.enableSplitProducts = enableSplitProducts && dealType !== 'KIT';
-        vm.splitProducts = ( isTender == 1 && vm.dealType === "ECAP" ) ? true : false;
+        vm.splitProducts = ( isTender == 1 && dealType === "ECAP" ) ? true : false;
         vm.openCAPBreakOut = openCAPBreakOut;
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
@@ -62,7 +62,7 @@
         vm.showDefault = true;
         vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >";
         vm.isTender = isTender;
-        
+
         function resetexcludeProductMessage() {
             vm.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
         }
