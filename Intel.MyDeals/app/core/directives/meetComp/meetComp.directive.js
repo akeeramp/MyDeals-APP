@@ -138,7 +138,9 @@
                 $scope.runPCTMCT = function (mode) {
                     if ($scope.PAGE_NM === 'WIDGET') {
                         objsetService.runPctContract($scope.objSid).then(function (data) {
-                            $scope.$parent.goToPublished();
+                            if (mode == '0') { // For Expect Product We have to go to Publish
+                                $scope.$parent.goToPublished();
+                            }                            
                             $scope.isBusy = false;
                             return;
                         });
@@ -162,7 +164,7 @@
                             $scope.$parent.setIsBusyFalse();
                         }
                         if (response.data.length == 0 && $scope.isAdhoc == 1) {
-                            $scope.runPCTMCT();
+                            $scope.runPCTMCT('0');
                             kendo.alert("Meet comp is not applicable for the Products selected in the Tender Table editor");
                             //$scope.isBusy = false;                            
                             $scope.$parent.inCompleteDueToCapMissing(true);
@@ -221,7 +223,8 @@
                             if ($scope.isAdhoc == 1 && typeof $scope.$parent.inCompleteDueToCapMissing != 'undefined') {
                                 var isCapMissed = inCompleteDueToCAPMissing(response.data);
                                 if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
-                                    $scope.$parent.goToPublished();
+                                    $scope.runPCTMCT('1');
+                                    $scope.$root.$broadcast('refreshPricingTableData', isCapMissed);                                    
                                 }               
                             }                           
 
@@ -1517,7 +1520,7 @@
                                     var isTrueOnce = false;
 
                                     if ($scope.isAdhoc == 1) {
-                                        $scope.runPCTMCT();
+                                        $scope.runPCTMCT('1'); // Means do not call GotToPublish
                                         var isCapMissed = inCompleteDueToCAPMissing(response.data);                                          
                                     }
 
@@ -1569,7 +1572,7 @@
                                     var isTrueOnce = false;
 
                                     if ($scope.isAdhoc == 1) {
-                                        $scope.runPCTMCT();
+                                        $scope.runPCTMCT('1'); // Means do not call GotToPublish
                                         var isCapMissed = inCompleteDueToCAPMissing(response.data);                                        
                                     }
 
