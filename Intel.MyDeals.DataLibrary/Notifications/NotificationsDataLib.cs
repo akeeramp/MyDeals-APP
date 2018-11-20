@@ -384,11 +384,15 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     payload.sent_test_email = true;
                 }
-                var response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
+                var response = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitemails/" + notfEvent.ToString(), payload);
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     await SetApiToken();
-                    var result = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitrecipient/" + notfEvent.ToString(), payload);
+                    var result = await MsgCenterClient.PostAsJsonAsync("/v1/projects/My Deals/reusable/explicitemails/" + notfEvent.ToString(), payload);
+                    if (!result.IsSuccessStatusCode)
+                    {
+                        OpLogPerf.Log("Failed to send MC emails. RequestMessage: " + result.RequestMessage + " ReasonPhrase:" + result.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)

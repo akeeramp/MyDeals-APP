@@ -10,7 +10,7 @@ namespace Intel.MyDeals.Entities
     {
         public IList<PayLoad> payload { get; set; }
 
-        public string recipient { get; set; }
+        public string recipients { get; set; }
 
         public bool sent_test_email { get; set; }
     }

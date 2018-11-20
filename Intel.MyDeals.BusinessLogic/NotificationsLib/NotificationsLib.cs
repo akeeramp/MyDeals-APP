@@ -134,7 +134,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             var msgPayload = new MessageCenterPayload()
             {
-                recipient = notification.NOTIFD_EMP_ADDR,
+                recipients = notification.NOTIFD_EMP_ADDR.Replace(',', ';'),
                 payload = new List<PayLoad>()
             };
 
