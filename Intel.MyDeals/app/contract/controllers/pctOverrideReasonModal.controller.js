@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-pctOverrideReasonModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService'];
+pctOverrideReasonModalCtrl.$inject = ['$scope', '$uibModalInstance', 'dataItem', 'objsetService', '$timeout'];
 
-function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetService) {
+function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetService, $timeout) {
 
     $scope.curData = dataItem.COST_TEST_OVRRD_CMT.split(",");
     $scope.dataItem = dataItem;
@@ -50,6 +50,12 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                         response.splice(i, 1);
                     }
                 }
+                // ng-disabled when evaluates to false it removes the 'disabled' attribute which we are adding as part of template, workaround for this is Jquery.
+                $timeout(function () {
+                    if ($scope.disabled === "disabled") {
+                        $('.pctOverrideCheckbox').attr($scope.disabled, true);
+                    }
+                });
             }
         },
         sortable: true,
@@ -66,7 +72,7 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                         + "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>"
                         + "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# != -1' style='padding-left: 6px;'>"                                //all other legal exceptions get an ordinary checkbox
-                        + "<input type='checkbox' " + $scope.disabled + " ng-class='{disabled: dataItem.IS_DSBL}' ng-disabled='dataItem.IS_DSBL' ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font' ng-class='disabled'/>"
+                        + "<input type='checkbox' " + $scope.disabled + " ng-class='{disabled: dataItem.IS_DSBL}' ng-disabled='dataItem.IS_DSBL' ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font pctOverrideCheckbox' ng-class='disabled'/>"
                         + "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' title='{{dataItem.IS_DSBL ? \"Exception is disabled for selection. Please contact legal\" : \"\"}}' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>",
                 width: "60px",
