@@ -161,7 +161,7 @@ namespace Intel.MyDeals.BusinessLogic
             return $"{opDataElementType}_{field}";
         }
 
-        private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd)
+        private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd, bool userDefContract, bool userDefDeal)
         {
             string rtn = string.Empty;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
@@ -179,13 +179,13 @@ namespace Intel.MyDeals.BusinessLogic
             // modifiedSearchList.Add($"{opDataElementType}_REBATE_TYPE = 'TENDER'");
 
             // Set Start Date
-            if (!userDefStart) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.START_DT} <= '{data.StrEnd:MM/dd/yyyy}'");
+            if (!userDefStart && !userDefContract && !userDefDeal) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.START_DT} <= '{data.StrEnd:MM/dd/yyyy}'");
 
             // Set End Date
-            if (!userDefEnd) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
+            if (!userDefEnd && !userDefContract && !userDefDeal) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
 
             // Customers
-            if (data.Customers.Any())
+            if (data.Customers.Any() && !userDefContract && !userDefDeal)
             {
                 modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;",".")}')");
             }
@@ -380,9 +380,12 @@ namespace Intel.MyDeals.BusinessLogic
             // Check is user entered a date range
             bool userDefStart = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf(AttributeCodes.START_DT) >= 0;
             bool userDefEnd = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf(AttributeCodes.END_DT) >= 0;
+            bool userDefCntrct = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("CNTRCT_OBJ_SID") >= 0;
+            bool userDefDeal = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("DEAL_OBJ_SID") >= 0;
+
 
             // Build where clause from start/end date and search text
-            string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL, initSearchCriteria, customSearchOption, userDefStart, userDefEnd);
+            string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL, initSearchCriteria, customSearchOption, userDefStart, userDefEnd, userDefCntrct, userDefDeal);
 
             // Build Order By
             string orderBy = string.IsNullOrEmpty(data.StrSorts) ? "" : $"{OpDataElementType.WIP_DEAL}_{data.StrSorts}";

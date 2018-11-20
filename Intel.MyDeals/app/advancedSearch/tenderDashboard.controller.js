@@ -1144,22 +1144,28 @@
         }
 
         $scope.actionWipDeal = function (wip, actn) {
-            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
+            if (actn === "Cancel") {
+                $scope.setBusy("Cancelling Wip Deal...", "Please wait as we cancel the Wip Deal!", "Info", true);
+            } else {
+                $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
+            }
             objsetService.actionWipDeal(wip.CUST_MBR_SID, wip._contractId, wip, actn).then(
                 function (data) {
-                    $scope.syncHoldItems(data, { Cancel: [wip] });
+                    //$scope.syncHoldItems(data, { Cancel: [wip] });
                     $scope.$broadcast('refreshStage', { Cancel: [wip] });
-                    $scope.setBusy("", "");
+                    $scope.setBusy("Cancel Successful", "Reloading the Deal", "Success");
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 4000);
 
                     // You changed the deals list, just reload it.
-                    //TODO need to issue a reload most likely
+                    $scope.refreshGridRows([wip.DC_ID], null);
                 },
                 function (result) {
                     $scope.setBusy("", "");
                 }
             );
         }
-
 
         $scope.downloadQuoteLetter = function (customerSid, objTypeSid, objSid) {
             var downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + customerSid + "/" + objTypeSid + "/" + objSid + "/0";
