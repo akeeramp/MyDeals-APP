@@ -1282,7 +1282,12 @@
                                             },
                                             change: function (e) {
                                                 if (isNaN(options.model.COMP_PRC) || options.model.COMP_PRC == null) {
-                                                    options.model.COMP_PRC = null;
+                                                    if (e.sender._old) {
+                                                        options.model.COMP_PRC = e.sender._old;
+                                                    }
+                                                    else {
+                                                        options.model.COMP_PRC = null;
+                                                    }                                                    
                                                 }
                                                 if (options.model.COMP_PRC > 0) {
                                                     var tempData = [];
@@ -1488,9 +1493,8 @@
                                     if ($scope.tempUpdatedList.length > 0) {
                                         $scope.updateMeetComp();
                                     }
-                                    else if ($scope.tempUpdatedList.length == 0) {
-                                        $scope.forceRunMeetComp();
-                                        //kendo.alert('No new Meet Comp Changes detected to be saved.');
+                                    else if ($scope.tempUpdatedList.length == 0 && $scope.isAdhoc == 0) {
+                                        $scope.forceRunMeetComp();                                        
                                     }
                                 }
                                 else {

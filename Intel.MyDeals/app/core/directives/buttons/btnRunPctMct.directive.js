@@ -105,7 +105,7 @@ function btnRunPctMct(logger, objsetService, $timeout, $state) {
 
                 $(".iconRunPct").addClass("fa-spin grn");
                 if ($scope.runViaButton && $scope.curState === $state.current.name) $scope.root.$broadcast('btnPctMctRunning', {});
-                if (!$scope.$parent.$parent.isToolReq && typeof $scope.$parent.$parent.isToolReq != 'undefined') {
+                if ($scope.$parent.$parent != null && typeof $scope.$parent.$parent.isToolReq != 'undefined' && !$scope.$parent.$parent.isToolReq) {
                     var selectedItem = [];
                     selectedItem.push($scope.$parent.$parent.PRC_ST_OBJ_SID);
                     objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {

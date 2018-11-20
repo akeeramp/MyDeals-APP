@@ -4572,14 +4572,7 @@
                     }, 2000);
                 }
             );
-            //for (var i = 0; i < data.length; i++) {
-            //    for (var j = 0; j < $scope.pricingTableData.PRC_TBL_ROW.length; j++) {
-            //        if ($scope.pricingTableData.PRC_TBL_ROW[j].DC_PARENT_ID == data[i].PRC_TBL_OBJ_SID && PTR_USER_PRD) {
-            //            $scope.pricingTableData.PRC_TBL_ROW[j].MEETCOMP_TEST_RESULT = data[i].MEET_COMP_STS;
-            //        }
-            //    }
-
-            //}
+            
         });
 
         $scope.isMCForceRunReq = function () {
