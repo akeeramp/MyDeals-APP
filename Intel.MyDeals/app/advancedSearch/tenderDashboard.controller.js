@@ -1127,6 +1127,7 @@
                             return;
                         }
 
+                        $scope.refreshGridRows([wip.DC_ID], null);
                         $scope.setBusy("Rollback Successful", "Rollback of the Deal", "Success");
                         $timeout(function () {
                             $scope.setBusy("", "");
