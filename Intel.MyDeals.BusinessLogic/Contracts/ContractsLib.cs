@@ -273,7 +273,7 @@ namespace Intel.MyDeals.BusinessLogic
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.HAS_TRACKER, "0"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.OVERLAP_RESULT, "Not Run Yet"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COST_MISSING_FLG, "0"));
-            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "0"));
+            psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "Pricing Strategy Created from a Copy"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.CAP_MISSING_FLG, "0"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.IN_REDEAL, "0"));
             psAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.VERTICAL_ROLLUP, ""));
@@ -291,7 +291,7 @@ namespace Intel.MyDeals.BusinessLogic
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.PASSED_VALIDATION, "Dirty"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.HAS_TRACKER, "0"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.COST_MISSING_FLG, "0"));
-            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "0"));
+            ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.SYS_COMMENTS, "Pricing Table Created from a Copy"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.CAP_MISSING_FLG, "0"));
             ptAtrbs.Add(new KeyValuePair<MyDealsAttribute, string>(Attributes.IN_REDEAL, "0"));
 
@@ -300,6 +300,10 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (data[0].ContainsKey(atrb.ATRB_COL_NM))
                 {
+                    if (atrb.ATRB_COL_NM == AttributeCodes.SYS_COMMENTS)
+                    {
+                        data[0][atrb.ATRB_COL_NM] = "Contract Created from a Copy";
+                    }
                     cntrctDEs.Add(new OpDataElement
                     {
                         DcID = -101,
