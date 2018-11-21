@@ -223,9 +223,8 @@
                             if ($scope.isAdhoc == 1 && typeof $scope.$parent.inCompleteDueToCapMissing != 'undefined') {
                                 var isCapMissed = inCompleteDueToCAPMissing(response.data);
                                 if (isCapMissed && typeof $scope.$parent.goToPublished != 'undefined') {
-                                    $scope.runPCTMCT('1');
-                                    $scope.$root.$broadcast('refreshPricingTableData', isCapMissed);                                    
-                                }               
+                                    $scope.runPCTMCT('0');
+                                }          
                             }                           
 
                             response.data.forEach(function (obj) {

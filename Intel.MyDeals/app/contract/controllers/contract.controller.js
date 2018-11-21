@@ -434,6 +434,7 @@
             $scope.resetDirty();
             $scope.setBusy("", "");
             $scope.loadPublishGrid();
+            $scope.forceNavigation = false;
         }
 
         $scope.goToPublished = function () {
@@ -442,7 +443,6 @@
             if ($scope.actualClikedTabName == 'PD') {
                 $scope.gotoPDPage();
             }
-
             $scope.resetDirty();
         }
 
