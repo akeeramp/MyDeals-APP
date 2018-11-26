@@ -1080,7 +1080,6 @@
 
         $scope.deletePricingTableRow = function (wip) {
             $scope.$apply(function () {
-                debugger;
                 $scope.setBusy("Deleting...", "Deleting Tender Deal " + wip.DC_ID + " information");
                 $scope._dirty = false;
 

@@ -1402,6 +1402,15 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
             title: "Notes"
         }
     ];
+    var forceHide = [];
+
+    if (window.usrRole != "DA") {
+        forceHide.push("COST_TEST_RESULT")
+    }
+
+    if (!(window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper))) {
+        forceHide.push("MEETCOMP_TEST_RESULT")
+    }
 
     // Create element to generate templates in.
     var elem = document.createElement('div');
@@ -1409,6 +1418,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
     var colList = [];
     for (var i = 0; i < gridColumns.length; i++) {
         colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
+        if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
         if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
             var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
                 ? gridColumns[i].excelHeaderLabel
@@ -1466,6 +1476,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
             var cells = [];
             for (var c = 0; c < gridColumns.length; c++) {
                 colHidden = onlyVisible && gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
+                if (forceHide.indexOf(gridColumns[c].field) >= 0) colHidden = true;
                 if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
                     // get default value
                     if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
