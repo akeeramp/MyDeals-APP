@@ -1330,7 +1330,7 @@
 
         $scope.changeBidAction = function (dataItem, newVal, gridDS) {
             var tenders = [];
-
+            var linkedUnactionables = [];
             // if item is checked (linked) then we need to make sure all linked items are in the same stages otherwise we disallow the action
             if (dataItem.isLinked) {
                 for (var d = 0; d < gridDS.length; d++) {
@@ -1339,6 +1339,8 @@
                             //mismatch detected, end execution and warn user
                             kendo.alert("The selected deals must be in the same Stage in order to do Actions in bulk.");
                             return;
+                        } else if (gridDS[d]["_actionsPS"][newVal] == false) {
+                            linkedUnactionables.push(gridDS[d].DC_ID);
                         } else {
                             //no mismatch, therefore we push it into the packet that we will send to the middle tier
                             tenders.push({
@@ -1372,6 +1374,13 @@
 
             if (newVal === "Approve") msg = "Would you like approve the Tender Deal" + plural + " and set to 'Approved'?";
             if (newVal === "Revise") msg = "Would you like to edit the Tender Deal" + plural + " and set to 'Revise'?";
+
+            if (linkedUnactionables.length > 0) {
+                msg += "<br/><br/>The following deals cannot be Actioned:";
+                msg += "<br/><b>" + linkedUnactionables.join(", ") + "</b>";
+                msg += "<br/>Please check validations and/or Missing Cost/CAP."
+                msg += "<br/><br/>All other selected deals will proceed with your selected Action."
+            }
 
             kendo.confirm(msg)
                 .then(
