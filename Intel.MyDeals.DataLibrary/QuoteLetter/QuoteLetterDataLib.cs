@@ -305,16 +305,16 @@ namespace Intel.MyDeals.DataLibrary
                     if (inNegotiation) // add a water mark to signify that this is not a real contract
                     {
                         Telerik.Reporting.Drawing.TextWatermark textWatermark1 = new Telerik.Reporting.Drawing.TextWatermark();
-                        textWatermark1.Color = System.Drawing.Color.Red;
+                        textWatermark1.Color = System.Drawing.Color.Gray;
                         textWatermark1.Font.Bold = true;
                         textWatermark1.Font.Size = Telerik.Reporting.Drawing.Unit.Point(72D);
                         textWatermark1.Orientation = Telerik.Reporting.Drawing.WatermarkOrientation.Diagonal;
-                        textWatermark1.Position = Telerik.Reporting.Drawing.WatermarkPosition.Front;
+                        textWatermark1.Position = Telerik.Reporting.Drawing.WatermarkPosition.Behind;
                         textWatermark1.PrintOnFirstPage = true;
                         textWatermark1.PrintOnLastPage = true;
                         if (isTenderOfferStg == "Offer")
                         {
-                            textWatermark1.Text = "Offer for Customer";
+                            textWatermark1.Text = "Offer";
                         }
                         else
                         {
