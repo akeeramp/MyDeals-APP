@@ -165,7 +165,9 @@ namespace Intel.MyDeals.BusinessLogic
                             dcPath.WipDealId = dcId;
                             break;
                     }
-                    dcId = myDealsData[opDataElementType].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId).DataElements.Select(s => s.DcParentID).FirstOrDefault();
+                    var dcTmp = myDealsData[opDataElementType].AllDataCollectors.FirstOrDefault(d => d.DcID == dcId);
+                    if (dcTmp != null) dcId = dcTmp.DataElements.Select(s => s.DcParentID).FirstOrDefault();
+                    else opDataElementType = OpDataElementType.ALL_OBJ_TYPE;
 
                     opDataElementType = opDataElementType.GetParent();
 

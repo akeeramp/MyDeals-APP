@@ -700,15 +700,27 @@ namespace Intel.MyDeals.BusinessLogic
             for (var i = 0; i < flatDictList[OpDataElementType.WIP_DEAL].Count(); i++)
             {
                 var myDcPath = paths.FirstOrDefault(p => p.WipDealId == (int)flatDictList[OpDataElementType.WIP_DEAL][i]["DC_ID"]);
-                var myPs = psDecoder[myDcPath.PricingStrategyId];
 
-                flatDictList[OpDataElementType.WIP_DEAL][i]["_actionsPS"] = myPs["_actions"];
-                flatDictList[OpDataElementType.WIP_DEAL][i]["_parentIdPS"] = myPs["DC_ID"];
-                flatDictList[OpDataElementType.WIP_DEAL][i]["_actionReasonsPS"] = myPs["_actionReasons"];
+                if (psDecoder.ContainsKey(myDcPath.PricingStrategyId))
+                {
+                    var myPs = psDecoder[myDcPath.PricingStrategyId];
 
-                //the below 2 are relics of when we would potentially see unpublished tender deals in the tender dashboard.  while they are no longer needed, it doesn't hurt to leave the logic here as a failsafe.
-                flatDictList[OpDataElementType.WIP_DEAL][i]["_contractPublished"] = cntrctPublished.ContainsKey((int)myPs["DC_PARENT_ID"]) ? cntrctPublished[(int)myPs["DC_PARENT_ID"]] : 0;
-                flatDictList[OpDataElementType.WIP_DEAL][i]["_contractId"] = (int)myPs["DC_PARENT_ID"];
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_actionsPS"] = myPs["_actions"];
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_parentIdPS"] = myPs["DC_ID"];
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_actionReasonsPS"] = myPs["_actionReasons"];
+
+                    //the below 2 are relics of when we would potentially see unpublished tender deals in the tender dashboard.  while they are no longer needed, it doesn't hurt to leave the logic here as a failsafe.
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_contractPublished"] = cntrctPublished.ContainsKey((int)myPs["DC_PARENT_ID"]) ? cntrctPublished[(int)myPs["DC_PARENT_ID"]] : 0;
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_contractId"] = (int)myPs["DC_PARENT_ID"];
+                }
+                else
+                {
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_actionsPS"] = null;
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_parentIdPS"] = null;
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_actionReasonsPS"] = null;
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_contractPublished"] = 0;
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["_contractId"] = 0;
+                }
             }
 
             return flatDictList;

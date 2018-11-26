@@ -1278,9 +1278,12 @@
                     $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;
 
                 }).catch(function (data) {
+                    $scope.setBusy("", "");
+                    kendo.alert("Tender Search Failed.  Please try again with more specific Search Options.");
                     console.log('Tender Search Failed');
                 });
             } else {
+                $scope.setBusy("", "");
                 kendo.alert("Please specify a Tender Deal Type");
             }
         });
