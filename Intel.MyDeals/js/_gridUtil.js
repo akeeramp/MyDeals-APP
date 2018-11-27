@@ -133,7 +133,7 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
 
     }
     else {
-        if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper || window.usrRole === 'SA')) { // Cost Test visable by Super GA, DA, and SA
+        if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper || window.usrRole === 'SA' || window.usrRole === 'Legal')) { // Cost Test visable by Super GA, DA, and SA
             return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
         }
         else {
@@ -1404,11 +1404,11 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
     ];
     var forceHide = [];
 
-    if (window.usrRole != "DA") {
+    if (!(window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper) || (window.usrRole === "Legal") || (window.usrRole === "SA"))) {
         forceHide.push("COST_TEST_RESULT")
     }
 
-    if (!(window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper))) {
+    if (!(window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper) || (window.usrRole === "Legal") || (window.usrRole === "SA"))) {
         forceHide.push("MEETCOMP_TEST_RESULT")
     }
 
