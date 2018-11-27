@@ -613,30 +613,31 @@ namespace Intel.MyDeals.BusinessLogic
             }
             else
             {
-                foreach (List<TenderActionItem> item in contractDecoder.Values)
+                //Standard code flow for applying a bid action (Offer, Won, Lost) to a tender deal
+                List<int> custs = data.Select(t => t.CUST_MBR_SID).ToList();
+                List<int> conIds = data.Select(t => t.CNTRCT_OBJ_SID).ToList();
+
+                contractToken.CustId = custs.Count() == 1 ? custs.FirstOrDefault() : 0;
+                contractToken.ContractId = conIds.Count() == 1 ? conIds.FirstOrDefault() : -1;
+
+                MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, data.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
+
+                List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
+
+                Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
+                foreach (OpDataElement de in trkrs)
                 {
-                    //Standard code flow for applying a bid action (Offer, Won, Lost) to a tender deal
-                    contractToken.CustId = item.Select(t => t.CUST_MBR_SID).FirstOrDefault();
-                    contractToken.ContractId = item.Select(t => t.CNTRCT_OBJ_SID).FirstOrDefault();
-                    MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, item.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
-
-                    List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
-
-                    Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
-                    foreach (OpDataElement de in trkrs)
-                    {
-                        if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
-                        dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
-                    }
-
-                    // Apply messaging
-                    opMsgQueue.Messages.Add(new OpMsg
-                    {
-                        MsgType = OpMsg.MessageType.Info,
-                        Message = "Action List",
-                        ExtraDetails = actn == WorkFlowStages.Won ? (object)dictTrkrs : actions
-                    });
+                    if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
+                    dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
                 }
+
+                // Apply messaging
+                opMsgQueue.Messages.Add(new OpMsg
+                {
+                    MsgType = OpMsg.MessageType.Info,
+                    Message = "Action List",
+                    ExtraDetails = actn == WorkFlowStages.Won ? (object)dictTrkrs : actions
+                });
             }
 
             return opMsgQueue;
