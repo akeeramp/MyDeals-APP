@@ -1408,7 +1408,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
         forceHide.push("COST_TEST_RESULT")
     }
 
-    if (!(window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper) || (window.usrRole === "Legal") || (window.usrRole === "SA"))) {
+    if (!(window.usrRole === "DA" || (window.usrRole === "GA") || (window.usrRole === "Legal") || (window.usrRole === "SA"))) {
         forceHide.push("MEETCOMP_TEST_RESULT")
     }
 
