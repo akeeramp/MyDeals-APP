@@ -201,11 +201,21 @@ namespace Intel.MyDeals.Entities
         {
             if (!dealIds.Any()) return;
 
-            packet.AttachAction(DealSaveActionCodes.GENERATE_QUOTE, 100, dealIds);
+            List<int> quoteIds = new List<int>();
             foreach (OpDataCollector dc in packet.AllDataCollectors.Where(d => dealIds.Contains(d.DcID)))
             {
-                dc.AddTimelineComment("Quote letter generated");
+                IOpDataElement de = dc.GetDataElement(AttributeCodes.WF_STG_CD);
+                // See if they moved into Active or Won and we really need to spend the processing on making a legal quote letter.
+                if (de != null && de.State == OpDataElementState.Modified && (de.AtrbValue.ToString() == WorkFlowStages.Active || de.AtrbValue.ToString() == WorkFlowStages.Won))
+                {
+                    dc.AddTimelineComment("Quote letter generated");
+                    quoteIds.Add(dc.DcID);
+                }
             }
+
+            // Was dealIds, but this also placed Offer stage deals into generating quotes upon approvals.
+            if (!quoteIds.Any()) return;
+            packet.AttachAction(DealSaveActionCodes.GENERATE_QUOTE, 100, quoteIds);
         }
 
         public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, OpDataCollectorFlattenedList data)
