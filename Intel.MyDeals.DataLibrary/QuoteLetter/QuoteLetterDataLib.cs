@@ -95,11 +95,15 @@ namespace Intel.MyDeals.DataLibrary
         public void GenerateBulkQuoteLetter(List<QuoteLetterData> quoteLetterDealInfoList)
         {
             GetDealQuoteLetterData(quoteLetterDealInfoList, 2);
+            Thread quoteLetterThread = new Thread(() => GenerateQuoteLetterThread(quoteLetterDealInfoList));
+            quoteLetterThread.Start();
+        }
+
+        private void GenerateQuoteLetterThread(List<QuoteLetterData> quoteLetterDealInfoList)
+        {
             foreach (var qlData in quoteLetterDealInfoList)
             {
-                Thread quoteLetterThread = new Thread(() => GenerateQuoteLetterPDF(qlData, true));
-                quoteLetterThread.Start();
-                //GenerateQuoteLetterPDF(qlData, true);  // Force quote letter generation when a deal is approved (part of deal Approval flow)
+                GenerateQuoteLetterPDF(qlData, true);
             }
         }
 
@@ -337,7 +341,7 @@ namespace Intel.MyDeals.DataLibrary
                     if (!inNegotiation || (forceRegenerateQuoteLetter && !inNegotiation))
                     {
                         bool quoteResult = forceRegenerateQuoteLetter ?
-                            SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes).Result:
+                            SaveQuotePDF(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes).Result :
                             SaveQuotePDFWait(quoteLetterData, quoteLetterData.ContentInfo.TRKR_NBR, quoteLetterBytes);
                     }
                 }

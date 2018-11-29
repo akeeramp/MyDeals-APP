@@ -92,7 +92,6 @@ namespace Intel.MyDeals.BusinessLogic
             return DeletePricingStrategy(contractToken, pricingStrategies);
         }
 
-
         public OpMsg RollBackObject(OpDataElementType opDataElementType, ContractToken contractToken, int dcId)
         {
             // Issue the needed rollbacks and deletes - this is generalized code that will figure out the level and act as needed.
@@ -288,13 +287,11 @@ namespace Intel.MyDeals.BusinessLogic
                     ExtraDetails = dc.DcType,
                     KeyIdentifiers = new[] { dc.DcID }
                 });
-                
+
                 dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
             }
-
-
 
             // Now let us test for PCT or MCT if needed
             if (needsPctMctDealIds.Any())
@@ -326,7 +323,6 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
             // END DE19996 block...
-
 
             List<int> dealIds = new List<int>();
             List<int> pendingDealIds = new List<int>();
@@ -488,7 +484,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (contractToken.BulkTenderUpdate)
             {
-                //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions 
+                //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions
 
                 List<int> ps_ids = new List<int>();
                 //MyDealsData myDealsTenderData;
@@ -540,7 +536,8 @@ namespace Intel.MyDeals.BusinessLogic
                             //IDs of datacollector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
                             //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
                             om.ExtraDetails = wip_data[i];
-                        } else
+                        }
+                        else
                         {
                             //returned ps data does not match id in this OpMsg so we continue
                             continue;
@@ -708,6 +705,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_actionsPS"] = myPs["_actions"];
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_parentIdPS"] = myPs["DC_ID"];
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["PRC_ST_OBJ_SID"] = myPs["DC_ID"];
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_actionReasonsPS"] = myPs["_actionReasons"];
 
                     //the below 2 are relics of when we would potentially see unpublished tender deals in the tender dashboard.  while they are no longer needed, it doesn't hurt to leave the logic here as a failsafe.
@@ -718,6 +716,9 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_actionsPS"] = null;
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_parentIdPS"] = null;
+
+                    // Angular code expecting a different variable. TODO: make it consistant across to use one variable between _parentIdPS and PRC_ST_OBJ_SID
+                    flatDictList[OpDataElementType.WIP_DEAL][i]["PRC_ST_OBJ_SID"] = null;
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_actionReasonsPS"] = null;
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_contractPublished"] = 0;
                     flatDictList[OpDataElementType.WIP_DEAL][i]["_contractId"] = 0;
