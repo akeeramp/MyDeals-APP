@@ -95,7 +95,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (opDataElementType != OpDataElementType.PRC_ST) continue;
 
-                if ((action == "Approve" || action == "Revise") && passedValidation != PassedValidation.Complete.ToString())
+                if ((action == "Approve") && passedValidation != PassedValidation.Complete.ToString())
                 {
                     objsetActionItem.Actions[action] = false;
                     objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
