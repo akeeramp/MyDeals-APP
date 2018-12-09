@@ -458,6 +458,7 @@
                                     }
                                     else {
                                         $scope.meetCompMasterdata[selectedID - 1].IS_SELECTED = event.target.checked;
+                                        $scope.resetDealItems($scope.meetCompMasterdata[selectedID - 1].GRP_PRD_SID, filterData); // Reset All the Deals not copied from Peers
                                     }
                                 }
                                 else {
@@ -480,11 +481,25 @@
                                     }
                                     else {
                                         $scope.meetCompMasterdata[selectedID - 1].IS_SELECTED = event.target.checked;
+                                        $scope.resetDealItems($scope.meetCompMasterdata[selectedID - 1].GRP_PRD_SID, $scope.meetCompMasterdata); // Reset All the Deals not copied from Peers
                                     }
                                 }
                                 //Holding expanded column
                                 if (selectedID == 'all') {
                                     expandSelected();
+                                }
+                            }
+
+                            //Reset Child Item if Checkbox is Un-Selected
+                            $scope.resetDealItems = function (GRP_PRD_SID, data) {
+                                //Getting all Child Item
+                                var tempDealData = $linq.Enumerable().From(data)
+                                    .Where(function (x) {
+                                        return (x.GRP_PRD_SID == GRP_PRD_SID);
+                                    })
+                                    .ToArray();
+                                for (var i = 0; i < tempDealData.length; i++) {
+                                    $scope.meetCompMasterdata[tempDealData[i].RW_NM - 1].IS_SELECTED = event.target.checked;
                                 }
                             }
 
