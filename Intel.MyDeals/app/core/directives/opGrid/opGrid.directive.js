@@ -104,9 +104,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.dealCnt = 0;
             $scope.isGridDataLoaded = false;
             $scope.isLayoutConfigurablePrev = $scope.isLayoutConfigurable;
+            $scope.isTenderPlatform = ($scope.opIsTender === null || $scope.opIsTender === undefined) ? false : $scope.opIsTender === "true";
 
             $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
-            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
+            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null) || (window.usrRole === "FSE" && $scope.isTenderPlatform);
 
             $scope.root = !!$scope.opOptions.rootScope ? $scope.opOptions.rootScope : $scope.$parent.$parent.$parent;
             if (!$scope.root || !$scope.root.saveCell) { // possible this directive is called from nested parent hierarchy
