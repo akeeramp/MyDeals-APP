@@ -927,6 +927,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     alert("Status: " + e.status + "; Error message: " + e.errorThrown);
                 },
                 batch: true,
+                //Added for DE26504
+                sort: [
+                    { field: "PASSED_VALIDATION", dir: "desc" }
+                ],
+                //
                 schema: {
                     model: $scope.opOptions.model
                 },
