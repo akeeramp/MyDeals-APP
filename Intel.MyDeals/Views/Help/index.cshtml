@@ -59,7 +59,7 @@
             clickedLink.addClass('selected-link');
         });
 
-        if ((!String(window.location).includes("#")) && String(window.location).includes("?topic")) {
+        if ((!String(window.location).indexOf("#") >= 0) && String(window.location).indexOf("?topic") >= 0) {
             var topic = getUrlParameter('topic');
             if (topic.length > 0) {
                 var matchStr = 'a[href$="#' + topic + '"]';

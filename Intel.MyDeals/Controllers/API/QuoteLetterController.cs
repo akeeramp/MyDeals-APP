@@ -30,7 +30,7 @@ namespace Intel.MyDeals.Controllers.API
             var result = new HttpResponseMessage(HttpStatusCode.OK);
             var quoteLetterDealInfo = new QuoteLetterData(customerId, objectTypeId, dealId); 
             
-            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(quoteLetterDealInfo, string.Empty, string.Empty, forceRegenerateQuoteLetter == 1)
+            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(quoteLetterDealInfo, string.Empty, string.Empty, forceRegenerateQuoteLetter == 1, null)
                 , $"Unable to download quote letter for {dealId}"
             );
             quoteLetterFinalBytes = quoteLetterFile.Content;
@@ -65,7 +65,7 @@ namespace Intel.MyDeals.Controllers.API
             byte[] quoteLetterFinalBytes = null;
             var result = new HttpResponseMessage(HttpStatusCode.OK);
             var quoteLetterDealInfo = new QuoteLetterData();
-            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(quoteLetterDealInfo, template.HDR_INFO, template.BODY_INFO, false)
+            var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter(quoteLetterDealInfo, template.HDR_INFO, template.BODY_INFO, false, null)
             //var quoteLetterFile = SafeExecutor(() => _quoteLetterLib.GetDealQuoteLetter("502124", string.Empty, string.Empty)
                 , $"Unable to download preview quote letter"
             );

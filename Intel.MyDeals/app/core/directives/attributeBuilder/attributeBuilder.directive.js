@@ -70,7 +70,15 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.loadMyRules = function () {
                 userPreferencesService.getActions($scope.cat, $scope.subcat)
                     .then(function (data) {
-                        $scope.myRules = data.data.length > 0 ? JSON.parse(data.data[0].PRFR_VAL) : [];
+
+                        $scope.myRules = [];
+                        if (data.data.length > 0) {
+                            for (var r = 0; r < data.data.length; r++) {
+                                if (data.data[r].PRFR_KEY === "Rules") {
+                                    $scope.myRules = JSON.parse(data.data[r].PRFR_VAL);
+                                }
+                            }
+                        }
                         $scope.root.$broadcast('search-rules-updated', $scope.myRules);
                     },
                     function (response) {

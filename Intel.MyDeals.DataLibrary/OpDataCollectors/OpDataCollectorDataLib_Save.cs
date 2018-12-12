@@ -102,7 +102,7 @@ namespace Intel.MyDeals.DataLibrary
                         }
                     }
 
-                    quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList);
+                    quoteLetterDataLib.GenerateBulkQuoteLetter(quoteLetterDataList, contractToken);
                 }
 
 #if DEBUG

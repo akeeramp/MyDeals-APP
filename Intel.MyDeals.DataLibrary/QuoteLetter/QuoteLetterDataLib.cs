@@ -92,8 +92,9 @@ namespace Intel.MyDeals.DataLibrary
             return template;
         }
 
-        public void GenerateBulkQuoteLetter(List<QuoteLetterData> quoteLetterDealInfoList)
+        public void GenerateBulkQuoteLetter(List<QuoteLetterData> quoteLetterDealInfoList, ContractToken contractToken)
         {
+            DateTime startTime = DateTime.Now;
             GetDealQuoteLetterData(quoteLetterDealInfoList, 2);
             Thread quoteLetterThread = new Thread(() => GenerateQuoteLetterThread(quoteLetterDealInfoList));
             quoteLetterThread.Start();
@@ -107,7 +108,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo, bool forceRegenerateQuoteLetter = false)
+        public QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealData, string headerInfo, string bodyInfo, bool forceRegenerateQuoteLetter, ContractToken contractToken)
         {
             QuoteLetterFile quoteLetterPdfBytes = new QuoteLetterFile();
             var quoteLetterDataList = new List<QuoteLetterData> { quoteLetterDealData };
@@ -116,7 +117,11 @@ namespace Intel.MyDeals.DataLibrary
             if (!string.IsNullOrEmpty(headerInfo) && !string.IsNullOrEmpty(bodyInfo))
                 SetDealQuoteLetterPreviewData(quoteLetterDataList[0], headerInfo, bodyInfo);
             else
+            {
+                DateTime startTime = DateTime.Now;
+                if (contractToken != null) contractToken.AddMark("GetDealQuoteLetterData - PR_MYDL_GET_QUOTE_INFO", TimeFlowMedia.DB, (DateTime.Now - startTime).TotalMilliseconds);
                 GetDealQuoteLetterData(quoteLetterDataList, 2);
+            }
 
             quoteLetterPdfBytes = GenerateQuoteLetterPDF(quoteLetterDataList[0], forceRegenerateQuoteLetter);
             return quoteLetterPdfBytes;
