@@ -243,7 +243,7 @@
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td style="line-height: 1.1em;">{{psTitle}} / {{ptTitle}}</td>
                     <!--<td style="width: 100px; text-align: center;"># of Tables</td>-->
-                    <td style="width: 150px; text-align: center;" ng-if="userRole == 'GA'">Missing Cost/CAP</td>
+                    <td style="width: 150px; text-align: center;" ng-if="userRole == 'GA' || userRole == 'SA'">Missing Cost/CAP</td>
                     <td style="width: 160px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                         <btn-run-pct-mct ng-model="root"
                                          contract-id="root.contractData.DC_ID"
