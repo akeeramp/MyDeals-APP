@@ -101,6 +101,7 @@ namespace Intel.MyDeals
                 , "~/app/core/filters/kitProducts.filter.js"
                 , "~/app/core/filters/kitCalculatedValues.filter.js"
                 , "~/app/core/filters/gridMath.filter.js"
+                , "~/app/core/filters/calcBackEndRebate.filter.js"
                 , "~/app/blocks/util.js"
                 ));
 

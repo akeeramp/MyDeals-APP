@@ -818,6 +818,86 @@ gridUtils.exportMathControlWrapper = function (passedData, atrb1, dim1, atrb2, d
     return tmplt;
 }
 
+gridUtils.calculateECAPBackEndRebate = function (passedData, atrb2, dim2) {
+    var dim1 = "20___0";
+    var CAP = passedData["CAP"];
+    var YCS2 = passedData["YCS2_PRC_IRBT"];
+    var ecapPrice = passedData[atrb2];
+
+    if (CAP === undefined || YCS2 === undefined || ecapPrice === undefined) return "";
+
+    var data1;
+    if (CAP[dim1] == "No CAP" && YCS2[dim1] == "No YCS2") {
+        return "";
+    } else if (CAP[dim1] == "No CAP") {
+        data1 = YCS2[dim1];
+    } else if (YCS2[dim1] == "No YCS2") {
+        data1 = CAP[dim1];
+    } else {
+        data1 = Math.min(CAP[dim1], YCS2[dim1]);
+    }
+
+    if (!(dim2 == "" || dim2 == null)) {
+        ecapPrice = ecapPrice[dim2];
+    }
+
+    if (ecapPrice === undefined) return "";
+
+    return data1 - ecapPrice;
+}
+
+gridUtils.calcKITBackendRebate = function (passedData, atrb2, dim2) {
+    var dimSuffix = "20___";
+    var CAP = passedData["CAP"];
+    var YCS2 = passedData["YCS2_PRC_IRBT"];
+    var ecapPrice = passedData[atrb2];
+    var kitProds = passedData["TITLE"].split(',');
+
+    var netPrice = 0.0;;
+    for (var i = 0; i <= kitProds.length - 1 ; i++) {
+        var dim1 = dimSuffix + i;
+        var data1 = 0.0;
+        if (CAP[dim1] == "No CAP" && YCS2[dim1] == "No YCS2") {
+            if (i == 0) return "";
+            continue;
+        } else if (CAP[dim1] == "No CAP") {
+            data1 = YCS2[dim1];
+        } else if (YCS2[dim1] == "No YCS2") {
+            data1 = CAP[dim1];
+        } else {
+            data1 = Math.min(CAP[dim1], YCS2[dim1]);
+        }
+        netPrice = parseFloat(netPrice) + parseFloat(data1);
+    }
+
+    if (!(dim2 == "" || dim2 == null)) {
+        ecapPrice = ecapPrice[dim2];
+    }
+
+    if (ecapPrice === undefined) return "";
+
+    return netPrice - ecapPrice;
+}
+
+gridUtils.uiControlBackEndRebateWrapper = function (passedData, dealType, atrb2, dim2, format) {
+    var tmplt = '';
+    tmplt += '<div class="uiControlDiv" ng-class="{isReadOnlyCell:true}">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="((dataItem | calcBackEndRebate : \'' + dealType + '\': \'' + atrb2 + '\':\'' + dim2 + '\') ' + gridUtils.getFormat("", format) + ')"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
+gridUtils.exportBackEndRebateWrapper = function (passedData, dealType, atrb2, dim2, format) {
+    var tmplt = '';
+    if (dealType == "ECAP") {
+        var val = gridUtils.calculateECAPBackEndRebate(passedData, atrb2, dim2);
+    } else {
+        var val = gridUtils.calcKITBackendRebate(passedData, atrb2, dim2);
+    }
+    tmplt += gridUtils.formatValue(val, format);
+    return tmplt;
+}
+
 gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt, dimKey) {
     var msg = "";
     var msgClass = "";
@@ -1345,7 +1425,7 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
             return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
         }
     }
-    // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
+        // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
     else if (valCusts === "All Customers") {
         if (valRoles === "CBA" || valRoles === "FSE" || valRoles === "GA" || valRoles === "RA") // If customer based role, allow them to short cut to all cuatomers to default to geo filters
         {

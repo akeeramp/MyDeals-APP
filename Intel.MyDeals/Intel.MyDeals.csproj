@@ -598,6 +598,7 @@
     <Content Include="app\core\directives\ping\ping.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
+    <Content Include="app\core\filters\calcBackEndRebate.filter.js" />
     <Content Include="app\core\filters\gridMath.filter.js" />
     <Content Include="app\core\filters\kitCalculatedValues.filter.js" />
     <Content Include="app\core\filters\kitProducts.filter.js" />
