@@ -857,7 +857,7 @@
             // look for checked ending
             if (ps !== undefined) {
                 for (var p = 0; p < ps.length; p++) {
-                    if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
+                    if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0] != null && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
                         $scope.isPending = true;
                         root.contractData.CUST_ACCPT = "Accepted";
                         checkForRequirements = true;
@@ -933,7 +933,7 @@
                 var ps = root.contractData.PRC_ST;
                 if (ps !== undefined) {
                     for (var p = 0; p < ps.length; p++) {
-                        if (ps[p].WF_STG_CD === "Pending") {
+                        if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0] != null) {
                             $("#rad_approve_" + ps[p].DC_ID)[0].checked = true;
                         }
                     }
