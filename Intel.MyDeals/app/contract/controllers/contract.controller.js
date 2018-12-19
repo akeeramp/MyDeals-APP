@@ -582,7 +582,8 @@
                     if (response.data.length <= 1) {
                         $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
-                        if ($scope.contractData.CUST_ACCNT_DIV_UI !== undefined) $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
+                        //US2444394: commented out below because we no longer want to save Customer Account Division names if there is only one possible option
+                        //if ($scope.contractData.CUST_ACCNT_DIV_UI !== undefined) $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
                     } else {
                         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
                         $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL

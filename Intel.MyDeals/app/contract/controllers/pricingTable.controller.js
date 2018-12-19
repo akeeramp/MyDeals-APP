@@ -260,6 +260,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.syncCellValidationsOnAllRows(root.pricingTableData.PRC_TBL_ROW);
 
+        //  TODO: Jeff wants to know what the division issue is... the commented out line of code below the if looks like what we want.
         //  Kannans Division issue - replace next line with:
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
             // if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.filter(c => c["ACTV_IND"] === true).length <= 1) {
