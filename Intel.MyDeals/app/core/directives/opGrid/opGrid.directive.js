@@ -1531,7 +1531,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             "NEW_STG": gridDs[i].PS_WF_STG_CD,
                             "DEAL_ID": gridDs[i].DC_ID,
                             "END_CUSTOMER_RETAIL": gridDs[i].END_CUSTOMER_RETAIL,
-                            "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i]._parentIdPS
+                            "FOLIO_ID":gridDs[i].CNTRCT_OBJ_SID,
+                            "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i]._parentIdPS,
+                            "folioUrl": rootUrl + "Contract#/manager/" + gridDs[i].CNTRCT_OBJ_SID
                         };
                         items.push(item);
                     }

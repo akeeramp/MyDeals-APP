@@ -1225,7 +1225,7 @@
                     for (var w = 0; w < $scope.wipData.length; w++) {
                         var item = $scope.wipData[w];
 
-                        // Get missing cap... but the message is too long and has line breaks... this will cause issues in the grid filter. 
+                        // Get missing cap... but the message is too long and has line breaks... this will cause issues in the grid filter.
                         // Could replace the \n with spaces, but the text for filtering probably only needs the first sentence... let's split on the first \n
 
                         // -- first sentence version
@@ -1410,7 +1410,7 @@
             var pcService = new perfCacheBlock("Update Actions to Tenders", "MT");
             objsetService.actionTenderDeals(tenders, actn).then(
                 function (results) {
-                    
+
                     pcService.addPerfTimes(results.data.PerformanceTimes);
                     pc.add(pcService.stop());
                     var pcUI = new perfCacheBlock("Processing returned data", "UI");
@@ -1812,11 +1812,14 @@
             }
 
             var custNames = [];
+            var endCustomers = [];
             var rootUrl = window.location.protocol + "//" + window.location.host;
 
             for (var x = 0; x < items.length; x++) {
                 if (custNames.indexOf(items[x].CUST_NM) < 0)
                     custNames.push(items[x].CUST_NM);
+                if (endCustomers.indexOf(items[x].END_CUSTOMER_RETAIL) < 0)
+                    endCustomers.push(items[x].END_CUSTOMER_RETAIL);
                 items[x].url = rootUrl + "/advancedSearch#/gotoDeal/" + items[x].DEAL_ID;
             }
 
@@ -1832,9 +1835,14 @@
             var dataItem = {
                 from: "mydeals.notification@intel.com",
                 to: "",
-                subject: "My Deals Action Required for " + custNames.join(', ') + "!",
+                subject: "My Deals Action Required for " + custNames.join(', '),
                 body: msg
             };
+
+            if (endCustomers.length > 0) {
+                dataItem.subject = dataItem.subject + " (End Customer: " + endCustomers.join(', ') + ")";
+            }
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
