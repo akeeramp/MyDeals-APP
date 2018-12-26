@@ -11,19 +11,20 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             startDt: '=',
             endDt: '=',
             includeTenders: '=?',
-            favContractIds: '='
+            favContractIds: '=',
+            gridFilter: '='
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridStatusBoard/gridStatusBoard.directive.html',
         controller: ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
 
             $scope.isLoaded = false;
-            $scope.stages = [];
+            $scope.stages = { 'contractStages': [], 'tenderStages': [] };
             $scope.initDsLoaded = false;
-            $scope.stageCnt = 0;
+            $scope.stageCnt = { 'contract': 0, 'tender': 0, 'all': 0 };
             $scope.favCount = 0;
             $scope.alertCount = 0;
-            var activeFilter = 'All';
+            var activeFilter = ($scope.gridFilter == "" || $scope.gridFilter == undefined) ? "fltr_All" : $scope.gridFilter;
 
             // Construct the fav contract id map
             var favContractsMap = {};
@@ -34,7 +35,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
             }
 
             $scope.toolTipOptions = {
-                filter: "td:nth-child(4)",
+                filter: "td:nth-child(5)",
                 position: "top",
                 content: function (e) {
                     var grid = e.target.closest(".k-grid").getKendoGrid();
@@ -85,6 +86,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         fields: {
                             WF_STG_CD: { type: "string" },
                             IS_FAVORITE: { type: "boolean" },
+                            IS_TENDER: { type: "string" },
                             HAS_ALERT: { type: "boolean" },
                             TITLE: { type: "string" },
                             CUST_NM: { type: "string" },
@@ -97,14 +99,23 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 requestEnd: function (e) {
                     if ($scope.initDsLoaded || e.response === undefined) return;
 
-                    var rtn = {};
-                    var tmp = [];
-                    $scope.stageCnt = e.response.length;
+                    var rtn = { 'Contract': {}, 'Tender': {} };
+
                     $scope.favCount = 0;
                     $scope.alertCount = 0;
+                    $scope.stageCnt.all = e.response.length;
+
                     for (var i = 0; i < e.response.length; i++) {
-                        if (rtn[e.response[i].WF_STG_CD] === undefined) rtn[e.response[i].WF_STG_CD] = 0;
-                        rtn[e.response[i].WF_STG_CD]++;
+
+                        if (e.response[i].IS_TENDER == "0") {
+                            if (rtn.Contract[e.response[i].WF_STG_CD] === undefined) rtn.Contract[e.response[i].WF_STG_CD] = 0;
+                            rtn.Contract[e.response[i].WF_STG_CD]++;
+                            $scope.stageCnt.contract++;
+                        } else {
+                            if (rtn.Tender[e.response[i].WF_STG_CD] === undefined) rtn.Tender[e.response[i].WF_STG_CD] = 0;
+                            rtn.Tender[e.response[i].WF_STG_CD]++;
+                            $scope.stageCnt.tender++;
+                        }
 
                         if (e.response[i].HAS_ALERT && e.response[i].WF_STG_CD !== "Complete") {
                             $scope.alertCount++;
@@ -120,20 +131,27 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         }
                     }
 
-                    angular.forEach(rtn, function (value, key) {
+                    var contractStages = [];
+                    angular.forEach(rtn['Contract'], function (value, key) {
                         this.push({ "Stage": key, "Cnt": value });
-                    }, tmp);
+                    }, contractStages);
 
-                    $scope.stages = tmp;
+                    var tenderStages = []
+                    angular.forEach(rtn['Tender'], function (value, key) {
+                        this.push({ "Stage": key, "Cnt": value });
+                    }, tenderStages);
+
+                    $scope.stages.contractStages = contractStages;
+                    $scope.stages.tenderStages = tenderStages;
 
                     $scope.initDsLoaded = true;
                     $scope.isLoaded = true;
 
                     $scope.$apply();
 
-                    //$timeout(function () {
-                    //    $("#gridContractStatus .k-pager-info").html("Results limited to 100 most recently modified. Use Search for full list.");
-                    //}, 200);
+                    $timeout(function () {
+                        if (activeFilter !== "fltr_All") $scope.clkFilter(activeFilter);
+                    });
                 }
 
             });
@@ -163,7 +181,13 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         title: "&nbsp;",
                         width: "20px",
                         filterable: false,
-                        template: '<div class="status #:WF_STG_CD#" title="#:WF_STG_CD[0]#">#:WF_STG_CD[0]#</div>'
+                        template: '<div class="status #:WF_STG_CD#" title="#:WF_STG_CD#">#:WF_STG_CD[0]#</div>'
+                    }, {
+                        field: "IS_TENDER",
+                        title: "&nbsp;",
+                        width: "20px",
+                        filterable: false,
+                        template: '<div class="status #:IS_TENDER == "0" ? "Contract" : "Tender"#" title="#:IS_TENDER == "0" ? "Contract" : "Tender"#">#:(IS_TENDER == "0" ? "C" : "T")#</div>'
                     }, {
                         field: "IS_FAVORITE",
                         title: "&nbsp;",
@@ -251,19 +275,43 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 }, 500);
             }
 
-            $scope.clkFilter = function (el) {
+            $scope.clkFilter = function (filter) {
                 $(".stgLnk").removeClass('active');
-                $("#" + el).addClass('active');
-                activeFilter = el.replace('fltr_', '');
-                switch (activeFilter) {
-                    case "All": $scope.contractDs.filter({});
+
+                // if user saved filter no longer available on UI default it to all filter(for e.g HasFilter will be hidden if no contracts with alert)
+                var el = $("#" + filter);
+                if (el === undefined) {
+                    filter = "fltr_All";
+                }
+
+                $("#" + filter).addClass('active');
+
+                var splitFilter = filter.split('_');
+                var lnk = splitFilter[1];
+                if (splitFilter.length > 2) {
+                    var type = splitFilter[2] == 'Contract' ? "0" : '1';
+                }
+
+                switch (lnk) {
+                    case "All":
+                        type == undefined ? $scope.contractDs.filter({}) : $scope.contractDs.filter({ field: "IS_TENDER", operator: "eq", value: type });
                         break;
                     case "Favorites": $scope.contractDs.filter({ field: "IS_FAVORITE", operator: "eq", value: true });
                         break;
                     case "HasAlert": $scope.contractDs.filter({ field: "HAS_ALERT", operator: "eq", value: true });
                         break;
                     default:
-                        $scope.contractDs.filter({ field: "WF_STG_CD", operator: "eq", value: activeFilter });
+                        $scope.contractDs.filter({
+                            logic: "and",
+                            filters: [
+                             { field: "WF_STG_CD", operator: "eq", value: lnk },
+                             { field: "IS_TENDER", operator: "eq", value: type }
+                            ]
+                        });
+                }
+                // Save only if there is value change in the filters and not default value (fltr_All)
+                if (activeFilter !== filter) {
+                    $rootScope.$broadcast('gridFilterChanged', { 'gridFilter': filter });
                 }
             }
 

@@ -76,7 +76,8 @@ widgetConfig.configWidgets = function () {
         template: 'app/dashboard/widgets/contractStatusBoard.html',
         widgetConfig: {},
         subConfig: {
-            favContractIds: ""
+            favContractIds: "",
+            gridFilter: ""
         },
         resizeEvent: function () {
             var grid = $("#gridContractStatus");

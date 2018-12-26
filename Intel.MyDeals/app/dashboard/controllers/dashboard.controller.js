@@ -35,6 +35,7 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
     $scope.selectedCustomerIds = $scope.$storage.selectedCustomerIds;
     $scope.includeTenders = $scope.$storage.includeTenders;
     $scope.favContractIds = "";
+    $scope.gridFilter = "";
 
     $scope.C_CREATE_CONTRACT = securityService.chkDealRules('C_CREATE_CONTRACT', window.usrRole, null, null, null);
 
@@ -66,7 +67,7 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
                 return ($scope.selectedCustomerIds.indexOf(x.CUST_SID) >= 0);
             })
             .Select(
-            function(x) {
+            function (x) {
                 return x.CUST_NM;
             }).ToArray();
 
@@ -217,6 +218,16 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
         $scope.saveLayout();
     });
 
+    // When Deals desk widget sends out a grid Filter change event call SaveLayout
+    $scope.$on('gridFilterChanged', function (event, args) {
+        for (var i = 0; i < $scope.dashboardData.currentWidgets.length; i++) {
+            if (!!$scope.dashboardData.currentWidgets[i].subConfig && $scope.dashboardData.currentWidgets[i].subConfig.gridFilter !== undefined) {
+                $scope.dashboardData.currentWidgets[i].subConfig.gridFilter = args["gridFilter"];
+            }
+        }
+        $scope.saveLayout();
+    });
+
     $scope.refreshAllWidgets = function () {
         if (!this.$angular_scope)
             this.broadcastRefresh(this);
@@ -295,9 +306,15 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
                     widgetToAdd.size = currentWidgetSavedSetting[0].size;
                     widgetToAdd.position = currentWidgetSavedSetting[0].position;
                     widgetToAdd.name = currentWidgetSavedSetting[0].name;
-                    if (!!currentWidgetSavedSetting[0].subConfig && currentWidgetSavedSetting[0].subConfig.favContractIds !== undefined) {
-                        $scope.favContractIds = currentWidgetSavedSetting[0].subConfig.favContractIds;
-                        widgetToAdd.subConfig.favContractIds = $scope.favContractIds;
+                    if (!!currentWidgetSavedSetting[0].subConfig) {
+                        if (currentWidgetSavedSetting[0].subConfig.favContractIds !== undefined) {
+                            $scope.favContractIds = currentWidgetSavedSetting[0].subConfig.favContractIds;
+                            widgetToAdd.subConfig.favContractIds = $scope.favContractIds;
+                        }
+                        if (currentWidgetSavedSetting[0].subConfig.gridFilter !== undefined) {
+                            $scope.gridFilter = currentWidgetSavedSetting[0].subConfig.gridFilter;
+                            widgetToAdd.subConfig.gridFilter = $scope.gridFilter;
+                        }
                     }
                     $scope.dashboardData.currentWidgets.push(widgetToAdd);
                 }
@@ -314,8 +331,13 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
                 if (widgetLayout.defaultSize !== undefined) widgetToAdd.size = widgetLayout.defaultSize;
                 if (widgetLayout.defaultPosition !== undefined) widgetToAdd.position = widgetLayout.defaultPosition;
                 if (widgetLayout.name !== undefined) widgetToAdd.name = widgetLayout.name;
-                if (!!widgetLayout.subConfig && !!widgetLayout.subConfig.favContractIds) {
-                    $scope.favContractIds = widgetLayout.subConfig.favContractIds;
+                if (!!widgetLayout.subConfig) {
+                    if (!!widgetLayout.subConfig.favContractIds) {
+                        $scope.favContractIds = widgetLayout.subConfig.favContractIds;
+                    }
+                    if (!!widgetLayout.subConfig.gridFilter) {
+                        $scope.gridFilter = widgetLayout.subConfig.gridFilter;
+                    }
                 }
                 $scope.dashboardData.currentWidgets.push(widgetToAdd);
             }
@@ -327,7 +349,7 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
 
     }
 
-    $scope.resizeAll = function() {
+    $scope.resizeAll = function () {
         for (var i = 0; i < $scope.dashboardData.currentWidgets.length; i++) {
             var widget = $scope.dashboardData.currentWidgets[i];
             if ($scope.dashboardData.allWidgets[widget.id].resizeEvent != null)
