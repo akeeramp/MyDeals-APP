@@ -247,6 +247,13 @@
                 width: 140,
                 template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
             }, {
+                field: "PRC_ST_OBJ_SID",
+                title: "Pricing Strategy Id",
+                type: "number",
+                filterable: "numObjFilter",
+                width: 140,
+                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_OBJ_SID#</a>"
+            }, {
                 field: "CNTRCT_OBJ_SID",
                 title: "Folio Id",
                 type: "string",
@@ -609,6 +616,14 @@
                 });
             }
             if (key.toLowerCase() == "psid") {
+                $scope.customSettings.push({
+                    field: "PRC_ST_OBJ_SID",
+                    operator: "=",
+                    value: parseInt(value),
+                    source: null
+                });
+            }
+            if (key.toLowerCase() == "ptid") {
                 $scope.customSettings.push({
                     field: "PRC_ST_OBJ_SID",
                     operator: "=",

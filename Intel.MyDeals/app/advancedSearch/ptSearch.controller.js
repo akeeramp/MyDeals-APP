@@ -22,8 +22,8 @@
 
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
-            	var newState = msg != undefined && msg !== "";
-            	if (isShowFunFact == null) { isShowFunFact = false; }
+                var newState = msg != undefined && msg !== "";
+                if (isShowFunFact == null) { isShowFunFact = false; }
 
                 // if no change in state, simple update the text
                 if ($scope.isBusy === newState) {
@@ -55,7 +55,6 @@
 
         //perform search operation
         dataService.get("api/Search/GotoPt/" + $scope.dcid).then(function (response) {
-
             // Didn't find it?
             if (response.data.ContractId <= 0) {
                 $scope.status = response.data.Message === "" ? "Unable to locate the Pricing Table." : response.data.Message;
@@ -65,7 +64,10 @@
 
             // Found it... redirect
             var url = "/Contract#/manager/" + response.data.ContractId + "/" + response.data.PricingStrategyId + "/" + response.data.PricingTableId;
-            if (window.usrRole === "DA") url += "/Contract#/manager/" + response.data.ContractId + "/summary";
+            if (response.data.IsTenderPublished && response.data.PricingTableId > 0) {
+                url = "/advancedSearch#/tenderDashboard?DealType=" + response.data.DealType + "&PsId=" + response.data.PricingStrategyId + "&search";
+            }
+            else if (window.usrRole === "DA") url = "/Contract#/manager/" + response.data.ContractId + "/summary";
 
             document.location.href = url;
 

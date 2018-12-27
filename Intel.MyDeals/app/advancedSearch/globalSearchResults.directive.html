@@ -2,9 +2,9 @@
 <div class="container-fluid">
     <div style="margin-bottom: 15px; text-align: center;">
         <i class="search intelicon-search" style="margin-right: 10px; font-size: 28px; color: #0071C5; vertical-align: sub;"></i>
-        <input type="text" placeholder="Search for deal #, contract, or pricing strategy" 
-               class="k-input searchResultInpt" 
-               ng-model="$root.globalSearchResultsData.searchText" 
+        <input type="text" placeholder="Search for deal #, contract, or pricing strategy"
+               class="k-input searchResultInpt"
+               ng-model="$root.globalSearchResultsData.searchText"
                ng-keypress="EnterPressed($event)">
         <div class="btn-group" style="margin-top: -3px;">
             <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
@@ -16,7 +16,7 @@
     </div>
     <div class="row row-modal">
         <div class="col-md-{{$root.globalSearchResultsData.colCount}} row-container" ng-if="$root.globalSearchResultsData.searchIn.indexOf('CNTRCT') >= 0">
-            <h5>Contracts</h5>
+            <h5>Contracts / Folio</h5>
             <div class="results-container">
                 <div ng-show="$root.globalSearchResultsData.results.CNTRCT.searching" class="waiting">
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -162,7 +162,7 @@
         margin-top: 8px;
         margin-bottom: -15px;
         margin-left: -25px;
-        text-align: left;    
+        text-align: left;
     }
     .searchResultInpt {
         height: 22px;
