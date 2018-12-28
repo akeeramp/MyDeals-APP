@@ -73,7 +73,6 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                                 "CustomerIds": $scope.custIds,
                                 "StartDate": $scope.startDt,
                                 "EndDate": $scope.endDt,
-                                "DontIncludeTenders": $scope.includeTenders
                             };
                         }
                     }
@@ -103,6 +102,10 @@ function gridStatusBoard($compile, objsetService, $timeout) {
 
                     $scope.favCount = 0;
                     $scope.alertCount = 0;
+
+                    $scope.stages = { 'contractStages': [], 'tenderStages': [] };
+                    $scope.stageCnt = { 'contract': 0, 'tender': 0, 'all': 0 };
+
                     $scope.stageCnt.all = e.response.length;
 
                     for (var i = 0; i < e.response.length; i++) {

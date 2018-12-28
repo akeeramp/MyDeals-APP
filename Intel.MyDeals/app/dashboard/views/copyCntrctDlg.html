@@ -16,7 +16,7 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="inner-addon right-addon" style="width:375px; margin-top:20px">
                     <i class="glyphicon glyphicon-search"></i>
-                    <input type="text" class="form-control" style="height:24px" maxlength="40" ng-change="onCopyCntrctSearchTextChanged()" ng-model="copyCntrctSearchText" />
+                    <input type="text" class="form-control" style="height:24px" maxlength="40"  ng-model-options="{ debounce: 500 }" ng-change="onCopyCntrctSearchTextChanged()" ng-model="copyCntrctSearchText" />
                 </div>
             </div>
         </div>
@@ -67,5 +67,5 @@
 
     .right-addon .glyphicon {
         right: -15px;
-    }    
+    }
 </style>
