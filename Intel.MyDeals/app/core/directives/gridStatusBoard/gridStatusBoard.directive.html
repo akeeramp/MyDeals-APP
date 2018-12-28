@@ -6,7 +6,7 @@
             <div class="inner">
                 <div class="stgLnkBox stgLnk active" id="fltr_All" ng-click="clkFilter('fltr_All')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{stageCnt.all}}</span></div>
                 <div id="fltr_Favorites" class="stgLnkBox stgLnk" ng-click="clkFilter('fltr_Favorites')"><i class="intelicon-favorite-rating-solid"></i> Favorites<span class="badge">{{favCount}}</span></div>
-                <div ng-if="alertCount > 0" title="Contracts that contain deals with a start date within 48 hours and are not yet approved" id="fltr_HasAlert" class="stgLnk" ng-click="clkFilter('fltr_HasAlert')"><i class="intelicon-alert-outlined"></i> Alerts<span class="badge">{{alertCount}}</span></div>
+                <div ng-if="alertCount > 0" title="Contracts that contain deals with a start date within 48 hours and are not yet approved" id="fltr_HasAlert" class="stgLnkBox stgLnk" ng-click="clkFilter('fltr_HasAlert')"><i class="intelicon-alert-outlined"></i> Alerts<span class="badge">{{alertCount}}</span></div>
                 <h6>Contracts</h6>
                 <div class="stgLnkBox">
                     <div class="stgLnk" id="fltr_All_Contract" ng-click="clkFilter('fltr_All_Contract')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{stageCnt.contract}}</span></div>
