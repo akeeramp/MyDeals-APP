@@ -13,6 +13,22 @@
         <li ng-click="clearRule()"><a>Clear Rule(s)</a></li>
     </ul>
 </div>
+<div class="fr btn-group rule-dropdown-actions" ng-if="saveCat == 'TenderDealSearch' && rules.length > 0">
+	
+            <select kendo-drop-down-list
+					id="ruleDropDownList"
+                    k-placeholder="'Select saved rules'"
+                    k-data-text-field="'title'"
+                    k-data-value-field="'title'"
+                    k-filter="'contains'"
+                    k-auto-bind="true"
+                    k-ng-model="ruleToRun"
+                    k-data-source="rulesDataSource"					
+					k-select="onRuleSelect"					
+					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem)\' title=\'Click me to make it Default Rule\'></i> # } # #: title # '"
+					class="opUiContainer sm"
+                    style="width: 170px;border: 1px solid #b1babf;margin-right:15px;"></select>
+        </div>
 
 <h5>Search Options<span class="h5-small">To start a search select your search options</span></h5>
 <div style="margin-left: 70px; font-size: 14px;" ng-show="currentRule === ''">Create new custom search</div>
@@ -69,6 +85,11 @@
 
 
 <style>
+	.rule-icon {font-size:14px; padding-right:7px}
+	.rule-icon:hover {cursor:pointer}
+	.rule-icon-selected {color:#0071C5 !important}
+	#ruleDropDownList_listbox{min-width:165px !important}
+	.k-animation-container UL{min-width:165px !important}
     .filterContainer {
         height: 120px;
         overflow: auto;
