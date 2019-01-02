@@ -25,7 +25,7 @@
                     k-ng-model="ruleToRun"
                     k-data-source="rulesDataSource"					
 					k-select="onRuleSelect"					
-					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem)\' title=\'Click me to make it Default Rule\'></i> # } # #: title # '"
+					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem)\' title=\'Click me to make it Default Rule\'></i> # } # #: title # '"
 					class="opUiContainer sm"
                     style="width: 170px;border: 1px solid #b1babf;margin-right:15px;"></select>
         </div>

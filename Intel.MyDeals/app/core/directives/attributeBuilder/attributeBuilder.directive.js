@@ -34,7 +34,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.subcat = $scope.saveSubCat === undefined ? "SearchRules" : $scope.saveSubCat;
             //$scope.cat = "DealSearch";
             //$scope.subcat = "SearchRules";
-            
+
             $scope.tenderAttributeBuilder = ($scope.customSettings !== undefined && $scope.customSettings.length) > 0;
 
             for (var i = 0; i < $scope.attributeSettings.length; i++) {
@@ -197,9 +197,11 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
             //Setting Default Rule on User Click
             $scope.setDefaultRule = function (e) {
+                var selectionType = '';
                 for (var itmCnt = 0; itmCnt < $scope.rules.length; itmCnt++) {
                     if ($scope.rules[itmCnt].title == e.title) {
-                        $scope.rules[itmCnt]["default"] = true;                        
+                        $scope.rules[itmCnt]["default"] = !$scope.rules[itmCnt]["default"]; 
+                        selectionType = !$scope.rules[itmCnt]["default"];
                     }
                     else {
                         $scope.rules[itmCnt]["default"] = false;
@@ -214,8 +216,14 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
                 userPreferencesService
                     .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.rules))
-                    .then(function (response) {                        
-                        op.notifySuccess("The rule saved as Default", "Saved");
+                    .then(function (response) {
+                        if (selectionType == false) {
+                            op.notifySuccess("The rule saved as Default", "Saved");
+                        }
+                        else if (selectionType == true) {
+                            op.notifySuccess("Default selection was removed", "Saved");
+                        }
+                        
                     },
                     function (response) {
                         logger.error("Unable to make Default Rule.", response, response.statusText);
@@ -274,6 +282,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                     $scope.rules = $scope.myRules;
 
                                     $scope.rulesDataSource.read();
+
+                                    $scope.runRuleOnSelection();
                                 }
                                 
                             },
@@ -663,7 +673,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         $scope.drawValueControl($(els[e]), scope);
                     }
                     //Run Rules for TenderDealSearch
-                    if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length) {
+                    if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules) {                        
                         if ($("#ruleDropDownList").data("kendoDropDownList").text().length > 0) {
                             sleepAndRunWell();       
                         }                                         
