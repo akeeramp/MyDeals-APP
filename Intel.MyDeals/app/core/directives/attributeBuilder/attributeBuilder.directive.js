@@ -613,6 +613,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                 }
 
                                 if (flag == false) {
+                                    $("#ruleDropDownList").data("kendoDropDownList").select(-1);
                                     $scope.buildRuleFormula();
                                 }
                                                                
