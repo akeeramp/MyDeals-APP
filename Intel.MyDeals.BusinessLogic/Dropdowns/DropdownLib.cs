@@ -288,11 +288,12 @@ namespace Intel.MyDeals.BusinessLogic
             List<SoldToIds> soldToIdList = _dataCollectionsDataLib.GetSoldToIdList();
 
             var custDivsList = custDivs == null ? new List<string>(): custDivs.Select(s => s.ToUpper()).ToList();
+
             List<Dropdown> myList = soldToIdList
                 .Where(r =>
                     r.CUST_NM_SID == custId
                     && (geos == null || geos.Contains("Worldwide") || geos.Contains(r.GEO_NM))
-                    && (custDivs == null || custDivsList.Contains(r.CUST_DIV_NM))
+                    && (custDivs == null || custDivsList.Contains(r.CUST_DIV_NM.ToUpper()))
                     && r.ACTV_IND
                 )
                 .OrderBy(dd => dd.SOLD_TO_ID)
