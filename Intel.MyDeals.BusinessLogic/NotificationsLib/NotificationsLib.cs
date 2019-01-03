@@ -243,7 +243,9 @@ namespace Intel.MyDeals.BusinessLogic
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/Contract#/manager/"" + item.CNTRCT_SID)'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</a>*
+                                                                    </td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>
                                                                         <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
                                                                     </td>
@@ -289,12 +291,14 @@ namespace Intel.MyDeals.BusinessLogic
                                                             @foreach(var item in Model)
                                                             {
                                                                 <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
+                                                                        <a href='@(rootUrl +""/Contract#/manager/"" + item.CNTRCT_SID)'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</a>*
                                                                     </td>
                                                                     <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
+                                                                        @item.OBJ_SID
+                                                                    </td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals*</a>*
                                                                     </td>
                                                                 </tr>
                                                             }

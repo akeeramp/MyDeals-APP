@@ -1042,7 +1042,8 @@
                         "DC_ID": stItem.DC_ID,
                         "NEW_STG": stItem.WF_STG_CD,
                         "TITLE": stItem.TITLE,
-                        "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID
+                        "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID,
+                        "contractUrl": rootUrl + "/Contract#/manager/" + $scope.root.contractData.DC_ID
                     };
                     items.push(item);
                 }

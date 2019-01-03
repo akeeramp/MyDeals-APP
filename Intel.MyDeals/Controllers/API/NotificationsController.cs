@@ -88,5 +88,15 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get notifications email body"
             );
         }
+
+        /// <summary>
+        /// We can hit this URL to send pending user subscribed notifications
+        /// </summary>
+        [HttpGet]
+        [Route("SendEmailNotifications")]
+        public void SendEmailNotifications()
+        {
+            _notificationsLib.SendEmailNotifications();
+        }
     }
 }
