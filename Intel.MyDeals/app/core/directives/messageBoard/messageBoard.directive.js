@@ -51,14 +51,14 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                     if (!!item) {
                         for (var i = 0; i < item.length; i++) {
                             item[i].CUST_NM = $scope.$parent.contractData.Customer.CUST_NM;
-                            for (var x = 0; x < $scope.$parent.contractData.PRC_ST.length; x++)
-                            {
+                            for (var x = 0; x < $scope.$parent.contractData.PRC_ST.length; x++) {
                                 if ($scope.$parent.contractData.PRC_ST[x].DC_ID === item[i].DC_ID)
                                     item[i].VERTICAL_ROLLUP = $scope.$parent.contractData.PRC_ST[x].VERTICAL_ROLLUP;
                             }
                             item[i].CNTRCT = "#" + $scope.$parent.contractData.DC_ID + " " + $scope.$parent.contractData.TITLE;
                             item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
                             item[i].url = rootUrl + "/advancedSearch#/gotoPs/" + item[i].DC_ID;
+                            item[i].contractUrl = rootUrl + "/Contract#/manager/" + $scope.$parent.contractData.DC_ID;
                             items.push(item[i]);
                         }
                     }
@@ -75,10 +75,9 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                 }
                 actnList.push(kendo.template($("#emailItemTemplate").html())(data));
                 var msg = actnList.join("\n\n");
-                
+
                 var custNames = [];
-                for (var x = 0; x < items.length; x++)
-                {
+                for (var x = 0; x < items.length; x++) {
                     if (custNames.indexOf(items[x].CUST_NM) < 0)
                         custNames.push(items[x].CUST_NM);
                 }
@@ -138,7 +137,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                     $scope.$apply();
                 }, 200);
             });
-            
+
         }],
         link: function (scope, element, attr) {
         }
