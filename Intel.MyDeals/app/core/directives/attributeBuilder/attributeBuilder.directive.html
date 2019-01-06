@@ -21,11 +21,11 @@
                     k-data-text-field="'title'"
                     k-data-value-field="'title'"
                     k-filter="'contains'"
-                    k-auto-bind="true"
-                    k-ng-model="ruleToRun"
+                    k-auto-bind="true" 
+					k-ng-model="ruleToRun"					
                     k-data-source="rulesDataSource"					
 					k-select="onRuleSelect"					
-					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem)\' title=\'Click me to make it Default Rule\'></i> # } # #: title # '"
+					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem,$event)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem,$event)\' title=\'Click me to make it Default Rule\'></i> # } # #: title # <i class=\'intelicon-trash-solid delete-rule-icon rule-icon-selected\' ng-click=\'deleteSaveRule(dataItem,$event)\' title=\'Click me to Delete the Rule\'></i>'"
 					class="opUiContainer sm"
                     style="width: 170px;border: 1px solid #b1babf;margin-right:15px;"></select>
         </div>
@@ -85,8 +85,10 @@
 
 
 <style>
-	.rule-icon {font-size:14px; padding-right:7px}
+	.rule-icon {font-size:14px; padding:5px}
+	.delete-rule-icon {font-size:12px; padding:5px;float: right}
 	.rule-icon:hover {cursor:pointer}
+	.delete-rule-icon:hover {cursor:pointer; color:red !important}
 	.rule-icon-selected {color:#0071C5 !important}
 	#ruleDropDownList_listbox{min-width:165px !important}
 	.k-animation-container UL{min-width:165px !important}
