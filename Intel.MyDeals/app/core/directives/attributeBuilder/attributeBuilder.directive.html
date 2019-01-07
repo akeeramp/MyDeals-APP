@@ -25,9 +25,9 @@
 					k-ng-model="ruleToRun"					
                     k-data-source="rulesDataSource"					
 					k-select="onRuleSelect"					
-					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem,$event)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem,$event)\' title=\'Click me to make it Default Rule\'></i> # } # #: title # <i class=\'intelicon-trash-solid delete-rule-icon rule-icon-selected\' ng-click=\'deleteSaveRule(dataItem,$event)\' title=\'Click me to Delete the Rule\'></i>'"
+					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem,$event)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem,$event)\' title=\'Click me to make it Default Rule\'></i> # } # <p class=\'textTitle\' title=\'#: title #\'>#: title # </p><i class=\'intelicon-trash-solid delete-rule-icon rule-icon-selected\' ng-click=\'deleteSaveRule(dataItem,$event)\' title=\'Click me to Delete the Rule\'></i>'"
 					class="opUiContainer sm"
-                    style="width: 170px;border: 1px solid #b1babf;margin-right:15px;"></select>
+                    style="width: 190px;border: 1px solid #b1babf;margin-right:15px;"></select>
         </div>
 
 <h5>Search Options<span class="h5-small">To start a search select your search options</span></h5>
@@ -85,7 +85,8 @@
 
 
 <style>
-	.rule-icon {font-size:14px; padding:5px}
+	.textTitle{ float: left;width: 115px;white-space: nowrap; overflow: hidden; padding-top: 1px;   text-overflow: ellipsis;}
+	.rule-icon {font-size:14px; padding:5px; float:left}
 	.delete-rule-icon {font-size:12px; padding:5px;float: right}
 	.rule-icon:hover {cursor:pointer}
 	.delete-rule-icon:hover {cursor:pointer; color:red !important}
