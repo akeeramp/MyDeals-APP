@@ -8,7 +8,7 @@
     var usrRoleId = 0;
     var usrEmail = "";
     var usrVerticals = "";
-	var isEditableGrid = true;
+    var isEditableGrid = true;
     try
     {
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
@@ -355,7 +355,7 @@
 
         window.location = newPath;
     }
-	window.isEditableGrid = "True";
+    window.isEditableGrid = "True";
     window.usrRole = "@usrRole";
     window.usrRoleId = parseInt("@usrRoleId");
     window.usrName = "@usrName";
@@ -370,5 +370,11 @@
     window.env = "@env";
 </script>
 
-
-<script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>
+@if (env == "PROD")
+{
+    <script src="https://appusage.intel.com/Service/api/loguser/114464" async></script>
+}
+else
+{
+    <script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>
+}
