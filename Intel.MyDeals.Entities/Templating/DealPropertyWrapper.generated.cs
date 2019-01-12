@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/23/2018 9:45:17 AM
+File Updated: 1/9/2019 12:16:43 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2921,6 +2921,38 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute OEM_PLTFRM_EOL_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "OEM_PLTFRM_EOL_DT",
+			ATRB_DESC = "OEM Platform EOL Date",
+			ATRB_LBL = "OEM Platform EOL Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3712,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute OEM_PLTFRM_LNCH_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "OEM_PLTFRM_LNCH_DT",
+			ATRB_DESC = "OEM Platform Launch Date",
+			ATRB_LBL = "OEM Platform Launch Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3711,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
 		};
 		public static MyDealsAttribute OFF_ROADMAP_FLG = new MyDealsAttribute()
 		{

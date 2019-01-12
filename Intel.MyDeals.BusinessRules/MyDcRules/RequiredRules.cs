@@ -91,6 +91,47 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    // If deal type is Vol Tier and Type is MDF ACTIVITY, then ensure that user fills in VOLUME values
+                    Title="Forecast Volume Required if Program Type is MDF ACTIVITY",
+                    ActionRule = MyDcActions.VolTierMdfVolumeRequired,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("MDF ACTIVITY")).Any(), 
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.FRCST_VOL
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    // If deal type is Program and Type is NRE, then ensure that user fills in OEM_PLTFRM_LNCH_DT, OEM_PLTFRM_EOL_DT values
+                    Title="Required if Program Type is NRE",
+                    ActionRule = MyDcActions.ProgramNreRequired,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.OEM_PLTFRM_LNCH_DT,
+                                AttributeCodes.OEM_PLTFRM_EOL_DT
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Required if User Defined RPU",
                     ActionRule = MyDcActions.UserDefinedRpuRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},

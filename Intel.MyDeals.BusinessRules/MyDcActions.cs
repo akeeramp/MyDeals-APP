@@ -1423,6 +1423,28 @@ namespace Intel.MyDeals.BusinessRules
             deTrkr.IsRequired = true;
         }
 
+        public static void ProgramNreRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            // Add in restriction for future deals only for this rule to apply to...  Take from constants
+            string strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+            int minDealId = Int32.TryParse(strMinDealId, out minDealId) ? minDealId: 0;
+            if ( r.Dc.DcID >= minDealId)
+            {
+                r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            }
+        }
+
+        public static void VolTierMdfVolumeRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
         #region Tiered Validations
 
         private static bool IsGreaterThanZero(decimal attrb)

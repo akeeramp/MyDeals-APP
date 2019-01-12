@@ -89,6 +89,19 @@ gridUtils.uiReadonlyControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiReadonlyControlWrapperOEMDates = function (passedData, field, format) {
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+    if (passedData[field] === undefined || passedData[field] === null || passedData[field] === "" || passedData[field] === "1/1/1900")
+    {
+        tmplt += '    <div class="ng-binding vert-center">&nbsp;</div>';
+    }
+    else {
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+    }
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.uiReadonlyDimControlWrapper = function (passedData, field, dim, format) {
     var tmplt = '';
     if (passedData[field] === undefined) return tmplt;
@@ -1057,6 +1070,11 @@ gridUtils.concatDimElements = function (passedData, field) {
     var tmplt = '<span class="ng-binding">' + displayData + '</span>';
 
     return tmplt;
+}
+
+gridUtils.displayOEMDates = function (passedData, field) {
+    if (passedData[field] === undefined || passedData[field] === null || passedData[field] === "" || passedData[field] === "1/1/1900") return "";
+    return kendo.toString(new Date(passedData[field]), 'M/d/yyyy');
 }
 
 gridUtils.getFormat = function (lType, lFormat) {

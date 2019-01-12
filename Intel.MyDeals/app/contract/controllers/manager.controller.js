@@ -654,6 +654,8 @@
                                 PASSED_VALIDATION: { type: "string" },
                                 WF_STG_CD: { type: "string" },
                                 START_DT: { type: "date" },
+                                OEM_PLTFRM_LNCH_DT: { type: "date" },
+                                OEM_PLTFRM_EOL_DT: { type: "date" },
                                 END_DT: { type: "date" },
                                 COST_TEST_RESULT: { type: "string" },
                                 MEETCOMP_TEST_RESULT: { type: "string" },
@@ -716,6 +718,18 @@
                                 title: "Deal Start/End",
                                 width: "170px",
                                 template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "OEM_PLTFRM_LNCH_DT",
+                                title: "OEM Platform Launch Date",
+                                width: "170px",
+                                template: "#=gridUtils.displayOEMDates(data, 'OEM_PLTFRM_LNCH_DT')#",
+                                filterable: { multi: true, search: true }
+                            }, {
+                                field: "OEM_PLTFRM_EOL_DT",
+                                title: "OEM Platform EOL Date",
+                                width: "170px",
+                                template: "#=gridUtils.displayOEMDates(data, 'OEM_PLTFRM_EOL_DT')#",
                                 filterable: { multi: true, search: true }
                             }, {
                                 field: "TITLE",

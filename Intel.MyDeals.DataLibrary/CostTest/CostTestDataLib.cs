@@ -54,6 +54,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
                     int IDX_MKT_SEG = DB.GetReaderOrdinal(rdr, "MKT_SEG");
                     int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+                    int IDX_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_EOL_DT");
+                    int IDX_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_LNCH_DT");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
                     int IDX_PRC_CST_TST_STS = DB.GetReaderOrdinal(rdr, "PRC_CST_TST_STS");
                     int IDX_PRD_COST = DB.GetReaderOrdinal(rdr, "PRD_COST");
@@ -70,8 +72,8 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ret.Add(new CustomEntities.CostTestDetailItem
                         {
-                            AVG_RPU = (IDX_AVG_RPU < 0 || rdr.IsDBNull(IDX_AVG_RPU)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_AVG_RPU),
-                            CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
+                            AVG_RPU = (IDX_AVG_RPU < 0 || rdr.IsDBNull(IDX_AVG_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_AVG_RPU),
+                            CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
                             CNSMPTN_RSN = (IDX_CNSMPTN_RSN < 0 || rdr.IsDBNull(IDX_CNSMPTN_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNSMPTN_RSN),
                             COST_TEST_OVRRD_CMT = (IDX_COST_TEST_OVRRD_CMT < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_CMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_CMT),
                             COST_TEST_OVRRD_FLG = (IDX_COST_TEST_OVRRD_FLG < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_FLG),
@@ -83,28 +85,30 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
                             DEAL_PRD_RNK = (IDX_DEAL_PRD_RNK < 0 || rdr.IsDBNull(IDX_DEAL_PRD_RNK)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_DEAL_PRD_RNK),
                             DEAL_STRT_DT = (IDX_DEAL_STRT_DT < 0 || rdr.IsDBNull(IDX_DEAL_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_STRT_DT),
-                            ECAP_FLR = (IDX_ECAP_FLR < 0 || rdr.IsDBNull(IDX_ECAP_FLR)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_FLR),
-                            ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
+                            ECAP_FLR = (IDX_ECAP_FLR < 0 || rdr.IsDBNull(IDX_ECAP_FLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_FLR),
+                            ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
                             GEO = (IDX_GEO < 0 || rdr.IsDBNull(IDX_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO),
                             GRP_DEALS = (IDX_GRP_DEALS < 0 || rdr.IsDBNull(IDX_GRP_DEALS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_DEALS),
                             INCMPL_COST_TEST_RSN = (IDX_INCMPL_COST_TEST_RSN < 0 || rdr.IsDBNull(IDX_INCMPL_COST_TEST_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INCMPL_COST_TEST_RSN),
                             LAST_COST_TEST_RUN = (IDX_LAST_COST_TEST_RUN < 0 || rdr.IsDBNull(IDX_LAST_COST_TEST_RUN)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_LAST_COST_TEST_RUN),
                             LNP_FRMULA = (IDX_LNP_FRMULA < 0 || rdr.IsDBNull(IDX_LNP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LNP_FRMULA),
-                            LOW_NET_PRC = (IDX_LOW_NET_PRC < 0 || rdr.IsDBNull(IDX_LOW_NET_PRC)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_LOW_NET_PRC),
-                            MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
+                            LOW_NET_PRC = (IDX_LOW_NET_PRC < 0 || rdr.IsDBNull(IDX_LOW_NET_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_LOW_NET_PRC),
+                            MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
                             MKT_SEG = (IDX_MKT_SEG < 0 || rdr.IsDBNull(IDX_MKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MKT_SEG),
                             OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
+                            OEM_PLTFRM_EOL_DT = (IDX_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_EOL_DT),
+                            OEM_PLTFRM_LNCH_DT = (IDX_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_LNCH_DT),
                             PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
                             PRC_CST_TST_STS = (IDX_PRC_CST_TST_STS < 0 || rdr.IsDBNull(IDX_PRC_CST_TST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_CST_TST_STS),
-                            PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_PRD_COST),
+                            PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_PRD_COST),
                             PRD_MBR_SIDS = (IDX_PRD_MBR_SIDS < 0 || rdr.IsDBNull(IDX_PRD_MBR_SIDS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_MBR_SIDS),
                             PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT),
                             PROG_PMT = (IDX_PROG_PMT < 0 || rdr.IsDBNull(IDX_PROG_PMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROG_PMT),
                             PYOUT_BASE_ON = (IDX_PYOUT_BASE_ON < 0 || rdr.IsDBNull(IDX_PYOUT_BASE_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PYOUT_BASE_ON),
                             RTL_CYC_NM = (IDX_RTL_CYC_NM < 0 || rdr.IsDBNull(IDX_RTL_CYC_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RTL_CYC_NM),
-                            RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
+                            RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
                             WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
-                            YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal?) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)
+                            YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)
                         });
                     }
 

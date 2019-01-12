@@ -1062,6 +1062,36 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = true,
                 ExcelTemplate = "#=gridUtils.formatDate(END_DT)#"
             });
+
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3711,
+                AtrbCd = AttributeCodes.OEM_PLTFRM_LNCH_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiControlEndDateWrapper(data, 'OEM_PLTFRM_LNCH_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "OEM Platform Launch Date",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = false,
+                ExcelTemplate = "#=gridUtils.formatDate(OEM_PLTFRM_LNCH_DT)#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3712,
+                AtrbCd = AttributeCodes.OEM_PLTFRM_EOL_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiControlEndDateWrapper(data, 'OEM_PLTFRM_EOL_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "OEM Platform EOL Date",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = false,
+                ExcelTemplate = "#=gridUtils.formatDate(OEM_PLTFRM_EOL_DT)#"
+            });
+
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3676,

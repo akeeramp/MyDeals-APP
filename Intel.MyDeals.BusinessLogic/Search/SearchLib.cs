@@ -567,6 +567,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
                 Attributes.END_VOL.ATRB_SID,
+                Attributes.OEM_PLTFRM_LNCH_DT.ATRB_SID,
+                Attributes.OEM_PLTFRM_EOL_DT.ATRB_SID,
                 Attributes.FSE_APPROVED_BY.ATRB_SID,
                 Attributes.GEO_APPROVED_BY.ATRB_SID,
                 Attributes.GEO_COMBINED.ATRB_SID,

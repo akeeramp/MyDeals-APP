@@ -50,6 +50,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PASSED_VALIDATION.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.START_DT.ATRB_SID,
+                Attributes.OEM_PLTFRM_LNCH_DT.ATRB_SID,
+                Attributes.OEM_PLTFRM_EOL_DT.ATRB_SID,
                 Attributes.TITLE.ATRB_SID,
                 Attributes.TRKR_NBR.ATRB_SID,
                 Attributes.VOLUME.ATRB_SID,

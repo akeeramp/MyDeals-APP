@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/23/2018 9:44:48 AM
+File Updated: 1/9/2019 12:16:29 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1657,6 +1657,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string OBJ_SET_TYPE_SID = "OBJ_SET_TYPE_SID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3712
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string OEM_PLTFRM_EOL_DT = "OEM_PLTFRM_EOL_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3711
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string OEM_PLTFRM_LNCH_DT = "OEM_PLTFRM_LNCH_DT";
 
 		///<summary>
 		/// DIM_SID: 7

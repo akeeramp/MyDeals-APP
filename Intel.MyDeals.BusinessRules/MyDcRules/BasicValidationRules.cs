@@ -323,6 +323,22 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="OEM Platform EOL Date must be after the Deal End Date",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.END_DT),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] { "OEM Platform EOL Date must be after the Deal End Date." },
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.OEM_PLTFRM_EOL_DT })
+                        }
+                    }
+                },
                 //new MyOpRule
                 //{
                 //    Title="Make sure End Date is later than Credit Date",

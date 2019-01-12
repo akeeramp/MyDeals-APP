@@ -259,6 +259,18 @@
                 template: "#= moment(END_DT).format('MM/DD/YYYY') #",
                 width: 130
             }, {
+                field: "OEM_PLTFRM_LNCH_DT",
+                title: "OEM Platform Launch Date",
+                type: "date",
+                template: "#= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') #",
+                width: 130
+            }, {
+                field: "OEM_PLTFRM_EOL_DT",
+                title: "OEM Platform EOL Date",
+                type: "date",
+                template: "#= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') #",
+                width: 130
+            }, {
                 field: "PRODUCT_CATEGORIES",
                 title: "Product Verticals",
                 type: "list",

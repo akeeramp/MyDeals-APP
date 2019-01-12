@@ -517,6 +517,12 @@
                     "END_DT": {
                         "Groups": ["Deal Info"]
                     },
+                    "OEM_PLTFRM_LNCH_DT": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "OEM_PLTFRM_EOL_DT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "WF_STG_CD": {
                         "Groups": ["Deal Info"]
                     },

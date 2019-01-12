@@ -352,6 +352,16 @@
                 template: "#=gridUtils.uiReadonlyControlWrapper(data, 'END_DT', \"date:'MM/dd/yyyy'\")#",
                 width: 120
             }, {
+                field: "OEM_PLTFRM_LNCH_DT",
+                title: "OEM Platform Launch Date",
+                template: "#=gridUtils.uiReadonlyControlWrapperOEMDates(data, 'OEM_PLTFRM_LNCH_DT', \"date:'MM/dd/yyyy'\")#",
+                width: 120
+            }, {
+                field: "OEM_PLTFRM_EOL_DT",
+                title: "OEM Platform EOL Date",
+                template: "#=gridUtils.uiReadonlyControlWrapperOEMDates(data, 'OEM_PLTFRM_EOL_DT', \"date:'MM/dd/yyyy'\")#",
+                width: 120
+            }, {
                 field: "DEAL_COMB_TYPE",
                 title: "Additive",
                 template: "#=gridUtils.uiReadonlyControlWrapper(data, 'DEAL_COMB_TYPE')#",
@@ -411,6 +421,8 @@
                             OBJ_SET_TYPE_CD: { type: "string" },
                             START_DT: { type: "date" },
                             END_DT: { type: "date" },
+                            OEM_PLTFRM_LNCH_DT: { type: "date" },
+                            OEM_PLTFRM_EOL_DT: { type: "date" },
                             DEAL_COMB_TYPE: { type: "string" },
                             ECAP_PRICE: { type: "object" },
                             MAX_RPU: { type: "number" },
@@ -458,6 +470,12 @@
                                 "Groups": ["Grouping Exclusions"]
                             },
                             "END_DT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "OEM_PLTFRM_LNCH_DT": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "OEM_PLTFRM_EOL_DT": {
                                 "Groups": ["Grouping Exclusions"]
                             },
                             "DEAL_COMB_TYPE": {
