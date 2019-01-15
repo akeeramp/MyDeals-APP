@@ -531,6 +531,28 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#",
                 IsRequired = true
             });
+            items.Add(new UiTemplateContainerItem  
+            {
+                Id = 3711,
+                AtrbCd = AttributeCodes.OEM_PLTFRM_LNCH_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiIconWrapper(data, 'OEM_PLTFRM_LNCH_DT')#",
+                Label = "OEM Platform Launch Date",
+                Width = 100,
+                IsRequired = false
+            });
+            items.Add(new UiTemplateContainerItem  
+            {
+                Id = 3712,
+                AtrbCd = AttributeCodes.OEM_PLTFRM_EOL_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiIconWrapper(data, 'OEM_PLTFRM_EOL_DT')#",
+                Label = "OEM Platform EOL Date",
+                Width = 100,
+                IsRequired = false
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -1062,7 +1084,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = true,
                 ExcelTemplate = "#=gridUtils.formatDate(END_DT)#"
             });
-
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3711,
@@ -1091,7 +1112,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = false,
                 ExcelTemplate = "#=gridUtils.formatDate(OEM_PLTFRM_EOL_DT)#"
             });
-
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3676,

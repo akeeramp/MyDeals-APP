@@ -1429,6 +1429,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             // Add in restriction for future deals only for this rule to apply to...  Take from constants
+            // TODO: Add in PTR Min Deal # check since Trang extended this...
             string strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
             int minDealId = Int32.TryParse(strMinDealId, out minDealId) ? minDealId: 0;
             if ( r.Dc.DcID >= minDealId)

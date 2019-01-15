@@ -2480,55 +2480,77 @@
                         // Let's store the backdate rns from the contract in the text field so we can leverage it in rules
                         sData[s].BACK_DATE_RSN_TXT = $scope.contractData.BACK_DATE_RSN;
 
+                        //var isProgramNRE = sData[s].REBATE_TYPE === "NRE" && sData[s].OBJ_SET_TYPE_CD === "PROGRAM";
                         // fix date formats
                         for (var d = 0; d < dateFields.length; d++) {
-                            sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                            if (sData[s][dateFields[d]] === "Invalid date") {
-                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                sData[s]._behaviors.isError[dateFields[d]] = true;
-                                sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
-                            } else {
-                                // check dates against contract
-                                if (dateFields[d] === "START_DT") {
-                                    var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
-                                    var isTenderFlag = "0";
-                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-
-                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
+                                sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                if (sData[s][dateFields[d]] === "Invalid date") {
+                                    if (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT") {//(isProgramNRE === true || (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT"))
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                        sData[s]._behaviors.isError['START_DT'] = true;
-                                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                        sData[s]._behaviors.isError[dateFields[d]] = true;
+                                        sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                        errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
                                     }
-                                }
-                                if (dateFields[d] === "END_DT") {
-                                    var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                    var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
-                                    var isTenderFlag = "0";
-                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+                                } else {
+                                    // check dates against contract
+                                    if (dateFields[d] === "START_DT") {
+                                        var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                        var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
+                                        var isTenderFlag = "0";
+                                        if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
-                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
-                                        if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                        sData[s]._behaviors.isError['END_DT'] = true;
-                                        sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                        // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                        if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
+                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                            sData[s]._behaviors.isError['START_DT'] = true;
+                                            sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                        }
                                     }
+                                    if (dateFields[d] === "END_DT") {
+                                        var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                        var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
+                                        var isTenderFlag = "0";
+                                        if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                        // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                        if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
+                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                            sData[s]._behaviors.isError['END_DT'] = true;
+                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                        }
+                                    }
+                                    //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
+                                    //{
+                                    //    var tblOEMEOLDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    //    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
+                                    //    var isTenderFlag = "0";
+                                    //    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                    //    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                    //    if (moment(endDate).isAfter(tblOEMEOLDate) && isTenderFlag !== "1") {
+                                    //        if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                    //        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                    //        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                    //        sData[s]._behaviors.isError['OEM_PLTFRM_EOL_DT'] = true;
+                                    //        sData[s]._behaviors.validMsg['OEM_PLTFRM_EOL_DT'] = "OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                    //        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    //        errs.PRC_TBL_ROW.push("OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                    //    }
+                                    //}
                                 }
                             }
-                        }
+                        //}
                         if (forceValidation) {
                             // check for rows that need to be translated
                             // TODO:  merged cells are not updated with valid JSON, hence the work around to check for the unique DC_ID's

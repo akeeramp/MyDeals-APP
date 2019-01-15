@@ -325,7 +325,7 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="OEM Platform EOL Date must be after the Deal End Date",
+                    Title="Deal End Date should be earlier than OEM EOL Platform Date",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.END_DT),
@@ -334,7 +334,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = MyDeActions.AddMessage,
-                            Args = new object[] { "OEM Platform EOL Date must be after the Deal End Date." },
+                            Args = new object[] { "Deal End Date should be earlier than OEM EOL Platform Date." },
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.OEM_PLTFRM_EOL_DT })
                         }
                     }

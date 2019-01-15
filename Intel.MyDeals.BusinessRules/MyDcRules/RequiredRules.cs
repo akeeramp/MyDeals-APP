@@ -115,7 +115,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Required if Program Type is NRE",
                     ActionRule = MyDcActions.ProgramNreRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
