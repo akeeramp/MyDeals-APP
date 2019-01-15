@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender'];
+    DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender', 'isOEM'];
 
-function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender) {
+function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender, isOEM) {
     var $ctrl = this;
 	$ctrl.popupResult = cellCurrValues;
     $ctrl.placeholderText = "Click to Select...";
@@ -36,7 +36,8 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 
 	$ctrl.EnterPressed = function (event) {
         //KeyCode 13 is 'Enter'
-	    if (event.keyCode === 13 && $ctrl.isValidDate === true) {
+	    if (event.keyCode === 13 && $ctrl.isValidDate === true)
+	    {
 	     	    $ctrl.ok();   
 	    }
 	};
@@ -51,11 +52,17 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 			$ctrl.isValidDate = true;
 
 		    // date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
-			if ($ctrl.isStartDate && value > new Date(contractEndDate) && contractIsTender !== "1") {
+			if ($ctrl.isStartDate && value > new Date(contractEndDate) && contractIsTender !== "1")
+			{
 			    $ctrl.isValidDate = false;
 			}
-			if (!$ctrl.isStartDate && value < new Date(contractStartDate) && contractIsTender !== "1") {
+			if (!$ctrl.isStartDate && value < new Date(contractStartDate) && contractIsTender !== "1")
+			{
 			    $ctrl.isValidDate = false;
+			}
+			if (isOEM)
+			{
+			    $ctrl.isValidDate = true;
 			}
 
 		    //// NO BACKDATE HERE.  It will be set in the Grid

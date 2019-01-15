@@ -694,7 +694,29 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> dcIds = res.SearchResults.Where(s => s.OBJ_TYPE == deType.ToString()).OrderByDescending(s => s.OBJ_SID).Select(s => s.OBJ_SID).ToList();
             MyDealsData myDealsData = deType.GetByIDs(dcIds, new List<OpDataElementType> { deType }, atrbs);
-            return myDealsData.ToOpDataCollectorFlattenedDictList(deType, ObjSetPivotMode.Nested, false);
+
+            CustomerLib custLib = new CustomerLib();
+            List<int> mtCustIds = custLib.GetMyCustomersInfo().Select(c => c.CUST_SID).ToList();
+            //CUST_ACCNT_DIV
+
+            var updatedRet = myDealsData.ToOpDataCollectorFlattenedDictList(deType, ObjSetPivotMode.Nested, false);
+
+            foreach (OpDataCollectorFlattenedItem item in updatedRet)
+            {
+                int dcId = int.Parse(item[AttributeCodes.DC_ID].ToString());
+
+                if (item.ContainsKey(AttributeCodes.CUST_MBR_SID) && !item.ContainsKey(AttributeCodes.CUST_ACCNT_DIV))
+                {
+                    CustomerDivision cust = custLib.GetCustomerDivisionsByCustNmId(int.Parse(item[AttributeCodes.CUST_MBR_SID].ToString())).FirstOrDefault();
+
+                    if (cust != null)
+                    {
+                        item[AttributeCodes.CUST_ACCNT_DIV] = cust.CUST_NM;
+                    }
+                }
+            }
+      
+            return updatedRet;
         }
 
     }

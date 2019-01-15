@@ -3712,6 +3712,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
             var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
+            var isOEM = colName === "OEM_PLTFRM_LNCH_DT" || colName === "OEM_PLTFRM_EOL_DT"; // Remove message if it is one of thexse cols
 
             // check dates against contract - Tender contracts don't observe start/end date within contract.
             var contractIsTender = "0";
@@ -3740,6 +3741,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     },
                     contractIsTender: function () {
                         return contractIsTender;
+                    },
+                    isOEM: function () {
+                        return isOEM;
                     }
                 }
             });
