@@ -54,13 +54,13 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         }
     });
 
+    //Export to Excel
+    $scope.exportToExcelTimeline = function () {
+        gridUtils.dsToExcelTimeLine($scope.gridOptions, $scope.gridOptions.dataSource, "Deal " + $scope.dataItem.DC_ID + " Timeline Export.xlsx", false);
+    }
+
     $scope.gridOptions = {
-        dataSource: $scope.timelineDs,
-        toolbar: [{ name: 'excel', text: '<div class="excelText"><span>Excel<br/>Export</span></div>' }],
-        excel: {
-            fileName: "Deal " + $scope.dataItem.DC_ID + " Timeline Export.xlsx",
-            filterable: true
-        },
+        dataSource: $scope.timelineDs,        
         sortable: true,
         scrollable: true,
         resizable: true,
@@ -77,7 +77,8 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         }, {
             field: "HIST_EFF_FR_DTM",
             title: "Date Changed",
-            width: "160px"
+            width: "160px",
+            template: "#=kendo.toString(new Date(HIST_EFF_FR_DTM), 'd/M/yyyy hh:mm')#"
         }]
     };
 

@@ -230,6 +230,8 @@ namespace Intel.MyDeals.BusinessLogic
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             List<int> dealIds = data[0]["dealIds"].ToString().Split(',').Select(Int32.Parse).ToList();
+            
+            //string dealIdsWithPrefix = string.Join("#", data[0]["dealIds"]);
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dealIds, new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW });
 
             List<MyDealsAttribute> cntrctAtrbs = new List<MyDealsAttribute>
@@ -302,7 +304,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     if (atrb.ATRB_COL_NM == AttributeCodes.SYS_COMMENTS)
                     {
-                        data[0][atrb.ATRB_COL_NM] = "Contract Created from a Copy";
+                        data[0][atrb.ATRB_COL_NM] = "Folio created from a Copy of deal(s) #" + data[0]["dealIds"].ToString();
                     }
                     cntrctDEs.Add(new OpDataElement
                     {
