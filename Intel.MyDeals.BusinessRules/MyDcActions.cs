@@ -1430,9 +1430,19 @@ namespace Intel.MyDeals.BusinessRules
 
             // Add in restriction for future deals only for this rule to apply to...  Take from constants
             // TODO: Add in PTR Min Deal # check since Trang extended this...
-            string strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
-            int minDealId = Int32.TryParse(strMinDealId, out minDealId) ? minDealId: 0;
-            if ( r.Dc.DcID >= minDealId)
+            OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
+            string strMinDealId = "0";
+            switch (deType)
+            {
+                case OpDataElementType.PRC_TBL_ROW:
+                    strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_PTR").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+                    break;
+                case OpDataElementType.WIP_DEAL:
+                    strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+                    break;
+            }
+            int minCheckId = Int32.TryParse(strMinDealId, out minCheckId) ? minCheckId : 0;
+            if ( r.Dc.DcID >= minCheckId)
             {
                 r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
             }
