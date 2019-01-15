@@ -67,7 +67,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         columns: [{
             field: "ATRB_VAL",
             title: "Comment Detail",
-            encoded: false
+            encoded: true
         }, {
             field: "user",
             title: "Changed By",
