@@ -1429,7 +1429,6 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             // Add in restriction for future deals only for this rule to apply to...  Take from constants
-            // TODO: Add in PTR Min Deal # check since Trang extended this...
             OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
             string strMinDealId = "0";
             switch (deType)
@@ -1442,7 +1441,7 @@ namespace Intel.MyDeals.BusinessRules
                     break;
             }
             int minCheckId = Int32.TryParse(strMinDealId, out minCheckId) ? minCheckId : 0;
-            if ( r.Dc.DcID >= minCheckId)
+            if (r.Dc.DcID < 0 || r.Dc.DcID >= minCheckId) // Check if it is a new record or if it falls after the future deal ID check
             {
                 r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
             }
