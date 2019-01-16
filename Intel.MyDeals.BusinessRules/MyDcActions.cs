@@ -1384,6 +1384,16 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            // Not required for Program MDF, Program ECAP ADJ, Program Debit Memo (US242659)
+            List<string> notRequiredProgramTypes = new List<string>
+            {
+                "ECAP ADJ",
+                "DEBIT MEMO",
+                "MDF"
+            };
+            IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            if (notRequiredProgramTypes.Contains(rebateType.AtrbValue)) return;  // If this is one of the above program types, it cannot be required, so bail.
+
             IOpDataElement forecastVolume = r.Dc.GetDataElement(AttributeCodes.FRCST_VOL);
             if (forecastVolume == null) return;
 
