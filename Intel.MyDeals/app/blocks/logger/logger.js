@@ -19,7 +19,8 @@
             warning: warning,
             stickyError: stickyError,
             // straight to console; bypass toastr
-            log: $log.log
+            log: $log.log,
+            stickyInfo: stickyInfo
 
             //TODO: include the op.error in the logger
         };
@@ -51,7 +52,7 @@
         function stickyError(message, data, title) {
             toastr.options = {
                 timeOut: 0,
-                extendedTimeOut:0,
+                extendedTimeOut: 0,
                 closeButton: true,
                 tapToDismiss: false,
                 positionClass: 'toast-bottom-right'
@@ -69,6 +70,25 @@
             toastr.info(message, title);
             $log.info('Info: ' + message, data);
             op.ajaxPostAsync(URL + "PostLogMessage", message);
+        }
+
+        function stickyInfo(message, data, title) {
+            toastr.options = {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                tapToDismiss: false,
+                allowHtml: true,
+                positionClass: 'toast-bottom-right'
+            };
+
+            toastr.info(message, title);
+
+            toastr.options = {
+                closeButton: false,
+                extendedTimeOut: 4000,
+                timeOut: 4000
+            };
         }
 
         function success(message, data, title) {

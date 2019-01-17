@@ -9,13 +9,14 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$uibModalStack', '$timeout', '$q', 'objsetService', 'templatesService', 'securityService', '$location', 'logger', '$window', 'opGridTemplate', '$linq', '$rootScope', 'colorDictionary', 'dataService'];
+    tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$uibModalStack', '$timeout', '$q', 'objsetService', 'templatesService', 'securityService', '$location', 'logger', '$window', 'opGridTemplate', '$linq', '$rootScope', 'colorDictionary', 'dataService', 'maxRecordCountConstant'];
 
-    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $uibModalStack, $timeout, $q, objsetService, templatesService, securityService, $location, logger, $window, opGridTemplate, $linq, $rootScope, colorDictionary, dataService) {
+    function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $uibModalStack, $timeout, $q, objsetService, templatesService, securityService, $location, logger, $window, opGridTemplate, $linq, $rootScope, colorDictionary, dataService, maxRecordCountConstant) {
 
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
         $scope.uid = -101;
+        maxRecordCountConstant = maxRecordCountConstant.data;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"]; //TODO: this is a copy of a hard-coded list of strings from contract.controller.js - ideally we move this into some sort of global file and reference from there at least.
@@ -1212,7 +1213,17 @@
                 var en = $scope.endDt.replace(/\//g, '-');
                 var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
 
-                $scope.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true, true)
+                $scope.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true, true);
+
+                var take = 100;
+                if (maxRecordCountConstant.CNST_VAL_TXT !== undefined && maxRecordCountConstant.CNST_VAL_TXT !== null) {
+                    take = Number.parseInt(maxRecordCountConstant.CNST_VAL_TXT);
+                    take = Number.isInteger(take) ? take : 100;
+                    searchText = searchText + "?top=" + take;
+                } else {
+                    searchText = searchText + "?top=" + take;
+                }
+
                 objsetService.searchTender(st, en, searchText)
                 .then(function (response) {
 
@@ -1235,6 +1246,12 @@
                         var message = window.usrRole === "DA" ? "No results found. Try changing your search options or check your product category access." : "No results found. Try changing your search options."
                         $scope.setBusy("", "");
                         kendo.alert(message);
+                    }
+
+                    if (response.data['Count'] > take) {
+                        var info = maxRecordCountConstant.CNST_DESC != undefined ? maxRecordCountConstant.CNST_DESC : "Your search options returned <b>" + response.data['Count'] + "</b> deals. Refine your search options"
+                        info = info.replace("**", response.data['Count']);
+                        logger.stickyInfo(info);
                     }
 
                     for (var w = 0; w < $scope.wipData.length; w++) {

@@ -73,8 +73,13 @@
                 config: {
                     templateUrl: '/app/advancedSearch/tenderDashboard.html',
                     url: 'tenderDashboard',
-                    controller: 'tenderDashboardController'
-                }
+                    controller: 'tenderDashboardController',
+                    resolve: {
+                        maxRecordCountConstant: ['constantsService', function (constantsService) {
+                            return constantsService.getConstantsByName('TENDER_SEARCH_MAX_VALUE');
+                        }]
+                    }
+                },
             },
             {
                 state: 'advancedSearch.tenderSearch',
@@ -83,7 +88,7 @@
                     templateUrl: '/app/advancedSearch/tenderSearch.html',
                     url: 'tenderSearch',
                     controller: 'tenderSearchController'
-                }
+                },
             },
             {
                 state: 'advancedSearch.gotoPs',
