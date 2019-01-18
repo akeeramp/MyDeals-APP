@@ -1219,9 +1219,9 @@
                 if (maxRecordCountConstant.CNST_VAL_TXT !== undefined && maxRecordCountConstant.CNST_VAL_TXT !== null) {
                     take = Number.parseInt(maxRecordCountConstant.CNST_VAL_TXT);
                     take = Number.isInteger(take) ? take : 100;
-                    searchText = searchText + "?top=" + take;
+                    searchText = searchText + "?$top=" + take;
                 } else {
-                    searchText = searchText + "?top=" + take;
+                    searchText = searchText + "?$top=" + take;
                 }
 
                 objsetService.searchTender(st, en, searchText)
