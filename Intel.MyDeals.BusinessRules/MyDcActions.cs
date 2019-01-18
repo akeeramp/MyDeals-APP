@@ -440,6 +440,14 @@ namespace Intel.MyDeals.BusinessRules
             if (r.Dc.DcID >= 0) return;
 
             OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
+            var deTypeDesc = deType.ToDesc();
+
+            // For contract and Tender type rebate change detype desc to folio
+            if (deType == OpDataElementType.CNTRCT && r.Dc.GetDataElementValue(AttributeCodes.IS_TENDER) == "1" )
+            {
+                deTypeDesc = "Folio";
+            }
+
             string title = string.Empty;
             switch (deType)
             {
@@ -457,7 +465,7 @@ namespace Intel.MyDeals.BusinessRules
                     title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
                     break;
             }
-            r.Dc.AddTimelineComment($"Created { deType.ToDesc() }: { title }");
+            r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }");
         }
 
         public static void CheckCustDivValues(params object[] args)
