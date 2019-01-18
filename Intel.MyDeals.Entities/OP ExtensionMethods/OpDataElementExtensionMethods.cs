@@ -348,7 +348,7 @@ namespace Intel.MyDeals.Entities
 
                     case "DATE":
                     case "DATETIME":
-                        return (DateTime)atrb.GetValueStronglyTyped(testValue, false) == (DateTime)atrb.GetValueStronglyTyped(oav, false);
+                        return (DateTime)atrb.GetValueStronglyTyped(testValue, false) != (DateTime)atrb.GetValueStronglyTyped(oav, false);
 
                     case "BIT":
                         return false;

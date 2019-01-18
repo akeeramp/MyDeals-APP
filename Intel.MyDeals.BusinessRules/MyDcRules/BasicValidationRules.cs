@@ -326,15 +326,33 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Deal End Date should be earlier than OEM EOL Platform Date",
-                    ActionRule = MyDcActions.ExecuteActions,
+                    ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.END_DT),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() 
+                        && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.END_DT),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "Deal End Date should be earlier than OEM EOL Platform Date." },
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.OEM_PLTFRM_EOL_DT })
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Make sure OEM Platform EOL Date is later than OEM Platform Launch Date",
+                    ActionRule = MyDcActions.ProgramNreDateChecks,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() 
+                        && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.OEM_PLTFRM_LNCH_DT),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] { "OEM Platform EOL Date must be after the OEM Platform Launch Date." },
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.OEM_PLTFRM_EOL_DT })
                         }
                     }

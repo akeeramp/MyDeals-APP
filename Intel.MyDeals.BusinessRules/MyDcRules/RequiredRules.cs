@@ -113,7 +113,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     // If deal type is Program and Type is NRE, then ensure that user fills in OEM_PLTFRM_LNCH_DT, OEM_PLTFRM_EOL_DT values
                     Title="Required if Program Type is NRE",
-                    ActionRule = MyDcActions.ProgramNreRequired,
+                    ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},

@@ -1245,12 +1245,12 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 else if (!myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.Any(d => d.DcID == dcPs))
                 {
-                    MyDealsData blah = new MyDealsData();
-                    blah[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
+                    MyDealsData tempMyDealsData = new MyDealsData();
+                    tempMyDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
                         new List<int> { dcPs },
                         new List<OpDataElementType> { OpDataElementType.PRC_ST },
                         new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
-                    myDealsData[OpDataElementType.PRC_ST].Data.AddRange(blah[OpDataElementType.PRC_ST].AllDataCollectors);
+                    myDealsData[OpDataElementType.PRC_ST].Data.AddRange(tempMyDealsData[OpDataElementType.PRC_ST].AllDataCollectors);
                 }
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcPs];
                 dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
@@ -1441,7 +1441,7 @@ namespace Intel.MyDeals.BusinessRules
             deTrkr.IsRequired = true;
         }
 
-        public static void ProgramNreRequired(params object[] args)
+        public static void ProgramNreDateChecks(params object[] args) // required check as well as date comparison checks
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
