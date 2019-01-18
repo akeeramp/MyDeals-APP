@@ -136,14 +136,9 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     var result = passedData[field];
     var iconNm = gridPctUtils.getResultSingleIcon(result, style);
     //return iconNm;
-    if (field === 'MEETCOMP_TEST_RESULT') {
-        if (window.usrRole != 'FSE') {
-            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
-        }
-        else {
-            return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">Edit</div></div>';
-        }
-
+    if (field === 'MEETCOMP_TEST_RESULT') { 
+        // DE29155 - Removed if clause and made all users return the same thing, if !FSE just subtituted iconMn with "EDIT", but still allowed openMCTScreen.  
+        return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
     }
     else {
         if (window.usrRole === 'DA' || (window.usrRole === 'GA' && window.isSuper || window.usrRole === 'SA' || window.usrRole === 'Legal')) { // Cost Test visable by Super GA, DA, and SA
