@@ -88,6 +88,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             }
                         }
                         $scope.root.$broadcast('search-rules-updated', $scope.myRules);
+                        $scope.loadRuleDetails();
                     },
                     function (response) {
                         logger.error("Unable to get your list of rules.", response, response.statusText);
@@ -189,20 +190,20 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             }
 
             //Rule Selection Select Event
-            $scope.onRuleSelect = function (e) {                
+            $scope.onRuleSelect = function (e) {
                 if ($scope.selectedRuleItem != e.dataItem.title) {
                     $scope.selectedRuleItem = e.dataItem.title;
                     if (e.dataItem && $scope.deleteRuleInitiated == false) {
                         $scope.ruleEngine(e.dataItem.rule);
                     }
                     else {
-                        $scope.deleteRuleInitiated = false;                         
+                        $scope.deleteRuleInitiated = false;
                         $scope.selectedRuleItem = '';
                         sleepAndResetDDL();
                     }
                 }
                 else {
-                    $scope.deleteRuleInitiated = false;                    
+                    $scope.deleteRuleInitiated = false;
                 }
             }
 
@@ -219,16 +220,16 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             //Remove Created Rule
             $scope.deleteSaveRule = function (dataItem, event) {
                 event.preventDefault();
-                
+
                 var selectedDDl = $("#ruleDropDownList").data("kendoDropDownList").text();
-                
+
                 for (var itmCnt = 0; itmCnt < $scope.rules.length; itmCnt++) {
                     if ($scope.rules[itmCnt].title == dataItem.title) {
                         $scope.rules.splice(itmCnt, 1);
                         if ($scope.rules.length > 0 && (selectedDDl == dataItem.title || selectedDDl.length == 0)) {
-                            $("#ruleDropDownList").data("kendoDropDownList").select(itmCnt == 0 ? $scope.rules.length - 1 : 0);                            
+                            $("#ruleDropDownList").data("kendoDropDownList").select(itmCnt == 0 ? $scope.rules.length - 1 : 0);
                         }
-                                              
+
                         $scope.deleteRuleInitiated = true;
                         userPreferencesService
                             .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.rules))
@@ -239,15 +240,15 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                 });
 
                                 $scope.rulesDataSource.read();
-                                if ($scope.rules.length > 0 && (selectedDDl == dataItem.title || selectedDDl.length == 0)) { 
+                                if ($scope.rules.length > 0 && (selectedDDl == dataItem.title || selectedDDl.length == 0)) {
                                     sleepAndResetDDL();
                                     $scope.clearRule();
-                                    
-                                } else {                                    
+
+                                } else {
                                     $("#ruleDropDownList").data("kendoDropDownList").value(selectedDDl);
                                     $scope.ruleExtracter(selectedDDl);
                                 }
-                                
+
                             },
                             function (response) {
                                 logger.error("Unable to make Default Rule.", response, response.statusText);
@@ -255,7 +256,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
                         break;
                     }
-                } 
+                }
             }
 
             //Setting Default Rule on User Click
@@ -264,13 +265,13 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 var selectionType = '';
                 for (var itmCnt = 0; itmCnt < $scope.rules.length; itmCnt++) {
                     if ($scope.rules[itmCnt].title == dataItem.title) {
-                        $scope.rules[itmCnt]["default"] = !$scope.rules[itmCnt]["default"]; 
+                        $scope.rules[itmCnt]["default"] = !$scope.rules[itmCnt]["default"];
                         selectionType = !$scope.rules[itmCnt]["default"];
                     }
                     else {
                         $scope.rules[itmCnt]["default"] = false;
                     }
-                }  
+                }
                 //adding item to rule dropdown                                
                 $scope.rulesDataSource = new kendo.data.DataSource({
                     data: $scope.rules
@@ -287,7 +288,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         else if (selectionType == true) {
                             op.notifySuccess("Default selection was removed", "Saved");
                         }
-                        
+
                     },
                     function (response) {
                         logger.error("Unable to make Default Rule.", response, response.statusText);
@@ -303,7 +304,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 if (newValue === oldValue) return;
                 $scope.$broadcast('search-rule-loaded', newValue);
             });
-             
+
             //Sleeping thread
             function sleepDDL(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
@@ -333,7 +334,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         if ($linq.Enumerable().From($scope.myRules)
                             .Where(function (x) {
                                 return (x.title !== undefined && x.title.toUpperCase() === title.toUpperCase());
-                        }).ToArray().length > 0) {
+                            }).ToArray().length > 0) {
                             kendo.confirm("The title was already used.  Would you like to enter a different name?").then(function () {
                                 $scope.saveRule();
                             }, function () { });
@@ -360,12 +361,12 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                         data: $scope.myRules
                                     });
 
-                                    $scope.rules = $scope.myRules; 
-                                    $scope.rulesDataSource.read(); 
+                                    $scope.rules = $scope.myRules;
+                                    $scope.rulesDataSource.read();
                                     sleepAndDDL(title);
-                                    
+
                                 }
-                                
+
                             },
                             function (response) {
                                 logger.error("Unable to save Search Rule.", response, response.statusText);
@@ -552,14 +553,14 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 var index = $scope.data.indexOf(dataItem);
                 if (index > -1) {
                     $scope.data.splice(index + 1, 0,
-                    {
-                        field: "",
-                        operator: "",
-                        value: "",
-                        source: new kendo.data.DataSource({
-                            data: $scope.attributeSettingsCopy
-                        })
-                    });
+                        {
+                            field: "",
+                            operator: "",
+                            value: "",
+                            source: new kendo.data.DataSource({
+                                data: $scope.attributeSettingsCopy
+                            })
+                        });
 
                     setTimeout(function () {
                         if ($(".filterRow")[index + 1] !== undefined)
@@ -635,7 +636,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     $scope.currentRule = "";
                     $scope.currentRuleColumns = [];
                 }
-                
+
 
                 if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules && $scope.rules.length > 0) {
                     if ($("#ruleDropDownList").data("kendoDropDownList").text().length > 0) {
@@ -680,7 +681,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.initRules();
                 $scope.runRule();
             });
-
+            
             $scope.initRules = function () {
                 if ($scope.saveCat == 'TenderDealSearch') {
                     if ($scope.data.length != 0) {
@@ -707,27 +708,27 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             });
 
                             $scope.buildRuleFormula();
-                            
+
                         }
                         else {
-                            $scope.loadRuleDetails();
+                            $scope.buildRuleFormula();                            
                         }
                     }
                     else {
                         $scope.loadRuleDetails();
                     }
-                    
+
                 }
                 else {
                     $scope.buildRuleFormula();
-                }                    
+                }
 
             }
             //Extract Rule from Rules
             $scope.ruleExtracter = function (ruleName) {
                 for (var rulesCounter = 0; rulesCounter < $scope.rules.length; rulesCounter++) {
                     //Calling RuleEngine Setter                                    
-                    if ($scope.rules[rulesCounter].title == ruleName) {                        
+                    if ($scope.rules[rulesCounter].title == ruleName) {
                         $scope.ruleEngine($scope.rules[rulesCounter].rule);
                         break;
                     }
@@ -760,7 +761,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                         //Calling RuleEngine Setter                                    
                                         if ($scope.rules[rulesCounter].default == true) {
                                             $("#ruleDropDownList").data("kendoDropDownList").value($scope.rules[rulesCounter].title);
-                                            $scope.selectedRuleItem = $scope.rules[rulesCounter].title;                                            
+                                            $scope.selectedRuleItem = $scope.rules[rulesCounter].title;
                                             flag = true;
                                             $scope.isDefaultPresnt = true;
                                             $scope.ruleEngine($scope.rules[rulesCounter].rule);
@@ -782,7 +783,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             if (flag == false && $scope.defaultSelection) {
                                 $("#ruleDropDownList").data("kendoDropDownList").select(-1);
                                 $scope.resetRuleInitiated = false;
-                                $scope.buildRuleFormula();
+                                //$scope.buildRuleFormula();
                             }
 
                         }
@@ -800,7 +801,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 //IF Any Default Rule then Reset $scope.data to default rule i:e $scope.data = []; and then $scope.data = $scope.rules[rulesCounter].rule[ruleCounter]
                 var ruleNode = $scope.data[0];
                 $scope.data = [];
-                for (var ruleCounter = 0; ruleCounter < rule.length; ruleCounter++) {                    
+                for (var ruleCounter = 0; ruleCounter < rule.length; ruleCounter++) {
                     var tempRuleNode = angular.copy(ruleNode);
                     tempRuleNode.field = rule[ruleCounter].field;
                     tempRuleNode.operator = rule[ruleCounter].operator;
@@ -818,8 +819,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
-            async function sleepAndRunWell() {                
-                await sleep(1000);                
+            async function sleepAndRunWell() {
+                await sleep(1000);
                 $scope.runRuleOnSelection();
             }
 
@@ -836,22 +837,22 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         $scope.drawValueControl($(els[e]), scope);
                     }
                     //Run Rules for TenderDealSearch
-                    if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules && $scope.rules.length > 0) {                        
+                    if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules && $scope.rules.length > 0) {
                         if ($("#ruleDropDownList").data("kendoDropDownList").text().length > 0) {
                             if ($scope.deleteRuleInitiated == false) {
-                                sleepAndRunWell(); 
+                                sleepAndRunWell();
                             }
                             else {
                                 $scope.deleteRuleInitiated == false;
                             }
-                            
-                        }                                         
+
+                        }
                     }
 
                     if ($scope.defaultSelection == false && $("#ruleDropDownList").data("kendoDropDownList")) {
                         $("#ruleDropDownList").data("kendoDropDownList").select(-1);
                     }
-                    
+
                 }, 0);
             }            
             
