@@ -218,10 +218,8 @@ namespace Intel.MyDeals.JMSQueueApp
             // By virtue of changing timestamp, only the latest file will be selected.
             string jmsUploadDirectory = _jmsqConfig.JmsUploadDirectory;
             string csvFilePath = "";
-            string checkPath = Path.Combine(jmsUploadDirectory, String.Format("DRQ_YCS2_{0}_{1}",
-                operationMode,
-                DateTime.Now.ToString("yyyyMMdd")
-                )).ToLower();
+            string checkPath = Path.Combine(jmsUploadDirectory,
+                $"DRQ_YCS2_{operationMode}_{DateTime.Now.ToString("yyyyMMdd")}_{DateTime.Now.ToString("HH")}").ToLower();
 
             JmsQCommon.TryCreateFileFolder(jmsUploadDirectory);
             var root = new DirectoryInfo(jmsUploadDirectory);
