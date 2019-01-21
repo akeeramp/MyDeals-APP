@@ -58,14 +58,15 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
     $scope.exportToExcelTimeline = function () {
         gridUtils.dsToExcelTimeLine($scope.gridOptions, $scope.gridOptions.dataSource, "Deal " + $scope.dataItem.DC_ID + " Timeline Export.xlsx", false);
     }
-
+    
     $scope.gridOptions = {
-        dataSource: $scope.timelineDs,        
+        dataSource: $scope.timelineDs,         
         sortable: true,
         scrollable: true,
         resizable: true,
         columns: [{
             field: "ATRB_VAL",
+            template:"#=ATRB_VAL#",
             title: "Comment Detail",
             encoded: true
         }, {
