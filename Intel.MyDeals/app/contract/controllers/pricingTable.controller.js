@@ -2620,11 +2620,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         var data = $scope.root.spreadDs.data();
                         var dataItem = data[pasteRef.topLeft.row + padNumRows + row];
-                        var numTiers = root.numOfPivot(dataItem);    //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later
+                        var numTiers = root.numOfPivot(dataItem);    //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later Note2: when it "correctly" returns a tier num for non-product kit columns, because we disabled merged cell paste this gets affected as well.
                         for (var t = 0; t < numTiers; t++) {
                             newData.push(util.deepClone(state.data[row]));
                         }
-                        padNumRows += numTiers - 1;
+                        //padNumRows += numTiers - 1;
                     }
                     state.data = newData;
                 }
@@ -2636,8 +2636,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Prevent user from pasting merged cells
                 state.mergedCells = null;
 
-                // need to pad range ref
-                pasteRef.bottomRight.row += padNumRows;
+                // need to pad range ref //DE29002 removed references to padNumRows and numtiers as we disallow pasting of merged cells, leaving it in causes data to sometimes spill over into rows without products
+                //pasteRef.bottomRight.row += padNumRows;
 
                 var i = state.data.length;
                 while (i--) {
@@ -2645,7 +2645,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         state.data.splice(i, 1);
                     }
                 }
-
+                
                 sheet.range(pasteRef).setState(state, clip);
                 sheet.triggerChange({
                     recalc: true,
