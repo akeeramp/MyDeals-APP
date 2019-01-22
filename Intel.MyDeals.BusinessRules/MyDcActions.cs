@@ -1922,6 +1922,22 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void DefaultProgramAdditive(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> targetTypes = new List<string> { "NRE", "MDF" };
+
+            IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            IOpDataElement myCombType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);
+
+            if (myRebateType.DcID < 0 && targetTypes.Contains(myRebateType.AtrbValue)) // Only do this check initially to default value.
+            {
+                myCombType.AtrbValue = "Additive";
+            }
+        }
+
         public static void CheckEcapAdjUnit(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

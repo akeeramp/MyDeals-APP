@@ -535,6 +535,14 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Program NRE/MDF Deals default to Additive",
+                    ActionRule = MyDcActions.DefaultProgramAdditive,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
                     ActionRule = MyDcActions.CheckTotalDollarAmount,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
