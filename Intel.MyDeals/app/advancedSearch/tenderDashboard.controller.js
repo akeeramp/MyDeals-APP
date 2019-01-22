@@ -16,7 +16,7 @@
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
         $scope.uid = -101;
-        maxRecordCountConstant = maxRecordCountConstant.data;
+        var maxRecordCount = maxRecordCountConstant.data;
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         var kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"]; //TODO: this is a copy of a hard-coded list of strings from contract.controller.js - ideally we move this into some sort of global file and reference from there at least.
@@ -1216,8 +1216,8 @@
                 $scope.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true, true);
 
                 var take = 100;
-                if (maxRecordCountConstant.CNST_VAL_TXT !== undefined && maxRecordCountConstant.CNST_VAL_TXT !== null) {
-                    take = Number.parseInt(maxRecordCountConstant.CNST_VAL_TXT);
+                if (maxRecordCount !== undefined && maxRecordCount.CNST_VAL_TXT !== undefined && maxRecordCount.CNST_VAL_TXT !== null) {
+                    take = Number.parseInt(maxRecordCount.CNST_VAL_TXT);
                     take = Number.isInteger(take) ? take : 100;
                     searchText = searchText + "?$top=" + take;
                 } else {
@@ -1249,7 +1249,7 @@
                     }
 
                     if (response.data['Count'] > take) {
-                        var info = maxRecordCountConstant.CNST_DESC != undefined ? maxRecordCountConstant.CNST_DESC : "Your search options returned <b>" + response.data['Count'] + "</b> deals. Refine your search options"
+                        var info = maxRecordCount.CNST_DESC != undefined ? maxRecordCount.CNST_DESC : "Your search options returned <b>" + response.data['Count'] + "</b> deals. Refine your search options"
                         info = info.replace("**", response.data['Count']);
                         logger.stickyInfo(info);
                     }
@@ -1631,6 +1631,9 @@
                 resolve: {
                     copyItems: function () {
                         return items;
+                    },
+                    maxRecordCountConstant: function () {
+                        return maxRecordCountConstant
                     }
                 }
             });
