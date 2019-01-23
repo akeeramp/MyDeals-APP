@@ -250,25 +250,25 @@
                 field: "START_DT",
                 title: "Start Date",
                 type: "date",
-                template: "#= moment(START_DT).format('MM/DD/YYYY') #",
+                template: "#if(START_DT==null){#  #}else{# #= moment(START_DT).format('MM/DD/YYYY') # #}#",
                 width: 130
             }, {
                 field: "END_DT",
                 title: "End Date",
                 type: "date",
-                template: "#= moment(END_DT).format('MM/DD/YYYY') #",
+                template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
                 width: 130
             }, {
                 field: "OEM_PLTFRM_LNCH_DT",
                 title: "OEM Platform Launch Date",
                 type: "date",
-                template: "#= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') #",
+                template: "#if(OEM_PLTFRM_LNCH_DT==null){#  #}else{# #= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') # #}#",                
                 width: 130
             }, {
                 field: "OEM_PLTFRM_EOL_DT",
                 title: "OEM Platform EOL Date",
                 type: "date",
-                template: "#= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') #",
+                template: "#if(OEM_PLTFRM_EOL_DT==null){#  #}else{# #= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') # #}#",                 
                 width: 130
             }, {
                 field: "PRODUCT_CATEGORIES",
