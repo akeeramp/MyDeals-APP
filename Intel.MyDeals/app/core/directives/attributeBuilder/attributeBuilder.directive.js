@@ -88,7 +88,10 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             }
                         }
                         $scope.root.$broadcast('search-rules-updated', $scope.myRules);
-                        $scope.loadRuleDetails();
+                        if ($scope.saveCat == 'TenderDealSearch') {//This checking req for Tender dashboard only
+                            $scope.loadRuleDetails();
+                        }
+                        
                     },
                     function (response) {
                         logger.error("Unable to get your list of rules.", response, response.statusText);
