@@ -680,6 +680,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
                 $scope.currentRule = rule.title;
                 $scope.currentRuleColumns = rule.columns;
+                if (!rule.rule[0]["source"]) {
+                    rule.rule[0]["source"] = $scope.attributeSettingsCopy;
+                }                
                 $scope.data = rule.rule;
                 $scope.initRules();
                 $scope.runRule();
