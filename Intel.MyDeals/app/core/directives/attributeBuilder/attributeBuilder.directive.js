@@ -834,6 +834,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 for (var a = 0; a < $scope.data.length; a++) {
                     var item = $scope.data[a];
                     item.operatorDataSource = $scope.getOperDatasource(item.field);
+                    if (a > 0) {
+                        item.source = $scope.data[0].source;
+                    }
                 }
 
                 setTimeout(function () {
