@@ -23,6 +23,18 @@
         return {
             request: function (config) {
                 xhrRequests++;
+
+                /*
+                With app version appended as query param, if there is a version change,
+                new html is downloaded from server instead of from disk cache(see chrome network tab for more info).
+                Note: Only html files which angular uses should be appended(files inside the folder app), do not append for other html files (which are part of third party packages).
+                */
+
+                if (config !== undefined && config.url !== undefined && appVer !== undefined
+                        && config.url.endsWith('.html') && (config.url.startsWith('/app/') || config.url.startsWith('app/'))) {
+                    config.url = config.url + '?v=' + appVer;
+                }
+
                 updateStatus();
                 return config;
             },

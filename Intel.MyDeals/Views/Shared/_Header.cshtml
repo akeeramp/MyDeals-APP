@@ -9,6 +9,7 @@
     var usrEmail = "";
     var usrVerticals = "";
     var isEditableGrid = true;
+    var appVer = "UNKNOWN";
     try
     {
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
@@ -16,6 +17,7 @@
         usrEmail = ViewBag.UserToken.Usr.Email;
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
         usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
+        appVer = ViewBag.AppVer;
 
         foreach (var x in ViewBag.UserVarticals)
         {
@@ -363,6 +365,7 @@
     window.usrEmail = "@usrEmail";
     window.isSuper = "@isSuper" === "True";
     window.usrVerticals = "@usrVerticals";
+    window.appVer = "@appVer";
 
     window.isDeveloper = "@isDeveloper" === "True";
     window.isTester = "@isTester" === "True";

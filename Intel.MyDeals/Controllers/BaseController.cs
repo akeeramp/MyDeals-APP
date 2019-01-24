@@ -28,6 +28,7 @@ namespace Intel.MyDeals.Controllers
             // Set the user details to view bag, these variables are available to all the views
             ViewBag.UserToken = user;
             ViewBag.AppToken = op.AppToken;
+            ViewBag.AppVer = AppLib.AVM.AppVer;
             ViewBag.IsDeveloper = user.IsDeveloper();
             ViewBag.IsSuper = user.IsSuper();
             ViewBag.IsTester = user.IsTester();
