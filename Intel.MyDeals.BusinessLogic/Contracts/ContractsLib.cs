@@ -233,6 +233,7 @@ namespace Intel.MyDeals.BusinessLogic
             
             //string dealIdsWithPrefix = string.Join("#", data[0]["dealIds"]);
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dealIds, new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW });
+            string custAccountDivisionsFromContract = "";
 
             List<MyDealsAttribute> cntrctAtrbs = new List<MyDealsAttribute>
             {
@@ -306,19 +307,30 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         data[0][atrb.ATRB_COL_NM] = "Folio created from a Copy of deal(s) #" + data[0]["dealIds"].ToString();
                     }
-                    cntrctDEs.Add(new OpDataElement
+                    if (atrb.ATRB_COL_NM == AttributeCodes.CUST_ACCNT_DIV && data[0][atrb.ATRB_COL_NM].ToString() != "")
                     {
-                        DcID = -101,
-                        DcType = OpDataElementTypeConverter.StringToId(OpDataElementType.CNTRCT.ToString()),
-                        DcParentType = 0,
-                        DcParentID = 0,
-                        AtrbID = atrb.ATRB_SID,
-                        AtrbValue = data[0][atrb.ATRB_COL_NM].ToString(),
-                        OrigAtrbValue = String.Empty,
-                        PrevAtrbValue = String.Empty,
-                        AtrbCd = atrb.ATRB_COL_NM,
-                        State = OpDataElementState.Modified
-                    });
+                        custAccountDivisionsFromContract = data[0][atrb.ATRB_COL_NM].ToString(); // Set the division values for later
+                    }
+                    if (atrb.ATRB_COL_NM == AttributeCodes.CUST_ACCNT_DIV && data[0][atrb.ATRB_COL_NM].ToString() == "") // Only save populated not empty diviions
+                    {
+                        // Don't save an empty division
+                    }
+                    else
+                    { 
+                        cntrctDEs.Add(new OpDataElement
+                        {
+                            DcID = -101,
+                            DcType = OpDataElementTypeConverter.StringToId(OpDataElementType.CNTRCT.ToString()),
+                            DcParentType = 0,
+                            DcParentID = 0,
+                            AtrbID = atrb.ATRB_SID,
+                            AtrbValue = data[0][atrb.ATRB_COL_NM].ToString(),
+                            OrigAtrbValue = String.Empty,
+                            PrevAtrbValue = String.Empty,
+                            AtrbCd = atrb.ATRB_COL_NM,
+                            State = OpDataElementState.Modified
+                        });
+                    }
                 }
             }
 
@@ -376,7 +388,10 @@ namespace Intel.MyDeals.BusinessLogic
                 // Set values of PTR items as needed (customer, division, stage), clean out things that will harm us down the road as well..
 
                 ptr.DataElementDict[AttributeCodes.CUST_MBR_SID + "|0"].AtrbValue = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID).AtrbValue;
-                AddOrUpdateElementInPTR(ptr, AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
+                if (custAccountDivisionsFromContract != "")
+                {
+                    AddOrUpdateElementInPTR(ptr, AttributeCodes.CUST_ACCNT_DIV, cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_ACCNT_DIV).AtrbValue, attrCollection);
+                }
                 AddOrUpdateElementInPTR(ptr, AttributeCodes.WF_STG_CD, WorkFlowStages.Draft, attrCollection);
                 AddOrUpdateElementInPTR(ptr, AttributeCodes.PS_WF_STG_CD, psDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.WF_STG_CD).AtrbValue, attrCollection);
                 ptr.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, "");  // Force the products to be re-validated.
