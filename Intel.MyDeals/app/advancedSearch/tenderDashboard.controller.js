@@ -1219,11 +1219,11 @@
                 if (maxRecordCount !== undefined && maxRecordCount.CNST_VAL_TXT !== undefined && maxRecordCount.CNST_VAL_TXT !== null) {
                     take = Number.parseInt(maxRecordCount.CNST_VAL_TXT);
                     take = Number.isInteger(take) ? take : 100;
-                    searchText = searchText + "?$top=" + take;
+                    searchText = searchText + "?$top=" + (take - 1);
                 } else {
-                    searchText = searchText + "?$top=" + take;
+                    searchText = searchText + "?$top=" + (take - 1);
                 }
-
+                toastr.clear();// Clear any sticky messages present
                 objsetService.searchTender(st, en, searchText)
                 .then(function (response) {
 
