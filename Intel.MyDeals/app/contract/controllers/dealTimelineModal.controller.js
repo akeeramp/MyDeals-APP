@@ -58,7 +58,17 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
     $scope.exportToExcelTimeline = function () {
         gridUtils.dsToExcelTimeLine($scope.gridOptions, $scope.gridOptions.dataSource, "Deal " + $scope.dataItem.DC_ID + " Timeline Export.xlsx", false);
     }
-    
+
+    $scope.changeSubString = function (dataItem) {
+        var tempString = dataItem.ATRB_VAL;
+        var regex1 = /Created Folio:/gi;
+        var regex2 = /Created Deals:/gi;
+        tempString = tempString.replace(regex1, 'Created Folio for product(s):');
+        tempString = tempString.replace(regex2, 'Created Deal(s) for product:');
+        
+        return tempString;
+    }
+
     $scope.gridOptions = {
         dataSource: $scope.timelineDs,         
         sortable: true,
@@ -66,7 +76,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         resizable: true,
         columns: [{
             field: "ATRB_VAL",
-            template:"#=ATRB_VAL#",
+            template:"{{changeSubString(dataItem)}}",
             title: "Comment Detail",
             encoded: true
         }, {
@@ -79,7 +89,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
             field: "HIST_EFF_FR_DTM",
             title: "Date Changed",
             width: "160px",
-            template: "#=kendo.toString(new Date(HIST_EFF_FR_DTM), 'd/M/yyyy hh:mm')#"
+            template: "#=kendo.toString(new Date(HIST_EFF_FR_DTM), 'M/d/yyyy')#"
         }]
     };
 
