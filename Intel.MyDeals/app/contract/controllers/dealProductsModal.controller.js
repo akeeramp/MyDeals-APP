@@ -38,7 +38,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
     // For VOL_TIER and product if Mydeals product is at higher level > 7007, actual products against which deal are created are in GRP PDL table
     // From deal id get the product and CAP
     function getProductDetailsFromDealId(e) {
-        return dataService.get('/api/Products/GetDealProducts/' + $scope.dataItem.DC_ID + '/5' + $scope.dataItem.CUST_MBR_SID)
+        return dataService.get('/api/Products/GetDealProducts/' + $scope.dataItem.DC_ID + '/5/' + $scope.dataItem.CUST_MBR_SID + '/false')
                            .then(function (response) {
                                copyOfData = response.data;
                                e.success(response.data);
