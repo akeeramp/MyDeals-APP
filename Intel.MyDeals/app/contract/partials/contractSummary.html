@@ -333,7 +333,7 @@
                             <!--<td style="width: 100px; text-align: center;">
                                 <div ng-bind="ps.PRC_TBL.length" class="bolder"></div>
                             </td>-->
-                            <td style="width: 160px; text-align: center;" ng-if="userRole == 'GA'">
+                            <td style="width: 160px; text-align: center;" ng-if="userRole == 'GA' || userRole == 'SA'">
                                 <!--<i ng-if="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid bigIcon"></i>-->
                                 <i ng-if="ps.CAP_MISSING_FLG ==='1' || ps.COST_MISSING_FLG ==='1'" style="color:#f3d54e" class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
                             </td>
