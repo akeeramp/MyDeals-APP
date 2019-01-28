@@ -2624,7 +2624,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         for (var t = 0; t < numTiers; t++) {
                             newData.push(util.deepClone(state.data[row]));
                         }
-                        //padNumRows += numTiers - 1;
+                        padNumRows += numTiers - 1;
                     }
                     state.data = newData;
                 }
@@ -2637,7 +2637,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 state.mergedCells = null;
 
                 // need to pad range ref //DE29002 removed references to padNumRows and numtiers as we disallow pasting of merged cells, leaving it in causes data to sometimes spill over into rows without products
-                //pasteRef.bottomRight.row += padNumRows;
+                pasteRef.bottomRight.row += padNumRows;
 
                 var i = state.data.length;
                 while (i--) {
