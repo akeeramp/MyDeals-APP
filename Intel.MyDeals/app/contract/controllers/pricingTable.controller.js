@@ -2615,6 +2615,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // IDEA:
                 // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
                 var colNum = pasteRef.topLeft.col;
+
+                var isProducts = ("PTR_USER_PRD" == root.letterToCol[String.fromCharCode("A".charCodeAt(0) + colNum)]); //we have a check here to find if we are pasting into our products column - if not we do not want to utilize our padNumRows acct
+
                 if (!nonMergedColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only
                     for (row = 0; row < state.data.length; row++) {
 
@@ -2624,7 +2627,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         for (var t = 0; t < numTiers; t++) {
                             newData.push(util.deepClone(state.data[row]));
                         }
-                        padNumRows += numTiers - 1;
+                        if (isProducts) {
+                            padNumRows += numTiers - 1;
+                        }
                     }
                     state.data = newData;
                 }
@@ -2637,7 +2642,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 state.mergedCells = null;
 
                 // need to pad range ref //DE29002 removed references to padNumRows and numtiers as we disallow pasting of merged cells, leaving it in causes data to sometimes spill over into rows without products
-                pasteRef.bottomRight.row += padNumRows;
+                if (isProducts) {
+                    pasteRef.bottomRight.row += padNumRows;
+                }
 
                 var i = state.data.length;
                 while (i--) {
