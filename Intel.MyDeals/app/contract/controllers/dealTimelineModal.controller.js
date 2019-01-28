@@ -32,6 +32,10 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                 for (var d = 0; d < data.length; d++) {
                     data[d]["user"] = data[d]["FRST_NM"] + " " + data[d]["LST_NM"];
                     data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(/; /g, '<br/>');
+                    var regex1 = /Created Folio:/gi;
+                    var regex2 = /Created Deals:/gi;
+                    data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex1, 'Created Folio for product(s):');
+                    data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex2, 'Created Deal(s) for product:');
                 }
                 return data;
             },
@@ -76,7 +80,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         resizable: true,
         columns: [{
             field: "ATRB_VAL",
-            template:"{{changeSubString(dataItem)}}",
+            template:"#=ATRB_VAL#",
             title: "Comment Detail",
             encoded: true
         }, {
