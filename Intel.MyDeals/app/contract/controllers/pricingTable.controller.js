@@ -209,15 +209,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 delete ptTemplate.model.fields[x];
             });
         }
-        else
-        {
+        else {
             root.tenderRequiredColumns.forEach(function (x) {
                 ptTemplate.model.fields[x].label += " *";
             });
-            for (i = 0; i < ptTemplate.columns.length; i++)
-            {
-                if (root.tenderRequiredColumns.indexOf(ptTemplate.columns[i].field) >= 0)
-                {
+            for (i = 0; i < ptTemplate.columns.length; i++) {
+                if (root.tenderRequiredColumns.indexOf(ptTemplate.columns[i].field) >= 0) {
                     ptTemplate.columns[i].title += " *";
                 }
             }
@@ -262,7 +259,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // US244393 - Hide Customer Divisions column if there aren't more then 1 currently active
         // Replace 2nd with "root.contractData.CustomerDivisions.length <= 1" if inactive divisions are needed again
-        if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.filter(c => c["ACTV_IND"] === true).length <= 1) { 
+        if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.filter(c => c["ACTV_IND"] === true).length <= 1) {
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
         }
 
@@ -297,7 +294,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     name: "DropdownValuesSheet" // COntains lists of data used for dropdowns
                 }
             ],
-            render: onRender
+            render: onRender,
+
         };
 
         // Define Kendo Main Grid options
@@ -829,7 +827,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					    var myRowIndex = (rowIndex - 1);
 					    var myRow = data[myRowIndex];
 					    var letter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex)
-                        // Get column name out of selected cell
+					    // Get column name out of selected cell
 					    var colName = root.letterToCol[letter];
 
 					    if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
@@ -1669,9 +1667,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
             var rowSizeHeight = 150;
             if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
-                rowSizeHeight = 50;
+                rowSizeHeight = 51;
             }
             sheet.rowHeight(sheetRowIndex, rowSizeHeight);
+        }
+
+        // Make the default height of the row to 21 when there are no line breaks > 10
+        if ((sheet.rowHeight(sheetRowIndex, rowSizeHeight) > 21) && root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+            sheet.rowHeight(sheetRowIndex, 21);
         }
 
         return stringToSanitize;
@@ -1984,6 +1987,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 root.child.setRowIdStyle(data);
 
+                resizeSheet(sheet);
+
                 // reset num of tiers
                 if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     // TODO: maybe not use NUM_OF_TIERS?
@@ -1991,6 +1996,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }, 10);
+    }
+
+    function resizeSheet(sheet) {
+        // Change width of column triggers sheet resize event
+        $timeout(function () {
+            // Any valid column indiex will work.
+            var width = sheet.columnWidth(5);
+            sheet.columnWidth(5, width + 1);
+        });
     }
 
     function spreadDsSync() {
@@ -2652,7 +2666,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         state.data.splice(i, 1);
                     }
                 }
-                
+
                 sheet.range(pasteRef).setState(state, clip);
                 sheet.triggerChange({
                     recalc: true,
