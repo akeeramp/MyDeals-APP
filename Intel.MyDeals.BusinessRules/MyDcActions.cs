@@ -851,7 +851,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 if (cVol == "999999999")
                 {
-                    de.AddMessage("Ceiling Volume canot be Blank or Unlimited (999999999) for TENDER deals.");
+                    de.AddMessage("Ceiling Volume cannot be Blank or Unlimited (999999999) for TENDER deals.");
                 }
             }
 
@@ -864,7 +864,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 if (cVol == "999999999")
                 {
-                    de.AddMessage("Ceiling Volume canot be Blank or Unlimited (999999999) for Frontend XOA3 deals.");
+                    de.AddMessage("Ceiling Volume cannot be Blank or Unlimited (999999999) for Frontend XOA3 deals.");
                 }
             }
         }

@@ -36,7 +36,7 @@
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel last" ng-class="{'complete': selectedTAB == 'PD','isDisabled': curPricingStrategy.MEETCOMP_TEST_RESULT == 'InComplete' && curPricingStrategy.MEETCOMP_TEST_RESULT == 'Not Run Yet'}">
 			<span id="tenderWidPD" class="badge wizard-step" ng-class="{'btnWidgetActive': selectedTAB == 'PD'}" ng-click="tenderWidgetPathManager('', 'PD')">4</span>
-			<span kendo-tooltip="" k-content="'Publishing will both put each deal into it\'s own strategy which can be approved individually as well as submitting each strategy to the next level approver.'" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined" data-role="tooltip"></span>
+			<span kendo-tooltip="" k-content="'Publishing will separate the deals entered in the table below so that they can be individually approved.'" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined" data-role="tooltip"></span>
 		</div>
         <a ng-click="tenderWidgetPathManager('', 'PD')" ng-class="{'isDisabled': curPricingStrategy.MEETCOMP_TEST_RESULT != 'Pass'}">
             <div class="wizard-step-text">
