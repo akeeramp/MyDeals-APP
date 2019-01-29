@@ -153,16 +153,18 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
 
 gridUtils.getMissingCostCapTitle = function (data) {
     var title = '';
-    if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
-        title += 'Your deal is missing CAP and Division Approver will not be able to approve until this is fixed.\n' +
-            'Missing CAP issues are currently handled with PriceOps via a weekly DQ process. If there is urgency in \n' +
-            'getting this deal approved please raise a TAC ticket in service now.';
-    }
-    if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
-        title !== '' ? title += ' \n' : title;
-        title += 'Your deal is missing Cost and Division Approver will not be able to approve until this is fixed.\n' +
-            'Missing Cost issues are currently handled with iCost team via a weekly DQ process. If there is urgency in \n' +
-            'getting this deal approved please raise a TAC ticket in service now.';
+    if (window.usrRole === 'DA' || (window.usrRole === 'GA' || window.usrRole === 'SA' || window.usrRole === 'Legal')) { // DE32060 - Missing COST - CAP is Displaying for FSE, restrict to GA/DA
+        if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
+            title += 'Your deal is missing CAP and Division Approver will not be able to approve until this is fixed.\n' +
+                'Missing CAP issues are currently handled with PriceOps via a weekly DQ process. If there is urgency in \n' +
+                'getting this deal approved please raise a TAC ticket in service now.';
+        }
+        if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
+            title !== '' ? title += ' \n' : title;
+            title += 'Your deal is missing Cost and Division Approver will not be able to approve until this is fixed.\n' +
+                'Missing Cost issues are currently handled with iCost team via a weekly DQ process. If there is urgency in \n' +
+                'getting this deal approved please raise a TAC ticket in service now.';
+        }
     }
     return title;
 }
