@@ -465,7 +465,7 @@ namespace Intel.MyDeals.BusinessRules
                     title = r.Dc.GetDataElementValue(AttributeCodes.TITLE);
                     break;
             }
-            r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }");
+            r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }"); //r.Dc.AddTimelineComment($"Created { deTypeDesc } ({ r.Dc.DcID }): { title }"); // But deal # shows up as -1000 ID upon creation
         }
 
         public static void CheckCustDivValues(params object[] args)
@@ -1446,20 +1446,37 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            // Add in restriction for future deals only for this rule to apply to...  Take from constants
             OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
-            string strMinDealId = "0";
+            bool testObject = false;
+            List<string> parentStagesCheckToBypass = new List<string> { WorkFlowStages.Pending, WorkFlowStages.Approved };
+
+            //switch (deType)
+            //{
+            //    case OpDataElementType.PRC_TBL_ROW:
+            //        strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_PTR").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+            //        break;
+            //    case OpDataElementType.WIP_DEAL:
+            //        strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+            //        break;
+            //}
+
+            IOpDataElement deParentStage = r.Dc.GetDataElement(AttributeCodes.PS_WF_STG_CD);
+
             switch (deType)
             {
                 case OpDataElementType.PRC_TBL_ROW:
-                    strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_PTR").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+                    IOpDataElement deHasTrkr = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
+                    IOpDataElement deInRedeal = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
+                    testObject = ((deHasTrkr.AtrbValue.ToString() == "0") || (deHasTrkr.AtrbValue.ToString() == "1" && deInRedeal.AtrbValue.ToString() == "1")) && 
+                        (!parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString()));
                     break;
                 case OpDataElementType.WIP_DEAL:
-                    strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+                    IOpDataElement deStg = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
+                    testObject = deStg.AtrbValue.ToString() != WorkFlowStages.Active && !parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString());
                     break;
             }
-            int minCheckId = Int32.TryParse(strMinDealId, out minCheckId) ? minCheckId : 0;
-            if (r.Dc.DcID < 0 || r.Dc.DcID >= minCheckId) // Check if it is a new record or if it falls after the future deal ID check
+
+            if (testObject) // If the testObject meets above requirements, run this test...
             {
                 r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
             }
