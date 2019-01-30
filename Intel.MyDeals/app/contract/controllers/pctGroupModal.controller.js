@@ -51,8 +51,13 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems, dealId) {
             },
             {
                 field: "OVLP_DEAL_TYPE",
-                title: "Deal Type",
+                title: "Deal TypeAA",
                 width: "80px"
+            },
+            {
+                field: "OVLP_REBT_TYPE",
+                title: "Rebate Type",
+                width: "120px"
             },
             {
                 field: "OVLP_CNTRCT_NM",

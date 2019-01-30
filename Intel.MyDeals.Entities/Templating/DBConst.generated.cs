@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/9/2019 12:16:29 PM
+File Updated: 1/30/2019 2:24:57 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2672,8 +2672,11 @@ namespace Intel.MyDeals.Entities {
 		public const string NEW_ACCOUNT_REVIEWER_IJKK = "NEW_ACCOUNT_REVIEWER_IJKK";
 		public const string NEW_ACCOUNT_REVIEWER_PRC = "NEW_ACCOUNT_REVIEWER_PRC";
 		public const string NEW_ACCOUNT_REVIEWER_Worldwide = "NEW_ACCOUNT_REVIEWER_Worldwide";
+		public const string NO_TRKR_STRT_DT = "NO_TRKR_STRT_DT";
 		public const string NON_PROD_EMAIL_DIST = "NON_PROD_EMAIL_DIST";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
+		public const string PGM_NRE_OEM_START_DEAL = "PGM_NRE_OEM_START_DEAL";
+		public const string PGM_NRE_OEM_START_PTR = "PGM_NRE_OEM_START_PTR";
 		public const string PRC_GRP_CD_IGNR = "PRC_GRP_CD_IGNR";
 		public const string PRD_CST_TST_ATRB_MIGRATION = "PRD_CST_TST_ATRB_MIGRATION";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
@@ -2684,6 +2687,7 @@ namespace Intel.MyDeals.Entities {
 		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string TENDER_ECAP_KIT_MIGRATION = "TENDER_ECAP_KIT_MIGRATION";
+		public const string TENDER_SEARCH_MAX_VALUE = "TENDER_SEARCH_MAX_VALUE";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 		public const string VERBOSE_LOG_TO_DB = "VERBOSE_LOG_TO_DB";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";

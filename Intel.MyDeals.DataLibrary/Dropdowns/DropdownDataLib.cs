@@ -240,6 +240,9 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OVLP_DEAL_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_TYPE");
                     int IDX_OVLP_ECAP_PRC = DB.GetReaderOrdinal(rdr, "OVLP_ECAP_PRC");
                     int IDX_OVLP_MAX_RPU = DB.GetReaderOrdinal(rdr, "OVLP_MAX_RPU");
+                    int IDX_OVLP_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OVLP_OEM_PLTFRM_EOL_DT");
+                    int IDX_OVLP_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OVLP_OEM_PLTFRM_LNCH_DT");
+                    int IDX_OVLP_REBT_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_REBT_TYPE");
                     int IDX_OVLP_WF_STG_CD = DB.GetReaderOrdinal(rdr, "OVLP_WF_STG_CD");
                     int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
 
@@ -259,6 +262,9 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_DEAL_TYPE = (IDX_OVLP_DEAL_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_DEAL_TYPE),
                             OVLP_ECAP_PRC = (IDX_OVLP_ECAP_PRC < 0 || rdr.IsDBNull(IDX_OVLP_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_OVLP_ECAP_PRC),
                             OVLP_MAX_RPU = (IDX_OVLP_MAX_RPU < 0 || rdr.IsDBNull(IDX_OVLP_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_OVLP_MAX_RPU),
+                            OVLP_OEM_PLTFRM_EOL_DT = (IDX_OVLP_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OVLP_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_OEM_PLTFRM_EOL_DT),
+                            OVLP_OEM_PLTFRM_LNCH_DT = (IDX_OVLP_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OVLP_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_OEM_PLTFRM_LNCH_DT),
+                            OVLP_REBT_TYPE = (IDX_OVLP_REBT_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_REBT_TYPE),
                             OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD),
                             WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)
                         });
