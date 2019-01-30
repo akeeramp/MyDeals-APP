@@ -1666,14 +1666,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
             var rowSizeHeight = 150;
-            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                 rowSizeHeight = 51;
             }
             sheet.rowHeight(sheetRowIndex, rowSizeHeight);
         }
 
         // Make the default height of the row to 21 when there are no line breaks > 10
-        if ((sheet.rowHeight(sheetRowIndex, rowSizeHeight) > 21) && root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+        if ((sheet.rowHeight(sheetRowIndex, rowSizeHeight) > 21)) {
             sheet.rowHeight(sheetRowIndex, 21);
         }
 
