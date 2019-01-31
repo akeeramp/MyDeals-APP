@@ -30,6 +30,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_ADDITIVE = DB.GetReaderOrdinal(rdr, "ADDITIVE");
                     int IDX_AVG_RPU = DB.GetReaderOrdinal(rdr, "AVG_RPU");
                     int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
                     int IDX_CNSMPTN_RSN = DB.GetReaderOrdinal(rdr, "CNSMPTN_RSN");
@@ -63,6 +64,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
                     int IDX_PROG_PMT = DB.GetReaderOrdinal(rdr, "PROG_PMT");
                     int IDX_PYOUT_BASE_ON = DB.GetReaderOrdinal(rdr, "PYOUT_BASE_ON");
+                    int IDX_REBT_TYPE = DB.GetReaderOrdinal(rdr, "REBT_TYPE");
                     int IDX_RTL_CYC_NM = DB.GetReaderOrdinal(rdr, "RTL_CYC_NM");
                     int IDX_RTL_PULL_DLR = DB.GetReaderOrdinal(rdr, "RTL_PULL_DLR");
                     int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
@@ -72,6 +74,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ret.Add(new CustomEntities.CostTestDetailItem
                         {
+                            ADDITIVE = (IDX_ADDITIVE < 0 || rdr.IsDBNull(IDX_ADDITIVE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ADDITIVE),
                             AVG_RPU = (IDX_AVG_RPU < 0 || rdr.IsDBNull(IDX_AVG_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_AVG_RPU),
                             CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
                             CNSMPTN_RSN = (IDX_CNSMPTN_RSN < 0 || rdr.IsDBNull(IDX_CNSMPTN_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNSMPTN_RSN),
@@ -105,6 +108,7 @@ namespace Intel.MyDeals.DataLibrary
                             PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT),
                             PROG_PMT = (IDX_PROG_PMT < 0 || rdr.IsDBNull(IDX_PROG_PMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROG_PMT),
                             PYOUT_BASE_ON = (IDX_PYOUT_BASE_ON < 0 || rdr.IsDBNull(IDX_PYOUT_BASE_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PYOUT_BASE_ON),
+                            REBT_TYPE = (IDX_REBT_TYPE < 0 || rdr.IsDBNull(IDX_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBT_TYPE),
                             RTL_CYC_NM = (IDX_RTL_CYC_NM < 0 || rdr.IsDBNull(IDX_RTL_CYC_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RTL_CYC_NM),
                             RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
                             WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),

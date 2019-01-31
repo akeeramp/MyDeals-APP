@@ -313,6 +313,16 @@
                 template: "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_CMNT')#",
                 width: 120
             }, {
+                field: "REBT_TYPE",
+                title: "Rebate Type",
+                template: "#=gridUtils.uiControlWrapper(data, 'REBT_TYPE')#",
+                width: 120
+            }, {
+                field: "ADDITIVE",
+                title: "Additive",
+                template: "#=gridUtils.uiControlWrapper(data, 'ADDITIVE')#",
+                width: 120
+            }, {
                 field: "PTR_USER_PRD",
                 title: "Contract product",
                 template: "#=gridUtils.uiReadonlyControlWrapper(data, 'PTR_USER_PRD')#",
@@ -414,6 +424,8 @@
                             DSPL_WF_STG_CD: { type: "string" },
                             DEAL_GRP_EXCLDS: { type: "string" },
                             DEAL_GRP_CMNT: { type: "string" },
+                            REBT_TYPE: { type: "string" },
+                            ADDITIVE: { type: "string" },
                             PTR_USER_PRD: { type: "string" },
                             TITLE: { type: "string" },
                             COST_TEST_RESULT: { type: "string" },
@@ -448,6 +460,12 @@
                             "DEAL_GRP_CMNT": {
                                 "Groups": ["Grouping Exclusions"]
                             },
+                            //"REBT_TYPE": {
+                            //    "Groups": ["Grouping Exclusions"]
+                            //},
+                            //"ADDITIVE": {
+                            //    "Groups": ["Grouping Exclusions"]
+                            //},
                             "PTR_USER_PRD": {
                                 "Groups": ["Grouping Exclusions"]
                             },

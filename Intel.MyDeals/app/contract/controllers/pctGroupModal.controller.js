@@ -26,7 +26,9 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems, dealId) {
                 model: {
                     fields: {
                         OVLP_ECAP_PRC: { type: "number" },
-                        OVLP_MAX_RPU: { type: "number" }
+                        OVLP_MAX_RPU: { type: "number" },
+                        OVLP_REBT_TYPE: { type: "string" },
+                        OVLP_ADDITIVE: { type: "string" }
                     }
                 }
             }
