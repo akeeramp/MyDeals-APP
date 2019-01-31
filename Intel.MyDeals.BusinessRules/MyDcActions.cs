@@ -1467,11 +1467,13 @@ namespace Intel.MyDeals.BusinessRules
                 case OpDataElementType.PRC_TBL_ROW:
                     IOpDataElement deHasTrkr = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
                     IOpDataElement deInRedeal = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
+                    if (deParentStage == null || deHasTrkr == null || deInRedeal == null) return; // Because apparently meeto comp uses this as well and doesn't bring these fields down
                     testObject = ((deHasTrkr.AtrbValue.ToString() == "0") || (deHasTrkr.AtrbValue.ToString() == "1" && deInRedeal.AtrbValue.ToString() == "1")) && 
                         (!parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString()));
                     break;
                 case OpDataElementType.WIP_DEAL:
                     IOpDataElement deStg = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
+                    if (deParentStage == null || deStg == null) return; // Because apparently meeto comp uses this as well and doesn't bring these fields down
                     testObject = deStg.AtrbValue.ToString() != WorkFlowStages.Active && !parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString());
                     break;
             }
