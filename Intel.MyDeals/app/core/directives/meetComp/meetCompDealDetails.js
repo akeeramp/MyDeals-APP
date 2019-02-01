@@ -72,7 +72,13 @@ function MeetCompDealDetailsModalController($compile, $filter, $scope, $uibModal
                 title: "Deal Type",
                 width: 150,                
                 template: "<div class='readOnlyCell' title='#=OBJ_SET_TYPE#'>#=OBJ_SET_TYPE#</div>"
-            },                        
+            },
+            {
+                field: "REBT_TYPE",
+                title: "Rebate Type",
+                width: 150,
+                template: "<div class='readOnlyCell' title='#=REBT_TYPE#'>#=REBT_TYPE#</div>"
+            },
             {
                 field: "CTRCT_NM",
                 title: "Contract Name",
