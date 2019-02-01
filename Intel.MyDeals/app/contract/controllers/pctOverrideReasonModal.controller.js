@@ -66,12 +66,12 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
             {
                 field: "isSelected",
                 title: "&nbsp;",
-                filterable: false,
-                template: "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# == -1' style='padding-left: 6px;'>"                                //if legal exception sid is -1, aka "See DCS...", we need to disable the checkbox to prevent users from changing it from its' current state.
+                filterable: false, // Altered -1 ID check to anything less then 0 is not checkable - US156297
+                template: "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# <= 0' style='padding-left: 6px;'>"                                //if legal exception sid is -1, aka "See DCS...", we need to disable the checkbox to prevent users from changing it from its' current state.
                         + "<input type='checkbox' " + 'disabled' + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font disabled'/>"
                         + "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>"
-                        + "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# != -1' style='padding-left: 6px;'>"                                //all other legal exceptions get an ordinary checkbox
+                        + "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# > 0' style='padding-left: 6px;'>"                                //all other legal exceptions get an ordinary checkbox
                         + "<input type='checkbox' " + $scope.disabled + " ng-class='{disabled: dataItem.IS_DSBL}' ng-disabled='dataItem.IS_DSBL' ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font pctOverrideCheckbox' ng-class='disabled'/>"
                         + "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' title='{{dataItem.IS_DSBL ? \"Exception is disabled for selection. Please contact legal\" : \"\"}}' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>",
