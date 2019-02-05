@@ -104,7 +104,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             }
 
                             if (isValuePresent == false) {
-                                if ($scope.rules && $scope.rules.length > 0) {
+                                if ($scope.rules != undefined && $scope.rules && $scope.rules.length > 0) {
                                     //Attribute Builder
                                     var flag = false;
                                     if ($scope.resetRuleInitiated == false && $scope.defaultSelection) {
@@ -260,12 +260,15 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
             async function sleepAndResetDDL(title) {
-                await sleepAndReset(1000);
+                await sleepAndReset(500);
                 var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
                 if (title && title.length > 0) {
                     $("#ruleDropDownList").data("kendoDropDownList").value(title);
                 } else {
-                    dropdownlist.select(-1);
+                    if (dropdownlist !== undefined) 
+                    {
+                        dropdownlist.select(-1);
+                    }
                 }
 
             }
