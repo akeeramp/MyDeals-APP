@@ -22,6 +22,8 @@
                 $scope.msg = "Looking for Overlapping Deals";
                 $scope.isOverlapping = false;
                 $scope.isOvlpAccess = false;
+                $scope.acceptYes = false;
+                $scope.selectBtnText = 'Select All';
                 if (usrRole === "GA" || usrRole === "FSE") {
                     $scope.isOvlpAccess = true;
                 }
@@ -53,63 +55,83 @@
                 }
 
                 //Accept Overlapping
-                $scope.acceptOvlp = function (data, YCS2_OVERLAP_OVERRIDE) {
+                $scope.acceptOvlp = function (WIP_DEAL_OBJ_SID, YCS2_OVERLAP_OVERRIDE) {                    
                     var tempdata = $scope.ovlpData;
                     var START_DT = '';
                     var END_DT = '';
                     var dcID = 0;
-
+                    var splitData = [];
+                    if (WIP_DEAL_OBJ_SID.toString().indexOf(',') > -1) {
+                        splitData = WIP_DEAL_OBJ_SID.toString().split(',');
+                    }
+                    else {
+                        splitData.push(WIP_DEAL_OBJ_SID);
+                    }
                     $scope.$root.$broadcast("overlappingDealUpdating", null);
-
-                    for (var i = 0; i < tempdata.length; i++) {
-                        if (tempdata[i].WIP_DEAL_OBJ_SID === data && tempdata[i].WF_STG_CD === "Draft" && tempdata[i].OVLP_CD === "SELF_OVLP") {
-                            START_DT = tempdata[i].START_DT;
-                            END_DT = tempdata[i].END_DT;
+                    for (var cnt = 0; cnt < splitData.length; cnt++) {
+                        var data = parseInt(splitData[cnt]);
+                        for (var i = 0; i < tempdata.length; i++) {
+                            if (tempdata[i].WIP_DEAL_OBJ_SID === data && tempdata[i].WF_STG_CD === "Draft" && tempdata[i].OVLP_CD === "SELF_OVLP") {
+                                START_DT = tempdata[i].START_DT;
+                                END_DT = tempdata[i].END_DT;
+                            }
                         }
-                    }
-                    for (var i = 0; i < tempdata.length; i++) {
-                        if (tempdata[i].WIP_DEAL_OBJ_SID === data && tempdata[i].WF_STG_CD === "Active" && tempdata[i].OVLP_CD === "FE_HARD_STOP") {
-                            if (YCS2_OVERLAP_OVERRIDE === 'Y') {                                
-                                var drftStartDate = new Date(START_DT);
-                                var drftEndDate = new Date(END_DT);
-                                var actvEndDate = new Date(tempdata[i].END_DT);
-                                var actvStartDate = new Date(tempdata[i].START_DT);
+                        for (var i = 0; i < tempdata.length; i++) {
+                            if (tempdata[i].WIP_DEAL_OBJ_SID === data && tempdata[i].WF_STG_CD === "Active" && tempdata[i].OVLP_CD === "FE_HARD_STOP") {
+                                if (YCS2_OVERLAP_OVERRIDE === 'Y') {
+                                    var drftStartDate = new Date(START_DT);
+                                    var drftEndDate = new Date(END_DT);
+                                    var actvEndDate = new Date(tempdata[i].END_DT);
+                                    var actvStartDate = new Date(tempdata[i].START_DT);
 
-                                //Pulling END Date condition 
-                                if (drftStartDate > actvStartDate) {                                    
-                                    drftStartDate.setDate(drftStartDate.getDate() - 1);                                    
-                                    var tempEND_DT = drftStartDate.getMonth("MM") + 1 + "/" + drftStartDate.getDate() + "/" + drftStartDate.getFullYear();
-                                    $scope.ovlpData[i].END_DT = "<span title='END Date Pulling' style='color:red'> " + tempEND_DT + " - Pending </span>";
+                                    //Pulling END Date condition 
+                                    if (drftStartDate > actvStartDate) {
+                                        drftStartDate.setDate(drftStartDate.getDate() - 1);
+                                        var tempEND_DT = drftStartDate.getMonth("MM") + 1 + "/" + drftStartDate.getDate() + "/" + drftStartDate.getFullYear();
+                                        $scope.ovlpData[i].END_DT = "<span title='END Date Pulling' style='color:red'> " + tempEND_DT + " - Pending </span>";
+                                    }
+                                    //Pushing END Date Condition
+                                    else if (drftEndDate < actvEndDate) {
+                                        drftEndDate.setDate(drftEndDate.getDate() + 1);
+                                        var tempSTART_DT = drftEndDate.getMonth("MM") + 1 + "/" + drftEndDate.getDate() + "/" + drftEndDate.getFullYear();
+                                        $scope.ovlpData[i].START_DT = "<span title='START Date Pushing' style='color:red'> " + tempSTART_DT + " - Pending </span>";
+                                    }
+
                                 }
-                                //Pushing END Date Condition
-                                else if (drftEndDate < actvEndDate) {                                    
-                                    drftEndDate.setDate(drftEndDate.getDate() + 1);                                    
-                                    var tempSTART_DT = drftEndDate.getMonth("MM") + 1 + "/" + drftEndDate.getDate() + "/" + drftEndDate.getFullYear();
-                                    $scope.ovlpData[i].START_DT = "<span title='START Date Pushing' style='color:red'> " + tempSTART_DT + " - Pending </span>";
-                                }                             
-                                
-                            }
-                            else {
-                                $scope.ovlpData[i].START_DT = $scope.ovlpDataRep[i].START_DT;
-                                $scope.ovlpData[i].END_DT = $scope.ovlpDataRep[i].END_DT;
-                            }
+                                else {
+                                    $scope.ovlpData[i].START_DT = $scope.ovlpDataRep[i].START_DT;
+                                    $scope.ovlpData[i].END_DT = $scope.ovlpDataRep[i].END_DT;
+                                }
 
+                            }
                         }
+
                     }
-
-                    $scope.ovlpDataSource.read();
-
+                    
+                    $scope.ovlpDataSource.read();                    
+                    $scope.updateOverlapping(splitData, YCS2_OVERLAP_OVERRIDE);
+                    
+                }
+                //Update Overlap Flag 
+                $scope.updateOverlapping = function (data, YCS2_OVERLAP_OVERRIDE) {
                     objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                         .then(function (response) {
                             if (response.data[0].PRICING_TABLES > 0) {
 
                                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
-                                    $scope.ovlpErrorCount.push(data);
+                                    for (var j = 0; j < data.length; j++) {
+                                        $scope.ovlpErrorCount.push(parseInt(data[j]));
+                                        //Finding all the indexes in an Array
+                                        $scope.resetIsSelect(parseInt(data[j]));                                                                        
+                                    }
                                 }
                                 else {
-                                    if ($scope.ovlpErrorCount.indexOf(data) > -1) {
-                                        $scope.ovlpErrorCount.splice($scope.ovlpErrorCount.indexOf(data), 1);
-                                    }
+                                    for (var j = 0; j < data.length; j++) {
+                                        if ($scope.ovlpErrorCount.indexOf(parseInt(data[j])) > -1) {
+                                            $scope.ovlpErrorCount.splice($scope.ovlpErrorCount.indexOf(parseInt(data[j])), 1);
+                                        }
+                                        $scope.resetIsSelect(parseInt(data[j]));
+                                    }                                    
                                 }
 
                                 $scope.ovlpDataSource.read();
@@ -122,6 +144,14 @@
 
                         });
                 }
+                //Reset IS_SEL
+                $scope.resetIsSelect = function (data) {
+                    for (var m = 0; m < $scope.ovlpData.length; m++) {
+                        if ($scope.ovlpData[m].WIP_DEAL_OBJ_SID == parseInt(data) && $scope.ovlpData[m].PROGRAM_PAYMENT === "Frontend YCS2") {
+                            $scope.ovlpData[m].IS_SEL = false;
+                        }
+                    }    
+                }
                 //Take first character of WF_STG_CD
                 $scope.stageOneChar = function (WF_STG_CD) {
                     return WF_STG_CD === undefined ? "&nbsp;" : WF_STG_CD[0];
@@ -129,6 +159,54 @@
                 //Reject
                 $scope.rejectOvlp = function (OVLP_DEAL_OBJ_SID) {
                     kendo.alert("Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.", "Overlapping Warning");
+                }
+
+                //Select All Overlap Deal
+                $scope.selectAllOvlp = function (event) {
+                    if ($scope.acceptYes == true) {
+                        $scope.selectBtnText = 'Select All';
+                    } else {
+                        $scope.selectBtnText = 'Clear All';
+                    }
+                    event.preventDefault();
+                    $scope.acceptYes = !$scope.acceptYes;
+                    for (var i = 0; i < $scope.ovlpData.length; i++) {
+                        if ($scope.ovlpData[i].PROGRAM_PAYMENT === "Frontend YCS2") {
+                            $scope.ovlpData[i]["IS_SEL"] = $scope.acceptYes;
+                        }                        
+                    }
+                    
+                    $scope.ovlpDataSource.read();                    
+                }
+
+                //Accept All Selected Overlap
+                $scope.acceptSelectAll = function (event) {
+                    event.preventDefault();
+                    var selectedIDS = [];
+                    for (var i = 0; i < $scope.ovlpData.length; i++) {
+                        if ($scope.ovlpData[i]["IS_SEL"] == true && $scope.ovlpData[i].PROGRAM_PAYMENT === "Frontend YCS2") {
+                            if (selectedIDS.indexOf($scope.ovlpData[i].WIP_DEAL_OBJ_SID) == -1) {
+                                selectedIDS.push($scope.ovlpData[i].WIP_DEAL_OBJ_SID);
+                            }
+                            
+                        }
+                    }
+                    if (selectedIDS.length > 0) {
+                        $scope.acceptOvlp(selectedIDS.toString(), 'Y');
+                    }
+                    else {
+                        logger.error("Select An overlap with an Active or Draft deal");
+                    }
+                }
+
+                //Check uncheck Overlap
+                $scope.selectCheckBox = function (id, event) {
+                    for (var i = 0; i < $scope.ovlpData.length; i++) {
+                        if ($scope.ovlpData[i].WIP_DEAL_OBJ_SID == id && $scope.ovlpData[i].PROGRAM_PAYMENT === "Frontend YCS2") {
+                            $scope.ovlpData[i]["IS_SEL"] = event.target.checked;
+                            //$scope.acceptYes = true;
+                        }                        
+                    }                    
                 }
 
                 $scope.ovlpDataSource = new kendo.data.DataSource({
@@ -145,6 +223,9 @@
                         model: {
                             id: "CONTRACTNUMBER",
                             fields: {
+                                "IS_SEL": {
+                                    type:"boolean"
+                                },
                                 "PROGRAM_PAYMENT": {
                                     type: "string"
                                 },
@@ -231,7 +312,7 @@
                         pageSizes: [25, 50, 100, 250, 500],
                         buttonCount: 5
                     },
-                    columns: [
+                    columns: [                        
                         {
                             field: "WF_STG_CD",
                             filterable: false,
@@ -246,14 +327,15 @@
                             filterable: { multi: true, search: true },
                             groupHeaderTemplate: function (e) {
                                 if (e.value === "Frontend YCS2") {
-                                    return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>";
+                                    return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>&nbsp;&nbsp;<span class='lnk btnSelect' ng-click='selectAllOvlp($event)'>" + $scope.selectBtnText + "</span > &nbsp; <span class='lnk btnYes btnselectAccept' ng-click='acceptSelectAll($event)' ><i class='intelicon-check' style='font-size: 12px !important;'></i> Accept </span >";
+                                    
                                 }
                                 else {
                                     return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Billings Overlap</span>";
                                 }
                             },
                             hidden: true
-                        },
+                        },                        
                         {
                             field: "WIP_DEAL_OBJ_SID",
                             title: "Contract",
@@ -261,9 +343,12 @@
                             groupHeaderTemplate: function (e) {
                                 var hasResolved = false;
                                 var cnt = 0;
+                                var is_selected = false;
+
                                 var groupRow = $filter("where")($scope.ovlpDataSource._data, { 'WIP_DEAL_OBJ_SID': e.value, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
                                 if (groupRow.length > 1) {
-
+                                    is_selected = groupRow[0].IS_SEL;
+                                    //dataItem["IS_SEL"] = groupRow[0].IS_SEL
                                     if ($filter("where")(groupRow, { 'WF_STG_CD': 'Draft' }).length > 1) {
                                         cnt = groupRow.length;
                                     }
@@ -280,7 +365,7 @@
                                 }
 
                                 if (hasResolved && cnt > 0 && cnt === 1 && $scope.isOvlpAccess) {
-                                    return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<a class='lnk btnYes' ng-click='acceptOvlp(" + e.value + ",\"Y\")' ><i class='intelicon-check' style='font-size: 12px !important;'></i> Yes </a > <span class='or'>&nbsp;OR&nbsp;</span> <a class='lnk btnNo' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-close-max' style='font-size: 10px !important;padding-right: 3px;'></i>&nbsp;No</a>";
+                                    return "<input type='checkbox' ng-click='selectCheckBox(" + e.value + ", $event)' class='check with-font' id='chkGrp" + e.value + "' ng-checked='" + is_selected + "', checked ='" + is_selected + "'/><label for=\"dataItem\"></label><span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<span class='lnk btnYes' ng-click='acceptOvlp(" + e.value + ",\"Y\")' ><i class='intelicon-check' style='font-size: 12px !important;'></i> Accept </span > <span class='or'>&nbsp;OR&nbsp;</span> <a class='lnk btnNo' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-close-max' style='font-size: 10px !important;padding-right: 3px;'></i>&nbsp;Reject</a>";
                                 }
                                 else if (hasResolved && cnt > 1 && $scope.isOvlpAccess) {
                                     return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with another Draft deal, please correct and revalidate.</span>&nbsp;<a class='lnk btnYes' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</a>";
@@ -447,9 +532,14 @@
                         fn(params)
                             .then(function (response) {
                                 $scope.msg = "Done";
-                                if (response.data) {
-                                    var data = response.data.Data;
+                                if (response.data) {                                  
 
+                                    //add IS_SEL == false for Frontend YCS2 deal
+                                    for (var i = 0; i < response.data.Data.length; i++) {
+                                        response.data.Data[i]["IS_SEL"] = false;
+                                    }
+
+                                    var data = response.data.Data;
                                     $scope.drawGrid(response.data.Data);
                                 }
 

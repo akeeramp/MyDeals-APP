@@ -680,7 +680,7 @@ namespace Intel.MyDeals.BusinessLogic
             return overlapps;
         }
 
-        public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
+        public List<Overlapping> UpdateOverlappingDeals(List<int> PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
             return OD.UpdateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE);

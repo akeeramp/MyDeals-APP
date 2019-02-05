@@ -1141,22 +1141,26 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
+        public List<Overlapping> UpdateOverlappingDeals(List<int> PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
         {
             OpLog.Log("UpdateOverlappingDeals");
 
             type_int_pair opPair = new type_int_pair();
-            opPair.AddRows(new List<OpPair<int, int>>
+            foreach(var id in PRICING_TABLES_ID)
             {
-                new OpPair<int, int>
+                opPair.AddRows(new List<OpPair<int, int>>
                 {
-                    First = OpDataElementType.WIP_DEAL.ToId(),
-                    Second = PRICING_TABLES_ID
-                }
-            });
+                    new OpPair<int, int>
+                    {
+                        First = OpDataElementType.WIP_DEAL.ToId(),
+                        Second = id
+                    }
+                });
+            }
+            
 
             var ret = new List<Overlapping>();
-
+            
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UI_GET_OVRLP

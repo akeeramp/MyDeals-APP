@@ -32,7 +32,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Overlapping> GetOverlappingDeals(OpDataElementType opDataElementType, List<int> ids, List<TimeFlowItem> timeFlows);
 
-        List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE);
+        List<Overlapping> UpdateOverlappingDeals(List<int> PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE);
 
     }
 }

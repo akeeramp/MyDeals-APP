@@ -284,10 +284,10 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         [AntiForgeryValidate]
         [Authorize]
-        [Route("UpdateOverlappingDeals/{PRICING_TABLES_ID}/{YCS2_OVERLAP_OVERRIDE}")]
-        public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)     //Get all Product with Alias from ProductAlias
+        [Route("UpdateOverlappingDeals/{YCS2_OVERLAP_OVERRIDE}")]
+        public List<Overlapping> UpdateOverlappingDeals(List<int> PRICING_TABLES_IDs, string YCS2_OVERLAP_OVERRIDE)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE)
+            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(PRICING_TABLES_IDs, YCS2_OVERLAP_OVERRIDE)
                 , $"Unable to get {"Overlapping Data"}"
              );
         }

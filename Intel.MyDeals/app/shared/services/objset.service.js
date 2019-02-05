@@ -310,7 +310,7 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
 
     function updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + PRICING_TABLES_ID + "/" + YCS2_OVERLAP_OVERRIDE);
+        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + YCS2_OVERLAP_OVERRIDE, PRICING_TABLES_ID);
     }
 
     // #### Quote Letter

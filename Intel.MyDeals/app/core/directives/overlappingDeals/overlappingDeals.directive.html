@@ -26,6 +26,110 @@
 
 
 <style>
+.k-grouping-row {height: 30px}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.checkbox-custom, .checkbox-custom-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.checkbox-custom-label {
+    position: relative;
+}
+
+.checkbox-custom + .checkbox-custom-label:before {
+    content: '';
+    background: #fff;
+    border: 1.5px solid #eee;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    height: 14px;
+    padding: 2px;
+    text-align: center;
+}
+
+.checkbox-custom:checked + .checkbox-custom-label:before {
+    background: #01AEEF;
+}
+
+.checkbox-custom:hover + .checkbox-custom-label:before {
+    border: 1.5px solid #01AEEF;
+}
+input[type=checkbox].with-font {
+            border: 0;
+    opacity: 0;
+    cursor: pointer;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 35px;
+    height: 20px;
+       
+    }
+
+        input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 22px;
+            letter-spacing: 5px;
+            color: #00AEEF;
+            margin-left: 10px;
+            margin-top: 2px;
+            vertical-align: middle;
+        }
+
+        input[type=checkbox].with-font.ckSm + label:before {
+            font-size: 16px;
+        }
+
+        input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
+        }
+
+        input[type=checkbox].with-font[disabled]:hover + label:before {
+            color: red;
+            cursor: no-drop;
+        }
+
+        input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
+        input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 22px;
+            letter-spacing: 5px;
+            margin-left: 10px;
+            margin-top: 2px;
+            vertical-align: middle;
+        }
+
+        input[type=checkbox].with-font.ckSm:checked + label:before {
+            font-size: 16px;
+        }
+
+        input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+        }
 .gridStatusMarker.Active {
     color: #000000;
     background-color: #C4D600;	   
@@ -64,10 +168,12 @@
 	.k-grid-content > table > tbody > tr > td {
         padding-left: 5px !important;
     }
-
+	.btnSelect {background: #003C71 !important; color: white;}
+	.btnSelect:hover{color: black !important; background:#00B1F1 !important;text-decoration:none !important;}
     .btnYes {
         background: #a49d00 !important;
         color: black;
+		z-index:999999;
     }
 	.btnYes:hover{
 		text-decoration:none !important;
@@ -107,15 +213,25 @@
         margin: 0;
         padding: 0;
     }
+	::-webkit-scrollbar {
+    width: 10px; left:-100px;
+}
 
     .lnk {
         background: #00AEEF;
-        color: white;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-top: 3px;
-        padding-bottom: 3px;
-        border-radius: 3px;
-        cursor: pointer;
+		color: white;
+		padding-left: 5px;
+		padding-right: 5px;
+		padding-top: 2px;
+		padding-bottom: 4px;
+		border-radius: 3px;
+		cursor: pointer;
+		font-size: 12px;
     }
+	.sum-main-body label {
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
+    margin-left: -8px !important;
+    background-color: white;
+}
 </style>
