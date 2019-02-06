@@ -824,9 +824,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             }
             $scope.initRules();
             if ($scope.runSearch) {
-                $timeout(function () {
-                    $scope.runRule();
-                });
+                //$timeout(function () {
+                //    $scope.runRule();
+                //});
             }
         }],
         link: function (scope, element, attr) {
