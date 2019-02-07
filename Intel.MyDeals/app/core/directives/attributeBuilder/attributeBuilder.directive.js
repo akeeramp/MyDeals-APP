@@ -87,8 +87,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                 }
                             }
                         }
-                        $scope.root.$broadcast('search-rules-updated', $scope.myRules);
 
+                        $scope.root.$broadcast('search-rules-updated', $scope.myRules);
 
                         if ($scope.saveCat == 'TenderDealSearch') {//This checking req for Tender dashboard only
                             var isValuePresent = false;
@@ -109,7 +109,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                     var flag = false;
                                     if ($scope.resetRuleInitiated == false && $scope.defaultSelection) {
                                         for (var rulesCounter = 0; rulesCounter < $scope.rules.length; rulesCounter++) {
-                                            //Calling RuleEngine Setter                                    
+                                            //Calling RuleEngine Setter
                                             if ($scope.rules[rulesCounter].default == true) {
                                                 sleepAndResetDDL($scope.rules[rulesCounter].title);
                                                 $scope.selectedRuleItem = $scope.rules[rulesCounter].title;
@@ -255,22 +255,20 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 }
             }
 
-            //Reset MenuItem
-            function sleepAndReset(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-            async function sleepAndResetDDL(title) {
-                await sleepAndReset(500);
-                var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
-                if (title && title.length > 0) {
-                    $("#ruleDropDownList").data("kendoDropDownList").value(title);
-                } else {
-                    if (dropdownlist !== undefined) 
-                    {
+            var doNotRunRule = false;
+            function sleepAndResetDDL(title) {
+                var title = title;
+                if (title === undefined) {
+                    doNotRunRule = true;
+                }
+                $timeout(function () {
+                    var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
+                    if (title && title.length > 0) {
+                        $("#ruleDropDownList").data("kendoDropDownList").value(title);
+                    } else if (dropdownlist !== undefined) {
                         dropdownlist.select(-1);
                     }
-                }
-
+                });
             }
 
             //Remove Created Rule
@@ -285,7 +283,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         if ($scope.rules.length > 0 && (selectedDDl == dataItem.title || selectedDDl.length == 0)) {
                             $("#ruleDropDownList").data("kendoDropDownList").select(itmCnt == 0 ? $scope.rules.length - 1 : 0);
                         }
-
                         $scope.deleteRuleInitiated = true;
                         userPreferencesService
                             .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.rules))
@@ -299,7 +296,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                 if ($scope.rules.length > 0 && (selectedDDl == dataItem.title || selectedDDl.length == 0)) {
                                     sleepAndResetDDL();
                                     $scope.clearRule();
-
                                 } else {
                                     $("#ruleDropDownList").data("kendoDropDownList").value(selectedDDl);
                                     $scope.ruleExtracter(selectedDDl);
@@ -308,7 +304,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             function (response) {
                                 logger.error("Unable to make Default Rule.", response, response.statusText);
                             });
-
                         break;
                     }
                 }
@@ -327,7 +322,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         $scope.rules[itmCnt]["default"] = false;
                     }
                 }
-                //adding item to rule dropdown                                
+                //adding item to rule dropdown
                 $scope.rulesDataSource = new kendo.data.DataSource({
                     data: $scope.rules
                 });
@@ -360,17 +355,15 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.$broadcast('search-rule-loaded', newValue);
             });
 
-            //Sleeping thread
-            function sleepDDL(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-            async function sleepAndDDL(title) {
-                await sleep(2000);
-                var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
-                dropdownlist.select($scope.rules.length - 1);
+            function sleepAndDDL(title) {
+                $timeout(function () {
+                    var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
+                    dropdownlist.select($scope.rules.length - 1);
 
-                //Call Run Rules
-                $scope.runRuleOnSelection();
+                    //Call Run Rules
+                    $scope.runRuleOnSelection();
+                });
+
             }
 
             $scope.saveAsRule = function () {
@@ -389,7 +382,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         if ($linq.Enumerable().From($scope.myRules)
                             .Where(function (x) {
                                 return (x.title !== undefined && x.title.toUpperCase() === title.toUpperCase());
-                            }).ToArray().length > 0) {
+                        }).ToArray().length > 0) {
                             kendo.confirm("The title was already used.  Would you like to enter a different name?").then(function () {
                                 $scope.saveRule();
                             }, function () { });
@@ -411,7 +404,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
                                 //Added for Tecnder Dashboard
                                 if ($scope.saveCat == 'TenderDealSearch') {
-                                    //adding item to rule dropdown                                
+                                    //adding item to rule dropdown
                                     $scope.rulesDataSource = new kendo.data.DataSource({
                                         data: $scope.myRules
                                     });
@@ -419,7 +412,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                     $scope.rules = $scope.myRules;
                                     $scope.rulesDataSource.read();
                                     sleepAndDDL(title);
-
                                 }
 
                             },
@@ -740,21 +732,21 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.runRule();
             });
 
-            $scope.initRules = function () {                
+            $scope.initRules = function () {
                 $scope.buildRuleFormula();
             }
 
             //Extract Rule from Rules
             $scope.ruleExtracter = function (ruleName) {
                 for (var rulesCounter = 0; rulesCounter < $scope.rules.length; rulesCounter++) {
-                    //Calling RuleEngine Setter                                    
+                    //Calling RuleEngine Setter
                     if ($scope.rules[rulesCounter].title == ruleName) {
                         $scope.ruleEngine($scope.rules[rulesCounter].rule);
                         break;
                     }
                 }
             }
-            
+
             //overriding default or selected rule
             $scope.ruleEngine = function (rule) {
                 //IF Any Default Rule then Reset $scope.data to default rule i:e $scope.data = []; and then $scope.data = $scope.rules[rulesCounter].rule[ruleCounter]
@@ -774,13 +766,14 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.buildRuleFormula();
             }
 
-            //Sleeping thread
-            function sleep(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-            async function sleepAndRunWell() {
-                await sleep(1000);
-                $scope.runRuleOnSelection();
+            function sleepAndRunWell() {
+                if (doNotRunRule) {
+                    doNotRunRule = false;
+                    return;
+                }
+                $timeout(function () {
+                    $scope.runRuleOnSelection();
+                }, 200);
             }
 
             $scope.buildRuleFormula = function () {
@@ -792,7 +785,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     }
                 }
 
-                setTimeout(function () {
+                $timeout(function () {
                     var els = $(".abValue");
                     for (var e = 0; e < els.length; e++) {
                         var scope = angular.element(els[e]).scope();
@@ -807,7 +800,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                             else {
                                 $scope.deleteRuleInitiated == false;
                             }
-
                         }
                     }
 
