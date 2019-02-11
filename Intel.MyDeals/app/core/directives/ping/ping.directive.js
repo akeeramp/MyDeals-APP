@@ -16,6 +16,7 @@ function ping($timeout) {
             $scope.pingCycle = 60000;
             $scope.pingValues = [];
             $scope.pingTime = null;
+            $scope.batchInProgress = false;
 
             $scope.getClassName = function () {
                 if ($scope.pingTime === undefined || $scope.pingTime === null) {
@@ -28,7 +29,7 @@ function ping($timeout) {
                 return "high";
             }
 
-            $scope.pingHost = function() {
+            $scope.pingHost = function () {
                 $scope.ping = new Date;
                 $.ajax({
                     url: "/Ping",
@@ -44,7 +45,23 @@ function ping($timeout) {
                 });
             }
 
+            $scope.getBatchStatus = function() {
+                $scope.ping = new Date;
+                $.ajax({
+                    url: "/api/AdminConstants/v1/GetConstantsByNameNonCached/BATCH_STATUS",
+                    cache: false,
+                    success: function (output) {
+                        $scope.batchInProgress = false;
+                        if (output.CNST_VAL_TXT !== undefined && output.CNST_VAL_TXT.toUpperCase() !== "COMPLETED") {
+                            $scope.batchInProgress = true;
+                        }
+                    }
+                });
+            }
+
             $scope.pingHost();
+
+            $scope.getBatchStatus();
         }],
         link: function (scope, element, attrs) {
         }

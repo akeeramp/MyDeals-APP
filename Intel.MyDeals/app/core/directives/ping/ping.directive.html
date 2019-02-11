@@ -1,15 +1,19 @@
-﻿<i class="fa fa-signal ping-net" role="button" ng-class="getClassName()" ng-click="pingHost()" title="{{pingTime}} ms" aria-hidden="true"></i>
+﻿<i class="intelicon-database-solid" ng-if="batchInProgress" title="Batch in progress"></i>
+<i class="fa fa-signal ping-net" role="button" ng-class="getClassName()" ng-click="pingHost()" title="{{pingTime}} ms" aria-hidden="true"></i>
 
 <style>
     .ping-net.low {
         color: #FC4C02;
     }
+
     .ping-net.med {
         color: #FFA300;
     }
+
     .ping-net.high {
         color: #C4D600;
     }
+
     .ping-net.none {
         color: #cccccc;
     }
