@@ -1,4 +1,4 @@
-﻿<i class="intelicon-database-solid" ng-if="batchInProgress" title="Batch in progress"></i>
+﻿<i class="intelicon-database-solid batch-running" ng-if="batchInProgress" title="Batch in progress"><b>Batch In Progress</b></i>
 <i class="fa fa-signal ping-net" role="button" ng-class="getClassName()" ng-click="pingHost()" title="{{pingTime}} ms" aria-hidden="true"></i>
 
 <style>
@@ -16,5 +16,9 @@
 
     .ping-net.none {
         color: #cccccc;
+    }
+
+    .batch-running {
+        color: #f3d54e;
     }
 </style>
