@@ -15,7 +15,7 @@
     <div class="fl" ondblclick="eggDd()">@appVer</div>
     <div class="fl env">@environment</div>
 
-    <div class="fr ping"><ping></ping></div>
+    <div class="float_center ping"><ping></ping></div>
     <div class="fr">Intel Confidential</div>
 </div>
 
@@ -34,7 +34,15 @@
         color: #f3D54E;
     }
     .ping {
+        align-content: center;
         margin: 0 0 0 10px;
         font-size: 10px;
     }
+    .float_center {
+        float: right;
+        position: relative;
+        left: -50%; /* or right 50% */
+        text-align: left;
+    }
+
 </style>
