@@ -15,8 +15,8 @@
     <div class="fl" ondblclick="eggDd()">@appVer</div>
     <div class="fl env">@environment</div>
 
-    <div class="float_center ping"><ping></ping></div>
     <div class="fr">Intel Confidential</div>
+    <div class="float_center ping"><ping></ping></div>
 </div>
 
 <style>
@@ -42,7 +42,8 @@
     .float_center {
         float: left;
         position: relative;
-        left: 40%; /* or right 50% */
+        right: 40%; /* Normally, Right 50% (or left -50%), but we have some oddness going on, so right 40 looks correct */
+        text-align: left;
     }
 
 </style>
