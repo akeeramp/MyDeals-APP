@@ -56,15 +56,11 @@
         $scope.getmissingCapCostTitle = function (item) {
             var ret = "";
             if (item.CAP_MISSING_FLG !== undefined && item.CAP_MISSING_FLG == "1") {
-                ret += "Your strategy/deal is missing CAP and Division Approver will not be able to approve till this is fixed.\n" +
-                       "Missing CAP issues are handled currently with PriceOps via a weekly DQ process. If there is urgency in \n" +
-                       "getting this deal approved please raise a TAC ticket in service now";
+                ret += "Your strategy/deal is missing CAP.";
             }
             if (item.COST_MISSING_FLG !== undefined && item.COST_MISSING_FLG == "1") {
                 ret !== "" ? ret += " \n" : ret;
-                ret += "Your strategy/deal is missing Cost and Division Approver will not be able to approve till this is fixed.\n" +
-                        "Missing Cost issues are handled currently with iCost team via a weekly DQ process. If there is urgency in \n" +
-                        "getting this deal approved please raise a TAC ticket in service now";
+                ret += "Your strategy/deal is missing Cost.";
             }
             return ret;
         }

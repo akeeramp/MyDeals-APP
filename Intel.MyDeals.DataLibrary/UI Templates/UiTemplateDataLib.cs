@@ -2338,7 +2338,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 150,
-                Label = "Missing Cost/CAP",
+                Label = "<div title='Deals missing Cost and/or CAP cannot be approved by Division Approvers until the missing data has been added. For urgent issues, contact TAC.'>Missing Cost/CAP</div>",
                 IsFilterable = true,
                 IsReadOnly = true,
                 IsSortable = true,
