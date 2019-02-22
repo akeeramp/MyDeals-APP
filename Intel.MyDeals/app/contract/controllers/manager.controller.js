@@ -523,7 +523,7 @@
                                 title: "Deal Id",
                                 width: "120px",
                                 locked: true,
-                                template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
+                                template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ (dataItem.PASSED_VALIDATION === \"Dirty\" ? \"Validation Errors\" : dataItem.PASSED_VALIDATION) || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
                                 filterable: { multi: true, search: true }
                             }, {
                                 field: "TRKR_NBR",
@@ -698,7 +698,7 @@
                                 title: "Deal Id",
                                 width: "120px",
                                 locked: true,
-                                template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
+                                template: "<div class='dealLnk'><deal-popup-icon deal-id=\"'#=DC_ID#'\"></deal-popup-icon><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ (dataItem.PASSED_VALIDATION === \"Dirty\" ? \"Validation Errors\" : dataItem.PASSED_VALIDATION) || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-alert-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i>#=DC_ID#</div>",
                                 filterable: { multi: true, search: true }
                             }, {
                                 field: "TRKR_NBR",
