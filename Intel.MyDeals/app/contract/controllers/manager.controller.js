@@ -56,11 +56,13 @@
         $scope.getmissingCapCostTitle = function (item) {
             var ret = "";
             if (item.CAP_MISSING_FLG !== undefined && item.CAP_MISSING_FLG == "1") {
-                ret += "Your strategy/deal is missing CAP.";
+                ret = "Missing CAP";
             }
             if (item.COST_MISSING_FLG !== undefined && item.COST_MISSING_FLG == "1") {
-                ret !== "" ? ret += " \n" : ret;
-                ret += "Your strategy/deal is missing Cost.";
+                ret = "Missing Cost";
+            }
+            if (item.CAP_MISSING_FLG !== undefined && item.CAP_MISSING_FLG == "1" && item.COST_MISSING_FLG !== undefined && item.COST_MISSING_FLG == "1") {
+                ret = "Missing Cost and CAP";
             }
             return ret;
         }

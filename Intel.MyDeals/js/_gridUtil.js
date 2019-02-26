@@ -155,11 +155,13 @@ gridUtils.getMissingCostCapTitle = function (data) {
     var title = '';
     if (window.usrRole === 'DA' || (window.usrRole === 'GA' || window.usrRole === 'SA' || window.usrRole === 'Legal')) { // DE32060 - Missing COST - CAP is Displaying for FSE, restrict to GA/DA
         if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
-            title += 'Your deal is missing CAP.';
+            title = 'Missing CAP';
         }
         if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
-            title !== '' ? title += ' \n' : title;
-            title += 'Your deal is missing Cost.';
+            title = 'Missing Cost';
+        }
+        if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1" && data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
+            title = 'Missing Cost and CAP';
         }
     }
     return title;
