@@ -285,6 +285,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $timeout(function () {
                         // Custom layout assigns page size, page size change triggers read operaion , no need of calling read oeparation again
                         $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_" + key]);
+                        $scope.contractDs.read();
                     }, 10);
                     return;
                 }
@@ -295,6 +296,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $timeout(function () {
                             // Custom layout assigns page size, page size change triggers read operaion , no need of calling read oeparation again
                             $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_" + key]);
+                            $scope.contractDs.read();
                         }, 10);
                     }, function (response) {
                         $timeout(function () {
