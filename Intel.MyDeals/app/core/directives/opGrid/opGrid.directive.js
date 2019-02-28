@@ -283,8 +283,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var key = "CustomLayoutFor" + dealType;
                 if ($scope.$storage[$scope.opName + "_" + key] !== undefined && $scope.$storage[$scope.opName + "_" + key].length > 0) {
                     $timeout(function () {
+                        // Custom layout assigns page size, page size change triggers read operaion , no need of calling read oeparation again
                         $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_" + key]);
-                        $scope.contractDs.read();
                     }, 10);
                     return;
                 }
@@ -293,8 +293,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     .then(function (response) {
                         $scope.$storage[$scope.opName + "_" + key] = response.data;
                         $timeout(function () {
+                            // Custom layout assigns page size, page size change triggers read operaion , no need of calling read oeparation again
                             $scope.applyCustomLayoutToGrid($scope.$storage[$scope.opName + "_" + key]);
-                            $scope.contractDs.read();
                         }, 10);
                     }, function (response) {
                         $timeout(function () {
@@ -806,6 +806,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.$on('data-item-changed', function (event, fieldName, dataItem, el) {
                 $scope.saveFunctions(dataItem, fieldName, dataItem[fieldName], el);
+            });
+
+            // Check the tender deals and approve them, this action is triggered from only tender dashboard
+            $scope.$on('check-tender-deals', function (event, action) {
+                var data = $scope.contractDs.data();
+                var actionsChecked = false;
+                var dataItem = {};
+                for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].PS_WF_STG_CD == "Submitted" && data[i]["_actionsPS"] !== undefined && data[i]["_actionsPS"][action]) {
+                        // Store the first item in the grid source, changeAction function reads the first item
+                        if (!actionsChecked) {
+                            dataItem = data[i];
+                        }
+                        data[i]["isLinked"] = true;
+                        actionsChecked = true;
+                    }
+                }
+
+                if (actionsChecked) {
+                    $scope.broadcast("approval-actions-updated", { newValue: "Approve", dataItem: dataItem, gridDS: data });
+                }
             });
 
             $scope.applyHideIfAllRules = function (data) {
@@ -1531,7 +1552,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             "NEW_STG": gridDs[i].PS_WF_STG_CD,
                             "DEAL_ID": gridDs[i].DC_ID,
                             "END_CUSTOMER_RETAIL": gridDs[i].END_CUSTOMER_RETAIL,
-                            "FOLIO_ID":gridDs[i].CNTRCT_OBJ_SID,
+                            "FOLIO_ID": gridDs[i].CNTRCT_OBJ_SID,
                             "url": rootUrl + "/advancedSearch#/gotoPs/" + gridDs[i]._parentIdPS,
                             "folioUrl": rootUrl + "/Contract#/manager/" + gridDs[i].CNTRCT_OBJ_SID
                         };

@@ -76,6 +76,7 @@
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
         $scope.runSearch = false;
+        var approveDeals = false;
 
         $scope.filterDealTypes = function (items) {
             var result = {};
@@ -642,6 +643,9 @@
             }
             if (key.toLowerCase() == "search") {
                 $scope.runSearch = true
+            }
+            if (key.toLowerCase() == "approvedeals") {
+                approveDeals = true
             }
         });
 
@@ -1326,7 +1330,18 @@
 
         $scope.$on("grid-datasource-read-complete", function (event, args) {
             resizeGrid();
+            triggerApproveAction();
         });
+
+        function triggerApproveAction() {
+            // Once the grid is loaded trigger the Approve action
+            if (approveDeals && usrRole === "DA") {
+                $timeout(function () {
+                    approveDeals = false;
+                    $scope.$broadcast("check-tender-deals", "Approve");
+                }, 500);
+            }
+        }
 
         $scope.$on("bid-actions-updated", function (event, args) {
             var newValue = args.newValue;
@@ -1336,6 +1351,7 @@
             $scope.actionType = "BID";
             $scope.changeBidAction(dataItem, newValue, gridDS);
         });
+
 
         $scope.$on("approval-actions-updated", function (event, args) {
             var newValue = args.newValue;
@@ -1855,7 +1871,8 @@
                     custNames.push(items[x].CUST_NM);
                 if (endCustomers.indexOf(items[x].END_CUSTOMER_RETAIL) < 0)
                     endCustomers.push(items[x].END_CUSTOMER_RETAIL);
-                items[x].url = rootUrl + "/advancedSearch#/gotoDeal/" + items[x].DEAL_ID;
+                items[x].url = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + $scope.dealType + "&Deal=" + items[x].DEAL_ID + "&search&approvedeals"
+                items[x].folioUrl = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + $scope.dealType + "&FolioId=" + items[x].FOLIO_ID + "&search&approvedeals"
             }
 
             var data = {
