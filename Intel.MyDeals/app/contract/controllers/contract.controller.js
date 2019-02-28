@@ -61,6 +61,8 @@
         $scope.showMCTag = false;
         // custom Contract Titles
         $scope.isTenderContract = isTender;
+        $scope.isPerformanceDisplayUser = window.isTester || window.isDeveloper;
+
         $scope.contractType = "Contract";
         $scope.contractName = $scope.contractType + " Name:";
         $scope.psTitle = "Pricing Strategy";

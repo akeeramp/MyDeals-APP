@@ -1,4 +1,4 @@
-﻿<div class="row wizard" style="padding-top: 35px;" ng-if="isTenderWidgetVisible == true">
+﻿<div class="row wizard" ng-style="{ 'width' : (isPerformanceDisplayUser == false) ? '100%' : '80%' }" style="padding-top: 35px;" ng-if="isTenderWidgetVisible == true">
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel first" ng-class="{'complete': isPTRPartiallyComplete() == true || curPricingStrategy.PASSED_VALIDATION == 'Complete'}">
             <a id="tenderWidPTR" ng-click="tenderWidgetPathManager('backToPricingTable', 'PTR')">
@@ -50,5 +50,5 @@
 #tenderWidPD, #tenderWidDE, #tenderWidMC, #tenderWidPTR{
 	cursor:pointer !important;
 	}
-.k-master-row > td {border-top: 2px solid #b1babf !important;}	    
+.k-master-row > td {border-top: 2px solid #b1babf !important;}	  
 </style>

@@ -13,12 +13,14 @@
 			</div>
 			<div class="clearboth"></div>
 		</div>
-		<div id="perfMs" ng-class="{'notReqForTender': isTenderContract == true}"></div>
-		<div id="perfLegend" ng-class="{'notReqForTender': isTenderContract == true}"></div>
-		<div id="perfDetails" ng-class="{'notReqForTender': isTenderContract == true}"></div>
-		<div style="position: absolute; top: 70px; right: 5px;" ng-class="{'notReqForTender': isTenderContract == true}">
-			<div id="perfChart" style="height: 40px; padding: 0;"></div>
-		</div>
+<!--        <div ng-class="{'notReqForTender': isPerformanceDisplayUser == false}">
+            <div id="perfMs"></div>
+	        <div id="perfLegend"></div>
+	        <div id="perfDetails"></div>
+	        <div style="position: absolute; top: 70px; right: 5px;">
+		        <div id="perfChart" style="height: 40px; padding: 0;"></div>
+	        </div>
+        </div>-->
 		<div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">{{ptTitle}} Editor</div>
 			<div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}"
