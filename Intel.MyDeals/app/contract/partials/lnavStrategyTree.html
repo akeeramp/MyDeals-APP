@@ -13,7 +13,7 @@
                     <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
-                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Dirty'" title="{{ps.PASSED_VALIDATION}}"></i>
+                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Dirty'" title="{{ (ps.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet' }}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete' && ps.PASSED_VALIDATION !== 'Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                 </div>
                 <div ng-click="isCollapsed = !isCollapsed" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
@@ -50,7 +50,7 @@
         <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
             <div ng-repeat="pt in ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
                 <div id="lnavPt_{{ pt.DC_ID }}" class="ptNav" ng-class="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
-                    <div class="fl textCircle valid_{{ pt.PASSED_VALIDATION }}" title="{{ pt.PASSED_VALIDATION || 'Not validated yet' }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
+                    <div class="fl textCircle valid_{{ pt.PASSED_VALIDATION }}" title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">
                         <div ng-if="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'"
                              ng-click="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;"
