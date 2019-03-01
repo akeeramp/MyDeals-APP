@@ -828,9 +828,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
 
-                if (actionsChecked) {
-                    $scope.broadcast("approval-actions-updated", { newValue: "Approve", dataItem: dataItem, gridDS: data });
-                }
+                //if (actionsChecked) {
+                //    $scope.broadcast("approval-actions-updated", { newValue: "Approve", dataItem: dataItem, gridDS: data });
+                //}
             });
 
             // Check the tender deals and approve them, this action is triggered from only tender dashboard
