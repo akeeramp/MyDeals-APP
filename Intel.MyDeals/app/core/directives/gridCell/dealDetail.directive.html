@@ -1,6 +1,6 @@
 ﻿<div class="dealDetail" ng-style="{{colorStyle()}};">
     <div class="dealDetailContainer">
-        <div class="fl"><i class="intelicon-protection-solid validf_{{ dataItem.PASSED_VALIDATION }}" title="Validation: {{ dataItem.PASSED_VALIDATION || 'Not validated yet' }}"></i></div>
+        <div class="fl"><i class="intelicon-protection-solid validf_{{ dataItem.PASSED_VALIDATION }}" title="Validation: {{ (dataItem.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : dataItem.PASSED_VALIDATION) || 'Not validated yet' }}"></i></div>
         <div class="fl id dealLink"><a href="">Deal #{{dataItem.DC_ID}}</a></div>
         <div class="fr dates">{{stStr}} - {{enStr}}</div>
         <div class="clearboth"></div>
