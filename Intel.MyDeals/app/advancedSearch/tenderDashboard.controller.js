@@ -796,14 +796,14 @@
 
         $scope.saveWIPRoot = function (callback) {
 
-            //if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Controller", "");
-            //var pc = new perfCacheBlock("Save Contract Root", "UX");
-            //var pcUi = new perfCacheBlock("Gather data to pass", "UI");
+            if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Controller", "");
+            var pc = new perfCacheBlock("Save Contract Root", "UX");
+            var pcUi = new perfCacheBlock("Gather data to pass", "UI");
 
             //$scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
 
             var data = $scope.createWIPBase();
-            //pc.mark("Built data structure");
+            pc.mark("Built data structure");
 
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.Errors && !angular.equals(data.Errors, {})) {
@@ -816,24 +816,24 @@
             var copyData = util.deepClone(data);
 
 
-            //pc.add(pcUi.stop());
-            //var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
+            pc.add(pcUi.stop());
+            var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
 
             objsetService.bulkTenderUpdate(copyData).then(
                 function (results) {
 
                     var data = results.data.Data;
 
-                    //pcService.addPerfTimes(results.data.PerformanceTimes);
-                    //pc.add(pcService.stop());
-                    //var pcUI = new perfCacheBlock("Processing returned data", "UI");
+                    pcService.addPerfTimes(results.data.PerformanceTimes);
+                    pc.add(pcService.stop());
+                    var pcUI = new perfCacheBlock("Processing returned data", "UI");
                     //util.console("updateContractAndCurPricingTable Returned");
 
                     $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
 
                     var anyWarnings = false;
 
-                    //pc.mark("Constructing returnset");
+                    pc.mark("Constructing returnset");
 
                     if (!!data.WIP_DEAL) {
                         for (i = 0; i < data.WIP_DEAL.length; i++) {
@@ -901,15 +901,15 @@
                     //if a callback function is provided, invoke it now once everything else is completed
                     if (!!callback && typeof callback === "function") {
                         callback();
-                        //pc.add(pcUI.stop());
-                        //if ($scope.$root.pc !== null) $scope.$root.pc.add(pc.stop());
-                        //} else {
-                        //pc.add(pcUI.stop());
-                        //if ($scope.$root.pc !== null) {
-                        //    $scope.$root.pc.add(pc.stop());
-                        //    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                        //    $scope.$root.pc = null;
-                        //}
+                        pc.add(pcUI.stop());
+                        if ($scope.$root.pc !== null) $scope.$root.pc.add(pc.stop());
+                        } else {
+                        pc.add(pcUI.stop());
+                        if ($scope.$root.pc !== null) {
+                            $scope.$root.pc.add(pc.stop());
+                            $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                            $scope.$root.pc = null;
+                        }
                     }
 
                 },

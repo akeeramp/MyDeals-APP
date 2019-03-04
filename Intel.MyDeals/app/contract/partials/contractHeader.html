@@ -21,7 +21,7 @@
         <div class="valid_{{ curPricingStrategy.PASSED_VALIDATION }}" style="padding: 5px 8px;"><span style="opacity: 0.5;">{{psTitle}}:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
     </div>
     <div ng-if="isTenderContract == true" ng-include="'app/contract/partials/tenderWidget.html'"></div>
-    <!-- PERFORMANCE BARS -->
+    <!-- PERFORMANCE BARS 1 -->
     <div ng-class="{'notReqForTender': isPerformanceDisplayUser == false}">
         <div id="perfMs"></div>
 	    <div id="perfLegend"></div>
@@ -30,7 +30,7 @@
 		    <div id="perfChart" style="height: 40px; padding: 0;"></div>
 	    </div>
     </div>
-    <!-- END PERFORMANCE BARS -->
+    <!-- END PERFORMANCE BARS 1 -->
     <div ng-if="isPtr || isWip">
         <div ng-class="{'notReqForTender': isTenderContract == true}" class="contractHeader" style="margin: 0 10px 0 0; line-height: 1.2em; font-size: 18px;">
             <table style="width: 100%;">
