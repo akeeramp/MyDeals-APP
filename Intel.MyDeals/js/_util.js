@@ -302,17 +302,19 @@ util.markFormElFail = function (elName, msg) {
     return true;
 }
 
+// IE doesn't support ES6 startsWith and endsWith function..Created polyfills for now
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (searchString, position) {
+        position = position || 0;
+        return this.indexOf(searchString, position) === position;
+    };
+}
 
-
-
-
-
-
-
-
-
-
-
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function (suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
 
 //(function (f, define) {
 //    define(["kendo"], f);

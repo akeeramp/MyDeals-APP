@@ -259,7 +259,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // US244393 - Hide Customer Divisions column if there aren't more then 1 currently active
         // Replace 2nd with "root.contractData.CustomerDivisions.length <= 1" if inactive divisions are needed again
-        if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.filter(c => c["ACTV_IND"] === true).length <= 1) {
+        var custD = root.contractData.CustomerDivisions.filter(function(x){
+            return x["ACTV_IND"] === true
+        });
+
+        if (!root.contractData.CustomerDivisions || custD.length <= 1) {
             ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
         }
 
