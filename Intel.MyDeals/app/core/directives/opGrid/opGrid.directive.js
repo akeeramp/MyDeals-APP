@@ -833,6 +833,26 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //}
             });
 
+            // Check the tender deals and approve them, this action is triggered from only tender dashboard
+            $scope.$on('check-tender-deals', function (event, action) {
+                var data = $scope.contractDs.data();
+                var actionsChecked = false;
+                var dataItem = {};
+                for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].PS_WF_STG_CD == "Submitted" && data[i]["_actionsPS"] !== undefined && data[i]["_actionsPS"][action]) {
+                        // Store the first item in the grid source, changeAction function reads the first item
+                        if (!actionsChecked) {
+                            dataItem = data[i];
+                        }
+                        data[i]["isLinked"] = true;
+                        actionsChecked = true;
+                    }
+                }
+                //if (actionsChecked) {
+                //    $scope.broadcast("approval-actions-updated", { newValue: "Approve", dataItem: dataItem, gridDS: data });
+                //}
+            });
+
             $scope.applyHideIfAllRules = function (data) {
                 var hideIfAll = [];
 
