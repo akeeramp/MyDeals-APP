@@ -2343,7 +2343,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 IsSortable = true,
                 Template = "#=gridUtils.getMissingCostCapIcon(data)#",
-                ExcelTemplate = "#=gridUtils.getMissingCostCapTitle(data)#"
+                ExcelTemplate = "#=gridUtils.getMissingCostCapTitle(data)#",
+                ExcelHeaderLabel = "Missing Cost/CAP"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
