@@ -2451,6 +2451,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             // Original kendo code
             x.dest._properties(x.props);
+
+            syncSpreadRows(spreadsheet, x.dest._ref.topLeft.row + 1, x.dest._ref.bottomRight.row + 1);  //added this line to ensure drag and dropped formatted data such as dates have their custom formatting applied after a drag and drop
+
             return x.dest;
         };
     }
