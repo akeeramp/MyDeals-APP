@@ -815,42 +815,55 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             // Check the tender deals and approve them, this action is triggered from only tender dashboard
             $scope.$on('check-tender-deals', function (event, action) {
                 var data = $scope.contractDs.data();
-                var actionsChecked = false;
-                var dataItem = {};
                 for (var i = 0; i <= data.length - 1; i++) {
                     if (data[i].PS_WF_STG_CD == "Submitted" && data[i]["_actionsPS"] !== undefined && data[i]["_actionsPS"][action]) {
-                        // Store the first item in the grid source, changeAction function reads the first item
-                        if (!actionsChecked) {
-                            dataItem = data[i];
-                        }
                         data[i]["isLinked"] = true;
-                        actionsChecked = true;
                     }
                 }
-
-                //if (actionsChecked) {
-                //    $scope.broadcast("approval-actions-updated", { newValue: "Approve", dataItem: dataItem, gridDS: data });
-                //}
             });
 
-            // Check the tender deals and approve them, this action is triggered from only tender dashboard
-            $scope.$on('check-tender-deals', function (event, action) {
-                var data = $scope.contractDs.data();
+            // Tender deals quick actions trigger handling
+            $scope.$on('check-tender-deals-action', function (event, args) {
                 var actionsChecked = false;
-                var dataItem = {};
-                for (var i = 0; i <= data.length - 1; i++) {
-                    if (data[i].PS_WF_STG_CD == "Submitted" && data[i]["_actionsPS"] !== undefined && data[i]["_actionsPS"][action]) {
-                        // Store the first item in the grid source, changeAction function reads the first item
-                        if (!actionsChecked) {
-                            dataItem = data[i];
+                var isTenderStage = (args["action"] == "Offer" || args["action"] == "Won" || args["action"] == "Lost") ? true : false;
+                var data = $scope.contractDs.data();
+
+                var checkedDeals = data.filter(function (x) {
+                    return x["isLinked"] === true;
+                });
+
+                // if user has selected deals, go ahead and trigger actions. Else select the deals which matches the actions user is doing
+                if (checkedDeals.length > 0) {
+                    actionsChecked = true;
+                } else {
+                    for (var i = 0; i <= data.length - 1; i++) {
+                        if (!isTenderStage && data[i]["_actionsPS"] !== undefined && data[i]["_actionsPS"][args["action"]]) {
+                            data[i]["isLinked"] = true;
+                            actionsChecked = true;
+                        } else if (isTenderStage && data[i]["WF_STG_CD"] != args["action"]
+                                && (data[i]["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1") {
+                            data[i]["isLinked"] = true;
+                            actionsChecked = true;
                         }
-                        data[i]["isLinked"] = true;
-                        actionsChecked = true;
                     }
                 }
-                //if (actionsChecked) {
-                //    $scope.broadcast("approval-actions-updated", { newValue: "Approve", dataItem: dataItem, gridDS: data });
-                //}
+
+                if (actionsChecked) {
+
+                    checkedDeals = data.filter(function (x) {
+                        return x["isLinked"] === true && (x["_actionsPS"][args["action"]] == true || ((x["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1"))
+                    });
+
+                    if (checkedDeals.length === 0) return;
+
+                    $timeout(function () {
+                        if (!isTenderStage) {
+                            $scope.broadcast("approval-actions-updated", { newValue: args["action"], dataItem: checkedDeals[0], gridDS: checkedDeals });
+                        } else {
+                            $scope.broadcast("bid-actions-updated", { newValue: args["action"], dataItem: checkedDeals[0], gridDS: checkedDeals });
+                        }
+                    });
+                }
             });
 
             $scope.applyHideIfAllRules = function (data) {
@@ -2782,10 +2795,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }, 2000);
 
                         },
-                        function (response) {
-                            //empty after moving sync and validate to happen before the getOverlappingDeals call is made
-                            $scope.$parent.$parent.setBusy("", "");
-                        });
+                            function (response) {
+                                //empty after moving sync and validate to happen before the getOverlappingDeals call is made
+                                $scope.$parent.$parent.setBusy("", "");
+                            });
                 } else {
                     if ($scope.$root.pc !== null) $scope.$root.pc.stop();
                     $timeout(function () {

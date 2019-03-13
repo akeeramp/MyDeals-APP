@@ -567,6 +567,8 @@
     <Content Include="app\contract\partials\lnavStrategyTree.html" />
     <Content Include="app\contract\partials\pricingTable.html" />
     <Content Include="app\core\directives\bindToHeight.directive.js" />
+    <Content Include="app\core\directives\floatingActions\floatingActions.directive.html" />
+    <Content Include="app\core\directives\floatingActions\floatingActions.directive.js" />
     <Content Include="app\core\directives\gridCell\dealToolsHelper.html" />
     <Content Include="app\core\directives\gridCell\iconMctPct.directive.html" />
     <Content Include="app\core\directives\gridCell\iconMctPct.directive.js" />
@@ -1491,6 +1493,7 @@
     <Content Include="Scripts\Angular\ngStorage.min.js" />
     <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
+    <Content Include="Scripts\anime.min.js" />
     <Content Include="Scripts\base64-string.js" />
     <Content Include="Scripts\bootstrap-switch.min.js" />
     <Content Include="Scripts\bootstrap.js" />

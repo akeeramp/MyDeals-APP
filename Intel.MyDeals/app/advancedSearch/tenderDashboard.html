@@ -7,7 +7,7 @@
 <!--<div ng-include="'app/contract/partials/ptModals/ecapTrackerAutoFillModal.html'"></div>-->
 
 <loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
-
+<floating-actions></floating-actions>
 <div class="show-hide-options">
     <span ng-show="showSearchFilters" ng-click="toggleFilters()">
         <i class="intelicon-up"></i> Hide Tender Search Options
@@ -89,7 +89,7 @@
                      save-sub-cat="'TenderSearchRules'"
                      run-search="runSearch"></div>
             </div>
-			
+
         </div>
 
     </div>
@@ -523,7 +523,7 @@
     label.k-label {
         overflow: auto;
     }
-	
+
 
 </style>
 <script id="emailItemTemplateTender" type="text/x-kendo-template">

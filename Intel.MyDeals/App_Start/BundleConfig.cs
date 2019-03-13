@@ -35,7 +35,8 @@ namespace Intel.MyDeals
                 "~/Scripts/intcAnalytics.js",
                 "~/Scripts/Angular/clipboard.min.js",
                 "~/Scripts/Angular/ngclipboard.min.js",
-                "~/Scripts/modernizr-2.6.2.min.js"
+                "~/Scripts/modernizr-2.6.2.min.js",
+                "~/Scripts/anime.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
@@ -78,6 +79,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/dealPopup/dealPopup.directive.js"
                 , "~/app/core/directives/dealPopup/dealPopupDock.directive.js"
                 , "~/app/core/directives/dealPopup/dealPopupIcon.directive.js"
+                , "~/app/core/directives/floatingActions/floatingActions.directive.js"
                 , "~/app/core/directives/gridCell/dealDetail.directive.js"
                 , "~/app/core/directives/gridCell/dealTools.directive.js"
                 , "~/app/core/directives/gridCell/dealToolsTender.directive.js"
