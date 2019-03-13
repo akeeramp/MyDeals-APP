@@ -125,7 +125,7 @@
               { field: "FACT_SID", title: "Id", width: "6%" },
               { field: "FACT_TXT", title: "Fun Fact", width: "30%" },
               { field: "FACT_HDR", title: "Header", width: "14%", filterable: { multi: true } },
-              { field: "FACT_ICON", template: "<div class='col-md-2' style='text-align:center'><i class='fa fa-#= FACT_ICON # ss-funfact-icon'></i></div><div class='col-md-6'>#= FACT_ICON #</div>", title: "Font Awesome Icon <i class='intelicon-help' uib-tooltip='Pick an icon from fontawesome.com/icons' tooltip-placement='right'>", width: "15%", filterable: { multi: true} },
+              { field: "FACT_ICON", template: "<div class='col-md-2' style='text-align:center'><i class='fa fa-#= FACT_ICON # ss-funfact-icon'></i></div><div class='col-md-6'>#= FACT_ICON #</div>", title: "Font Awesome Icon <i class='intelicon-help' uib-tooltip='Pick an icon from fontawesome.com/v4.7.0/icons/ ' tooltip-placement='right'>", width: "15%", filterable: { multi: true } },
               { field: "FACT_SRC", title: "Fact Source / Credentials <i class='intelicon-help' uib-tooltip='If copy/pasted, we must legally credit the source.' tooltip-placement='right'>", width: "19%" },
               { field: "ACTV_IND", title: "Active", width: "10%", template: gridUtils.boolViewer('ACTV_IND'), editor: gridUtils.boolEditor, attributes: { style: "text-align: center;" }, filterable: { multi: true } }
             ]
