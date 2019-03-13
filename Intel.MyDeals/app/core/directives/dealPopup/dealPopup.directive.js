@@ -391,10 +391,6 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                 e.stopPropagation();
             };
 
-            $scope.showQuote = function () {
-                return $scope.data.WF_STG_CD !== 'Cancelled' && ($scope.data.WF_STG_CD === 'Active' || $scope.data.WF_STG_CD === 'Won' || $scope.data.WF_STG_CD === 'Pending' || $scope.data.HAS_TRACKER === '1');
-            }
-
             $scope.downloadQuoteLetter = function () {
                 var customerSid = $scope.data["CUST_MBR_SID"];
                 var objSid = $scope.data["DC_ID"];
@@ -450,6 +446,12 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                         }, 200);
                     }
 
+                    // Breaking out as $scope.showQuote = function () fails since no data is passed.
+                    if (!($scope.data["WF_STG_CD"] !== 'Cancelled' && ($scope.data["WF_STG_CD"] === 'Active' || $scope.data["WF_STG_CD"] === 'Won' || $scope.data["WF_STG_CD"] === 'Pending' || $scope.data["HAS_TRACKER"] === '1'))) {
+                        $timeout(function () {
+                            $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li:nth-child(7)").addClass("disabled");
+                        }, 200);
+                    }
 
                     // Deal Volume
                     if ($scope.data["CREDIT_VOLUME"] === "") $scope.data["CREDIT_VOLUME"] = 0;
