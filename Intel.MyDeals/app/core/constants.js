@@ -135,6 +135,9 @@
                     "details": {
                         "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "Payment"]
                     },
+                    "CNTRCT_OBJ_SID": { //note: this is tender Folio Id
+                        "Groups": ["Deal Info"]
+                    },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
                     },
@@ -720,6 +723,9 @@
                     "details": {
                         "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit", "Payment"]
                     },
+                    "CNTRCT_OBJ_SID": { //note: this is tender Folio Id
+                        "Groups": ["Deal Info"]
+                    },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
                     },
@@ -977,6 +983,6 @@
             "requiredForTender": ["VOLUME", "END_CUSTOMER_RETAIL"],
             "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
             "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
-            "hideForStandardDealEditor": ["tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY"],
+            "hideForStandardDealEditor": ["tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
         });
 })();

@@ -4848,7 +4848,7 @@
                         "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
                     ];
                     var usedCols = [];
-                    var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID", "tender_actions"];
+                    var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID", "tender_actions", "CNTRCT_OBJ_SID"];
 
                     if (window.usrRole == 'FSE') {
                         excludeCols.push("MEETCOMP_TEST_RESULT");

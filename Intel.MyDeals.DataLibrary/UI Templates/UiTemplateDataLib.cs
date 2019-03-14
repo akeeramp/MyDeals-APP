@@ -975,7 +975,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 10003,
+                Id = 10004,
                 AtrbCd = "tender_actions",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
@@ -990,6 +990,23 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "<div id='cb_actn_#=data.DC_ID#'>#=gridUtils.getBidActions(data)#</div>",
                 BypassExport = true,
                 Editor = "BID_ACTNS"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 10005, //Note: placeholder ID, granted these IDs don't do anything right now but 10004 is not this attribute's id.
+                AtrbCd = "CNTRCT_OBJ_SID",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                DataType = "number",
+                Label = "Folio Id",
+                Width = 80,
+                IsSortable = true,
+                IsFilterable = true,
+                IsReadOnly = true,
+                Locked = true,
+                Lockable = false,
+                Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'CNTRCT_OBJ_SID')#",
+                ExcelTemplate = "#=CNTRCT_OBJ_SID#",
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
