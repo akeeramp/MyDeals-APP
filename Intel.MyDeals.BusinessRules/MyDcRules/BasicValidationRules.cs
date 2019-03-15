@@ -397,6 +397,14 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Tier Volume Validations",
+                    ActionRule = MyDcActions.CheckTierVolumes,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="Frontend can't be consumption",
                     ActionRule = MyDcActions.CheckFrontendConsumption,
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),

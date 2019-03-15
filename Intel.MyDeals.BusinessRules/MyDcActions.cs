@@ -918,6 +918,29 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckTierVolumes(params object[] args)
+        {
+            // DE36947 - PRODUCTION: Large end volume broke DSU batch 
+            // This check doesn't take into account that start vol might be set to same value as end vol and that check (happens earlier then this)
+            // will be violated.  We allow the save and catch the match later so that the PTR tab doesn't propogate the last tier values into the 
+            // first tier while offsetting the save completely nuking the save data later on (killing tier numbers that requires a data fix)
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> atrbs = new List<string> { AttributeCodes.STRT_VOL, AttributeCodes.END_VOL };
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
+            {
+                decimal safeParse = 0;
+                bool isNumber = Decimal.TryParse(de.AtrbValue.ToString(), out safeParse);
+
+                if (isNumber && safeParse > 999999999)
+                {
+                    de.AtrbValue = 999999999;
+                    de.State = OpDataElementState.Modified;
+                }
+            }
+        }
+
         public static void CompressJson(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
