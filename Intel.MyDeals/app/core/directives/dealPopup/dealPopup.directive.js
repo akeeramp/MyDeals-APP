@@ -447,7 +447,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     }
 
                     // Breaking out as $scope.showQuote = function () fails since no data is passed.
-                    if (!($scope.data["WF_STG_CD"] !== 'Cancelled' && ($scope.data["WF_STG_CD"] === 'Active' || $scope.data["WF_STG_CD"] === 'Won' || $scope.data["WF_STG_CD"] === 'Pending' || $scope.data["HAS_TRACKER"] === '1'))) {
+                    if (!($scope.data["WF_STG_CD"] !== 'Cancelled' && ($scope.data["WF_STG_CD"] === 'Active' || $scope.data["WF_STG_CD"] === 'Won' || $scope.data["WF_STG_CD"] === 'Offer' || $scope.data["WF_STG_CD"] === 'Pending' || $scope.data["HAS_TRACKER"] === '1'))) {
                         $timeout(function () { 
                             $("#cn-draggable-" + $scope.dealId + " .cn-wrapper li:nth-child(7)").addClass("disabled");
                         }, 200);
