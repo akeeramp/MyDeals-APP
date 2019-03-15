@@ -453,7 +453,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                         }, 200);
                     }
 
-                    // Deal Volume
+                    // Deal Volumes
                     if ($scope.data["CREDIT_VOLUME"] === "") $scope.data["CREDIT_VOLUME"] = 0;
                     if ($scope.data["DEBIT_VOLUME"] === "") $scope.data["DEBIT_VOLUME"] = 0;
                     if ($scope.data["CREDIT_AMT"] === "") $scope.data["CREDIT_AMT"] = 0;
