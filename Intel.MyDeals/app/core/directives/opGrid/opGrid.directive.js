@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage', 'securityService'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger', '$localStorage', 'securityService', '$linq'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage, securityService) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger, $localStorage, securityService, $linq) {
 
     return {
         scope: {
@@ -829,19 +829,28 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var data = $scope.contractDs.data();
 
                 var checkedDeals = data.filter(function (x) {
-                    return x["isLinked"] === true;
+                    return x["isLinked"] === true
                 });
 
                 // if user has selected deals, go ahead and trigger actions. Else select the deals which matches the actions user is doing
                 if (checkedDeals.length > 0) {
                     actionsChecked = true;
+                    var checkedDealsValid = checkedDeals.filter(function (x) {
+                        return ((!isTenderStage && x["_actionsPS"][args["action"]] == true)
+                            || (isTenderStage && ((x["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1")))
+                    });
+                    if (checkedDealsValid.length == 0) {
+                        kendo.alert("The selected deals cannot be set to " + args["action"]);
+                        return;
+                    }
+
                 } else {
                     for (var i = 0; i <= data.length - 1; i++) {
                         if (!isTenderStage && data[i]["_actionsPS"] !== undefined && data[i]["_actionsPS"][args["action"]]) {
                             data[i]["isLinked"] = true;
                             actionsChecked = true;
                         } else if (isTenderStage && data[i]["WF_STG_CD"] != args["action"]
-                                && (data[i]["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1") {
+                            && (data[i]["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1") {
                             data[i]["isLinked"] = true;
                             actionsChecked = true;
                         }
@@ -851,7 +860,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (actionsChecked) {
 
                     checkedDeals = data.filter(function (x) {
-                        return x["isLinked"] === true && (x["_actionsPS"][args["action"]] == true || ((x["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1"))
+                        return x["isLinked"] === true;//&& (x["_actionsPS"][args["action"]] == true || ((x["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1"))
                     });
 
                     if (checkedDeals.length === 0) return;

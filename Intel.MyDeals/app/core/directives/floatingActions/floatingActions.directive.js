@@ -190,10 +190,6 @@
                 $(document).delay(50).queue(function (next) {
                     menu.open();
                     next();
-                    $(document).delay(1000).queue(function (next) {
-                        menu.close();
-                        next();
-                    });
                 });
             }
         }

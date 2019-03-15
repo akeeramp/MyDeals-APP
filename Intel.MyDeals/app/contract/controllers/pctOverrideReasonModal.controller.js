@@ -56,7 +56,10 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                         $('.pctOverrideCheckbox').attr($scope.disabled, true);
                     }
                 });
-            }
+            },
+            sort: [
+                { field: "isSelected", dir: "desc" }
+            ]
         },
         sortable: true,
         filterable: true,
