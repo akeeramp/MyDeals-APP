@@ -15,7 +15,7 @@
 </div>
 <div class="fr btn-group rule-dropdown-actions" ng-if="saveCat == 'TenderDealSearch' && rules.length > 0">
 	
-            <select kendo-drop-down-list
+            <select kendo-combo-box
 					id="ruleDropDownList"
                     k-placeholder="'Select saved rules'"
                     k-data-text-field="'title'"
@@ -27,7 +27,7 @@
 					k-select="onRuleSelect"					
 					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem,$event)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem,$event)\' title=\'Click me to make it Default Rule\'></i> # } # <p class=\'textTitle\' title=\'#: title #\'>#: title # </p><i class=\'intelicon-trash-solid delete-rule-icon rule-icon-selected\' ng-click=\'deleteSaveRule(dataItem,$event)\' title=\'Click me to Delete the Rule\'></i>'"
 					class="opUiContainer sm"
-                    style="width: 190px;border: 1px solid #b1babf;margin-right:15px;"></select>
+                    style="width: 190px;margin-right:15px;"></select>
         </div>
 
 <h5>Search Options<span class="h5-small">To start a search select your search options</span></h5>

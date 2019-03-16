@@ -224,7 +224,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     }).ToArray()[0];
 
                 curRule.rule = $scope.data;
-                curRule.columns = $scope.getColumns();
+                curRule.columns = $scope.saveCat == 'TenderDealSearch' ? '' : $scope.getColumns(),
 
                 userPreferencesService
                     .updateAction($scope.cat, $scope.subcat, "Rules", JSON.stringify($scope.myRules))
@@ -243,6 +243,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     $scope.selectedRuleItem = e.dataItem.title;
                     if (e.dataItem && $scope.deleteRuleInitiated == false) {
                         $scope.ruleEngine(e.dataItem.rule);
+                        //$scope.$broadcast('search-rule-loaded', e.dataItem); // This is what the search page does, but kicks off extra things that tender search doesn't need
+                        $scope.currentRule = $scope.selectedRuleItem;
                     }
                     else {
                         $scope.deleteRuleInitiated = false;
@@ -262,9 +264,9 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     doNotRunRule = true;
                 }
                 $timeout(function () {
-                    var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
+                    var dropdownlist = $("#ruleDropDownList").data("kendoComboBox");
                     if (title && title.length > 0) {
-                        $("#ruleDropDownList").data("kendoDropDownList").value(title);
+                        $("#ruleDropDownList").data("kendoComboBox").value(title);
                     } else if (dropdownlist !== undefined) {
                         dropdownlist.select(-1);
                     }
@@ -275,13 +277,13 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
             $scope.deleteSaveRule = function (dataItem, event) {
                 event.preventDefault();
 
-                var selectedDDl = $("#ruleDropDownList").data("kendoDropDownList").text();
+                var selectedDDl = $("#ruleDropDownList").data("kendoComboBox").text();
 
                 for (var itmCnt = 0; itmCnt < $scope.rules.length; itmCnt++) {
                     if ($scope.rules[itmCnt].title == dataItem.title) {
                         $scope.rules.splice(itmCnt, 1);
                         if ($scope.rules.length > 0 && (selectedDDl == dataItem.title || selectedDDl.length == 0)) {
-                            $("#ruleDropDownList").data("kendoDropDownList").select(itmCnt == 0 ? $scope.rules.length - 1 : 0);
+                            $("#ruleDropDownList").data("kendoComboBox").select(itmCnt == 0 ? $scope.rules.length - 1 : 0);
                         }
                         $scope.deleteRuleInitiated = true;
                         userPreferencesService
@@ -297,7 +299,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                                     sleepAndResetDDL();
                                     $scope.clearRule();
                                 } else {
-                                    $("#ruleDropDownList").data("kendoDropDownList").value(selectedDDl);
+                                    $("#ruleDropDownList").data("kendoComboBox").value(selectedDDl);
                                     $scope.ruleExtracter(selectedDDl);
                                 }
                             },
@@ -357,7 +359,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
             function sleepAndDDL(title) {
                 $timeout(function () {
-                    var dropdownlist = $("#ruleDropDownList").data("kendoDropDownList");
+                    var dropdownlist = $("#ruleDropDownList").data("kendoComboBox");
                     dropdownlist.select($scope.rules.length - 1);
 
                     //Call Run Rules
@@ -686,8 +688,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
 
 
                 if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules && $scope.rules.length > 0) {
-                    if ($("#ruleDropDownList").data("kendoDropDownList").text().length > 0) {
-                        $("#ruleDropDownList").data("kendoDropDownList").select(-1);
+                    if ($("#ruleDropDownList").data("kendoComboBox").text().length > 0) {
+                        $("#ruleDropDownList").data("kendoComboBox").select(-1);
                         $scope.selectedRuleItem = '';
                     }
                 }
@@ -793,7 +795,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     }
                     //Run Rules for TenderDealSearch
                     if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules && $scope.rules.length > 0) {
-                        if ($("#ruleDropDownList").data("kendoDropDownList").text().length > 0) {
+                        if ($("#ruleDropDownList").data("kendoComboBox").text().length > 0) {
                             if ($scope.deleteRuleInitiated == false) {
                                 sleepAndRunWell();
                             }
@@ -803,8 +805,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                         }
                     }
 
-                    if ($scope.defaultSelection == false && $("#ruleDropDownList").data("kendoDropDownList")) {
-                        $("#ruleDropDownList").data("kendoDropDownList").select(-1);
+                    if ($scope.defaultSelection == false && $("#ruleDropDownList").data("kendoComboBox")) {
+                        $("#ruleDropDownList").data("kendoComboBox").select(-1);
                     }
 
                 }, 0);
