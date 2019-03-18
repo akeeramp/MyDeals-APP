@@ -1866,6 +1866,17 @@
             var endCustomers = [];
             var rootUrl = window.location.protocol + "//" + window.location.host;
 
+            // Check unique stages as per role
+            var stageToCheck = "";
+            if (window.usrRole == "DA") {
+                stageToCheck = "Approved"
+            } else if (window.usrRole == "GA") {
+                stageToCheck = "Submitted"
+            }
+
+            // set this flag to false when stages are not unique as per role
+            var stagesOK = true;
+
             for (var x = 0; x < items.length; x++) {
                 if (custNames.indexOf(items[x].CUST_NM) < 0)
                     custNames.push(items[x].CUST_NM);
@@ -1873,11 +1884,32 @@
                     endCustomers.push(items[x].END_CUSTOMER_RETAIL);
                 items[x].url = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + $scope.dealType + "&Deal=" + items[x].DEAL_ID + "&search&approvedeals"
                 items[x].folioUrl = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + $scope.dealType + "&FolioId=" + items[x].FOLIO_ID + "&search&approvedeals"
+
+                if (stageToCheck != "" && stageToCheck != items[x].NEW_STG) {
+                    stagesOK = false;
+                }
             }
+
+            var subject = "";
+            var eBodyHeader = "";
+
+            if (stagesOK && window.usrRole === "DA") {
+                subject = "My Deals Deals Approved for ";
+                eBodyHeader = "My Deals Deals Approved!";
+            } else if (stagesOK && window.usrRole === "GA") {
+                subject = "My Deals Approval Required for "
+                eBodyHeader = "My Deals Approval Required!";
+            } else {
+                subject = "My Deals Action Required for ";
+                eBodyHeader = "My Deals Action Required!";
+            }
+
+            subject = subject + custNames.join(', ');
 
             var data = {
                 from: window.usrEmail,
-                items: items
+                items: items,
+                eBodyHeader: eBodyHeader
             }
 
             var actnList = [];
@@ -1887,7 +1919,7 @@
             var dataItem = {
                 from: "mydeals.notification@intel.com",
                 to: "",
-                subject: "My Deals Action Required for " + custNames.join(', '),
+                subject: subject,
                 body: msg
             };
 

@@ -109,339 +109,339 @@
 
 
 <style class="ng-scope">
-        /*#dealEditor>.k-grid-content{max-height: 200px !important}
+    /*#dealEditor>.k-grid-content{max-height: 200px !important}
     #dealEditor>.k-grid-content-locked{max-height: 200px !important}*/
-        #notesDialog {
-            width: 100%;
-            height: 100%;
-            padding: 0;
+    #notesDialog {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+
+        #notesDialog div {
+            padding: 0 8px;
         }
 
-            #notesDialog div {
-                padding: 0 8px;
+            #notesDialog div textarea {
+                width: 440px;
+                height: 200px;
             }
 
-                #notesDialog div textarea {
-                    width: 440px;
-                    height: 200px;
-                }
+    .k-dialog .notesDialog.k-content textarea {
+        width: 450px;
+        height: 250px;
+    }
 
-        .k-dialog .notesDialog.k-content textarea {
-            width: 450px;
-            height: 250px;
+    .k-dialog .notesDialog.k-content .opUiContainer {
+        margin-top: -30px;
+    }
+
+    .k-dialog .promptUserDialog {
+        text-align: center;
+        padding: 10px 0 0 0;
+    }
+
+        .k-dialog .promptUserDialog h4 {
+            color: #003C71;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0;
         }
 
-        .k-dialog .notesDialog.k-content .opUiContainer {
-            margin-top: -30px;
+        .k-dialog .promptUserDialog p {
+            font-size: 12px;
+            padding: 10px 20px;
         }
 
-        .k-dialog .promptUserDialog {
-            text-align: center;
-            padding: 10px 0 0 0;
-        }
+    .rotate90 {
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
 
-            .k-dialog .promptUserDialog h4 {
-                color: #003C71;
-                font-size: 18px;
-                font-weight: 600;
-                margin-top: 0;
-            }
+    .dirtyTip {
+        position: absolute;
+        left: 0;
+        border-style: solid;
+        border-color: #0071C5 transparent transparent #0071C5;
+        border-width: 3px;
+    }
 
-            .k-dialog .promptUserDialog p {
-                font-size: 12px;
-                padding: 10px 20px;
-            }
+    .dealTag {
+        display: none;
+    }
 
-        .rotate90 {
-            -ms-transform: rotate(90deg);
-            -webkit-transform: rotate(90deg);
-            transform: rotate(90deg);
-        }
-
-        .dirtyTip {
-            position: absolute;
-            left: 0;
-            border-style: solid;
-            border-color: #0071C5 transparent transparent #0071C5;
-            border-width: 3px;
-        }
-
-        .dealTag {
-            display: none;
-        }
-
-        /*.rule-dropdown-actions {
+    /*.rule-dropdown-actions {
             display: none;
         }*/
 
-        .dealTools {
-            line-height: 1.8em;
-            height: 100% !important;
-            width: 100%;
+    .dealTools {
+        line-height: 1.8em;
+        height: 100% !important;
+        width: 100%;
+    }
+
+        .dealTools .gridStatusMarker {
+            font-family: arial;
         }
 
-            .dealTools .gridStatusMarker {
-                font-family: arial;
-            }
+        .dealTools a {
+            text-decoration: none;
+        }
 
-            .dealTools a {
-                text-decoration: none;
-            }
+        .dealTools i:hover {
+            color: #003C71;
+        }
 
-            .dealTools i:hover {
-                color: #003C71;
-            }
+    .gridStatusMarker {
+        height: 100%;
+        width: 16px;
+        color: #000000;
+        background-color: #cccccc;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 2px 6px 7px;
+        text-align: center;
+    }
 
-        .gridStatusMarker {
-            height: 100%;
-            width: 16px;
+        .gridStatusMarker.Working {
+            color: #000000;
+            background-color: #FFA300;
+        }
+
+        .gridStatusMarker.Active {
+            color: #000000;
+            background-color: #C4D600;
+        }
+
+        .gridStatusMarker.Cancelled {
             color: #000000;
             background-color: #cccccc;
-            font-size: 14px;
-            font-weight: 600;
-            padding: 6px 2px 6px 7px;
-            text-align: center;
         }
 
-            .gridStatusMarker.Working {
-                color: #000000;
-                background-color: #FFA300;
-            }
+    .dealTools .md-icon {
+        padding: 4px 0 0 5px;
+    }
 
-            .gridStatusMarker.Active {
-                color: #000000;
-                background-color: #C4D600;
-            }
-
-            .gridStatusMarker.Cancelled {
-                color: #000000;
-                background-color: #cccccc;
-            }
-
-        .dealTools .md-icon {
-            padding: 4px 0 0 5px;
-        }
-
-            .dealTools .md-icon i {
-                color: #00AEEF;
-            }
-
-                .dealTools .md-icon i:hover {
-                    color: #003C71 !important;
-                }
-
-        .dealTools .md-icon-disabled {
-            padding: 4px 2px 0 1px;
-        }
-
-            .dealTools .md-icon-disabled i {
-                color: #00AEEF;
-            }
-
-        .dealTools input[type=radio].with-font,
-        .dealTools input[type=checkbox].with-font {
-            border: 0;
-            clip: rect(0 0 0 0);
-            height: 1px;
-            margin: -1px;
-            overflow: hidden;
-            padding: 0;
-            position: absolute;
-            width: 1px;
-        }
-
-            .dealTools input[type=radio].with-font + label:before,
-            .dealTools input[type=checkbox].with-font + label:before {
-                font-family: FontAwesome;
-                display: inline-block;
-                content: "\f096";
-                font-size: 20px;
-                letter-spacing: 10px;
-                color: #00AEEF;
-                margin-left: 10px;
-            }
-
-            .dealTools input[type=radio].with-font:hover + label:before,
-            .dealTools input[type=checkbox].with-font:hover + label:before {
-                color: #003C71;
-                cursor: pointer;
-            }
-
-            .dealTools input[type=radio].with-font.disabled + label:before,
-            .dealTools input[type=checkbox].with-font.disabled + label:before {
-                color: #cccccc;
-                cursor: default;
-            }
-
-            .dealTools input[type=radio].with-font:checked + label:before,
-            .dealTools input[type=checkbox].with-font:checked + label:before {
-                content: "\f046";
-                font-size: 20px;
-                letter-spacing: 5px;
-                color: #C4D600;
-                margin-left: 10px;
-            }
-
-            .dealTools input[type=radio].with-font:focus + label:before,
-            .dealTools input[type=checkbox].with-font:focus + label:before {
-                font-weight: bold;
-                color: #00AEEF;
-            }
-
-            .dealTools input[type=radio].with-font:checked:focus + label:before,
-            .dealTools input[type=checkbox].with-font:checked:focus + label:before {
-                font-weight: bold;
-                color: #C4D600;
-            }
-
-        .delete-attach-icon {
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-            .delete-attach-icon:hover {
-                text-decoration: none;
-            }
-
-        .disabled-dropdown .k-dropdown .k-state-disabled .k-input,
-        .disabled-dropdown .k-dropdown .k-state-disabled .k-select,
-        .disabled-dropdown .k-dropdown .k-state-disabled .k-select .k-icon {
-            cursor: not-allowed;
-        }
-
-        #horizontal-search {
-            border: 0 solid transparent;
-            height: 100%;
-            font-size: 12px;
-            margin-left: -8px;
-            margin-right: -8px;
-        }
-
-        #search-info-container {
-            width: 100%;
-            margin: auto;
-        }
-
-        .search-toolbar {
-            padding: 0 15px;
-        }
-
-            .search-toolbar h5, #search-info-container h5 {
-                margin-top: 0;
-                color: #003C71;
-                font-weight: 600;
-            }
-
-        #search-info-container label {
-            font-weight: normal;
-            font-size: 16px;
-            margin-right: 10px;
-            width: 110px;
-        }
-
-        #search-info-container .left-container {
-            width: 420px;
-            float: left;
-        }
-
-        #search-info-container .left-inner-container {
-            border: 1px solid transparent;
-            border-radius: 6px;
-            padding: 0 10px 20px 10px;
-        }
-
-        #search-info-container .right-container {
-            padding: 20px 10px 20px 900px;
-            margin-left: -460px;
-        }
-
-        #search-info-container .right-inner-container {
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            padding: 10px;
-            height: auto;
-        }
-
-        .btn-skyblue {
-            background-color: #00AEEF;
-            border-color: #00AEEF;
-            margin: 0 0 0 15px;
-        }
-
-            .btn-skyblue:hover {
-                background-color: #0071C5;
-            }
-
-        .show-hide-options {
-            color: #00AEEF;
-            cursor: pointer;
-            position: absolute;
-            top: 1px;
-            right: 20px;
-            z-index: 200;
-            font-size: 12px;
-        }
-
-            .show-hide-options:hover {
-                color: #0071C5;
-            }
-
-        .attrbMenu .k-link {
-            padding: 3px 20px !important;
-        }
-
-        .attrbMenu .k-state-hover .k-link {
-            background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
-        }
-
-        .k-multiselect {
-            width: 360px;
-        }
-
-        .objDealId {
-            cursor: pointer;
+        .dealTools .md-icon i {
             color: #00AEEF;
         }
 
-            .objDealId:hover {
-                color: #003C71;
+            .dealTools .md-icon i:hover {
+                color: #003C71 !important;
             }
 
-        .search-container {
-            padding: 25px 20px;
+    .dealTools .md-icon-disabled {
+        padding: 4px 2px 0 1px;
+    }
+
+        .dealTools .md-icon-disabled i {
+            color: #00AEEF;
         }
 
-        .valid_Valid {
-            background: #e8eaec;
+    .dealTools input[type=radio].with-font,
+    .dealTools input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+        .dealTools input[type=radio].with-font + label:before,
+        .dealTools input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 20px;
+            letter-spacing: 10px;
+            color: #00AEEF;
+            margin-left: 10px;
         }
 
-        .valid_Finalizing {
-            background: #e8eaec;
+        .dealTools input[type=radio].with-font:hover + label:before,
+        .dealTools input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
         }
 
-        .valid_Complete {
-            background: #C4D600;
+        .dealTools input[type=radio].with-font.disabled + label:before,
+        .dealTools input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
         }
 
-        .valid_, .valid_0, .valid_Dirty {
-            background: #e8eaec;
+        .dealTools input[type=radio].with-font:checked + label:before,
+        .dealTools input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #C4D600;
+            margin-left: 10px;
         }
 
-        .validf_Valid {
-            color: #e8eaec;
+        .dealTools input[type=radio].with-font:focus + label:before,
+        .dealTools input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+            color: #00AEEF;
         }
 
-        .validf_Finalizing {
-            color: #e8eaec;
-        }
-
-        .validf_Complete {
+        .dealTools input[type=radio].with-font:checked:focus + label:before,
+        .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+            font-weight: bold;
             color: #C4D600;
         }
 
-        .validf_, .validf_0, .validf_Dirty {
-            color: #f9521a;
+    .delete-attach-icon {
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .delete-attach-icon:hover {
+            text-decoration: none;
         }
+
+    .disabled-dropdown .k-dropdown .k-state-disabled .k-input,
+    .disabled-dropdown .k-dropdown .k-state-disabled .k-select,
+    .disabled-dropdown .k-dropdown .k-state-disabled .k-select .k-icon {
+        cursor: not-allowed;
+    }
+
+    #horizontal-search {
+        border: 0 solid transparent;
+        height: 100%;
+        font-size: 12px;
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    #search-info-container {
+        width: 100%;
+        margin: auto;
+    }
+
+    .search-toolbar {
+        padding: 0 15px;
+    }
+
+        .search-toolbar h5, #search-info-container h5 {
+            margin-top: 0;
+            color: #003C71;
+            font-weight: 600;
+        }
+
+    #search-info-container label {
+        font-weight: normal;
+        font-size: 16px;
+        margin-right: 10px;
+        width: 110px;
+    }
+
+    #search-info-container .left-container {
+        width: 420px;
+        float: left;
+    }
+
+    #search-info-container .left-inner-container {
+        border: 1px solid transparent;
+        border-radius: 6px;
+        padding: 0 10px 20px 10px;
+    }
+
+    #search-info-container .right-container {
+        padding: 20px 10px 20px 900px;
+        margin-left: -460px;
+    }
+
+    #search-info-container .right-inner-container {
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        padding: 10px;
+        height: auto;
+    }
+
+    .btn-skyblue {
+        background-color: #00AEEF;
+        border-color: #00AEEF;
+        margin: 0 0 0 15px;
+    }
+
+        .btn-skyblue:hover {
+            background-color: #0071C5;
+        }
+
+    .show-hide-options {
+        color: #00AEEF;
+        cursor: pointer;
+        position: absolute;
+        top: 1px;
+        right: 20px;
+        z-index: 200;
+        font-size: 12px;
+    }
+
+        .show-hide-options:hover {
+            color: #0071C5;
+        }
+
+    .attrbMenu .k-link {
+        padding: 3px 20px !important;
+    }
+
+    .attrbMenu .k-state-hover .k-link {
+        background-image: none, linear-gradient(to bottom, #f2f2f2 0px, #f2f2f2 100%) !important;
+    }
+
+    .k-multiselect {
+        width: 360px;
+    }
+
+    .objDealId {
+        cursor: pointer;
+        color: #00AEEF;
+    }
+
+        .objDealId:hover {
+            color: #003C71;
+        }
+
+    .search-container {
+        padding: 25px 20px;
+    }
+
+    .valid_Valid {
+        background: #e8eaec;
+    }
+
+    .valid_Finalizing {
+        background: #e8eaec;
+    }
+
+    .valid_Complete {
+        background: #C4D600;
+    }
+
+    .valid_, .valid_0, .valid_Dirty {
+        background: #e8eaec;
+    }
+
+    .validf_Valid {
+        color: #e8eaec;
+    }
+
+    .validf_Finalizing {
+        color: #e8eaec;
+    }
+
+    .validf_Complete {
+        color: #C4D600;
+    }
+
+    .validf_, .validf_0, .validf_Dirty {
+        color: #f9521a;
+    }
 
     #perfMs {
         position: absolute;
@@ -512,23 +512,22 @@
         cursor: pointer;
     }
 
-    .showMore:hover {
-        color: #0071C5;
-    }
+        .showMore:hover {
+            color: #0071C5;
+        }
 
     .k-animation-container UL.k-reset.k-multicheck-wrap {
         max-width: 600px;
     }
+
     label.k-label {
         overflow: auto;
     }
-
-
 </style>
 <script id="emailItemTemplateTender" type="text/x-kendo-template">
 
     <div style='font-family:sans-serif;'>
-        <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
+        <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>#= data.eBodyHeader #</span></p>
         <br />
         <p><span style='font-size:18px;'>Tender Deals</span></p>
         <p><span style='font-size: 12px;'>The following list of Tender Deals have changed.  Click <b style='color: \\#00AEEF;'>View Tender Deal</b> in order to view details in My Deals.</span></p>
@@ -546,7 +545,7 @@
             <tbody>
                 # for (var i = 0; i < data.items.length; i++) { #
                 <tr>
-                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span  style='color:\\#1f4e79;'><a href='#= data.items[i].folioUrl #'>#= data.items[i].CNTRCT #</a>*</span> </td>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].folioUrl #'>#= data.items[i].CNTRCT #</a>*</span> </td>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>#= data.items[i].DEAL_ID #</a>*</span> </td>
                     <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].END_CUSTOMER_RETAIL #</span> </td>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'>#= data.items[i].VERTICAL_ROLLUP #</span> </td>
@@ -559,7 +558,7 @@
         <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
         <br />
         <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:#= data.from #'>#= data.from #</a>.</span></p>
-        <br/>
+        <br />
         <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
 
     </div>

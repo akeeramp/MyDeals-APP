@@ -3,8 +3,8 @@
 
     angular
         .module('app.contract')
-            .controller('managerController', managerController)
-            .run(SetRequestVerificationToken);
+        .controller('managerController', managerController)
+        .run(SetRequestVerificationToken);
 
 
     SetRequestVerificationToken.$inject = ['$http'];
@@ -333,7 +333,7 @@
                 ($scope.dealTypeFilter === undefined || $scope.dealTypeFilter === '' || ps.dealType === undefined || ps.dealType.indexOf($scope.dealTypeFilter) >= 0) &&
                 ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0 || $scope.titleInPt(ps)) &&
                 $scope.stageInPs(ps)
-                );
+            );
         }
 
         $scope.titleInPt = function (ps) {
@@ -1223,8 +1223,18 @@
             $("#wincontractMessages").data("kendoWindow").close();
 
             var rootUrl = window.location.protocol + "//" + window.location.host;
-
             var items = [];
+
+            // Check unique stages as per role
+            var stageToCheck = "";
+            if (window.usrRole == "DA") {
+                stageToCheck = "Approved"
+            } else if (window.usrRole == "GA") {
+                stageToCheck = "Submitted"
+            }
+
+            // set this flag to false when stages are not unique as per role
+            var stagesOK = true;
 
             for (var a = 0; a < $scope.root.contractData.PRC_ST.length; a++) {
                 var stItem = $scope.root.contractData.PRC_ST[a];
@@ -1239,6 +1249,11 @@
                         "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID,
                         "contractUrl": rootUrl + "/Contract#/manager/" + $scope.root.contractData.DC_ID
                     };
+
+                    if (stageToCheck != "" && stageToCheck != item.NEW_STG) {
+                        stagesOK = false;
+                    }
+
                     items.push(item);
                 }
             }
@@ -1254,9 +1269,26 @@
                     custNames.push(items[x].CUST_NM);
             }
 
+            var subject = "";
+            var eBodyHeader = "";
+
+            if (stagesOK && window.usrRole === "DA") {
+                subject = "My Deals Deals Approved for ";
+                eBodyHeader = "My Deals Deals Approved!";
+            } else if (stagesOK && window.usrRole === "GA") {
+                subject = "My Deals Approval Required for "
+                eBodyHeader = "My Deals Approval Required!";
+            } else {
+                subject = "My Deals Action Required for ";
+                eBodyHeader = "My Deals Action Required!";
+            }
+
+            subject = subject + custNames.join(', ') + "!";
+
             var data = {
                 from: window.usrEmail,
-                items: items
+                items: items,
+                eBodyHeader: eBodyHeader
             }
 
             var actnList = [];
@@ -1266,9 +1298,10 @@
             var dataItem = {
                 from: "mydeals.notification@intel.com",
                 to: "",
-                subject: "My Deals Action Required for " + custNames.join(', ') + "!",
+                subject: subject,
                 body: msg
             };
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
