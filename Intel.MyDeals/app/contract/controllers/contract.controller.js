@@ -633,11 +633,11 @@
                                 ? "End date cannot be greater than - " + $scope.contractData.MaxDate
                                 : "End date cannot be less than Start Date";
                     }
-                    if ($scope.existingMinEndDate !== "") {
+                    if ($scope.existingMinEndDate !== "" && $scope.contractData.PRC_ST != null && $scope.contractData.PRC_ST.length != 0) {
                         if (moment(endDate).isBefore($scope.existingMinEndDate)) {
                             $scope.contractData._behaviors.isError['END_DT'] = true;
                             $scope.contractData._behaviors
-                                .validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + $scope.existingMinEndDate;
+                                .validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + $scope.existingMinEndDate + " - if you have already created pricing strategies. ";
                         }
                     }
                 }
