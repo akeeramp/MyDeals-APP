@@ -43,6 +43,17 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                 var actns = ["Approve", "Revise"];
                 var actnList = [];
 
+                // Check unique stages as per role
+                var stageToCheck = "";
+                if (window.usrRole == "DA") {
+                    stageToCheck = "Approved"
+                } else if (window.usrRole == "GA") {
+                    stageToCheck = "Submitted"
+                }
+
+                // set this flag to false when stages are not unique as per role
+                var stagesOK = true;
+
                 var rootUrl = window.location.protocol + "//" + window.location.host;
 
                 var items = [];
@@ -60,8 +71,26 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                             item[i].url = rootUrl + "/advancedSearch#/gotoPs/" + item[i].DC_ID;
                             item[i].contractUrl = rootUrl + "/Contract#/manager/" + $scope.$parent.contractData.DC_ID;
                             items.push(item[i]);
+                            var stg = item[i].NEW_STG.replace(/.\s*$/, "");
+                            if (stageToCheck != "" && stageToCheck != stg) {
+                                stagesOK = false;
+                            }
                         }
                     }
+                }
+
+                var subject = "";
+                var eBodyHeader = "";
+
+                if (stagesOK && window.usrRole === "DA") {
+                    subject = "My Deals Deals Approved for ";
+                    eBodyHeader = "My Deals Deals Approved!";
+                } else if (stagesOK && window.usrRole === "GA") {
+                    subject = "My Deals Approval Required for "
+                    eBodyHeader = "My Deals Approval Required!";
+                } else {
+                    subject = "My Deals Action Required for ";
+                    eBodyHeader = "My Deals Action Required!";
                 }
 
                 if (items.length === 0) {
@@ -71,7 +100,8 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
 
                 var data = {
                     from: window.usrEmail,
-                    items: items
+                    items: items,
+                    eBodyHeader: eBodyHeader
                 }
                 actnList.push(kendo.template($("#emailItemTemplate").html())(data));
                 var msg = actnList.join("\n\n");
@@ -82,10 +112,12 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                         custNames.push(items[x].CUST_NM);
                 }
 
+                subject = subject + custNames.join(', ') + "!";
+
                 var dataItem = {
                     from: "mydeals.notification@intel.com",
                     to: "",
-                    subject: "My Deals Action Required for " + custNames.join(', ') + "!",
+                    subject: subject,
                     body: msg
                 };
                 var modalInstance = $uibModal.open({
