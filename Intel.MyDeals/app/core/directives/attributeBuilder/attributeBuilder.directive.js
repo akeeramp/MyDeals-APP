@@ -243,8 +243,8 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     $scope.selectedRuleItem = e.dataItem.title;
                     if (e.dataItem && $scope.deleteRuleInitiated == false) {
                         $scope.ruleEngine(e.dataItem.rule);
-                        //$scope.$broadcast('search-rule-loaded', e.dataItem); // This is what the search page does, but kicks off extra things that tender search doesn't need
-                        $scope.currentRule = $scope.selectedRuleItem;
+                        $scope.$broadcast('search-rule-loaded', e.dataItem); // This is what the search page does, but kicks off extra things that tender search doesn't need
+                        //$scope.currentRule = $scope.selectedRuleItem;
                     }
                     else {
                         $scope.deleteRuleInitiated = false;
@@ -257,12 +257,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 }
             }
 
-            var doNotRunRule = false;
             function sleepAndResetDDL(title) {
-                var title = title;
-                if (title === undefined) {
-                    doNotRunRule = true;
-                }
                 $timeout(function () {
                     var dropdownlist = $("#ruleDropDownList").data("kendoComboBox");
                     if (title && title.length > 0) {
@@ -771,16 +766,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 $scope.buildRuleFormula();
             }
 
-            function sleepAndRunWell() {
-                if (doNotRunRule) {
-                    doNotRunRule = false;
-                    return;
-                }
-                $timeout(function () {
-                    $scope.runRuleOnSelection();
-                }, 200);
-            }
-
             $scope.buildRuleFormula = function () {
                 for (var a = 0; a < $scope.data.length; a++) {
                     var item = $scope.data[a];
@@ -795,17 +780,6 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                     for (var e = 0; e < els.length; e++) {
                         var scope = angular.element(els[e]).scope();
                         $scope.drawValueControl($(els[e]), scope);
-                    }
-                    //Run Rules for TenderDealSearch
-                    if ($scope.saveCat == 'TenderDealSearch' && $scope.data.length && $scope.rules && $scope.rules.length > 0) {
-                        if ($("#ruleDropDownList").data("kendoComboBox").text().length > 0) {
-                            if ($scope.deleteRuleInitiated == false) {
-                                sleepAndRunWell();
-                            }
-                            else {
-                                $scope.deleteRuleInitiated == false;
-                            }
-                        }
                     }
 
                     if ($scope.defaultSelection == false && $("#ruleDropDownList").data("kendoComboBox")) {
