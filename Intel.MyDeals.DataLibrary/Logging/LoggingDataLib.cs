@@ -115,7 +115,7 @@ namespace Intel.MyDeals.DataLibrary
                     in_ui_log = dt,
                     in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
-                using (var sync = DataAccess.ExecuteReaderAsync(cmd))
+                using (var sync = DataAccess.ExecuteReader(cmd))
                 {
                 }
             }

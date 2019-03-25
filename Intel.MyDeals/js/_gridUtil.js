@@ -91,8 +91,7 @@ gridUtils.uiReadonlyControlWrapper = function (passedData, field, format) {
 
 gridUtils.uiReadonlyControlWrapperOEMDates = function (passedData, field, format) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-    if (passedData[field] === undefined || passedData[field] === null || passedData[field] === "" || passedData[field] === "1/1/1900")
-    {
+    if (passedData[field] === undefined || passedData[field] === null || passedData[field] === "" || passedData[field] === "1/1/1900") {
         tmplt += '    <div class="ng-binding vert-center">&nbsp;</div>';
     }
     else {
@@ -136,7 +135,7 @@ gridUtils.getResultSingleIcon = function (passedData, field) {
     var result = passedData[field];
     var iconNm = gridPctUtils.getResultSingleIcon(result, style);
     //return iconNm;
-    if (field === 'MEETCOMP_TEST_RESULT') { 
+    if (field === 'MEETCOMP_TEST_RESULT') {
         // DE29155 - Removed if clause and made all users return the same thing, if !FSE just subtituted iconMn with "EDIT", but still allowed openMCTScreen.  
         return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
     }
@@ -862,7 +861,7 @@ gridUtils.calcKITBackendRebate = function (passedData, atrb2, dim2) {
     var kitProds = passedData["TITLE"].split(',');
 
     var netPrice = 0.0;;
-    for (var i = 0; i <= kitProds.length - 1 ; i++) {
+    for (var i = 0; i <= kitProds.length - 1; i++) {
         var dim1 = dimSuffix + i;
         var data1 = 0.0;
         if (CAP[dim1] == "No CAP" && YCS2[dim1] == "No YCS2") {
@@ -1438,7 +1437,7 @@ gridUtils.customersFormatting = function (passedData, usrCusts, usrRole, usrGeos
             return "<span class='ng-binding' style='padding: 0 4px; color: #CCCCCC;' ng-bind='dataItem.USR_CUST'></span>"; // Edit turned off
         }
     }
-        // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
+    // Don't allow edits on GEO or GLOBAL provisioned customers, they are role based
     else if (valCusts === "All Customers") {
         if (valRoles === "CBA" || valRoles === "FSE" || valRoles === "GA" || valRoles === "RA") // If customer based role, allow them to short cut to all cuatomers to default to geo filters
         {
@@ -1694,7 +1693,7 @@ gridUtils.dsToExcelTimeLine = function (grid, ds, title, onlyVisible) {
     var colHidden = false;
     var hasProds = false;
     if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
-    
+
     var forceHide = [];
 
     //if (!(window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper) || (window.usrRole === "Legal") || (window.usrRole === "SA"))) {
@@ -1841,7 +1840,7 @@ gridUtils.dsToExcelTimeLine = function (grid, ds, title, onlyVisible) {
                         cells: [
                             { value: dataItem["ATRB_VAL"], wrap: true },
                             { value: prd["user"], wrap: true },
-                            { value: prd["HIST_EFF_FR_DTM"], wrap: true }                            
+                            { value: prd["HIST_EFF_FR_DTM"], wrap: true }
                         ]
                     });
                 }
@@ -2678,8 +2677,6 @@ perfCacheBlock.prototype.getChartData = function () {
 }
 
 perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
-    if (!window.isDeveloper && !window.isTester) return;
-
     var data = {
         executionMs: this.executionMs,
         data: this.getChartData()
@@ -2708,6 +2705,8 @@ perfCacheBlock.prototype.drawChart = function (chartId, titleId, legendId) {
     }
 
     op.ajaxPostAsync("/api/Logging/PerformanceTimes", logData, function () { }, function () { });
+
+    if (!window.isDeveloper && !window.isTester) return;
 
     var legend = "";
     var block = this;

@@ -1475,12 +1475,6 @@
     <Content Include="Scripts\angular-bootstrap-toggle.js" />
     <Content Include="Scripts\angular-gridster.min.js" />
     <Content Include="Scripts\angular-nvd3.min.js" />
-    <Content Include="Scripts\Angular\1.5.8\angular-animate.min.js" />
-    <Content Include="Scripts\Angular\1.5.8\angular-mocks.js" />
-    <Content Include="Scripts\Angular\1.5.8\angular-sanitize.min.js" />
-    <Content Include="Scripts\Angular\1.5.8\angular-ui-router.min.js" />
-    <Content Include="Scripts\Angular\1.5.8\angular.js" />
-    <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
     <Content Include="Scripts\Angular\1.6.9\angular-animate.min.js" />
     <Content Include="Scripts\Angular\1.6.9\angular-mocks.js" />
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js" />
@@ -1702,7 +1696,6 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
-    <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

@@ -13,10 +13,12 @@ function ping($timeout) {
         transclude: true,
         templateUrl: '/app/core/directives/ping/ping.directive.html',
         controller: ['$scope', 'dataService', function ($scope, dataService) {
-            $scope.pingCycle = 60000;
-            $scope.pingValues = [];
+
             $scope.pingTime = null;
             $scope.batchInProgress = false;
+
+            var pingCycle = 60000;
+            var pingValues = [];
 
             $scope.getClassName = function () {
                 if ($scope.pingTime === undefined || $scope.pingTime === null) {
@@ -36,17 +38,16 @@ function ping($timeout) {
                     cache: false,
                     success: function (output) {
                         $scope.pingTime = new Date - $scope.ping;
-                        $scope.pingValues.push($scope.pingTime);
-                        if ($scope.pingValues.length > 10) $scope.pingValues.shift();
+                        pingValues.push($scope.pingTime);
+                        if (pingValues.length > 10) pingValues.shift();
                         $timeout(function () {
                             $scope.pingHost();
-                        }, $scope.pingCycle);
+                        }, pingCycle);
                     }
                 });
             }
 
-            $scope.getBatchStatus = function() {
-                $scope.ping = new Date;
+            var getBatchStatus = function () {
                 $.ajax({
                     url: "/api/AdminConstants/v1/GetConstantsByNameNonCached/BATCH_STATUS",
                     cache: false,
@@ -61,7 +62,7 @@ function ping($timeout) {
 
             $scope.pingHost();
 
-            $scope.getBatchStatus();
+            getBatchStatus();
         }],
         link: function (scope, element, attrs) {
         }
