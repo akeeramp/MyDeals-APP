@@ -452,6 +452,30 @@
             }
         }
 
+        function onDataBound() {
+            var wrapper = this.wrapper,
+                header = wrapper.find(".k-grid-header"),
+                id = wrapper.attr('id');
+
+            function scrollFixed() {
+
+                // Position of y-scroll
+                var offset = $(this).scrollTop() + 120,
+                    tableOffsetTop = wrapper[0].offsetTop,
+                    tableOffsetBottom = tableOffsetTop + wrapper.height() - header.height();
+
+                // When scroll position is greater than table header position apply fix header css else remove it
+                if (offset < tableOffsetTop || offset > tableOffsetBottom) {
+                    header.removeClass("fixed-header");
+                } else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && !header.hasClass("fixed")) {
+                    header.addClass("fixed-header");
+                }
+            }
+
+            // Grids container where scroll appears
+            $("#sum-container").scroll(scrollFixed);
+        }
+
         $scope.togglePt = function (ps, pt) {
 
             $("#sumWipGrid_" + pt.DC_ID).html("<div style='margin: 10px;'><ul class='fa-ul'><li><i class='fa-li fa fa-spinner fa-spin'></i>Loading...</li></ul></div>");
@@ -508,6 +532,7 @@
                         resizable: true,
                         autoBind: false,
                         dataSource: ds,
+                        dataBound: onDataBound,
                         sortable: true,
                         height: 250,
                         columns: [
@@ -684,6 +709,7 @@
                     return {
                         filterable: true,
                         resizable: true,
+                        dataBound: onDataBound,
                         autoBind: false,
                         dataSource: ds,
                         sortable: true,
@@ -860,6 +886,7 @@
                         filterable: true,
                         resizable: true,
                         autoBind: false,
+                        dataBound: onDataBound,
                         dataSource: ds,
                         sortable: true,
                         height: 250,

@@ -3,13 +3,13 @@
 
     angular
         .module('app.contract')
-            .controller('managerPctController', managerPctController)
-            .run(SetRequestVerificationToken);
+        .controller('managerPctController', managerPctController)
+        .run(SetRequestVerificationToken);
 
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData','dataItem', 'isToolReq'];
+    managerPctController.$inject = ['$scope', '$uibModalStack', '$state', 'securityService', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq', '$window', 'contractData', 'dataItem', 'isToolReq'];
 
     function managerPctController($scope, $uibModalStack, $state, securityService, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq, $window, contractData, dataItem, isToolReq) {
         if (isToolReq === undefined) isToolReq = true;
@@ -268,7 +268,7 @@
             return (
                 ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT.toUpperCase() === $scope.pctFilter.toUpperCase()) &&
                 ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0 || $scope.titleInPt(ps))
-                );
+            );
         }
 
         $scope.titleInPt = function (ps) {
@@ -300,13 +300,13 @@
         }
 
         // Get the hroup header checkbox a unique id
-        function getColumnTemplateByObjType(pt){
+        function getColumnTemplateByObjType(pt) {
             var template = angular.copy($scope.templates.columns[pt.OBJ_SET_TYPE_CD]);
             if (template[0].field === "TOOLS" && $scope.isToolReq) {
                 template[0].headerTemplate = template[0].headerTemplate.replace(/PT_ID/g, pt.DC_ID);
             }
             else if (template[0].field === "TOOLS" && !$scope.isToolReq) {
-                    template.splice(0, 1);
+                template.splice(0, 1);
             }
             return template;
         }
@@ -323,6 +323,29 @@
                     });
                 }
             }
+        }
+
+        function stickGridHeader(context) {
+            var wrapper = context.wrapper,
+                header = wrapper.find(".k-grid-header");
+
+            function scrollFixed() {
+
+                // Position of y-scroll
+                var offset = $(this).scrollTop() + 120,
+                    tableOffsetTop = wrapper[0].offsetTop,
+                    tableOffsetBottom = tableOffsetTop + wrapper.height() - header.height();
+
+                // When scroll position is greater than table header position apply fix header css else remove it
+                if (offset < tableOffsetTop || offset > tableOffsetBottom) {
+                    header.removeClass("fixed-header");
+                } else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && !header.hasClass("fixed")) {
+                    header.addClass("fixed-header");
+                }
+            }
+
+            // Grids container where scroll appears
+            $("#sum-container").scroll(scrollFixed);
         }
 
         $scope.togglePt = function (ps, pt) {
@@ -345,7 +368,7 @@
                         });
                         if (tempItem.length > 0) {
                             e.data.CostTestDetailItems = [];
-                            e.data.CostTestDetailItems=tempItem;
+                            e.data.CostTestDetailItems = tempItem;
                         }
                     }
                     $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
@@ -358,7 +381,7 @@
                         response[j]['PS_WF_STG_CD'] = pt.PS_WF_STG_CD;
 
                         // Copy PS actions to deal to deal tools to work
-                        response[j]['_actionsPS']= ps._actions;
+                        response[j]['_actionsPS'] = ps._actions;
 
                         // Deal id is not parent id here..Make deal tool directive work assigning this value
                         response[j]['DC_PARENT_ID'] = response[j]["DEAL_ID"];
@@ -448,7 +471,7 @@
                         //}
                     }
 
-                    if (!$scope.sumGridOptions)  $scope.sumGridOptions = {};
+                    if (!$scope.sumGridOptions) $scope.sumGridOptions = {};
 
                     $scope.sumGridOptions["dc" + pt.DC_ID] = {
                         dataSource: {
@@ -475,7 +498,6 @@
                                 linkFunction($scope);
                                 grid.tbody.find(".k-grouping-row:eq(" + index + ") td").html(template);
                             });
-
 
                             // Set background colors
                             var rows = e.sender.content.find('tr');
@@ -535,12 +557,11 @@
 
                             });
 
-
-
                             $timeout(function () {
                                 $scope.setOverrideMarkup(ps, pt);
                             }, 100);
 
+                            stickGridHeader(this);
                         }
                     }
 
@@ -762,7 +783,7 @@
 
             }
             else {
-            //$scope.selectedTAB = 'GE';
+                //$scope.selectedTAB = 'GE';
                 $state.go('contract.grouping');
             }
 
