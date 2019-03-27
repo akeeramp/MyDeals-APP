@@ -93,7 +93,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
             field: "HIST_EFF_FR_DTM",
             title: "Date Changed",
             width: "160px",
-            template: "#=kendo.toString(new Date(HIST_EFF_FR_DTM), 'M/d/yyyy')#"
+                template: "#=kendo.toString(new Date(HIST_EFF_FR_DTM), 'MM/dd/yyyy hh:mm tt')#"
         }]
     };
 

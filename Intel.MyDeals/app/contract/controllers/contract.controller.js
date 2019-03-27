@@ -3649,7 +3649,7 @@
                     $scope.updateResults(data.data.PRC_TBL, pt); //?? needed?
                     //Check for errors
                     if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
-                        $scope.setBusy("Save unsuccessful", "Could not create the contract", "Error");
+                        $scope.setBusy("Save unsuccessful", "Could not create the Tender Folio", "Error");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
@@ -3673,19 +3673,23 @@
 
                         });
                     }
-                    $scope.setBusy("Save Successful", "Saved the contract", "Success");
+                    $scope.setBusy("Save Successful", "Saved the Tender Folio", "Success");
 
                     $scope.setBusy("", "");
                 },
                 function (result) {
-                    logger.error("Could not create the contract.", result, result.statusText);
+                    logger.error("Could not create the Tender Folio", result, result.statusText);
                     $scope.setBusy("", "");
                 }
             );
             return true;
         }
         $scope.saveContract = function () {
-            $scope.setBusy("Saving Contract", "Saving the Contract Information");
+            if ($scope.isTenderContract) {
+                $scope.setBusy("Saving Tender Folio", "Saving the Tender Folio Information");
+            }else {
+                $scope.setBusy("Saving Contract", "Saving the Contract Information");
+            }           
 
             // Contract Data
             var ct = $scope.contractData;
