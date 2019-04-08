@@ -1274,7 +1274,7 @@
 
             vm.productSearchValues = data;
 
-            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to find this product. The product does not match the global filter criteria or is not active within the deal date range." : "";
+            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to find this product. The product does not match the global filter criteria (Media Code in Autofill defaults for instance) or is not active within the deal date range." : "";
             if (vm.errorMessage != "") {
                 vm.showSuggestions = true;
             }

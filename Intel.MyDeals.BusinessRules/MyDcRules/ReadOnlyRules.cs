@@ -159,6 +159,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.USER_AVG_RPU,
                                 AttributeCodes.USER_MAX_RPU,
                                 AttributeCodes.RATE,
+                                AttributeCodes.OEM_PLTFRM_EOL_DT,
+                                AttributeCodes.OEM_PLTFRM_LNCH_DT,
                                 AttributeCodes.TERMS }
                         }
                     }

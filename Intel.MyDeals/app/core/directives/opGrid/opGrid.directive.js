@@ -2698,7 +2698,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.overlappingDealsSetup = function () {
-                // Moved this block up before Overlpa return to re-include the perf block rendering that was displaced.
+                // Moved this block up before Overlap return to re-include the perf block rendering that was displaced.
                 $timeout(function () {
                     if ($scope.$root.pc && $scope.$root.pc !== null) {
                         $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");

@@ -367,7 +367,7 @@ function attributeBuilder($compile, objsetService, $timeout, $filter, $localStor
                 if (!$scope.validateRules()) return;
                 var notes = "<br><br><div style='font-size: 9px;'>Only those filters selected under the '<b>Search Options</b>' (right hand side of the screen)<br>\
                              will be included in the creation of the user defined 'search rule'.  The '<b>Customers</b>' and '<b>Date<br>\
-                             Range</b>' filters (left hand side of the screen) will not be considdered as 'search rule' filters.</div>";
+                             Range</b>' filters (left hand side of the screen) will not be considered as 'search rule' filters.</div>";
 
                 kendo.prompt("Please, enter a name for the rule:<div style='font-size: 11px;'><b>Note:</b> The rule name must be unique." + notes + "</div>", "")
                     .then(function (title) {
