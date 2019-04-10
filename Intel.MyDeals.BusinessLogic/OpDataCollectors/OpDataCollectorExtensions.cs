@@ -204,13 +204,12 @@ namespace Intel.MyDeals.BusinessLogic
                     if (!items.ContainsKey(de.AtrbCd)) continue;
 
                     if (de.DataType == "System.DateTime" && items[de.AtrbCd] != null &&
-                        items[de.AtrbCd].ToString() == "Invalid date" && de.OrigAtrbValue == "")
+                        items[de.AtrbCd].ToString() == "Invalid date" && de.OrigAtrbValue.ToString() == "")
                     {
                         items[de.AtrbCd] = "";
                     }
 
-                        if (de.DataType == "System.DateTime" && items[de.AtrbCd] != null &&
-                        !string.IsNullOrEmpty(items[de.AtrbCd].ToString().Replace("Invalid date", "")))
+                    if (de.DataType == "System.DateTime" && items[de.AtrbCd] != null && !string.IsNullOrEmpty(items[de.AtrbCd].ToString().Replace("Invalid date", "")))
                     {
                         DateTime date = Convert.ToDateTime(items[de.AtrbCd]);
                         items[de.AtrbCd] = date;
@@ -251,7 +250,7 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         if (dictValues.ContainsKey(uniqDimBaseKey))
                         {
-                            if (de.DataType == "System.DateTime" && dictValues[uniqDimBaseKey].ToString() == "Invalid date" && de.OrigAtrbValue == "")
+                            if (de.DataType == "System.DateTime" && dictValues[uniqDimBaseKey].ToString() == "Invalid date" && de.OrigAtrbValue.ToString() == "")
                             {
                                 dictValues[uniqDimBaseKey] = "";
                             }

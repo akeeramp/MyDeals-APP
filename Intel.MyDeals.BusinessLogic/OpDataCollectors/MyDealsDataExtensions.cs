@@ -963,6 +963,21 @@ namespace Intel.MyDeals.BusinessLogic
         {
             foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in myDealsDataResults)
             {
+                // Foreach added to carry Major Change Tracker updates without redeal through to return set.  They were being dropped in the case of backdate reason
+                // triggering error and taking the current UI data over the return set, thus resetting the DB updated Tracker in non-redeal tracker updates.
+                foreach (OpDataCollector dc in myDealsDataResults[kvp.Key].AllDataCollectors)
+                {
+                    if (kvp.Key == OpDataElementType.WIP_DEAL)
+                    {
+                        string trkr = dc.GetDataElementValue(AttributeCodes.TRKR_NBR).ToString();
+                        foreach (OpDataCollector dc2 in myDealsDataWithErrors[kvp.Key].AllDataCollectors)
+                        {
+                            if (dc2.DcID == dc.DcID && dc2.GetDataElementValue(AttributeCodes.TRKR_NBR).ToString() != trkr)
+                                dc2.SetDataElementValue(AttributeCodes.TRKR_NBR, trkr);
+                        }
+                    }
+                }
+
                 if (myDealsDataResults[kvp.Key].Actions == null || !myDealsDataResults[kvp.Key].Actions.Any()) continue;
                 if (!myDealsDataWithErrors.ContainsKey(kvp.Key)) myDealsDataWithErrors[kvp.Key] = new OpDataPacket<OpDataElementType>();
                 myDealsDataWithErrors[kvp.Key].Actions = myDealsDataResults[kvp.Key].Actions;
