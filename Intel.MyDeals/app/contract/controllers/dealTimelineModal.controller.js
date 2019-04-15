@@ -34,7 +34,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                     data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(/; /g, '<br/>');
                     var regex1 = /Created Folio:/gi;
                     var regex2 = /Created Deals:/gi;
-                    data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex1, 'Created Folio for product(s):');
+                    //data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex1, 'Created Folio for product(s):');
                     data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex2, 'Created Deal(s) for product:');
                 }
                 return data;
