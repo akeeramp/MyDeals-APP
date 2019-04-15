@@ -1420,7 +1420,7 @@
             if (newVal === "Lost") msg = "Would you like to mark the Tender Deal" + plural + " as 'Lost'?";
             if (newVal === "Offer") msg = "Would you like to re-open the Tender Deal" + plural + " and set to 'Offer'?";
 
-            if (newVal === "Approve") msg = "Would you like approve the Tender Deal" + plural + " and set to 'Approved'?";
+            if (newVal === "Approve") msg = "Would you like to approve the Tender Deal" + plural + " and set to 'Approved'?";
             if (newVal === "Revise") msg = "Would you like to edit the Tender Deal" + plural + " and set to 'Revise'?";
 
             if (linkedUnactionables.length > 0) {
