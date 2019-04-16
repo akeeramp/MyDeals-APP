@@ -863,7 +863,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         return x["isLinked"] === true;//&& (x["_actionsPS"][args["action"]] == true || ((x["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(args["action"])) != -"1"))
                     });
 
-                    if (checkedDeals.length === 0) return;
+                    if (checkedDeals.length === 0) {
+                        kendo.alert("The selected deals cannot be set to " + args["action"]);
+                        return;
+                    }
 
                     $timeout(function () {
                         if (!isTenderStage) {
