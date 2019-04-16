@@ -265,6 +265,15 @@
                     , url: 'notifications'
 					, controller: 'notificationsController as vm'
                 }
+            },
+            {
+                state: 'admin.dataquality',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/dataquality/dataquality.html'
+                    , url: 'dataquality'
+                    , controller: 'DataQualityController as vm'
+                }
             }
         ];
     }

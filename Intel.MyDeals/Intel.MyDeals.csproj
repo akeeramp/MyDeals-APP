@@ -235,6 +235,7 @@
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\DataQuality\" />
     <Folder Include="Views\Email\" />
     <Folder Include="Views\FileUpload\" />
     <Folder Include="Views\Timeline\" />
@@ -253,6 +254,7 @@
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
+    <Compile Include="Controllers\API\DataQualityController.cs" />
     <Compile Include="Controllers\API\NotificationsController.cs" />
     <Compile Include="Controllers\API\OpLogController.cs" />
     <Compile Include="Controllers\API\CacheController.cs" />
@@ -324,6 +326,8 @@
     <Content Include="app\admin\customer\admin.customer.controller.js" />
     <Content Include="app\admin\customer\customer.html" />
     <Content Include="app\admin\customer\customer.service.js" />
+    <Content Include="app\admin\dataQuality\dataQuality.html" />
+    <Content Include="app\admin\dataQuality\dataQuality.service.js" />
     <Content Include="app\admin\dropdowns\admin.dropdowns.controller.js" />
     <Content Include="app\admin\dropdowns\dropdowns.html" />
     <Content Include="app\admin\dropdowns\dropdowns.service.js" />
@@ -605,6 +609,7 @@
     <Content Include="app\core\filters\kitCalculatedValues.filter.js" />
     <Content Include="app\core\filters\kitProducts.filter.js" />
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
+    <Content Include="app\admin\dataQuality\admin.dataQuality.controller.js" />
     <Content Include="app\shared\services\performanceTestingService.service.js" />
     <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />

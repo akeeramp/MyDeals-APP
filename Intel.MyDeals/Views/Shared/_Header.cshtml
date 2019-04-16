@@ -219,7 +219,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
@@ -240,6 +240,7 @@
                     @if (usrRole == "SA" || isDeveloper)
                     {
                         <li><a href="Admin#/dropdowns">UI Control Values</a></li>
+                        <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
                     }
 
                     @if (isDeveloper)
@@ -258,7 +259,7 @@
 
                     @if (usrRole == "DA" || usrRole == "SA" || isDeveloper) // DA users get to edit their own records only, SA get all.  Developer gets their present record and might be restricted access.
                     {
-                        <li><a href="Admin#/manageEmployee">User Administration Screen</a></li> //User Customer Assignments
+                        <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
 
                 </ul>

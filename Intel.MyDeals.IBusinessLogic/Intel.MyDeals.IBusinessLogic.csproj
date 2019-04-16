@@ -68,6 +68,7 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarLib.cs" />
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
+    <Compile Include="DataQuality\IDataQualityLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />

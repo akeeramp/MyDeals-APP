@@ -120,6 +120,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/constants/constants.service.js"
                 , "~/app/admin/customer/admin.customer.controller.js"
                 , "~/app/admin/customer/customer.service.js"
+                , "~/app/admin/dataquality/admin.dataquality.controller.js"
+                , "~/app/admin/dataquality/dataquality.service.js"
                 , "~/app/admin/dropdowns/admin.dropdowns.controller.js"
                 , "~/app/admin/dropdowns/dropdowns.service.js"
                 , "~/app/admin/employee/employee.service.js"

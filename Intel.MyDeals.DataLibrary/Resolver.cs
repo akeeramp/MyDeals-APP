@@ -38,6 +38,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IQuoteLetterDataLib, QuoteLetterDataLib>();
             registerService.RegisterType<IJmsDataLib, JmsDataLib>();
             registerService.RegisterType<INotificationsDataLib, NotificationsDataLib>();
+            registerService.RegisterType<IDataQualityDataLib, DataQualityDataLib>();
         }
     }
 }

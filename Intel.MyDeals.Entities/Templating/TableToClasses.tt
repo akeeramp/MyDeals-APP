@@ -369,6 +369,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "NotificationEmailTable";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Data Quality Usecase
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DQ_META_DATA");
+	ds.Tables[0].TableName = "DataQualityUsecase";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 
