@@ -70,7 +70,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         var tempString = dataItem.ATRB_VAL;
         var regex1 = /Created Folio:/gi;
         var regex2 = /Created Deals:/gi;
-        tempString = tempString.replace(regex1, 'Created Folio for product(s):');
+        //tempString = tempString.replace(regex1, 'Created Folio for product(s):');
         tempString = tempString.replace(regex2, 'Created Deal(s) for product:');
         
         return tempString;
