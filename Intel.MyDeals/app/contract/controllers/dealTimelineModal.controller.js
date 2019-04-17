@@ -37,7 +37,7 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
                     data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex1, '');
                     data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex2, 'Created Deal(s) for product:');
                     if (data[d]["ATRB_VAL"].toLowerCase() == "quote letter generated") {
-                        delete data[d];
+                        delete data[d]; 
                     }
                 }
                 return data;
