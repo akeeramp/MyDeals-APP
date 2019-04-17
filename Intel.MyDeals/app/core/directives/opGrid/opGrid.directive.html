@@ -34,8 +34,6 @@
                         </tr>
                     </table>
                 </button>
-                <floating-actions ng-if="opIsTender"></floating-actions>
-
                 <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" ng-show="isVisibleAdditionalDiscounts" title="Show/Hide Additional Discounts and Requirements.">
                     <table>
                         <tr>
@@ -48,9 +46,10 @@
                         </tr>
                     </table>
                 </button>
-
             </div>
-
+            <div class="fl">
+                <floating-actions ng-if="opIsTender"></floating-actions>
+            </div>
             <div class="fr" style="margin-top: 2px;">
                 <span class="k-textbox k-space-left opGridSearchInput">
                     <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search... (press enter to search)" ng-model="searchFilter" />
