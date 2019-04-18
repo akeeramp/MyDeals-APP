@@ -1935,6 +1935,40 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckForBadCapRemoval(params object[] args)
+        {
+            // If there are DEs for CAP/CAP_STRT_DT/CAP_END_DT that are removed or reset to bad values, over-ride them to prevent corrupt data into DB
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement myCap = r.Dc.GetDataElement(AttributeCodes.CAP);
+            
+            if (myCap != null && myCap.HasOrigValueChanged && String.IsNullOrEmpty(myCap.AtrbValue.ToString()))
+            {
+                myCap.AtrbValue = myCap.OrigAtrbValue;
+            }
+        }
+
+        public static void CheckForBadCapDates(params object[] args)
+        {
+            // If there are DEs for CAP/CAP_STRT_DT/CAP_END_DT that are removed or reset to bad values, over-ride them to prevent corrupt data into DB
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement myCapStrtDt = r.Dc.GetDataElement(AttributeCodes.CAP_STRT_DT);
+            IOpDataElement myCapEndDt = r.Dc.GetDataElement(AttributeCodes.CAP_END_DT);
+
+            if (myCapStrtDt != null && myCapStrtDt.HasOrigValueChanged && (String.IsNullOrEmpty(myCapStrtDt.AtrbValue.ToString()) || myCapStrtDt.AtrbValue.ToString() == "1/1/1900"))
+            {
+                myCapStrtDt.AtrbValue = myCapStrtDt.OrigAtrbValue;
+            }
+
+            if (myCapEndDt != null && myCapEndDt.HasOrigValueChanged && (String.IsNullOrEmpty(myCapEndDt.AtrbValue.ToString()) || myCapEndDt.AtrbValue.ToString() == "1/1/1900"))
+            {
+                myCapEndDt.AtrbValue = myCapEndDt.OrigAtrbValue;
+            }
+        }
+
         public static void CheckTotalDollarAmount(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

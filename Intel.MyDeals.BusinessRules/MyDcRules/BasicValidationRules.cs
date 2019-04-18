@@ -588,6 +588,22 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
+                new MyOpRule
+                {
+                    Title="Improperly removed CAP value check",
+                    ActionRule = MyDcActions.CheckForBadCapRemoval,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
+                },
+                new MyOpRule
+                {
+                    Title="Incorrect CAP dates check",
+                    ActionRule = MyDcActions.CheckForBadCapDates,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
+                },
 				//new MyOpRule
 				//{
 				//	Title="Qty cannot be negative",
