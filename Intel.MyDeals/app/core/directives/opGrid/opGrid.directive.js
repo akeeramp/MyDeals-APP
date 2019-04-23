@@ -875,6 +875,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $scope.broadcast("bid-actions-updated", { newValue: args["action"], dataItem: checkedDeals[0], gridDS: checkedDeals });
                         }
                     });
+                } else {
+                    kendo.alert("The selected action cannot be performed.");
+                    return;
                 }
             });
 
