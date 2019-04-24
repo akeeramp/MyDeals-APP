@@ -1796,7 +1796,7 @@ gridUtils.dsToExcelTimeLine = function (grid, ds, title, onlyVisible) {
                         // Output the text content of the templated cell into the exported cell.
                         //val = (elem.textContent || elem.innerText || "").replace(/null/g, '').replace(/undefined/g, '')
                         //    .replace(/LINEBREAKTOKEN/g, '\n');
-                        val = (dataItem.ATRB_VAL).replace(/null/g, '').replace(/undefined/g, '')
+                        val = (newHtmlVal).replace(/null/g, '').replace(/undefined/g, '')
                             .replace(/LINEBREAKTOKEN/g, '\n');
                         var regex = /<br\s*[\/]?>/gi;
                         val = val.replace(regex, "\r");
