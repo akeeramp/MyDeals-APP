@@ -86,8 +86,9 @@ namespace Intel.MyDeals.Entities
             {
                 packet.AttachAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, 80, majorFieldNoRedealIds); // Set actions - save them.
                 packet.AddGoingActiveActions(majorFieldNoRedealIds);
+                packet.AddAuditActions(majorFieldNoRedealIds);
                 packet.AddQuoteLetterActions(majorFieldNoRedealIds);
-                //packet.AddAuditActions(majorFieldNoRedealIds); // Pulled out since Doug doesn't think that we nee to re-trigger cost testing.
+                //packet.AddAuditActions(majorFieldNoRedealIds); // Pulled out since Doug doesn't think that we need to re-trigger cost testing.
             }
 
             if (majorFieldQuoteOnlyIds.Any())
@@ -146,6 +147,7 @@ namespace Intel.MyDeals.Entities
 
         public static void AddAuditActions(this OpDataPacket<OpDataElementType> packet, List<int> ids)
         {
+            // This is what adds Audit Actions - trigger PR_MYDL_UPD_APRV_AUDIT_ATRBS to update GA/DA approval item populations
             if (!ids.Any()) return;
             packet.AttachAction(DealSaveActionCodes.APRV_AUDIT, 75, ids);
         }

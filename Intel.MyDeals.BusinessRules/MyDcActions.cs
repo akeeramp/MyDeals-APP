@@ -1086,7 +1086,7 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void MajorWrongWayChangeCheck(params object[] args)
         {
-            // This rule added in because Kannan said that for wrong way major changes to properly generate a tracker, they were relying on tracker having "*" prior to gen-tracker call.
+            // This rule added in because Kannan said that for wrong way major changes to properly generate a tracker.  The DB is relying on tracker having "*" prior to gen-tracker call.
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
@@ -1098,23 +1098,41 @@ namespace Intel.MyDeals.BusinessRules
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeWrongWayIds.Contains(d.DcID))
                 .Select(d => d.DcID).ToList();
 
-            if (!majorFieldNoRedealIds.Any()) return; // If there are none to process, bail out
+            if (!majorFieldNoRedealIds.Any()) return; // If there are no "wrong way" major changes to process, bail out.
 
             if (majorFieldNoRedealIds.Contains(r.Dc.DcID))
             {
-                foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
+                foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers (Potentially multi-dimensional) for this object and update as needed.
                 {
                     string tracker = de.AtrbValue.ToString();
-                    if (!string.IsNullOrEmpty(tracker) && !tracker.Contains('*')) // If there is a tracker number, put the WIP version in redeal visual state
+                    // If there is a tracker number, put the WIP version in re-deal visual state.  We do this because we will issue a GEN_TRACKER call to update the tracker.
+                    if (!string.IsNullOrEmpty(tracker) && !tracker.Contains('*')) 
                     {
                         de.AtrbValue = tracker + "*";
                     }
                 }
+
+                // Tack on re-deal messages that are specific to "wrong way" major changes.
+                var reason = "Fast Track Redeal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
+                var reasonDetails = new List<string>();
+                List<IOpDataElement> onChangeWrongWayElements = r.Dc.GetDataElementsWhere(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
+
+                foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList())
+                {
+                    MyDealsAttribute atrb = onChangeWrongWayItems.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                    if (atrb == null) continue;
+
+                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME"
+                        ? $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}"
+                        : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                }
+                r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
         }
 
         public static void MajorChangeCheck(params object[] args)
         {
+            // Check for changes in attributes that would trigger a major change and re-deal.
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
@@ -1124,7 +1142,7 @@ namespace Intel.MyDeals.BusinessRules
             var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
-            // if there isn't a future stage, then it isn't redealable
+            // If there isn't a future stage, then it isn't redealable
             // TO DO - WE NEED TO ADD IN PARENT PS STAGE FOR THIS CHECK
             if (futureStage == null && wipStage != WorkFlowStages.Pending && wipStage != WorkFlowStages.Active
                 && wipStage != WorkFlowStages.Won && wipStage != WorkFlowStages.Offer) return; // DE19865 - Place end stages that DO force redeal here (including Offer)
@@ -1148,7 +1166,7 @@ namespace Intel.MyDeals.BusinessRules
 
             var titleDe = changedDes.Where(x => x.AtrbCd == AttributeCodes.TITLE);
 
-            // Product title changed..Check if Atrb 15 changed
+            // Product title changed..  Check if Atrb 15 changed
             if (titleDe.Any())
             {
                 // Get all the products
