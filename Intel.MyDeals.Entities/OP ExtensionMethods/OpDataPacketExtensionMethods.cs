@@ -213,6 +213,16 @@ namespace Intel.MyDeals.Entities
                     dc.AddTimelineComment("Quote letter generated");
                     quoteIds.Add(dc.DcID);
                 }
+                if (de == null) // User didn't change stage, only made an End Customer Quote only change, catch it and re-gen anyhow..
+                {
+                    IOpDataElement deEndCust = dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+                    // This is safe because quote only changes is checks WF_STG matches above criteria.  User didn't change the WF as a movement, so WF element doesn't come through to here.
+                    if (deEndCust != null && deEndCust.State == OpDataElementState.Modified) 
+                    {
+                        dc.AddTimelineComment("Quote letter generated for End Customer Change");
+                        quoteIds.Add(dc.DcID);
+                    }
+                }
             }
 
             // Was dealIds, but this also placed Offer stage deals into generating quotes upon approvals.
