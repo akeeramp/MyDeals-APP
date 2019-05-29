@@ -29,7 +29,19 @@ namespace Intel.MyDeals.DataLibrary
 
         string GetValue(string key)
         {
-            return source.Descendants("PARAMETERS").Select(el => (el.Element(key) == null) ? string.Empty : ((string)el.Element(key)).Replace("\\n", "<br />")).FirstOrDefault();
+            string retVal = source.Descendants("PARAMETERS").Select(el => (el.Element(key) == null) ? string.Empty : ((string)el.Element(key)).Replace("\\n", "<br />")).FirstOrDefault();
+            if (retVal.Contains("&") && !retVal.Contains("&amp;")) // stand alone &s need to be replaced
+            {
+                retVal = retVal.Replace("&", "&amp;");
+            }
+            // These don't contain themselves in the replacement code, so they can go without the check like &s.  Looks like Quote HTML replacement changes escaped 
+            // chars to HTML, but &s still kills output.  Others replaced back to expected just in case.
+            retVal = retVal.Replace("<", "&lt;");
+            retVal = retVal.Replace(">", "&gt;");
+            retVal = retVal.Replace("'", "&apos;");
+            retVal = retVal.Replace("\"", "&quot;");
+            retVal = retVal.Replace("/", "&#x2F;");
+            return retVal;
         }
         string GetTrackerValue(string key)
         {
