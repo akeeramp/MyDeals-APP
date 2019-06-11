@@ -234,6 +234,12 @@
             filterable: "moneyObjFilter",
             template: "#= gridUtils.tenderDim(data, 'YCS2_PRC_IRBT', 'c') #"
         }, {
+            field: "DEAL_DESC",
+            title: "Deal Description",
+            type: "string",
+            width: 210,
+            filterable: "objFilter",
+        }, {
             field: "START_DT",
             title: "Start Date",
             type: "date",

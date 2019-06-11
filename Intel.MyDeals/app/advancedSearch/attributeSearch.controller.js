@@ -247,6 +247,12 @@
                     { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }
                 ]
             }, {
+                field: "DEAL_DESC",
+                title: "Deal Description",
+                type: "string",
+                width: 210,
+                filterable: "objFilter",
+            }, {
                 field: "START_DT",
                 title: "Start Date",
                 type: "date",

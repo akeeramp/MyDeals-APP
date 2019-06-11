@@ -337,6 +337,12 @@
                     { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" }
                 ]
             }, {
+                field: "DEAL_DESC",
+                title: "Deal Description",
+                type: "string",
+                width: 210,
+                filterable: "objFilter",
+            }, {
                 field: "START_DT",
                 title: "Start Date",
                 type: "date",
