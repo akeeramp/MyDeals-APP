@@ -860,30 +860,23 @@ gridUtils.calcKITBackendRebate = function (passedData, atrb2, dim2) {
     var ecapPrice = passedData[atrb2];
     var kitProds = passedData["TITLE"].split(',');
 
-    var netPrice = 0.0;
-    //DE44354- Backend Rebate = CAP KIT - NET KIT Price
-    if (CAP["20_____1"]) {
-        netPrice = CAP["20_____1"];
+    var netPrice = 0.0;;
+    for (var i = 0; i <= kitProds.length - 1; i++) {
+        var dim1 = dimSuffix + i;
+        var data1 = 0.0;
+        if (CAP[dim1] == "No CAP" && YCS2[dim1] == "No YCS2") {
+            if (i == 0) return "";
+            continue;
+        } else if (CAP[dim1] == "No CAP") {
+            data1 = YCS2[dim1];
+        } else if (YCS2[dim1] == "No YCS2") {
+            data1 = CAP[dim1];
+        } else {
+            data1 = Math.min(CAP[dim1], YCS2[dim1]);
+        }
+        netPrice = parseFloat(netPrice) + parseFloat(data1);
     }
 
-    if (netPrice == 0.0) {
-        for (var i = 0; i <= kitProds.length - 1; i++) {
-            var dim1 = dimSuffix + i;
-            var data1 = 0.0;
-            if (CAP[dim1] == "No CAP" && YCS2[dim1] == "No YCS2") {
-                if (i == 0) return "";
-                continue;
-            } else if (CAP[dim1] == "No CAP") {
-                data1 = YCS2[dim1];
-            } else if (YCS2[dim1] == "No YCS2") {
-                data1 = CAP[dim1];
-            } else {
-                data1 = Math.min(CAP[dim1], YCS2[dim1]);
-            }
-            netPrice = parseFloat(netPrice) + parseFloat(data1);
-        }
-    }
-    
     if (!(dim2 == "" || dim2 == null)) {
         ecapPrice = ecapPrice[dim2];
     }
