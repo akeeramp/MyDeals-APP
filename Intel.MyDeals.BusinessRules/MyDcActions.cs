@@ -8,6 +8,7 @@ using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
+using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -1055,6 +1056,7 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
+            var myDealsData = (MyDealsData)r.ExtraArgs[1];
 
             List<string> atrbs = new List<string> { AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD, AttributeCodes.EXPIRE_YCS2 };
 
@@ -1076,10 +1078,34 @@ namespace Intel.MyDeals.BusinessRules
                         if (de.AtrbValue.ToString() == "Yes") r.Dc.AddTimelineComment($"YCS2 deal has been expired");
                         break;
 
+                    case AttributeCodes.WF_STG_CD:
+                        if (OpDataElementTypeConverter.IdToOpDataElementTypeString(de.DcType) == OpDataElementType.WIP_DEAL) SetDealDcMessages(myDealsData, (OpDataElement)de, null); // WIP item, get PS data
+                        else r.Dc.AddTimelineComment($"{ atrb.ATRB_LBL } changed from {de.OrigAtrbValue} to { de.AtrbValue }"); // Not wip - do normal
+                        break;
+
                     default:
                         if (de.OrigAtrbValue.ToString() == string.Empty) continue;
                         r.Dc.AddTimelineComment($"{ atrb.ATRB_LBL } changed from {de.OrigAtrbValue} to { de.AtrbValue }");
                         break;
+                }
+            }
+        }
+
+        // This takes a WIP and myDealsData packet, and sets the deal level DC stage change message as defined by its parent PS
+        public static void SetDealDcMessages(MyDealsData myDealsData, OpDataElement dealDe, string specificStage)
+        {
+            OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == dealDe.DcID);
+            string dealBreadcrumbPathJSON = dealDc.GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+            if (!string.IsNullOrEmpty(dealBreadcrumbPathJSON))
+            {
+                // Dynamic makes the JSON an mapable object, otherwise need to parse it via dealBreadcrumbPath["PS"].ToString()
+                dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJSON);
+                int dealParentPSId = Int32.Parse(dealBreadcrumbPath.PS.ToString());
+                if (dealParentPSId != 0) // We got back a PS ID, get stage data from there
+                {
+                    OpDataElement psWfStgDe = myDealsData[OpDataElementType.PRC_ST].AllDataElements.FirstOrDefault(d => d.DcID == dealParentPSId && d.AtrbCd == AttributeCodes.WF_STG_CD);
+                    string setDestStage = string.IsNullOrEmpty(specificStage) ? psWfStgDe.AtrbValue.ToString() : specificStage;
+                    if (psWfStgDe != null) dealDc.AddTimelineComment($"Stage changed from {psWfStgDe.OrigAtrbValue} to {setDestStage}");
                 }
             }
         }
@@ -1124,7 +1150,9 @@ namespace Intel.MyDeals.BusinessRules
 
                     reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME"
                         ? $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}"
-                        : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                        : atrb.DATA_TYPE_CD == "MONEY"
+                            ? $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}"
+                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
                 }
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
@@ -1206,7 +1234,9 @@ namespace Intel.MyDeals.BusinessRules
 
                     reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME"
                         ? $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}"
-                        : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                        : atrb.DATA_TYPE_CD == "MONEY"
+                            ? $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}"
+                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
                 }
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }

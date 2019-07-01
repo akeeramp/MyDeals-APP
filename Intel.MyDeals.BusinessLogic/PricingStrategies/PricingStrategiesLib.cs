@@ -9,6 +9,7 @@ using Intel.MyDeals.DataLibrary;
 using System.Threading;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -136,6 +137,7 @@ namespace Intel.MyDeals.BusinessLogic
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             List<int> psGoingActive = new List<int>();
             List<int> psGoingPending = new List<int>();
+            List<int> psStageChanges = new List<int>();
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
             List<int> auditableDealIds = new List<int>();
             List<NotificationLog> notifications = new List<NotificationLog>();
@@ -249,25 +251,32 @@ namespace Intel.MyDeals.BusinessLogic
                     needsPctMctDealIds.Add(dc.DcID);
                 }
 
-                // Check for pending stage... might need to bypass it
-                if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending")
+
+                // Check for pending stage... contract setting might bypass it
+                if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending") 
                 {
-                    targetStage = WorkFlowStages.Approved;
+                    targetStage = WorkFlowStages.Approved; // Was pending, but contract was set to force it approved, so move it
                 }
 
-                // Check to see if we are passing the Pending threshold
-                if (targetStage == WorkFlowStages.Pending)
+                // Check to see if we are passing the Pending threshold for pending actions to be applied
+                if (targetStage == WorkFlowStages.Pending) 
                 {
                     psGoingPending.Add(dc.DcID);
                 }
 
                 // Check to see if we are passing the Approved threshold and need to pass actions
-                if (targetStage == WorkFlowStages.Approved)
+                if (targetStage == WorkFlowStages.Approved) 
                 {
                     psGoingActive.Add(dc.DcID);
                 }
 
-                if (targetStage != stageIn && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
+                // Simple PS stage change to reflect down to deals history
+                if (targetStage != WorkFlowStages.Pending && targetStage != WorkFlowStages.Approved) 
+                {
+                    psStageChanges.Add(dc.DcID);
+                }
+
+                if (targetStage != stageIn && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID)) 
                 {
                     if ((role == RoleTypes.FSE && stageIn == WorkFlowStages.Draft) ||
                         (role == RoleTypes.GA && stageIn == WorkFlowStages.Requested) ||
@@ -277,7 +286,7 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
 
-                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
+                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Passed all checks, set the PS WFSTG
 
                 //standard manage screen approval
                 opMsgQueue.Messages.Add(new OpMsg
@@ -322,15 +331,17 @@ namespace Intel.MyDeals.BusinessLogic
                     return opMsgQueue;
                 }
             }
-            // END DE19996 block...
 
+
+            // Stage changes are involved, go and grab the WIP deals for extra operations
             List<int> dealIds = new List<int>();
             List<int> pendingDealIds = new List<int>();
             List<int> tenderDealIds = new List<int>();
+            List<int> stageChangesDealIds = new List<int>();
             List<int> tenderWonDealsIds = new List<int>();
             List<int> quotableDealIds = new List<int>();
 
-            if (psGoingPending.Any() || psGoingActive.Any())
+            if (psGoingPending.Any() || psGoingActive.Any() || psStageChanges.Any())
             {
                 List<OpDataElementType> opDataElementTypesActive = new List<OpDataElementType>
                 {
@@ -349,8 +360,33 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.REBATE_TYPE.ATRB_SID,
                     Attributes.IN_REDEAL.ATRB_SID,
                     Attributes.HAS_TRACKER.ATRB_SID,
-                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                    Attributes.OBJ_PATH_HASH.ATRB_SID
                 };
+
+                if (psStageChanges.Any())
+                {
+                    start = DateTime.Now;
+                    // Pull all WIP DEAL children from altered PS elements, stuff them into a new WIP_DEAL packet
+                    var myDealsStageChangesDataPs = OpDataElementType.PRC_ST.GetByIDs(psStageChanges, opDataElementTypesActive, atrbsActive);
+                    contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+
+                    myDealsData[OpDataElementType.WIP_DEAL].PacketType = OpDataElementType.WIP_DEAL;
+
+                    foreach (OpDataCollector t in myDealsStageChangesDataPs[OpDataElementType.WIP_DEAL].Data.Values)
+                    {
+                        myDealsData[OpDataElementType.WIP_DEAL].Data.Add(t);
+                    }
+
+                    // Now get a list or deals that are "in play", stage = Draft (not active or hold)
+                    deals = myDealsStageChangesDataPs[OpDataElementType.WIP_DEAL].AllDataElements
+                        .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+
+                    foreach (OpDataElement de in deals)
+                    {
+                        SetDealDcMessages(myDealsData, de, null);
+                    }
+                }
 
                 if (psGoingPending.Any())
                 {
@@ -366,10 +402,12 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     deals = myDealsPendingDataPs[OpDataElementType.WIP_DEAL].AllDataElements
                         .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+
                     pendingDealIds = deals.Select(d => d.DcID).ToList();
 
                     foreach (OpDataElement de in deals)
                     {
+                        SetDealDcMessages(myDealsData, de, WorkFlowStages.Pending);
                         de.SetAtrbValue(WorkFlowStages.Pending);
                     }
                 }
@@ -385,7 +423,6 @@ namespace Intel.MyDeals.BusinessLogic
                         myDealsData[OpDataElementType.WIP_DEAL].Data.Add(t);
                     }
 
-                    myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
                     deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements
                         .Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)
                         || d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Pending)).ToList();
@@ -413,6 +450,7 @@ namespace Intel.MyDeals.BusinessLogic
                                 OpDataElement deTracker = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.FirstOrDefault(d => d.DcID == de.DcID && d.AtrbCd == AttributeCodes.HAS_TRACKER);
                                 if (deTracker != null && deTracker.AtrbValue.ToString() == "1")
                                 {
+                                    SetDealDcMessages(myDealsData, de, WorkFlowStages.Won);
                                     de.SetAtrbValue(WorkFlowStages.Won);
                                     tenderWonDealsIds.Add(de.DcID);
                                     dealIds.Add(de.DcID);
@@ -421,24 +459,26 @@ namespace Intel.MyDeals.BusinessLogic
                                 {
                                     if (de.AtrbValue.ToString() != WorkFlowStages.Offer)
                                     {
-                                        myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors
-                                            .FirstOrDefault(d => d.DcID == de.DcID)
-                                            .AddTimelineComment($"Stage changed from {de.AtrbValue} to {WorkFlowStages.Offer}");
+                                        SetDealDcMessages(myDealsData, de, WorkFlowStages.Offer);
+                                        //myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataCollectors
+                                        //    .FirstOrDefault(d => d.DcID == de.DcID)
+                                        //    .AddTimelineComment($"Stage changed from {de.AtrbValue} to {WorkFlowStages.Offer}");
                                     }
                                     de.SetAtrbValue(WorkFlowStages.Offer);
 
-                                    // For tneder deals Sumbitted to offer notification logged at deal level
+                                    // For tender deals Sumbitted to offer notification logged at deal level
                                     AddNotificationLog(notifications, contractToken.ContractId, de.DcID, OpDataElementType.WIP_DEAL, NotificationEvents.TenderSubmittedToOffer);
                                 }
                             }
                             else
                             {
+                                SetDealDcMessages(myDealsData, de, WorkFlowStages.Active);
                                 de.SetAtrbValue(WorkFlowStages.Active);
                             }
                         }
                     }
 
-                    // For non tender deals notification is logged at PS level, (Assumption if there are no Tneder deal noifications then all of them are non tender PS)
+                    // For non tender deals notification is logged at PS level, (Assumption if there are no Tender deal noifications then all of them are non tender PS)
                     if (!notifications.Any())
                     {
                         psGoingActive.ForEach(psId => AddNotificationLog(notifications, contractToken.ContractId, psId, OpDataElementType.PRC_ST, NotificationEvents.SubmittedToApproved));
@@ -485,39 +525,13 @@ namespace Intel.MyDeals.BusinessLogic
             if (contractToken.BulkTenderUpdate)
             {
                 //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions
-
                 List<int> ps_ids = new List<int>();
-                //MyDealsData myDealsTenderData;
 
                 //we need to gather the pricing strategy ids here so that we can also retrieve the corresponding tender wip deals
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
                 {
                     ps_ids.Add(dc.DcID);
                 }
-
-                //get updated wip deals now that we have changed ps stage
-                //myDealsTenderData = OpDataElementType.PRC_ST.GetByIDs(ps_ids,
-                //    new List<OpDataElementType>
-                //    {
-                //        OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL
-                //    },
-                //    new List<int>());
-
-                //apply rules on the PRC_ST and WIP_DEAL data collectors
-                //foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.PRC_ST].AllDataCollectors)
-                //{
-                //    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
-                //}
-                //foreach (OpDataCollector dc in myDealsTenderData[OpDataElementType.WIP_DEAL].AllDataCollectors)
-                //{
-                //    dc.ApplyRules(MyRulesTrigger.OnDealListLoad, null, null);
-                //}
-
-                //fill in holes for any missing attributes that we use in the grid that isn't saved
-                //myDealsTenderData.FillInHolesFromAtrbTemplate();
-
-                //OpDataCollectorFlattenedDictList flatDictList = myDealsTenderData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
-                //convert to UI friendly data types
 
                 OpDataCollectorFlattenedDictList flatDictList = FetchTenderData(ps_ids, OpDataElementType.PRC_ST);
                 OpDataCollectorFlattenedList prc_st_data = flatDictList.ToHierarchialList(OpDataElementType.PRC_ST);
@@ -554,6 +568,25 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return opMsgQueue;
+        }
+
+        // This takes a WIP and myDealsData packet, and sets the deal level DC stage change message as defined by its parent PS
+        public void SetDealDcMessages(MyDealsData myDealsData, OpDataElement dealDe, string specificStage)
+        {
+            OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == dealDe.DcID);
+            string dealBreadcrumbPathJSON = dealDc.GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+            if (!string.IsNullOrEmpty(dealBreadcrumbPathJSON))
+            {
+                // Dynamic makes the JSON an mapable object, otherwise need to parse it via dealBreadcrumbPath["PS"].ToString()
+                dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJSON);
+                int dealParentPSId = Int32.Parse(dealBreadcrumbPath.PS.ToString());
+                if (dealParentPSId != 0) // We got back a PS ID, get stage data from there
+                {
+                    OpDataElement psWfStgDe = myDealsData[OpDataElementType.PRC_ST].AllDataElements.FirstOrDefault(d => d.DcID == dealParentPSId && d.AtrbCd == AttributeCodes.WF_STG_CD);
+                    string setDestStage = string.IsNullOrEmpty(specificStage) ? psWfStgDe.AtrbValue.ToString() : specificStage;
+                    if (psWfStgDe != null) dealDc.AddTimelineComment($"Stage changed from {psWfStgDe.OrigAtrbValue} to {setDestStage}");
+                }
+            }
         }
 
         public OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn)

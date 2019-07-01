@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/30/2019 2:27:20 PM
+File Updated: 6/20/2019 12:11:51 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -3342,7 +3342,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "PRODUCT_CATEGORIES",
 			ATRB_DESC = "Product Catagories List",
-			ATRB_LBL = "Product Catagories Lis",
+			ATRB_LBL = "Product Catagories List",
 			ATRB_MAX_LEN = 500,
 			ATRB_SID = 3671,
 			DATA_TYPE_CD = "VARCHAR",

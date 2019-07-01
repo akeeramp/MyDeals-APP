@@ -233,7 +233,8 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else
                     {
-                        if (de.AtrbCd != AttributeCodes.BACK_DATE_RSN_TXT) // Prevent backdate reason needed from being flushed out.
+                        // Don't roll these items back to PTR level from WIP...
+                        if (de.AtrbCd != AttributeCodes.BACK_DATE_RSN_TXT && de.AtrbCd != AttributeCodes.OBJ_PATH_HASH) // Prevent backdate reason needed from being flushed out.
                         {
                             de.AtrbValue = items[de.AtrbCd];
                             if (de.AtrbID <= 2 || de.AtrbCd == AttributeCodes.COST_TEST_RESULT || de.AtrbCd == AttributeCodes.MEETCOMP_TEST_RESULT)
