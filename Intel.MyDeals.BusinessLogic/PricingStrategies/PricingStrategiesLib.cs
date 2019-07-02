@@ -385,6 +385,7 @@ namespace Intel.MyDeals.BusinessLogic
                     foreach (OpDataElement de in deals)
                     {
                         SetDealDcMessages(myDealsData, de, null);
+                        stageChangesDealIds.Add(de.DcID);
                     }
                 }
 
@@ -498,7 +499,7 @@ namespace Intel.MyDeals.BusinessLogic
             //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
             myDealsData[OpDataElementType.PRC_ST].AddAuditActions(auditableDealIds);
 
-            if (dealIds.Any() || pendingDealIds.Any() || tenderWonDealsIds.Any())
+            if (dealIds.Any() || pendingDealIds.Any() || tenderWonDealsIds.Any() || stageChangesDealIds.Any())
             {
                 myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
                 myDealsData[OpDataElementType.WIP_DEAL].GroupID = -102; // Whatever the real ID of this object is
@@ -509,7 +510,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Tack on the save action call now
                 List<int> nonTenderIds = dealIds.Where(d => !tenderDealIds.Contains(d)).ToList();
-                List<int> possibleMajorIds = dealIds.Where(d => !tenderDealIds.Contains(d) || tenderWonDealsIds.Contains(d)).ToList();
+                List<int> possibleMajorIds = dealIds.Where(d => !tenderDealIds.Contains(d) || tenderWonDealsIds.Contains(d) || stageChangesDealIds.Contains(d)).ToList();
                 AttributeCollection atrbMstr = DataCollections.GetAttributeData();
                 myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(null, possibleMajorIds, atrbMstr);
                 if (dealIds.Any())
