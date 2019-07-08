@@ -26,7 +26,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     vm.toggleMessage = 'Off';
     vm.toggleClass = 'txtOff';
     vm.trimString = trimString;
-    
+
     var filter = {};
     if (excludeOutliers) {
         filter = { field: "GRP_BY", operator: "eq", value: 0 }
@@ -207,7 +207,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             }
         );
     }
-
+    
     vm.gridOptionsSuggested = {
         dataSource: dataSourceSuggested,
         enableHorizontalScrollbar: true,
@@ -242,7 +242,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             { field: "OVLP_CNSMPTN_RSN", width: "120px", title: "Comsumption Reason", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNSMPTN_RSN#">{{vm.trimString(dataItem,"OVLP_CNSMPTN_RSN")}}</div>' }
         ],
         dataBound: function (e) {
-
+            
             if (!vm.hasCheckbox) {
                 $('#ExcldGrid :checkbox').prop("disabled", true);
             }
@@ -263,24 +263,28 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                 var data = e.sender.dataSource.data();
                 for (var d = 0; d < data.length; d++) {
                     if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 0 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
-                        data[d].set("_disabled", true); // Commented due to PERF hike
+                        
                         $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
-                        $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
-                        $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
-                    }
-                    else if (data[0]["OVLP_WF_STG_CD"] !== undefined && (data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'active' || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'offer' || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'won' || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending' || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted') && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 0) {
-                        data[d].set("_disabled", true); // Commented due to PERF hike
-                        $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
-                        $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
+                        $("#" + data[d].OVLP_DEAL_ID).parent().find("label").
+                            removeClass("checkbox-custom-label")
+                            .html("<i class='intelicon-filled-box' style='color: #bbbbbb; font-size: 28px !important; margin: 2px; vertical-align: text-top;' title='This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations.'></i>");
                         $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
                     }
                     else if (data[d]["CST_MCP_DEAL_FLAG"] !== undefined && data[d]["CST_MCP_DEAL_FLAG"] === 2 && data[d]["EXCLD_DEAL_FLAG"] !== undefined && data[d]["EXCLD_DEAL_FLAG"] === 2) {
-                        data[d].set("_disabled", true);
+                        
                         $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
                         $("#" + data[d].OVLP_DEAL_ID).parent().find("label").removeClass("checkbox-custom-label").html(" ");
                         $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-current");
                     }
-
+                    else if ((data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'active'
+                        || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'offer'
+                        || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'won'
+                        || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending'
+                        || data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted')) {
+                            $("#" + data[d].OVLP_DEAL_ID).prop("disabled", true);
+                            $("#" + data[d].OVLP_DEAL_ID).parent().prop("title", 'Cannot edit when deal is in Sumbitted, Pending, Active, Offer or Won stages.');
+                            $("#" + data[d].OVLP_DEAL_ID).closest("tr").addClass("tr-disabled");
+                    }
                 }
             }, 50);
         }
