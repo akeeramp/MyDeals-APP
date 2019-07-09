@@ -353,6 +353,7 @@ namespace Intel.MyDeals.BusinessLogic
                 List<OpDataElement> tenderDeals = new List<OpDataElement>();
                 List<OpDataElement> tenderWonDeals = new List<OpDataElement>();
                 myDealsData[OpDataElementType.WIP_DEAL] = new OpDataPacket<OpDataElementType>();
+                myDealsData[OpDataElementType.WIP_DEAL].PacketType = OpDataElementType.WIP_DEAL; // Ensure that this new packet has the correct type for all cases
 
                 List<int> atrbsActive = new List<int>
                 {
@@ -370,8 +371,6 @@ namespace Intel.MyDeals.BusinessLogic
                     // Pull all WIP DEAL children from altered PS elements, stuff them into a new WIP_DEAL packet
                     var myDealsStageChangesDataPs = OpDataElementType.PRC_ST.GetByIDs(psStageChanges, opDataElementTypesActive, atrbsActive);
                     contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
-
-                    myDealsData[OpDataElementType.WIP_DEAL].PacketType = OpDataElementType.WIP_DEAL;
 
                     foreach (OpDataCollector t in myDealsStageChangesDataPs[OpDataElementType.WIP_DEAL].Data.Values)
                     {
@@ -394,8 +393,6 @@ namespace Intel.MyDeals.BusinessLogic
                     start = DateTime.Now;
                     var myDealsPendingDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive.Union(psGoingPending), opDataElementTypesActive, atrbsActive);
                     contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
-
-                    myDealsData[OpDataElementType.WIP_DEAL].PacketType = OpDataElementType.WIP_DEAL;
 
                     foreach (OpDataCollector t in myDealsPendingDataPs[OpDataElementType.WIP_DEAL].Data.Values)
                     {
