@@ -1094,6 +1094,7 @@ namespace Intel.MyDeals.BusinessRules
         // This takes a WIP and myDealsData packet, and sets the deal level DC stage change message as defined by its parent PS
         public static void SetDealDcMessages(MyDealsData myDealsData, OpDataElement dealDe, string specificStage)
         {
+            List<string> tenderStages = new List<string> { WorkFlowStages.Offer, WorkFlowStages.Won, WorkFlowStages.Lost };
             OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == dealDe.DcID);
             string dealBreadcrumbPathJSON = dealDc.GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
             if (!string.IsNullOrEmpty(dealBreadcrumbPathJSON))
@@ -1104,8 +1105,10 @@ namespace Intel.MyDeals.BusinessRules
                 if (dealParentPSId != 0) // We got back a PS ID, get stage data from there
                 {
                     OpDataElement psWfStgDe = myDealsData[OpDataElementType.PRC_ST].AllDataElements.FirstOrDefault(d => d.DcID == dealParentPSId && d.AtrbCd == AttributeCodes.WF_STG_CD);
-                    string setDestStage = string.IsNullOrEmpty(specificStage) ? psWfStgDe.AtrbValue.ToString() : specificStage;
-                    if (psWfStgDe != null) dealDc.AddTimelineComment($"Stage changed from {psWfStgDe.OrigAtrbValue} to {setDestStage}");
+                    // If this is a tender deal - take the tender WIP stage, else take the PS stage
+                    string fromStage = tenderStages.Contains(dealDe.OrigAtrbValue.ToString()) ? dealDe.OrigAtrbValue.ToString() : psWfStgDe.OrigAtrbValue.ToString();
+                    string destStage = string.IsNullOrEmpty(specificStage) ? psWfStgDe.AtrbValue.ToString() : specificStage;
+                    if (psWfStgDe != null) dealDc.AddTimelineComment($"Wip Deal moved from {fromStage} to {destStage}.");
                 }
             }
         }

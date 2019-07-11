@@ -7,6 +7,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -395,7 +396,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.MEETCOMP_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
                 Attributes.COST_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
-                Attributes.PASSED_VALIDATION.ATRB_SID
+                Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.PS_WF_STG_CD.ATRB_SID,
+                Attributes.OBJ_PATH_HASH.ATRB_SID
             };
 
             List<string> submittedFailTests = new List<string>
@@ -427,6 +430,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
                 string stageIn = id2stageMapping[dc.DcID];
+                string psStageIn = id2stageMapping[dc.DcID]; // place holder for WIP timeline messages (proper PS stage code, not Draft)
 
                 // Check to get around Manage Tab sending PS WF stage for WIP deals instead of normal WF stage
                 if ((stageIn == WorkFlowStages.Requested || stageIn == WorkFlowStages.Submitted) && dc.DcType == OpDataElementType.WIP_DEAL.ToString())
@@ -466,12 +470,19 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // get next stage
                 string targetStage = dc.GetNextStage(actn);
+                string psTargetStage = targetStage;
+
+                // If this is coming off of hold, lower code will correct message
+                if (targetStage == WorkFlowStages.Hold && psStageIn == WorkFlowStages.Draft)
+                {
+                    psStageIn = dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
+                }
 
                 if (string.IsNullOrEmpty(targetStage))
                 {
                     opMsgQueue.Messages.Add(new OpMsg
                     {
-                        Message = $"You do not have permission to {actn} the Wip Deal from the {stageIn} stage.",
+                        Message = $"You do not have permission to {actn} the Wip Deal from the {psStageIn} stage.",
                         MsgType = OpMsg.MessageType.Warning,
                         ExtraDetails = dc.DcType,
                         KeyIdentifiers = new[] { dc.DcID }
@@ -484,17 +495,20 @@ namespace Intel.MyDeals.BusinessLogic
                     dealsOffHold.Add(dc.DcID);
                 }
 
-                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
-                opMsgQueue.Messages.Add(new OpMsg
+                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Set the stage no matter which way, message is dependant upon direction of move
+                if (!dealsOffHold.Contains(dc.DcID)) // This deal is not coming off of hold, tag it now, tag it later comes below
                 {
-                    Message = $"Wip Deal moved from {stageIn} to {targetStage}.",
-                    ShortMessage = targetStage,
-                    MsgType = OpMsg.MessageType.Info,
-                    ExtraDetails = dc.DcType,
-                    KeyIdentifiers = new[] { dc.DcID }
-                });
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Wip Deal moved from {psStageIn} to {psTargetStage}.",
+                        ShortMessage = targetStage,
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
 
-                dc.AddTimelineComment($"Wip Deal moved from {stageIn} to {targetStage}.");
+                    dc.AddTimelineComment($"Wip Deal moved from {psStageIn} to {psTargetStage}.");
+                }
 
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
@@ -522,10 +536,17 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var psStage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
                     var futureStage = dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), psStage, OpDataElementType.PRC_ST);
+
                     if (futureStage != null)
                     {
                         needRedeal = true;
                         dc.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
+                        dc.AddTimelineComment($"Pricing Strategy moved from {psStage} to {futureStage} for deals taken off of Hold.");
+
+                        foreach (OpDataCollector wipDC in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => dealsOffHold.Contains(d.DcID)).ToList())
+                        {
+                            wipDC.AddTimelineComment($"Wip Deal moved from Hold to {futureStage}.");
+                        }
                     }
                 }
 
