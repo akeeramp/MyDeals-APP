@@ -98,6 +98,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     int IDX_CNTRCT_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_SID");
                     int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                    int IDX_EXTND_COL = DB.GetReaderOrdinal(rdr, "EXTND_COL");
                     int IDX_IS_READ_IND = DB.GetReaderOrdinal(rdr, "IS_READ_IND");
                     int IDX_NLT_ID = DB.GetReaderOrdinal(rdr, "NLT_ID");
                     int IDX_NOTIF_ID = DB.GetReaderOrdinal(rdr, "NOTIF_ID");
@@ -114,6 +115,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             CNTRCT_SID = (IDX_CNTRCT_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_SID),
                             CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                            EXTND_COL = (IDX_EXTND_COL < 0 || rdr.IsDBNull(IDX_EXTND_COL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXTND_COL),
                             IS_READ_IND = (IDX_IS_READ_IND < 0 || rdr.IsDBNull(IDX_IS_READ_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_READ_IND),
                             NLT_ID = (IDX_NLT_ID < 0 || rdr.IsDBNull(IDX_NLT_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_NLT_ID),
                             NOTIF_ID = (IDX_NOTIF_ID < 0 || rdr.IsDBNull(IDX_NOTIF_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_NOTIF_ID),
@@ -300,10 +302,11 @@ namespace Intel.MyDeals.DataLibrary
                     cmd.TYPE_INT_LIST = new type_int_list(ids.ToArray());
                 }
                 using (var rdr = DataAccess.ExecuteReader(cmd))
-                {
+                {                    
                     int IDX_CHG_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "CHG_EMAIL_ADDR");
                     int IDX_CNTRCT_NM = DB.GetReaderOrdinal(rdr, "CNTRCT_NM");
                     int IDX_CNTRCT_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_SID");
+                    int IDX_EXTND_PROP = DB.GetReaderOrdinal(rdr, "EXTND_PROP");
                     int IDX_NLT_ID = DB.GetReaderOrdinal(rdr, "NLT_ID");
                     int IDX_NOTIF_ID = DB.GetReaderOrdinal(rdr, "NOTIF_ID");
                     int IDX_NOTIF_LONG_DSC = DB.GetReaderOrdinal(rdr, "NOTIF_LONG_DSC");
@@ -321,6 +324,7 @@ namespace Intel.MyDeals.DataLibrary
                             CHG_EMAIL_ADDR = (IDX_CHG_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_CHG_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_EMAIL_ADDR),
                             CNTRCT_NM = (IDX_CNTRCT_NM < 0 || rdr.IsDBNull(IDX_CNTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTRCT_NM),
                             CNTRCT_SID = (IDX_CNTRCT_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_SID),
+                            EXTND_PROP = (IDX_EXTND_PROP < 0 || rdr.IsDBNull(IDX_EXTND_PROP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXTND_PROP),
                             NLT_ID = (IDX_NLT_ID < 0 || rdr.IsDBNull(IDX_NLT_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NLT_ID),
                             NOTIF_ID = (IDX_NOTIF_ID < 0 || rdr.IsDBNull(IDX_NOTIF_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_NOTIF_ID),
                             NOTIF_LONG_DSC = (IDX_NOTIF_LONG_DSC < 0 || rdr.IsDBNull(IDX_NOTIF_LONG_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTIF_LONG_DSC),

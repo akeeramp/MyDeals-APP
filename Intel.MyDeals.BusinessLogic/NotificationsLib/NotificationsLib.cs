@@ -1,13 +1,14 @@
-﻿using Intel.MyDeals.IBusinessLogic;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Force.DeepCloner;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Logging;
+using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using RazorEngine;
 using RazorEngine.Templating;
-using Intel.MyDeals.Entities.Logging;
-using Force.DeepCloner;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -187,6 +188,10 @@ namespace Intel.MyDeals.BusinessLogic
 
                 case NotificationEvents.CapUpdateToDeal:
                 case NotificationEvents.CostUpdateToDeal:
+                    var extendedProp = NotifExtendedPropXMLDeserialize(model);
+                    emailTable = GetDealAndPSTableForCAPandCost(extendedProp);
+                    break;
+
                 case NotificationEvents.DealModifiedByOtherUser:
                     emailTable = GetDealAndPSTable(model);
                     break;
@@ -315,6 +320,45 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
+        public T Deserialize<T>(string input) where T : class
+        {
+            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(T));
+
+            using (StringReader sr = new StringReader(input))
+            {
+                return (T)ser.Deserialize(sr);
+            }
+        }
+
+        public class NotifExtendedProperty
+        {
+            public string CUST_NM { get; set; }
+            public string C2A_ID { get; set; }
+            public string OBJ_SET_TYPE_CD { get; set; }
+            public string SKU_NM { get; set; }
+        }
+
+        /// <summary>
+        /// Convert Extended Property XML- JSON
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public List<NotificationMaster> NotifExtendedPropXMLDeserialize(List<NotificationEmailTable> email)
+        {
+            List<NotificationMaster> notifMasters = new List<NotificationMaster>();
+            foreach (var node in email)
+            {
+                NotificationMaster nm = new NotificationMaster();
+                nm.PRICING_STRTAEGY_NAME = node.PRICING_STRTAEGY_NAME;
+                nm.OBJ_SID = node.OBJ_SID;
+                NotifExtendedProperty notifExtendedProperty = Deserialize<NotifExtendedProperty>("<NotifExtendedProperty>" + node.EXTND_PROP + "</NotifExtendedProperty>");
+                nm.ExtendedProperty = notifExtendedProperty;
+                notifMasters.Add(nm);
+            }
+
+            return notifMasters;
+        }
+
         /// <summary>
         /// Get Contract And PSTable Tender
         /// </summary>
@@ -357,6 +401,59 @@ namespace Intel.MyDeals.BusinessLogic
             else
             {
                 return Engine.Razor.Run(tempKey, typeof(List<NotificationEmailTable>), email);
+            }
+        }
+
+        /// <summary>
+        /// Get Contract And PSTable Tender
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public string GetDealAndPSTableForCAPandCost(List<NotificationMaster> email)
+        {
+            var url = MyDealsWebApiUrl.ROOT_URL;
+            var template = "@{ var rootUrl =\"" + url + "\";}";
+
+            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
+            template += @"<table style='FONT-SIZE: 11pt;BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Customer</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>C2A ID#</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal Type</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>SKU</th>
+                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tbody>
+                                                            @foreach(var item in Model)
+                                                            {
+                                                                <tr>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.CUST_NM</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.C2A_ID</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
+                                                                    </td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.OBJ_SET_TYPE_CD</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.SKU_NM</td>
+                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
+                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>";
+            var tempKey = "DealAndPSTableCAPCost"; // Constant Name
+            if (!Engine.Razor.IsTemplateCached(tempKey, typeof(List<NotificationMaster>)))
+            {
+                return Engine.Razor.RunCompile(template, tempKey, typeof(List<NotificationMaster>), email);
+            }
+            else
+            {
+                return Engine.Razor.Run(tempKey, typeof(List<NotificationMaster>), email);
             }
         }
 
@@ -409,6 +506,11 @@ namespace Intel.MyDeals.BusinessLogic
         public bool UpdateNotificationEmails(List<int> ids)
         {
             return _notificationsDataLib.UpdateNotificationEmails(ids);
+        }
+
+        public class NotificationMaster : NotificationEmailTable
+        {
+            public NotifExtendedProperty ExtendedProperty { get; set; }
         }
     }
 }
