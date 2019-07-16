@@ -500,14 +500,14 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     opMsgQueue.Messages.Add(new OpMsg
                     {
-                        Message = $"Wip Deal moved from {psStageIn} to {psTargetStage}.",
+                        Message = $"Deal moved from {psStageIn} to {psTargetStage}.",
                         ShortMessage = targetStage,
                         MsgType = OpMsg.MessageType.Info,
                         ExtraDetails = dc.DcType,
                         KeyIdentifiers = new[] { dc.DcID }
                     });
 
-                    dc.AddTimelineComment($"Wip Deal moved from {psStageIn} to {psTargetStage}.");
+                    dc.AddTimelineComment($"Deal moved from {psStageIn} to {psTargetStage}.");
                 }
 
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
@@ -545,7 +545,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                         foreach (OpDataCollector wipDC in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => dealsOffHold.Contains(d.DcID)).ToList())
                         {
-                            wipDC.AddTimelineComment($"Wip Deal moved from Hold to {futureStage}.");
+                            wipDC.AddTimelineComment($"Deal moved from Hold to {futureStage}.");
                         }
                     }
                 }

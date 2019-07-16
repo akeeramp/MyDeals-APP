@@ -585,7 +585,7 @@ namespace Intel.MyDeals.BusinessLogic
                     // If this is a tender deal - take the tender WIP stage, else take the PS stage
                     string fromStage = tenderStages.Contains(dealDe.OrigAtrbValue.ToString()) ? dealDe.OrigAtrbValue.ToString() : psWfStgDe.OrigAtrbValue.ToString();
                     string destStage = string.IsNullOrEmpty(specificStage) ? psWfStgDe.AtrbValue.ToString() : specificStage;
-                    if (psWfStgDe != null) dealDc.AddTimelineComment($"Wip Deal moved from {fromStage} to {destStage}.");
+                    if (psWfStgDe != null) dealDc.AddTimelineComment($"Deal moved from {fromStage} to {destStage}.");
                 }
             }
         }
