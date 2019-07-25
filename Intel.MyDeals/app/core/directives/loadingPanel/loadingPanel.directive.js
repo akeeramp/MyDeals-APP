@@ -68,7 +68,7 @@ function loadingPanel(funfactService, logger) {
 			        $scope.currFunFact.Title = "Fun Fact";
 			    }
 			    $scope.funFactTitle = $scope.currFunFact.Title;
-			    $scope.funFactDesc = $scope.currFunFact.Description;
+			    $scope.funFactDesc = $scope.currFunFact.Description.replace(/<br>/g, "\n");
 			    $scope.funFactIcon = $scope.currFunFact.FontAwesomeIcon;
 			}
 
