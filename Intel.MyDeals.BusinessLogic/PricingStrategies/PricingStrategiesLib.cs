@@ -288,18 +288,26 @@ namespace Intel.MyDeals.BusinessLogic
 
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Passed all checks, set the PS WFSTG
 
-                //standard manage screen approval
-                opMsgQueue.Messages.Add(new OpMsg
-                {
-                    Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
-                    MsgType = OpMsg.MessageType.Info,
-                    ExtraDetails = dc.DcType,
-                    KeyIdentifiers = new[] { dc.DcID }
-                });
+                //// Put this in to test if we can remove the strat stage change message for tender deals.  Creates an update error post save because UI
+                //// relies upon the stage changed messages to capture the fact that is also needs to force UI update.  This is a non-starter for removing that message.
+                ////var cntrctIsTender = OpDataElementType.CNTRCT.GetByIDs(new List<int> { dc.DcParentID }, new List<OpDataElementType> { OpDataElementType.CNTRCT }, new List<int> { Attributes.IS_TENDER.ATRB_SID });
+                ////int stratIsTender = cntrctIsTender[OpDataElementType.CNTRCT].AllDataElements.FirstOrDefault().AtrbValue.ToString() == "1" ? 1 : 0;
 
-                dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
-                // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
-                // This should probably be a rule item
+                ////if (stratIsTender == 0) // This is not a tender strategy, tag the message
+                ////{
+                    //standard manage screen approval
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+
+                    dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
+                    // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
+                    // This should probably be a rule item
+                ////}
             }
 
             // Now let us test for PCT or MCT if needed
