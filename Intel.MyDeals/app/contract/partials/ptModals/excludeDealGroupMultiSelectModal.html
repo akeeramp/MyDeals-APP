@@ -12,7 +12,7 @@
 		<div class="modal-body">
 			<div class="fr">
 				<span  style="padding-right:15px; color: #ffffff">
-					<i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
+					<i role="button" title="Save and Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
 				</span>
 			</div>
 			<div ng-show="vm.isLoading">
@@ -75,7 +75,7 @@
 		<div class="col-md-12" style="padding-bottom:20px;">			
 			<div class="fr">
 				<button class="btn btn-warning prdBtn" type="button" ng-click="vm.cancel()" ng-if="vm.hasCheckbox">Cancel</button>
-				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()" ng-disabled="vm.hasComment" ng-disable style="margin-left: 10px;">Close</button>
+				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()" ng-disabled="vm.hasComment" ng-disable style="margin-left: 10px;">Save and Close</button>
 			</div>
 		</div>
 	</div>
