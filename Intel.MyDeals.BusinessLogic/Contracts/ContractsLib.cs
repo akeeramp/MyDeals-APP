@@ -762,6 +762,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OEM_PLTFRM_LNCH_DT.ATRB_SID,
                     Attributes.OEM_PLTFRM_EOL_DT.ATRB_SID,
                     Attributes.DEAL_COMB_TYPE.ATRB_SID,
+                    Attributes.MRKT_SEG.ATRB_SID,
                     Attributes.MAX_RPU.ATRB_SID,
                     Attributes.REBATE_TYPE.ATRB_SID,
                     Attributes.ECAP_PRICE.ATRB_SID,
