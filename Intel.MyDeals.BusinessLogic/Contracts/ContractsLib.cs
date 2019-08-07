@@ -738,6 +738,11 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, dcId, 0, title);
         }
         
+        /// <summary>
+        /// Get wip exclusions 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public OpDataCollectorFlattenedDictList GetWipExclusionFromContract(int id)
         {
             MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(
