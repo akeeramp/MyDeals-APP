@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/20/2019 12:10:58 PM
+File Updated: 8/12/2019 9:28:23 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2431,6 +2431,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string WF_STG_CD = "WF_STG_CD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3713
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string WIP_WORK_FLG = "WIP_WORK_FLG";
 
 		///<summary>
 		/// DIM_SID: 3

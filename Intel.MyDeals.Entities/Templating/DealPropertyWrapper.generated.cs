@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/20/2019 12:11:51 PM
+File Updated: 8/12/2019 9:29:19 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -4297,6 +4297,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "WorkFlow"
+		};
+		public static MyDealsAttribute WIP_WORK_FLG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "WIP_WORK_FLG",
+			ATRB_DESC = "WIP/Hold Deals Flag",
+			ATRB_LBL = "WIP/Hold Deals Flag",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3713,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute YCS2_END_DT = new MyDealsAttribute()
 		{

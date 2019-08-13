@@ -370,6 +370,18 @@
         font: 10px Arial, sans-serif;
         font-weight: bold;
     }
+    .textCircle_NeedsWork {
+        border-radius: 50%;
+        /*border: 2px solid #000000;*/
+        width: 15px;
+        height: 15px;
+        /*padding: 0px;*/ /*Raise 1 px for radious decrease, 2 px was default*/
+        padding: 2px;
+        color: #FC4C02; /*Set text to Orange*/
+        text-align: center;
+        font: 10px Arial, sans-serif;
+        font-weight: bold;
+    }
     .textCircleMd {
         border-radius: 50%;
         width: 20px;
