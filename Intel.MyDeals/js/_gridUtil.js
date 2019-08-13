@@ -874,7 +874,7 @@ gridUtils.calcKITBackendRebate = function (passedData, atrb2, dim2) {
         } else {
             data1 = Math.min(CAP[dim1], YCS2[dim1]);
         }
-        netPrice = parseFloat(netPrice) + parseFloat(data1);
+        netPrice = parseFloat(netPrice) + parseFloat(data1 * passedData["QTY"][dim1]);
     }
 
     if (!(dim2 == "" || dim2 == null)) {
