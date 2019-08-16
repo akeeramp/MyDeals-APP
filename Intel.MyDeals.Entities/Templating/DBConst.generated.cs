@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/12/2019 9:28:23 AM
+File Updated: 8/14/2019 4:47:49 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -253,6 +253,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string CAP_STRT_DT = "CAP_STRT_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3714
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CNTRCT_CUST_TYPE = "CNTRCT_CUST_TYPE";
 
 		///<summary>
 		/// DIM_SID: 30
