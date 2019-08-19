@@ -1,231 +1,257 @@
 ﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
-<nav class="navbar navbar-default">	
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
-	<div class="navbar-header">          
-          <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px;    color: white;"></i>
-          <a class="navbar-brand" href="#">Tender Folio Details</a>
+<nav class="navbar navbar-default">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+        <div class="navbar-header">
+            <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px;    color: white;"></i>
+            <a class="navbar-brand" href="#">Tender Folio Details</a>
         </div>
-          <ul class="nav navbar-nav navbar-right">            
+        <ul class="nav navbar-nav navbar-right">
             <li><a href="" onclick="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
-          </ul>
-        </div>		</nav>
-        <div id="secBasicContainerWrapper" style="padding:0px">
-            <div id="secContainer">
+        </ul>
+    </div>
+</nav>
+<div id="secBasicContainerWrapper" style="padding:0px">
+    <div id="secContainer">
+        <div class="row">
+            <span class="col-md-3 infospan"><span> * </span>Indicates Required fields</span>
+        </div>
+        <!--<form novalidate dirty-tracking obj-type="contractData" class="contract-detail-form">-->
+        <form novalidate obj-type="contractData" class="contract-detail-form">
+
+            <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
+            <div class="container-fluid">
+
+
                 <div class="row">
-                    <span class="col-md-3 infospan"><span> * </span>Indicates Required fields</span>
-                </div>
-                <!--<form novalidate dirty-tracking obj-type="contractData" class="contract-detail-form">-->
-                    <form novalidate obj-type="contractData" class="contract-detail-form">
-
-                        <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
-                        <div class="container-fluid">
-
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="col-md-12 row">
-                                        <h6>{{contractType}} Information</h6>
-                                    </div>
-
-                                    <div class="col-md-11 row">
-                                        <div op-control-flat
-                                             ng-model="contractData"
-                                             op-cd="'CUST_MBR_SID'"
-                                             op-type="'COMBOBOX'"
-                                             op-label="'Customer:'"
-                                             op-lookup-url="'/api/Customers/GetMyCustomerNames'"
-                                             op-lookup-text="'CUST_NM'"
-                                             op-lookup-value="'CUST_SID'"
-                                             op-selected-object="'Customer'"
-                                             op-is-stealth="true"
-                                             op-is-form="true"
-                                             op-ui-mode="'VERTICAL'"></div>
-                                    </div>
-                                    <div class="col-md-11 row">
-                                        <div op-control-flat
-                                             ng-model="contractData"
-                                             op-cd="'CUST_ACCNT_DIV_UI'"
-                                             op-type="'MULTISELECT'"
-                                             op-label="'Division:'"
-                                             op-lookup-values="[]"
-                                             op-lookup-text="'CUST_DIV_NM'"
-                                             op-lookup-value="'CUST_DIV_NM'"
-                                             op-is-stealth="true"
-                                             op-is-form="true"
-                                             op-ui-mode="'VERTICAL'"></div>
-                                        <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
-                                    </div>
-                                    <div class="col-md-11 row">
-                                        <div op-control-flat
-                                             ng-model="contractData"
-                                             op-cd="'CNTRCT_CUST_TYPE'"
-                                             op-type="'DROPDOWN'"
-                                             op-label="'Customer Type:'"
-                                             op-lookup-url="'api/Dropdown/GetDropdowns/CNTRCT_CUST_TYPE'"
-                                             op-lookup-text="'DROP_DOWN'"
-                                             op-lookup-value="'DROP_DOWN'"
-                                             op-is-form="true"
-                                             op-ui-mode="'VERTICAL'"></div>
-                                    </div>
-
-                                        <div class="col-md-11 row"
-                                             op-control-flat
-                                             ng-model="contractData"
-                                             op-cd="'TITLE'"
-                                             op-type="'TEXTBOX'"
-                                             op-label="'Tender Folio Name:'"
-                                             op-is-form="true"
-                                             op-ui-mode="'VERTICAL'"></div>
-                                        <div class="fl opUiLabel ng-binding isRequired" style="width:240px" ng-if="filterDealTypes(templates.ModelTemplates.PRC_TBL).Keys.length > 0" ng-class="{isRequired: opIsRequired}">Select Tender Table Deal Type:</div>
-                                        <div ng-repeat="(key, value) in filterDealTypes(templates.ModelTemplates.PRC_TBL)">
-                                            <!--ang-if="value.name == 'ECAP'"-->
-                                            <div id="btnSel{{removeBlanks(value.name)}}" class="fl circleWithText" ng-click="selectPtTemplateIcon(value, true)" ng-class="{active: value._custom._active}">
-                                                <div class="fl textCircle blueBg" ng-class="{activeCircle: value._custom._active}">{{ value._custom.ltr }}</div>
-                                                <div class="fl textName" ng-class="{activeText: value._custom._active}">{{ removeBlanks(value.name) }}</div>
-                                                <div class="clearboth"></div>
-                                            </div>
-                                            <!--<div ng-if="value.name != 'ECAP'" class="fl circleWithText" style="cursor: not-allowed;">
-                <div class="fl textCircle" style="background-color: #cccccc;">{{ value._custom.ltr }}</div>
-                <div class="fl textName" style="color: #cccccc;">{{ removeBlanks(value.name) }}</div>
-                <div class="clearboth"></div>
-            </div>-->
-                                        </div>
-
-                                    </div>
-
-                                    <div id="#dateTimeSection" class="col-md-0" style="margin-top: -20px;" ng-hide="true">
-                                        <div class="col-md-12 row" style="margin-top: 20px;">
-                                            <h6>Dates&nbsp;<span kendo-tooltip k-content="constants.helpTipDateRanges" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
-                                        </div>
-                                        <div class="col-md-12 row mb5">
-                                            ">
-                                            <div id="startDateTimeSection" op-control-flat
-                                                 ng-model="contractData"
-                                                 op-cd="'START_DT'"
-                                                 op-type="'DATEPICKER'"
-                                                 op-label="'Select Start Date:'"
-                                                 op-is-form="true"
-                                                 op-ui-mode="'HORIZONTAL'"></div>
-                                        </div>
-
-                                        <div class="col-md-12 row mb5" ng-class="{'padTop30': initialStartDateReadOnly}" style="margin-top: 15px;">
-                                            <div id="endDateTimeSection" op-is-readonly="true" op-control-flat
-                                                 ng-model="contractData"
-                                                 op-cd="'END_DT'"
-                                                 op-type="'DATEPICKER'"
-                                                 op-label="'Select End Date:'"
-                                                 op-is-form="true"
-                                                 op-ui-mode="'HORIZONTAL'"></div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
+                    <div class="col-md-12">
+                        <div class="col-md-12 row">
+                            <h6>{{contractType}} Information</h6>
                         </div>
 
+                        <div class="col-md-11 row">
+                            <div op-control-flat
+                                 ng-model="contractData"
+                                 op-cd="'CUST_MBR_SID'"
+                                 op-type="'COMBOBOX'"
+                                 op-label="'Customer:'"
+                                 op-lookup-url="'/api/Customers/GetMyCustomerNames'"
+                                 op-lookup-text="'CUST_NM'"
+                                 op-lookup-value="'CUST_SID'"
+                                 op-selected-object="'Customer'"
+                                 op-is-stealth="true"
+                                 op-is-form="true"
+                                 op-ui-mode="'VERTICAL'"></div>
+                        </div>
+                        <div class="col-md-11 row">
+                            <div op-control-flat
+                                 ng-model="contractData"
+                                 op-cd="'CUST_ACCNT_DIV_UI'"
+                                 op-type="'MULTISELECT'"
+                                 op-label="'Division:'"
+                                 op-lookup-values="[]"
+                                 op-lookup-text="'CUST_DIV_NM'"
+                                 op-lookup-value="'CUST_DIV_NM'"
+                                 op-is-stealth="true"
+                                 op-is-form="true"
+                                 op-ui-mode="'VERTICAL'"></div>
+                            <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
+                        </div>
+                        <div class="col-md-11 row">
+                            <div op-control-flat
+                                 ng-model="contractData"
+                                 op-cd="'CNTRCT_CUST_TYPE'"
+                                 op-type="'DROPDOWN'"
+                                 op-label="'Customer Type:'"
+                                 op-lookup-url="'api/Dropdown/GetDropdowns/CNTRCT_CUST_TYPE'"
+                                 op-lookup-text="'DROP_DOWN'"
+                                 op-lookup-value="'DROP_DOWN'"
+                                 op-is-form="true"
+                                 op-ui-mode="'VERTICAL'"></div>
+                        </div>
+
+                        <div class="col-md-11 row"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'TITLE'"
+                             op-type="'TEXTBOX'"
+                             op-label="'Tender Folio Name:'"
+                             op-is-form="true"
+                             op-ui-mode="'VERTICAL'"></div>
+                        <div class="fl opUiLabel ng-binding isRequired" style="width:240px" ng-if="filterDealTypes(templates.ModelTemplates.PRC_TBL).Keys.length > 0" ng-class="{isRequired: opIsRequired}">Select Tender Table Deal Type:</div>
+                        <div ng-repeat="(key, value) in filterDealTypes(templates.ModelTemplates.PRC_TBL)">
+                            <!--ang-if="value.name == 'ECAP'"-->
+                            <div id="btnSel{{removeBlanks(value.name)}}" class="fl circleWithText" ng-click="selectPtTemplateIcon(value, true)" ng-class="{active: value._custom._active}">
+                                <div class="fl textCircle blueBg" ng-class="{activeCircle: value._custom._active}">{{ value._custom.ltr }}</div>
+                                <div class="fl textName" ng-class="{activeText: value._custom._active}">{{ removeBlanks(value.name) }}</div>
+                                <div class="clearboth"></div>
+                            </div>
+                            <!--<div ng-if="value.name != 'ECAP'" class="fl circleWithText" style="cursor: not-allowed;">
+                                <div class="fl textCircle" style="background-color: #cccccc;">{{ value._custom.ltr }}</div>
+                                <div class="fl textName" style="color: #cccccc;">{{ removeBlanks(value.name) }}</div>
+                                <div class="clearboth"></div>
+                            </div>-->
+                        </div>
+
+                    </div>
+
+                    <div id="#dateTimeSection" class="col-md-0" style="margin-top: -20px;" ng-hide="true">
+                        <div class="col-md-12 row" style="margin-top: 20px;">
+                            <h6>Dates&nbsp;<span kendo-tooltip k-content="constants.helpTipDateRanges" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
+                        </div>
+                        <div class="col-md-12 row mb5">
+                            <div id="startDateTimeSection" op-control-flat
+                                 ng-model="contractData"
+                                 op-cd="'START_DT'"
+                                 op-type="'DATEPICKER'"
+                                 op-label="'Select Start Date:'"
+                                 op-is-form="true"
+                                 op-ui-mode="'HORIZONTAL'"></div>
+                        </div>
+
+                        <div class="col-md-12 row mb5" ng-class="{'padTop30': initialStartDateReadOnly}" style="margin-top: 15px;">
+                            <div id="endDateTimeSection" op-is-readonly="true" op-control-flat
+                                 ng-model="contractData"
+                                 op-cd="'END_DT'"
+                                 op-type="'DATEPICKER'"
+                                 op-label="'Select End Date:'"
+                                 op-is-form="true"
+                                 op-ui-mode="'HORIZONTAL'"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
 
 
+
+    </div>
+
+
+
+    <!--<pre style="font-size: 9px; font-family: arial;">{{contractData | json}}</pre>-->
+    </form>
 </div>
 
-            
-
-            <!--<pre style="font-size: 9px; font-family: arial;">{{contractData | json}}</pre>-->
-        </form>
-    </div>
-
-    <div id="secFooter">
-        <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="deleteContract()" ng-if="contractData.DC_ID && contractData.DC_ID > 0 && C_DELETE_CONTRACT">
-            <span>Delete {{contractType}}</span>
-        </button>
-        <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">
-            <span ng-bind="saveBtnName()"></span>
-        </button>
-    </div>
+<div id="secFooter">
+    <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="deleteContract()" ng-if="contractData.DC_ID && contractData.DC_ID > 0 && C_DELETE_CONTRACT">
+        <span>Delete {{contractType}}</span>
+    </button>
+    <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">
+        <span ng-bind="saveBtnName()"></span>
+    </button>
+</div>
 </div>
 
 <script>
-$( document ).ready(function() {
+    $(document).ready(function () {
 
-	$("#startDateTimeSection div div div span input").attr("disabled", true);
-	$("#endDateTimeSection div div div span input").attr("disabled", true);
-	$("#endDateTimeSection").attr("disabled", true);
-    $("#btnSelECAP").click();
-});
-	
-function dismissPopup() {
-    var el = document.getElementById("createNewContract") // main page
-    if (el === null) el = document.getElementById("search-info-container") // Tender manager page
-    var scope = angular.element(el).scope();
-    scope.$apply(function () {
-        scope.dismissPopup();
+        $("#startDateTimeSection div div div span input").attr("disabled", true);
+        $("#endDateTimeSection div div div span input").attr("disabled", true);
+        $("#endDateTimeSection").attr("disabled", true);
+        $("#btnSelECAP").click();
     });
-}
+
+    function dismissPopup() {
+        var el = document.getElementById("createNewContract") // main page
+        if (el === null) el = document.getElementById("search-info-container") // Tender manager page
+        var scope = angular.element(el).scope();
+        scope.$apply(function () {
+            scope.dismissPopup();
+        });
+    }
 </script>
 
 <style type="text/css">
-.infospan {
-    margin-top: -135px !important;
-    margin-left: 200px !important;
-    width: 220px;
-    background-color: #f2f2f2;
-    color: #322122;
-    padding: 8px 16px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    z-index: 99999;
-    position: fixed;
-    opacity: 0.86;
-}
-.ss-loading-panel {
-    background-color: #ffffff;
-    margin-top: 150px !important;
-    margin-left: 150px !important;
-	position:absolute !important;
-	}
-.circleWithText:hover {
+    .infospan {
+        margin-top: -135px !important;
+        margin-left: 200px !important;
+        width: 220px;
+        background-color: #f2f2f2;
+        color: #322122;
+        padding: 8px 16px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        z-index: 99999;
+        position: fixed;
+        opacity: 0.86;
+    }
+
+    .ss-loading-panel {
+        background-color: #ffffff;
+        margin-top: 150px !important;
+        margin-left: 150px !important;
+        position: absolute !important;
+    }
+
+    .circleWithText:hover {
         color: #FFA300;
     }
-    .circleWithText:hover .textCircle {
+
+        .circleWithText:hover .textCircle {
+            background-color: #FFA300;
+        }
+
+    .activeCircle {
         background-color: #FFA300;
     }
-	.activeCircle {background-color: #FFA300;}
-	.activeText {color: #FFA300 !important;}
-.blueBg {
-    
-    margin-top: 3px;
-}
-.circleWithText {    
-    height: 28px !important;
-	padding-left: 10px;
-}
-.circleWithText:hover {
-    color: #FFA300;
-}
-.textName {color: #00AEEF }
-.ptLnavTitle {    
-    margin: -15px !important;
-	font-weight: bold;
-	font-size: 14px;
-}
-.modal-content{ margin-top: 85px; border-top: none}
-.navbar-logo {
-   
-    padding: 10px 5px !important;
-}
-.k-numeric-wrap{
-	width:100%;
-}
-.contract-detail-form {
-    padding: 0 20px 0px 20px !important;
-}
-.tenderFolio-modal-window .modal-dialog{
-	width:600px;
-	margin:auto;
-}
- #copyCntrctDlg{padding:0px !important}
+
+    .activeText {
+        color: #FFA300 !important;
+    }
+
+    .blueBg {
+        margin-top: 3px;
+    }
+
+    .circleWithText {
+        height: 28px !important;
+        padding-left: 10px;
+    }
+
+        .circleWithText:hover {
+            color: #FFA300;
+        }
+
+    .textName {
+        color: #00AEEF
+    }
+
+    .ptLnavTitle {
+        margin: -15px !important;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        margin-top: 85px;
+        border-top: none
+    }
+
+    .navbar-logo {
+        padding: 10px 5px !important;
+    }
+
+    .k-numeric-wrap {
+        width: 100%;
+    }
+
+    .contract-detail-form {
+        padding: 0 20px 0px 20px !important;
+    }
+
+    .tenderFolio-modal-window .modal-dialog {
+        width: 600px;
+        margin: auto;
+    }
+
+    #copyCntrctDlg {
+        padding: 0px !important
+    }
+
     #secContainer {
         overflow: auto !important;
     }
@@ -239,44 +265,48 @@ function dismissPopup() {
         padding: 10px 0 0 0;
     }
 
-    .k-dialog .promptUserDialog h4 {
-        color: #003C71;
-        font-size: 18px;
-        font-weight: 600;
-        margin-top: 0;
-    }
+        .k-dialog .promptUserDialog h4 {
+            color: #003C71;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0;
+        }
 
-    .k-dialog .promptUserDialog p {
-        font-size: 12px;
-        padding: 10px 20px;
-    }
+        .k-dialog .promptUserDialog p {
+            font-size: 12px;
+            padding: 10px 20px;
+        }
 
     .delete-attach-icon {
         font-size: 16px;
         cursor: pointer;
     }
 
-    .delete-attach-icon:hover {
-        text-decoration: none;
-    }
+        .delete-attach-icon:hover {
+            text-decoration: none;
+        }
 
     .btn-primary {
         background-color: #00AEFF;
     }
+
     .hint-collapse {
         display: none;
     }
+
     @media (max-width: 1000px) {
         .hint-collapse {
             background-color: #f3D54E;
             color: #ffffff;
             display: inherit;
         }
+
         .no-hint-collapse {
             display: none;
         }
     }
-	.disabled-section {
-		background-color: #f2f2f2;
-	}
+
+    .disabled-section {
+        background-color: #f2f2f2;
+    }
 </style>
