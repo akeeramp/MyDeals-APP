@@ -44,6 +44,23 @@
                         <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
                     </div>
 
+
+                    <div class="col-md-11 row">
+                        <div class="col-md-11 row"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'CNTRCT_CUST_TYPE'"
+                             op-type="'DROPDOWN'"
+                             op-label="'Customer Type:'"
+                             op-lookup-url="'api/Dropdown/GetDropdowns/CNTRCT_CUST_TYPE'"
+                             op-lookup-text="'DROP_DOWN'"
+                             op-lookup-value="'DROP_DOWN'"
+                             op-is-stealth="true"
+                             op-is-form="true"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+
+
                     <div class="col-md-11 row"
                          op-control-flat
                          ng-model="contractData"
@@ -179,38 +196,38 @@
                 </div>
 
                 <div class="col-md-6">
-					<div class="col-md-11 row" ng-hide="isTenderContract">
-						<h6>Customer Acceptance of Contract is...</h6>
-					</div>
+                    <div class="col-md-11 row" ng-hide="isTenderContract">
+                        <h6>Customer Acceptance of Contract is...</h6>
+                    </div>
 
-					<div class="col-md-1" ng-hide="isTenderContract">
-						<div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
-							<i class="intelicon-help" style="font-size:30px !important"></i>
-						</div>
-					</div>
-					<div class="row" ng-hide="isTenderContract" style="margin-bottom: 20px;">
-						<div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
-							<div class="col-md-1">
-								<i class="fa fa-info-circle fa-2x" style="color:#FFA300"></i>
-							</div>
-							<div class="col-md-11">
-								In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
-							</div>
-						</div>
-					    <div class="col-md-11 radCustAccpt"
-							 ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0}"
-							 op-control-flat
-							 ng-model="contractData"
-							 op-cd="'CUST_ACCPT'"
-							 op-type="'RADIOBUTTONGROUP'"
-							 op-label="''"
-							 op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
-							 op-lookup-text="'DROP_DOWN'"
-							 op-lookup-value="'DROP_DOWN'"
-							 op-is-form="true"
-							 op-extra="true"
-							 op-ui-mode="'VERTICAL'"></div>
-						</div>
+                    <div class="col-md-1" ng-hide="isTenderContract">
+                        <div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.CreateContract_ContractDetails);">
+                            <i class="intelicon-help" style="font-size:30px !important"></i>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="isTenderContract" style="margin-bottom: 20px;">
+                        <div ng-if="contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0" class="col-md-11 alert alert-warning" style="margin-bottom: 7px;">
+                            <div class="col-md-1">
+                                <i class="fa fa-info-circle fa-2x" style="color:#FFA300"></i>
+                            </div>
+                            <div class="col-md-11">
+                                In order to change the customer acceptance please visit the <a ng-click="gotoManage()" style="cursor: pointer;">Manage Tab</a> and click the slider in the right hand corner of the page.
+                            </div>
+                        </div>
+                        <div class="col-md-11 radCustAccpt"
+                             ng-class="{'disabled-section' : contractData._behaviors.isReadOnly.CUST_ACCPT || contractData.DC_ID > 0}"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'CUST_ACCPT'"
+                             op-type="'RADIOBUTTONGROUP'"
+                             op-label="''"
+                             op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
+                             op-lookup-text="'DROP_DOWN'"
+                             op-lookup-value="'DROP_DOWN'"
+                             op-is-form="true"
+                             op-extra="true"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
 
 
                     <div class="col-md-12 row">
@@ -330,44 +347,48 @@
         padding: 10px 0 0 0;
     }
 
-    .k-dialog .promptUserDialog h4 {
-        color: #003C71;
-        font-size: 18px;
-        font-weight: 600;
-        margin-top: 0;
-    }
+        .k-dialog .promptUserDialog h4 {
+            color: #003C71;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0;
+        }
 
-    .k-dialog .promptUserDialog p {
-        font-size: 12px;
-        padding: 10px 20px;
-    }
+        .k-dialog .promptUserDialog p {
+            font-size: 12px;
+            padding: 10px 20px;
+        }
 
     .delete-attach-icon {
         font-size: 16px;
         cursor: pointer;
     }
 
-    .delete-attach-icon:hover {
-        text-decoration: none;
-    }
+        .delete-attach-icon:hover {
+            text-decoration: none;
+        }
 
     .btn-primary {
         background-color: #00AEFF;
     }
+
     .hint-collapse {
         display: none;
     }
+
     @media (max-width: 1000px) {
         .hint-collapse {
             background-color: #f3D54E;
             color: #ffffff;
             display: inherit;
         }
+
         .no-hint-collapse {
             display: none;
         }
     }
-	.disabled-section {
-		background-color: #f2f2f2;
-	}
+
+    .disabled-section {
+        background-color: #f2f2f2;
+    }
 </style>
