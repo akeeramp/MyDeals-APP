@@ -70,6 +70,7 @@ function messageBoard($compile, $timeout, objsetService, $uibModal) {
                             item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
                             item[i].url = rootUrl + "/advancedSearch#/gotoPs/" + item[i].DC_ID;
                             item[i].contractUrl = rootUrl + "/Contract#/manager/" + $scope.$parent.contractData.DC_ID;
+                            item[i].C2A_ID = $scope.$parent.contractData.C2A_DATA_C2A_ID;
                             items.push(item[i]);
                             var stg = item[i].NEW_STG.replace(/.\s*$/, "");
                             if (stageToCheck != "" && stageToCheck != stg) {

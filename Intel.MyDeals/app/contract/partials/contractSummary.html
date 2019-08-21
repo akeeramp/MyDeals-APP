@@ -25,6 +25,7 @@
             <thead>
                 <tr>
                     <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
+                    <th style='text-align: left; width:80px; font-size: 12px; font-family: sans-serif;'><strong>C2A \\#</strong></th>
                     <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy \\#</strong></th>
                     <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
                     <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
@@ -36,6 +37,7 @@
                 # for (var i = 0; i < data.items.length; i++) { #
                 <tr>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].contractUrl #'>#= data.items[i].CNTRCT #</a>*</span> </td>
+                    <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].C2A_ID #</span> </td>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>#= data.items[i].DC_ID #</a>*</span> </td>
                     <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].TITLE #</span> </td>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'>#= data.items[i].VERTICAL_ROLLUP #</span> </td>

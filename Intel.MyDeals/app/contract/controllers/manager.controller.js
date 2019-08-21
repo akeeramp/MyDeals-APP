@@ -1246,7 +1246,6 @@
         }
 
         $scope.openEmailMsg = function (ids) {
-
             $("#wincontractMessages").data("kendoWindow").close();
 
             var rootUrl = window.location.protocol + "//" + window.location.host;
@@ -1270,6 +1269,7 @@
                         "CUST_NM": $scope.root.contractData.Customer.CUST_NM,
                         "VERTICAL_ROLLUP": stItem.VERTICAL_ROLLUP,
                         "CNTRCT": "#" + $scope.root.contractData.DC_ID + " " + $scope.root.contractData.TITLE,
+                        "C2A_ID": $scope.root.contractData.C2A_DATA_C2A_ID,
                         "DC_ID": stItem.DC_ID,
                         "NEW_STG": stItem.WF_STG_CD,
                         "TITLE": stItem.TITLE,
