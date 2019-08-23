@@ -12,10 +12,13 @@
         usrLName = ViewBag.UserToken.Usr.LastName;
         usrEmail = ViewBag.UserToken.Usr.Email;
         usrWwid = ViewBag.UserToken.Usr.WWID;
+
+        if (usrWwid == 0) { throw new Exception("Oh crap!  No UserToken came back from MeedCustomers page!"); }
     }
     catch (Exception)
     {
         // do some error catching or 404 error redirect here...
+        Response.Redirect("/Error/LostAccountToken");
     }
 }
 
@@ -59,7 +62,7 @@
     <div style='font-family:sans-serif;'>
         <p><span style='font-size:20px; color: \\#00AEEF; font-weight: 600'>My Deals Customer Access Review Required!</span></p>
         <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
-        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:#= data.from #'>#= data.from #</a>.</span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:#= data.from #'>#= data.from # (#= data.wwid #)</a>.</span></p>
         <br />
         <p><span style='font-size:18px;'>Customer Account Request Granted</span></p>
         <p><span style='font-size: 12px;'>

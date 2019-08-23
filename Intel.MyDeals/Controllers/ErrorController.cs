@@ -48,6 +48,12 @@ namespace Intel.MyDeals.Controllers
             return View();
         }
 
+        public ActionResult LostAccountToken()
+        {
+            Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
+            return View();
+        }
+
         public ActionResult DirectUser()
         {
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
