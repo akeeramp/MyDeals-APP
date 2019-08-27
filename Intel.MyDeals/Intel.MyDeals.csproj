@@ -1723,6 +1723,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Views\Error\LostAccountToken.html" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1807,6 +1808,7 @@
     <Content Include="Scripts\Angular\1.6.9\angular.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-animate.min.js.map" />
+    <Content Include="Views\Error\LostAccountToken.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
