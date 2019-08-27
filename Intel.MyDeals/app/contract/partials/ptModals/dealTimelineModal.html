@@ -1,57 +1,151 @@
 ﻿<div class="modal-header modalBlueBody">
     <h5 class="modal-title" id="modal-title">Timeline for deal {{dataItem.DC_ID}} <img ng-if="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+    <i id="btnClose" class="intelicon-close-max" ng-click="ok()" title="Click to Close"></i>
+    <i id="btnAnchordisable" class="intelicon-locked-outlined" title="Click to Enable dragging"></i>
+    <i id="btnEnlargeText" class="intelicon-increase-text-outlined" title="Click to Decrese Text"></i>
+    
 </div>
 
-<div class="modal-body modalBlueBody" id="modal-body">
+<div class="modal-body modalBlueBody hresize" id="modal-body">
     <div class="k-header k-grid-toolbar ng-scope">
         <a role="button" class="k-button k-button-icontext k-grid-excel" ng-click="exportToExcelTimeline()"><span class="k-icon k-i-file-excel"></span><div class="excelText"><span>Excel Export</span></div></a>
     </div>
-    <kendo-grid options="gridOptions" class="opUiContainer md" style="height: calc(100% - 100px); margin-bottom: 20px;"></kendo-grid>
+    <kendo-grid options="gridOptions" class="historyModal opUiContainer md" style="height: calc(100% - 100px); margin-bottom: 20px;"></kendo-grid>
 
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-12">
             <button class="btn btn-primary" type="button" style="width: 100%;" ng-click="ok()">Close</button>
         </div>
-    </div>
+    </div>-->
 </div>
 
 <script type="text/javascript">
-    $('.modal-content').resizable({
-      //alsoResize: ".modal-dialog",
-      minHeight: 300,
-      minWidth: 300
+    $(".modal-content").resizable({
+        handles: 'e, w'
     });
+    //Intializing the Draggble function for the first time
     $('.modal-dialog').draggable();
+    //Disabled it cause by default it will be disabled
+    $('.modal-dialog').draggable('disable');
+    //Draggble Toggle button for the User- Click to Enable.Disablen
+    $('#btnAnchordisable').click(function (e) {          
+        $('.modal-dialog').draggable('disable');
+        if ($('#btnAnchordisable').attr('class').trim() == 'intelicon-locked-outlined') {
+            $('.modal-dialog').draggable('enable');
+            $('#btnAnchordisable').removeClass('intelicon-locked-outlined').addClass('intelicon-unlocked-outlined');
+            $('#btnAnchordisable').attr('title', 'Click me to Disable Dragging');
+        } else {
+            $('.modal-dialog').draggable('disable');
+            $('#btnAnchordisable').removeClass('intelicon-unlocked-outlined').addClass('intelicon-locked-outlined');
+            $('#btnAnchordisable').attr('title', 'Click me to Enable Dragging');
+        }
+        
+    });
+    $('#btnEnlargeText').click(function (e) {
+        if ($('#btnEnlargeText').attr('class').trim() == 'intelicon-decrease-text-outlined') {
+            $('#btnEnlargeText').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
+            $('.historyModal').removeClass('opUiContainer sm k-grid k-widget').addClass('opUiContainer md k-grid k-widget');
+            $('#btnEnlargeText').attr('title', 'Click me to Increase Text size');
+        } else {
+            $('#btnEnlargeText').removeClass('intelicon-increase-text-outlined').addClass('intelicon-decrease-text-outlined');
+            $('.historyModal').removeClass('opUiContainer md k-grid k-widget').addClass('opUiContainer sm k-grid k-widget');
+            $('#btnEnlargeText').attr('title', 'Click me to Decrease Text size');
+        }            
+    });
 
-    $('#myModal').on('show.bs.modal', function() {
+    $('#modal-window').on('show.bs.modal', function() {
       $(this).find('.modal-body').css({
         'max-height': '100%'
       });
     });
 </script>
 <style>
+    #btnAnchordisable {
+        float: right;
+        margin-left: 94.5%;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        cursor: pointer;
+        font-size: 20px;
+        margin-top: -35px;
+        z-index: 999999999;
+        margin-right: 360px;
+    }
+    #btnEnlargeText {
+        float: right;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        cursor: pointer;
+        font-size: 20px;
+        margin-top: -35px;
+        z-index: 99999;
+        margin-right: 330px;
+    }
+    #btnClose {
+        float: right;
+        margin-top: -25px;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    #btnAnchordisable:hover {
+        border-color: #F3D54E;
+    }
+    #btnEnlargeText:hover {
+        border-color: #F3D54E;
+    }
+    .active {
+        border-color: #00aeef;
+    }
+    .inactive {
+        border-color: rgb(196, 214, 0);
+    }
     .excelText {
         line-height: 1.2em;
         font-size: 12px;
         float: right;
     }
-
-        .excelText span {
-            text-align: left;
-        }
-
+    .excelText span {
+        text-align: left;
+    }
     .modalBlueBody {
         background-color: #003C71;
         color: #ffffff;
     }
-
     .modal-lg {
         min-width: 90% !important;
+        max-height: calc(100% - 40px) !important;
     }
     .modal-body {
         height: calc(100% - 100px) !important;
+        min-height:200px;
     }
     .k-grid-content {
-        max-height: 410px;
+        max-height: 490px;
+        min-height:250px;
     }
+    .modal-content {
+        background: #003c71;
+        resize: horizontal;
+        
+        min-width:750px;
+    }
+    .k-grid-content{
+        min-width:500px;
+        overflow: scroll;
+    }
+    .k-grid-toolbar > .k-button{
+        height: 25px;
+    }
+    .k-i-file-excel{
+        margin-top: -6px;
+    }.excelText {
+        margin-top: -5px;
+        font-size:15px;
+    }
+    
 </style>
