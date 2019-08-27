@@ -45,11 +45,11 @@
         if ($('#btnEnlargeText').attr('class').trim() == 'intelicon-decrease-text-outlined') {
             $('#btnEnlargeText').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
             $('.historyModal').removeClass('opUiContainer sm k-grid k-widget').addClass('opUiContainer md k-grid k-widget');
-            $('#btnEnlargeText').attr('title', 'Click me to Increase Text size');
+            $('#btnEnlargeText').attr('title', 'Click me to Decrease Text size');
         } else {
             $('#btnEnlargeText').removeClass('intelicon-increase-text-outlined').addClass('intelicon-decrease-text-outlined');
             $('.historyModal').removeClass('opUiContainer md k-grid k-widget').addClass('opUiContainer sm k-grid k-widget');
-            $('#btnEnlargeText').attr('title', 'Click me to Decrease Text size');
+            $('#btnEnlargeText').attr('title', 'Click me to Increase Text size');
         }            
     });
 
@@ -67,10 +67,10 @@
         border: 1px solid #00aeef;
         padding: 3px;
         cursor: pointer;
-        font-size: 20px;
-        margin-top: -35px;
+        font-size: 22px;
+        margin-top: -30px;
         z-index: 999999999;
-        margin-right: 360px;
+        margin-right: 70px;
     }
     #btnEnlargeText {
         float: right;
@@ -78,10 +78,10 @@
         border: 1px solid #00aeef;
         padding: 3px;
         cursor: pointer;
-        font-size: 20px;
-        margin-top: -35px;
+        font-size: 22px;
+        margin-top: -30px;
         z-index: 99999;
-        margin-right: 330px;
+        margin-right: 35px;
     }
     #btnClose {
         float: right;
@@ -89,7 +89,7 @@
         background: transparent;
         border: 1px solid #00aeef;
         padding: 3px;
-        font-size: 25px;
+        font-size: 22px;
         cursor: pointer;
     }
     #btnAnchordisable:hover {
