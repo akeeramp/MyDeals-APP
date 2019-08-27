@@ -1723,7 +1723,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr.min.js" />
-    <Content Include="Views\Error\LostAccountToken.html" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
