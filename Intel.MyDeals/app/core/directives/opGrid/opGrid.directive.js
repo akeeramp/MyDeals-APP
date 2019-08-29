@@ -1870,6 +1870,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         var dataItem = $scope.findDataItemById(args.WIP_DEAL[i]["DC_ID"]);
                         if (!!dataItem) {
                             dataItem["PASSED_VALIDATION"] = args.WIP_DEAL[i]["PASSED_VALIDATION"];
+                            dataItem["REBATE_BILLING_START"] = args.WIP_DEAL[i]["REBATE_BILLING_START"];
+                            dataItem["REBATE_BILLING_END"] = args.WIP_DEAL[i]["REBATE_BILLING_END"];
                             dataItem["WF_STG_CD"] = args.WIP_DEAL[i]["WF_STG_CD"];
                             dataItem["PS_WF_STG_CD"] = args.WIP_DEAL[i]["PS_WF_STG_CD"];
                             dataItem["TRKR_NBR"] = args.WIP_DEAL[i]["TRKR_NBR"];
