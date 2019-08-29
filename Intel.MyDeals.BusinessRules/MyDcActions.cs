@@ -65,13 +65,15 @@ namespace Intel.MyDeals.BusinessRules
             string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON]?.ToString() ?? "";
             string mrktSegValue = item[AttributeCodes.MRKT_SEG]?.ToString() ?? "";
             var billStartDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
-            var billEndDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
+            //var billEndDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
 
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString().ToUpper() ?? "";
 
             if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase))
             {
+                // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+                // End date =  Billing End date
                 if (string.IsNullOrEmpty(billStartDate?.AtrbValue.ToString()))
                 {
                     item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).AddYears(-1).ToString("MM/dd/yyyy");
@@ -80,7 +82,7 @@ namespace Intel.MyDeals.BusinessRules
             }
             else
             {
-                // Billing Dates
+                // Billing dates will be default to deal start and end date where payout is based Billings
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
                 {
                     item[AttributeCodes.REBATE_BILLING_START] = dcItemSt;
@@ -798,6 +800,10 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        /// <summary>
+        /// Check billing start and end date for deals
+        /// </summary>
+        /// <param name="args"></param>
         public static void CheckBillingDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -822,6 +828,8 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
+            // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+            // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
                 var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
