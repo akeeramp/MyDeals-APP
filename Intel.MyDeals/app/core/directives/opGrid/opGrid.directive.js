@@ -719,7 +719,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     for (var i = 0; i < grid.columns.length; i++) {
                         if (grid.columns[i]["field"] === fieldToMatch) {
-                            grid.reorderColumn(c, grid.columns[i]);
+                            if (grid.columns[c] !== undefined) {
+                                grid.reorderColumn(c, grid.columns[i]);
+                            }
                             break;
                         }
                     }
