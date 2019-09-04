@@ -221,7 +221,7 @@ namespace Intel.MyDeals.DataLibrary
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
-                throw;
+                throw; 
             }
             return ret.FirstOrDefault();
         }
