@@ -9,9 +9,11 @@
         float: right;
     }
 
-
-
-
+.dealTools {
+    margin-top: 0px !important;
+    position: absolute !important;
+    max-height: 20px !important;
+}
 
     .waitingCenterDiv {
         background: #ffffff;
