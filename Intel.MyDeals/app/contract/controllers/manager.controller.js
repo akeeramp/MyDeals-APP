@@ -1392,7 +1392,7 @@
                     },
                     function (response) {
                         $scope.root.setBusy("Error", "Could not Run Overlapping Check.");
-                        logger.error("Could not run Overlapping Cheack.", response, response.statusText);
+                        logger.error("Could not run Overlapping Check.", response, response.statusText);
                         $timeout(function () {
                             $scope.root.setBusy("", "");
                         }, 2000);
