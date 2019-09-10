@@ -610,6 +610,7 @@
     <Content Include="app\core\filters\kitProducts.filter.js" />
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
     <Content Include="app\admin\dataQuality\admin.dataQuality.controller.js" />
+    <Content Include="app\dashboard\widgets\recents.html" />
     <Content Include="app\shared\services\performanceTestingService.service.js" />
     <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />

@@ -20,6 +20,9 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
+    // Get recent links from localstorage
+    $scope.recents = $localStorage.recents;
+
     $scope.$storage = $localStorage.$default({
         selectedDashboardId: '1',
         startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
