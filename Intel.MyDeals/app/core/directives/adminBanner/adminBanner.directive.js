@@ -18,10 +18,7 @@
 
                 scope.userDismissed = sessionStorage.getItem('userDismissedAdminBanner') == null ? 'false' :
                     sessionStorage.getItem('userDismissedAdminBanner');
-
-
-
-                //----------------------------Recents code-------------------------------------------------------------------
+                                               
                 // If user has closed the banner message he wont see it for the current session again.
                 constantsService.getConstantsByName("ADMIN_MESSAGE").then(function (data) {
                     if (!!data.data) {
@@ -35,7 +32,8 @@
                     scope.userDismissed = sessionStorage.getItem('userDismissedAdminBanner');
                 }
 
-                // Admin banner is a global directory, we track url changes from here and add it to the recent vistited links
+                 //----------------------------Recent Widget code-------------------------------------------------------------------
+                // Admin banner is a global directory, we track url changes from here and add it to the recent visited links
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
                     // store recents on a local storage,
