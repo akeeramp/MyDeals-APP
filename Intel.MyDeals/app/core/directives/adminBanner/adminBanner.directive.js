@@ -18,7 +18,7 @@
 
                 scope.userDismissed = sessionStorage.getItem('userDismissedAdminBanner') == null ? 'false' :
                     sessionStorage.getItem('userDismissedAdminBanner');
-                                               
+
                 // If user has closed the banner message he wont see it for the current session again.
                 constantsService.getConstantsByName("ADMIN_MESSAGE").then(function (data) {
                     if (!!data.data) {
@@ -32,8 +32,11 @@
                     scope.userDismissed = sessionStorage.getItem('userDismissedAdminBanner');
                 }
 
-                 //----------------------------Recent Widget code-------------------------------------------------------------------
+                //----------------------------Recent Widget code-------------------------------------------------------------------
                 // Admin banner is a global directory, we track url changes from here and add it to the recent visited links
+
+                var dontAddTheseInRecents = "portal";
+
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
                     // store recents on a local storage,
@@ -43,27 +46,24 @@
                     var recents = $localStorage.recents;
 
                     // Get the url from the state change venet
-                    var url = $state.href($state.current.name, $state.params, { absolute: true });
+                    var url = $location.absUrl();
+                    if (!url.endsWith(dontAddTheseInRecents)) {
+                        // if there is already entry in recents, to make it appear in top remove and add
+                        recents = recents.filter(function (item) {
+                            return item.url != url;
+                        });
 
-                    // $state doesnt capture the query string, get that here from $location
-                    var queryString = $location.url().split('?');
-                    queryString[1] !== undefined ? url += "?" + queryString[1] : url = url;
+                        var date = new Date();
 
-                    // if there is already entry in recents, to make it appear in top remove and add
-                    recents = recents.filter(function (item) {
-                        return item.url != url;
-                    });
+                        recents.unshift({ 'url': url, 'time': date.getTime() });
 
-                    var date = new Date();
+                        if (recents.length > 10) {
+                            recents.length = 10;
+                        }
 
-                    recents.unshift({ 'url': url, 'time': date.getTime() });
-
-                    if (recents.length > 10) {
-                        recents.length = 10;
+                        // replace recents on localstorage
+                        $localStorage.recents = recents;
                     }
-
-                    // replace recents on localstorage
-                    $localStorage.recents = recents;
                 });
             }
         }
