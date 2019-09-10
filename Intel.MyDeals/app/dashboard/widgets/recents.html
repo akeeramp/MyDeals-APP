@@ -2,7 +2,7 @@
     <table>
         <tr ng-repeat="r  in recents" ng-bind-html-unsafe="recents">
             <td style="margin:2px;font-size:14px" >
-                <a title="{{ r.url }}" href="{{ r.url }}">{{ r.url | limitTo: 50 }}{{r.url.length > 50 ? '...' : ''}}</a>
+                <a title="{{ r.url }}" href="{{ r.url }}">{{ r.url | limitTo: 55 }}{{r.url.length > 55 ? '...' : ''}}</a>
             </td>
         </tr>
     </table>
