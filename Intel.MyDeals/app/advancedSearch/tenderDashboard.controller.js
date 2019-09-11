@@ -1437,23 +1437,25 @@
             }
 
             kendo.confirm(msg)
-                .then(
-                    function () {
-                        //Save the changes
+                .then(function () {
+                    // Before updating stage from Submitted to offer run PCT forecfully, after running PCT it will call the actionTenderDeals function
+                    if (dataItem.PS_WF_STG_CD == 'Submitted' && newVal == 'Approve') {
+                        $scope.$broadcast('TenderRunPCTBeforeApproval', { 'tenders': tenders, 'newVal': newVal });
+                    } else {
+                        // Change stage of deals
                         $scope.actionTenderDeals(tenders, newVal);
-                    },
-                    function () {
-                        //User hit cancel, reset Actions to default values
-                        if ($scope.actionType == "PS") {
-                            dataItem["tender_actions"].text = "Action";
-                            dataItem["tender_actions"].value = "Action";
-                        }
-                        if ($scope.actionType == "BID") {
-                            dataItem["tender_actions"].BidActnName = dataItem["WF_STG_CD"];
-                            dataItem["tender_actions"].BidActnValue = dataItem["WF_STG_CD"];
-                        }
-                    });
-
+                    }
+                }, function () {
+                    //User hit cancel, reset Actions to default values
+                    if ($scope.actionType == "PS") {
+                        dataItem["tender_actions"].text = "Action";
+                        dataItem["tender_actions"].value = "Action";
+                    }
+                    if ($scope.actionType == "BID") {
+                        dataItem["tender_actions"].BidActnName = dataItem["WF_STG_CD"];
+                        dataItem["tender_actions"].BidActnValue = dataItem["WF_STG_CD"];
+                    }
+                });
         }
 
         $scope.actionTenderDeals = function (tenders, actn) {
@@ -1471,6 +1473,7 @@
 
                     //take the response opMsgQueue and update grid accordingly
                     var msgArray = results.data.Data.Messages;
+                    var errorMessages = [];
                     for (var dsIndex = 0; dsIndex < $scope.wipData.length; dsIndex++) {
                         //iterate through grid's dats in order to find entries that were updated
                         if ($scope.actionType == "BID") {
@@ -1531,17 +1534,24 @@
                                     if (msgArray[i].MsgType == 1) {
                                         //opMsgType = 1 is for "Info" messages, aka the success scenario
 
-                                        //the advanced search functions we take advantage of kindly gives us the contract obj sids of each wip deal which we utilize in the standard save routine.  however the wip data returned to us by actioning pricing strategies does not... so rather than elaborately retrieving contract data and passing it around as well, we just create a copy and reset it after we replace wipData as we know that is a value that should never change.
+                                        //the advanced search functions we take advantage of kindly gives us the contract obj sids of each wip deal which we utilize in the standard save routine.  however the wip data returned to us by actioning pricing strategies does not... 
+                                        // so rather than elaborately retrieving contract data and passing it around as well, we just create a copy and reset it after we replace wipData as we know that is a value that should never change.
                                         var contractId = $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"];
                                         $scope.wipData[dsIndex] = msgArray[i].ExtraDetails; //extradetails contains the myDealsData of the wip deal that was updated and would have updated security flags we can utilize
                                         $scope.wipData[dsIndex]["CNTRCT_OBJ_SID"] = contractId;
                                     } else {
                                         //update failed for this data item
                                         //TODO: create popup indicating warnings/failures
+                                        errorMessages.push(msgArray[i]);
                                     }
                                 }
                             }
                         }
+                    }
+
+                    //Temp fix to indicate there was a error
+                    if (errorMessages.length > 0) {
+                        logger.stickyError("The stage or PCT/MCT was changed by another source prior to this action.Please refresh and try again.");
                     }
 
                     //go through and remove all checkboxes / unlink everything

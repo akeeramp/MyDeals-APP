@@ -151,6 +151,30 @@ widgetConfig.configWidgets = function () {
         }
     };
 
+    widgetConfig.widgets["10"] = {
+        id: '10',
+        size: { x: 4, y: 3 },
+        position: { row: 0, col: 0 },
+        name: "Recent",
+        desc: "Recently visited My deals contracts or deals",
+        icon: "intelicon-time-outlined",
+        type: 'openrecents',
+        canChangeSettings: true,
+        canRefresh: false,
+        canAdd: true,
+        template: 'app/dashboard/widgets/recents.html',
+        subConfig: {},
+        widgetConfig: {
+            options: {},
+            data: [],
+            api: {}
+        },
+        resizeEvent: function (widget) {
+        },
+        refreshEvent: function () {
+        }
+    };
+
 }
 
 widgetConfig.getAllWidgetLayouts = function () {

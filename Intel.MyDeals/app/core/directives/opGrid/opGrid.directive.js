@@ -206,17 +206,35 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                     if (selectedItem.length > 0) {
                         $(".iconRunPct").addClass("fa-spin grn");
-                        $scope.root.$broadcast('btnPctMctRunning', {});
+                        $scope.$root.$broadcast('btnPctMctRunning', {});
                         objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
-                            $scope.parentRoot.refreshGridRows(selectedDeals, null);
-                            $scope.root.$broadcast('btnPctMctComplete', {});
                             $(".iconRunPct").removeClass("fa-spin grn");
+                            $scope.$root.$broadcast('btnPctMctComplete', {});
+                            $scope.parentRoot.refreshGridRows(selectedDeals, null);
                             logger.success("Please wait for the result to be updated...");
                         });
                     }
                 }
 
             }
+
+            // This method is used for tender approvel Submitted to Offer stage change
+            // Run PCT before stage change call
+            $scope.$on('TenderRunPCTBeforeApproval', function (e, arg) {
+                var selectedItem = arg.tenders.map(function (x) {
+                    return x.PS_ID; // PS Id to run PCT
+                });
+                if (selectedItem.length > 0) {
+                    $(".iconRunPct").addClass("fa-spin grn");
+                    $scope.$root.$broadcast('btnPctMctRunning', {});
+                    objsetService.runBulkPctPricingStrategy(selectedItem).then(function (data) {
+                        // PCT completed, irrespective of result call stage change method, this method will return 
+                        // error message if DB has a fail result and UI has pass result for PCT and MCT
+                        $(".iconRunPct").removeClass("fa-spin grn");
+                        $scope.parentRoot.actionTenderDeals(arg.tenders, arg.newVal);
+                    });
+                }
+            });
 
             $scope.openMCTScreen = function (dataItem) {
                 if (dataItem.PRC_ST_OBJ_SID === undefined) dataItem["PRC_ST_OBJ_SID"] = dataItem._parentIdPS;
@@ -719,6 +737,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     for (var i = 0; i < grid.columns.length; i++) {
                         if (grid.columns[i]["field"] === fieldToMatch) {
+                            // Sold to id column hidden for Tender deals, 
+                            // thus grid will have less column than columnOrderArr, check for undefined
                             if (grid.columns[c] !== undefined) {
                                 grid.reorderColumn(c, grid.columns[i]);
                             }
