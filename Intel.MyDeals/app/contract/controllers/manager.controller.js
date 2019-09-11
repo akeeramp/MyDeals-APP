@@ -541,7 +541,7 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools></div>",
                                 headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
@@ -720,7 +720,7 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools></div>",
                                 headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
@@ -896,7 +896,7 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools></div>",
                                 headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false

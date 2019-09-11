@@ -137,7 +137,7 @@
             width: 70,
             filterable: false,
             sortable: false,
-            template: "<span id='dealTool_#=data.DC_ID#'><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></span>",
+            template: "<span id='dealTool_#=data.DC_ID#'><div><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='customFunc(root.canShowCheckBox, dataItem)'></deal-tools></div></span>",
             headerTemplate: "<input type='checkbox' ng-click='root.clkAllTenderItem($event)' class='with-font' id='chkAllBox' /><label for='chkAllBox' style='margin-left: -6px;'>&nbsp;</label>",
             excelTemplate: " ",
             bypassExport: true

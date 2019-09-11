@@ -184,7 +184,7 @@
                     width: 70,
                     filterable: false,
                     sortable: false,
-                    template: "<deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='canShowCheckBox(dataItem)'></deal-tools>"
+                    template: "<div><deal-tools-tender ng-model='dataItem' is-editable='true' ng-if='canShowCheckBox(dataItem)'></deal-tools></div>"
                 }, {
                     field: "WF_STG_CD",
                     title: "Bid Action",

@@ -801,7 +801,7 @@
                 title: "Tools",
                 width: "150px",
                 locked: true,
-                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-file-attachment-enabled='false' is-history-enabled='true' is-comment-enabled='false' is-editable='true' is-quote-letter-enabled='false' is-delete-enabled='false'></deal-tools>",
+                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-file-attachment-enabled='false' is-history-enabled='true' is-comment-enabled='false' is-editable='true' is-quote-letter-enabled='false' is-delete-enabled='false'></deal-tools></div>",
                 headerTemplate: "<input type='checkbox' ng-click='clkAllItems($event, PT_ID)' class='with-font' id='chkDealTools_PT_ID' /><label for='chkDealTools_PT_ID'>Tools</label>",
                 filterable: false,
                 sortable: false,
