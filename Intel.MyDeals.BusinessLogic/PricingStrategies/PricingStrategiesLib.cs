@@ -189,7 +189,7 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData myDealsData = OpDataElementType.PRC_ST.GetByIDs(ids, opDataElementTypes, atrbs);
             contractToken.AddMark("GetByIDs - PR_MYDL_GET_OBJS_BY_SIDS", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
-            List<int> needsPctMctDealIds = new List<int>();
+            //List<int> needsPctMctDealIds = new List<int>();
 
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
             {
@@ -244,13 +244,12 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Brought this block back in to force DA into having to re-run PCT/MCT on approval for Jyoti's "Change Cost in DB after user does PCT" defect (DE19996)
                 // Meet Comp Test / Price Cost Test Check
-                bool needToRunMct = actn == "Approve" && hasL1 && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
-                bool needToRunPct = actn == "Approve" && hasL1 && stageIn == WorkFlowStages.Submitted;
-                if (needToRunMct || needToRunPct)
-                {
-                    needsPctMctDealIds.Add(dc.DcID);
-                }
-
+                //bool needToRunMct = actn == "Approve" && hasL1 && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
+                //bool needToRunPct = actn == "Approve" && hasL1 && stageIn == WorkFlowStages.Submitted;
+                //if (needToRunMct || needToRunPct)
+                //{
+                //    needsPctMctDealIds.Add(dc.DcID);
+                //}
 
                 // Check for pending stage... contract setting might bypass it
                 if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending") 
@@ -311,34 +310,34 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Now let us test for PCT or MCT if needed
-            if (needsPctMctDealIds.Any())
-            {
-                bool passMct, passPct;
+            //if (needsPctMctDealIds.Any())
+            //{
+            //    bool passMct, passPct;
 
-                start = DateTime.Now;
-                bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
-                contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
+            //    start = DateTime.Now;
+            //    bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), needsPctMctDealIds, out passMct, out passPct);
+            //    contractToken.AddMark("ExecutePctMct - PR_MYDL_GET_MEET_COMP", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
 
-                if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
-                {
-                    string passMsg = !passMct && !passPct
-                        ? "Meet Comp and Cost Test"
-                        : !passMct ? "Meet Comp" : "Cost Test";
+            //    if (!passed && role == RoleTypes.DA) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
+            //    {
+            //        string passMsg = !passMct && !passPct
+            //            ? "Meet Comp and Cost Test"
+            //            : !passMct ? "Meet Comp" : "Cost Test";
 
-                    foreach (int dcId in needsPctMctDealIds)
-                    {
-                        opMsgQueue.Messages.Add(new OpMsg
-                        {
-                            Message = $"Pricing Strategy did not pass {passMsg}.",
-                            MsgType = OpMsg.MessageType.Warning,
-                            ExtraDetails = dcId,
-                            KeyIdentifiers = new[] { dcId }
-                        });
-                    }
+            //        foreach (int dcId in needsPctMctDealIds)
+            //        {
+            //            opMsgQueue.Messages.Add(new OpMsg
+            //            {
+            //                Message = $"Pricing Strategy did not pass {passMsg}.",
+            //                MsgType = OpMsg.MessageType.Warning,
+            //                ExtraDetails = dcId,
+            //                KeyIdentifiers = new[] { dcId }
+            //            });
+            //        }
 
-                    return opMsgQueue;
-                }
-            }
+            //        return opMsgQueue;
+            //    }
+            //}
 
 
             // Stage changes are involved, go and grab the WIP deals for extra operations
