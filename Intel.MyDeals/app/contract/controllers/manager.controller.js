@@ -29,7 +29,6 @@
         $scope.showPendingC2A = false;
         $scope.needToRunPct = false;
         $scope.canBypassEmptyActions = false;
-        $scope.ranManuallySincePageLoaded = false;
         root.enablePCT = false;
         $scope.needToRunOverlaps = [];
         $scope.canActionIcon = true;
@@ -268,8 +267,6 @@
         }
 
         $scope.$on('ExecutionPctMctComplete', function (event, executedFromBtn) {
-            if (!!executedFromBtn && executedFromBtn === true) $scope.ranManuallySincePageLoaded = true;
-
             objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
                 var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
                 var newContractData = $scope.root.initContract(data);
@@ -1445,17 +1442,12 @@
 
         $scope.getIdsToPctMct = function (data) {
             var rtn = [];
-
-            // If I just ran it by hand... don't do it again
-            if ($scope.ranManuallySincePageLoaded) return rtn;
-
             var role = window.usrRole;
             var apprItems = data["Approve"];
             if (!!apprItems) {
                 for (var a = 0; a < apprItems.length; a++) {
                     var stage = apprItems[a]["WF_STG_CD"];
-                    var hasL1 = apprItems[a]["HAS_L1"];
-                    if (hasL1 && ((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted"))) {
+                    if (((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted"))) {
                         rtn.push(apprItems[a]["DC_ID"]);
                     }
                 }
