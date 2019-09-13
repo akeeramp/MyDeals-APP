@@ -951,7 +951,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "<deal-detail ng-model='dataItem'></deal-detail>",
+                Template = "<div><deal-detail ng-model='dataItem'></deal-detail></div>",
                 BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
