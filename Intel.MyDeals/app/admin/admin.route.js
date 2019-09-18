@@ -274,6 +274,15 @@
                     , url: 'dataquality'
                     , controller: 'DataQualityController as vm'
                 }
+            },
+            {
+                state: 'admin.admintools',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/admintools/admintools.html'
+                    , url: 'AdminTools'
+                    , controller: 'AdminToolsController as vm'
+                }
             }
         ];
     }

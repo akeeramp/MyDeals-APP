@@ -111,6 +111,8 @@ namespace Intel.MyDeals
                  "~/app/admin/admin.module.js"
                 , "~/app/admin/admin.route.js"
                 , "~/app/shared/_requestVerificationToken.js"
+                , "~/app/admin/admintools/admintools.service.js"
+                , "~/app/admin/admintools/admin.admintools.controller.js"
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/cache/cache.service.js"
                 , "~/app/admin/cache/cache.manager.resize.directive.js"
