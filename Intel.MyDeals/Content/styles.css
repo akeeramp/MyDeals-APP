@@ -8,10 +8,21 @@
     .fr {
         float: right;
     }
+<<<<<<< Intel.MyDeals/Content/styles.css
     .dealTools .gridStatusMarker {    
         margin-top: -4px;
     }
     
+=======
+
+.dealTools {
+    margin-top: 0px !important;
+    position: absolute !important;
+    max-height: 20px !important;
+    max-width: 280px;
+}
+
+>>>>>>> Intel.MyDeals/Content/styles.css
     .waitingCenterDiv {
         background: #ffffff;
         background: rgba(255, 255, 255, .75);
