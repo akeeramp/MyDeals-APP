@@ -25,6 +25,7 @@
             <thead>
                 <tr>
                     <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
+                    <th style='text-align: left; width:80px; font-size: 12px; font-family: sans-serif;'><strong>C2A \\#</strong></th>
                     <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy \\#</strong></th>
                     <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
                     <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
@@ -36,6 +37,7 @@
                 # for (var i = 0; i < data.items.length; i++) { #
                 <tr>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].contractUrl #'>#= data.items[i].CNTRCT #</a>*</span> </td>
+                    <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].C2A_ID #</span> </td>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'><a href='#= data.items[i].url #'>#= data.items[i].DC_ID #</a>*</span> </td>
                     <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span style=''>#= data.items[i].TITLE #</span> </td>
                     <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:\\#1f4e79;'>#= data.items[i].VERTICAL_ROLLUP #</span> </td>
@@ -363,7 +365,7 @@
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 50px; padding-left: 17px;">
-                                    <div class="textCircle valid_{{ pt.PASSED_VALIDATION }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
+                                    <div class="textCircle{{ pt.WIP_WORK_FLG === '1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION }}" title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}{{pt.WIP_WORK_FLG === '1' ? ' - Some deals still require attention': ''}}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                                 </td>
                                 <td>
                                     <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the {{ptTitle}} in the {{contractType}} Editor"></div>
@@ -400,6 +402,9 @@
 
 
 <style>
+    .dealTools {
+        margin-left: -5px !important;
+    }
     .sumGridOptionsExpand {
         height: auto !important;
     }

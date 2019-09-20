@@ -45,6 +45,13 @@ namespace Intel.MyDeals.Entities
             if (packet.PacketType != OpDataElementType.WIP_DEAL) return;
             if (dealIds == null) dealIds = new List<int>();
 
+            // Ensure that IN_REDEAL flag is set from DB balue if UI drops it's value (which happens in multi-screen concurrency situations)
+            //List<OpDataElement> inRedealAtrbsCheck = packet.AllDataElements.Where(d => d.AtrbCd == AttributeCodes.IN_REDEAL).ToList();
+            foreach (OpDataElement de in packet.AllDataElements.Where(d => d.AtrbCd == AttributeCodes.IN_REDEAL).ToList())
+            {
+                if (de.AtrbValue.ToString() == "") de.AtrbValue = de.PrevAtrbValue;
+            }
+
             OpDataPacket<OpDataElementType> testPacket = fullPacket ?? packet;
             List<int> majorDealIds = testPacket.AllDataElements
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && d.HasValueChanged && (!dealIds.Any() || dealIds.Contains(d.DcID)))
@@ -215,13 +222,23 @@ namespace Intel.MyDeals.Entities
                 }
                 if (de == null) // User didn't change stage, only made an End Customer Quote only change, catch it and re-gen anyhow..
                 {
+                    // In the case of wrong way major changes, we need to check which elements changes to customoze proper quote message
+                    string changeType = "";
                     IOpDataElement deEndCust = dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+                    IOpDataElement deVolume = dc.GetDataElement(AttributeCodes.VOLUME);
+                    IOpDataElement deDollars = dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
+                    IOpDataElement deStart = dc.GetDataElement(AttributeCodes.START_DT);
+                    IOpDataElement deEnd = dc.GetDataElement(AttributeCodes.END_DT);
                     // This is safe because quote only changes is checks WF_STG matches above criteria.  User didn't change the WF as a movement, so WF element doesn't come through to here.
-                    if (deEndCust != null && deEndCust.State == OpDataElementState.Modified) 
-                    {
-                        dc.AddTimelineComment("Quote letter generated for End Customer Change");
-                        quoteIds.Add(dc.DcID);
-                    }
+                    if (deEndCust != null && deEndCust.State == OpDataElementState.Modified) changeType = "End Customer change,";
+                    if (deVolume != null && deVolume.State == OpDataElementState.Modified) changeType = "Volume change,";
+                    if (deDollars != null && deDollars.State == OpDataElementState.Modified) changeType = "Total Dollars change,";
+                    if (deStart != null && deStart.State == OpDataElementState.Modified) changeType = "Start Date change,";
+                    if (deEnd != null && deEnd.State == OpDataElementState.Modified) changeType = "End Date change,";
+                    if (changeType == "") changeType = "Some other reason,";
+
+                    dc.AddTimelineComment("Quote letter generated for " + changeType.TrimEnd(changeType[changeType.Length - 1]));
+                    quoteIds.Add(dc.DcID);
                 }
             }
 

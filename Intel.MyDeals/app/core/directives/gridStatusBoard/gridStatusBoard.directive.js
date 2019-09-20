@@ -250,6 +250,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     }, {
                         title: "Notes",
                         field: "NOTES",
+                        template: "<div title='#:NOTES#'>{{ ::dataItem.NOTES }}</div>",
                         width: "170px"
                     }
                 ]

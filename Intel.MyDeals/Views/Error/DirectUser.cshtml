@@ -14,10 +14,13 @@
         usrEmail = ViewBag.UserToken.Usr.Email;
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
         usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
+
+        if (usrWwid == 0) { throw new Exception("Oh crap!  No UserToken came back from DirectUser page!"); }
     }
     catch (Exception)
     {
         // do some error catching or 404 error redirect here...
+        Response.Redirect("/Error/LostAccountToken");
     }
 }
 

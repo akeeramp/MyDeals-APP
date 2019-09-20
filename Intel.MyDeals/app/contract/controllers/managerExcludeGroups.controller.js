@@ -378,6 +378,11 @@
                 filterable: { multi: true },
                 width: 120
             }, {
+                field: "MRKT_SEG",
+                title: "Market Segment",
+                template: "#=gridUtils.uiReadonlyControlWrapper(data, 'MRKT_SEG')#",
+                width: 160
+            }, {
                 field: "ECAP_PRICE",
                 title: "ECAP Price",
                 template: "#=gridUtils.uiReadonlyDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
@@ -436,6 +441,7 @@
                             OEM_PLTFRM_LNCH_DT: { type: "date" },
                             OEM_PLTFRM_EOL_DT: { type: "date" },
                             DEAL_COMB_TYPE: { type: "string" },
+                            MRKT_SEG: { type: "string" },
                             ECAP_PRICE: { type: "object" },
                             MAX_RPU: { type: "number" },
                             DEAL_DESC: { type: "string" },
@@ -497,6 +503,9 @@
                                 "Groups": ["Grouping Exclusions"]
                             },
                             "DEAL_COMB_TYPE": {
+                                "Groups": ["Grouping Exclusions"]
+                            },
+                            "MRKT_SEG": {
                                 "Groups": ["Grouping Exclusions"]
                             },
                             "ECAP_PRICE": {

@@ -64,17 +64,33 @@ namespace Intel.MyDeals.BusinessRules
             string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
             string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON]?.ToString() ?? "";
             string mrktSegValue = item[AttributeCodes.MRKT_SEG]?.ToString() ?? "";
+            var billStartDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
+            //var billEndDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
+
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString().ToUpper() ?? "";
 
-            // Billing Dates
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
+            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase))
             {
-                item[AttributeCodes.REBATE_BILLING_START] = dcItemSt;
+                // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+                // End date =  Billing End date
+                if (string.IsNullOrEmpty(billStartDate?.AtrbValue.ToString()))
+                {
+                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).AddYears(-1).ToString("MM/dd/yyyy");
+                    item[AttributeCodes.REBATE_BILLING_END] = DateTime.Parse(dcEn).ToString("MM/dd/yyyy");
+                }
             }
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)) || dcEn != dcItemEn)
+            else
             {
-                item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
+                // Billing dates will be default to deal start and end date where payout is based Billings
+                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
+                {
+                    item[AttributeCodes.REBATE_BILLING_START] = dcItemSt;
+                }
+                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)) || dcEn != dcItemEn)
+                {
+                    item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
+                }
             }
 
             // On Ad Date
@@ -444,7 +460,7 @@ namespace Intel.MyDeals.BusinessRules
             var deTypeDesc = deType.ToDesc();
 
             // For contract and Tender type rebate change detype desc to folio
-            if (deType == OpDataElementType.CNTRCT && r.Dc.GetDataElementValue(AttributeCodes.IS_TENDER) == "1" )
+            if (deType == OpDataElementType.CNTRCT && r.Dc.GetDataElementValue(AttributeCodes.IS_TENDER) == "1")
             {
                 deTypeDesc = "Folio";
             }
@@ -784,28 +800,46 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        /// <summary>
+        /// Check billing start and end date for deals
+        /// </summary>
+        /// <param name="args"></param>
         public static void CheckBillingDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            // Billing dates should be only for deals which have Payout Based on = Consumption ??
+            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToString();
+            if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase)) return;
+
+            // Billing dates should be only for deals which have Payout Based on = Consumption ?? Yes.
             IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
-
-            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToString();
             var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT).ToString();
 
             // For front end YCS2 do not check for billing dates
-            if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase) && programPayment.Contains("YCS2")) return;
+
 
             if (string.IsNullOrEmpty(deStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deEnd?.AtrbValue.ToString())) return;
             if (string.IsNullOrEmpty(deBllgStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deBllgEnd?.AtrbValue.ToString())) return;
 
             DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
+
+            // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+            // End date =  Billing End date
+            if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
+            {
+                var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
+                deBllgStart.SetAtrbValue(dt);
+            }
+
+            if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
+            {
+                deBllgEnd.SetAtrbValue(deEnd.AtrbValue.ToString());
+            }
 
             if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date > dcSt)
             {
@@ -1145,7 +1179,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     string tracker = de.AtrbValue.ToString();
                     // If there is a tracker number, put the WIP version in re-deal visual state.  We do this because we will issue a GEN_TRACKER call to update the tracker.
-                    if (!string.IsNullOrEmpty(tracker) && !tracker.Contains('*')) 
+                    if (!string.IsNullOrEmpty(tracker) && !tracker.Contains('*'))
                     {
                         de.AtrbValue = tracker + "*";
                     }
@@ -1552,7 +1586,7 @@ namespace Intel.MyDeals.BusinessRules
                     IOpDataElement deHasTrkr = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
                     IOpDataElement deInRedeal = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
                     if (deParentStage == null || deHasTrkr == null || deInRedeal == null) return; // Because apparently meeto comp uses this as well and doesn't bring these fields down
-                    testObject = ((deHasTrkr.AtrbValue.ToString() == "0") || (deHasTrkr.AtrbValue.ToString() == "1" && deInRedeal.AtrbValue.ToString() == "1")) && 
+                    testObject = ((deHasTrkr.AtrbValue.ToString() == "0") || (deHasTrkr.AtrbValue.ToString() == "1" && deInRedeal.AtrbValue.ToString() == "1")) &&
                         (!parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString()));
                     break;
                 case OpDataElementType.WIP_DEAL:
@@ -2003,7 +2037,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement myCap = r.Dc.GetDataElement(AttributeCodes.CAP);
-            
+
             if (myCap != null && myCap.HasOrigValueChanged && String.IsNullOrEmpty(myCap.AtrbValue.ToString()))
             {
                 myCap.AtrbValue = myCap.OrigAtrbValue;

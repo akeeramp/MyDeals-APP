@@ -738,6 +738,11 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, dcId, 0, title);
         }
         
+        /// <summary>
+        /// Get wip exclusions 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public OpDataCollectorFlattenedDictList GetWipExclusionFromContract(int id)
         {
             MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(
@@ -762,6 +767,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OEM_PLTFRM_LNCH_DT.ATRB_SID,
                     Attributes.OEM_PLTFRM_EOL_DT.ATRB_SID,
                     Attributes.DEAL_COMB_TYPE.ATRB_SID,
+                    Attributes.MRKT_SEG.ATRB_SID,
                     Attributes.MAX_RPU.ATRB_SID,
                     Attributes.REBATE_TYPE.ATRB_SID,
                     Attributes.ECAP_PRICE.ATRB_SID,

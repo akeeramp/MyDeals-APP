@@ -22,7 +22,6 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     vm.hasCheckbox = enableCheckbox;
     vm.DC_ID = dataItem.DC_ID;
     vm.delCounter = 0;
-    vm.IS_EXCLUDED = [];
     vm.toggleMessage = 'Off';
     vm.toggleClass = 'txtOff';
     vm.trimString = trimString;
@@ -117,11 +116,6 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                     if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
                         vm.gridData[i].selected = true;
                     }
-
-                    if (vm.IS_EXCLUDED.indexOf(vm.gridData[i]["OVLP_DEAL_ID"]) > -1) {
-                        vm.gridData[i]["IS_TOUCHED"] = 1;
-                    }
-
                 }
 
                 e.success(vm.gridData);
@@ -188,6 +182,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
                     OVLP_REBT_TYPE: dataItem["REBATE_TYPE"] === undefined || dataItem["REBATE_TYPE"] === "" ? dataItem["REBT_TYPE"] : dataItem["REBATE_TYPE"],
                     OVLP_ECAP_PRC: ecap,
                     OVLP_MAX_RPU: dataItem["MAX_RPU"],
+                    OVLP_MKT_SEG: dataItem["MRKT_SEG"],
                     OVLP_WF_STG_CD: dataItem["DSPL_WF_STG_CD"],
                     GRP_BY: 0,
                     selected: true,
@@ -239,6 +234,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             { field: "OVLP_DEAL_DESC", title: "Deal Description", width: "250px", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_DEAL_DESC#">{{vm.trimString(dataItem,"OVLP_DEAL_DESC")}}</div>' },
             { field: "OVLP_ECAP_PRC", title: "ECAP", width: "120px", format: "{0:c}" },
             { field: "OVLP_MAX_RPU", title: "Max RPU", width: "120px", format: "{0:c}" },
+            { field: "OVLP_MKT_SEG", title: "Market Segment", width: "120px" },
             { field: "OVLP_CNSMPTN_RSN", width: "120px", title: "Comsumption Reason", template: '<div class="contractHeaderGrpExclusion" title="#=OVLP_CNSMPTN_RSN#">{{vm.trimString(dataItem,"OVLP_CNSMPTN_RSN")}}</div>' }
         ],
         dataBound: function (e) {
@@ -291,14 +287,17 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
     };
 
     vm.selectProduct = function (dataItem) {
+        // Allow users to exclude deals which are part of cost test only, i.e, do not allow to exclude group 0 which is the deal itself. 
+        // group 2 which are not part of cost test  
+        if (dataItem.GRP_BY != '1') return;
+        console.log(dataItem.OVLP_DEAL_ID + 'GRP:' + dataItem.GRP_BY);
         var varItem = vm.cellCurrValues.replace(/ /g, '').split(',');
         if (dataItem.selected) {
             // checked
             selectedGridDict[dataItem.OVLP_DEAL_ID] = true;
             if (varItem.indexOf(dataItem.OVLP_DEAL_ID) == -1) {
-                varItem.push(dataItem.OVLP_DEAL_ID);// = vm.cellCurrValues + ", " + vm.cellCurrValues;
+                varItem.push(dataItem.OVLP_DEAL_ID);
             }
-            //currValsArr.push(dataItem.OVLP_DEAL_ID, true);
         } else {
             // unchecked
             delete selectedGridDict[dataItem.OVLP_DEAL_ID];
@@ -313,9 +312,9 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
             if (indx > -1) {
                 varItem.splice(indx, 1);
             }
-            //delete currValsArr(dataItem.OVLP_DEAL_ID);
         }
 
+        // Checks or unchecks from the grid to match the data property dataItem.selected
         vm.cellCurrValues = varItem.toString();
         var indx = -1;
         vm.gridData.some(function (e, i) {
@@ -327,10 +326,6 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
         if (indx > -1) {
             vm.gridData[indx]["selected"] = dataItem.selected;
         }
-        if (vm.IS_EXCLUDED.indexOf(dataItem.OVLP_DEAL_ID) == -1) {
-            vm.IS_EXCLUDED.push(dataItem.OVLP_DEAL_ID);
-        }
-        dataItem.IS_TOUCHED = true;
     }
 
     vm.ok = function () {

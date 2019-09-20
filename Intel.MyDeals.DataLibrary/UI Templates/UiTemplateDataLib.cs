@@ -951,7 +951,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "<deal-detail ng-model='dataItem'></deal-detail>",
+                Template = "<div><deal-detail ng-model='dataItem'></deal-detail></div>",
                 BypassExport = true
             });
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
@@ -968,7 +968,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "<deal-tools ng-model='dataItem' is-editable='true'></deal-tools>",
+                Template = "<div><deal-tools ng-model='dataItem' is-editable='true'></deal-tools></div>",
                 HeaderTemplate = "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>",
                 BypassExport = true
             });
@@ -2492,7 +2492,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,
-                Template = "<deal-tools-tender ng-model='dataItem' is-editable='true'></deal-tools>",
+                Template = "<div><deal-tools-tender ng-model='dataItem' is-editable='true'></deal-tools></div>",
             });
             items.Add(new UiTemplateContainerItem
             {

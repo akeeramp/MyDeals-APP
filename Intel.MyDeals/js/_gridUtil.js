@@ -24,6 +24,15 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     //    "format": format
     //});
 
+    // When payout is based on billings, show blank for Billing startdate and end date fields, as these are readonly fields
+    if (passedData['PAYOUT_BASED_ON'] != undefined && passedData['PAYOUT_BASED_ON'] == 'Billings' && (field == 'REBATE_BILLING_START' || field == 'REBATE_BILLING_END')) {
+        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv"';
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+        tmplt += '</div>';
+        return tmplt
+    }
+
     // MUCH FASTER
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
@@ -874,7 +883,7 @@ gridUtils.calcKITBackendRebate = function (passedData, atrb2, dim2) {
         } else {
             data1 = Math.min(CAP[dim1], YCS2[dim1]);
         }
-        netPrice = parseFloat(netPrice) + parseFloat(data1);
+        netPrice = parseFloat(netPrice) + parseFloat(data1 * passedData["QTY"][dim1]);
     }
 
     if (!(dim2 == "" || dim2 == null)) {

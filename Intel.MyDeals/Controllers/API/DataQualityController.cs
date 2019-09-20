@@ -34,5 +34,22 @@ namespace Intel.MyDeals.Controllers.API
               , $"Unable queue DQ {useCase}"
           );
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startYearQuarter"></param>
+        /// <param name="endYearQuarter"></param>
+        /// <param name="in_prod_ids"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AntiForgeryValidate]
+        [Route("ExecuteCostGapFiller/{startYearQuarter}/{endYearQuarter}")]
+        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, [FromBody] string productIds)
+        {
+            return SafeExecutor(() => _dataQualityLib.ExecuteCostGapFiller(startYearQuarter, endYearQuarter, productIds)
+              , $"Unable run COST gap filler"
+          );
+        }
     }
 }

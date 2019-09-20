@@ -29,7 +29,6 @@
         $scope.showPendingC2A = false;
         $scope.needToRunPct = false;
         $scope.canBypassEmptyActions = false;
-        $scope.ranManuallySincePageLoaded = false;
         root.enablePCT = false;
         $scope.needToRunOverlaps = [];
         $scope.canActionIcon = true;
@@ -268,8 +267,6 @@
         }
 
         $scope.$on('ExecutionPctMctComplete', function (event, executedFromBtn) {
-            if (!!executedFromBtn && executedFromBtn === true) $scope.ranManuallySincePageLoaded = true;
-
             objsetService.readContract($scope.root.contractData.DC_ID).then(function (data) {
                 var atrbs = ["WF_STG_CD", "PASSED_VALIDATION", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT"];
                 var newContractData = $scope.root.initContract(data);
@@ -541,7 +538,7 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools></div>",
                                 headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
@@ -720,7 +717,7 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools></div>",
                                 headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
@@ -896,7 +893,7 @@
                                 title: "Tools",
                                 width: "200px",
                                 locked: true,
-                                template: "<deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools>",
+                                template: "<div><deal-tools ng-model='dataItem' is-split-enabled='false' is-editable='true' is-quote-letter-enabled='true' is-delete-enabled='false'></deal-tools></div>",
                                 headerTemplate: "<input type='checkbox' ng-click='clkAllItem($event, " + gridId + ")' class='with-font'  id='ptId_" + gridId + "chkDealTools' /><label for='ptId_" + gridId + "chkDealTools'>Tools</label>",
                                 filterable: false,
                                 sortable: false
@@ -1246,7 +1243,6 @@
         }
 
         $scope.openEmailMsg = function (ids) {
-
             $("#wincontractMessages").data("kendoWindow").close();
 
             var rootUrl = window.location.protocol + "//" + window.location.host;
@@ -1270,6 +1266,7 @@
                         "CUST_NM": $scope.root.contractData.Customer.CUST_NM,
                         "VERTICAL_ROLLUP": stItem.VERTICAL_ROLLUP,
                         "CNTRCT": "#" + $scope.root.contractData.DC_ID + " " + $scope.root.contractData.TITLE,
+                        "C2A_ID": $scope.root.contractData.C2A_DATA_C2A_ID,
                         "DC_ID": stItem.DC_ID,
                         "NEW_STG": stItem.WF_STG_CD,
                         "TITLE": stItem.TITLE,
@@ -1392,7 +1389,7 @@
                     },
                     function (response) {
                         $scope.root.setBusy("Error", "Could not Run Overlapping Check.");
-                        logger.error("Could not run Overlapping Cheack.", response, response.statusText);
+                        logger.error("Could not run Overlapping Check.", response, response.statusText);
                         $timeout(function () {
                             $scope.root.setBusy("", "");
                         }, 2000);
@@ -1445,17 +1442,12 @@
 
         $scope.getIdsToPctMct = function (data) {
             var rtn = [];
-
-            // If I just ran it by hand... don't do it again
-            if ($scope.ranManuallySincePageLoaded) return rtn;
-
             var role = window.usrRole;
             var apprItems = data["Approve"];
             if (!!apprItems) {
                 for (var a = 0; a < apprItems.length; a++) {
                     var stage = apprItems[a]["WF_STG_CD"];
-                    var hasL1 = apprItems[a]["HAS_L1"];
-                    if (hasL1 && ((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted"))) {
+                    if (((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted"))) {
                         rtn.push(apprItems[a]["DC_ID"]);
                     }
                 }

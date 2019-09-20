@@ -89,5 +89,34 @@ namespace Intel.MyDeals.DataLibrary
             }
             return true;
         }
+
+        /// <summary>
+        /// Fill COST gaps
+        /// </summary>
+        /// <param name="startYearQuarter"></param>
+        /// <param name="endYearQuarter"></param>
+        /// <param name="in_prod_ids"></param>
+        /// <returns></returns>
+        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string in_prod_ids)
+        {
+            Procs.dbo.PR_MYDL_EXT_PRD_COSTS cmd = new Procs.dbo.PR_MYDL_EXT_PRD_COSTS
+            {
+                in_start_yrqtr = startYearQuarter,
+                in_end_yrqtr = endYearQuarter,
+                in_prod_ids = in_prod_ids
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteDataSet(cmd))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return true;
+        }
     }
 }

@@ -29,16 +29,12 @@ function dealTimelineModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
         },
         schema: {
             parse: function (data) {
+                // Remove "Created Deals:" messages from output
                 for (var d = 0; d < data.length; d++) {
                     data[d]["user"] = data[d]["FRST_NM"] + " " + data[d]["LST_NM"];
                     data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(/; /g, '<br/>');
-                    var regex1 = /Quote letter generated/gi;
-                    var regex2 = /Created Deals:/gi;
-                    data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex1, '');
-                    data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex2, 'Created Deal(s) for product:');
-                    if (data[d]["ATRB_VAL"].toLowerCase() == "quote letter generated") {
-                        delete data[d]; 
-                    }
+                    var regex1 = /Created Deals:/gi;
+                    data[d]["ATRB_VAL"] = data[d]["ATRB_VAL"].replace(regex1, 'Created Deal(s) for product:');
                 }
                 return data;
             },

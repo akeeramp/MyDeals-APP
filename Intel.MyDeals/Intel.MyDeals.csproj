@@ -317,6 +317,9 @@
   <ItemGroup>
     <Content Include="app\admin\admin.module.js" />
     <Content Include="app\admin\admin.route.js" />
+    <Content Include="app\admin\adminTools\admin.admintools.controller.js" />
+    <Content Include="app\admin\adminTools\admintools.html" />
+    <Content Include="app\admin\adminTools\admintools.service.js" />
     <Content Include="app\admin\cache\admin.cache.controller.js" />
     <Content Include="app\admin\cache\cache.html" />
     <Content Include="app\admin\constants\admin.constants.controller.js" />
@@ -610,6 +613,7 @@
     <Content Include="app\core\filters\kitProducts.filter.js" />
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
     <Content Include="app\admin\dataQuality\admin.dataQuality.controller.js" />
+    <Content Include="app\dashboard\widgets\recents.html" />
     <Content Include="app\shared\services\performanceTestingService.service.js" />
     <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />
@@ -1807,6 +1811,7 @@
     <Content Include="Scripts\Angular\1.6.9\angular.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-animate.min.js.map" />
+    <Content Include="Views\Error\LostAccountToken.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
