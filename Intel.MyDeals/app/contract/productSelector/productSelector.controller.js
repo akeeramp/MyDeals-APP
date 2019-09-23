@@ -775,7 +775,7 @@
                     width: "150px",
                     filterable: { multi: true, search: true },
                     template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
-                    hidden: isGA
+                    hidden: !isGA
                 },
                 {
                     field: "MM_MEDIA_CD",
