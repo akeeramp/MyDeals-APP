@@ -11,7 +11,7 @@
     </div>
 
     <!-- Split group icon -->
-    <div ng-if="isSplitEnabled">
+    <div ng-if="isSplitEnabled" class='fl'>
         <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
             <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
         </div>
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Notes icon -->
-    <div ng-if="isCommentEnabled">
+    <div ng-if="isCommentEnabled" class='fl'>
         <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
             <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
         </div>
