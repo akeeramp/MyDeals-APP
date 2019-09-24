@@ -526,9 +526,9 @@
             if (!$scope.contractData.CUST_MBR_SID && !!$scope.defCust)
                 $scope.contractData.CUST_MBR_SID = $scope.defCust;
 
-            $scope.contractData.CNTRCT_CUST_TYPE = $scope.contractData.CNTRCT_CUST_TYPE === "" ? 'Direct' : $scope.contractData.CNTRCT_CUST_TYPE;
+            //$scope.contractData.CNTRCT_CUST_TYPE = $scope.contractData.CNTRCT_CUST_TYPE === "" ? 'Direct' : $scope.contractData.CNTRCT_CUST_TYPE;
 
-            $scope.contractData._behaviors.isReadOnly["CNTRCT_CUST_TYPE"] = !$scope.isNewContract;
+            //$scope.contractData._behaviors.isReadOnly["CNTRCT_CUST_TYPE"] = !$scope.isNewContract;
 
             // Contract custom initializations and functions
             // Dummy attribute on the UI which will hold the array of customer divisions

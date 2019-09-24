@@ -1,0 +1,119 @@
+﻿<div class="form-inline">
+    <h2 class="col-md-12">Missing COST filler</h2>
+    <p style="margin-left: 15px;">Use the tool below to fill or extend COST gaps in the tool</p>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 dateRangeLabel">
+                Select Start Year Quarter:
+            </div>
+            <div class="col-md-2">
+                <div class="col-md-11 row"
+                     id="StartSlider"
+                     style="width: 200px;"
+                     op-control-flat
+                     ng-model="adminToolsData"
+                     op-cd="'startQtr'"
+                     op-type="'SLIDER'"
+                     op-label="''"
+                     op-min-value="1"
+                     op-max-value="4"
+                     op-is-form="true"
+                     op-is-stealth="true"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="col-md-11 row"
+                     op-control-flat
+                     ng-model="adminToolsData"
+                     op-cd="'startYear'"
+                     op-type="'NUMERIC'"
+                     op-label="''"
+                     op-min-value="adminToolsData.MinYear"
+                     op-max-value="adminToolsData.MaxYear"
+                     op-is-stealth="true"
+                     op-is-form="true"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 dateRangeLabel">
+                Select END Year Quarter:
+            </div>
+            <div class="col-md-2">
+                <div class="col-md-11 row"
+                     id="StartSlider"
+                     style="width: 200px;"
+                     op-control-flat
+                     ng-model="adminToolsData"
+                     op-cd="'endQtr'"
+                     op-type="'SLIDER'"
+                     op-label="''"
+                     op-min-value="01"
+                     op-is-form="true"
+                     op-max-value="04"
+                     op-is-stealth="true"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="col-md-11 row"
+                     op-control-flat
+                     ng-model="adminToolsData"
+                     op-cd="'endYear'"
+                     op-type="'NUMERIC'"
+                     op-is-form="true"
+                     op-label="''"
+                     op-min-value="adminToolsData.MinYear"
+                     op-max-value="adminToolsData.MaxYear"
+                     op-is-stealth="true"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 font-weight-bold dateRangeLabel">
+                Enter Level4 Product Id(s):
+            </div>
+            <div class="col-md-9">
+                <div class="col-md-5"
+                     op-control-flat
+                     ng-model="adminToolsData"
+                     op-cd="'productIds'"
+                     op-type="'TEXTAREA'"
+                     op-label="''"
+                     op-is-form="true"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            </div>
+            <div class="col-md-2 btnExec">
+                <div>
+                    <button ng-click="executeCostFiller()" class="btn btn-primary">Execute COST Gap filler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .opUiElement {
+        width: 95%
+    }
+
+    .dateRangeLabel {
+        font-weight: bold;
+    }
+
+    .btnExec{
+        padding-left:25px;
+    }
+</style>

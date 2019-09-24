@@ -317,6 +317,9 @@
   <ItemGroup>
     <Content Include="app\admin\admin.module.js" />
     <Content Include="app\admin\admin.route.js" />
+    <Content Include="app\admin\adminTools\admin.admintools.controller.js" />
+    <Content Include="app\admin\adminTools\admintools.html" />
+    <Content Include="app\admin\adminTools\admintools.service.js" />
     <Content Include="app\admin\cache\admin.cache.controller.js" />
     <Content Include="app\admin\cache\cache.html" />
     <Content Include="app\admin\constants\admin.constants.controller.js" />

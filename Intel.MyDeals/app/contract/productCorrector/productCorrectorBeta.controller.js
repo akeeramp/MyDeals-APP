@@ -36,6 +36,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.DEAL_TYPE = dealType;
     vm.showIncludeExcludeLabel = false;
     vm.selectedItms = [];
+    var isGA = window.usrRole == "GA";
     vm.isTender = "";
     if (contractData.IS_TENDER) {
         vm.isTender = contractData.IS_TENDER;
@@ -60,9 +61,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         $timeout(function () {
             if (ProductRows.length > 1) {
                 vm.rowDCId = $linq.Enumerable().From(ProductRows)
-                                                .Where(function (x) {
-                                                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
-                                                }).ToArray()[0].DC_ID
+                    .Where(function (x) {
+                        return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
+                    }).ToArray()[0].DC_ID
             } else {
                 vm.rowDCId = ProductRows[0].DC_ID;
             }
@@ -97,9 +98,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                         reason = "Found multiple matches";
                         status = "Issue";
                         cnt += $linq.Enumerable().From(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item])
-                                .Where(function (x) {
-                                    return (x.EXCLUDE == (ptr == "E"));
-                                }).ToArray().length;
+                            .Where(function (x) {
+                                return (x.EXCLUDE == (ptr == "E"));
+                            }).ToArray().length;
                     }
                     if (!!vm.ProductCorrectorData.InValidProducts[vm.curRowId][ptr] && vm.ProductCorrectorData.InValidProducts[vm.curRowId][ptr].indexOf(item) >= 0) {
                         reason = "Unable to locate the product";
@@ -119,7 +120,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                             for (var ii = 0; ii < name.length; ii++) {
                                 matchName.push(name[ii]);
                             }
-                            
+
                         }
                     }
 
@@ -160,7 +161,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                                 dataitem[k][r]['DISP_HIER_VAL_NM'] = dataitem[k][r]["HIER_VAL_NM"];
                             }
                             if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
-                                
+
                                 if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k].length > 0) {
                                     var result = [];
                                     result = validDataItem[k].filter(function (value) {
@@ -189,14 +190,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
         //Remove Search Header
         vm.isIncludeProd = $linq.Enumerable().From(vm.curRowProds)
-                                            .Where(function (x) {
-                                                return (x.exclude == "I");
-                                            }).ToArray().length > 0;
+            .Where(function (x) {
+                return (x.exclude == "I");
+            }).ToArray().length > 0;
 
         vm.isExcludeProd = $linq.Enumerable().From(vm.curRowProds)
-                                .Where(function (x) {
-                                    return (x.exclude == "E");
-                                }).ToArray().length > 0;
+            .Where(function (x) {
+                return (x.exclude == "E");
+            }).ToArray().length > 0;
 
         // Build filters
         for (x = 0; x < vm.curRowProds.length; x++) {
@@ -339,7 +340,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         if (!!data.InValidProducts) {
             for (key in data.InValidProducts) {
                 if (data.InValidProducts.hasOwnProperty(key) && (data.InValidProducts[key]["E"].length > 0
-                        || data.InValidProducts[key]["I"].length > 0)) {
+                    || data.InValidProducts[key]["I"].length > 0)) {
                     if (issueRowIds.indexOf(key) < 0) issueRowIds.push(key);
                     if (vm.issueRowKeys.indexOf(key) < 0) vm.issueRowKeys.push(key);
                 }
@@ -418,10 +419,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             angular.forEach(grid.columns, function (item, key) {
                 var columnValue = $filter('unique')(data, item.field);
                 if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != "IS_SEL" && item.field != "USR_INPUT" && item.field != 'CAP' && item.field != 'YCS2' &&
-                    (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
+                    (columnValue[0][item.field] === "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
                     grid.hideColumn(item.field);//hide column
-                } else {
-                    grid.showColumn(item.field); //show column
+                } else if (item.field !== 'HAS_L1') {
+                    grid.showColumn(item.field)
                 }
             });
         }
@@ -430,7 +431,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     function gridDataBound(e) {
         var grid = e.sender;
         var data = grid.dataSource.data();
-        
+
         if (!data.length) {
             return;
         }
@@ -447,13 +448,13 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             var foundIndex = -1;
             for (var tempCnt = 0; tempCnt < vm.selectedItms.length; tempCnt++) {
                 if (vm.selectedItms[tempCnt].PRD_MBR_SID == data[item].PRD_MBR_SID && vm.selectedItms[tempCnt].ROW_NM == data[item].ROW_NM) {
-                    $("#prdChk" + vm.selectedItms[tempCnt].PRD_MBR_SID + vm.selectedItms[tempCnt].USR_INPUT.toLowerCase().replace(/\s/g, "_").trim()).prop('checked', true);                    
+                    $("#prdChk" + vm.selectedItms[tempCnt].PRD_MBR_SID + vm.selectedItms[tempCnt].USR_INPUT.toLowerCase().replace(/\s/g, "_").trim()).prop('checked', true);
                 }
             }
-            
+
         }
     };
-    
+
     vm.gridOptionsPotential = {
         dataSource: vm.dataSourceProduct,
         filterable: gridConstants.filterable,
@@ -467,14 +468,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         dataBound: gridDataBound,
         enableHorizontalScrollbar: true,
         columns: [
-             {
-                 field: "EXCLUDE",
-                 title: "",
-                 width: "4px",
-                 template: '<div class="fl gridStatusMarker #=EXCLUDE#" title="#=EXCLUDE#"></div>',
-                 hidden: false,
-                 filterable: false
-             },
+            {
+                field: "EXCLUDE",
+                title: "",
+                width: "4px",
+                template: '<div class="fl gridStatusMarker #=EXCLUDE#" title="#=EXCLUDE#"></div>',
+                hidden: false,
+                filterable: false
+            },
             {
                 field: "USR_INPUT",
                 title: "User Entered",
@@ -492,7 +493,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 width: "50px",
                 headerTemplate: "&nbsp;",
                 template: '<div ng-if="!((vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="{{vm.replaceString(dataItem)}}" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="{{vm.replaceString(dataItem)}}"></label></div>' +
-                          '<div ng-if="(vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
+                    '<div ng-if="(vm.DEAL_TYPE == \'KIT\' || vm.DEAL_TYPE == \'ECAP\') && dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
             },
             //Removed due to Bug no: DE13816
             //{
@@ -543,6 +544,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
                 width: "150px",
                 filterable: { multi: true, search: true }
+            },
+            {
+                field: "HAS_L1",
+                title: "Legal Classification",
+                width: "150px",
+                filterable: { multi: true, search: true },
+                template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
+                hidden: !isGA
             },
             {
                 field: "MM_MEDIA_CD",
@@ -652,7 +661,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             },
         ]
     }
-  
+
     function getFullNameOfProduct(item) {
         // When a product belongs to two different family, get the full path
         if (item.PRD_ATRB_SID == 7006) {
@@ -729,7 +738,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             .Select(function (x) { return x.matchName.length })
             .Sum();
         if (parseInt(resolvedProducts) + parseInt(validProducts) >= noOfValidItem) {
-            logger.stickyError("You have too many products! You may have up to " + noOfValidItem + " product(s)." );
+            logger.stickyError("You have too many products! You may have up to " + noOfValidItem + " product(s).");
             return false;
         }
         return true;
@@ -780,9 +789,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     "HIER_NM_HASH": foundItem.HIER_NM_HASH,
                     'USR_INPUT': foundItem.USR_INPUT
                 });
-            } 
-            
-            
+            }
+
+
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
             foundItem.HIER_VAL_NM = getFullNameOfProduct(foundItem);
@@ -817,7 +826,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (delIndex > -1) {
                 item.matchName.splice(delIndex, 1);
             }
-            
+
             var delSelIndex = -1;
             vm.selectedItms.some(function (e, i) {
                 if (e.PRD_MBR_SID == id && e.ROW_NM == vm.curRowId) {
@@ -827,7 +836,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             });
             if (delSelIndex > -1) {
                 vm.selectedItms.splice(delSelIndex, 1);
-            }            
+            }
 
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
@@ -849,7 +858,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     item.IS_SEL = false;
                 }
             });
-        }        
+        }
     }
 
     function checkForDuplicateProducts(item, lookup) {
@@ -879,7 +888,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     for (var aa = 0; aa < vm.curRowIssues.length; aa++) {
                         if (vm.curRowIssues[aa].anchorName === item.USR_INPUT) {
                             vm.curRowIssues[aa].cnt = $filter('where')(vm.curRowData, { 'USR_INPUT': item.USR_INPUT }).length;
-                        }                        
+                        }
                     }
                     vm.gridOptionsPotential.dataSource.read();
                     var delProduct = false;
@@ -910,9 +919,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     }
 
                 },
-                function () {
-                    //Unchecked
-                });
+                    function () {
+                        //Unchecked
+                    });
         }
         return isDuplicate;
     }
@@ -955,9 +964,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.openProdSelector = function (dataItem, rowId) {
         if (ProductRows.length > 1) {
             var currentPricingTableRow = $linq.Enumerable().From(ProductRows)
-                                                .Where(function (x) {
-                                                    return (x.DC_ID == vm.rowDCId);
-                                                }).ToArray()[0];
+                .Where(function (x) {
+                    return (x.DC_ID == vm.rowDCId);
+                }).ToArray()[0];
         }
         else {
             var currentPricingTableRow = ProductRows[0];
@@ -1173,14 +1182,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             //Remove Search Header
             vm.isIncludeProd = $linq.Enumerable().From(vm.curRowProds)
-                                                .Where(function (x) {
-                                                    return (x.exclude == "I");
-                                                }).ToArray().length > 0;
+                .Where(function (x) {
+                    return (x.exclude == "I");
+                }).ToArray().length > 0;
 
             vm.isExcludeProd = $linq.Enumerable().From(vm.curRowProds)
-                                    .Where(function (x) {
-                                        return (x.exclude == "E");
-                                    }).ToArray().length > 0;
+                .Where(function (x) {
+                    return (x.exclude == "E");
+                }).ToArray().length > 0;
 
             vm.selectRow(vm.curRowIndx);
         });
@@ -1225,9 +1234,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         var currentPricingTableRow = [];
         if (ProductRows.length > 1) {
             currentPricingTableRow = $linq.Enumerable().From(ProductRows)
-                                                .Where(function (x) {
-                                                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
-                                                }).ToArray()[0];
+                .Where(function (x) {
+                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
+                }).ToArray()[0];
         }
         else {
             currentPricingTableRow = ProductRows[0];
@@ -1247,9 +1256,9 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         var currentPricingTableRow = [];
         if (ProductRows.length > 1) {
             currentPricingTableRow = $linq.Enumerable().From(ProductRows)
-                                                .Where(function (x) {
-                                                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
-                                                }).ToArray()[0];
+                .Where(function (x) {
+                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
+                }).ToArray()[0];
         }
         else {
             currentPricingTableRow = ProductRows[0];

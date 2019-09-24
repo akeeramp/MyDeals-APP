@@ -1,14 +1,14 @@
 ﻿(function () {
     'use strict';
     angular
-       .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
+        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
         .controller('ProductSelectorModalController', ProductSelectorModalController)
         .run(SetRequestVerificationToken);
 
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'crossVertical','isTender'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'crossVertical', 'isTender'];
 
     function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct, crossVertical, isTender) {
         var vm = this;
@@ -16,6 +16,7 @@
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
         var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
+        var isGA = window.usrRole == "GA";
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
 
@@ -40,7 +41,7 @@
         vm.selectedItems = [];
         vm.prdSelLvlAtrbsForCategory = [];
         vm.enableSplitProducts = enableSplitProducts && dealType !== 'KIT';
-        vm.splitProducts = ( isTender == 1 && dealType === "ECAP" ) ? true : false;
+        vm.splitProducts = (isTender == 1 && dealType === "ECAP") ? true : false;
         vm.openCAPBreakOut = openCAPBreakOut;
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
@@ -54,7 +55,7 @@
         vm.animateExclude = false;
         vm.manageSelectedProducts = manageSelectedProducts;
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
-                        suggestedProduct.isExcludeProduct && (dealType == 'VOL_TIER' || dealType == 'PROGRAM') : false;
+            suggestedProduct.isExcludeProduct && (dealType == 'VOL_TIER' || dealType == 'PROGRAM') : false;
         vm.enableMultipleSelection = dealType == 'VOL_TIER' || dealType == 'PROGRAM';
         vm.isDeveloper = isDeveloper;
         vm.isTester = isTester;
@@ -146,9 +147,9 @@
                 var markLevel2 = $filter('unique')(vm.productSelectionLevels, 'MRK_LVL2');
                 vm.items = markLevel2.filter(function (i) {
                     return i.MRK_LVL2 != null
-                            && i.MRK_LVL2 != ""
-                            && i.MRK_LVL1 == item.name
-                            && i.PRD_MRK_MBR_SID != null;
+                        && i.MRK_LVL2 != ""
+                        && i.MRK_LVL1 == item.name
+                        && i.PRD_MRK_MBR_SID != null;
                 }).map(function (i) {
                     return {
                         name: i.MRK_LVL2,
@@ -338,7 +339,7 @@
             // drillDownFilter5 = GDM_FMLY/NAND Family depends upon vertical
             if (selectionLevel == 7007) {
                 data.drillDownFilter4 = (!!!item.drillDownFilter4 && item.drillDownFilter4 == "") ? null : item.drillDownFilter4,
-                data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
+                    data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
             }
 
             productSelectorService.GetProductSelectionResults(data).then(function (response) {
@@ -383,11 +384,11 @@
                 angular.forEach(grid.columns, function (item, key) {
                     var columnValue = $filter('unique')(data, item.field);
                     if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'MM_MEDIA_CD'
-                        && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null
-                        || columnValue[0][item.field] == 'NA')) {
+                        && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] === "" || columnValue[0][item.field] == null
+                            || columnValue[0][item.field] == 'NA')) {
                         grid.hideColumn(item.field);//hide column
                     }
-                    else {
+                    else if (item.field !== 'HAS_L1') {
                         grid.showColumn(item.field)
                     }
                 });
@@ -420,11 +421,11 @@
             var item = newItem();
             item.name = dataItem.HIER_VAL_NM;
             item.path = dataItem.HIER_NM_HASH,
-            item.drillDownFilter4 = dataItem.drillDownFilter4,
-            item.drillDownFilter5 = dataItem.drillDownFilter5,
-            item.selected = dataItem.selected,
-            item.parentSelected = dataItem.selected,
-            vm.selectedPathParts.push(item);
+                item.drillDownFilter4 = dataItem.drillDownFilter4,
+                item.drillDownFilter5 = dataItem.drillDownFilter5,
+                item.selected = dataItem.selected,
+                item.parentSelected = dataItem.selected,
+                vm.selectedPathParts.push(item);
             getItems(item);
         }
 
@@ -767,6 +768,14 @@
                     title: "CPU Processor number",
                     width: "150px",
                     filterable: { multi: true, search: true }
+                },
+                {
+                    field: "HAS_L1",
+                    title: "Legal Classification",
+                    width: "150px",
+                    filterable: { multi: true, search: true },
+                    template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
+                    hidden: !isGA
                 },
                 {
                     field: "MM_MEDIA_CD",
@@ -1325,8 +1334,8 @@
                 var markLevel1 = markLevel1s[0].MRK_LVL1;
 
                 vm.selectedPathParts = [{ name: markLevel1 },
-                                        { name: item.name },
-                                        { name: item.vertical, path: item.verticalPath }];
+                { name: item.name },
+                { name: item.vertical, path: item.verticalPath }];
 
                 var brandNames = $filter('where')(vm.productSearchValues, { 'PRD_CAT_NM': item.vertical });
                 if (brandNames.length == 1 && brandNames[0].PRD_ATRB_SID == 7003) {
@@ -1380,7 +1389,7 @@
                 vm.selectedPathParts.push(item);
                 // Filter the search results based on the hierarchy
                 var products = $filter('where')(vm.productSearchValues,
-                   { 'PRD_CAT_NM': item.vertical, 'FMLY_NM': item.name, 'BRND_NM': item.brand });
+                    { 'PRD_CAT_NM': item.vertical, 'FMLY_NM': item.name, 'BRND_NM': item.brand });
 
                 if (products.length == 1 && products[0].PRD_ATRB_SID == 7005) {
                     vm.selectPath(vm.selectedPathParts.length + 1);
@@ -1479,7 +1488,7 @@
             if (!vm.showTree) {
                 vm.selectPath(0);
                 vm.treeData.data = getProductHeirarrchy(vm.addedProducts),
-                vm.tree.dataSource = vm.treeData;
+                    vm.tree.dataSource = vm.treeData;
             }
             vm.showTree = !vm.showTree;
         }
@@ -1626,6 +1635,14 @@
                     title: "CPU Processor number",
                     width: "150px",
                     filterable: { multi: true, search: true }
+                },
+                {
+                    field: "HAS_L1",
+                    title: "Legal Classification",
+                    width: "150px",
+                    filterable: { multi: true, search: true },
+                    template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
+                    hidden: !isGA
                 },
                 {
                     field: "MM_CUST_CUSTOMER",
