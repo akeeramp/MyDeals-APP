@@ -79,6 +79,9 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
         public static void ApplySingleAndMultiDim(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode)
         {
+            if (dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
+                return;
+
             string dimKey = de.DimKeyString ?? "";
 
             if (string.IsNullOrEmpty(dimKey) && de.DimID <= 0) // single dim
