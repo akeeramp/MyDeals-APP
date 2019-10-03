@@ -1153,35 +1153,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Width = 100
             });
-            items.Add(new UiTemplateContainerItem  // WIP ECAP type
-            {
-                Id = 3354,
-                AtrbCd = AttributeCodes.COMPETITIVE_PRICE,
-                Label = "Meet Comp Price",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
-                Template = "<div class=\"uiControlDiv isReadOnlyCell\">#=gridUtils.uiDimControlWrapper(data, 'COMPETITIVE_PRICE', '20___0', 'currency')#</div>",
-                IsSortable = true,
-                Width = 100,
-                DataType = "object",
-                IsReadOnly = true,
-                Format = "{0:c}",
-                IsDimKey = true
-            });
-            items.Add(new UiTemplateContainerItem  // WIP ECAP type
-            {
-                Id = 3621,
-                AtrbCd = AttributeCodes.COMP_SKU,
-                Label = "Meet Comp SKU",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
-                Template = "<div class=\"uiControlDiv isReadOnlyCell\"><div class=\"vert-center\">#=gridUtils.getFormatedDim(data, 'COMP_SKU', '20___0', 'string')#</div></div>",
-                IsSortable = true,
-                Width = 100,
-                DataType = "object",
-                IsReadOnly = true,
-                IsDimKey = true
-            });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 26,
