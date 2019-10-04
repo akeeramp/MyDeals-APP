@@ -171,10 +171,10 @@
                     "WF_STG_CD": {
                         "Groups": ["Deal Info"]
                     },
-                    "COMPETITIVE_PRICE": {
+                    "COMP_SKU": {
                         "Groups": ["Deal Info"]
                     },
-                    "COMP_SKU": {
+                    "COMPETITIVE_PRICE": {
                         "Groups": ["Deal Info"]
                     },
                     "EXPIRE_FLG": {
