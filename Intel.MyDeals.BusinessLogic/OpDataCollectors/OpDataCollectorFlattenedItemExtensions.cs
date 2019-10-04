@@ -79,9 +79,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
         public static void ApplySingleAndMultiDim(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode)
         {
-            if (dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
-                return;
-
             string dimKey = de.DimKeyString ?? "";
 
             if (string.IsNullOrEmpty(dimKey) && de.DimID <= 0) // single dim
@@ -96,23 +93,14 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     objsetItem.PivotData(de, dc, pivotMode, dimKey);
             }
 
-            if (dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
-            {
-                if (objsetItem[de.AtrbCd].GetType().Namespace == "System.Collections.Generic")
-                {
-                    Dictionary<string, string> dicAtrbMtxFor_20_0 = (Dictionary<string, string>)objsetItem[de.AtrbCd];
-                    if (dicAtrbMtxFor_20_0.ContainsKey("20___0"))
-                    {
-                        objsetItem[de.AtrbCd] = dicAtrbMtxFor_20_0["20___0"];
-                    }
-                }
-            }
-
             objsetItem.SetBehavior("isRequired", de.AtrbCd, de.IsRequired);
             objsetItem.SetBehavior("isReadOnly", de.AtrbCd, de.IsReadOnly);
             objsetItem.SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
             objsetItem.SetBehavior("isError", de.AtrbCd, de.ValidationMessage != string.Empty);
             objsetItem.SetBehavior("validMsg", de.AtrbCd, de.ValidationMessage);
+
+            if (objsetItem.ContainsKey("TempCOMP_SKU") == false && dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
+                objsetItem.Add("TempCOMP_SKU", objsetItem[de.AtrbCd]);
         }
 
         public static int GetIntAtrb(this OpDataCollectorFlattenedItem items, string atrbCd)
