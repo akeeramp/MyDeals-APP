@@ -1176,7 +1176,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Template = "<div class=\"uiControlDiv isReadOnlyCell\"><div class=\"vert-center\">#=gridUtils.getFormatedDim(data, 'TempCOMP_SKU', '20___0', 'string')#</div></div>",
-                //Template = "<div class=\"uiControlDiv isReadOnlyCell\">#=gridUtils.uiControlWrapper(data, 'COMP_SKU')#</div>",
                 IsSortable = true,
                 Width = 100,
                 DataType = "object",
