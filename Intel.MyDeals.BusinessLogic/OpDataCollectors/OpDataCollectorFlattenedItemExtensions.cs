@@ -80,17 +80,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         public static void ApplySingleAndMultiDim(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode)
         {
             if (dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
-            {
-                if (objsetItem[de.AtrbCd].GetType().Namespace == "System.Collections.Generic")
-                {
-                    Dictionary<string, string> dicAtrbMtxFor_20_0 = (Dictionary<string, string>)objsetItem[de.AtrbCd];
-                    if (dicAtrbMtxFor_20_0.ContainsKey("20___0"))
-                    {
-                        objsetItem[de.AtrbCd] = dicAtrbMtxFor_20_0["20___0"];
-                        return;
-                    }
-                }
-            }
+                return;
 
             string dimKey = de.DimKeyString ?? "";
 
@@ -104,6 +94,18 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     objsetItem.PivotData(de, dc, pivotMode, de.DimID);
                 else
                     objsetItem.PivotData(de, dc, pivotMode, dimKey);
+            }
+
+            if (dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
+            {
+                if (objsetItem[de.AtrbCd].GetType().Namespace == "System.Collections.Generic")
+                {
+                    Dictionary<string, string> dicAtrbMtxFor_20_0 = (Dictionary<string, string>)objsetItem[de.AtrbCd];
+                    if (dicAtrbMtxFor_20_0.ContainsKey("20___0"))
+                    {
+                        objsetItem[de.AtrbCd] = dicAtrbMtxFor_20_0["20___0"];
+                    }
+                }
             }
 
             objsetItem.SetBehavior("isRequired", de.AtrbCd, de.IsRequired);
