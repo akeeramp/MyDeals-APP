@@ -5,6 +5,7 @@
     var usrName = "UNKNOWN";
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
+    var usrRoleExtension = "";
     var usrRoleId = 0;
     var usrEmail = "";
     var usrVerticals = "";
@@ -41,15 +42,19 @@
     bool isDeveloper = opUserToken.IsDeveloper();
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
-
+    bool isCustomerAdmin = opUserToken.IsCustomerAdmin();
+    bool isRealSA = opUserToken.IsRealSA(); // This ensures that user is an SA and not a Customer Admin
 
     if (isSuper)
     {
         superPrefix = "SUPER ";
         //extraUserPrivs += "S"; extraUserPrivsDetail.Add("Super User"); // for now leave this out as end users will actually have Super powers
     }
+
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("Tester User"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("Developer User"); }
+    if (isCustomerAdmin) { extraUserPrivs += "C"; extraUserPrivsDetail.Add("Customer Administrator"); }
+    if (usrRole == "SA" && !isRealSA) { usrRoleExtension = "*"; } // Mark neutered SA role because this is a customer admin
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD"; } // We practice SAFE CODING on this project
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 
@@ -101,7 +106,7 @@
                                     </div>
                                     <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
                                         <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
-                                        <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@superPrefix @usrRole <span class='yellow' title='@string.Join("\n", extraUserPrivsDetail)'>@extraUserPrivs</span></div>
+                                        <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@superPrefix @usrRole<font color="yellow">@usrRoleExtension</font> <span class='yellow' title='@string.Join("\n", extraUserPrivsDetail)'>@extraUserPrivs</span></div>
                                     </div>
                                     <div class="fl">
                                         <notification-dock></notification-dock>
@@ -165,7 +170,7 @@
                                     <div class="clearboth"></div>
                                 </a>
                             </li>
-                            @if (usrRole == "SA" || isDeveloper)
+                            @if (isRealSA || isDeveloper)
                             {
                                 <li class="menu-detailed">
                                     <a href="/error/ResetAVM" onclick="clearSessionData('/error/ResetAVM'); return false;">
@@ -201,18 +206,18 @@
                         <li><a href="Admin#/oplog">Log Viewer</a></li>
                         <li><a href="Admin#/constants">Constants</a></li>
                     }
-                    @if (usrRole == "SA" || isDeveloper)
+                    @if (isRealSA || isDeveloper)
                     {
                         <li><a href="Admin#/customers">Customer</a></li>
                         <li><a href="Admin#/geo">Geo</a></li>
                         <li><a href="Admin#/funfact">Fun Facts</a></li>
                     }
-                    @if (usrRole == "Legal" || usrRole == "SA" || (usrRole == "GA" && isSuper) || isDeveloper)
+                    @if (usrRole == "Legal" || isRealSA || (usrRole == "GA" && isSuper) || isDeveloper)
                     {
                         <li><a href="Admin#/meetcomp">Meet Comp</a></li>
                     }
 
-                    @if (usrRole == "SA" || isDeveloper)
+                    @if (isRealSA || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Products</a>
@@ -225,7 +230,7 @@
                             </ul>
                         </li>
                     }
-                    @if (usrRole == "Legal" || usrRole == "SA" || isDeveloper)
+                    @if (usrRole == "Legal" || isRealSA || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Legal Configurations</a>
@@ -237,7 +242,7 @@
                         </li>
                     }
 
-                    @if (usrRole == "SA" || isDeveloper)
+                    @if (isRealSA || isDeveloper)
                     {
                         <li><a href="Admin#/dropdowns">UI Control Values</a></li>
                         <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
@@ -267,7 +272,7 @@
                         </li>
                     }
 
-                    @if (usrRole == "DA" || usrRole == "SA" || isDeveloper) // DA users get to edit their own records only, SA get all.  Developer gets their present record and might be restricted access.
+                    @if (usrRole == "DA" || isRealSA || isDeveloper || isCustomerAdmin) // DA users get to edit their own records only, SA/Customer Admin get all.  Developer gets their present record and might be restricted access.
                     {
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
@@ -384,6 +389,7 @@
     window.appVer = "@appVer";
 
     window.isDeveloper = "@isDeveloper" === "True";
+    window.isCustomerAdmin = "@isCustomerAdmin" === "True";
     window.isTester = "@isTester" === "True";
 
     window.env = "@env";
