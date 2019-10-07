@@ -94,6 +94,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
                 , "~/app/core/directives/overlappingDeals/overlappingDeals.directive.js"
                 , "~/app/core/directives/ping/ping.directive.js"
+                , "~/app/core/directives/ruleAttributeBuilder/ruleAttributeBuilder.directive.js"
                 , "~/app/core/directives/searchResults/searchResults.directive.js"
                 , "~/app/core/directives/securityLoader/securityLoader.directive.js"
                 , "~/app/core/directives/trashcan/trashcan.directive.js"

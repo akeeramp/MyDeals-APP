@@ -272,6 +272,11 @@
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
 
+                    @if (usrRole == "DA" || isDeveloper)
+                    {
+                        <li><a href="Admin#/rules">Rules</a></li>
+                    }
+
                 </ul>
             </li>
 

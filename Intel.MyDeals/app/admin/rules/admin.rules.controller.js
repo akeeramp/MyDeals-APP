@@ -7,244 +7,693 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$uibModal', 'ruleService', '$scope', 'logger']
+    RuleController.$inject = ['$uibModal', 'ruleService', '$scope', 'logger', '$timeout']
 
-    function RuleController($uibModal, ruleService, $scope, logger) {
+    function RuleController($uibModal, ruleService, $scope, logger, $timeout) {
         var vm = this;
-        
-        // Functions
-        //vm.addItem = addItem;
-        //vm.updateItem = updateItem;
-        //vm.deleteItem = deleteItem
-        
-        //vm.rsOnChange = rsOnChange; //relic of kendo grid, DELETE ME
+        vm.ruleTypeId = 0;
+        vm.ruleId = 0;
 
-        // Variables
-        vm.selectedItem = null;
-        vm.selectedRuleSet = {Id: 0};
-        //vm.isButtonDisabled = true;
+        //--------------------------------------------DataSources----------
+        vm.RuleTypes = [{
+            'id': 1,
+            'Name': 'Tender DA auto approval',
+            'Approvers': '11579289',
+            'CreaterBy': '11579289',
+            'CreatedDateTime': '',
+            'ChangedBy': '11579289',
+            'ChangedDateTime': '',
+        },
+        {
+            'id': 2,
+            'Name': 'Sample',
+            'Approvers': '11579289',
+            'CreaterBy': '11579289',
+            'CreatedDateTime': '',
+            'ChangedBy': '11579289',
+            'ChangedDateTime': '',
+        }];
 
-        vm.rsDataSource = [];
-        vm.riDataSource = {};
-        vm.rcDataSource = [];
-        vm.rtPassedDataSource = [];
-        vm.rtFailedDataSource = [];
+        vm.Rules = [{
+            'Id': 1,
+            'RuleTypeId': 1,
+            'Name': 'Mahesh Auto Approval Tender Rules',
+            'IsActive': true,
+            'OwnerId': 11579289,
+            'StartDate': "01/01/2019",
+            'EndDate': "12/31/2019",
+            'Notes': 'Tender Deals will be auto approved when it passed below rule',
+            'Criteria': '',
+            'CreatedBy': '11579289',
+            'CreatedDateTime': new Date(),
+            'ChangedBy': '11579289',
+            'ChangeDateTime': new Date(),
+        }];
+        //------------------------------------------------------------------------------------------------
 
-        vm.conditionData = [];
+        vm.ruleTypeDs = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.RuleTypes);
+                }
+            }
+        });
 
-        getRSDataSource(); //TODO: put this call in an init section?
-
-        //GET ruleset data
-        function getRSDataSource() {
-            ruleService.getRuleSets()
-                        .then(function (response) {
-                            vm.rsDataSource = response.data;
-                        }, function (response) {
-                            logger.error("Unable to get RuleSets.", response, response.statusText);
-                        });
-        }
-
-        //promise for GET ruleitem data
-        function getRIDataSource() {
-            return new Promise(function(resolve, reject) {
-                ruleService.getRuleItemById(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.riDataSource = response.data;
-                            resolve();
-                        }, function (response) {
-                            logger.error("Unable to get Rule Item.", response, response.statusText);
-                            reject();
-                        });
-            })
+        vm.ruleTypeOptions = {
+            placeholder: "Select a Rule Type...",
+            dataTextField: "Name",
+            dataValueField: "Id",
+            valuePrimitive: true,
+            autoBind: false,
+            autoClose: false,
+            dataSource: vm.ruleTypeDs,
+            change: function (e) {
+                // Cascade dropdown trigger
+            }
         };
 
-        //promise for GET rulecondition data
-        function getRCDataSource() {
-            return new Promise(function(resolve, reject) {
-                ruleService.getRuleConditionsByRuleId(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.rcDataSource = response.data;
-                            resolve();
-                        }, function (response) {
-                            logger.error("Unable to get Rule Conditions.", response, response.statusText);
-                            reject();
-                        });
-            })
+        vm.ruleDs = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.Rules);
+                }
+            }
+        });
+
+        vm.rule = {};
+
+        vm.ruleOptions = {
+            placeholder: "Select a Rule ...",
+            dataTextField: "Name",
+            dataValueField: "Id",
+            valuePrimitive: true,
+            autoBind: false,
+            autoClose: false,
+            dataSource: vm.ruleDs,
+            change: function (e) {
+                $timeout(function () {
+                    vm.rule = vm.Rules[0];
+                });
+            }
         };
 
-        //GET ruletask data for passed condition
-        function getPassedRTDataSource() {
-            ruleService.getPassedRuleTasksByRuleId(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.rtPassedDataSource = response.data;
-                        }, function (response) {
-                            logger.error("Unable to get Rule Tasks.", response, response.statusText);
+        vm.ownerDs = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/api/Employees/GetUsrProfileRole",
+                    dataType: "json"
+                }
+            }
+        });
+
+        vm.ownerOptions = {
+            placeholder: "Select email address...",
+            dataTextField: "EMAIL_ADDR",
+            dataValueField: "EMP_WWID",
+            valueTemplate: '<div class="tmpltItem">' +
+                '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+                '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+                '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
+                '<div class="clearboth"></div>' +
+                '</div>',
+            template: '<div class="tmpltItem">' +
+                '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+                '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+                '<div class="clearboth"></div>' +
+                '</div>',
+            footerTemplate: 'Total #: instance.dataSource.total() # items found',
+            valuePrimitive: true,
+            filter: "contains",
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataSource: vm.ownerDs
+        };
+
+        $scope.operatorSettings = {
+            "operators": [
+                {
+                    operator: "LIKE",
+                    operCode: "contains",
+                    label: "contains"
+                },
+                {
+                    operator: "=",
+                    operCode: "eq",
+                    label: "equal to"
+                },
+                {
+                    operator: "IN",
+                    operCode: "in",
+                    label: "in"
+                },
+                {
+                    operator: "!=",
+                    operCode: "neq",
+                    label: "not equal to"
+                },
+                {
+                    operator: "<",
+                    operCode: "lt",
+                    label: "less than"
+                },
+                {
+                    operator: "<=",
+                    operCode: "lte",
+                    label: "less than or equal to"
+                },
+                {
+                    operator: ">",
+                    operCode: "gt",
+                    label: "greater than"
+                },
+                {
+                    operator: ">=",
+                    operCode: "gte",
+                    label: "greater than or equal to"
+                }
+            ],
+            "types": [
+                {
+                    "type": "string",
+                    "uiType": "textbox"
+                },
+                {
+                    "type": "number",
+                    "uiType": "numeric"
+                },
+                {
+                    "type": "money",
+                    "uiType": "numeric"
+                },
+                {
+                    "type": "date",
+                    "uiType": "datepicker"
+                },
+                {
+                    "type": "list",
+                    "uiType": "combobox"
+                },
+                {
+                    "type": "bool",
+                    "uiType": "checkbox"
+                }
+            ],
+            "types2operator": [
+                {
+                    type: "number",
+                    operator: ["<=", "<", "=", "!=", ">", ">=", "IN"]
+                },
+                {
+                    type: "money",
+                    operator: ["<=", "<", "=", "!=", ">", ">=", "IN"]
+                },
+                {
+                    type: "date",
+                    operator: ["<=", "<", "=", "!=", ">", ">="]
+                },
+                {
+                    type: "string",
+                    operator: ["=", "!=", "LIKE"]
+                },
+                {
+                    type: "list",
+                    operator: ["=", "LIKE"]
+                },
+                {
+                    type: "bool",
+                    operator: ["=", "!="]
+                }
+            ]
+        }
+
+        $scope.attributeSettings = [
+            {
+                field: "Customer.CUST_NM",
+                title: "Customer",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoMultiSelect({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Customers/GetMyCustomersNameInfo",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "CUST_NM",
+                            dataValueField: "CUST_NM",
+                            tagMode: "single",
+                            valuePrimitive: true
                         });
-        }
-
-        //GET ruletask data for failed condition
-        function getFailedRTDataSource() {
-            ruleService.getFailedRuleTasksByRuleId(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.rtFailedDataSource = response.data;
-                        }, function (response) {
-                            logger.error("Unable to get Rule Tasks.", response, response.statusText);
+                    },
+                    extra: false
+                },
+                lookupText: "CUST_NM",
+                lookupValue: "CUST_NM",
+                lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
+            }, {
+                field: "CUST_ACCNT_DIV",
+                title: "Division",
+                type: "string",
+                width: 140
+            }, {
+                field: "CNTRCT_TITLE",
+                title: "Contract Title",
+                type: "string",
+                width: 140,
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
+            }, {
+                field: "CNTRCT_OBJ_SID",
+                title: "Contract Id",
+                type: "string",
+                width: 110,
+                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_OBJ_SID#</a>"
+            }, {
+                field: "PRC_ST_TITLE",
+                title: "Pricing Strategy",
+                type: "string",
+                width: 140,
+                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
+            }, {
+                field: "CNTRCT_C2A_DATA_C2A_ID",
+                title: "C2A Id",
+                type: "string",
+                width: 100
+            }, {
+                field: "DC_ID",
+                title: "Deal",
+                type: "number",
+                width: 100,
+                filterable: "numObjFilter",
+                template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon><a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
+            }, {
+                field: "WF_STG_CD",
+                title: "Deal Status",
+                type: "list",
+                width: 140,
+                template: "#=gridUtils.stgFullTitleChar(data)#",
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: {
+                                data: [
+                                    "Draft",
+                                    "Requested",
+                                    "Submitted",
+                                    "Pending",
+                                    "Approved",
+                                    "Active",
+                                    "Cancelled"
+                                ]
+                            },
+                            optionLabel: "--Select Status--"
                         });
-        }
+                    },
+                    extra: false
+                },
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [
+                    { Value: "Draft" },
+                    { Value: "Requested" },
+                    { Value: "Submitted" },
+                    { Value: "Pending" },
+                    { Value: "Approved" },
+                    { Value: "Active" },
+                    { Value: "Cancelled" }
+                ]
 
-
-        //triggered when user selects a ruleset
-        vm.selectRuleSet = function(ruleset) {
-            vm.selectedRuleSet = ruleset;
-            getPassedRTDataSource();
-            getFailedRTDataSource();
-
-            Promise.all([getRIDataSource(),getRCDataSource()]).then(function(){
-                createConditionStructure();
-            })
-        }
-
-        //used when RuleItem/RuleCondition GET promises are resolved, populates conditionData which is used by the queryBuilder directive
-        function createConditionStructure() {
-            var rootConditionObject;
-            if (vm.riDataSource == null) {
-                //TODO: do this on c# side so we do not hard code the structure into js file
-                vm.riDataSource = {
-                    Id: -1,
-                    RuleConditionId: -1,
-                    RulePassedTaskIds: [],
-                    RuleFailedTaskIds: [],
-                    Tier: "C#"
-                }
-                //TODO: do this on c# side so we do not hard code the structure into js file
-                rootConditionObject = {
-                    Id: -1,
-                    ConditionType: "AND",
-                    Operator: "",
-                    LeftExpressionType: "",
-                    LeftExpressionValue: "",
-                    RightExpressionType: "",
-                    RightExpressionValue: "",
-                    RuleId: -1,
-                    ParentConditionId: 0,
-                    ChildConditionIds: []
-                };
-            } else {
-                rootConditionObject = getCondition(vm.riDataSource.RuleConditionId);
+            }, {
+                field: "OBJ_SET_TYPE_CD",
+                title: "Deal Type",
+                type: "list",
+                width: 130,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: {
+                                data: [
+                                    "ECAP",
+                                    "KIT",
+                                    "PROGRAM",
+                                    "VOL_TIER"
+                                ]
+                            },
+                            optionLabel: "--Select Value--"
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "OBJ_SET_TYPE_NM",
+                lookupValue: "OBJ_SET_TYPE_CD",
+                lookups: [
+                    { OBJ_SET_TYPE_CD: "ECAP", OBJ_SET_TYPE_NM: "ECAP" },
+                    { OBJ_SET_TYPE_CD: "PROGRAM", OBJ_SET_TYPE_NM: "PROGRAM" },
+                    { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" },
+                    { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }
+                ]
+            }, {
+                field: "DEAL_DESC",
+                title: "Deal Description",
+                type: "string",
+                width: 210,
+                filterable: "objFilter",
+            }, {
+                field: "START_DT",
+                title: "Start Date",
+                type: "date",
+                template: "#if(START_DT==null){#  #}else{# #= moment(START_DT).format('MM/DD/YYYY') # #}#",
+                width: 130
+            }, {
+                field: "END_DT",
+                title: "End Date",
+                type: "date",
+                template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
+                width: 130
+            }, {
+                field: "OEM_PLTFRM_LNCH_DT",
+                title: "OEM Platform Launch Date",
+                type: "date",
+                template: "#if(OEM_PLTFRM_LNCH_DT==null){#  #}else{# #= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') # #}#",
+                width: 130
+            }, {
+                field: "OEM_PLTFRM_EOL_DT",
+                title: "OEM Platform EOL Date",
+                type: "date",
+                template: "#if(OEM_PLTFRM_EOL_DT==null){#  #}else{# #= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') # #}#",
+                width: 130
+            }, {
+                field: "PRODUCT_CATEGORIES",
+                title: "Product Verticals",
+                type: "list",
+                width: 150,
+                filterable: "listMultiProdCatFilter",
+                lookupText: "PRD_CAT_NM",
+                lookupValue: "PRD_CAT_NM",
+                lookupUrl: "/api/Products/GetProductCategories"
+            }, {
+                field: "PRODUCT_FILTER",
+                title: "Product",
+                type: "string",
+                width: 400,
+                dimKey: 20,
+                filterable: "objFilter",
+                template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
+            }, {
+                field: "MRKT_SEG",
+                title: "Market Segment",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
+            }, {
+                field: "REBATE_TYPE",
+                title: "Rebate Type",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE"
+            }, {
+                field: "TRKR_NBR",
+                title: "Tracker #",
+                type: "string",
+                width: 210,
+                dimKey: 20,
+                filterable: "objFilter",
+                template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
+            }, {
+                field: "CAP",
+                title: "CAP",
+                type: "money",
+                width: 170,
+                dimKey: 20,
+                format: "{0:c}",
+                filterable: "moneyObjFilter",
+                template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
+            }, {
+                field: "ECAP_PRICE",
+                title: "ECAP Price",
+                type: "money",
+                width: 170,
+                dimKey: 20,
+                format: "{0:c}",
+                filterable: "moneyObjFilter",
+                template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
+            }, {
+                field: "VOLUME",
+                title: "Ceiling Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "STRT_VOL",
+                title: "Start Volume",
+                type: "number",
+                width: 170,
+                dimKey: 10,
+                format: "{0:n}",
+                filterable: "numObjFilter",
+                template: "#= gridUtils.tierDim(data, 'STRT_VOL', 'n') #"
+            }, {
+                field: "END_VOL",
+                title: "End Volume",
+                type: "number",
+                width: 170,
+                dimKey: 10,
+                format: "{0:n}",
+                filterable: "numObjFilter",
+                template: "#= gridUtils.tierDim(data, 'END_VOL', 'n') #"
+            }, {
+                field: "RATE",
+                title: "Rate",
+                type: "money",
+                width: 170,
+                dimKey: 10,
+                format: "{0:c}",
+                filterable: "moneyObjFilter",
+                template: "#= gridUtils.tierDim(data, 'RATE', 'c') #"
+            }, {
+                field: "PROGRAM_PAYMENT",
+                title: "Program Payment",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT"
+            }, {
+                field: "PAYOUT_BASED_ON",
+                title: "Payout Based On",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
+            }, {
+                field: "SERVER_DEAL_TYPE",
+                title: "Server Deal Type",
+                type: "list",
+                width: 140,
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: new kendo.data.DataSource({
+                                type: 'json',
+                                transport: {
+                                    read: {
+                                        url: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
+                                        type: "GET",
+                                        dataType: "json"
+                                    }
+                                }
+                            }),
+                            dataTextField: "DROP_DOWN",
+                            dataValueField: "DROP_DOWN",
+                            valuePrimitive: true
+                        });
+                    },
+                    extra: false
+                },
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
+            }, {
+                field: "GEO_COMBINED",
+                title: "Geo",
+                type: "string",
+                width: 100
+            }, {
+                field: "TOTAL_DOLLAR_AMOUNT",
+                title: "Total Dollar Amount",
+                type: "number",
+                width: 170,
+                format: "{0:c}",
+                filterable: "moneyObjFilter"
+            }, {
+                field: "CREDIT_VOLUME",
+                title: "Credit Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "DEBIT_VOLUME",
+                title: "Debit Vol",
+                type: "number",
+                width: 120
+            }, {
+                field: "NET_VOL_PAID",
+                title: "Net Credited Volume",
+                type: "number",
+                filterable: false,
+                sortable: false,
+                width: 120
+            }, {
+                field: "CREDIT_AMT",
+                title: "Credit Amt",
+                type: "number",
+                format: "{0:c}",
+                width: 120
+            }, {
+                field: "DEBIT_AMT",
+                title: "Debit Amt",
+                type: "number",
+                format: "{0:c}",
+                width: 120
+            }, {
+                field: "TOT_QTY_PAID",
+                title: "Total Qty Paid",
+                type: "number",
+                format: "{0:c}",
+                filterable: false,
+                sortable: false,
+                width: 120
+            }, {
+                field: "BLLG_DT",
+                title: "Last Credit Date",
+                type: "string",
+                template: "# if (BLLG_DT !== undefined) { # #=moment(BLLG_DT).format('MM/DD/YYYY')# # } #",
+                width: 140
+            }, {
+                field: "END_CUSTOMER_RETAIL",
+                title: "End Customer",
+                type: "string",
+                width: 140
+            }, {
+                field: "DEAL_GRP_NM ",
+                title: "Kit Name",
+                type: "string",
+                width: 140
+            }, {
+                field: "NOTES",
+                title: "Comments / notes",
+                type: "string",
+                width: 250
+            }, {
+                field: "GEO_APPROVED_BY",
+                title: "GEO Approved By",
+                type: "string",
+                width: 160
+            }, {
+                field: "DIV_APPROVED_BY",
+                title: "DIV Approved By",
+                type: "string",
+                width: 160
+            }, {
+                field: "CRE_EMP_NAME",
+                title: "Created By",
+                type: "string",
+                width: 160
+            }, {
+                field: "CRE_DTM",
+                title: "Created Time",
+                type: "string",
+                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
+                width: 140
             }
-            vm.conditionData = conditionToJson(rootConditionObject);
-        }
-
-        //creates json for queryBuilder to turn into html
-        function conditionToJson(condition) {
-            var retJson = {};
-            if (condition.ConditionType == "AND" || condition.ConditionType == "OR") {
-                retJson.group = {
-                    operator: condition.ConditionType,
-                    rules: []
-                }
-                if (condition.ChildConditionIds != null && condition.ChildConditionIds.length != 0) {
-                    //for each child, push into rules the recursive call
-                    for (var i = 0; i<condition.ChildConditionIds.length; i++) {
-                        var childCondition = getCondition(condition.ChildConditionIds[i]);
-                        retJson.group.rules.push(conditionToJson(childCondition))
-                    }
-                }
-            } else {
-                retJson.lefttype = condition.LeftExpressionType;
-                retJson.leftvalue = condition.LeftExpressionValue;
-                retJson.condition = condition.Operator;
-                retJson.righttype = condition.RightExpressionType;
-                retJson.rightvalue = condition.RightExpressionValue;
-            }
-            return retJson;
-        }
-
-        //retrieves condition object given condition id
-        function getCondition(conditionId) {
-            //assumes this is only called after cm.rcDataSource has been populated
-            for (var i = 0; i<vm.rcDataSource.length; i++) {
-                if (vm.rcDataSource[i].Id == conditionId) {
-                    return vm.rcDataSource[i];
-                }
-            }
-        }
-
-        vm.removeTask = function(task, successtype) {
-            var reference = getTaskByType(successtype);
-            var index = reference.indexOf(task);
-            if (index > -1) {
-                reference.splice(index, 1);
-            }
-        }
-
-        vm.addTask = function(successtype) {
-            var reference = getTaskByType(successtype);
-            //TODO: do this on c# side so we do not hard code the structure into js file
-            reference.push({
-                Id: -1,
-                Function: '',
-                Params: '',
-                RuleId: vm.riDataSource.Id,
-                Order: 0,
-                SuccessType : successtype
-            })
-        }
-
-        vm.addRule = function () {
-            resetData();
-            //TODO: do this on c# side so we do not hard code the structure into js file
-            vm.rsDataSource.push({
-                Id: -1,
-                Name: 'New Rule',
-                Description: 'Add Description',
-                Trigger: '',
-                Category: '',
-                SubCategory: '',
-                RuleId: -1,
-                Order: 0
-            })
-
-            vm.selectRuleSet(vm.rsDataSource[vm.rsDataSource.length -1]);
-        }
-
-        vm.removeRule = function () {
-            var index = vm.rsDataSource.indexOf(vm.selectedRuleSet);
-            if (index > -1) {
-                vm.rsDataSource.splice(index, 1);
-            }
-            vm.selectedRuleSet = { Id: 0 };
-
-            resetData();
-            //TODO: need to properly DELETE relevant rule item/condition/tasks as well
-        }
-
-        var resetData = function () {
-            vm.riDataSource = {};
-            vm.rcDataSource = [];
-            vm.rtPassedDataSource = [];
-            vm.rtFailedDataSource = [];
-        }
-
-        var getTaskByType = function(successtype) {
-            if (successtype == true) {
-                return vm.rtPassedDataSource;
-            } else {
-                return vm.rtFailedDataSource;
-            }
-        }
-        
-
-        ////TODO: save update delete
-        //function addItem() {
-        //    vm.isButtonDisabled = true;
-        //    $scope.grid.addRow();
-        //}
-        //function updateItem() {
-        //    $scope.grid.editRow(vm.selectedItem);
-        //}
-        //function deleteItem() {
-        //    $scope.grid.removeRow(vm.selectedItem);
-        //}
+        ];
     }
 })();

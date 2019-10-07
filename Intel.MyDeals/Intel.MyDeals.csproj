@@ -381,6 +381,9 @@
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
+    <Content Include="app\admin\beta-rules\admin.rules.controller.js" />
+    <Content Include="app\admin\beta-rules\rules.html" />
+    <Content Include="app\admin\beta-rules\rules.service.js" />
     <Content Include="app\admin\rules\admin.rules.controller.js" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
@@ -605,6 +608,8 @@
     <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.js" />
     <Content Include="app\core\directives\ping\ping.directive.html" />
     <Content Include="app\core\directives\ping\ping.directive.js" />
+    <Content Include="app\core\directives\ruleAttributeBuilder\ruleAttributeBuilder.directive.html" />
+    <Content Include="app\core\directives\ruleAttributeBuilder\ruleAttributeBuilder.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\core\filters\calcBackEndRebate.filter.js" />
