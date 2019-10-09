@@ -283,7 +283,12 @@
 
                     @if (usrRole == "DA" || isDeveloper)
                     {
-                        <li><a href="Admin#/rules">Price Rules</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Rules Management</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/rules">Price Rules</a></li>
+                            </ul>
+                        </li>
                     }
 
                 </ul>
