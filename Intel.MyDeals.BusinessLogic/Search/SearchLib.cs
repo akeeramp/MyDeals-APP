@@ -679,15 +679,29 @@ namespace Intel.MyDeals.BusinessLogic
             int dcIdNum;
             string whereClause, orderBy, searchIn;
 
-            if (int.TryParse(data.StrSearch, out dcIdNum))
+            if (int.TryParse(data.StrSearch, out dcIdNum)) // IDs are being searched for (US477064)
             {
-                whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%')";
+                if (deType == OpDataElementType.WIP_DEAL) // WIP_DEAL only pass the SID, TITLE makes no sense and hurts performance
+                {
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = {dcIdNum})";
+                }
+                else // Original layout for non WIP_DEAL objects
+                {
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%')";
+                }
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }
-            else
+            else // Titles are being searched for
             {
-                whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
+                if (deType == OpDataElementType.WIP_DEAL) // WIP_DEAL TITLE makes no sense and hurts performance, so kill search by passing 0 ID
+                {
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = 0)";
+                }
+                else // Original layout for non WIP_DEAL objects
+                {
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
+                }
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
             }
