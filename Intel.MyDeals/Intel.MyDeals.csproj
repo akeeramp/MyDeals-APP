@@ -304,6 +304,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
     <Compile Include="Controllers\TestCasesController.cs" />
+    <Compile Include="Controllers\ToolManual.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1817,6 +1818,7 @@
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-animate.min.js.map" />
     <Content Include="Views\Error\LostAccountToken.cshtml" />
+    <Content Include="Views\ToolManual\Index.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

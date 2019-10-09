@@ -90,6 +90,10 @@
                     <div style="text-align: center;" class="navbar-collapse collapse">
                         <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
                             Optimized For Google Chrome <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
+                            @if (env != "PROD")
+                                {               
+                                    <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>
+                                }
                         </div>
                     </div>
 
@@ -279,7 +283,7 @@
 
                     @if (usrRole == "DA" || isDeveloper)
                     {
-                        <li><a href="Admin#/rules">Rules</a></li>
+                        <li><a href="Admin#/rules">Price Rules</a></li>
                     }
 
                 </ul>
@@ -295,6 +299,13 @@
             <li>
                 <a href="/Help?topic=intro" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
             </li>
+            @if (env == "LOCAL" && usrWwid == 10548414)
+            {
+                <li>
+                    <a href="/ToolManual?topic=intro" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Tool Manual</span></a>
+                </li>
+            }
+
             @Html.Partial("_Search")
         </ul>
     </div>
