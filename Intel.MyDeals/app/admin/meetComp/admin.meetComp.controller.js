@@ -44,7 +44,7 @@
         }
         vm.isAcess = false;
         
-        if ((usrRole == 'GA' && isSuper) || usrRole == 'SA') {
+        if ((usrRole == 'GA' && isSuper) || usrRole == 'DA' || usrRole == 'SA') {
             vm.isAcess = true;            
         }
         else {

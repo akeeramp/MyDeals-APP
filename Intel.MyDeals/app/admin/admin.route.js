@@ -116,6 +116,15 @@
                 }
             },
             {
+                state: 'admin.mydealsmanual',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/mydealsmanual/MyDealsManual.html',
+                    url: 'MyDealsManual',
+                    controller: 'ManualsController as vm',
+                }
+            },
+            {
                 state: 'admin.geo',
                 abstract: false,
                 config: {

@@ -254,6 +254,7 @@
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
+    <Compile Include="Controllers\API\ManualsController.cs" />
     <Compile Include="Controllers\API\DataQualityController.cs" />
     <Compile Include="Controllers\API\NotificationsController.cs" />
     <Compile Include="Controllers\API\OpLogController.cs" />
@@ -350,6 +351,8 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />
+    <Content Include="app\admin\mydealsmanual\MyDealsManual.service.js" />
     <Content Include="app\admin\notifications\notification.service.js" />
     <Content Include="app\admin\notifications\notifications.controller.js" />
     <Content Include="app\admin\notifications\notifications.html" />
@@ -1710,6 +1713,7 @@
     </Content>
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="app\admin\mydealsmanual\MyDealsManual.controller.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

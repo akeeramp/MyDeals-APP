@@ -1,0 +1,343 @@
+﻿<div class="col-md-12">
+    <h4 id="handbook-header">My Deals User Manual and FAQ</h4>
+</div>
+
+<div class="col-md-2">
+    <div>
+        <a href="#intro" onclick="javascript:loadContent('/content/help/intro/intro.html')" style="color: #FFF;"></a>
+    </div>
+    <div id="handbook-wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="handbook-sidebar-wrapper">
+            <ul class="sidebar-nav" id="myList">
+                <!-- Filled in by arrayOfTopics -->
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-10">
+    BODY {{blahme}} TAG {{vm.tester}} WITH {{testme}}
+    <div id="handbook-page-content-wrapper">
+        <div id="handbook-page-content" class="container-fluid">
+            <!--This is where the content will be inserted. -->
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    //var arrayOfTopics = [
+    //    { "id": 1, "Parent": 0, "Order": 1, "Title": "Dashboard", "Link": "LI1" },
+    //    { "id": 2, "Parent": 1, "Order": 1, "Title": "Filtering Dashboard", "Link": "LI-1A" },
+    //    { "id": 3, "Parent": 1, "Order": 2, "Title": "Advanced Search", "Link": "LI-1B" },
+    //    { "id": 4, "Parent": 0, "Order": 1, "Title": "Create Deals", "Link": "LI2" },
+    //    { "id": 5, "Parent": 4, "Order": 1, "Title": "Topic 2-a", "Link": "LI-2A" },
+    //];
+
+    //alert(blahme);
+
+    //var page = "";
+    //var currTopic = "";
+    //for (var i = 0; i < arrayOfTopics.length; i++) {
+    //    var object = arrayOfTopics[i];
+    //    if (object.Parent == 0) {
+    //        if (currTopic != "") {
+    //            page += "</ul>"; 
+    //        }
+    //        currTopic = object.Link;
+    //        page += "<li><a data-toggle='collapse' href='javascript:;' id='#" + currTopic + "' data-target='#" + currTopic + "'>" + object.Title + "<i class='fa expansion-indicator pull-right fa-chevron-down'></i></a></li>";
+    //        page += "<ul id='" + currTopic + "' class='panel-collapse collapse' style='list-style: none; font-size: 12px; margin-left: -25px'>";
+    //    }
+    //    else {
+    //        page += "<li><a class='handbook-link' id='" + object.Link + "' href='Admin#/MyDealsManual?topic=intro#" + object.Link + "' onclick='javascript:loadContent(" + "\"" + object.Title + "\"" + ");'>" + object.Title + "</a></li>";
+    //    }
+    //}
+    //page += "</ul>";
+    //$("#myList").html($scope.returnedValue);
+
+    function loadContent(content) {
+        //$('#handbook-page-content').load(content);
+        $('#handbook-page-content').html(content);
+        return false;
+    }
+
+
+    //$(document).ready(function () {
+        // Load the side bar menu with "page" data
+        //$("#myList").html(page);
+
+        // When clicking a top level menu item, toggle the chevron icon and expand contents (indirect child with non# name).
+        //$('a[data-toggle]').click(function (event) {
+        //    var clickedLink = $(this);
+        //    if ($(clickedLink).find('i').hasClass('fa-chevron-down')) {
+        //        $(clickedLink).find('i').addClass('fa-chevron-up').removeClass('fa-chevron-down');
+        //    }
+        //    else {
+        //        $(clickedLink).find('i').addClass('fa-chevron-down').removeClass('fa-chevron-up');
+        //    }
+        //});
+
+        //// When a sub menu item is selected, add class that will allow the style to be changed. (.handbook-link.selected-link)
+        //$('.handbook-link').click(function (event) {
+        //    var clickedLink = $(this);
+        //    $(".handbook-link").removeClass('selected-link');
+        //    clickedLink.addClass('selected-link');
+        //});
+
+        //var myURL = document.location.href.substring(document.location.href.indexOf('MyDealsManual'));
+        //// If the page is called from some other location, expand the selected content and pre-load it.
+        //if (myURL.indexOf("#") >= 0 && myURL.indexOf("?topic") >= 0) {
+        //    var target = myURL.indexOf('#') > 0 ? myURL.substring(myURL.indexOf('#')): "";
+        //    if (target.length > 0) // Target if passed will be "#tagname"
+        //    {
+        //        // Pre-load the selected content
+        //        var matchStr = 'a[href$="' + target + '"]'; // HREF based search of DOM
+        //        if ($(matchStr).length > 0) // See if the matchstring is located in DOM
+        //        {
+        //            $(matchStr).trigger('click');
+
+        //            // Expand the contents to show the correct selected item
+        //            var divId = $(matchStr).closest('.panel-collapse').attr('id');
+        //            var matchStr = 'a[id$="#' + divId + '"]'; // ID based search of DOM
+        //            $(matchStr).trigger('click');
+        //        }
+        //        else 
+        //        {
+        //            alert('Specified help topic ' + target + ' not found.');
+        //        }  
+        //    }
+        //}
+        //else
+        //{
+        //    //alert("Bypass it");
+        //}
+
+        //alert($('.handbook-link').length); 
+
+    //});
+
+
+</script>
+
+
+
+<style>
+    #handbook-wrapper {
+        padding: 0 20px 0 200px;
+        height: calc(100% - 45px);
+        overflow: auto !important;
+    }
+
+    #handbook-sidebar-wrapper {
+        z-index: 1000;
+        position: fixed;
+        left: 250px;
+        width: 0;
+        height: 100%;
+        margin-left: -250px;
+        overflow-y: auto;
+        background: #0071c5;
+        -webkit-transition: all 0.5s ease;
+        -moz-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+    }
+
+    #handbook-wrapper.toggled #handbook-sidebar-wrapper {
+        width: 250px;
+        height: calc(100% - 45px);
+        overflow-x: hidden;
+    }
+
+    #handbook-page-content-wrapper {
+        width: 100%;
+        position: absolute;
+    }
+
+    #handbook-wrapper.toggled #handbook-page-content-wrapper {
+        position: absolute;
+        margin-right: -250px;
+    }
+
+    #handbook-header { /* This works */
+        padding: 5px;
+        padding-left: 25px;
+        font-weight: 100;
+        background-color: #0071c5;
+        color: #FFFFFF;
+        margin-bottom: -1px;
+        margin-top: 0;
+        margin-left:-30px; 
+        margin-right:-60px;
+    }
+
+    .tip {
+        background-color: #DCCB47;
+        display: inline-block;
+        padding-top: 20px;
+        padding-right: 10px;
+        padding-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .tipimg {
+        float: left;
+        margin-right: 5px;
+    }
+
+
+    .ptip {
+        float: right;
+    }
+
+    /* Sidebar Styles */
+
+    .sidebar-nav {
+        position: absolute;
+        top: 0;
+        width: 250px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+}
+
+    .sidebar-nav li {
+        text-indent: 5px; /* was 20 */
+        /*line-height: 25px;*/ /* was 40 */
+    }
+
+    .sidebar-nav li a {
+        display: block;
+        text-decoration: none;
+        color: #FFFFFF;
+    }
+
+    .sidebar-nav li a:hover {
+        text-decoration: none;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-nav li a:active, .sidebar-nav li a:focus {
+        text-decoration: none;
+    }
+
+    /* tweaks to bootstrap custom containers for content*/
+    /*.col-xs-6 {
+    padding: 20px;
+    width: 40%;
+    }*/
+
+    .expansion-indicator {
+        margin-right: 10px; /* was 50 */
+        margin-top: 3px; /* was 10 */
+    }
+
+    .labelhighlights {
+        color: #0071c5;
+        font-weight: bolder;
+        font-size: 20px;
+    }
+
+    /*.btn {
+    background-color:#00AEEF;
+    margin-right: 20px;
+    color:white;
+    }*/
+
+    /*.btn-primary.focus, .btn-primary:focus {
+    background-color: #0071c5;
+    }*/
+
+    /*list in sidebar styles*/
+
+    .handbook-panel-body li {
+        list-style: none;
+        color: #706A6A;
+        font-size: 12px;
+        padding-left: 10px;
+        background-color: #FFFFFF;
+    }
+    .handbook-li {
+        list-style: none;
+        color: #706A6A;
+        font-size: 12px;
+        padding-left: 10px;
+        background-color: #FFFFFF;
+    }
+
+    .handbook-panel-body a {
+        text-decoration: none;
+    }
+
+    .handbook-link.selected-link { /* This works */
+        background-color: #4ACDFF;
+        color: black;
+        list-style: none;
+    }
+
+    .handbook-link > li:hover {
+        list-style: none;
+        color: white;
+        background-color: #EDEFF0;
+        font-size: 12px;
+        padding-left: 10px;
+    }
+
+    /*end panel*/
+
+    .sidebar-nav > .sidebar-brand {
+        height: 65px;
+        font-size: 18px;
+        line-height: 60px;
+    }
+
+    .sidebar-nav > .sidebar-brand a {
+        color: #FFFFFF;
+    }
+
+    .sidebar-nav > .sidebar-brand a:hover {
+        color: #fff;
+        background: none;
+    }
+
+    /*iframe*/
+    iframe:focus {
+        outline: none;
+    }
+
+    iframe[seamless] {
+        display: block;
+    }
+
+    @media(min-width:768px) {
+        #handbook-wrapper {
+        padding-left: 0;
+    }
+
+    #handbook-wrapper.toggled {
+        padding-left: 250px;
+    }
+
+    #handbook-sidebar-wrapper {
+        width: 0;
+    }
+
+    #handbook-wrapper.toggled #handbook-sidebar-wrapper {
+        width: 250px;
+    }
+
+    #handbook-page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #handbook-wrapper.toggled #handbook-page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+</style>

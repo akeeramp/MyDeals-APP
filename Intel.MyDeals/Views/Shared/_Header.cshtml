@@ -216,7 +216,7 @@
                         <li><a href="Admin#/geo">Geo</a></li>
                         <li><a href="Admin#/funfact">Fun Facts</a></li>
                     }
-                    @if (usrRole == "Legal" || isRealSA || (usrRole == "GA" && isSuper) || isDeveloper)
+                    @if (usrRole == "DA" || usrRole == "Legal" || (usrRole == "GA" && isSuper) || isRealSA || isDeveloper)
                     {
                         <li><a href="Admin#/meetcomp">Meet Comp</a></li>
                     }
@@ -291,6 +291,11 @@
                         </li>
                     }
 
+                    @if (env == "LOCAL" && usrWwid == 10548414)
+                    {
+                        <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>//User Customer Assignments
+                    }
+
                 </ul>
             </li>
 
@@ -304,12 +309,6 @@
             <li>
                 <a href="/Help?topic=intro" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
             </li>
-            @if (env == "LOCAL" && usrWwid == 10548414)
-            {
-                <li>
-                    <a href="/ToolManual?topic=intro" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Tool Manual</span></a>
-                </li>
-            }
 
             @Html.Partial("_Search")
         </ul>
