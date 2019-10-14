@@ -44,11 +44,11 @@
         }
         vm.isAcess = false;
         
-        if ((usrRole == 'GA' && isSuper) || usrRole == 'DA' || usrRole == 'SA') {
+        if ((usrRole == 'GA' && isSuper) || usrRole == 'DA' || usrRole == 'Legal' || usrRole == 'SA') {
             vm.isAcess = true;            
         }
         else {
-            vm.isAcessMessage = 'You don\'t have access to view this page.  Only SuperGA or SA users are allowed.';
+            vm.isAcessMessage = 'You don\'t have access to view this page.  Only SuperGA, DA, Legal, or SA users are allowed.';
         }
         if (vm.isAcess == true) {
             vm.meetCompDIMMasterData = [];
