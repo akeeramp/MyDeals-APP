@@ -21,11 +21,22 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [Route("GetNavigationItems")]
-        public List<ManualsNavItem> GetNavigationItems()
+        public List<RefManualsNavItem> GetNavigationItems()
         {
-            return SafeExecutor(() => _manualEngineLib.GetNavigationItems()
+            string refType = "UserManual";
+            return SafeExecutor(() => _manualEngineLib.GetNavigationItems(refType)
                 , $"Unable to get Manuals Navagation Items"
             );
         }
+
+        [Authorize]
+        [Route("GetManualPageData/{pageLink}")]
+        public string GetManualPageData(string pageLink)
+        {
+            return SafeExecutor(() => _manualEngineLib.GetManualPageData(pageLink)
+                , $"Unable to get Manuals Page Data"
+            );
+        }
+
     }
 }

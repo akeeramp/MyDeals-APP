@@ -5,6 +5,7 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface IMyDealsManualDataLib
     {
-        List<ManualsNavItem> GetNavigationItems();
+        List<RefManualsNavItem> GetNavigationItems(string refType);
+        string GetManualPageData(string pageLink);
     }
 }

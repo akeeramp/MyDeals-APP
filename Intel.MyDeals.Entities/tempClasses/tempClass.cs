@@ -58,22 +58,6 @@ namespace Intel.MyDeals.Entities
     //    public System.DateTime YCS2_End_Date { set; get; }
     //}
 
-        // REMOVE ONCE IT IS IN DB
-    public partial class ManualsNavItem
-    {
-        //{ "id": 1, "Parent": 0, "Order": 1, "Title": "Dashboard", "Link": "LI1" },
-        public System.Int32 Id { set; get; }
-
-        public System.Int32 Parent { set; get; }
-
-        public System.Int32 Order { set; get; }
-
-        public System.String Title { set; get; }
-
-        public System.String Link { set; get; }
-    } // End of dummy class
-    // END REMOVE ONCE IT IS IN DB
-
     [DataContract]
     public partial class EmployeeGeo
     {

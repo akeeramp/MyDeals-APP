@@ -76,7 +76,11 @@ function notificationDock($compile, $timeout, objsetService, $uibModal, $locatio
                     $window.open('/Admin#/notifications', '_blank');
                 }
 
-                getUnreadNotification();
+                // Fix some sloopy bug when we are trying to engage an old easter egg
+                if ($location.absUrl().indexOf('Snow') < 0)
+                {
+                    getUnreadNotification();
+                }
 
                 $scope.$on('refreshUnreadCount', function (event, data) {
                     debugger;

@@ -11,52 +11,83 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class MyDealsManualDataLib : IMyDealsManualDataLib
     {
-        public List<ManualsNavItem> GetNavigationItems()
+        public List<RefManualsNavItem> GetNavigationItems(string refType)
         {
-            // Only the idsid is populatied to the user token at this point.  We need to fill in the rest.
+            var retNavigation = new List<RefManualsNavItem>();
 
-            List<ManualsNavItem> rtn = new List<ManualsNavItem>();
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_GET_REF_NAVIGATION()
+                {
+                    ref_type = refType
+                };
 
-            //var cmd = new Procs.dbo.PR_MYDL_GET_USR_ROLE();
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_DOC_SID = DB.GetReaderOrdinal(rdr, "DOC_SID");
+                    int IDX_ORD = DB.GetReaderOrdinal(rdr, "ORD");
+                    int IDX_PARNT = DB.GetReaderOrdinal(rdr, "PARNT");
+                    int IDX_REF_LNK = DB.GetReaderOrdinal(rdr, "REF_LNK");
+                    int IDX_REF_TTL = DB.GetReaderOrdinal(rdr, "REF_TTL");
 
-            //try
-            //{
-            //    using (var rdr = DataAccess.ExecuteReader(cmd))
-            //    {
-            //        //TABLE 1
-            //        var ret = new List<UsrProfileRole>();
-            //        int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
-            //        int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
-            //        int IDX_FRST_NM = DB.GetReaderOrdinal(rdr, "FRST_NM");
-            //        int IDX_IDSID = DB.GetReaderOrdinal(rdr, "IDSID");
-            //        int IDX_LST_NM = DB.GetReaderOrdinal(rdr, "LST_NM");
-            //        int IDX_MI = DB.GetReaderOrdinal(rdr, "MI");
-            //        int IDX_ROLE_NM = DB.GetReaderOrdinal(rdr, "ROLE_NM");
-            //        int IDX_USR_ACTV_IND = DB.GetReaderOrdinal(rdr, "USR_ACTV_IND");
+                    while (rdr.Read())
+                    {
+                        retNavigation.Add(new RefManualsNavItem
+                        {
+                            DOC_SID = (IDX_DOC_SID < 0 || rdr.IsDBNull(IDX_DOC_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DOC_SID),
+                            ORD = (IDX_ORD < 0 || rdr.IsDBNull(IDX_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ORD),
+                            PARNT = (IDX_PARNT < 0 || rdr.IsDBNull(IDX_PARNT)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PARNT),
+                            REF_LNK = (IDX_REF_LNK < 0 || rdr.IsDBNull(IDX_REF_LNK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REF_LNK),
+                            REF_TTL = (IDX_REF_TTL < 0 || rdr.IsDBNull(IDX_REF_TTL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REF_TTL)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
 
-            //        while (rdr.Read())
-            //        {
-            //            rtn.Add(new UsrProfileRole
-            //            {
-            //                EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
-            //                EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
-            //                FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
-            //                IDSID = (IDX_IDSID < 0 || rdr.IsDBNull(IDX_IDSID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IDSID),
-            //                LST_NM = (IDX_LST_NM < 0 || rdr.IsDBNull(IDX_LST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_NM),
-            //                MI = (IDX_MI < 0 || rdr.IsDBNull(IDX_MI)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MI),
-            //                ROLE_NM = (IDX_ROLE_NM < 0 || rdr.IsDBNull(IDX_ROLE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_NM),
-            //                USR_ACTV_IND = (IDX_USR_ACTV_IND < 0 || rdr.IsDBNull(IDX_USR_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_USR_ACTV_IND)
-            //            });
-            //        } // while
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw OpMsgQueue.CreateFault(ex);
-            //}
+            return retNavigation;
+        }
+
+        public string GetManualPageData(string pageLink)
+        {
+            var retPage = new List<RefManualsPage>();
+
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_GET_REF_PAGE()
+                {
+                    ref_link = pageLink
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_PAGE_DATA = DB.GetReaderOrdinal(rdr, "PAGE_DATA");
+
+                    while (rdr.Read())
+                    {
+                        retPage.Add(new RefManualsPage
+                        {
+                            PAGE_DATA = (IDX_PAGE_DATA < 0 || rdr.IsDBNull(IDX_PAGE_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PAGE_DATA)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            string rtn = "Under Construction";
+            if (retPage.Count > 0) rtn = retPage[0].PAGE_DATA.ToString();
 
             return rtn;
         }
+
 
     }
 

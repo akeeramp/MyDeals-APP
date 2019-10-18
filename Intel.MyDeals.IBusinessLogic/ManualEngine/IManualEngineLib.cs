@@ -5,6 +5,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IManualEngineLib
     {
-        List<ManualsNavItem> GetNavigationItems();
+        List<RefManualsNavItem> GetNavigationItems(string refType);
+        string GetManualPageData(string pageLink);
     }
 }

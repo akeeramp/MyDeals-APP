@@ -13,7 +13,8 @@
         var apiBaseUrl = "api/Manuals/";
 
         var service = {
-            GetNavigationItems: GetNavigationItems
+            GetNavigationItems: GetNavigationItems,
+            GetManualPageData: GetManualPageData
         }
 
         return service;
@@ -22,7 +23,9 @@
             return dataService.get(apiBaseUrl + 'GetNavigationItems');
         }
 
-
+        function GetManualPageData(pageLink) {
+            return dataService.get(apiBaseUrl + 'GetManualPageData/' + pageLink);
+        }
 
     }
 })();
