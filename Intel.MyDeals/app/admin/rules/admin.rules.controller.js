@@ -7,26 +7,18 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$uibModal', 'ruleService', '$scope', 'logger', '$timeout']
+    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants']
 
-    function RuleController($uibModal, ruleService, $scope, logger, $timeout) {
+    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants) {
         var vm = this;
         vm.ruleTypeId = 0;
         vm.ruleId = 0;
+        vm.isEditmode = false;
 
         //--------------------------------------------DataSources----------
         vm.RuleTypes = [{
-            'id': 1,
+            'Id': 1,
             'Name': 'Tender DA auto approval',
-            'Approvers': '11579289',
-            'CreaterBy': '11579289',
-            'CreatedDateTime': '',
-            'ChangedBy': '11579289',
-            'ChangedDateTime': '',
-        },
-        {
-            'id': 2,
-            'Name': 'Sample',
             'Approvers': '11579289',
             'CreaterBy': '11579289',
             'CreatedDateTime': '',
@@ -34,16 +26,19 @@
             'ChangedDateTime': '',
         }];
 
+        vm.ruleTypeId = 1;
+
         vm.Rules = [{
             'Id': 1,
             'RuleTypeId': 1,
             'Name': 'Mahesh Auto Approval Tender Rules',
             'IsActive': true,
+            'RuleStatus': true,
             'OwnerId': 11579289,
             'StartDate': "01/01/2019",
             'EndDate': "12/31/2019",
             'Notes': 'Tender Deals will be auto approved when it passed below rule',
-            'Criteria': '',
+            'Criteria': [],
             'CreatedBy': '11579289',
             'CreatedDateTime': new Date(),
             'ChangedBy': '11579289',
@@ -87,12 +82,14 @@
             dataTextField: "Name",
             dataValueField: "Id",
             valuePrimitive: true,
-            autoBind: false,
+            autoBind: true,
             autoClose: false,
             dataSource: vm.ruleDs,
             change: function (e) {
                 $timeout(function () {
-                    vm.rule = vm.Rules[0];
+                    vm.rule = vm.Rules.filter(function (x) {
+                        return x.Id == id
+                    })[0];
                 });
             }
         };
@@ -695,5 +692,135 @@
                 width: 140
             }
         ];
+
+        vm.editRule = function (id) {
+            vm.rule = vm.Rules.filter(function (x) {
+                return x.Id == id
+            })[0];
+            vm.isEditmode = true;
+        }
+
+        vm.copyRule = function (id) {
+            var rule = vm.Rules.filter(function (x) {
+                return x.Id == id
+            })[0];
+
+            var idx = 0;
+            var copyRule = {};
+            for (var i = 0; i < vm.Rules.length; i++) {
+                if (vm.Rules[i].Id == id) {
+                    copyRule = angular.copy(vm.Rules[i]);
+                    idx = i;
+                    break;
+                }
+            }
+            copyRule.Name += '(copy)'
+            copyRule.Id += 1;
+            copyRule.OwnerId = usrWwid;
+            //TODO: Save to API here..after return refresh the grid
+
+            vm.Rules.splice(idx + 1, 0, copyRule);
+            vm.dataSource.read();
+        }
+
+        vm.deleteRule = function (id) {
+
+            kendo.confirm("Are you sure ?").then(function () {
+                var idx = vm.Rules.findIndex(x => x.Id == id);
+                vm.Rules.splice(idx, 1);
+                vm.dataSource.read();
+            });
+        }
+
+        vm.dataSource = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.Rules);
+                },
+                update: function (e) {
+
+                },
+                destroy: function (e) {
+                    var modalOptions = {
+                        closeButtonText: 'Cancel',
+                        actionButtonText: 'Delete Rule',
+                        hasActionButton: true,
+                        headerText: 'Delete confirmation',
+                        bodyText: 'Are you sure you would like to Delete this Rule ?'
+                    };
+
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+
+                    }, function (response) {
+                    });
+                },
+                create: function (e) {
+
+                }
+            },
+            pageSize: 25,
+            schema: {
+                model: {
+                    id: "Id",
+                    fields: {
+                    }
+                }
+            },
+        });
+
+        vm.gridOptions = {
+            dataSource: vm.dataSource,
+            filterable: true,
+            sortable: true,
+            selectable: true,
+            resizable: true,
+            columnMenu: true,
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
+            columns: [
+                {
+                    width: "6%",
+                    template: "<div class='rule'><i role='button' class='rulesGidIcon intelicon-edit' ng-click='vm.editRule(#= Id #)'></i><i role='button' class='rulesGidIcon intelicon-copy-solid' ng-click='vm.copyRule(#=Id #)'></i><i role='button' class='rulesGidIcon intelicon-trash-solid' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                },
+                { field: "Id", title: "Id", width: "5%", hidden: true },
+                { field: "Name", title: "Name", width: "15%", filterable: { multi: true, search: true } },
+                { field: "IsActive", title: "IsActive", filterable: { multi: true, search: true } },
+                { field: "RuleStatus", title: "Status", filterable: { multi: true, search: true } },
+                { field: "StartDate", title: "Start Date", filterable: { multi: true, search: true } },
+                { field: "EndDate", title: "End Date", filterable: { multi: true, search: true } },
+                { field: "Notes", title: "Notes", filterable: { multi: true, search: true } },
+                { field: "ChangedBy", title: "Changed By", filterable: { multi: true, search: true } },
+                { field: "ChangeDateTime", title: "Change Date", filterable: { multi: true, search: true }, template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(ChangeDateTime)), 'M/d/yyyy hh:mm tt') #", },
+            ]
+        };
+
+        vm.cancel = function () {
+            vm.isEditmode = false;
+            vm.rule = {};
+        }
+
+        vm.saveRule = function () {
+            $rootScope.$broadcast('save-criteria');
+            $timeout(function () {
+                var idx = vm.Rules.findIndex(x => x.Id == vm.rule.Id);
+                vm.Rules[idx] = vm.rule;
+                vm.isEditmode = false;
+                vm.rule = {};
+                logger.success("Save successful");
+            });
+        }
+
+        vm.addNewRule = function () {
+            vm.isEditmode = true;
+            vm.rule = {};
+        }
+
+        vm.sendEmail = function () {
+            alert('Todo: TADA!!')
+        }
     }
 })();

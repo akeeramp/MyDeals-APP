@@ -1,92 +1,108 @@
-﻿<div class="col-md-12">
-    <h2>Rules</h2>
-</div>
-<form class="form-horizontal">
+﻿<form style="margin-top:15px" class="form-horizontal">
     <div class="form-group row">
         <label class="col-md-2 control-label">Rule Type :</label>
         <div class="col-md-4">
             <select class="form-control md"
                     kendo-combo-box
                     k-options="vm.ruleTypeOptions"
-                    k-ng-model="vm.ruleTypeId"
+                    ng-model="vm.ruleTypeId"
                     style="width:100%"></select>
         </div>
+        <a role="button" ng-click="vm.addNewRule()">Add New Rule</a>
     </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Rule :</label>
-        <div class="col-md-4">
-            <select class="form-control md"
-                    kendo-combo-box
-                    k-options="vm.ruleOptions"
-                    k-ng-model="vm.ruleId"
-                    style="width:100%"></select>
-        </div>
+    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
+        <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Name:</label>
-        <div class="col-md-4">
-            <input class="form-control md"
-                   type="text"
-                   ng-model="vm.rule.Name"
-                   style="width:100%">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Owner:</label>
-        <div class="col-md-4">
-            <select kendo-combo-box
-                    k-options="vm.ownerOptions"
-                    k-ng-model="vm.rule.OwnerId"
-                    style="width:100%"></select>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Rule Stage</label>
-        <div class="col-md-4">
-            <toggle class="fl toggle-accept"
-                    ng-model="vm.rule.IsActive"
-                    on="Approved"
-                    off="Pending"
-                    onstyle="btn-success"
-                    offstyle="btn-danger"></toggle>
+    <div ng-if="vm.isEditmode">
+        <div ng-show="false" class="form-group row">
+            <label class="control-label col-md-2">Rule :</label>
             <div class="col-md-4">
-                <input kendo-date-picker
-                       placeholder="From date"
-                       k-ng-model="vm.rule.StartDate"
-                       style="width: 100%;" />
-            </div>
-            <label class="control-label col-md-1">to</label>
-            <div class="col-md-4">
-                <input kendo-date-picker
-                       placeholder="To date"
-                       k-ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
+                <select class="form-control md"
+                        kendo-combo-box
+                        k-options="vm.ruleOptions"
+                        ng-model="vm.rule.Id"
+                        style="width:100%"></select>
             </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Notes:</label>
-        <div class="col-md-4">
-            <textarea type="textarea" rows="5"
-                      ng-model="vm.rule.Notes"
-                      style="width:100%" />
+        <div class="form-group row">
+            <label class="control-label col-md-2">Name:</label>
+            <div class="col-md-4">
+                <input class="form-control md"
+                       type="text"
+                       ng-model="vm.rule.Name"
+                       style="width:100%">
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Criteria:</label>
-        <div class="col-md-6">
-            <div rule-attribute-builder
-                 grid-id="'attributeGrid'"
-                 operator-settings="operatorSettings"
-                 attribute-settings="attributeSettings"
-                 custom-settings=""></div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Owner:</label>
+            <div class="col-md-4">
+                <select kendo-combo-box
+                        k-options="vm.ownerOptions"
+                        ng-model="vm.rule.OwnerId"
+                        style="width:100%"></select>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2"></label>
-        <div class="col-md-6">
-            <button class="btn btn-primary">Save</button>
-            <button class="btn btn-secondary">Cancel</button>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Is Active</label>
+            <div class="col-md-4">
+                <toggle class="fl toggle-accept"
+                        ng-model="vm.rule.IsActive"
+                        on="ON"
+                        off="OFF"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"></toggle>
+                <div class="col-md-4">
+                    <input kendo-date-picker
+                           placeholder="From date"
+                           k-ng-model="vm.rule.StartDate"
+                           style="width: 100%;" />
+                </div>
+                <label class="control-label col-md-1">to</label>
+                <div class="col-md-4">
+                    <input kendo-date-picker
+                           placeholder="To date"
+                           ng-model="vm.rule.EndDate"
+                           style="width: 100%;" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Status</label>
+            <div class="col-md-4">
+                <toggle class="fl toggle-accept"
+                        ng-model="vm.rule.IsApproved"
+                        on="Approved"
+                        off="Pending"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"></toggle>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Notes:</label>
+            <div class="col-md-4">
+                <textarea type="textarea" rows="5"
+                          ng-model="vm.rule.Notes"
+                          style="width:100%" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Criteria:</label>
+            <div class="col-md-6">
+                <div rule-attribute-builder
+                     grid-id="'attributeGrid'"
+                     operator-settings="operatorSettings"
+                     attribute-settings="attributeSettings"
+                     criteria="vm.rule.Criteria"
+                     custom-settings=""></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2"></label>
+            <div class="col-md-6">
+                <button ng-click="vm.saveRule()" class="btn btn-primary">Save</button>
+                <button ng-click="vm.cancel()" class="btn btn-secondary">Cancel</button>
+                <button ng-click="vm.sendEmail()" class="btn btn-secondary">Send Email</button>
+            </div>
         </div>
     </div>
 </form>
@@ -123,5 +139,11 @@
 
     .toggle {
         width: 120px !important;
+    }
+
+    .rulesGidIcon {
+        font-size: 20px;
+        margin: 3px;
+        color: #aaa;
     }
 </style>

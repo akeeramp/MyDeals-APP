@@ -1,22 +1,4 @@
-﻿<div class="fr btn-group rule-dropdown-actions" ng-if="saveCat == 'TenderDealSearch' && rules.length > 0">
-	
-            <select kendo-combo-box
-					id="ruleDropDownList"
-                    k-placeholder="'Select saved rules'"
-                    k-data-text-field="'title'"
-                    k-data-value-field="'title'"
-                    k-filter="'contains'"
-                    k-auto-bind="true" 
-					k-ng-model="ruleToRun"					
-                    k-data-source="rulesDataSource"					
-					k-select="onRuleSelect"					
-					k-template="'# if (data.default == true) { # <i class=\'intelicon-favorite-rating-solid rule-icon rule-icon-selected\' ng-click=\'setDefaultRule(dataItem,$event)\' ></i> # } else { # <i class=\'intelicon-favorite-rating-outlined rule-icon\' ng-click=\'setDefaultRule(dataItem,$event)\' title=\'Click me to make it Default Rule\'></i> # } # <p class=\'textTitle\' title=\'#: title #\'>#: title # </p><i class=\'intelicon-trash-solid delete-rule-icon rule-icon-selected\' ng-click=\'deleteSaveRule(dataItem,$event)\' title=\'Click me to Delete the Rule\'></i>'"
-					class="opUiContainer sm"
-                    style="width: 190px;margin-right:15px;"></select>
-        </div>
-
-
-<div class="filterContainer">
+﻿<div class="filterContainer">
     <div ng-repeat="dataItem in data" class="filterRow">
 
         <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
@@ -55,7 +37,7 @@
         </span>
 
         <span class="fl abValue" ng-hide="dataItem.operator === ''"></span>
-        
+
         <div class="clearboth"></div>
     </div>
 
