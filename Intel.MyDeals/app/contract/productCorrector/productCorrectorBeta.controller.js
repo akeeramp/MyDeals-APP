@@ -36,7 +36,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.DEAL_TYPE = dealType;
     vm.showIncludeExcludeLabel = false;
     vm.selectedItms = [];
-    var isGA = false//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
+    var isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
     vm.isTender = "";
     if (contractData.IS_TENDER) {
         vm.isTender = contractData.IS_TENDER;
