@@ -16,7 +16,7 @@
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
         var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
-        var isGA = window.usrRole == "GA";
+        var isGA = false//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
 
