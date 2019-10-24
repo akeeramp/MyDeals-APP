@@ -29,5 +29,14 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Business Rules"
             );
         }
+
+        [Authorize]
+        [Route("RunPriceRules")]
+        public bool RunPriceRules()
+        {
+            return SafeExecutor(() => _rulesLib.RunPriceRules()
+                            , $"Unable to get Business Rules"
+                        );
+        }
     }
 }
