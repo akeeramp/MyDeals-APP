@@ -1267,6 +1267,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }, 10);
 
                                     clearUndoHistory();
+                                    validateSavepublishWipDeals(); // DE55623, Added this in because it is part of the "Save Entire Contract" calls to force level 4 vs 5 updates bypassed by his specific call.
                                     root.delPtrs(delIds);
                                     //root.saveEntireContract(true, true, true);
                                 }
