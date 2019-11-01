@@ -132,7 +132,7 @@ namespace Intel.MyDeals.BusinessLogic
         public static string BuildCustSecurityWhere()
         {
             string custIds = string.Join(",", DataCollections.GetMyCustomers().CustomerInfo.Select(s => s.CUST_SID));
-            return $"dhr.CUST_MBR_SID IN ({custIds})"; // pst. replaced for performance reasons (US477064)
+            return $"cnt.CUST_MBR_SID IN ({custIds})"; // pst. replaced for performance reasons (US477064/US492799)
         }
     }
 }
