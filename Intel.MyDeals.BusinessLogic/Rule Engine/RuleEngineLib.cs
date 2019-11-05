@@ -30,7 +30,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool RunPriceRules()
         {
-            PricingStrategiesLib.RunPriceRules();
+            //PricingStrategiesLib.RunPriceRules();
             return true;
         }
     }

@@ -132,7 +132,7 @@ namespace Intel.MyDeals.BusinessLogic
             return allActnItems;
         }
 
-        public static void RunPriceRules()
+        public void RunPriceRules()
         {
             List<PriceRuleData> lstPriceRuleData = OpDataElementType.PRC_ST.GetPriceRuleData();
             List<int> lstPsIds = lstPriceRuleData.Select(x => x.PricingStrategyId).Distinct().ToList();
