@@ -105,6 +105,11 @@ namespace Intel.MyDeals.Entities
 
     }
 
-
+    public class PriceRuleData
+    {
+        public int ContractId { get; set; }
+        public int PricingStrategyId { get; set; }
+        public int DealId { get; set; }
+    }
 
 }
