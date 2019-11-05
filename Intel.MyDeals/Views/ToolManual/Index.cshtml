@@ -1,0 +1,144 @@
+﻿@using Intel.MyDeals.Entities
+@using Intel.Opaque
+@using Intel.MyDeals.App
+@{
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+
+    var usrRole = "UNKNOWN";
+    try
+    {
+        usrRole = ViewBag.UserToken.Role.RoleTypeCd;
+    }
+    catch (Exception ex)
+    {
+    }
+
+    OpUserToken opUserToken = (OpUserToken)ViewBag.UserToken;
+    bool isSuper = opUserToken.IsSuper();
+}
+<link href="~/css/simple-sidebar.css" rel="stylesheet" />
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Hello World</title>
+</head>
+
+<body>
+    <div>
+        <a href="#intro" onclick="javascript:loadContent('/content/help/intro/intro.html')" style="color: #FFF;">
+            <h4 id="handbook-header"> My Deals User Manual and FAQ</h4>
+        </a>
+    </div>
+    <div id="handbook-wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="handbook-sidebar-wrapper">
+            <ul class="sidebar-nav" id="myList"> 
+            </ul>
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!-- My Deals Handbook Content Content -->
+        <div id="handbook-page-content-wrapper">
+            <div id="handbook-page-content" class="container-fluid">
+                <!--This is where the content will be inserted. -->
+            </div>
+        </div>
+        <!-- /#handbook-page-content-wrapper -->
+    </div>
+</body>
+
+<script type="text/javascript">
+    var arrayOfTopics = [
+        { "id": 1, "Parent": 0, "Order": 1, "Title": "Topic 1", "Link": "LI1" },
+        { "id": 2, "Parent": 1, "Order": 1, "Title": "Topic 1a", "Link": "LI1A" },
+        { "id": 3, "Parent": 1, "Order": 2, "Title": "Topic 1b", "Link": "LI1B" },
+        { "id": 4, "Parent": 0, "Order": 1, "Title": "Topic 2", "Link": "LI2" },
+        { "id": 5, "Parent": 4, "Order": 1, "Title": "Topic 2a", "Link": "LI2A" },
+    ];
+
+    var page = "";
+    var currTopic = "";
+    for (var i = 0; i < arrayOfTopics.length; i++) {
+        var object = arrayOfTopics[i];
+        if (object.Parent == 0) {
+            if (currTopic != "") {
+                page += "</div></div>"; 
+            }
+            currTopic = object.Link;
+            page += "<li><a data-toggle='collapse' href='#" + currTopic + "'>" + object.Title + "<i class='fa fa-chevron-down expansion-indicator pull-right'></i></a></li>";
+            page += "<div id='" + currTopic + "' class='panel-collapse collapse'><div class='handbook-panel-body'>";
+        }
+        else {
+            page += "<a class='handbook-link' href='#" + object.Link + "' onclick='javascript:loadContent('/content/help/new/new.html')'><li>" + object.Title + "</li></a>";
+        }
+    }
+    page += "</div></div>"; 
+
+
+
+
+
+    $(document).ready(function () {
+        // Load the side bar menu with "page" data
+        $("#myList").html(page);
+
+        // When a top menu item is selected, toggle the chevron icon.
+        $('a[data-toggle]').click(function (event) {
+            var clickedLink = $(this);
+            if ($(clickedLink).find('i').hasClass('fa-chevron-down')) {
+                $(clickedLink).find('i').addClass('fa-chevron-up').removeClass('fa-chevron-down');
+            }
+            else {
+                $(clickedLink).find('i').addClass('fa-chevron-down').removeClass('fa-chevron-up');
+            }
+        });
+
+        // When a sub menu item is selected, add class that will allow the style to be
+        // changed.
+        $('.handbook-link').click(function (event) {
+            var clickedLink = $(this);
+            $(".handbook-link").removeClass('selected-link');
+            clickedLink.addClass('selected-link');
+        });
+
+        if ((!String(window.location).indexOf("#") >= 0) && String(window.location).indexOf("?topic") >= 0) {
+            var topic = getUrlParameter('topic');
+            if (topic.length > 0) {
+                var matchStr = 'a[href$="#' + topic + '"]';
+                if ($(matchStr).length == 1) {
+                    $(matchStr).trigger('click');
+
+                    var divId = $(matchStr).closest('.panel-collapse').attr('id');
+                    var matchStr = 'a[href$="#' + divId + '"]';
+                    if ($(matchStr).length == 1) {
+                        $(matchStr).trigger('click');
+                    }
+                }
+            } else {
+                alert('Specified help topic ' + topic + ' not found.');
+            }
+        }
+    });
+
+
+</script>
+
+<!-- #wrapper -->
+<!-- Bootstrap core JavaScript -->
+<script>
+
+    $('.linkdetails').hide();
+
+    $('.link').click(function () {
+        $('.linkdetails').hide();
+        $('.linkdetails[data-link=' + $(this).data('link') + ']').fadeIn({
+            width: '200px'
+        }, 300);
+
+    });
+</script>
+
+</html>

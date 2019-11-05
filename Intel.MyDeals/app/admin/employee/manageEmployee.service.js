@@ -11,9 +11,12 @@
     // Get the ROLE and WWID of the user if needed, SA users get a free pass and get to play with everyone
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
+    var usrCustomerAdmin = false;
 
     usrRole = window.usrRole;
-    if (usrRole === "SA")
+    usrCustomerAdmin = window.isCustomerAdmin;
+
+    if (usrRole === "SA" || usrCustomerAdmin === true)
     {
         usrWwid = window.usrWwid = "0";
     }

@@ -254,6 +254,7 @@
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
+    <Compile Include="Controllers\API\ManualsController.cs" />
     <Compile Include="Controllers\API\DataQualityController.cs" />
     <Compile Include="Controllers\API\NotificationsController.cs" />
     <Compile Include="Controllers\API\OpLogController.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
     <Compile Include="Controllers\TestCasesController.cs" />
+    <Compile Include="Controllers\ToolManual.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -349,6 +351,8 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />
+    <Content Include="app\admin\mydealsmanual\MyDealsManual.service.js" />
     <Content Include="app\admin\notifications\notification.service.js" />
     <Content Include="app\admin\notifications\notifications.controller.js" />
     <Content Include="app\admin\notifications\notifications.html" />
@@ -381,6 +385,9 @@
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
+    <Content Include="app\admin\beta-rules\admin.rules.controller.js" />
+    <Content Include="app\admin\beta-rules\rules.html" />
+    <Content Include="app\admin\beta-rules\rules.service.js" />
     <Content Include="app\admin\rules\admin.rules.controller.js" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
@@ -605,6 +612,8 @@
     <Content Include="app\core\directives\overlappingDeals\overlappingDeals.directive.js" />
     <Content Include="app\core\directives\ping\ping.directive.html" />
     <Content Include="app\core\directives\ping\ping.directive.js" />
+    <Content Include="app\core\directives\ruleAttributeBuilder\ruleAttributeBuilder.directive.html" />
+    <Content Include="app\core\directives\ruleAttributeBuilder\ruleAttributeBuilder.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\core\filters\calcBackEndRebate.filter.js" />
@@ -1704,6 +1713,7 @@
     </Content>
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="app\admin\mydealsmanual\MyDealsManual.controller.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
@@ -1812,6 +1822,7 @@
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-animate.min.js.map" />
     <Content Include="Views\Error\LostAccountToken.cshtml" />
+    <Content Include="Views\ToolManual\Index.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
