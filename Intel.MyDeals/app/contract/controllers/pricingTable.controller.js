@@ -1264,15 +1264,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             prdRange.enable(true);
                                             prdRange.background(null);
                                         });
-                                    }, 10);
+                                    }, 5);
 
                                     clearUndoHistory();
-                                    validateSavepublishWipDeals(); // DE55623, Added this in because it is part of the "Save Entire Contract" calls to force level 4 vs 5 updates bypassed by his specific call.
-                                    root.delPtrs(delIds);
-                                    //root.saveEntireContract(true, true, true);
+                                    ValidateProducts(data, true, true); // DE55623, Added this in because it is part of the "Save Entire Contract" calls to force level 4 vs 5 updates bypassed by his specific call.
+                                    //root.delPtrs(delIds); // Removed this due to it forcing a rapid double save, went to normal save call instead
+                                    root.saveEntireContract(delIds);
                                 }
                             },
-                          10);
+                          5);
                         },
                         function () {
                             $(".k-button[title=Undo]").click();
