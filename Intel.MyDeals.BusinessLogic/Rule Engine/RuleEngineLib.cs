@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessRules;
 using Intel.RulesEngine;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -30,8 +31,23 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool RunPriceRules()
         {
-            //PricingStrategiesLib.RunPriceRules();
+            new OpDataCollectorDataLib().GetPriceRuleData();
             return true;
+        }
+
+        public List<DropDowns> GetRuleTypes()
+        {
+            return new OpDataCollectorDataLib().GetRuleTypes();
+        }
+
+        public RuleConfig GetPriceRuleConfiguration(int iRuleTypeId)
+        {
+           return new OpDataCollectorDataLib().GetPriceRuleConfiguration(iRuleTypeId);
+        }
+
+        public List<string> GetSuggestion(string strCategory, string strSearchKey)
+        {
+            return new OpDataCollectorDataLib().GetSuggestion(strCategory, strSearchKey);
         }
     }
 }

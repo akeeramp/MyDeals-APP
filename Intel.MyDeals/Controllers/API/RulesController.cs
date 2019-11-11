@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using Intel.MyDeals.BusinessRules;
+using System.Linq;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -25,18 +26,36 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetBusinessRules")]
         public List<MyOpRule> GetBusinessRules()
         {
-            return SafeExecutor(() => _rulesLib.GetBusinessRules()
-                , $"Unable to get Business Rules"
+            return SafeExecutor(() => _rulesLib.GetBusinessRules(), $"Unable to get Business Rules"
             );
+        }
+
+        [Authorize]
+        [Route("GetRuleTypes")]
+        public List<DropDowns> GetRuleTypes()
+        {
+            return SafeExecutor(() => _rulesLib.GetRuleTypes(), $"Unable to get Business Rules TYpes");
+        }
+
+        [Authorize]
+        [Route("GetSuggestion/{strCategory}/{strSearchKey}")]
+        public List<string> GetSuggestion(string strCategory, string strSearchKey)
+        {
+            return SafeExecutor(() => _rulesLib.GetSuggestion(strCategory, strSearchKey), $"Unable to get Business Rules");
         }
 
         [Authorize]
         [Route("RunPriceRules")]
         public bool RunPriceRules()
         {
-            return SafeExecutor(() => _rulesLib.RunPriceRules()
-                            , $"Unable to get Business Rules"
-                        );
+            return SafeExecutor(() => _rulesLib.RunPriceRules(), $"Unable to get Business Rules");
+        }
+
+        [Authorize]
+        [Route("GetPriceRuleConfiguration/{iRuleId}")]
+        public RuleConfig GetPriceRuleConfiguration(int iRuleId)
+        {
+            return SafeExecutor(() => _rulesLib.GetPriceRuleConfiguration(iRuleId), $"Unable to get Business Rules");
         }
     }
 }

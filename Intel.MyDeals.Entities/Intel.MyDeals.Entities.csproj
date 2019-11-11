@@ -102,6 +102,7 @@
     <Compile Include="OpMsgQueuePacket.cs" />
     <Compile Include="OverlappingListPacket.cs" />
     <Compile Include="PerformanceTime.cs" />
+    <Compile Include="PriceRule.cs" />
     <Compile Include="ProductLookupPacket.cs" />
     <Compile Include="ProductTranslatePacket.cs" />
     <Compile Include="QuoteLetterSave.cs" />
