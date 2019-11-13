@@ -18,33 +18,6 @@ namespace Intel.MyDeals.DataLibrary
         private const string ATRB_SID = "ATRB_SID";
         private const string ATRB_VAL = "ATRB_VAL";
 
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction)
-        {
-            var cmd = new Procs.dbo.PR_MYDL_SAVE_RULE
-            {
-                actn_nm = priceRuleAction.ToString("g"),
-                rule_id = priceRuleCriteria.Id,
-                rule_type_id = priceRuleCriteria.RuleTypeId,
-                rule_nm = priceRuleCriteria.Name,
-                owner_wwid = priceRuleCriteria.OwnerId,
-                is_actv = priceRuleCriteria.IsActive,
-                eff_frm_dt = priceRuleCriteria.StartDate,
-                eff_to_dt = priceRuleCriteria.EndDate,
-                is_appvd = priceRuleCriteria.RuleStatus,
-                notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
-                rule_criteria = priceRuleCriteria.CriteriaJson,
-                rule_sql_criteria = priceRuleCriteria.CriteriaSql,
-                product_criteria = priceRuleCriteria.ProductCriteriaJson,
-                product_sql_criteria = priceRuleCriteria.ProductCriteriaSql,
-                usr_id = OpUserStack.MyOpUserToken.Usr.WWID
-            };
-
-            using (var rdr = DataAccess.ExecuteDataSet(cmd))
-            {
-                return GetPriceRuleCriteria(rdr);
-            }
-        }
-
         public MyDealsData SaveMyDealsData(MyDealsData packets, ContractToken contractToken, bool batchMode)
         {
             // Save Data Cycle: Point 15

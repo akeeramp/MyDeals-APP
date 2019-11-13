@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountDataLib.cs" />
+    <Compile Include="Admins\ApprovalRules.cs" />
     <Compile Include="Admins\ConstantsAdminDataLib.cs" />
     <Compile Include="Admins\MarketOpsAdminDataLib.cs" />
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />

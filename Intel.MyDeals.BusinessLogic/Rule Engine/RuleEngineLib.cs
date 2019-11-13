@@ -37,23 +37,25 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<DropDowns> GetRuleTypes()
         {
-            return new OpDataCollectorDataLib().GetRuleTypes();
+            return new ApprovalRules().GetRuleTypes();
         }
 
         public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
         {
-            return new OpDataCollectorDataLib().GetPriceRulesConfig(iRuleTypeId);
+            // Removed internal call for now, not used yet
+            return null; // new OpDataCollectorDataLib().GetPriceRulesConfig(iRuleTypeId);
         }
 
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
-            return new OpDataCollectorDataLib().GetSuggestion(strCategory, strSearchKey);
+            // Removed internal call for now, not used yet
+            return null; // new OpDataCollectorDataLib().GetSuggestion(strCategory, strSearchKey);
         }
 
         public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
         {
             PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            List<PriceRuleCriteria> lstPriceRuleCriteria = new OpDataCollectorDataLib().GetPriceRuleCriteriaById(id, priceRuleAction);
+            List<PriceRuleCriteria> lstPriceRuleCriteria = new ApprovalRules().GetPriceRuleCriteriaById(id, priceRuleAction);
             if (priceRuleAction == PriceRuleAction.GET_BY_RULE_ID)
             {
                 lstPriceRuleCriteria.ForEach(x =>
@@ -82,7 +84,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //To avoid overflow
                 priceRuleCriteria.StartDate = priceRuleCriteria.EndDate = DateTime.UtcNow;
             }
-            return new OpDataCollectorDataLib().SavePriceRule(priceRuleCriteria, priceRuleAction);
+            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataElementTypeExtensions
     {
+        // TODO: Remove this MIKE
         public static List<PriceRuleData> GetPriceRuleData(this OpDataElementType opDataElementType)
         {
             return new OpDataCollectorDataLib().GetPriceRuleData();
