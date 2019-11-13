@@ -10,6 +10,8 @@ namespace Intel.MyDeals.Entities
     {
         public operatorSettings operatorSettings { get; set; }
         public List<AttributeSettings> AttributeSettings { get; set; }
+
+        public List<PriceRuleCriteria> PriceRuleCriteria { get; set; }
     }
 
     public class operatorSettings
@@ -70,5 +72,53 @@ namespace Intel.MyDeals.Entities
         public string template { get; set; }
         public int dimKey { get; set; }
         public string format { get; set; }
+    }
+
+
+    public class PriceRuleData
+    {
+        public int ContractId { get; set; }
+        public int PricingStrategyId { get; set; }
+        public int DealId { get; set; }
+    }
+
+    public enum PriceRuleAction
+    {
+        NONE = 0,
+        CREATE,
+        UPDATE,
+        COPY,
+        DELETE,
+        GET_BY_RULE_ID,
+        GET_BY_RULE_TYPE_ID
+    }
+
+    public class PriceRuleCriteria
+    {
+        public int Id { get; set; }
+        public int RuleTypeId { get; set; }
+        public string Name { get; set; }
+        public int OwnerId { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Notes { get; set; }
+        public bool RuleStatus { get; set; }
+        public List<rule> Criteria { get; set; }
+        public string CriteriaJson { get; set; }
+        public string CriteriaSql { get; set; }
+        public List<rule> ProductCriteria { get; set; }
+        public string ProductCriteriaJson { get; set; }
+        public string ProductCriteriaSql { get; set; }
+        public string ChangedBy { get; set; }
+        public DateTime ChangeDateTime { get; set; }
+    }
+
+    public class rule
+    {
+        public string type { get; set; }
+        public string field { get; set; }
+        public string @operator { get; set; }
+        public string value { get; set; }
     }
 }

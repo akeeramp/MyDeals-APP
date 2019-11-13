@@ -18,6 +18,33 @@ namespace Intel.MyDeals.DataLibrary
         private const string ATRB_SID = "ATRB_SID";
         private const string ATRB_VAL = "ATRB_VAL";
 
+        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_SAVE_RULE
+            {
+                actn_nm = priceRuleAction.ToString("g"),
+                rule_id = priceRuleCriteria.Id,
+                rule_type_id = priceRuleCriteria.RuleTypeId,
+                rule_nm = priceRuleCriteria.Name,
+                owner_wwid = priceRuleCriteria.OwnerId,
+                is_actv = priceRuleCriteria.IsActive,
+                eff_frm_dt = priceRuleCriteria.StartDate,
+                eff_to_dt = priceRuleCriteria.EndDate,
+                is_appvd = priceRuleCriteria.RuleStatus,
+                notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
+                rule_criteria = priceRuleCriteria.CriteriaJson,
+                rule_sql_criteria = priceRuleCriteria.CriteriaSql,
+                product_criteria = priceRuleCriteria.ProductCriteriaJson,
+                product_sql_criteria = priceRuleCriteria.ProductCriteriaSql,
+                usr_id = OpUserStack.MyOpUserToken.Usr.WWID
+            };
+
+            using (var rdr = DataAccess.ExecuteDataSet(cmd))
+            {
+                return GetPriceRuleCriteria(rdr);
+            }
+        }
+
         public MyDealsData SaveMyDealsData(MyDealsData packets, ContractToken contractToken, bool batchMode)
         {
             // Save Data Cycle: Point 15
@@ -120,7 +147,8 @@ namespace Intel.MyDeals.DataLibrary
                     DateTime startTime = DateTime.Now;
                     new CostTestDataLib().RollupResults(new List<int> { contractToken.ContractId });
                     contractToken.AddMark("RollupResults - PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP", TimeFlowMedia.DB, (DateTime.Now - startTime).TotalMilliseconds);
-                } else if (contractToken.ContractId == -1 && contractToken.ContractIdList != null && contractToken.ContractIdList.Any())    // -1 is a trigger for tender multiple contract saves - the contractToken will only have a ContractIdList defined as the full list of contract ids if we are coming from the tenders dashboard
+                }
+                else if (contractToken.ContractId == -1 && contractToken.ContractIdList != null && contractToken.ContractIdList.Any())    // -1 is a trigger for tender multiple contract saves - the contractToken will only have a ContractIdList defined as the full list of contract ids if we are coming from the tenders dashboard
                 {
                     DateTime startTime = DateTime.Now;
                     new CostTestDataLib().RollupResults(contractToken.ContractIdList);

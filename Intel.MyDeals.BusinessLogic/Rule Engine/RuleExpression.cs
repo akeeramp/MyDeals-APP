@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using Intel.MyDeals.Entities;
+using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -248,15 +249,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             return obj.Product.GetHashCode() ^ obj.Price.GetHashCode();
         }
     }
-
-    public class rule
-    {
-        public string type { get; set; }
-        public string field { get; set; }
-        public string @operator { get; set; }
-        public string value { get; set; }
-    }
-
+    
     public class RuleAttribute
     {
         public int DcId { get; set; }

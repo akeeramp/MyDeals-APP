@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('ruleAttributeBuilder', ruleAttributeBuilder);
 
-ruleAttributeBuilder.$inject = ['$compile', 'objsetService', '$timeout', '$filter', '$localStorage', '$window', 'userPreferencesService', 'logger', '$linq'];
+ruleAttributeBuilder.$inject = ['$compile', 'objsetService', '$timeout', '$filter', '$localStorage', '$window', 'ruleService', 'logger', '$linq'];
 
-function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $localStorage, $window, userPreferencesService, logger, $linq) {
+function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $localStorage, $window, ruleService, logger, $linq) {
 
     return {
         scope: {
@@ -349,7 +349,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
             }
 
             $scope.$on('save-criteria', function (event) {
-                $scope.criteria = $scope.generateCurrentRule();
+                $scope.criteria = $scope.generateCurrentRule();                
             });
             
             $scope.initRules = function () {

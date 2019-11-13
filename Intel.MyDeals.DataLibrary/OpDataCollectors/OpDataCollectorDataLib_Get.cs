@@ -31,10 +31,46 @@ namespace Intel.MyDeals.DataLibrary
             return lstPriceRuleData;
         }
 
+        public List<PriceRuleCriteria> GetPriceRuleCriteriaById(int id, PriceRuleAction priceRuleAction)
+        {
+            List<PriceRuleCriteria> lstPriceRuleCriteria = new List<PriceRuleCriteria>();
+            var cmd = new PR_MYDL_GET_PRC_RULE { actn_nm = priceRuleAction.ToString("g"), id = id, usr_id = OpUserStack.MyOpUserToken.Usr.WWID };
+            using (var rdr = DataAccess.ExecuteDataSet(cmd))
+            {
+                return GetPriceRuleCriteria(rdr);
+            }
+        }
+
+
+        List<PriceRuleCriteria> GetPriceRuleCriteria(DataSet dtPriceRuleCriteria)
+        {
+            List<PriceRuleCriteria> lstPriceRuleCriteria = new List<PriceRuleCriteria>();
+            if (dtPriceRuleCriteria.Tables.Count > 0)
+            {
+                lstPriceRuleCriteria = (from result in dtPriceRuleCriteria.Tables[0].AsEnumerable()
+                                        select new PriceRuleCriteria
+                                        {
+                                            Id = (int)result["RULE_ID"],
+                                            RuleTypeId = (int)result["RULE_TYPE_ID"],
+                                            Name = Convert.ToString(result["RULE_NAME"]),
+                                            CriteriaJson = Convert.ToString(result["RULE_CRITERIA"]),
+                                            ProductCriteriaJson = Convert.ToString(result["PRODUCT_CRITERIA"]),
+                                            IsActive = Convert.ToBoolean(result["IS_ACTV"]),
+                                            RuleStatus = Convert.ToBoolean(result["IS_APPROVED"]),
+                                            StartDate = Convert.ToDateTime(result["EFF_FRM_DT"]),
+                                            EndDate = Convert.ToDateTime(result["EFF_TO_DT"]),
+                                            ChangedBy = Convert.ToString(result["CHG_BY"]),
+                                            ChangeDateTime = Convert.ToDateTime(result["CHG_DTM"])
+                                        }).ToList();
+            }
+            return lstPriceRuleCriteria;
+        }
+
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
             List<string> lstRtn = new List<string>();
-            var cmd = new PR_MYDL_GET_RULE_SUGG {
+            var cmd = new PR_MYDL_GET_RULE_SUGG
+            {
                 category = strCategory,
                 key = strSearchKey
             };
@@ -68,9 +104,10 @@ namespace Intel.MyDeals.DataLibrary
             return lstRtn;
         }
 
-        public RuleConfig GetPriceRuleConfiguration(int iRuleTypeId)
+        public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
         {
             RuleConfig ruleConfig = new RuleConfig();
+            ruleConfig.PriceRuleCriteria = GetPriceRuleCriteriaById(iRuleTypeId, PriceRuleAction.GET_BY_RULE_TYPE_ID);
             ruleConfig.AttributeSettings = new List<AttributeSettings>();
             ruleConfig.operatorSettings = new operatorSettings();
             var cmd = new PR_MYDL_GET_PRC_RULE_CONFIG
@@ -149,7 +186,6 @@ namespace Intel.MyDeals.DataLibrary
             }
             return rtn;
         }
-
 
         /// <summary>
         /// Get an object tree from its user displayed ID

@@ -19,13 +19,18 @@
             getPassedRuleTasksByRuleId: getPassedRuleTasksByRuleId,
             getFailedRuleTasksByRuleId: getFailedRuleTasksByRuleId,
             getRuleTypes: getRuleTypes,
-            getPriceRuleConfiguration: getPriceRuleConfiguration
+            getPriceRules: getPriceRules,
+            savePriceRule: savePriceRule
         }
 
         return service;
 
-        function getPriceRuleConfiguration(iRuleId) {
-            return dataService.get(apiBaseUrl + 'GetPriceRuleConfiguration/' + iRuleId);
+        function savePriceRule(priceRuleCriteria, strActionName) {
+            return dataService.post(apiBaseUrl + 'SavePriceRule/' + strActionName, priceRuleCriteria);
+        }
+        
+        function getPriceRules(id, strActionName) {
+            return dataService.get(apiBaseUrl + 'GetPriceRules/' + id + "/" + strActionName);
         }
 
         function getRuleTypes() {

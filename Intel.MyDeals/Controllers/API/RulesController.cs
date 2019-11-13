@@ -8,6 +8,7 @@ using System.Net;
 using System.Web.Http;
 using Intel.MyDeals.BusinessRules;
 using System.Linq;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -26,8 +27,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetBusinessRules")]
         public List<MyOpRule> GetBusinessRules()
         {
-            return SafeExecutor(() => _rulesLib.GetBusinessRules(), $"Unable to get Business Rules"
-            );
+            return SafeExecutor(() => _rulesLib.GetBusinessRules(), $"Unable to get Business Rules");
         }
 
         [Authorize]
@@ -52,10 +52,28 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetPriceRuleConfiguration/{iRuleId}")]
-        public RuleConfig GetPriceRuleConfiguration(int iRuleId)
+        [Route("GetPriceRulesConfig/{iRuleTypeId}")]
+        public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
         {
-            return SafeExecutor(() => _rulesLib.GetPriceRuleConfiguration(iRuleId), $"Unable to get Business Rules");
+            return SafeExecutor(() => _rulesLib.GetPriceRulesConfig(iRuleTypeId), $"Unable to get price rules");
+        }
+
+        [Authorize]
+        [Route("GetPriceRules/{iRuleTypeId}/{strActionName}")]
+        public List<PriceRuleCriteria> GetPriceRules(int iRuleTypeId, string strActionName)
+        {
+            return SafeExecutor(() => _rulesLib.GetPriceRules(iRuleTypeId, strActionName), $"Unable to get price rules");
+        }
+
+        [Authorize]
+        [Route("SavePriceRule/{strActionName}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<PriceRuleCriteria> SavePriceRule(string strActionName, PriceRuleCriteria priceRuleCriteria)
+        {
+            priceRuleCriteria.ProductCriteria = new List<rule>();
+            priceRuleCriteria.ProductCriteria.Add(new rule { field = "PRD_NM", @operator = "=", value = "i800" });
+            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName), $"Unable to save price rule");
         }
     }
 }
