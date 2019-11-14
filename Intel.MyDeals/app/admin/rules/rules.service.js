@@ -18,7 +18,6 @@
             getRuleConditionsByRuleId: getRuleConditionsByRuleId,
             getPassedRuleTasksByRuleId: getPassedRuleTasksByRuleId,
             getFailedRuleTasksByRuleId: getFailedRuleTasksByRuleId,
-            getRuleTypes: getRuleTypes,
             getPriceRules: getPriceRules,
             savePriceRule: savePriceRule
         }
@@ -31,11 +30,7 @@
         
         function getPriceRules(id, strActionName) {
             return dataService.get(apiBaseUrl + 'GetPriceRules/' + id + "/" + strActionName);
-        }
-
-        function getRuleTypes() {
-            return dataService.get(apiBaseUrl + 'GetRuleTypes');
-        }
+        }        
 
         function getRuleSets() {
             return dataService.get(apiBaseUrl + 'GetRuleSets');

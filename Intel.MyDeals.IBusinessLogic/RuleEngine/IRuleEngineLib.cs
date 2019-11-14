@@ -9,7 +9,6 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         List<MyOpRule> GetBusinessRules();
         bool RunPriceRules();
-        List<DropDowns> GetRuleTypes();
         RuleConfig GetPriceRulesConfig(int iRuleTypeId);
         List<string> GetSuggestion(string strCategory, string strSearchKey);
         List<PriceRuleCriteria> GetPriceRules(int id, string strActionName);

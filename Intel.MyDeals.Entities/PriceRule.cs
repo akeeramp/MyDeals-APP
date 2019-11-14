@@ -90,16 +90,16 @@ namespace Intel.MyDeals.Entities
         COPY,
         DELETE,
         GET_BY_RULE_ID,
-        GET_BY_RULE_TYPE_ID
+        GET_RULES
     }
 
     public class PriceRuleCriteria
     {
         public int Id { get; set; }
-        public int RuleTypeId { get; set; }
         public string Name { get; set; }
         public int OwnerId { get; set; }
         public bool IsActive { get; set; }
+        public bool IsNormalRule { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Notes { get; set; }

@@ -28,14 +28,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<MyOpRule> GetBusinessRules()
         {
             return SafeExecutor(() => _rulesLib.GetBusinessRules(), $"Unable to get Business Rules");
-        }
-
-        [Authorize]
-        [Route("GetRuleTypes")]
-        public List<DropDowns> GetRuleTypes()
-        {
-            return SafeExecutor(() => _rulesLib.GetRuleTypes(), $"Unable to get Business Rules TYpes");
-        }
+        }        
 
         [Authorize]
         [Route("GetSuggestion/{strCategory}/{strSearchKey}")]
@@ -59,10 +52,10 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetPriceRules/{iRuleTypeId}/{strActionName}")]
-        public List<PriceRuleCriteria> GetPriceRules(int iRuleTypeId, string strActionName)
+        [Route("GetPriceRules/{id}/{strActionName}")]
+        public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
         {
-            return SafeExecutor(() => _rulesLib.GetPriceRules(iRuleTypeId, strActionName), $"Unable to get price rules");
+            return SafeExecutor(() => _rulesLib.GetPriceRules(id, strActionName), $"Unable to get price rules");
         }
 
         [Authorize]

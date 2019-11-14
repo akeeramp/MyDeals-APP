@@ -34,12 +34,7 @@ namespace Intel.MyDeals.BusinessLogic
             new OpDataCollectorDataLib().GetPriceRuleData();
             return true;
         }
-
-        public List<DropDowns> GetRuleTypes()
-        {
-            return new ApprovalRules().GetRuleTypes();
-        }
-
+        
         public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
         {
             // Removed internal call for now, not used yet

@@ -46,11 +46,12 @@ namespace Intel.MyDeals.DataLibrary
             {
                 // Go and add this to templates classes if needed (MIKE)
                 int IDX_RULE_ID = DB.GetReaderOrdinal(rdr, "RULE_ID");
-                int IDX_RULE_TYPE_ID = DB.GetReaderOrdinal(rdr, "RULE_TYPE_ID");
                 int IDX_RULE_NAME = DB.GetReaderOrdinal(rdr, "RULE_NAME");
+                int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
                 int IDX_RULE_CRITERIA = DB.GetReaderOrdinal(rdr, "RULE_CRITERIA");
                 int IDX_PRODUCT_CRITERIA = DB.GetReaderOrdinal(rdr, "PRODUCT_CRITERIA");
                 int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+                int IDX_IS_NORMAL_RULE = DB.GetReaderOrdinal(rdr, "IS_NORMAL_RULE");
                 int IDX_IS_APPROVED = DB.GetReaderOrdinal(rdr, "IS_APPROVED");
                 int IDX_EFF_FRM_DT = DB.GetReaderOrdinal(rdr, "EFF_FRM_DT");
                 int IDX_EFF_TO_DT = DB.GetReaderOrdinal(rdr, "EFF_TO_DT");
@@ -62,13 +63,14 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     int j = 0;
                     rtn.Add(new PriceRuleCriteria
-                    { 
+                    {
                         Id = (IDX_RULE_ID < 0 || rdr.IsDBNull(IDX_RULE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_ID),
-                        RuleTypeId = (IDX_RULE_TYPE_ID < 0 || rdr.IsDBNull(IDX_RULE_TYPE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_TYPE_ID),
                         Name = (IDX_RULE_NAME < 0 || rdr.IsDBNull(IDX_RULE_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_NAME),
+                        Notes = (IDX_NOTES < 0 || rdr.IsDBNull(IDX_NOTES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTES),
                         CriteriaJson = (IDX_RULE_CRITERIA < 0 || rdr.IsDBNull(IDX_RULE_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_CRITERIA),
                         ProductCriteriaJson = (IDX_PRODUCT_CRITERIA < 0 || rdr.IsDBNull(IDX_PRODUCT_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT_CRITERIA),
                         IsActive = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
+                        IsNormalRule = (IDX_IS_NORMAL_RULE < 0 || rdr.IsDBNull(IDX_IS_NORMAL_RULE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_NORMAL_RULE),
                         RuleStatus = (IDX_IS_APPROVED < 0 || rdr.IsDBNull(IDX_IS_APPROVED)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_APPROVED),
                         StartDate = (IDX_EFF_FRM_DT < 0 || rdr.IsDBNull(IDX_EFF_FRM_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_FRM_DT),
                         EndDate = (IDX_EFF_TO_DT < 0 || rdr.IsDBNull(IDX_EFF_TO_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_TO_DT),
@@ -77,7 +79,7 @@ namespace Intel.MyDeals.DataLibrary
                         ChangedBy = (IDX_CHG_BY < 0 || rdr.IsDBNull(IDX_CHG_BY)) ? default(System.Int32).ToString() : rdr.GetFieldValue<System.Int32>(IDX_CHG_BY).ToString(),
                         ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
                     });
-                } // while
+                }  // while
             }
 
             return rtn;
@@ -144,30 +146,7 @@ namespace Intel.MyDeals.DataLibrary
         //    }
         //    return lstRtn;
         //}
-
-        public List<DropDowns> GetRuleTypes()
-        {
-            List<DropDowns> lstRtn = new List<DropDowns>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_RULE_TYPES { };
-
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                // Go and add this to templates classes if needed (MIKE)
-                int IDX_RULE_TYPE_ID = DB.GetReaderOrdinal(rdr, "RULE_TYPE_ID");
-                int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
-
-                while (rdr.Read())
-                {
-                    lstRtn.Add(new DropDowns
-                    { // Value is a string - should be an INT
-                        Value = (IDX_RULE_TYPE_ID < 0 || rdr.IsDBNull(IDX_RULE_TYPE_ID)) ? default(System.Int32).ToString() : rdr.GetFieldValue<System.Int32>(IDX_RULE_TYPE_ID).ToString(),
-                        Text = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE)
-                    });
-                } // while
-            }
-
-            return lstRtn;
-        }
+        
 
         //public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
         //{
@@ -258,9 +237,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 actn_nm = priceRuleAction.ToString("g"),
                 rule_id = priceRuleCriteria.Id,
-                rule_type_id = priceRuleCriteria.RuleTypeId,
                 rule_nm = priceRuleCriteria.Name,
                 owner_wwid = priceRuleCriteria.OwnerId,
+                is_normal_rule = priceRuleCriteria.IsNormalRule,
                 is_actv = priceRuleCriteria.IsActive,
                 eff_frm_dt = priceRuleCriteria.StartDate,
                 eff_to_dt = priceRuleCriteria.EndDate,
@@ -279,11 +258,12 @@ namespace Intel.MyDeals.DataLibrary
             {
                 // Go and add this to templates classes if needed (MIKE)
                 int IDX_RULE_ID = DB.GetReaderOrdinal(rdr, "RULE_ID");
-                int IDX_RULE_TYPE_ID = DB.GetReaderOrdinal(rdr, "RULE_TYPE_ID");
                 int IDX_RULE_NAME = DB.GetReaderOrdinal(rdr, "RULE_NAME");
+                int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
                 int IDX_RULE_CRITERIA = DB.GetReaderOrdinal(rdr, "RULE_CRITERIA");
                 int IDX_PRODUCT_CRITERIA = DB.GetReaderOrdinal(rdr, "PRODUCT_CRITERIA");
                 int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+                int IDX_IS_NORMAL_RULE = DB.GetReaderOrdinal(rdr, "IS_NORMAL_RULE");
                 int IDX_IS_APPROVED = DB.GetReaderOrdinal(rdr, "IS_APPROVED");
                 int IDX_EFF_FRM_DT = DB.GetReaderOrdinal(rdr, "EFF_FRM_DT");
                 int IDX_EFF_TO_DT = DB.GetReaderOrdinal(rdr, "EFF_TO_DT");
@@ -297,11 +277,12 @@ namespace Intel.MyDeals.DataLibrary
                     rtn.Add(new PriceRuleCriteria
                     {
                         Id = (IDX_RULE_ID < 0 || rdr.IsDBNull(IDX_RULE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_ID),
-                        RuleTypeId = (IDX_RULE_TYPE_ID < 0 || rdr.IsDBNull(IDX_RULE_TYPE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_TYPE_ID),
                         Name = (IDX_RULE_NAME < 0 || rdr.IsDBNull(IDX_RULE_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_NAME),
+                        Notes = (IDX_NOTES < 0 || rdr.IsDBNull(IDX_NOTES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTES),
                         CriteriaJson = (IDX_RULE_CRITERIA < 0 || rdr.IsDBNull(IDX_RULE_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_CRITERIA),
                         ProductCriteriaJson = (IDX_PRODUCT_CRITERIA < 0 || rdr.IsDBNull(IDX_PRODUCT_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT_CRITERIA),
                         IsActive = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
+                        IsNormalRule = (IDX_IS_NORMAL_RULE < 0 || rdr.IsDBNull(IDX_IS_NORMAL_RULE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_NORMAL_RULE),
                         RuleStatus = (IDX_IS_APPROVED < 0 || rdr.IsDBNull(IDX_IS_APPROVED)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_APPROVED),
                         StartDate = (IDX_EFF_FRM_DT < 0 || rdr.IsDBNull(IDX_EFF_FRM_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_FRM_DT),
                         EndDate = (IDX_EFF_TO_DT < 0 || rdr.IsDBNull(IDX_EFF_TO_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_TO_DT),
@@ -315,8 +296,5 @@ namespace Intel.MyDeals.DataLibrary
 
             return rtn;
         }
-
-
-
     }
 }

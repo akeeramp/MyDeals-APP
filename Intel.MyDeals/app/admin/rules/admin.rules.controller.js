@@ -13,19 +13,11 @@
         var vm = this;
         vm.ruleId = 0;
         vm.isEditmode = false;
-        vm.isRuleTypeLoaded = false;
-        vm.ruleTypeId = 0;
+        vm.Rules = [];
+        vm.rule = {};
 
         $scope.init = function () {
-            ruleService.getRuleTypes().then(function (response) {
-                vm.RuleTypes = response.data;
-                vm.isRuleTypeLoaded = true;
-                vm.LoadRuleType();
-                vm.ruleTypeId = response.data[0].Value;
-                vm.GetRules(vm.ruleTypeId, "GET_BY_RULE_TYPE_ID");
-            }, function (response) {
-                logger.error("Unable to get rule type.", response, response.statusText);
-            });
+            vm.GetRules(0, "GET_RULES");
         }
 
         $scope.operatorSettings = {
@@ -196,31 +188,6 @@
             ]
         };
 
-        vm.LoadRuleType = function () {
-            vm.ruleTypeOptions = {
-                placeholder: "Select a Rule Type...",
-                dataTextField: "Text",
-                dataValueField: "Value",
-                autoBind: false,
-                dataSource: {
-                    type: "json",
-                    serverFiltering: true,
-                    transport: {
-                        read: function (e) {
-                            e.success(vm.RuleTypes);
-                        }
-                    }
-                },
-                change: function (e) {
-                    vm.ruleTypeId = this.value();
-                }
-            };
-        }
-
-        vm.Rules = [];
-
-        vm.rule = {};
-
         vm.ruleOptions = {
             placeholder: "Select a Rule ...",
             dataTextField: "Name",
@@ -248,17 +215,17 @@
 
         vm.ownerOptions = {
             placeholder: "Select email address...",
-            dataTextField: "EMAIL_ADDR",
+            dataTextField: "NAME",
             dataValueField: "EMP_WWID",
             valueTemplate: '<div class="tmpltItem">' +
             '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-            '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+            '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
             '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
             '<div class="clearboth"></div>' +
             '</div>',
             template: '<div class="tmpltItem">' +
             '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-            '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+            '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
             '<div class="clearboth"></div>' +
             '</div>',
             footerTemplate: 'Total #: instance.dataSource.total() # items found',
@@ -274,123 +241,187 @@
 
         $scope.attributeSettings = [
             {
-                "field": "CRE_EMP_NAME",
-                "title": "Created by name",
-                "type": "autocomplete",
-                "width": 150.0,
-                "filterable": null,
-                "lookupText": "Text",
-                "lookupValue": "Value",
-                "lookupUrl": "",
-                "lookups": [
-                    {
-                        "Value": "/api/Rules/GetSuggestion/CRE_EMP_NAME",
-                        "Text": "/api/Rules/GetSuggestion/CRE_EMP_NAME"
-                    }
-                ],
-                "template": null,
-                "dimKey": 0,
-                "format": null
+                field: "CRE_EMP_NAME",
+                title: "Created by name",
+                type: "singleselect",
+                width: 150.0,
+                lookupText: "NAME",
+                lookupValue: "NAME",
+                lookupUrl: "/api/Employees/GetUsrProfileRole"
             },
             {
-                "field": "OBJ_SET_TYPE_CD",
-                "title": "Deal Type",
-                "type": "list",
-                "width": 150.0,
-                "filterable": null,
-                "lookupText": "Text",
-                "lookupValue": "Value",
-                "lookupUrl": "",
-                "lookups": [
-                    {
-                        "Value": "ECAP",
-                        "Text": "ECAP"
-                    },
-                    {
-                        "Value": "KIT",
-                        "Text": "KIT"
-                    }
-                ],
-                "template": null,
-                "dimKey": 0,
-                "format": null
+                field: "DC_ID",
+                title: "Deal #",
+                type: "number",
+                width: 150
             },
             {
-                "field": "CUST_NM",
-                "title": "Customer",
-                "type": "singleselect",
-                "width": 150.0,
-                "filterable": null,
-                "lookupText": "CUST_NM",
-                "lookupValue": "CUST_NM",
-                "lookupUrl": "/api/Customers/GetMyCustomersNameInfo",
-                "lookups": [],
-                "template": null,
-                "dimKey": 0,
-                "format": null
+                field: "OBJ_SET_TYPE_CD",
+                title: "Deal Type",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "ECAP" }]
+            },
+            {
+                field: "CUST_NM",
+                title: "Customer",
+                type: "singleselect",
+                width: 150.0,
+                lookupText: "CUST_NM",
+                lookupValue: "CUST_NM",
+                lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
             },
             {
                 field: "END_CUSTOMER_RETAIL",
                 title: "End Customer",
                 type: "string",
-                width: 140
-            }, {
+                width: 150
+            },
+            {
                 field: "GEO_COMBINED",
-                title: "Geo",
-                type: "string",
-                width: 100
-            }, {
+                title: "Customer Geo",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+            },
+            {
                 field: "PRODUCT_FILTER",
                 title: "Product",
                 type: "string",
-                width: 400,
-                dimKey: 20,
-                filterable: "objFilter",
-                template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
-            }, {
-                field: "CUST_ACCNT_DIV",
-                title: "Division",
+                width: 150,
+                dimKey: 20
+            },
+            {
+                field: "CUST_TYPE",
+                title: "Customer Type",
                 type: "string",
-                width: 140
-            }, {
+                width: 150
+            },
+            {
+                field: "OP_CD",
+                title: "Op Code",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "HJ" }, { Value: "HE" }]
+            },
+            {
+                field: "PRD_DIV",
+                title: "Product Division",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "ND" }]
+            },
+            {
                 field: "PRODUCT_CATEGORIES",
                 title: "Product Verticals",
-                type: "list",
+                type: "string",
+                width: 150
+            },
+            {
+                field: "SERVER_DEAL_TYPE",
+                title: "Server Deal Type",
+                type: "singleselect",
                 width: 150,
-                filterable: "listMultiProdCatFilter",
-                lookupText: "PRD_CAT_NM",
-                lookupValue: "PRD_CAT_NM",
-                lookupUrl: "/api/Products/GetProductCategories"
-            }, {
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
+            },
+            {
                 field: "MRKT_SEG",
                 title: "Market Segment",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
+                type: "singleselect",
+                width: 150,
                 lookupText: "DROP_DOWN",
                 lookupValue: "DROP_DOWN",
                 lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
+            },
+            {
+                field: "PAYOUT_BASED_ON",
+                title: "Payout Based On",
+                type: "singleselect",
+                width: 150,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
+            },
+            {
+                field: "COMP_SKU",
+                title: "Meet Comp Sku",
+                type: "string",
+                width: 150
+            },
+            {
+                field: "ECAP_PRICE",
+                title: "ECAP (Price)",
+                type: "money",
+                width: 150,
+                dimKey: 20,
+                format: "{0:c}"
+            },
+            {
+                field: "VOLUME",
+                title: "Ceiling Volume",
+                type: "number",
+                width: 150
+            },
+            {
+                field: "VOLUME_INC",
+                title: "Ceiling Volume Increase",
+                type: "number",
+                width: 150
+            },
+            {
+                field: "END_DT",
+                title: "End Date",
+                type: "date",
+                template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
+                width: 150
+            },
+            {
+                field: "END_DT_REDEAL",
+                title: "End Date (Redeal)",
+                type: "date",
+                template: "#if(END_DT_REDEAL==null){#  #}else{# #= moment(END_DT_REDEAL).format('MM/DD/YYYY') # #}#",
+                width: 150
+            },
+            {
+                field: "BLKT_DISC",
+                title: "Blanket Discount",
+                type: "number",
+                width: 150
             }
         ];
+
+        vm.ProductCriteria = [{ "PRD_NM": "test product", "ECAP_PRICE": "10" }];
+
+        vm.ProductCriteriaOptions = {
+            scrollable: true,
+            editable: true,
+            width: 200,
+            columns: [
+                { field: "PRD_NM", title: "Product Name", width: "65%", filterable: { multi: false, search: false } },
+                { field: "ECAP_PRICE", title: "ECAP", filterable: { multi: false, search: false } },
+            ],
+            dataBound: function (e) {
+                var rowCount = this.dataSource.view().length;  // only get count for current page
+                if (rowCount < 5) {
+                    for (var i = 1; i < 5 - rowCount; i++) {
+                        this.addRow();
+                    }
+                }
+            },
+            save: function (e) {
+                vm.ProductCriteria= this.dataSource.view(); 
+            },
+        };
 
         vm.editRule = function (id) {
             vm.GetRules(id, "GET_BY_RULE_ID");
@@ -416,14 +447,16 @@
 
         vm.GetRules = function (id, actionName) {
             ruleService.getPriceRules(id, actionName).then(function (response) {
-                vm.Rules = response.data;
-                vm.isEditmode = false;
-                vm.dataSource.read();
-                if (actionName == "GET_BY_RULE_ID") {
-                    vm.rule = vm.Rules.filter(function (x) {
-                        return x.Id == id
-                    })[0];
-                    vm.isEditmode = true;
+                switch (actionName) {
+                    case "GET_BY_RULE_ID": {
+                        vm.rule = response.data[0];
+                        vm.isEditmode = true;
+                    } break;
+                    default: {
+                        vm.Rules = response.data;
+                        vm.isEditmode = false;
+                        vm.dataSource.read();
+                    } break;
                 }
             }, function (response) {
                 logger.error("Operation failed");
@@ -495,7 +528,8 @@
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 { field: "Name", title: "Name", width: "15%", filterable: { multi: true, search: true } },
-                { field: "IsActive", title: "IsActive", filterable: { multi: true, search: true } },
+                { field: "IsActive", title: "Is Active", filterable: { multi: true, search: true } },
+                { field: "IsNormalRule", title: "Is Normal Rule", filterable: { multi: true, search: true } },
                 { field: "RuleStatus", title: "Status", filterable: { multi: true, search: true } },
                 { field: "StartDate", title: "Start Date", filterable: { multi: true, search: true } },
                 { field: "EndDate", title: "End Date", filterable: { multi: true, search: true } },
@@ -514,30 +548,35 @@
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
                 var requiredFields = [];
-                if (vm.ruleTypeId == null || vm.ruleTypeId == 0)
-                    requiredFields.push("Rule type");
                 if (vm.rule.Name == null || vm.rule.Name == "")
-                    requiredFields.push("Rule name");
+                    requiredFields.push("Rule name ");
                 if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
-                    requiredFields.push("Rule owner");
+                    requiredFields.push("Rule owner ");
                 if (vm.rule.StartDate == null)
-                    requiredFields.push("Start date");
+                    requiredFields.push("Start date ");
                 if (vm.rule.EndDate == null)
-                    requiredFields.push("End date");
+                    requiredFields.push("End date ");
                 if (vm.rule.Criteria.filter(x => x.value != "").length == 0)
-                    requiredFields.push("Rule criteria");
+                    requiredFields.push("Rule criteria ");
+                if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
+                    var dtEffFrom = new Date(vm.rule.StartDate);
+                    var dtEffTo = new Date(vm.rule.EndDate);
+                    if (dtEffFrom >= dtEffTo)
+                        requiredFields.push("Effective from date cannot be greater than effective to date ");
+                }
+
                 if (requiredFields.length > 0) {
                     alert("Please fill the required fields!\n" + requiredFields.join());
                 } else {
                     var priceRuleCriteria = {
                         Id: vm.rule.Id,
-                        RuleTypeId: vm.ruleTypeId,
                         Name: vm.rule.Name,
                         OwnerId: vm.rule.OwnerId,
                         IsActive: vm.rule.IsActive,
+                        IsNormalRule: vm.rule.IsNormalRule,
                         StartDate: vm.rule.StartDate,
                         EndDate: vm.rule.EndDate,
-                        RuleStatus: false,
+                        RuleStatus: vm.rule.RuleStatus,
                         Notes: vm.rule.Notes,
                         Criteria: vm.rule.Criteria.filter(x => x.value != ""),
                         ProductCriteria: {}
@@ -551,6 +590,10 @@
             vm.rule.Id = 0;
             vm.isEditmode = true;
             vm.rule = {};
+            vm.rule.IsNormalRule = true;
+            vm.rule.IsActive = true;
+            vm.rule.StartDate = new Date();
+            vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
         }
 
         vm.sendEmail = function () {
