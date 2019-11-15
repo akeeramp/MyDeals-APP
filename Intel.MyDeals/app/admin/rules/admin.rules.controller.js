@@ -15,57 +15,56 @@
         vm.isEditmode = false;
         vm.Rules = [];
         vm.rule = {};
+        vm.RuleConfig = [];
 
         $scope.init = function () {
+            ruleService.getPriceRulesConfig().then(function (response) {
+                vm.RuleConfig = response.data;
+            }, function (response) {
+                logger.error("Operation failed");
+            });
+
             vm.GetRules(0, "GET_RULES");
         }
 
         $scope.operatorSettings = {
             "operators": [
                 {
-                    "id": 1,
                     "operator": "LIKE",
                     "operCode": "contains",
                     "label": "contains"
                 },
                 {
-                    "id": 2,
                     "operator": "=",
                     "operCode": "eq",
                     "label": "equal to"
                 },
                 {
-                    "id": 3,
                     "operator": "IN",
                     "operCode": "in",
                     "label": "in"
                 },
                 {
-                    "id": 4,
                     "operator": "!=",
                     "operCode": "neq",
                     "label": "not equal to"
                 },
                 {
-                    "id": 5,
                     "operator": "<",
                     "operCode": "lt",
                     "label": "less than"
                 },
                 {
-                    "id": 6,
                     "operator": "<=",
                     "operCode": "lte",
                     "label": "less than or equal to"
                 },
                 {
-                    "id": 7,
                     "operator": ">",
                     "operCode": "gt",
                     "label": "greater than"
                 },
                 {
-                    "id": 8,
                     "operator": ">=",
                     "operCode": "gte",
                     "label": "greater than or equal to"
@@ -73,42 +72,38 @@
             ],
             "types": [
                 {
-                    "id": 1,
                     "type": "string",
                     "uiType": "textbox"
                 },
                 {
-                    "id": 2,
                     "type": "autocomplete",
                     "uiType": "textbox"
                 },
                 {
-                    "id": 3,
                     "type": "number",
                     "uiType": "numeric"
                 },
                 {
-                    "id": 4,
+                    "type": "numericOrPercentage",
+                    "uiType": "numeric"
+                },
+                {
                     "type": "money",
                     "uiType": "numeric"
                 },
                 {
-                    "id": 5,
                     "type": "date",
                     "uiType": "datepicker"
                 },
                 {
-                    "id": 6,
                     "type": "list",
                     "uiType": "combobox"
                 },
                 {
-                    "id": 7,
                     "type": "bool",
                     "uiType": "checkbox"
                 },
                 {
-                    "id": 8,
                     "type": "singleselect",
                     "uiType": "combobox"
                 }
@@ -125,6 +120,18 @@
                         ">",
                         ">="
                     ]
+                },
+                {
+                    "type": "numericOrPercentage",
+                    "operator": [
+                        "=",
+                        "IN",
+                        "!=",
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                    ],
                 },
                 {
                     "type": "money",
@@ -267,7 +274,7 @@
             {
                 field: "CUST_NM",
                 title: "Customer",
-                type: "singleselect",
+                type: "list",
                 width: 150.0,
                 lookupText: "CUST_NM",
                 lookupValue: "CUST_NM",
@@ -282,7 +289,7 @@
             {
                 field: "GEO_COMBINED",
                 title: "Customer Geo",
-                type: "singleselect",
+                type: "list",
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
@@ -337,7 +344,7 @@
             {
                 field: "MRKT_SEG",
                 title: "Market Segment",
-                type: "singleselect",
+                type: "list",
                 width: 150,
                 lookupText: "DROP_DOWN",
                 lookupValue: "DROP_DOWN",
@@ -375,7 +382,7 @@
             {
                 field: "VOLUME_INC",
                 title: "Ceiling Volume Increase",
-                type: "number",
+                type: "numericOrPercentage",
                 width: 150
             },
             {
@@ -386,16 +393,9 @@
                 width: 150
             },
             {
-                field: "END_DT_REDEAL",
-                title: "End Date (Redeal)",
-                type: "date",
-                template: "#if(END_DT_REDEAL==null){#  #}else{# #= moment(END_DT_REDEAL).format('MM/DD/YYYY') # #}#",
-                width: 150
-            },
-            {
                 field: "BLKT_DISC",
                 title: "Blanket Discount",
-                type: "number",
+                type: "numericOrPercentage",
                 width: 150
             }, {
                 field: "HAS_TRCK",
@@ -439,11 +439,11 @@
             var priceRuleCriteria = {
                 Id: id
             }
-            vm.RuleActions(priceRuleCriteria, "COPY");
+            vm.RuleActions(priceRuleCriteria, "COPY", false);
         }
 
-        vm.RuleActions = function (priceRuleCriteria, actionName) {
-            ruleService.savePriceRule(priceRuleCriteria, actionName).then(function (response) {
+        vm.RuleActions = function (priceRuleCriteria, actionName, isWithEmail) {
+            ruleService.savePriceRule(priceRuleCriteria, actionName, isWithEmail).then(function (response) {
                 vm.Rules = response.data;
                 vm.isEditmode = false;
                 vm.dataSource.read();
@@ -458,6 +458,11 @@
                 switch (actionName) {
                     case "GET_BY_RULE_ID": {
                         vm.rule = response.data[0];
+                        for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
+                            if (vm.rule.Criteria[idx].type == "list") {
+                                vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].multiValue;
+                            }
+                        }
                         vm.isEditmode = true;
                     } break;
                     default: {
@@ -476,7 +481,7 @@
                 var priceRuleCriteria = {
                     Id: id
                 }
-                vm.RuleActions(priceRuleCriteria, "DELETE");
+                vm.RuleActions(priceRuleCriteria, "DELETE", false);
             });
         };
 
@@ -486,7 +491,6 @@
                     e.success(vm.Rules);
                 },
                 update: function (e) {
-
                 },
                 destroy: function (e) {
                     var modalOptions = {
@@ -536,14 +540,14 @@
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 { field: "Name", title: "Name", width: "15%", filterable: { multi: true, search: true } },
-                { field: "IsActive", title: "Is Active", filterable: { multi: true, search: true } },
-                { field: "IsNormalRule", title: "Is Normal Rule", filterable: { multi: true, search: true } },
-                { field: "RuleStatus", title: "Status", filterable: { multi: true, search: true } },
-                { field: "StartDate", title: "Start Date", filterable: { multi: true, search: true } },
-                { field: "EndDate", title: "End Date", filterable: { multi: true, search: true } },
+                { field: "OwnerName", title: "Owner Name", width: "15%", filterable: { multi: true, search: true } },
+                { field: "RuleStage", title: "Rule Stage", filterable: { multi: true, search: true }, template: "<span ng-if='#= RuleStage #'>Approved</span><span ng-if='!#= RuleStage #'>Pending</span>" },
+                { field: "IsActive", title: "Status", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsActive #'>Active</span><span ng-if='!#= IsActive #'>Inactive</span>" },
+                { field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsAutomationIncluded #'>Included</span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>" },
+                { field: "StartDate", title: "Rule Start Date", filterable: { multi: true, search: true } },
+                { field: "EndDate", title: "Rule End Date", filterable: { multi: true, search: true } },
                 { field: "Notes", title: "Notes", filterable: { multi: true, search: true } },
-                { field: "ChangedBy", title: "Changed By", filterable: { multi: true, search: true } },
-                { field: "ChangeDateTime", title: "Change Date", filterable: { multi: true, search: true }, template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(ChangeDateTime)), 'M/d/yyyy') #", },
+                { field: "ChangedBy", title: "Updated By", filterable: { multi: true, search: true } }
             ]
         };
 
@@ -552,60 +556,65 @@
             vm.rule = {};
         }
 
-        vm.saveRule = function () {
+        vm.saveRule = function (isWithEmail) {
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
                 var requiredFields = [];
                 if (vm.rule.Name == null || vm.rule.Name == "")
-                    requiredFields.push("Rule name ");
+                    requiredFields.push("</br>Rule name");
                 if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
-                    requiredFields.push("Rule owner ");
+                    requiredFields.push("</br>Rule owner");
                 if (vm.rule.StartDate == null)
-                    requiredFields.push("Start date ");
+                    requiredFields.push("</br>Start date");
                 if (vm.rule.EndDate == null)
-                    requiredFields.push("End date ");
+                    requiredFields.push("</br>End date");
                 if (vm.rule.Criteria.filter(x => x.value != "").length == 0)
-                    requiredFields.push("Rule criteria ");
-                if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
+                    requiredFields.push("</br>Rule criteria");
+
+                if (requiredFields.length > 0) {
+                    kendo.alert("Please fill the following required fields!" + requiredFields.join());
+                } else {
                     var dtEffFrom = new Date(vm.rule.StartDate);
                     var dtEffTo = new Date(vm.rule.EndDate);
                     if (dtEffFrom >= dtEffTo)
-                        requiredFields.push("Effective from date cannot be greater than effective to date ");
-                }
-
-                if (requiredFields.length > 0) {
-                    alert("Please fill the required fields!\n" + requiredFields.join());
-                } else {
-                    var priceRuleCriteria = {
-                        Id: vm.rule.Id,
-                        Name: vm.rule.Name,
-                        OwnerId: vm.rule.OwnerId,
-                        IsActive: vm.rule.IsActive,
-                        IsNormalRule: vm.rule.IsNormalRule,
-                        StartDate: vm.rule.StartDate,
-                        EndDate: vm.rule.EndDate,
-                        RuleStatus: vm.rule.RuleStatus,
-                        Notes: vm.rule.Notes,
-                        Criteria: vm.rule.Criteria.filter(x => x.value != ""),
-                        ProductCriteria: {}
+                        kendo.alert("Effective from date cannot be greater than effective to date");
+                    else {
+                        for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
+                            if (vm.rule.Criteria[idx].type == "list") {
+                                vm.rule.Criteria[idx].multiValue = vm.rule.Criteria[idx].value;
+                                vm.rule.Criteria[idx].value = "-";
+                            } else {
+                                vm.rule.Criteria[idx].multiValue = [];
+                            }
+                        }
+                        var priceRuleCriteria = {
+                            Id: vm.rule.Id,
+                            Name: vm.rule.Name,
+                            OwnerId: vm.rule.OwnerId,
+                            IsActive: vm.rule.IsActive,
+                            IsAutomationIncluded: vm.rule.IsAutomationIncluded,
+                            StartDate: vm.rule.StartDate,
+                            EndDate: vm.rule.EndDate,
+                            RuleStage: vm.rule.RuleStage,
+                            Notes: vm.rule.Notes,
+                            Criteria: vm.rule.Criteria.filter(x => x.value != ""),
+                            ProductCriteria: {}
+                        }
+                        vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
                     }
-                    vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"));
                 }
             });
         }
 
         vm.addNewRule = function () {
-            vm.rule.Id = 0;
             vm.isEditmode = true;
             vm.rule = {};
-            vm.rule.IsNormalRule = true;
+            vm.rule.Id = 0;
+            vm.rule.IsAutomationIncluded = true;
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
-        }
-
-        vm.sendEmail = function () {
-            alert('Todo: TADA!!')
+            vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
         }
 
         $scope.init();

@@ -45,10 +45,10 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetPriceRulesConfig/{iRuleTypeId}")]
-        public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
+        [Route("GetPriceRulesConfig")]
+        public RuleConfig GetPriceRulesConfig()
         {
-            return SafeExecutor(() => _rulesLib.GetPriceRulesConfig(iRuleTypeId), $"Unable to get price rules");
+            return SafeExecutor(() => _rulesLib.GetPriceRulesConfig(), $"Unable to get configs of price rule");
         }
 
         [Authorize]
@@ -59,14 +59,14 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SavePriceRule/{strActionName}")]
+        [Route("SavePriceRule/{strActionName}/{isWithEmail}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<PriceRuleCriteria> SavePriceRule(string strActionName, PriceRuleCriteria priceRuleCriteria)
+        public List<PriceRuleCriteria> SavePriceRule(string strActionName,bool isWithEmail, PriceRuleCriteria priceRuleCriteria)
         {
             priceRuleCriteria.ProductCriteria = new List<rule>();
             priceRuleCriteria.ProductCriteria.Add(new rule { field = "PRD_NM", @operator = "=", value = "i800" });
-            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName), $"Unable to save price rule");
+            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName, isWithEmail), $"Unable to save price rule");
         }
     }
 }

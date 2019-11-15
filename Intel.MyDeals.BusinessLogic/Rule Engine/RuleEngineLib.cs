@@ -6,6 +6,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.BusinessLogic.Rule_Engine;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -34,11 +35,10 @@ namespace Intel.MyDeals.BusinessLogic
             new OpDataCollectorDataLib().GetPriceRuleData();
             return true;
         }
-        
-        public RuleConfig GetPriceRulesConfig(int iRuleTypeId)
+
+        public RuleConfig GetPriceRulesConfig()
         {
-            // Removed internal call for now, not used yet
-            return null; // new OpDataCollectorDataLib().GetPriceRulesConfig(iRuleTypeId);
+            return new ApprovalRules().GetPriceRulesConfig();
         }
 
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
@@ -61,12 +61,30 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return lstPriceRuleCriteria;
         }
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName)
+        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isWithEmail)
         {
             PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
             if (priceRuleAction == PriceRuleAction.CREATE || priceRuleAction == PriceRuleAction.UPDATE)
             {
                 priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criteria);
+                List<rule> lstMulti = new List<rule>();
+                priceRuleCriteria.Criteria.ForEach(x =>
+                {
+                    if (x.type == "list")
+                    {
+                        List<rule> lstTemp = (from result in x.multiValue
+                                              select new rule
+                                              {
+                                                  type = "string",
+                                                  value = result,
+                                                  field = x.field,
+                                                  @operator = x.@operator
+                                              }).ToList(); ;
+                        lstMulti.AddRange(lstTemp);
+                    }
+                });
+                priceRuleCriteria.Criteria.AddRange(lstMulti);
+                priceRuleCriteria.Criteria.RemoveAll(x => x.type == "list");
                 priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
                 using (RuleExpressions ruleExpressions = new RuleExpressions())
                 {
@@ -79,7 +97,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //To avoid overflow
                 priceRuleCriteria.StartDate = priceRuleCriteria.EndDate = DateTime.UtcNow;
             }
-            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction);
+            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction, isWithEmail);
         }
     }
 }

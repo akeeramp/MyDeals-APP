@@ -295,7 +295,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return ret;
             }
-
+            
             DateTime start = DateTime.Now;
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_MNG_WIP_ACTNS
             {

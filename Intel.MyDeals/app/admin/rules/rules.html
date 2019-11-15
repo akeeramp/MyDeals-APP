@@ -9,7 +9,7 @@
     </div>
     <div ng-if="vm.isEditmode">
         <div ng-show="false" class="form-group row">
-            <label class="control-label col-md-2">Rule :</label>
+            <label class="control-label col-md-2">Rule:</label>
             <div class="col-md-5">
                 <select class="form-control md"
                         kendo-combo-box
@@ -37,43 +37,43 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label col-md-2">Is Active</label>
+            <label class="control-label col-md-2">Status:</label>
             <div class="col-md-1">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsActive"
-                        on="ON"
-                        off="OFF"
+                        on="Active"
+                        off="Inactive"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Status : </label>
-            <div class="col-md-1">
-                <toggle class="fl toggle-accept"
-                        ng-model="vm.rule.IsApproved"
+            <label class="control-label col-md-1">Stage:</label>
+            <div class="col-md-1" style="margin-left:-15px;">
+                <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
+                        ng-model="vm.rule.RuleStage"
                         on="Approved"
                         off="Pending"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Rule Type : </label>
-            <div class="col-md-1" style="margin-left:-25px;">
+            <label class="control-label col-md-1">Automation:</label>
+            <div class="col-md-1" style="margin-left:-15px;">
                 <toggle class="fl toggle-accept"
-                        ng-model="vm.rule.IsNormalRule"
-                        on="Normal"
-                        off="Anti"
+                        ng-model="vm.rule.IsAutomationIncluded"
+                        on="Include"
+                        off="Exclude"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label col-md-2">Effective From:</label>
+            <label class="control-label col-md-2">Rule Start Date:</label>
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="From date"
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
-            <label class="control-label col-md-1">Effective To:</label>
+            <label class="control-label col-md-1">End Date:</label>
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="To date"
@@ -89,6 +89,15 @@
                           style="width:100%" />
             </div>
         </div>
+        <div ng-if="vm.rule.Id > 0" class="form-group row" style="margin:0px !important;margin-left:-10px !important;">
+            <label class="control-label col-md-2">&nbsp;</label>
+            <div class="col-md-5" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
+                <span>Last modified by </span>
+                <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
+                <span> on </span>
+                <span style="color:orangered">{{vm.rule.ChangeDateTime}}</span>
+            </div>
+        </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Criteria:</label>
             <div class="col-md-6">
@@ -100,7 +109,7 @@
                      custom-settings=""></div>
             </div>
         </div>
-        <div class="form-group row" style="margin-bottom: 50px;">
+        <div ng-show="false" class="form-group row" style="margin-bottom: 50px;">
             <label class="control-label col-md-2">Product Criteria:</label>
             <div class="col-md-5">
                 <kendo-grid id="productCriteria" options="vm.ProductCriteriaOptions" k-auto-bind="true" k-data-source="vm.ProductCriteria" style="height:200px !important; max-height:200px !important;" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
@@ -109,9 +118,9 @@
         <div class="form-group row action_btns">
             <label class="control-label col-md-2"></label>
             <div class="col-md-6">
-                <button ng-click="vm.saveRule()" class="btn btn-primary">Save</button>
+                <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save</button>
                 <button ng-click="vm.cancel()" class="btn btn-secondary">Cancel</button>
-                <button ng-click="vm.sendEmail()" class="btn btn-secondary">Send Email</button>
+                <button ng-click="vm.saveRule(true)" class="btn btn-secondary">Save & Send Email</button>
             </div>
         </div>
     </div>

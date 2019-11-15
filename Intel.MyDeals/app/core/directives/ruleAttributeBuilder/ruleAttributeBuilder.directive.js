@@ -119,7 +119,8 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                             type: $scope.fieldDict[x.field],
                             field: x.field,
                             operator: x.operator,
-                            value: x.value
+                            value: x.value,
+                            valueType: x.valueType
                         };
                     }).ToArray();
             }
@@ -159,6 +160,13 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                         case "money":
                             {
                                 html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                            } break;
+                        case "numericOrPercentage":
+                            {
+                                if (scope.dataItem.valueType == undefined)
+                                    scope.dataItem.valueType = "{text:\"$\",value:\"$\"}";
+                                html = '<input kendo-numeric-text-box restrict-decimals=true style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                                html += '<select class="opUiContainer sm" kendo-drop-down-list style="width: 60px;" k-ng-model="dataItem.valueType"><option>%</option><option>$</option></select>'
                             } break;
                         case "date":
                             {
@@ -261,7 +269,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                     $scope.runRule();
                 }
             };
-            
+
             $scope.suggestionPressed = function (event, fieldValue) {
                 $scope.suggestionText = new kendo.data.DataSource({
                     transport: {
@@ -349,9 +357,9 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
             }
 
             $scope.$on('save-criteria', function (event) {
-                $scope.criteria = $scope.generateCurrentRule();                
+                $scope.criteria = $scope.generateCurrentRule();
             });
-            
+
             $scope.initRules = function () {
                 $scope.buildRuleFormula();
             }

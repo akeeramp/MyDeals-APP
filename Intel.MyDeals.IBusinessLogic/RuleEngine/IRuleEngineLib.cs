@@ -9,9 +9,9 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         List<MyOpRule> GetBusinessRules();
         bool RunPriceRules();
-        RuleConfig GetPriceRulesConfig(int iRuleTypeId);
+        RuleConfig GetPriceRulesConfig();
         List<string> GetSuggestion(string strCategory, string strSearchKey);
         List<PriceRuleCriteria> GetPriceRules(int id, string strActionName);
-        List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName);
+        List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isWithEmail);
     }
 }

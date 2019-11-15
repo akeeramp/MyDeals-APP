@@ -8,6 +8,8 @@ namespace Intel.MyDeals.Entities
 {
     public class RuleConfig
     {
+        public bool IsElligibleForApproval { get; set; }
+        public int CurrentUserWWID { get; set; }
         public operatorSettings operatorSettings { get; set; }
         public List<AttributeSettings> AttributeSettings { get; set; }
 
@@ -97,13 +99,14 @@ namespace Intel.MyDeals.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string OwnerName { get; set; }
         public int OwnerId { get; set; }
         public bool IsActive { get; set; }
-        public bool IsNormalRule { get; set; }
+        public bool IsAutomationIncluded { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Notes { get; set; }
-        public bool RuleStatus { get; set; }
+        public bool RuleStage { get; set; }
         public List<rule> Criteria { get; set; }
         public string CriteriaJson { get; set; }
         public string CriteriaSql { get; set; }
@@ -120,5 +123,21 @@ namespace Intel.MyDeals.Entities
         public string field { get; set; }
         public string @operator { get; set; }
         public string value { get; set; }
+        public ValueType valueType { get; set; }
+        public List<string> multiValue { get; set; }
+    }
+
+    public class ValueType
+    {
+        public string text { get; set; }
+        public string value { get; set; }
+    }
+
+    public class MultiRule
+    {
+        public string type { get; set; }
+        public string field { get; set; }
+        public string @operator { get; set; }
+        public List<string> value { get; set; }
     }
 }
