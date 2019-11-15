@@ -177,6 +177,14 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Tier Numbers must match Tier Level",
+                    ActionRule = MyDcActions.ValidateTierNumber,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
                     ActionRule = MyDcActions.ClearSysComments,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
