@@ -288,7 +288,7 @@ namespace Intel.MyDeals.DataLibrary
                         EndDate = (IDX_EFF_TO_DT < 0 || rdr.IsDBNull(IDX_EFF_TO_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_TO_DT),
                         OwnerId = (IDX_OWNER_WWID < 0 || rdr.IsDBNull(IDX_OWNER_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OWNER_WWID),
                         // FIX CHANGED BY DEFINATION
-                        ChangedBy = (IDX_CHG_BY < 0 || rdr.IsDBNull(IDX_CHG_BY)) ? default(System.Int32).ToString() : rdr.GetFieldValue<System.Int32>(IDX_CHG_BY).ToString(),
+                        ChangedBy = (IDX_CHG_BY < 0 || rdr.IsDBNull(IDX_CHG_BY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_BY),
                         ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
                     });
                 } // while
