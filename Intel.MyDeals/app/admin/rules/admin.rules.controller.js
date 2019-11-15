@@ -397,6 +397,14 @@
                 title: "Blanket Discount",
                 type: "number",
                 width: 150
+            }, {
+                field: "HAS_TRCK",
+                title: "Has Tracker",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "Yes" }, { Value: "No" }]
             }
         ];
 
@@ -419,7 +427,7 @@
                 }
             },
             save: function (e) {
-                vm.ProductCriteria= this.dataSource.view(); 
+                vm.ProductCriteria = this.dataSource.view();
             },
         };
 
@@ -535,7 +543,7 @@
                 { field: "EndDate", title: "End Date", filterable: { multi: true, search: true } },
                 { field: "Notes", title: "Notes", filterable: { multi: true, search: true } },
                 { field: "ChangedBy", title: "Changed By", filterable: { multi: true, search: true } },
-                { field: "ChangeDateTime", title: "Change Date", filterable: { multi: true, search: true }, template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(ChangeDateTime)), 'M/d/yyyy hh:mm tt') #", },
+                { field: "ChangeDateTime", title: "Change Date", filterable: { multi: true, search: true }, template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(ChangeDateTime)), 'M/d/yyyy') #", },
             ]
         };
 
