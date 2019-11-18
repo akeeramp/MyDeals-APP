@@ -1616,7 +1616,7 @@ text{font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif !imp
   position: relative;
   border-radius: 3px;
   background: #ffffff;
-  border-top: 3px solid #004280;
+  border-top: 3px solid #dadada;
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -1947,142 +1947,7 @@ text{font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif !imp
   font-weight: 400;
   font-size: 12px;
 }
-/* Widget: TODO LIST */
-.todo-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow: auto;
-}
-.todo-list > li {
-  border-radius: 2px;
-  padding: 10px;
-  background: #f4f4f4;
-  margin-bottom: 2px;
-  border-left: 2px solid #e6e7e8;
-  color: #444;
-}
-.todo-list > li:last-of-type {
-  margin-bottom: 0;
-}
-.todo-list > li > input[type='checkbox'] {
-  margin: 0 10px 0 5px;
-}
-.todo-list > li .text {
-  display: inline-block;
-  margin-left: 5px;
-  font-weight: 600;
-}
-.todo-list > li .label {
-  margin-left: 10px;
-  font-size: 9px;
-}
-.todo-list > li .tools {
-  display: none;
-  float: right;
-  color: #dd4b39;
-}
-.todo-list > li .tools > .fa,
-.todo-list > li .tools > .glyphicon,
-.todo-list > li .tools > .ion {
-  margin-right: 5px;
-  cursor: pointer;
-}
-.todo-list > li:hover .tools {
-  display: inline-block;
-}
-.todo-list > li.done {
-  color: #999;
-}
-.todo-list > li.done .text {
-  text-decoration: line-through;
-  font-weight: 500;
-}
-.todo-list > li.done .label {
-  background: #d2d6de !important;
-}
-.todo-list .danger {
-  border-left-color: #dd4b39;
-}
-.todo-list .warning {
-  border-left-color: #f39c12;
-}
-.todo-list .info {
-  border-left-color: #00c0ef;
-}
-.todo-list .success {
-  border-left-color: #00a65a;
-}
-.todo-list .primary {
-  border-left-color: #3c8dbc;
-}
-.todo-list .handle {
-  display: inline-block;
-  cursor: move;
-  margin: 0 5px;
-}
-/* Chat widget (DEPRECATED - this will be removed in the next major release. Use Direct Chat instead)*/
-.chat {
-  padding: 5px 20px 5px 10px;
-}
-.chat .item {
-  margin-bottom: 10px;
-}
-.chat .item:before,
-.chat .item:after {
-  content: " ";
-  display: table;
-}
-.chat .item:after {
-  clear: both;
-}
-.chat .item > img {
-  width: 40px;
-  height: 40px;
-  border: 2px solid transparent;
-  border-radius: 50%;
-}
-.chat .item > .online {
-  border: 2px solid #00a65a;
-}
-.chat .item > .offline {
-  border: 2px solid #dd4b39;
-}
-.chat .item > .message {
-  margin-left: 55px;
-  margin-top: -40px;
-}
-.chat .item > .message > .name {
-  display: block;
-  font-weight: 600;
-}
-.chat .item > .attachment {
-  border-radius: 3px;
-  background: #f4f4f4;
-  margin-left: 65px;
-  margin-right: 15px;
-  padding: 10px;
-}
-.chat .item > .attachment > h4 {
-  margin: 0 0 5px 0;
-  font-weight: 600;
-  font-size: 14px;
-}
-.chat .item > .attachment > p,
-.chat .item > .attachment > .filename {
-  font-weight: 600;
-  font-size: 13px;
-  font-style: italic;
-  margin: 0;
-}
-.chat .item > .attachment:before,
-.chat .item > .attachment:after {
-  content: " ";
-  display: table;
-}
-.chat .item > .attachment:after {
-  clear: both;
-}
+
 .box-input {
   max-width: 200px;
 }

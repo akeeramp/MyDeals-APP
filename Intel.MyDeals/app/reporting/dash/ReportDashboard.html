@@ -279,7 +279,7 @@
                 <!-- TABLE: LATEST ORDERS -->
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="box box-info">
+                        <div class="box box">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Report(s) Log</h3>
                                 <label class="switch" title='Excluded/Included by USER'>
@@ -330,7 +330,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="x in vm.masterData['ReportLogDeatils'] | limitTo : vm.numberOfRecrods ">
-                                                <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? JSON.parse(x.ATRB_LIST) : 'Within the threshold value'}}"><i class="intelicon-information-outlined" ng-click="showFilter(x.ATRB_LIST)" ng-class="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
+                                                <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? 'Check Filter before pulling' : ''}}"><i ng-if="x.TOTAL_REPORT_TIME_TAKEN > 60" class="intelicon-information-outlined red" ng-class="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
                                                 <td>Deal Management {{x.RPT_ALS_NM}}</td>
                                                 <td>{{x.START_TIME}}</td>
                                                 <td>{{x.END_TIME}}</td>
