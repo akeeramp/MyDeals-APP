@@ -1,0 +1,135 @@
+﻿<div class="col-md-12">
+    <h2>Rules Engine</h2>
+    <!--<div ng-include="'app/layout/gridToolbar.html'" />-->
+</div>
+
+<div class="col-md-12 fixed-height">
+
+    <div id="rulesetlist" class="col-md-2 fixed-height">
+        <div class="affix col-md-2 fixed-height">
+            <h5>
+                <span class="intelicon-numbered-list">  Rule Set List</span>
+                <button ng-click="vm.addRule()" class="qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> New Rule</button>
+                <button ng-click="vm.removeRule()" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
+            </h5>
+            
+            <div id="rulesetlistsearch">
+                <form>
+                    <input id="rulesearchbox" ng-model="searchText" placeholder="Search Rules..">
+                </form>
+            </div>
+            <div id="rulesetlistcontents">
+                <div ng-repeat="ruleset in vm.rsDataSource | filter:searchText">
+                    <div class="ruleset alert alert-info alert-group" ng-click="vm.selectRuleSet(ruleset)" ng-class="{selectedrule: ruleset.Id === vm.selectedRuleSet.Id}">
+                        <!--TODO:betterformattingthanalertinfo-->
+                        {{ruleset.Name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rulebundle" class="col-md-10" ng-show="(vm.selectedRuleSet['Id']!=0)">
+        <uib-accordion close-others=false>
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Set/Item
+                </uib-accordion-heading>
+                <!--TODO:Triggers,Category,SubCategory,etc. need to be drawn from constants table or something-->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div>
+                            Name:<input type="text" ng-model="vm.selectedRuleSet.Name" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            Description:<input type="text" ng-model="vm.selectedRuleSet.Description" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            Trigger: <input type="text" ng-model="vm.selectedRuleSet.Trigger" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            Category: <input type="text" ng-model="vm.selectedRuleSet.Category" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            SubCategory: <input type="text" ng-model="vm.selectedRuleSet.SubCategory" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            Tier:
+                            <select class="custom-select form-control input-sm rule-engine-textbox" ng-model="vm.riDataSource.Tier">
+                                <option value="C#">C#</option>
+                                <option value="HTML/JS">HTML/JS</option>
+                            </select>
+                        </div>
+                        <div>
+                            Order:<input type="text" ng-model="vm.selectedRuleSet.Order" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            <button ng-click="vm.saveRule()" class="pull-right qb-field btn btn-sm btn-success" style="margin-top:2em"><span class="glyphicon glyphicon-plus-sign"></span> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Conditions
+                </uib-accordion-heading>
+                <query-builder style="padding-left:30px" class="" group="vm.conditionData.group" operators="vm.operators" lefttypes="vm.lefttypes" leftvalues="vm.leftvalues" conditions="vm.conditions" righttypes="vm.righttypes" rightvalues="vm.rightvalues">
+                </query-builder>
+            </div>
+
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Passed Tasks
+                </uib-accordion-heading>
+                <div ng-repeat="task in vm.rtPassedDataSource">
+                    <div class="alert alert-info alert-group">
+                        <!--TODO:betterformattingthanalertinfo-->
+                        <button ng-click="vm.removeTask(task,true)" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
+                        TaskId: {{task.Id}} <br />
+                        Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
+                        Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
+                        Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
+                    </div>
+                </div>
+                <button ng-click="vm.addTask(true)" class="pull-right qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Passed Task</button>
+            </div>
+
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Failed Tasks
+                </uib-accordion-heading>
+                <div ng-repeat="task in vm.rtFailedDataSource">
+                    <div class="alert alert-info alert-group">
+                        <!--TODO:betterformattingthanalertinfo-->
+                        <button ng-click="vm.removeTask(task,false)" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
+                        TaskId: {{task.Id}} <br />
+                        Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
+                        Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
+                        Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
+                    </div>
+                </div>
+                <button ng-click="vm.addTask(false)" class="pull-right qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Failed Task</button>
+            </div>
+        </uib-accordion>
+
+    </div>
+</div>
+
+<script>
+    var toggleExpand = function (obj) {
+        $(obj).toggleClass("intelicon-minus-outlined intelicon-plus-outlined")
+    }
+</script>
+
+<style>
+    /*TODO: delete <style>.  ignore this style block in this checkin, leaving in for now because I may use this in the future but am not certain enough to delete it*/
+
+
+
+
+</style>

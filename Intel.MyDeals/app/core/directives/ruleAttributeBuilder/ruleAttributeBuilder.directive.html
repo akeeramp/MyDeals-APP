@@ -1,0 +1,127 @@
+﻿<div class="filterContainer">
+    <div ng-repeat="dataItem in data" class="filterRow">
+        <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
+        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+        <span class="fl " ng-class="{'disabled-dropdown':$first}">
+            <select kendo-drop-down-list
+                    ng-disabled="$first"
+                    k-placeholder="'Select field'"
+                    k-data-text-field="'title'"
+                    k-data-value-field="'field'"
+                    k-ng-model="dataItem.field"
+                    k-value-primitive="true"
+                    k-change="changeField"
+                    k-close="closeField"
+                    k-filter="'contains'"
+                    k-auto-bind="true"
+                    k-data-source="dataItem.source"
+                    class="opUiContainer sm abField"
+                    style="width: 200px;"></select>
+        </span>
+        <span class="fl abOperator" ng-class="{'disabled-dropdown':$first}" ng-hide="dataItem.field === ''">
+            <select kendo-drop-down-list
+                    ng-disabled="$first"
+                    k-data-text-field="'label'"
+                    k-data-value-field="'operator'"
+                    k-ng-model="dataItem.operator"
+                    k-value-primitive="true"
+                    k-change="changeOper"
+                    k-auto-bind="true"
+                    k-data-source="dataItem.operatorDataSource"
+                    class="opUiContainer sm"
+                    style="width: 150px; margin: 0 15px;"></select>
+        </span>
+        <span class="fl abValue" ng-hide="dataItem.operator === ''"></span>
+        <div class="clearboth"></div>
+    </div>
+
+</div>
+
+
+<style>
+	#ruleDropDownList_listbox li {float:left}
+	.textTitle{ float: left;width: 100px;white-space: nowrap; overflow: hidden; padding-top: 1px;   text-overflow: ellipsis;}
+	.rule-icon {font-size:14px; padding:5px; float:left}
+	.delete-rule-icon {font-size:12px; padding:5px;float: right}
+	.rule-icon:hover {cursor:pointer}
+	.delete-rule-icon:hover {cursor:pointer; color:red !important}
+	.rule-icon-selected {color:#0071C5 !important}
+	#ruleDropDownList_listbox{min-width:165px !important}
+	.k-animation-container UL{min-width:165px !important}
+    .filterContainer {
+        max-height: 250px;
+        overflow: auto;
+    }
+     .filterRow {
+         margin-bottom: 7px;
+     }
+    .filterRow .k-dropdown {
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+    }
+
+    .icnBtn {
+        border-radius: 4px;
+        width: 24px;
+        padding: 2px 5px;
+        margin: 2px 12px 2px 0;
+        cursor: pointer;
+    }
+    .icnBtn i {
+        color: #ffffff;
+    }
+    .icnSkyBtn {
+        background-color: #00AEEF;
+    }
+    .icnSkyBtn:hover {
+        background-color: #0071C5;
+    }
+    .icnGryBtn {
+        background-color: #bbbbbb;
+    }
+    .icnGryBtn:hover {
+        background-color: #cccccc;
+    }
+
+    .k-window-titlebar.k-dialog-titlebar.k-header {
+        display: none;
+    }
+
+    .btn-def {
+        margin: 0 0 0 15px;
+    }
+
+    .h5-small {
+        font-size: 12px;
+        color: #444444;
+        font-weight: 200;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .curRule {
+        color: #0071C5;
+        margin-left: 10px;
+    }
+
+    .icnSky {
+        cursor: pointer;
+        color: #00AEEF;
+        margin-left: 8px;
+    }
+
+    .menu-container li a {
+        cursor: pointer;
+    }
+
+    .sm-help {
+        font-size: 11px;
+        color: #666666;
+        line-height: 1.1em;
+    }
+
+    .sm-help I {
+        color: #FFA300;
+    }
+
+</style>

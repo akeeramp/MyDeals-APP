@@ -32,6 +32,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_FRST_NM = DB.GetReaderOrdinal(rdr, "FRST_NM");
                     int IDX_IDSID = DB.GetReaderOrdinal(rdr, "IDSID");
                     int IDX_LST_NM = DB.GetReaderOrdinal(rdr, "LST_NM");
+                    int IDX_NAME = DB.GetReaderOrdinal(rdr, "NAME");
                     int IDX_MI = DB.GetReaderOrdinal(rdr, "MI");
                     int IDX_ROLE_NM = DB.GetReaderOrdinal(rdr, "ROLE_NM");
                     int IDX_USR_ACTV_IND = DB.GetReaderOrdinal(rdr, "USR_ACTV_IND");
@@ -45,6 +46,7 @@ namespace Intel.MyDeals.DataLibrary
                             FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
                             IDSID = (IDX_IDSID < 0 || rdr.IsDBNull(IDX_IDSID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IDSID),
                             LST_NM = (IDX_LST_NM < 0 || rdr.IsDBNull(IDX_LST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_NM),
+                            NAME = (IDX_NAME < 0 || rdr.IsDBNull(IDX_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAME),
                             MI = (IDX_MI < 0 || rdr.IsDBNull(IDX_MI)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MI),
                             ROLE_NM = (IDX_ROLE_NM < 0 || rdr.IsDBNull(IDX_ROLE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_NM),
                             USR_ACTV_IND = (IDX_USR_ACTV_IND < 0 || rdr.IsDBNull(IDX_USR_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_USR_ACTV_IND)
@@ -91,6 +93,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_FRST_NM = DB.GetReaderOrdinal(rdr, "FRST_NM");
                     int IDX_IDSID = DB.GetReaderOrdinal(rdr, "IDSID");
                     int IDX_IS_ADMIN = DB.GetReaderOrdinal(rdr, "IS_ADMIN");
+                    int IDX_IS_CUST_ADMIN = DB.GetReaderOrdinal(rdr, "IS_CUST_ADMIN");
                     int IDX_IS_DEVELOPER = DB.GetReaderOrdinal(rdr, "IS_DEVELOPER");
                     int IDX_IS_FINANCE_ADMIN = DB.GetReaderOrdinal(rdr, "IS_FINANCE_ADMIN");
                     int IDX_IS_SUPER = DB.GetReaderOrdinal(rdr, "IS_SUPER");
@@ -112,6 +115,7 @@ namespace Intel.MyDeals.DataLibrary
                             FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
                             IDSID = (IDX_IDSID < 0 || rdr.IsDBNull(IDX_IDSID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IDSID),
                             IS_ADMIN = (IDX_IS_ADMIN < 0 || rdr.IsDBNull(IDX_IS_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_ADMIN),
+                            IS_CUST_ADMIN = (IDX_IS_CUST_ADMIN < 0 || rdr.IsDBNull(IDX_IS_CUST_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_CUST_ADMIN),
                             IS_DEVELOPER = (IDX_IS_DEVELOPER < 0 || rdr.IsDBNull(IDX_IS_DEVELOPER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_DEVELOPER),
                             IS_FINANCE_ADMIN = (IDX_IS_FINANCE_ADMIN < 0 || rdr.IsDBNull(IDX_IS_FINANCE_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_FINANCE_ADMIN),
                             IS_SUPER = (IDX_IS_SUPER < 0 || rdr.IsDBNull(IDX_IS_SUPER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_SUPER),
@@ -221,6 +225,7 @@ namespace Intel.MyDeals.DataLibrary
             opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] = tempUserVitalsRole.First().IS_SUPER == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] = tempUserVitalsRole.First().IS_TESTER == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = tempUserVitalsRole.First().IS_DEVELOPER == 1 ? true : false;
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_CUSTOMERADMIN] = tempUserVitalsRole.First().IS_CUST_ADMIN == 1 ? true : false;
 
             opUserToken.Role = new OpRoleType
             {

@@ -60,6 +60,7 @@
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />
     <Compile Include="JMS\IJmsDataLib.cs" />
+    <Compile Include="MyDealsManual\IMyDealsManualDataLib.cs" />
     <Compile Include="Notifications\INotificationsDataLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterDataLib.cs" />
     <Compile Include="Reporting\IReportingDataLib.cs" />

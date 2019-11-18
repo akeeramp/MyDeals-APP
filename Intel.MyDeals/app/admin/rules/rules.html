@@ -1,135 +1,202 @@
-﻿<div class="col-md-12">
-    <h2>Rules Engine</h2>
-    <!--<div ng-include="'app/layout/gridToolbar.html'" />-->
-</div>
-
-<div class="col-md-12 fixed-height">
-
-    <div id="rulesetlist" class="col-md-2 fixed-height">
-        <div class="affix col-md-2 fixed-height">
-            <h5>
-                <span class="intelicon-numbered-list">  Rule Set List</span>
-                <button ng-click="vm.addRule()" class="qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> New Rule</button>
-                <button ng-click="vm.removeRule()" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
-            </h5>
-            
-            <div id="rulesetlistsearch">
-                <form>
-                    <input id="rulesearchbox" ng-model="searchText" placeholder="Search Rules..">
-                </form>
+﻿<form style="margin-top:15px" class="form-horizontal">
+    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
+        <div class="k-header k-grid-toolbar ng-scope">
+            <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
+                <span class="k-icon k-i-plus"></span>Add New Rule
+            </a>
+        </div>
+        <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
+    </div>
+    <div ng-if="vm.isEditmode">
+        <div ng-show="false" class="form-group row">
+            <label class="control-label col-md-2">Rule:</label>
+            <div class="col-md-5">
+                <select class="form-control md"
+                        kendo-combo-box
+                        k-options="vm.ruleOptions"
+                        ng-model="vm.rule.Id"
+                        style="width:100%"></select>
             </div>
-            <div id="rulesetlistcontents">
-                <div ng-repeat="ruleset in vm.rsDataSource | filter:searchText">
-                    <div class="ruleset alert alert-info alert-group" ng-click="vm.selectRuleSet(ruleset)" ng-class="{selectedrule: ruleset.Id === vm.selectedRuleSet.Id}">
-                        <!--TODO:betterformattingthanalertinfo-->
-                        {{ruleset.Name}}
-                    </div>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Name:</label>
+            <div class="col-md-5">
+                <input class="form-control md"
+                       type="text"
+                       ng-model="vm.rule.Name"
+                       style="width:100%">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Owner:</label>
+            <div class="col-md-5">
+                <select kendo-combo-box
+                        k-options="vm.ownerOptions"
+                        ng-model="vm.rule.OwnerId"
+                        style="width:100%"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Status:</label>
+            <div class="col-md-1">
+                <toggle class="fl toggle-accept"
+                        ng-model="vm.rule.IsActive"
+                        on="Active"
+                        off="Inactive"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"></toggle>
+            </div>
+            <label class="control-label col-md-1">Stage:</label>
+            <div class="col-md-1" style="margin-left:-15px;">
+                <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
+                        ng-model="vm.rule.RuleStage"
+                        on="Approved"
+                        off="Pending"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"></toggle>
+            </div>
+            <label class="control-label col-md-1">Automation:</label>
+            <div class="col-md-1" style="margin-left:-15px;">
+                <toggle class="fl toggle-accept"
+                        ng-model="vm.rule.IsAutomationIncluded"
+                        on="Include"
+                        off="Exclude"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"></toggle>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Rule Start Date:</label>
+            <div class="col-md-2">
+                <input kendo-date-picker
+                       placeholder="From date"
+                       k-ng-model="vm.rule.StartDate"
+                       style="width: 100%;" />
+            </div>
+            <label class="control-label col-md-1">End Date:</label>
+            <div class="col-md-2">
+                <input kendo-date-picker
+                       placeholder="To date"
+                       ng-model="vm.rule.EndDate"
+                       style="width: 100%;" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Notes:</label>
+            <div class="col-md-5">
+                <textarea type="textarea" rows="5"
+                          ng-model="vm.rule.Notes"
+                          style="width:100%" />
+            </div>
+        </div>
+        <div ng-if="vm.rule.Id > 0" class="form-group row" style="margin:0px !important;margin-left:-10px !important;">
+            <label class="control-label col-md-2">&nbsp;</label>
+            <div class="col-md-5" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
+                <span>Last modified by </span>
+                <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
+                <span> on </span>
+                <span style="color:orangered">{{vm.rule.ChangeDateTime}}</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Criteria:</label>
+            <div class="col-md-6">
+                <div rule-attribute-builder
+                     grid-id="'attributeGrid'"
+                     operator-settings="operatorSettings"
+                     attribute-settings="attributeSettings"
+                     criteria="vm.rule.Criteria"
+                     custom-settings=""></div>
+            </div>
+        </div>
+        <div ng-show="false" class="form-group row" style="margin-bottom: 50px;">
+            <label class="control-label col-md-2">Product Criteria:</label>
+            <div class="col-md-5">
+                <kendo-grid id="productCriteria" options="vm.ProductCriteriaOptions" k-auto-bind="true" k-data-source="vm.ProductCriteria" style="height:200px !important; max-height:200px !important;" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
+            </div>
+        </div>
+        <div class="form-group row action_btns">
+            <label class="control-label col-md-2"></label>
+            <div class="col-md-6">
+                <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save</button>
+                <button ng-click="vm.cancel()" class="btn btn-secondary">Cancel</button>
+                <button ng-click="vm.saveRule(true)" class="btn btn-secondary">Save & Send Email</button>
             </div>
         </div>
     </div>
-
-    <div id="rulebundle" class="col-md-10" ng-show="(vm.selectedRuleSet['Id']!=0)">
-        <uib-accordion close-others=false>
-            <div uib-accordion-group class="panel-default card-header" is-open=true>
-                <uib-accordion-heading>
-                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Set/Item
-                </uib-accordion-heading>
-                <!--TODO:Triggers,Category,SubCategory,etc. need to be drawn from constants table or something-->
-                <div class="row">
-                    <div class="col-md-4">
-                        <div>
-                            Name:<input type="text" ng-model="vm.selectedRuleSet.Name" class="form-control input-sm rule-engine-textbox" />
-                        </div>
-                        <div>
-                            Description:<input type="text" ng-model="vm.selectedRuleSet.Description" class="form-control input-sm rule-engine-textbox" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div>
-                            Trigger: <input type="text" ng-model="vm.selectedRuleSet.Trigger" class="form-control input-sm rule-engine-textbox" />
-                        </div>
-                        <div>
-                            Category: <input type="text" ng-model="vm.selectedRuleSet.Category" class="form-control input-sm rule-engine-textbox" />
-                        </div>
-                        <div>
-                            SubCategory: <input type="text" ng-model="vm.selectedRuleSet.SubCategory" class="form-control input-sm rule-engine-textbox" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div>
-                            Tier:
-                            <select class="custom-select form-control input-sm rule-engine-textbox" ng-model="vm.riDataSource.Tier">
-                                <option value="C#">C#</option>
-                                <option value="HTML/JS">HTML/JS</option>
-                            </select>
-                        </div>
-                        <div>
-                            Order:<input type="text" ng-model="vm.selectedRuleSet.Order" class="form-control input-sm rule-engine-textbox" />
-                        </div>
-                        <div>
-                            <button ng-click="vm.saveRule()" class="pull-right qb-field btn btn-sm btn-success" style="margin-top:2em"><span class="glyphicon glyphicon-plus-sign"></span> Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div uib-accordion-group class="panel-default card-header" is-open=true>
-                <uib-accordion-heading>
-                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Conditions
-                </uib-accordion-heading>
-                <query-builder style="padding-left:30px" class="" group="vm.conditionData.group" operators="vm.operators" lefttypes="vm.lefttypes" leftvalues="vm.leftvalues" conditions="vm.conditions" righttypes="vm.righttypes" rightvalues="vm.rightvalues">
-                </query-builder>
-            </div>
-
-            <div uib-accordion-group class="panel-default card-header" is-open=true>
-                <uib-accordion-heading>
-                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Passed Tasks
-                </uib-accordion-heading>
-                <div ng-repeat="task in vm.rtPassedDataSource">
-                    <div class="alert alert-info alert-group">
-                        <!--TODO:betterformattingthanalertinfo-->
-                        <button ng-click="vm.removeTask(task,true)" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
-                        TaskId: {{task.Id}} <br />
-                        Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
-                        Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
-                        Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
-                    </div>
-                </div>
-                <button ng-click="vm.addTask(true)" class="pull-right qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Passed Task</button>
-            </div>
-
-            <div uib-accordion-group class="panel-default card-header" is-open=true>
-                <uib-accordion-heading>
-                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Failed Tasks
-                </uib-accordion-heading>
-                <div ng-repeat="task in vm.rtFailedDataSource">
-                    <div class="alert alert-info alert-group">
-                        <!--TODO:betterformattingthanalertinfo-->
-                        <button ng-click="vm.removeTask(task,false)" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
-                        TaskId: {{task.Id}} <br />
-                        Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
-                        Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
-                        Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
-                    </div>
-                </div>
-                <button ng-click="vm.addTask(false)" class="pull-right qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Failed Task</button>
-            </div>
-        </uib-accordion>
-
-    </div>
-</div>
-
-<script>
-    var toggleExpand = function (obj) {
-        $(obj).toggleClass("intelicon-minus-outlined intelicon-plus-outlined")
-    }
-</script>
-
+</form>
 <style>
-    /*TODO: delete <style>.  ignore this style block in this checkin, leaving in for now because I may use this in the future but am not certain enough to delete it*/
+    #productCriteria tbody .k-alt {
+        background-color: white !important;
+        border-right-color: lightgray !important;
+        border-right-width: 1px !important;
+        border-bottom-style: solid !important;
+    }
 
+    #productCriteria .k-grid-content {
+        height: 100% !important;
+    }
 
+    .k-button {
+        color: #fff;
+        background-color: #0071c5;
+        border-color: #0071c5;
+        box-shadow: none;
+    }
 
+        .k-button:hover {
+            background-color: #00aeef;
+            border-color: #00aeef;
+            color: #fff;
+            box-shadow: none;
+        }
 
+    .tmpltItem {
+        width: 100%;
+    }
+
+    .tmpltIcn {
+        width: 35px;
+    }
+
+        .tmpltIcn i {
+            font-size: 26px;
+        }
+
+    .tmpltContract {
+    }
+
+    .tmpltRole {
+        font-size: 12px;
+    }
+
+    .tmpltPrimary {
+        font-size: 14px;
+        line-height: 1.1em;
+    }
+
+    .tmpltSecondary {
+        font-size: 12px;
+        line-height: 1.1em;
+        opacity: 0.6;
+    }
+
+    .toggle {
+        width: 120px !important;
+    }
+
+    .rulesGidIcon {
+        font-size: 20px;
+        margin: 3px;
+        color: #aaa;
+    }
+
+    .action_btns {
+        margin-bottom: 20px;
+    }
 </style>
+<script>
+    $(document).ready(function () {
+        $('#bodyContent').css('overflow', 'auto');
+    });
+</script>

@@ -73,6 +73,7 @@
     <Compile Include="Employees\IEmployeesLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
+    <Compile Include="ManualEngine\IManualEngineLib.cs" />
     <Compile Include="Notifications\INotificationsLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
     <Compile Include="Reporting\IReportingLib.cs" />

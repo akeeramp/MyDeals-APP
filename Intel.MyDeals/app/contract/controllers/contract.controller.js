@@ -3544,7 +3544,8 @@
         }
 
         $scope.delPtrs = function (delIds) {
-            $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);
+            //$scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+            $scope.saveEntireContractBase($state.current.name, true, true, null, null, delIds); // DE55623, force publish as well, used to pass ($state.current.name, false, false, null, null, delIds)
         }
 
         $scope.saveEntireContract = function (deletePtr, forceValidation, forcePublish) {

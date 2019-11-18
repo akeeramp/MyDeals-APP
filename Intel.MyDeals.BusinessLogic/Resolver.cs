@@ -30,6 +30,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
             registerService.RegisterType<IProductCostTestLib, ProductCostTestLib>();
             registerService.RegisterType<IRuleEngineLib, RuleEngineLib>();
+            registerService.RegisterType<IManualEngineLib, ManualEngineLib>();
             registerService.RegisterType<ISearchLib, SearchLib>();
             registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<ITendersLib, TendersLib>();

@@ -105,6 +105,7 @@
     <Compile Include="Employees\EmployeeHelpers.cs" />
     <Compile Include="Files\FilesLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
+    <Compile Include="ManualEngine\ManualEngineLib.cs" />
     <Compile Include="NotificationsLib\NotificationsLib.cs" />
     <Compile Include="OpDataCollectors\OpDataCollectorLib.cs" />
     <Compile Include="BusinessLogic.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Reporting\ReportingLib.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="Rule Engine\RuleEngineLib.cs" />
+    <Compile Include="Rule Engine\RuleExpression.cs" />
     <Compile Include="Search\SearchLib.cs" />
     <Compile Include="Search\SearchTools.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />

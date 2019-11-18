@@ -1688,11 +1688,10 @@ namespace Intel.MyDeals.BusinessRules
                 }
 
                 // Parse the decimal values
-                bool isEndDateANumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out endVol);
-                bool isStrtDateANumber = Decimal.TryParse(relatedStartVol, out startVol);
+                bool isEndVolANumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out endVol);
 
                 // End Vol is unlimited
-                if (!isEndDateANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                if (!isEndVolANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
                 }
@@ -1701,6 +1700,28 @@ namespace Intel.MyDeals.BusinessRules
                 if (startVol >= endVol)
                 {
                     AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", tier);
+                }
+            }
+        }
+
+        public static void ValidateTierNumber(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IEnumerable<IOpDataElement> tierNbrAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.TIER_NBR);
+            int atrbMtxSid = Attributes.ALL_TIER_NM.DIM_SID;
+
+            foreach (IOpDataElement atrb in tierNbrAtrbs)
+            {
+                int tier = atrb.DimKey.FirstOrDefault(mtx => mtx.AtrbID == atrbMtxSid).AtrbItemId;  // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+
+                decimal myTierNbr = 0;
+                bool tierNumberValue = Decimal.TryParse(atrb.AtrbValue.ToString(), out myTierNbr); // Grab the expected dimensional value because TIER_NBR should match
+                if (tierNumberValue && tier != myTierNbr)
+                {
+                    // Note that we could just fix the value here.  If we want a message, go back to atrbwithvalidation to attach message there, but this is cleaner.
+                    atrb.AtrbValue = tier;
                 }
             }
         }

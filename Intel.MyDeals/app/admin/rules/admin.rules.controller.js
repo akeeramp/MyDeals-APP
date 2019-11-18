@@ -7,244 +7,616 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$uibModal', 'ruleService', '$scope', 'logger']
+    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants']
 
-    function RuleController($uibModal, ruleService, $scope, logger) {
+    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants) {
         var vm = this;
-        
-        // Functions
-        //vm.addItem = addItem;
-        //vm.updateItem = updateItem;
-        //vm.deleteItem = deleteItem
-        
-        //vm.rsOnChange = rsOnChange; //relic of kendo grid, DELETE ME
+        vm.ruleId = 0;
+        vm.isEditmode = false;
+        vm.Rules = [];
+        vm.rule = {};
+        vm.RuleConfig = [];
 
-        // Variables
-        vm.selectedItem = null;
-        vm.selectedRuleSet = {Id: 0};
-        //vm.isButtonDisabled = true;
+        $scope.init = function () {
+            ruleService.getPriceRulesConfig().then(function (response) {
+                vm.RuleConfig = response.data;
+            }, function (response) {
+                logger.error("Operation failed");
+            });
 
-        vm.rsDataSource = [];
-        vm.riDataSource = {};
-        vm.rcDataSource = [];
-        vm.rtPassedDataSource = [];
-        vm.rtFailedDataSource = [];
-
-        vm.conditionData = [];
-
-        getRSDataSource(); //TODO: put this call in an init section?
-
-        //GET ruleset data
-        function getRSDataSource() {
-            ruleService.getRuleSets()
-                        .then(function (response) {
-                            vm.rsDataSource = response.data;
-                        }, function (response) {
-                            logger.error("Unable to get RuleSets.", response, response.statusText);
-                        });
+            vm.GetRules(0, "GET_RULES");
         }
 
-        //promise for GET ruleitem data
-        function getRIDataSource() {
-            return new Promise(function(resolve, reject) {
-                ruleService.getRuleItemById(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.riDataSource = response.data;
-                            resolve();
-                        }, function (response) {
-                            logger.error("Unable to get Rule Item.", response, response.statusText);
-                            reject();
-                        });
-            })
+        $scope.operatorSettings = {
+            "operators": [
+                {
+                    "operator": "LIKE",
+                    "operCode": "contains",
+                    "label": "contains"
+                },
+                {
+                    "operator": "=",
+                    "operCode": "eq",
+                    "label": "equal to"
+                },
+                {
+                    "operator": "IN",
+                    "operCode": "in",
+                    "label": "in"
+                },
+                {
+                    "operator": "!=",
+                    "operCode": "neq",
+                    "label": "not equal to"
+                },
+                {
+                    "operator": "<",
+                    "operCode": "lt",
+                    "label": "less than"
+                },
+                {
+                    "operator": "<=",
+                    "operCode": "lte",
+                    "label": "less than or equal to"
+                },
+                {
+                    "operator": ">",
+                    "operCode": "gt",
+                    "label": "greater than"
+                },
+                {
+                    "operator": ">=",
+                    "operCode": "gte",
+                    "label": "greater than or equal to"
+                }
+            ],
+            "types": [
+                {
+                    "type": "string",
+                    "uiType": "textbox"
+                },
+                {
+                    "type": "autocomplete",
+                    "uiType": "textbox"
+                },
+                {
+                    "type": "number",
+                    "uiType": "numeric"
+                },
+                {
+                    "type": "numericOrPercentage",
+                    "uiType": "numeric"
+                },
+                {
+                    "type": "money",
+                    "uiType": "numeric"
+                },
+                {
+                    "type": "date",
+                    "uiType": "datepicker"
+                },
+                {
+                    "type": "list",
+                    "uiType": "combobox"
+                },
+                {
+                    "type": "bool",
+                    "uiType": "checkbox"
+                },
+                {
+                    "type": "singleselect",
+                    "uiType": "combobox"
+                }
+            ],
+            "types2operator": [
+                {
+                    "type": "number",
+                    "operator": [
+                        "=",
+                        "IN",
+                        "!=",
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                    ]
+                },
+                {
+                    "type": "numericOrPercentage",
+                    "operator": [
+                        "=",
+                        "IN",
+                        "!=",
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                    ],
+                },
+                {
+                    "type": "money",
+                    "operator": [
+                        "=",
+                        "IN",
+                        "!=",
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                    ]
+                },
+                {
+                    "type": "date",
+                    "operator": [
+                        "=",
+                        "!=",
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                    ]
+                },
+                {
+                    "type": "string",
+                    "operator": [
+                        "LIKE",
+                        "=",
+                        "!="
+                    ]
+                },
+                {
+                    "type": "autocomplete",
+                    "operator": [
+                        "LIKE",
+                        "=",
+                        "!="
+                    ]
+                },
+                {
+                    "type": "list",
+                    "operator": [
+                        "LIKE",
+                        "="
+                    ]
+                },
+                {
+                    "type": "bool",
+                    "operator": [
+                        "=",
+                        "!="
+                    ]
+                },
+                {
+                    "type": "singleselect",
+                    "operator": [
+                        "="
+                    ]
+                }
+            ]
         };
 
-        //promise for GET rulecondition data
-        function getRCDataSource() {
-            return new Promise(function(resolve, reject) {
-                ruleService.getRuleConditionsByRuleId(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.rcDataSource = response.data;
-                            resolve();
-                        }, function (response) {
-                            logger.error("Unable to get Rule Conditions.", response, response.statusText);
-                            reject();
-                        });
-            })
-        };
-
-        //GET ruletask data for passed condition
-        function getPassedRTDataSource() {
-            ruleService.getPassedRuleTasksByRuleId(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.rtPassedDataSource = response.data;
-                        }, function (response) {
-                            logger.error("Unable to get Rule Tasks.", response, response.statusText);
-                        });
-        }
-
-        //GET ruletask data for failed condition
-        function getFailedRTDataSource() {
-            ruleService.getFailedRuleTasksByRuleId(vm.selectedRuleSet["Id"])
-                        .then(function (response) {
-                            vm.rtFailedDataSource = response.data;
-                        }, function (response) {
-                            logger.error("Unable to get Rule Tasks.", response, response.statusText);
-                        });
-        }
-
-
-        //triggered when user selects a ruleset
-        vm.selectRuleSet = function(ruleset) {
-            vm.selectedRuleSet = ruleset;
-            getPassedRTDataSource();
-            getFailedRTDataSource();
-
-            Promise.all([getRIDataSource(),getRCDataSource()]).then(function(){
-                createConditionStructure();
-            })
-        }
-
-        //used when RuleItem/RuleCondition GET promises are resolved, populates conditionData which is used by the queryBuilder directive
-        function createConditionStructure() {
-            var rootConditionObject;
-            if (vm.riDataSource == null) {
-                //TODO: do this on c# side so we do not hard code the structure into js file
-                vm.riDataSource = {
-                    Id: -1,
-                    RuleConditionId: -1,
-                    RulePassedTaskIds: [],
-                    RuleFailedTaskIds: [],
-                    Tier: "C#"
-                }
-                //TODO: do this on c# side so we do not hard code the structure into js file
-                rootConditionObject = {
-                    Id: -1,
-                    ConditionType: "AND",
-                    Operator: "",
-                    LeftExpressionType: "",
-                    LeftExpressionValue: "",
-                    RightExpressionType: "",
-                    RightExpressionValue: "",
-                    RuleId: -1,
-                    ParentConditionId: 0,
-                    ChildConditionIds: []
-                };
-            } else {
-                rootConditionObject = getCondition(vm.riDataSource.RuleConditionId);
-            }
-            vm.conditionData = conditionToJson(rootConditionObject);
-        }
-
-        //creates json for queryBuilder to turn into html
-        function conditionToJson(condition) {
-            var retJson = {};
-            if (condition.ConditionType == "AND" || condition.ConditionType == "OR") {
-                retJson.group = {
-                    operator: condition.ConditionType,
-                    rules: []
-                }
-                if (condition.ChildConditionIds != null && condition.ChildConditionIds.length != 0) {
-                    //for each child, push into rules the recursive call
-                    for (var i = 0; i<condition.ChildConditionIds.length; i++) {
-                        var childCondition = getCondition(condition.ChildConditionIds[i]);
-                        retJson.group.rules.push(conditionToJson(childCondition))
+        vm.ruleOptions = {
+            placeholder: "Select a Rule ...",
+            dataTextField: "Name",
+            dataValueField: "Id",
+            autoBind: false,
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: function (e) {
+                        e.success(vm.Rules);
                     }
                 }
-            } else {
-                retJson.lefttype = condition.LeftExpressionType;
-                retJson.leftvalue = condition.LeftExpressionValue;
-                retJson.condition = condition.Operator;
-                retJson.righttype = condition.RightExpressionType;
-                retJson.rightvalue = condition.RightExpressionValue;
             }
-            return retJson;
-        }
+        };
 
-        //retrieves condition object given condition id
-        function getCondition(conditionId) {
-            //assumes this is only called after cm.rcDataSource has been populated
-            for (var i = 0; i<vm.rcDataSource.length; i++) {
-                if (vm.rcDataSource[i].Id == conditionId) {
-                    return vm.rcDataSource[i];
+        vm.ownerDs = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/api/Employees/GetUsrProfileRole",
+                    dataType: "json"
                 }
             }
-        }
+        });
 
-        vm.removeTask = function(task, successtype) {
-            var reference = getTaskByType(successtype);
-            var index = reference.indexOf(task);
-            if (index > -1) {
-                reference.splice(index, 1);
+        vm.ownerOptions = {
+            placeholder: "Select email address...",
+            dataTextField: "NAME",
+            dataValueField: "EMP_WWID",
+            valueTemplate: '<div class="tmpltItem">' +
+            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+            '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+            '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
+            '<div class="clearboth"></div>' +
+            '</div>',
+            template: '<div class="tmpltItem">' +
+            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+            '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+            '<div class="clearboth"></div>' +
+            '</div>',
+            footerTemplate: 'Total #: instance.dataSource.total() # items found',
+            valuePrimitive: true,
+            filter: "contains",
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataSource: vm.ownerDs,
+            change: function (e) {
+                vm.rule.OwnerId = this.value();
             }
-        }
+        };
 
-        vm.addTask = function(successtype) {
-            var reference = getTaskByType(successtype);
-            //TODO: do this on c# side so we do not hard code the structure into js file
-            reference.push({
-                Id: -1,
-                Function: '',
-                Params: '',
-                RuleId: vm.riDataSource.Id,
-                Order: 0,
-                SuccessType : successtype
-            })
-        }
-
-        vm.addRule = function () {
-            resetData();
-            //TODO: do this on c# side so we do not hard code the structure into js file
-            vm.rsDataSource.push({
-                Id: -1,
-                Name: 'New Rule',
-                Description: 'Add Description',
-                Trigger: '',
-                Category: '',
-                SubCategory: '',
-                RuleId: -1,
-                Order: 0
-            })
-
-            vm.selectRuleSet(vm.rsDataSource[vm.rsDataSource.length -1]);
-        }
-
-        vm.removeRule = function () {
-            var index = vm.rsDataSource.indexOf(vm.selectedRuleSet);
-            if (index > -1) {
-                vm.rsDataSource.splice(index, 1);
+        $scope.attributeSettings = [
+            {
+                field: "CRE_EMP_NAME",
+                title: "Created by name",
+                type: "singleselect",
+                width: 150.0,
+                lookupText: "NAME",
+                lookupValue: "NAME",
+                lookupUrl: "/api/Employees/GetUsrProfileRole"
+            },
+            {
+                field: "DC_ID",
+                title: "Deal #",
+                type: "number",
+                width: 150
+            },
+            {
+                field: "OBJ_SET_TYPE_CD",
+                title: "Deal Type",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "ECAP" }]
+            },
+            {
+                field: "CUST_NM",
+                title: "Customer",
+                type: "list",
+                width: 150.0,
+                lookupText: "CUST_NM",
+                lookupValue: "CUST_NM",
+                lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
+            },
+            {
+                field: "END_CUSTOMER_RETAIL",
+                title: "End Customer",
+                type: "string",
+                width: 150
+            },
+            {
+                field: "GEO_COMBINED",
+                title: "Customer Geo",
+                type: "list",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+            },
+            {
+                field: "PRODUCT_FILTER",
+                title: "Product",
+                type: "string",
+                width: 150,
+                dimKey: 20
+            },
+            {
+                field: "CUST_TYPE",
+                title: "Customer Type",
+                type: "string",
+                width: 150
+            },
+            {
+                field: "OP_CD",
+                title: "Op Code",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "HJ" }, { Value: "HE" }]
+            },
+            {
+                field: "PRD_DIV",
+                title: "Product Division",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "ND" }]
+            },
+            {
+                field: "PRODUCT_CATEGORIES",
+                title: "Product Verticals",
+                type: "string",
+                width: 150
+            },
+            {
+                field: "SERVER_DEAL_TYPE",
+                title: "Server Deal Type",
+                type: "singleselect",
+                width: 150,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
+            },
+            {
+                field: "MRKT_SEG",
+                title: "Market Segment",
+                type: "list",
+                width: 150,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
+            },
+            {
+                field: "PAYOUT_BASED_ON",
+                title: "Payout Based On",
+                type: "singleselect",
+                width: 150,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
+            },
+            {
+                field: "COMP_SKU",
+                title: "Meet Comp Sku",
+                type: "string",
+                width: 150
+            },
+            {
+                field: "ECAP_PRICE",
+                title: "ECAP (Price)",
+                type: "money",
+                width: 150,
+                dimKey: 20,
+                format: "{0:c}"
+            },
+            {
+                field: "VOLUME",
+                title: "Ceiling Volume",
+                type: "number",
+                width: 150
+            },
+            {
+                field: "VOLUME_INC",
+                title: "Ceiling Volume Increase",
+                type: "numericOrPercentage",
+                width: 150
+            },
+            {
+                field: "END_DT",
+                title: "End Date",
+                type: "date",
+                template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
+                width: 150
+            },
+            {
+                field: "BLKT_DISC",
+                title: "Blanket Discount",
+                type: "numericOrPercentage",
+                width: 150
+            }, {
+                field: "HAS_TRCK",
+                title: "Has Tracker",
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "Yes" }, { Value: "No" }]
             }
-            vm.selectedRuleSet = { Id: 0 };
+        ];
 
-            resetData();
-            //TODO: need to properly DELETE relevant rule item/condition/tasks as well
+        vm.ProductCriteria = [{ "PRD_NM": "test product", "ECAP_PRICE": "10" }];
+
+        vm.ProductCriteriaOptions = {
+            scrollable: true,
+            editable: true,
+            width: 200,
+            columns: [
+                { field: "PRD_NM", title: "Product Name", width: "65%", filterable: { multi: false, search: false } },
+                { field: "ECAP_PRICE", title: "ECAP", filterable: { multi: false, search: false } },
+            ],
+            dataBound: function (e) {
+                var rowCount = this.dataSource.view().length;  // only get count for current page
+                if (rowCount < 5) {
+                    for (var i = 1; i < 5 - rowCount; i++) {
+                        this.addRow();
+                    }
+                }
+            },
+            save: function (e) {
+                vm.ProductCriteria = this.dataSource.view();
+            },
+        };
+
+        vm.editRule = function (id) {
+            vm.GetRules(id, "GET_BY_RULE_ID");
         }
 
-        var resetData = function () {
-            vm.riDataSource = {};
-            vm.rcDataSource = [];
-            vm.rtPassedDataSource = [];
-            vm.rtFailedDataSource = [];
-        }
-
-        var getTaskByType = function(successtype) {
-            if (successtype == true) {
-                return vm.rtPassedDataSource;
-            } else {
-                return vm.rtFailedDataSource;
+        vm.copyRule = function (id) {
+            var priceRuleCriteria = {
+                Id: id
             }
+            vm.RuleActions(priceRuleCriteria, "COPY", false);
         }
-        
 
-        ////TODO: save update delete
-        //function addItem() {
-        //    vm.isButtonDisabled = true;
-        //    $scope.grid.addRow();
-        //}
-        //function updateItem() {
-        //    $scope.grid.editRow(vm.selectedItem);
-        //}
-        //function deleteItem() {
-        //    $scope.grid.removeRow(vm.selectedItem);
-        //}
+        vm.RuleActions = function (priceRuleCriteria, actionName, isWithEmail) {
+            ruleService.savePriceRule(priceRuleCriteria, actionName, isWithEmail).then(function (response) {
+                vm.Rules = response.data;
+                vm.isEditmode = false;
+                vm.dataSource.read();
+                logger.success("Operation success");
+            }, function (response) {
+                logger.error("Operation failed");
+            });
+        };
+
+        vm.GetRules = function (id, actionName) {
+            ruleService.getPriceRules(id, actionName).then(function (response) {
+                switch (actionName) {
+                    case "GET_BY_RULE_ID": {
+                        vm.rule = response.data[0];
+                        for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
+                            if (vm.rule.Criteria[idx].type == "list") {
+                                vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].multiValue;
+                            }
+                        }
+                        vm.isEditmode = true;
+                    } break;
+                    default: {
+                        vm.Rules = response.data;
+                        vm.isEditmode = false;
+                        vm.dataSource.read();
+                    } break;
+                }
+            }, function (response) {
+                logger.error("Operation failed");
+            });
+        };
+
+        vm.deleteRule = function (id) {
+            kendo.confirm("Are you sure wants to delete?").then(function () {
+                var priceRuleCriteria = {
+                    Id: id
+                }
+                vm.RuleActions(priceRuleCriteria, "DELETE", false);
+            });
+        };
+
+        vm.dataSource = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.Rules);
+                },
+                update: function (e) {
+                },
+                destroy: function (e) {
+                    var modalOptions = {
+                        closeButtonText: 'Cancel',
+                        actionButtonText: 'Delete Rule',
+                        hasActionButton: true,
+                        headerText: 'Delete confirmation',
+                        bodyText: 'Are you sure you would like to Delete this Rule ?'
+                    };
+
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+
+                    }, function (response) {
+                    });
+                },
+                create: function (e) {
+
+                }
+            },
+            pageSize: 25,
+            schema: {
+                model: {
+                    id: "Id",
+                    fields: {
+                    }
+                }
+            },
+        });
+
+        vm.gridOptions = {
+            dataSource: vm.dataSource,
+            filterable: true,
+            sortable: true,
+            selectable: true,
+            resizable: true,
+            columnMenu: true,
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
+            columns: [
+                {
+                    width: "6%",
+                    template: "<div class='rule'><i role='button' class='rulesGidIcon intelicon-edit' ng-click='vm.editRule(#= Id #)'></i><i role='button' class='rulesGidIcon intelicon-copy-solid' ng-click='vm.copyRule(#=Id #)'></i><i role='button' class='rulesGidIcon intelicon-trash-solid' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                },
+                { field: "Id", title: "Id", width: "5%", hidden: true },
+                { field: "Name", title: "Name", width: "15%", filterable: { multi: true, search: true } },
+                { field: "OwnerName", title: "Owner Name", width: "15%", filterable: { multi: true, search: true } },
+                { field: "RuleStage", title: "Rule Stage", filterable: { multi: true, search: true }, template: "<span ng-if='#= RuleStage #'>Approved</span><span ng-if='!#= RuleStage #'>Pending</span>" },
+                { field: "IsActive", title: "Status", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsActive #'>Active</span><span ng-if='!#= IsActive #'>Inactive</span>" },
+                { field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsAutomationIncluded #'>Included</span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>" },
+                { field: "StartDate", title: "Rule Start Date", filterable: { multi: true, search: true } },
+                { field: "EndDate", title: "Rule End Date", filterable: { multi: true, search: true } },
+                { field: "Notes", title: "Notes", filterable: { multi: true, search: true } },
+                { field: "ChangedBy", title: "Updated By", filterable: { multi: true, search: true } }
+            ]
+        };
+
+        vm.cancel = function () {
+            vm.isEditmode = false;
+            vm.rule = {};
+        }
+
+        vm.saveRule = function (isWithEmail) {
+            $rootScope.$broadcast('save-criteria');
+            $timeout(function () {
+                var requiredFields = [];
+                if (vm.rule.Name == null || vm.rule.Name == "")
+                    requiredFields.push("</br>Rule name");
+                if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
+                    requiredFields.push("</br>Rule owner");
+                if (vm.rule.StartDate == null)
+                    requiredFields.push("</br>Start date");
+                if (vm.rule.EndDate == null)
+                    requiredFields.push("</br>End date");
+                if (vm.rule.Criteria.filter(x => x.value != "").length == 0)
+                    requiredFields.push("</br>Rule criteria");
+
+                if (requiredFields.length > 0) {
+                    kendo.alert("Please fill the following required fields!" + requiredFields.join());
+                } else {
+                    var dtEffFrom = new Date(vm.rule.StartDate);
+                    var dtEffTo = new Date(vm.rule.EndDate);
+                    if (dtEffFrom >= dtEffTo)
+                        kendo.alert("Effective from date cannot be greater than effective to date");
+                    else {
+                        for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
+                            if (vm.rule.Criteria[idx].type == "list") {
+                                vm.rule.Criteria[idx].multiValue = vm.rule.Criteria[idx].value;
+                                vm.rule.Criteria[idx].value = "-";
+                            } else {
+                                vm.rule.Criteria[idx].multiValue = [];
+                            }
+                        }
+                        var priceRuleCriteria = {
+                            Id: vm.rule.Id,
+                            Name: vm.rule.Name,
+                            OwnerId: vm.rule.OwnerId,
+                            IsActive: vm.rule.IsActive,
+                            IsAutomationIncluded: vm.rule.IsAutomationIncluded,
+                            StartDate: vm.rule.StartDate,
+                            EndDate: vm.rule.EndDate,
+                            RuleStage: vm.rule.RuleStage,
+                            Notes: vm.rule.Notes,
+                            Criteria: vm.rule.Criteria.filter(x => x.value != ""),
+                            ProductCriteria: {}
+                        }
+                        vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
+                    }
+                }
+            });
+        }
+
+        vm.addNewRule = function () {
+            vm.isEditmode = true;
+            vm.rule = {};
+            vm.rule.Id = 0;
+            vm.rule.IsAutomationIncluded = true;
+            vm.rule.IsActive = true;
+            vm.rule.StartDate = new Date();
+            vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
+            vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
+        }
+
+        $scope.init();
     }
 })();

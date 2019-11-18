@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountDataLib.cs" />
+    <Compile Include="Admins\ApprovalRules.cs" />
     <Compile Include="Admins\ConstantsAdminDataLib.cs" />
     <Compile Include="Admins\MarketOpsAdminDataLib.cs" />
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="DataQuality\DataQualityDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
+    <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />
     <Compile Include="Notifications\NotificationsDataLib.cs" />
     <Compile Include="ProductMicroPacket.cs" />
     <Compile Include="QuoteLetter\QuoteLetterDataLib.cs" />
@@ -165,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

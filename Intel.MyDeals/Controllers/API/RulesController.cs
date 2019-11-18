@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using Intel.MyDeals.BusinessRules;
+using System.Linq;
+using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -25,9 +27,46 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetBusinessRules")]
         public List<MyOpRule> GetBusinessRules()
         {
-            return SafeExecutor(() => _rulesLib.GetBusinessRules()
-                , $"Unable to get Business Rules"
-            );
+            return SafeExecutor(() => _rulesLib.GetBusinessRules(), $"Unable to get Business Rules");
+        }        
+
+        [Authorize]
+        [Route("GetSuggestion/{strCategory}/{strSearchKey}")]
+        public List<string> GetSuggestion(string strCategory, string strSearchKey)
+        {
+            return SafeExecutor(() => _rulesLib.GetSuggestion(strCategory, strSearchKey), $"Unable to get Business Rules");
+        }
+
+        [Authorize]
+        [Route("RunPriceRules")]
+        public bool RunPriceRules()
+        {
+            return SafeExecutor(() => _rulesLib.RunPriceRules(), $"Unable to get Business Rules");
+        }
+
+        [Authorize]
+        [Route("GetPriceRulesConfig")]
+        public RuleConfig GetPriceRulesConfig()
+        {
+            return SafeExecutor(() => _rulesLib.GetPriceRulesConfig(), $"Unable to get configs of price rule");
+        }
+
+        [Authorize]
+        [Route("GetPriceRules/{id}/{strActionName}")]
+        public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
+        {
+            return SafeExecutor(() => _rulesLib.GetPriceRules(id, strActionName), $"Unable to get price rules");
+        }
+
+        [Authorize]
+        [Route("SavePriceRule/{strActionName}/{isWithEmail}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<PriceRuleCriteria> SavePriceRule(string strActionName,bool isWithEmail, PriceRuleCriteria priceRuleCriteria)
+        {
+            priceRuleCriteria.ProductCriteria = new List<rule>();
+            priceRuleCriteria.ProductCriteria.Add(new rule { field = "PRD_NM", @operator = "=", value = "i800" });
+            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName, isWithEmail), $"Unable to save price rule");
         }
     }
 }

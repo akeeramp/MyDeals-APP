@@ -87,7 +87,7 @@
             "helptipMsgAttachment": "Attach multiple files.<br/>Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps.",
             "pastDateConfirmText": "You have Selected a date in the past which means the dates you will enter will be considered backdated",
             "FileAttachementDesc": "Either an attachment to deal request is uploaded or C2A id or link is enter above.",
-            "C2AIdDesc": "Either C2A id or link is entered or an attachment to deal request is uploaded below.",
+            "C2AIdDesc": "Either C2A id or link is entered or an attachment to deal request is uploaded below.  If 'Acceptance Not Required in C2A' is selected, please enter the link to documentation here or attach documentation below.",
             "ContractDetails": 'contract.details',
             "uplodaFileHelpText": "Your attachments will upload after clicking the Save Contract button."
         })
@@ -169,6 +169,12 @@
                         "Groups": ["Deal Info"]
                     },
                     "WF_STG_CD": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "COMP_SKU": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "COMPETITIVE_PRICE": {
                         "Groups": ["Deal Info"]
                     },
                     "EXPIRE_FLG": {

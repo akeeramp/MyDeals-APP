@@ -98,6 +98,9 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             objsetItem.SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
             objsetItem.SetBehavior("isError", de.AtrbCd, de.ValidationMessage != string.Empty);
             objsetItem.SetBehavior("validMsg", de.AtrbCd, de.ValidationMessage);
+
+            if (objsetItem.ContainsKey("TempCOMP_SKU") == false && dc.DcType == "WIP_DEAL" && objsetItem.ContainsKey("OBJ_SET_TYPE_CD") && objsetItem["OBJ_SET_TYPE_CD"].ToString() == "ECAP" && de.AtrbCd == "COMP_SKU" && objsetItem.ContainsKey(de.AtrbCd))
+                objsetItem.Add("TempCOMP_SKU", objsetItem[de.AtrbCd]);
         }
 
         public static int GetIntAtrb(this OpDataCollectorFlattenedItem items, string atrbCd)

@@ -30,6 +30,19 @@ namespace Intel.MyDeals.Entities
         {
             return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_TESTER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] ?? false);
         }
+        public static bool IsCustomerAdmin(this OpUserToken opUserToken)
+        {
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_CUSTOMERADMIN) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_CUSTOMERADMIN] ?? false);
+        }
+
+        public static bool IsRealSA(this OpUserToken opUserToken)
+        {
+            return opUserToken != null && 
+                opUserToken.Role.RoleTypeCd == "SA" && // And is an SA user
+                opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_CUSTOMERADMIN) && 
+                !ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_CUSTOMERADMIN] ?? false); // And is not Customer Admin, else neuter the SA
+        }
+
         public static bool IsInvalidUser(this OpUserToken opUserToken)
         {
             return opUserToken.Usr.WWID <= 0;
