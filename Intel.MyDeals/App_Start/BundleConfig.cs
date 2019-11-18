@@ -276,6 +276,7 @@ namespace Intel.MyDeals
                 "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
                 "~/css/kendo.intel.css",
+                "~/css/reporting.css",
                 "~/css/angular-bootstrap-toggle.min.css",
                 "~/css/select.min.css",
                 "~/css/select2.min.css",
