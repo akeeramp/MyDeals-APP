@@ -305,8 +305,11 @@
             {
                 field: "CUST_TYPE",
                 title: "Customer Type",
-                type: "string",
-                width: 150
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "Type 1" }, { Value: "Type 2" }, { Value: "Type 3" }]
             },
             {
                 field: "OP_CD",
@@ -568,9 +571,9 @@
                 if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
                     requiredFields.push("</br>Rule owner");
                 if (vm.rule.StartDate == null)
-                    requiredFields.push("</br>Start date");
+                    requiredFields.push("</br>Rule start date");
                 if (vm.rule.EndDate == null)
-                    requiredFields.push("</br>End date");
+                    requiredFields.push("</br>Rule end date");
                 if (vm.rule.Criteria.filter(x => x.value != "").length == 0)
                     requiredFields.push("</br>Rule criteria");
 
@@ -579,7 +582,7 @@
                     var dtEffFrom = new Date(vm.rule.StartDate);
                     var dtEffTo = new Date(vm.rule.EndDate);
                     if (dtEffFrom >= dtEffTo)
-                        validationFields.push("</br>Effective from date cannot be greater than effective to date");
+                        validationFields.push("</br>Rule start date cannot be greater than Rule end date");
                 }
                 if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
                     if (vm.ownerDs._data.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
