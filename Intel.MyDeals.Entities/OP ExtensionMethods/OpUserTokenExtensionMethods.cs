@@ -52,7 +52,7 @@ namespace Intel.MyDeals.Entities
         {
             string userName = opUserToken.Usr.Idsid;
             UserPrincipal user = null;
-            bool isReportingUser = true;          
+            bool isReportingUser = false;          
 
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "corpad.intel.com");
             {                
