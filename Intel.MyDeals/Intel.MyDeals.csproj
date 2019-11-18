@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,6 +30,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -230,7 +232,6 @@
     <Folder Include="app\admin\services\" />
     <Folder Include="app\dealManager\" />
     <Folder Include="app\errorHandling\" />
-    <Folder Include="app\reporting\" />
     <Folder Include="App_Data\" />
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
@@ -250,6 +251,8 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\ReportingController.cs" />
+    <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
@@ -614,6 +617,11 @@
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
     <Content Include="app\admin\dataQuality\admin.dataQuality.controller.js" />
     <Content Include="app\dashboard\widgets\recents.html" />
+    <Content Include="app\reporting\dash\reporting.dashboard.controller.js" />
+    <Content Include="app\reporting\reporting.module.js" />
+    <Content Include="app\reporting\reporting.route.js" />
+    <Content Include="app\reporting\dash\ReportDashboard.html" />
+    <Content Include="app\reporting\reporting.service.js" />
     <Content Include="app\shared\services\performanceTestingService.service.js" />
     <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />
@@ -1812,6 +1820,7 @@
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js.map" />
     <Content Include="Scripts\Angular\1.6.9\angular-animate.min.js.map" />
     <Content Include="Views\Error\LostAccountToken.cshtml" />
+    <Content Include="Views\Reporting\Index.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1882,6 +1891,9 @@
     </Content>
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -1932,6 +1944,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

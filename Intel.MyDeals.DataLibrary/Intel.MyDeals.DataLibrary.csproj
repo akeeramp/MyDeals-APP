@@ -111,6 +111,7 @@
     <Compile Include="QuoteLetter\QuoteLetter.designer.cs">
       <DependentUpon>QuoteLetter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporting\ReportingDataLib.cs" />
     <Compile Include="UserPreferences\UserPreferencesDataLib.cs" />
     <Compile Include="RetailPull\RetailPullDataLib.cs" />
     <Compile Include="Files\FilesDataLib.cs" />

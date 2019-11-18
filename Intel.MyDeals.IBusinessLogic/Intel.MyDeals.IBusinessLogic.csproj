@@ -75,6 +75,7 @@
     <Compile Include="MeetComp\IMeetCompLib.cs" />
     <Compile Include="Notifications\INotificationsLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
+    <Compile Include="Reporting\IReportingLib.cs" />
     <Compile Include="Tenders\ITendersLib.cs" />
     <Compile Include="Search\ISearchLib.cs" />
     <Compile Include="Files\IFilesLib.cs" />

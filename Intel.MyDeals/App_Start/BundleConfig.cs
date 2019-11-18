@@ -253,6 +253,10 @@ namespace Intel.MyDeals
                 , "~/app/testCases/performanceTesting/performanceTesting.service.js"
                 , "~/app/testCases/suggestProduct/suggestProduct.controller.js"
                 , "~/app/testCases/suggestProduct/suggestProduct.service.js"
+                , "~/app/reporting/reporting.module.js"
+                , "~/app/reporting/reporting.route.js"
+                , "~/app/reporting/reporting.service.js"
+                , "~/app/reporting/dash/reporting.dashboard.controller.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
