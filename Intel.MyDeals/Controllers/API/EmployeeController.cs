@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using System.Linq;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -20,9 +21,14 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUsrProfileRole")]
         public IEnumerable<UsrProfileRole> GetUsrProfileRole()
         {
-            return SafeExecutor(() => _employeeLib.GetUsrProfileRole()
-                , "Unable to get User Profiles"
-            );
+            return SafeExecutor(() => _employeeLib.GetUsrProfileRole(), "Unable to get User Profiles");
+        }
+
+        [Authorize]
+        [Route("GetUsrProfileByRole/{strRole}")]
+        public IEnumerable<UsrProfileRole> GetUsrProfileByRole(string strRole)
+        {
+            return SafeExecutor(() => _employeeLib.GetUsrProfileRole().Where(x => x.ROLE_NM == strRole), "Unable to get User Profiles");
         }
     }
 }
