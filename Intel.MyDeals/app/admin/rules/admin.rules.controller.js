@@ -214,7 +214,7 @@
         vm.ownerDs = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "/api/Employees/GetUsrProfileRole",
+                    url: "/api/Employees/GetUsrProfileByRole/DA",
                     dataType: "json"
                 }
             }
@@ -393,11 +393,6 @@
                 width: 150
             },
             {
-                field: "BLKT_DISC",
-                title: "Blanket Discount",
-                type: "numericOrPercentage",
-                width: 150
-            }, {
                 field: "HAS_TRCK",
                 title: "Has Tracker",
                 type: "singleselect",
@@ -453,11 +448,19 @@
             });
         };
 
+        var availableAttrs = [];
+
         vm.GetRules = function (id, actionName) {
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 switch (actionName) {
                     case "GET_BY_RULE_ID": {
+                        if (availableAttrs.length == 0) {
+                            for (var i = 0; i < $scope.attributeSettings.length; i++)
+                                availableAttrs.push($scope.attributeSettings[i].field);
+                        }
                         vm.rule = response.data[0];
+                        vm.rule.OwnerId = vm.ownerDs._data.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0 ? null : vm.rule.OwnerId;
+                        vm.rule.Criteria = vm.rule.Criteria.filter(x => availableAttrs.indexOf(x.field) > -1);
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                             if (vm.rule.Criteria[idx].type == "list") {
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].multiValue;
@@ -571,37 +574,52 @@
                 if (vm.rule.Criteria.filter(x => x.value != "").length == 0)
                     requiredFields.push("</br>Rule criteria");
 
-                if (requiredFields.length > 0) {
-                    kendo.alert("Please fill the following required fields!" + requiredFields.join());
-                } else {
+                var validationFields = [];
+                if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
                     var dtEffFrom = new Date(vm.rule.StartDate);
                     var dtEffTo = new Date(vm.rule.EndDate);
                     if (dtEffFrom >= dtEffTo)
-                        kendo.alert("Effective from date cannot be greater than effective to date");
-                    else {
-                        for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
-                            if (vm.rule.Criteria[idx].type == "list") {
-                                vm.rule.Criteria[idx].multiValue = vm.rule.Criteria[idx].value;
-                                vm.rule.Criteria[idx].value = "-";
-                            } else {
-                                vm.rule.Criteria[idx].multiValue = [];
-                            }
-                        }
-                        var priceRuleCriteria = {
-                            Id: vm.rule.Id,
-                            Name: vm.rule.Name,
-                            OwnerId: vm.rule.OwnerId,
-                            IsActive: vm.rule.IsActive,
-                            IsAutomationIncluded: vm.rule.IsAutomationIncluded,
-                            StartDate: vm.rule.StartDate,
-                            EndDate: vm.rule.EndDate,
-                            RuleStage: vm.rule.RuleStage,
-                            Notes: vm.rule.Notes,
-                            Criteria: vm.rule.Criteria.filter(x => x.value != ""),
-                            ProductCriteria: {}
-                        }
-                        vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
+                        validationFields.push("</br>Effective from date cannot be greater than effective to date");
+                }
+                if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
+                    if (vm.ownerDs._data.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
+                        validationFields.push("</br>Owner cannot be invalid");
+                }
+
+                if (requiredFields.length > 0 || validationFields.length > 0) {
+                    var strAlertMessege = '';
+                    if (validationFields.length > 0) {
+                        strAlertMessege = "<b>Following scenarios are failed!</b>" + validationFields.join();
                     }
+                    if (requiredFields.length > 0) {
+                        if (strAlertMessege != '')
+                            strAlertMessege += "</br></br>";
+                        strAlertMessege += "<b>Please fill the following required fields!</b>" + requiredFields.join();
+                    }
+                    kendo.alert(strAlertMessege);
+                } else {
+                    for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
+                        if (vm.rule.Criteria[idx].type == "list") {
+                            vm.rule.Criteria[idx].multiValue = vm.rule.Criteria[idx].value;
+                            vm.rule.Criteria[idx].value = "-";
+                        } else {
+                            vm.rule.Criteria[idx].multiValue = [];
+                        }
+                    }
+                    var priceRuleCriteria = {
+                        Id: vm.rule.Id,
+                        Name: vm.rule.Name,
+                        OwnerId: vm.rule.OwnerId,
+                        IsActive: vm.rule.IsActive,
+                        IsAutomationIncluded: vm.rule.IsAutomationIncluded,
+                        StartDate: vm.rule.StartDate,
+                        EndDate: vm.rule.EndDate,
+                        RuleStage: vm.rule.RuleStage,
+                        Notes: vm.rule.Notes,
+                        Criteria: vm.rule.Criteria.filter(x => x.value != ""),
+                        ProductCriteria: {}
+                    }
+                    vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
                 }
             });
         }
@@ -614,7 +632,7 @@
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
-            vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
+            vm.rule.OwnerId = vm.ownerDs._data.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
         }
 
         $scope.init();
