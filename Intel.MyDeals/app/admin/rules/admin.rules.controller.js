@@ -584,7 +584,7 @@
                     if (dtEffFrom >= dtEffTo)
                         validationFields.push("</br>Rule start date cannot be greater than Rule end date");
                 }
-                if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
+                if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null && vm.rule.OwnerId != 0) {
                     if (vm.ownerDs._data.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
                         validationFields.push("</br>Owner cannot be invalid");
                 }
