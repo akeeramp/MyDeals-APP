@@ -403,7 +403,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//Reference Manual Page
-	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_id=1");
+	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_link='Default'");
 	ds.Tables[0].TableName = "RefManualsPage";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
