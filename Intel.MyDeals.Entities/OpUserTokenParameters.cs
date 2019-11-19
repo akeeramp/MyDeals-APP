@@ -6,6 +6,8 @@
         public int isDeveloper { get; set; }
         public int isTester { get; set; }
         public int isSuper { get; set; }
+        public bool isReportingUser { get; set; }
+        
     }
 
 }

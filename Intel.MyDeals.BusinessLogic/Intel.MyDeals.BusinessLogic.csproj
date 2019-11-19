@@ -132,6 +132,7 @@
     <Compile Include="ProductCategories\ProductCategoriesLib.cs" />
     <Compile Include="Products\ProductsLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporting\ReportingLib.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="Rule Engine\RuleEngineLib.cs" />
     <Compile Include="Rule Engine\RuleExpression.cs" />

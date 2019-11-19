@@ -374,13 +374,36 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "DataQualityUsecase";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Data Quality Usecase
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_RPT_DSBD @CRE_EMP_IDSID='sauravku'");
+	ds.Tables[0].TableName = "ReportDashboardData";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds.Tables[1].TableName = "ReportDealType";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
+	ds.Tables[2].TableName = "ReportDealStage";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
+
+	ds.Tables[3].TableName = "ReportProductCount";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[3], false));
+
+	ds.Tables[4].TableName = "ReportLogDeatils";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[4], false));
+
+	ds.Tables[5].TableName = "ReportSummary";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[5], false));
+
+	ds.Tables[6].TableName = "ReportName";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[6], false));
+
 	//Reference Manual Index
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_REF_NAVIGATION @ref_type='UserManual', @actv_only=0");
 	ds.Tables[0].TableName = "RefManualsNavItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//Reference Manual Page
-	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_id=1");
+	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_link='Default'");
 	ds.Tables[0].TableName = "RefManualsPage";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
