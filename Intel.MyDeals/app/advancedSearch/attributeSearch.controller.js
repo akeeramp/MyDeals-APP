@@ -197,6 +197,10 @@
                                     "Pending",
                                     "Approved",
                                     "Active",
+                                    "Hold",
+                                    "Lost",
+                                    "Offer",
+                                    "Won",
                                     "Cancelled"
                                 ]
                             },
@@ -214,6 +218,10 @@
                     { Value: "Pending" },
                     { Value: "Approved" },
                     { Value: "Active" },
+                    { Value: "Hold" },
+                    { Value: "Lost" },
+                    { Value: "Offer" },
+                    { Value: "Won" },
                     { Value: "Cancelled" }
                 ]
 
