@@ -141,31 +141,31 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                 var fieldType = field.type;
                 var fieldValue = field.field;
                 if (scope.dataItem.operator === "IN") {
-                    html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    html = '<input class="k-textbox" style="width: 250px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     if (helpMsg["IN"] !== undefined) html += '<div class="sm-help">' + helpMsg["IN"] + '</div>';
                 } else {
                     switch (fieldType) {
                         case "string":
                             {
-                                html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                                html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
                         case "autocomplete":
                             {
-                                html = '<input kendo-auto-complete k-options="autocompleteOptions" style="width: 250px;" ng-model="dataItem.value" ng-keyup="suggestionPressed($event,\'' + fieldValue + '\')" k-data-source="suggestionText"/>';
+                                html = '<input kendo-auto-complete k-options="autocompleteOptions" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keyup="suggestionPressed($event,\'' + fieldValue + '\')" k-data-source="suggestionText"/>';
                             } break;
                         case "number":
                             {
-                                html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                                html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
                         case "money":
                             {
-                                html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                                html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
                         case "numericOrPercentage":
                             {
                                 if (scope.dataItem.valueType == undefined)
                                     scope.dataItem.valueType = "{text:\"$\",value:\"$\"}";
-                                html = '<input kendo-numeric-text-box restrict-decimals=true style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                                html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 137px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                                 html += '<select class="opUiContainer sm" kendo-drop-down-list style="width: 60px;" k-ng-model="dataItem.valueType"><option>%</option><option>$</option></select>'
                             } break;
                         case "date":
@@ -203,13 +203,13 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                                 html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
                                 html += 'k-filter="\'contains\'" ';
                                 html += 'k-auto-bind="true" ';
-                                html += 'k-tag-mode="\'single\'" ';
+                                //html += 'k-tag-mode="\'single\'" ';
                                 html += 'k-value-primitive="true" ';
                                 html += 'k-ng-model="dataItem.value" ';
                                 html += 'k-auto-close="false" ';
                                 html += 'k-data-source="lookupDs.' + key + '" ';
                                 html += 'class="opUiContainer sm" ';
-                                html += 'style="min-width: 200px; max-width: 400px;"></select>{{dataItem.value}}';
+                                html += 'style="min-width: 200px; max-width: 200px;"></select>{{dataItem.value}}';
                             } break;
                         case "singleselect":
                             {
