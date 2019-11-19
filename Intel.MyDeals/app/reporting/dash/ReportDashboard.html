@@ -144,7 +144,7 @@
                     <!-- /.col -->
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <div class="info-box">
-                            <span class="info-box-icon bg-yellow"><i class="intelicon-payment" style="font-size:70px; line-height: 1.3;"></i></span>
+                            <span class="info-box-icon bg-yellow"><i class="intelicon-time-lapse-solid" style="font-size:70px; line-height: 1.3;"></i></span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Reporting Time </span>
@@ -327,7 +327,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="x in vm.masterData['ReportLogDeatils'] | limitTo : vm.numberOfRecrods ">
-                                                <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? 'Check Filter before pulling' : ''}}"><i ng-if="x.TOTAL_REPORT_TIME_TAKEN > 60" class="intelicon-information-outlined red" ng-class="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
+                                                <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? 'Check Filter before running the Report' : ''}}"><i ng-if="x.TOTAL_REPORT_TIME_TAKEN > 60" class="intelicon-information-outlined red" ng-class="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
                                                 <td>Deal Management {{x.RPT_ALS_NM}}</td>
                                                 <td>{{x.START_TIME}}</td>
                                                 <td>{{x.END_TIME}}</td>
