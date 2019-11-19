@@ -122,7 +122,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
 
         public string GetSqlExpressionForProducts(List<Products> lstProduct)
         {
-            return string.Join(" OR ", lstProduct.Select(x => string.Format("({0} IS NOT NULL AND {0} = ''{1}'' AND {2} IS NOT NULL AND {2} = {3})", x.ProductAttribute, x.Product, x.PriceAttribute, x.Price)));
+            return string.Join(" OR ", lstProduct.Select(x => string.Format("({0} = ''{1}'' AND {2} = {3})", x.ProductAttribute, x.Product, x.PriceAttribute, x.Price)));
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect" };
@@ -133,7 +133,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             lstRules.Where(x => strStringDataTypes.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
             lstRules.Where(x => strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? string.Concat("''%", x.value, "%''") : string.Concat("''", x.value, "''"); });
             lstRules.Where(x => x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
-            return string.Join(" AND ", lstRules.Select(x => string.Format("({0} IS NOT NULL AND {0} {1} {2})", x.field, x.@operator, x.value)));
+            return string.Join(" AND ", lstRules.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value)));
         }
 
         string GetExpression(rule rule)

@@ -256,7 +256,7 @@
                 lookupUrl: "/api/Employees/GetUsrProfileRole"
             },
             {
-                field: "DC_ID",
+                field: "WIP_DEAL_OBJ_SID",
                 title: "Deal #",
                 type: "number",
                 width: 150
