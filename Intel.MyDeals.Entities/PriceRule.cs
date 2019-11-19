@@ -8,6 +8,7 @@ namespace Intel.MyDeals.Entities
 {
     public class RuleConfig
     {
+        public List<UsrProfileRole> DA_Users { get; set; }
         public bool IsElligibleForApproval { get; set; }
         public int CurrentUserWWID { get; set; }
         public operatorSettings operatorSettings { get; set; }
@@ -115,6 +116,7 @@ namespace Intel.MyDeals.Entities
         public string ProductCriteriaSql { get; set; }
         public string ChangedBy { get; set; }
         public DateTime ChangeDateTime { get; set; }
+        public string ChangeDateTimeFormat { get; set; }
     }
 
     public class rule
