@@ -22,13 +22,6 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<UsrProfileRole> GetUsrProfileRole()
         {
             return SafeExecutor(() => _employeeLib.GetUsrProfileRole(), "Unable to get User Profiles");
-        }
-
-        [Authorize]
-        [Route("GetUsrProfileByRole/{strRole}")]
-        public IEnumerable<UsrProfileRole> GetUsrProfileByRole(string strRole)
-        {
-            return SafeExecutor(() => _employeeLib.GetUsrProfileRole().Where(x => x.ROLE_NM == strRole), "Unable to get User Profiles");
-        }
+        }        
     }
 }

@@ -17,7 +17,7 @@ namespace Intel.MyDeals.Entities
             }
             return false;
         }
-
+        
         public static bool IsSuper(this OpUserToken opUserToken)
         {
             return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_SUPER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] ?? false);
@@ -48,27 +48,32 @@ namespace Intel.MyDeals.Entities
             return opUserToken.Usr.WWID <= 0;
         }
 
+        //TODO: Saurav will Cache this in MT and remove user.GetGroups() call everytime..
         public static bool IsReportingUser(this OpUserToken opUserToken)
         {
             string userName = opUserToken.Usr.Idsid;
             UserPrincipal user = null;
-            bool isReportingUser = false;          
+            bool isReportingUser = false;
 
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "corpad.intel.com");
-            {                
+            {
                 if ((user = UserPrincipal.FindByIdentity(ctx, userName)) != null)
                 {
-                    PrincipalSearchResult<Principal> groups = user.GetGroups();
+                    PrincipalSearchResult<Principal> groups = user.GetGroups(); //TODO: Need to Cached into MT
                     string agsRoleName1 = "Cognos BI_NextGen_DealMgmt_DealMgmt_Report_User";
                     string agsRoleName2 = "Cognos BI_IDMS_NextGen_";
-                    List<string> myList = new List<string>();                    
-                    var results = groups.ToList().Where(s =>s.Name.ToString().Contains(agsRoleName1) || s.Name.ToString().Contains(agsRoleName2)).Select(s => s).ToList();
+                    List<string> myList = new List<string>();
+                    var results = groups.ToList().Where(s => s.Name.ToString().Contains(agsRoleName1) || s.Name.ToString().Contains(agsRoleName2)).Select(s => s).ToList();
                     if (results.Any())
                     {
                         isReportingUser = true;
                     }
                 }
-            }
+                else
+                {
+                    isReportingUser = true;
+                }
+            }            
             return isReportingUser;
         }
     }

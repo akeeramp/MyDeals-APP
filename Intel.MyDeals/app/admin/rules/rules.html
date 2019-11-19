@@ -95,7 +95,7 @@
                 <span>Last modified by </span>
                 <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
                 <span> on </span>
-                <span style="color:orangered">{{vm.rule.ChangeDateTime}}</span>
+                <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
             </div>
         </div>
         <div class="form-group row">
@@ -118,9 +118,9 @@
         <div class="form-group row action_btns">
             <label class="control-label col-md-2"></label>
             <div class="col-md-6">
-                <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save & Draft</button>
-                <button ng-click="vm.cancel()" class="btn btn-secondary">Cancel</button>
-                <button ng-click="vm.saveRule(true)" class="btn btn-secondary">Publish</button>
+                <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save as Draft</button>
+                <button ng-click="vm.cancel()" class="btn btn-primary">Cancel Edits</button>
+                <button ng-click="vm.saveRule(true)" class="btn btn-primary">Save & Publish</button>
             </div>
         </div>
     </div>
@@ -197,6 +197,6 @@
 </style>
 <script>
     $(document).ready(function () {
-        $('#bodyContent').css('overflow', 'auto');
+        $('#bodyContent').attr('style', 'overflow: auto !important');
     });
 </script>

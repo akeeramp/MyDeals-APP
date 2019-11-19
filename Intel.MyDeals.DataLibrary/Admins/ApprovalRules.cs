@@ -95,7 +95,7 @@ namespace Intel.MyDeals.DataLibrary
                     ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
                 });
             } // while
-
+            rtn.ForEach(x => x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy HH:mm"));
             return rtn;
         }
 

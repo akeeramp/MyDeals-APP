@@ -22,8 +22,8 @@
                 vm.RuleConfig = response.data;
             }, function (response) {
                 logger.error("Operation failed");
-            });
-
+                });
+            
             vm.GetRules(0, "GET_RULES");
         }
 
@@ -210,16 +210,7 @@
                 }
             }
         };
-
-        vm.ownerDs = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    url: "/api/Employees/GetUsrProfileByRole/DA",
-                    dataType: "json"
-                }
-            }
-        });
-
+        
         vm.ownerOptions = {
             placeholder: "Select email address...",
             dataTextField: "NAME",
@@ -240,7 +231,15 @@
             filter: "contains",
             maxSelectedItems: 1,
             autoBind: true,
-            dataSource: vm.ownerDs,
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: function (e) {
+                        e.success(vm.RuleConfig.DA_Users);
+                    }
+                }
+            },
             change: function (e) {
                 vm.rule.OwnerId = this.value();
             }
@@ -257,7 +256,7 @@
                 lookupUrl: "/api/Employees/GetUsrProfileRole"
             },
             {
-                field: "DC_ID",
+                field: "WIP_DEAL_OBJ_SID",
                 title: "Deal #",
                 type: "number",
                 width: 150
@@ -303,15 +302,6 @@
                 dimKey: 20
             },
             {
-                field: "CUST_TYPE",
-                title: "Customer Type",
-                type: "singleselect",
-                width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [{ Value: "Type 1" }, { Value: "Type 2" }, { Value: "Type 3" }]
-            },
-            {
                 field: "OP_CD",
                 title: "Op Code",
                 type: "singleselect",
@@ -332,13 +322,16 @@
             {
                 field: "PRODUCT_CATEGORIES",
                 title: "Product Verticals",
-                type: "string",
-                width: 150
+                type: "singleselect",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "ECAP", Value: "VOL_TIER", Value: "KIT", Value: "PROGRAM" }]
             },
             {
                 field: "SERVER_DEAL_TYPE",
                 title: "Server Deal Type",
-                type: "singleselect",
+                type: "list",
                 width: 150,
                 lookupText: "DROP_DOWN",
                 lookupValue: "DROP_DOWN",
@@ -462,7 +455,7 @@
                                 availableAttrs.push($scope.attributeSettings[i].field);
                         }
                         vm.rule = response.data[0];
-                        vm.rule.OwnerId = vm.ownerDs._data.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0 ? null : vm.rule.OwnerId;
+                        vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0 ? null : vm.rule.OwnerId;
                         vm.rule.Criteria = vm.rule.Criteria.filter(x => availableAttrs.indexOf(x.field) > -1);
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                             if (vm.rule.Criteria[idx].type == "list") {
@@ -584,8 +577,8 @@
                     if (dtEffFrom >= dtEffTo)
                         validationFields.push("</br>Rule start date cannot be greater than Rule end date");
                 }
-                if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null && vm.rule.OwnerId != 0) {
-                    if (vm.ownerDs._data.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
+                if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
+                    if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
                         validationFields.push("</br>Owner cannot be invalid");
                 }
 
@@ -635,7 +628,7 @@
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
-            vm.rule.OwnerId = vm.ownerDs._data.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
+            vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
         }
 
         $scope.init();

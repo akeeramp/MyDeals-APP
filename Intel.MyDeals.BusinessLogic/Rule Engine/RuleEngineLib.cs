@@ -38,7 +38,10 @@ namespace Intel.MyDeals.BusinessLogic
 
         public RuleConfig GetPriceRulesConfig()
         {
-            return new ApprovalRules().GetPriceRulesConfig();
+            RuleConfig ruleConfig = new RuleConfig();
+            ruleConfig = new ApprovalRules().GetPriceRulesConfig();
+            ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").ToList();
+            return ruleConfig;
         }
 
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
