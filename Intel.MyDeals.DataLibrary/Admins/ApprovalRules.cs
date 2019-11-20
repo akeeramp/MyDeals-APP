@@ -76,7 +76,6 @@ namespace Intel.MyDeals.DataLibrary
 
             while (rdr.Read())
             {
-                int j = 0;
                 rtn.Add(new PriceRuleCriteria
                 {
                     Id = (IDX_RULE_ID < 0 || rdr.IsDBNull(IDX_RULE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_ID),
