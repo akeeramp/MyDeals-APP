@@ -54,26 +54,33 @@ namespace Intel.MyDeals.Entities
             string userName = opUserToken.Usr.Idsid;
             UserPrincipal user = null;
             bool isReportingUser = false;
-
-            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "corpad.intel.com");
+            try
             {
-                if ((user = UserPrincipal.FindByIdentity(ctx, userName)) != null)
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "corpad.intel.com");
                 {
-                    PrincipalSearchResult<Principal> groups = user.GetGroups(); //TODO: Need to Cached into MT
-                    string agsRoleName1 = "Cognos BI_NextGen_DealMgmt_DealMgmt_Report_User";
-                    string agsRoleName2 = "Cognos BI_IDMS_NextGen_";
-                    List<string> myList = new List<string>();
-                    var results = groups.ToList().Where(s => s.Name.ToString().Contains(agsRoleName1) || s.Name.ToString().Contains(agsRoleName2)).Select(s => s).ToList();
-                    if (results.Any())
+                    if ((user = UserPrincipal.FindByIdentity(ctx, userName)) != null)
+                    {
+                        PrincipalSearchResult<Principal> groups = user.GetGroups(); //TODO: Need to Cached into MT
+                        string agsRoleName1 = "Cognos BI_NextGen_DealMgmt_DealMgmt_Report_User";
+                        string agsRoleName2 = "Cognos BI_IDMS_NextGen_";
+                        List<string> myList = new List<string>();
+                        var results = groups.ToList().Where(s => s.Name.ToString().Contains(agsRoleName1) || s.Name.ToString().Contains(agsRoleName2)).Select(s => s).ToList();
+                        if (results.Any())
+                        {
+                            isReportingUser = true;
+                        }
+                    }
+                    else
                     {
                         isReportingUser = true;
                     }
                 }
-                else
-                {
-                    isReportingUser = true;
-                }
-            }            
+            }
+            catch(Exception ex)
+            {
+                isReportingUser = true;
+            }
+                 
             return isReportingUser;
         }
     }
