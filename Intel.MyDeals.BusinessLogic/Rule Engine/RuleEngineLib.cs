@@ -58,41 +58,20 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 lstPriceRuleCriteria.ForEach(x =>
                 {
-                    x.Criteria = JsonConvert.DeserializeObject<List<rule>>(x.CriteriaJson);
-                    x.ProductCriteria = JsonConvert.DeserializeObject<List<rule>>(x.ProductCriteriaJson);
+                    x.Criterias = JsonConvert.DeserializeObject<Criteria>(x.CriteriaJson);
                 });
             }
             return lstPriceRuleCriteria;
         }
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isWithEmail)
+        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isPublish)
         {
             PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
             if (priceRuleAction == PriceRuleAction.CREATE || priceRuleAction == PriceRuleAction.UPDATE)
             {
-                priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criteria);
-                List<rule> lstMulti = new List<rule>();
-                priceRuleCriteria.Criteria.ForEach(x =>
-                {
-                    if (x.type == "list")
-                    {
-                        List<rule> lstTemp = (from result in x.multiValue
-                                              select new rule
-                                              {
-                                                  type = "string",
-                                                  value = result,
-                                                  field = x.field,
-                                                  @operator = x.@operator
-                                              }).ToList(); ;
-                        lstMulti.AddRange(lstTemp);
-                    }
-                });
-                priceRuleCriteria.Criteria.AddRange(lstMulti);
-                priceRuleCriteria.Criteria.RemoveAll(x => x.type == "list");
-                priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
+                priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
                 using (RuleExpressions ruleExpressions = new RuleExpressions())
                 {
-                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criteria);
-                    priceRuleCriteria.ProductCriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.ProductCriteria);
+                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias);
                 }
             }
             else
@@ -100,7 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //To avoid overflow
                 priceRuleCriteria.StartDate = priceRuleCriteria.EndDate = DateTime.UtcNow;
             }
-            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction, isWithEmail);
+            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction, isPublish);
         }
     }
 }

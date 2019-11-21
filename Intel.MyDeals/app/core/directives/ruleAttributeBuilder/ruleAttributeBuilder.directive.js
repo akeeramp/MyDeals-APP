@@ -141,7 +141,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                 var fieldType = field.type;
                 var fieldValue = field.field;
                 if (scope.dataItem.operator === "IN") {
-                    html = '<input class="k-textbox" style="width: 250px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     if (helpMsg["IN"] !== undefined) html += '<div class="sm-help">' + helpMsg["IN"] + '</div>';
                 } else {
                     switch (fieldType) {

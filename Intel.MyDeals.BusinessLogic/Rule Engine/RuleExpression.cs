@@ -122,18 +122,47 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
 
         public string GetSqlExpressionForProducts(List<Products> lstProduct)
         {
-            return string.Join(" OR ", lstProduct.Select(x => string.Format("({0} = ''{1}'' AND {2} = {3})", x.ProductAttribute, x.Product, x.PriceAttribute, x.Price)));
+            return string.Join(" OR ", lstProduct.Select(x => string.Format("({0} = '{1}' AND {2} = {3})", x.ProductAttribute, x.Product, x.PriceAttribute, x.Price)));
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect" };
-        public string GetSqlExpression(List<rule> lstRules)
+        public string GetSqlExpression(Criteria criteria)
         {
-            lstRules.Where(x => x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
-            lstRules.Where(x => strStringDataTypes.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y, "'"))); });
-            lstRules.Where(x => strStringDataTypes.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
-            lstRules.Where(x => strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? string.Concat("''%", x.value, "%''") : string.Concat("''", x.value, "''"); });
-            lstRules.Where(x => x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
-            return string.Join(" AND ", lstRules.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value)));
+            criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
+            criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
+            criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y, "'"))); });
+            criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? string.Concat("'%", x.value, "%'") : string.Concat("'", x.value, "'"); });
+            criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
+            string strSqlCriteria = string.Join(" AND ", criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value)));
+
+            if (criteria.Rules.Where(x => x.type == "list").Count() > 0)
+            {
+                criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").ToList().ForEach(x =>
+                  {
+                      x.@operator = "IN";
+                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", y.Replace("'", "''"), "'"))), ")");
+                  });
+
+                strSqlCriteria = string.Concat(strSqlCriteria, " AND ", string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
+
+                List<rule> lstMulti = new List<rule>();
+                criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE").ToList().ForEach(x =>
+                {
+                    List<rule> lstTemp = (from result in x.values
+                                          select new rule
+                                          {
+                                              type = "string",
+                                              value = result,
+                                              field = x.field,
+                                              @operator = x.@operator
+                                          }).ToList();
+                    lstMulti.AddRange(lstTemp);
+                });
+
+                if (lstMulti.Count > 0)
+                    strSqlCriteria = string.Concat(strSqlCriteria, " AND (", string.Join(" OR ", lstMulti.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, string.Concat("'%", x.value, "%'")))), ")");
+            }
+            return strSqlCriteria;
         }
 
         string GetExpression(rule rule)
@@ -249,7 +278,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             return obj.Product.GetHashCode() ^ obj.Price.GetHashCode();
         }
     }
-    
+
     public class RuleAttribute
     {
         public int DcId { get; set; }

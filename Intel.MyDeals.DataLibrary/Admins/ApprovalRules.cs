@@ -11,26 +11,24 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class ApprovalRules
     {
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction, bool isWithEmail)
+        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction, bool isPublish)
         {
             var cmd = new Procs.dbo.PR_MYDL_SAVE_RULE
             {
                 actn_nm = priceRuleAction.ToString("g"),
                 rule_id = priceRuleCriteria.Id,
                 rule_nm = priceRuleCriteria.Name,
-                owner_wwid = priceRuleCriteria.OwnerId,
-                is_normal_rule = priceRuleCriteria.IsAutomationIncluded,
+                ownr_wwid = priceRuleCriteria.OwnerId,
+                is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
                 is_actv = priceRuleCriteria.IsActive,
-                eff_frm_dt = priceRuleCriteria.StartDate,
-                eff_to_dt = priceRuleCriteria.EndDate,
-                is_appvd = priceRuleCriteria.RuleStage,
-                notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
-                rule_criteria = priceRuleCriteria.CriteriaJson,
-                rule_sql_criteria = priceRuleCriteria.CriteriaSql,
-                product_criteria = priceRuleCriteria.ProductCriteriaJson,
-                product_sql_criteria = priceRuleCriteria.ProductCriteriaSql,
-                usr_id = OpUserStack.MyOpUserToken.Usr.WWID,
-                is_with_mail = isWithEmail
+                strt_dt = priceRuleCriteria.StartDate,
+                end_dt = priceRuleCriteria.EndDate,
+                is_aprv = priceRuleCriteria.RuleStage,
+                note = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
+                rule_cri = priceRuleCriteria.CriteriaJson,
+                rule_sql_cri = priceRuleCriteria.CriteriaSql,
+                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                is_publ = isPublish
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -53,29 +51,29 @@ namespace Intel.MyDeals.DataLibrary
                 return GetPriceRuleCriteria(rdr);
             }
         }
-        
+
         List<PriceRuleCriteria> GetPriceRuleCriteria(SqlDataReader rdr)
         {
             List<PriceRuleCriteria> rtn = new List<PriceRuleCriteria>();
 
             // Go and add this to templates classes if needed (MIKE)
             int IDX_RULE_ID = DB.GetReaderOrdinal(rdr, "RULE_ID");
-            int IDX_RULE_NAME = DB.GetReaderOrdinal(rdr, "RULE_NAME");
-            int IDX_OWNER_NAME = DB.GetReaderOrdinal(rdr, "OWNER_NM");
-            int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
-            int IDX_RULE_CRITERIA = DB.GetReaderOrdinal(rdr, "RULE_CRITERIA");
-            int IDX_PRODUCT_CRITERIA = DB.GetReaderOrdinal(rdr, "PRODUCT_CRITERIA");
+            int IDX_RULE_NAME = DB.GetReaderOrdinal(rdr, "RULE_NM");
+            int IDX_OWNER_NAME = DB.GetReaderOrdinal(rdr, "OWNR_NM");
+            int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTE");
+            int IDX_RULE_CRITERIA = DB.GetReaderOrdinal(rdr, "RULE_CRI");
             int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
-            int IDX_IS_NORMAL_RULE = DB.GetReaderOrdinal(rdr, "IS_NORMAL_RULE");
-            int IDX_IS_APPROVED = DB.GetReaderOrdinal(rdr, "IS_APPROVED");
-            int IDX_EFF_FRM_DT = DB.GetReaderOrdinal(rdr, "EFF_FRM_DT");
-            int IDX_EFF_TO_DT = DB.GetReaderOrdinal(rdr, "EFF_TO_DT");
-            int IDX_OWNER_WWID = DB.GetReaderOrdinal(rdr, "OWNER_WWID");
-            int IDX_CHG_BY = DB.GetReaderOrdinal(rdr, "CHG_BY");
+            int IDX_IS_NORMAL_RULE = DB.GetReaderOrdinal(rdr, "IS_AUTO_INCL");
+            int IDX_IS_APPROVED = DB.GetReaderOrdinal(rdr, "IS_APRV");
+            int IDX_EFF_FRM_DT = DB.GetReaderOrdinal(rdr, "STRT_DT");
+            int IDX_EFF_TO_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+            int IDX_OWNER_WWID = DB.GetReaderOrdinal(rdr, "OWNR_WWID");
+            int IDX_CHG_BY = DB.GetReaderOrdinal(rdr, "CHG_NM");
             int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
 
             while (rdr.Read())
             {
+                int j = 0;
                 rtn.Add(new PriceRuleCriteria
                 {
                     Id = (IDX_RULE_ID < 0 || rdr.IsDBNull(IDX_RULE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_ID),
@@ -83,7 +81,6 @@ namespace Intel.MyDeals.DataLibrary
                     OwnerName = (IDX_OWNER_NAME < 0 || rdr.IsDBNull(IDX_OWNER_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OWNER_NAME),
                     Notes = (IDX_NOTES < 0 || rdr.IsDBNull(IDX_NOTES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTES),
                     CriteriaJson = (IDX_RULE_CRITERIA < 0 || rdr.IsDBNull(IDX_RULE_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_CRITERIA),
-                    ProductCriteriaJson = (IDX_PRODUCT_CRITERIA < 0 || rdr.IsDBNull(IDX_PRODUCT_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT_CRITERIA),
                     IsActive = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
                     IsAutomationIncluded = (IDX_IS_NORMAL_RULE < 0 || rdr.IsDBNull(IDX_IS_NORMAL_RULE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_NORMAL_RULE),
                     RuleStage = (IDX_IS_APPROVED < 0 || rdr.IsDBNull(IDX_IS_APPROVED)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_APPROVED),

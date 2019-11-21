@@ -398,30 +398,7 @@
                 lookups: [{ Value: "Yes" }, { Value: "No" }]
             }
         ];
-
-        vm.ProductCriteria = [{ "PRD_NM": "test product", "ECAP_PRICE": "10" }];
-
-        vm.ProductCriteriaOptions = {
-            scrollable: true,
-            editable: true,
-            width: 200,
-            columns: [
-                { field: "PRD_NM", title: "Product Name", width: "65%", filterable: { multi: false, search: false } },
-                { field: "ECAP_PRICE", title: "ECAP", filterable: { multi: false, search: false } },
-            ],
-            dataBound: function (e) {
-                var rowCount = this.dataSource.view().length;  // only get count for current page
-                if (rowCount < 5) {
-                    for (var i = 1; i < 5 - rowCount; i++) {
-                        this.addRow();
-                    }
-                }
-            },
-            save: function (e) {
-                vm.ProductCriteria = this.dataSource.view();
-            },
-        };
-
+        
         vm.editRule = function (id) {
             vm.GetRules(id, "GET_BY_RULE_ID");
         }
@@ -456,10 +433,10 @@
                         }
                         vm.rule = response.data[0];
                         vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0 ? null : vm.rule.OwnerId;
-                        vm.rule.Criteria = vm.rule.Criteria.filter(x => availableAttrs.indexOf(x.field) > -1);
+                        vm.rule.Criteria = vm.rule.Criterias.Rules.filter(x => availableAttrs.indexOf(x.field) > -1);
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                             if (vm.rule.Criteria[idx].type == "list") {
-                                vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].multiValue;
+                                vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
                         }
                         vm.isEditmode = true;
@@ -596,10 +573,10 @@
                 } else {
                     for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                         if (vm.rule.Criteria[idx].type == "list") {
-                            vm.rule.Criteria[idx].multiValue = vm.rule.Criteria[idx].value;
+                            vm.rule.Criteria[idx].values = vm.rule.Criteria[idx].value;
                             vm.rule.Criteria[idx].value = "-";
                         } else {
-                            vm.rule.Criteria[idx].multiValue = [];
+                            vm.rule.Criteria[idx].values = [];
                         }
                     }
                     var priceRuleCriteria = {
@@ -612,8 +589,7 @@
                         EndDate: vm.rule.EndDate,
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
-                        Criteria: vm.rule.Criteria.filter(x => x.value != ""),
-                        ProductCriteria: {}
+                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), "Products": [], "BlanketDiscount": [] }
                     }
                     vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
                 }

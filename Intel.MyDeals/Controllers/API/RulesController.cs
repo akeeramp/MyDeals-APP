@@ -59,14 +59,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SavePriceRule/{strActionName}/{isWithEmail}")]
+        [Route("SavePriceRule/{strActionName}/{isPublish}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<PriceRuleCriteria> SavePriceRule(string strActionName,bool isWithEmail, PriceRuleCriteria priceRuleCriteria)
+        public List<PriceRuleCriteria> SavePriceRule(string strActionName,bool isPublish, PriceRuleCriteria priceRuleCriteria)
         {
-            priceRuleCriteria.ProductCriteria = new List<rule>();
-            priceRuleCriteria.ProductCriteria.Add(new rule { field = "PRD_NM", @operator = "=", value = "i800" });
-            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName, isWithEmail), $"Unable to save price rule");
+            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName, isPublish), $"Unable to save price rule");
         }
     }
 }

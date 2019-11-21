@@ -96,6 +96,21 @@ namespace Intel.MyDeals.Entities
         GET_RULES
     }
 
+    public class Criteria
+    {
+        public List<rule> Rules { get; set; }
+        public List<Products> Products { get; set; }
+        public rule BlanketDiscount { get; set; }
+    }
+
+    public class Products
+    {
+        public string ProductAttribute { get; set; }
+        public string Product { get; set; }
+        public string PriceAttribute { get; set; }
+        public string Price { get; set; }
+    }
+
     public class PriceRuleCriteria
     {
         public int Id { get; set; }
@@ -108,12 +123,9 @@ namespace Intel.MyDeals.Entities
         public DateTime EndDate { get; set; }
         public string Notes { get; set; }
         public bool RuleStage { get; set; }
-        public List<rule> Criteria { get; set; }
+        public Criteria Criterias { get; set; }
         public string CriteriaJson { get; set; }
         public string CriteriaSql { get; set; }
-        public List<rule> ProductCriteria { get; set; }
-        public string ProductCriteriaJson { get; set; }
-        public string ProductCriteriaSql { get; set; }
         public string ChangedBy { get; set; }
         public DateTime ChangeDateTime { get; set; }
         public string ChangeDateTimeFormat { get; set; }
@@ -125,8 +137,8 @@ namespace Intel.MyDeals.Entities
         public string field { get; set; }
         public string @operator { get; set; }
         public string value { get; set; }
-        public ValueType valueType { get; set; }
-        public List<string> multiValue { get; set; }
+        public List<string> values { get; set; }
+        public ValueType valueType { get; set; }        
     }
 
     public class ValueType
