@@ -589,7 +589,7 @@
                         EndDate: vm.rule.EndDate,
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
-                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), "Products": [], "BlanketDiscount": [] }
+                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), Products: [], BlanketDiscount: [] }
                     }
                     vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
                 }

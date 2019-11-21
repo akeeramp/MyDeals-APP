@@ -142,7 +142,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                 var fieldValue = field.field;
                 if (scope.dataItem.operator === "IN") {
                     html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                    if (helpMsg["IN"] !== undefined) html += '<div class="sm-help">' + helpMsg["IN"] + '</div>';
+                    if (helpMsg["IN"] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg["IN"] + '</div>';
                 } else {
                     switch (fieldType) {
                         case "string":
@@ -255,7 +255,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                                 html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
                     }
-                    if (helpMsg[fieldType] !== undefined) html += '<div class="sm-help">' + helpMsg[fieldType] + '</div>';
+                    if (helpMsg[fieldType] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg[fieldType] + '</div>';
                 }
 
                 var x = angular.element(html);
