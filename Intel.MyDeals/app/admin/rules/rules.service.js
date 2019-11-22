@@ -19,18 +19,33 @@
             getPassedRuleTasksByRuleId: getPassedRuleTasksByRuleId,
             getFailedRuleTasksByRuleId: getFailedRuleTasksByRuleId,
             getPriceRules: getPriceRules,
-            savePriceRule: savePriceRule,
-            getPriceRulesConfig: getPriceRulesConfig
+            updatePriceRule: updatePriceRule,
+            getPriceRulesConfig: getPriceRulesConfig,
+            isDuplicateTitle: isDuplicateTitle,
+            deletePriceRule: deletePriceRule,
+            copyPriceRule: copyPriceRule,
         }
 
         return service;
+
+        function copyPriceRule(iRuleSid) {
+            return dataService.post(apiBaseUrl + 'CopyPriceRule/' + iRuleSid);
+        }
+
+        function deletePriceRule(iRuleSid) {
+            return dataService.post(apiBaseUrl + 'DeletePriceRule/' + iRuleSid );
+        }
+
+        function isDuplicateTitle(iRuleSid, strTitle) {
+            return dataService.post(apiBaseUrl + 'IsDuplicateTitle/' + iRuleSid + "/" + strTitle);
+        }
 
         function getPriceRulesConfig() {
             return dataService.get(apiBaseUrl + 'GetPriceRulesConfig');
         }
 
-        function savePriceRule(priceRuleCriteria, strActionName, isWithEmail) {
-            return dataService.post(apiBaseUrl + 'SavePriceRule/' + strActionName + '/' + isWithEmail, priceRuleCriteria);
+        function updatePriceRule(priceRuleCriteria, isWithEmail) {
+            return dataService.post(apiBaseUrl + 'UpdatePriceRule/' +  isWithEmail, priceRuleCriteria);
         }
 
         function getPriceRules(id, strActionName) {

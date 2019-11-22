@@ -63,23 +63,29 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return lstPriceRuleCriteria;
         }
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isPublish)
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish)
         {
-            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            if (priceRuleAction == PriceRuleAction.CREATE || priceRuleAction == PriceRuleAction.UPDATE)
+            priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
+            using (RuleExpressions ruleExpressions = new RuleExpressions())
             {
-                priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
-                using (RuleExpressions ruleExpressions = new RuleExpressions())
-                {
-                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias);
-                }
+                priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias);
             }
-            else
-            {
-                //To avoid overflow
-                priceRuleCriteria.StartDate = priceRuleCriteria.EndDate = DateTime.UtcNow;
-            }
-            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction, isPublish);
+            return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, isPublish);
+        }
+
+        public bool IsDuplicateTitle(int iRuleSid, string strTitle)
+        {
+            return new ApprovalRules().IsDuplicateTitle(iRuleSid, strTitle);
+        }
+
+        public int DeletePriceRule(int iRuleSid)
+        {
+            return new ApprovalRules().DeletePriceRule(iRuleSid);
+        }
+
+        public int CopyPriceRule(int iRuleSid)
+        {
+            return new ApprovalRules().CopyPriceRule(iRuleSid);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
@@ -11,30 +10,98 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class ApprovalRules
     {
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction, bool isPublish)
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish)
         {
-            var cmd = new Procs.dbo.PR_MYDL_SAVE_RULE
+            if (!IsDuplicateTitle(priceRuleCriteria.Id, priceRuleCriteria.Name))
             {
-                actn_nm = priceRuleAction.ToString("g"),
-                rule_id = priceRuleCriteria.Id,
-                rule_nm = priceRuleCriteria.Name,
-                ownr_wwid = priceRuleCriteria.OwnerId,
-                is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
-                is_actv = priceRuleCriteria.IsActive,
-                strt_dt = priceRuleCriteria.StartDate,
-                end_dt = priceRuleCriteria.EndDate,
-                is_aprv = priceRuleCriteria.RuleStage,
-                note = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
-                rule_cri = priceRuleCriteria.CriteriaJson,
-                rule_sql_cri = priceRuleCriteria.CriteriaSql,
-                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                is_publ = isPublish
+                var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE
+                {
+                    @rule_sid = priceRuleCriteria.Id,
+                    @rule_nm = priceRuleCriteria.Name.Trim(),
+                    @ownr_wwid = priceRuleCriteria.OwnerId,
+                    @strt_dt = priceRuleCriteria.StartDate,
+                    @end_dt = priceRuleCriteria.EndDate,
+                    @notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
+                    @rule_cri = priceRuleCriteria.CriteriaJson,
+                    @rule_sql_cri = priceRuleCriteria.CriteriaSql,
+                    @prd_cri = null,
+                    @prd_sql_cri = null,
+                    @is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
+                    @is_aprv = priceRuleCriteria.RuleStage,
+                    @actv_ind = priceRuleCriteria.IsActive,
+                    @usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @is_publ = isPublish
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_RULE_SID = DB.GetReaderOrdinal(rdr, "RULE_SID");
+
+                    while (rdr.Read())
+                    {
+                        priceRuleCriteria.Id = (IDX_RULE_SID < 0 || rdr.IsDBNull(IDX_RULE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_SID);
+                    } // while
+                }
+            }
+
+            if (priceRuleCriteria.Id > 0)
+            {
+                priceRuleCriteria.ChangeDateTimeFormat = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm");
+                priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
+            }
+            return priceRuleCriteria;
+        }
+
+        public int DeletePriceRule(int iRuleSid)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_DEL_PRC_RULE
+            {
+                rule_sid = iRuleSid
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                return GetPriceRuleCriteria(rdr);
+                int IDX_RULE_SID = DB.GetReaderOrdinal(rdr, "RULE_SID");
+
+                while (rdr.Read())
+                {
+                    iRuleSid = (IDX_RULE_SID < 0 || rdr.IsDBNull(IDX_RULE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_SID);
+                } // while
             }
+            return iRuleSid;
+        }
+
+        public int CopyPriceRule(int iRuleSid)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_COPY_PRC_RULE
+            {
+                rule_sid = iRuleSid,
+                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_RULE_SID = DB.GetReaderOrdinal(rdr, "RULE_SID");
+
+                while (rdr.Read())
+                {
+                    iRuleSid = (IDX_RULE_SID < 0 || rdr.IsDBNull(IDX_RULE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_SID);
+                } // while
+            }
+            return iRuleSid;
+        }
+
+        public bool IsDuplicateTitle(int iRuleSid, string strTitle)
+        {
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_PRC_RULE_VLD
+            {
+                rule_sid = iRuleSid,
+                rule_nm = strTitle.Trim()
+            }))
+            {
+                if (rdr.HasRows) return true;
+            }
+            return false;
         }
 
         public List<PriceRuleCriteria> GetPriceRuleCriteriaById(int id, PriceRuleAction priceRuleAction)
@@ -42,8 +109,7 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_GET_PRC_RULE
             {
                 actn_nm = priceRuleAction.ToString("g"),
-                id = id,
-                usr_id = OpUserStack.MyOpUserToken.Usr.WWID
+                rule_sid = id
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -57,18 +123,18 @@ namespace Intel.MyDeals.DataLibrary
             List<PriceRuleCriteria> rtn = new List<PriceRuleCriteria>();
 
             // Go and add this to templates classes if needed (MIKE)
-            int IDX_RULE_ID = DB.GetReaderOrdinal(rdr, "RULE_ID");
+            int IDX_RULE_ID = DB.GetReaderOrdinal(rdr, "RULE_SID");
             int IDX_RULE_NAME = DB.GetReaderOrdinal(rdr, "RULE_NM");
-            int IDX_OWNER_NAME = DB.GetReaderOrdinal(rdr, "OWNR_NM");
-            int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTE");
+            int IDX_OWNER_NAME = DB.GetReaderOrdinal(rdr, "OWNR_EMP_NM");
+            int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
             int IDX_RULE_CRITERIA = DB.GetReaderOrdinal(rdr, "RULE_CRI");
-            int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+            int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "ACTV_IND");
             int IDX_IS_NORMAL_RULE = DB.GetReaderOrdinal(rdr, "IS_AUTO_INCL");
             int IDX_IS_APPROVED = DB.GetReaderOrdinal(rdr, "IS_APRV");
             int IDX_EFF_FRM_DT = DB.GetReaderOrdinal(rdr, "STRT_DT");
             int IDX_EFF_TO_DT = DB.GetReaderOrdinal(rdr, "END_DT");
-            int IDX_OWNER_WWID = DB.GetReaderOrdinal(rdr, "OWNR_WWID");
-            int IDX_CHG_BY = DB.GetReaderOrdinal(rdr, "CHG_NM");
+            int IDX_OWNER_WWID = DB.GetReaderOrdinal(rdr, "OWNR_EMP_WWID");
+            int IDX_CHG_BY = DB.GetReaderOrdinal(rdr, "CHG_EMP_NM");
             int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
 
             while (rdr.Read())
@@ -101,6 +167,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig.CurrentUserWWID = OpUserStack.MyOpUserToken.Usr.WWID;
+            ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ",", OpUserStack.MyOpUserToken.Usr.FirstName);
             ruleConfig.IsElligibleForApproval = lstApprovers.Contains(OpUserStack.MyOpUserToken.Usr.WWID);
             //ruleConfig.PriceRuleCriteria = GetPriceRuleCriteriaById(iRuleTypeId, PriceRuleAction.GET_BY_RULE_TYPE_ID);
             //ruleConfig.AttributeSettings = new List<AttributeSettings>();

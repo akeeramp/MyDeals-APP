@@ -45,6 +45,30 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("IsDuplicateTitle/{iRuleSid}/{strTitle}")]
+        [HttpPost]
+        public bool IsDuplicateTitle(int iRuleSid, string strTitle)
+        {
+            return SafeExecutor(() => _rulesLib.IsDuplicateTitle(iRuleSid, strTitle), $"Unable to get duplicate");
+        }
+
+        [Authorize]
+        [Route("DeletePriceRule/{iRuleSid}")]
+        [HttpPost]
+        public int DeletePriceRule(int iRuleSid)
+        {
+            return SafeExecutor(() => _rulesLib.DeletePriceRule(iRuleSid), $"Unable to delete the rule");
+        }
+
+        [Authorize]
+        [Route("CopyPriceRule/{iRuleSid}")]
+        [HttpPost]
+        public int CopyPriceRule(int iRuleSid)
+        {
+            return SafeExecutor(() => _rulesLib.CopyPriceRule(iRuleSid), $"Unable to copy the rule");
+        }
+
+        [Authorize]
         [Route("GetPriceRulesConfig")]
         public RuleConfig GetPriceRulesConfig()
         {
@@ -59,12 +83,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SavePriceRule/{strActionName}/{isPublish}")]
+        [Route("UpdatePriceRule/{isPublish}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<PriceRuleCriteria> SavePriceRule(string strActionName,bool isPublish, PriceRuleCriteria priceRuleCriteria)
+        public PriceRuleCriteria UpdatePriceRule(bool isPublish, PriceRuleCriteria priceRuleCriteria)
         {
-            return SafeExecutor(() => _rulesLib.SavePriceRule(priceRuleCriteria, strActionName, isPublish), $"Unable to save price rule");
+            return SafeExecutor(() => _rulesLib.UpdatePriceRule(priceRuleCriteria, isPublish), $"Unable to save price rule");
         }
     }
 }

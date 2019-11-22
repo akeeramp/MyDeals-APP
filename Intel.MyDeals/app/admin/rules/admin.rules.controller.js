@@ -12,6 +12,7 @@
     function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants) {
         var vm = this;
         vm.ruleId = 0;
+        vm.IsDuplicateName = false;
         vm.isEditmode = false;
         vm.Rules = [];
         vm.rule = {};
@@ -22,8 +23,8 @@
                 vm.RuleConfig = response.data;
             }, function (response) {
                 logger.error("Operation failed");
-                });
-            
+            });
+
             vm.GetRules(0, "GET_RULES");
         }
 
@@ -210,7 +211,7 @@
                 }
             }
         };
-        
+
         vm.ownerOptions = {
             placeholder: "Select email address...",
             dataTextField: "NAME",
@@ -398,27 +399,68 @@
                 lookups: [{ Value: "Yes" }, { Value: "No" }]
             }
         ];
-        
+
         vm.editRule = function (id) {
             vm.GetRules(id, "GET_BY_RULE_ID");
         }
 
         vm.copyRule = function (id) {
-            var priceRuleCriteria = {
-                Id: id
-            }
-            vm.RuleActions(priceRuleCriteria, "COPY", false);
+            ruleService.copyPriceRule(id).then(function (response) {
+                if (response.data > 0) {
+                    var sourceRule = vm.Rules.filter(x => x.Id == id)[0];
+                    var copiedRule = {};
+                    copiedRule.Id = response.data;
+                    copiedRule.Name = sourceRule.Name + " (Copy)";
+                    copiedRule.RuleStage = false;
+                    copiedRule.ChangeDateTime = new Date();
+                    copiedRule.ChangedBy = vm.RuleConfig.CurrentUserName;
+                    copiedRule.IsActive = sourceRule.IsActive;
+                    copiedRule.IsAutomationIncluded = sourceRule.IsAutomationIncluded;
+                    copiedRule.StartDate = sourceRule.StartDate;
+                    copiedRule.EndDate = sourceRule.EndDate;
+                    copiedRule.Notes = sourceRule.Notes;
+                    copiedRule.OwnerName = sourceRule.OwnerName;
+                    vm.Rules.splice(0, 0, copiedRule);
+                    vm.dataSource.read();
+                    logger.success("Rule has been copied");
+                    vm.editRule(copiedRule.Id);
+                } else {
+                    logger.error("Unable to copy the rule");
+                }
+            }, function (response) {
+                logger.error("Unable to copy the rule");
+            });
         }
 
-        vm.RuleActions = function (priceRuleCriteria, actionName, isWithEmail) {
-            ruleService.savePriceRule(priceRuleCriteria, actionName, isWithEmail).then(function (response) {
-                vm.Rules = response.data;
-                vm.isEditmode = false;
-                vm.dataSource.read();
-                logger.success("Operation success");
+        vm.UpdateRuleActions = function (priceRuleCriteria, isWithEmail) {
+            ruleService.updatePriceRule(priceRuleCriteria, isWithEmail).then(function (response) {
+                if (response.data.Id > 0) {
+                    if (vm.Rules.filter(x => x.Id == response.data.Id).length > 0) {
+                        vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);
+                    }
+                    var updatedRule = response.data;
+                    updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME;
+                    vm.Rules.splice(0, 0, updatedRule);
+                    vm.isEditmode = false;
+                    vm.dataSource.read();
+                    logger.success("Rule has been updated");
+                } else {
+                    vm.IsDuplicateName = true;
+                }
             }, function (response) {
-                logger.error("Operation failed");
+                logger.error("Unable to update the rule");
             });
+        };
+
+        vm.IsDuplicateTitle = function ($event) {
+            if (vm.rule.Name != '') {
+                ruleService.isDuplicateTitle(vm.rule.Id, vm.rule.Name).then(function (response) {
+                    vm.IsDuplicateName = response.data;
+                }, function (response) {
+                });
+            } else {
+                vm.IsDuplicateName = false;
+            }
         };
 
         var availableAttrs = [];
@@ -454,10 +496,15 @@
 
         vm.deleteRule = function (id) {
             kendo.confirm("Are you sure wants to delete?").then(function () {
-                var priceRuleCriteria = {
-                    Id: id
-                }
-                vm.RuleActions(priceRuleCriteria, "DELETE", false);
+                ruleService.deletePriceRule(id).then(function (response) {
+                    if (response.data > 0) {
+                        vm.Rules = vm.Rules.filter(x => x.Id != response.data);
+                        vm.dataSource.read();
+                        logger.success("Rule has been deleted");
+                    }
+                }, function (response) {
+                    logger.error("Unable to delete the rule");
+                });
             });
         };
 
@@ -589,9 +636,9 @@
                         EndDate: vm.rule.EndDate,
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
-                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), Products: [], BlanketDiscount: [] }
+                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [] }
                     }
-                    vm.RuleActions(priceRuleCriteria, (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0 ? "UPDATE" : "CREATE"), isWithEmail);
+                    vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
             });
         }
