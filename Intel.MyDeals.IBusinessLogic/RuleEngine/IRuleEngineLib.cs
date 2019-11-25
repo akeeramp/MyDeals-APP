@@ -12,6 +12,9 @@ namespace Intel.MyDeals.IBusinessLogic
         RuleConfig GetPriceRulesConfig();
         List<string> GetSuggestion(string strCategory, string strSearchKey);
         List<PriceRuleCriteria> GetPriceRules(int id, string strActionName);
-        List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isPublish);
+        PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName);
+        bool IsDuplicateTitle(int iRuleSid, string strTitle);
+        int DeletePriceRule(int iRuleSid);
+        int CopyPriceRule(int iRuleSid);
     }
 }

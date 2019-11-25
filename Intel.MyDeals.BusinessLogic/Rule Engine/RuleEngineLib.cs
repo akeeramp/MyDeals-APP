@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 
+
 namespace Intel.MyDeals.BusinessLogic
 {
     public class RuleEngineLib : IRuleEngineLib
@@ -40,7 +41,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig = new ApprovalRules().GetPriceRulesConfig();
-            ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").ToList();
+            ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").OrderBy(x => x.NAME).ToList();
             return ruleConfig;
         }
 
@@ -63,23 +64,30 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return lstPriceRuleCriteria;
         }
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isPublish)
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
         {
-            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            if (priceRuleAction == PriceRuleAction.CREATE || priceRuleAction == PriceRuleAction.UPDATE)
+            Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CRE_EMP_NAME").Count() > 0 ? new EmployeeDataLib().GetUsrProfileRole().ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
+            priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
+            using (RuleExpressions ruleExpressions = new RuleExpressions())
             {
-                priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
-                using (RuleExpressions ruleExpressions = new RuleExpressions())
-                {
-                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias);
-                }
+                priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
             }
-            else
-            {
-                //To avoid overflow
-                priceRuleCriteria.StartDate = priceRuleCriteria.EndDate = DateTime.UtcNow;
-            }
-            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction, isPublish);
+            return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, isPublish);
+        }
+
+        public bool IsDuplicateTitle(int iRuleSid, string strTitle)
+        {
+            return new ApprovalRules().IsDuplicateTitle(iRuleSid, strTitle);
+        }
+
+        public int DeletePriceRule(int iRuleSid)
+        {
+            return new ApprovalRules().DeletePriceRule(iRuleSid);
+        }
+
+        public int CopyPriceRule(int iRuleSid)
+        {
+            return new ApprovalRules().CopyPriceRule(iRuleSid);
         }
     }
 }

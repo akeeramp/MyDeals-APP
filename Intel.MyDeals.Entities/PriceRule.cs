@@ -11,6 +11,7 @@ namespace Intel.MyDeals.Entities
         public List<UsrProfileRole> DA_Users { get; set; }
         public bool IsElligibleForApproval { get; set; }
         public int CurrentUserWWID { get; set; }
+        public string CurrentUserName { get; set; }
         public operatorSettings operatorSettings { get; set; }
         public List<AttributeSettings> AttributeSettings { get; set; }
 
@@ -99,8 +100,7 @@ namespace Intel.MyDeals.Entities
     public class Criteria
     {
         public List<rule> Rules { get; set; }
-        public List<Products> Products { get; set; }
-        public rule BlanketDiscount { get; set; }
+        public List<rule> BlanketDiscount { get; set; }
     }
 
     public class Products

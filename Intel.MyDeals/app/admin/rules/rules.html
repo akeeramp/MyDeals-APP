@@ -23,8 +23,14 @@
             <div class="col-md-5">
                 <input class="form-control md"
                        type="text"
-                       ng-model="vm.rule.Name"
+                       ng-model="vm.rule.Name" ng-change="vm.IsDuplicateTitle($event)"
                        style="width:100%">
+            </div>
+        </div>
+        <div class="form-group row" ng-if="vm.IsDuplicateName" >
+            <label class="control-label col-md-2">&nbsp</label>
+            <div class="col-md-5">
+                <div class="err-Control ng-binding ng-scope" style="">This rule name already exists in another rule.</div>
             </div>
         </div>
         <div class="form-group row">
