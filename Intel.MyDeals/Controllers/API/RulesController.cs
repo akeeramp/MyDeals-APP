@@ -9,6 +9,7 @@ using System.Web.Http;
 using Intel.MyDeals.BusinessRules;
 using System.Linq;
 using Intel.MyDeals.Helpers;
+using Intel.MyDeals.App;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -28,7 +29,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<MyOpRule> GetBusinessRules()
         {
             return SafeExecutor(() => _rulesLib.GetBusinessRules(), $"Unable to get Business Rules");
-        }        
+        }
 
         [Authorize]
         [Route("GetSuggestion/{strCategory}/{strSearchKey}")]
@@ -88,7 +89,8 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public PriceRuleCriteria UpdatePriceRule(bool isPublish, PriceRuleCriteria priceRuleCriteria)
         {
-            return SafeExecutor(() => _rulesLib.UpdatePriceRule(priceRuleCriteria, isPublish), $"Unable to save price rule");
+            Dictionary<int, string> dicCustomerName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CUST_NM").Count() > 0 ? AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2002).ToDictionary(x => x.CUST_SID, y => y.CUST_NM) : new Dictionary<int, string>();            
+            return SafeExecutor(() => _rulesLib.UpdatePriceRule(priceRuleCriteria, isPublish, dicCustomerName), $"Unable to save price rule");
         }
     }
 }

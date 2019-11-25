@@ -126,9 +126,13 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect" };
-        public string GetSqlExpression(Criteria criteria)
+        public string GetSqlExpression(Criteria criteria, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
+            criteria.Rules.Where(x => x.field == "CRE_EMP_NAME").ToList().ForEach(x => { x.value = dicEmployeeName[Convert.ToInt32(x.value)]; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
+            criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
+            criteria.Rules.Where(x => x.type == "date").ToList().ForEach(x => { x.value = Convert.ToDateTime(x.value).ToString("MM/dd/yyyy"); });
+            criteria.Rules.Where(x => x.type == "numericOrPercentage").ToList().ForEach(x => { x.field = string.Concat(x.field, (x.valueType == null || x.valueType.value == "%" ? "_PRCNT" : x.valueType.value == "$" ? "_DLLR" : string.Empty)); });
             criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
             criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y, "'"))); });
             criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? string.Concat("'%", x.value, "%'") : string.Concat("'", x.value, "'"); });
@@ -140,7 +144,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").ToList().ForEach(x =>
                   {
                       x.@operator = "IN";
-                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", y.Replace("'", "''"), "'"))), ")");
+                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", (x.field == "CUST_NM" ? dicCustomerName[Convert.ToInt32(y)] : y).Replace("'", "''"), "'"))), ")");
                   });
 
                 strSqlCriteria = string.Concat(strSqlCriteria, " AND ", string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
@@ -152,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                                           select new rule
                                           {
                                               type = "string",
-                                              value = result,
+                                              value = x.field == "CUST_NM" ? dicCustomerName[Convert.ToInt32(result)] : result,
                                               field = x.field,
                                               @operator = x.@operator
                                           }).ToList();

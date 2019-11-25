@@ -253,7 +253,7 @@
                 type: "singleselect",
                 width: 150.0,
                 lookupText: "NAME",
-                lookupValue: "NAME",
+                lookupValue: "EMP_WWID",
                 lookupUrl: "/api/Employees/GetUsrProfileRole"
             },
             {
@@ -277,7 +277,7 @@
                 type: "list",
                 width: 150.0,
                 lookupText: "CUST_NM",
-                lookupValue: "CUST_NM",
+                lookupValue: "CUST_SID",
                 lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
             },
             {
@@ -288,12 +288,12 @@
             },
             {
                 field: "GEO_COMBINED",
-                title: "Customer Geo",
+                title: "Deal Geo",
                 type: "list",
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+                lookups: [{ Value: "WW" },{ Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
             },
             {
                 field: "PRODUCT_FILTER",
@@ -377,7 +377,7 @@
                 width: 150
             },
             {
-                field: "VOLUME_INC",
+                field: "VOL_INCR",
                 title: "Ceiling Volume Increase",
                 type: "numericOrPercentage",
                 width: 150
@@ -387,6 +387,12 @@
                 title: "End Date",
                 type: "date",
                 template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
+                width: 150
+            },
+            {
+                field: "END_DT_PUSH",
+                title: "End Date Push",
+                type: "number",
                 width: 150
             },
             {

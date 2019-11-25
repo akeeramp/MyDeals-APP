@@ -46,7 +46,7 @@ namespace Intel.MyDeals.DataLibrary
                             FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
                             IDSID = (IDX_IDSID < 0 || rdr.IsDBNull(IDX_IDSID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IDSID),
                             LST_NM = (IDX_LST_NM < 0 || rdr.IsDBNull(IDX_LST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_NM),
-                            NAME = (IDX_NAME < 0 || rdr.IsDBNull(IDX_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAME),
+                            NAME = (IDX_NAME < 0 || rdr.IsDBNull(IDX_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAME).Trim(),
                             MI = (IDX_MI < 0 || rdr.IsDBNull(IDX_MI)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MI),
                             ROLE_NM = (IDX_ROLE_NM < 0 || rdr.IsDBNull(IDX_ROLE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_NM),
                             USR_ACTV_IND = (IDX_USR_ACTV_IND < 0 || rdr.IsDBNull(IDX_USR_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_USR_ACTV_IND)

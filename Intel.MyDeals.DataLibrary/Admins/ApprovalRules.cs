@@ -167,7 +167,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig.CurrentUserWWID = OpUserStack.MyOpUserToken.Usr.WWID;
-            ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ",", OpUserStack.MyOpUserToken.Usr.FirstName);
+            ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
             ruleConfig.IsElligibleForApproval = lstApprovers.Contains(OpUserStack.MyOpUserToken.Usr.WWID);
             //ruleConfig.PriceRuleCriteria = GetPriceRuleCriteriaById(iRuleTypeId, PriceRuleAction.GET_BY_RULE_TYPE_ID);
             //ruleConfig.AttributeSettings = new List<AttributeSettings>();

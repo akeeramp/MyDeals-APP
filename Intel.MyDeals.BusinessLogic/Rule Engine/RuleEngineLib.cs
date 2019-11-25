@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 
+
 namespace Intel.MyDeals.BusinessLogic
 {
     public class RuleEngineLib : IRuleEngineLib
@@ -40,7 +41,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig = new ApprovalRules().GetPriceRulesConfig();
-            ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").ToList();
+            ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").OrderBy(x => x.NAME).ToList();
             return ruleConfig;
         }
 
@@ -63,12 +64,13 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return lstPriceRuleCriteria;
         }
-        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish)
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
         {
+            Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CRE_EMP_NAME").Count() > 0 ? new EmployeeDataLib().GetUsrProfileRole().ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
             priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
             using (RuleExpressions ruleExpressions = new RuleExpressions())
             {
-                priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias);
+                priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
             }
             return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, isPublish);
         }
