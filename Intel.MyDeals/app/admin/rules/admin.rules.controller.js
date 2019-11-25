@@ -17,6 +17,8 @@
         vm.Rules = [];
         vm.rule = {};
         vm.RuleConfig = [];
+        vm.BlanketDiscountDollar = "";
+        vm.BlanketDiscountPercentage = "";
 
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -293,7 +295,7 @@
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "WW" },{ Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+                lookups: [{ Value: "WW" }, { Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
             },
             {
                 field: "PRODUCT_FILTER",
@@ -448,7 +450,8 @@
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME;
                     vm.Rules.splice(0, 0, updatedRule);
                     vm.isEditmode = false;
-                    vm.dataSource.read();
+                    vm.IsDuplicateName = false;
+                    vm.dataSource.read();                    
                     logger.success("Rule has been updated");
                 } else {
                     vm.IsDuplicateName = true;
@@ -487,6 +490,8 @@
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
                         }
+                        vm.BlanketDiscountPercentage = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "%").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "%")[0].value : "";
+                        vm.BlanketDiscountDollar = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$")[0].value : "";
                         vm.isEditmode = true;
                     } break;
                     default: {
@@ -642,7 +647,7 @@
                         EndDate: vm.rule.EndDate,
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
-                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [] }
+                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollar, valueType: { value: "$" } }] }
                     }
                     vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
@@ -657,6 +662,9 @@
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
+            vm.BlanketDiscountPercentage = "";
+            vm.BlanketDiscountDollar = "";
+            vm.IsDuplicateName = false;
             vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
         }
 

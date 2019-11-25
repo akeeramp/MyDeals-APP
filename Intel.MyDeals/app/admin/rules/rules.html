@@ -27,7 +27,7 @@
                        style="width:100%">
             </div>
         </div>
-        <div class="form-group row" ng-if="vm.IsDuplicateName" >
+        <div class="form-group row" ng-if="vm.IsDuplicateName">
             <label class="control-label col-md-2">&nbsp</label>
             <div class="col-md-5">
                 <div class="err-Control ng-binding ng-scope" style="">This rule name already exists in another rule.</div>
@@ -115,10 +115,18 @@
                      custom-settings=""></div>
             </div>
         </div>
-        <div ng-show="false" class="form-group row" style="margin-bottom: 50px;">
-            <label class="control-label col-md-2">Product Criteria:</label>
-            <div class="col-md-5">
-                <kendo-grid id="productCriteria" options="vm.ProductCriteriaOptions" k-auto-bind="true" k-data-source="vm.ProductCriteria" style="height:200px !important; max-height:200px !important;" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Blanket Discount:</label>
+            <div class="col-md-2">
+                <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" k-decimals="0" k-format="'#'" k-min="0" k-max="100" style="width: 200px;font-size:11px;" />
+                <span>%</span>
+            </div>
+            <div class="col-md-1" style="text-align: center;line-height: 30px;">
+                <span>Or</span>
+            </div>
+            <div class="col-md-2">
+                <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollar" k-format="'n2'" k-min="0" style="width: 200px;font-size:11px;" />
+                <span>$</span>
             </div>
         </div>
         <div class="form-group row action_btns">

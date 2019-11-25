@@ -128,7 +128,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         string[] strStringDataTypes = new string[] { "string", "singleselect" };
         public string GetSqlExpression(Criteria criteria, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
-            criteria.Rules.Where(x => x.field == "CRE_EMP_NAME").ToList().ForEach(x => { x.value = dicEmployeeName[Convert.ToInt32(x.value)]; });
+            criteria.Rules.Where(x => x.field == "CRE_EMP_NAME").ToList().ForEach(x => { x.value = dicEmployeeName.ContainsKey(Convert.ToInt32(x.value)) ? dicEmployeeName[Convert.ToInt32(x.value)] : x.value; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
             criteria.Rules.Where(x => x.type == "date").ToList().ForEach(x => { x.value = Convert.ToDateTime(x.value).ToString("MM/dd/yyyy"); });
@@ -144,7 +144,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").ToList().ForEach(x =>
                   {
                       x.@operator = "IN";
-                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", (x.field == "CUST_NM" ? dicCustomerName[Convert.ToInt32(y)] : y).Replace("'", "''"), "'"))), ")");
+                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", (x.field == "CUST_NM" && dicCustomerName.ContainsKey(Convert.ToInt32(y)) ? dicCustomerName[Convert.ToInt32(y)] : y).Replace("'", "''"), "'"))), ")");
                   });
 
                 strSqlCriteria = string.Concat(strSqlCriteria, " AND ", string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
@@ -156,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                                           select new rule
                                           {
                                               type = "string",
-                                              value = x.field == "CUST_NM" ? dicCustomerName[Convert.ToInt32(result)] : result,
+                                              value = x.field == "CUST_NM" && dicCustomerName.ContainsKey(Convert.ToInt32(result)) ? dicCustomerName[Convert.ToInt32(result)] : result,
                                               field = x.field,
                                               @operator = x.@operator
                                           }).ToList();
@@ -166,6 +166,15 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 if (lstMulti.Count > 0)
                     strSqlCriteria = string.Concat(strSqlCriteria, " AND (", string.Join(" OR ", lstMulti.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, string.Concat("'%", x.value, "%'")))), ")");
             }
+            criteria.BlanketDiscount.RemoveAll(x => x.value == "0" || x.value == string.Empty);
+            if (criteria.BlanketDiscount.Count > 0)
+            {
+                if (criteria.BlanketDiscount.Count > 1)
+                    strSqlCriteria = string.Concat(strSqlCriteria, " AND (", string.Join(" OR ", criteria.BlanketDiscount.Select(x => string.Format("ECAP >= {0}", x.valueType.value == "%" ? string.Concat((Convert.ToDouble(x.value) / 100).ToString(), " * CAP") : x.value))), ")");
+                else
+                    strSqlCriteria = string.Concat(strSqlCriteria, " AND ", string.Format("ECAP >= {0}", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Concat((Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString(), " * CAP") : criteria.BlanketDiscount.First().value));
+            }
+
             return strSqlCriteria;
         }
 
