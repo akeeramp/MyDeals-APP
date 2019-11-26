@@ -149,7 +149,15 @@
     #blanket_section span {
         font-size: 12px;
     }
-
+    div.k-spreadsheet-formula-bar,
+    div.k-spreadsheet-row-header,
+    div.k-spreadsheet-column-header,
+    div.k-spreadsheet-top-corner {
+        display: none !important;
+    }
+    .k-animation-container {
+        visibility: hidden;
+    }
     .k-spreadsheet-action-bar {
         display:none !important;
     }
@@ -244,13 +252,13 @@
                     height: 25,
                     cells: [
                         {
-                            value: "ProductName",
+                            value: "Product Name",
                             bold: "true",
                             background: "#045092",
                             textAlign: "center",
                             color: "white"
                         }, {
-                            value: "ProductCost",
+                            value: "Price",
                             bold: "true",
                             background: "#045092",
                             textAlign: "center",
@@ -275,6 +283,8 @@
                 //dataSource.cancelChanges();
             }
         });
+
+        $(".k-context-menu").remove();
     }
         
 
