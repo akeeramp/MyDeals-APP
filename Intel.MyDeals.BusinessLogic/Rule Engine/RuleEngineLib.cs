@@ -60,6 +60,7 @@ namespace Intel.MyDeals.BusinessLogic
                 lstPriceRuleCriteria.ForEach(x =>
                 {
                     x.Criterias = JsonConvert.DeserializeObject<Criteria>(x.CriteriaJson);
+                    x.ProductCriteria= JsonConvert.DeserializeObject<List<Products>>(x.ProductCriteriaJson);
                 });
             }
             return lstPriceRuleCriteria;
@@ -68,9 +69,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CRE_EMP_NAME").Count() > 0 ? new EmployeeDataLib().GetUsrProfileRole().ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
             priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
+            priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
             using (RuleExpressions ruleExpressions = new RuleExpressions())
             {
                 priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
+                priceRuleCriteria.ProductCriteriaSql = ruleExpressions.GetSqlExpressionForProducts(priceRuleCriteria.ProductCriteria);
             }
             return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, isPublish);
         }

@@ -89,7 +89,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public PriceRuleCriteria UpdatePriceRule(bool isPublish, PriceRuleCriteria priceRuleCriteria)
         {
-            Dictionary<int, string> dicCustomerName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CUST_NM").Count() > 0 ? AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2002).ToDictionary(x => x.CUST_SID, y => y.CUST_NM) : new Dictionary<int, string>();            
+            Dictionary<int, string> dicCustomerName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CUST_NM").Count() > 0 ? AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2002).ToDictionary(x => x.CUST_SID, y => y.CUST_NM) : new Dictionary<int, string>();
             return SafeExecutor(() => _rulesLib.UpdatePriceRule(priceRuleCriteria, isPublish, dicCustomerName), $"Unable to save price rule");
         }
     }

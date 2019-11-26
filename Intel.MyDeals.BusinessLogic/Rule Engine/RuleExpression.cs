@@ -117,12 +117,12 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             StringReader stringReader = new StringReader(node.ToString());
             XmlSerializer serializer = new XmlSerializer(typeof(List<Products>), new XmlRootAttribute(strTempXmlRoot));
             List<Products> lstRtn = (List<Products>)serializer.Deserialize(stringReader);
-            return lstRtn.Distinct(new DistinctItemComparerProducts()).OrderBy(x => x.Product).ToList();
+            return lstRtn.Distinct(new DistinctItemComparerProducts()).OrderBy(x => x.ProductName).ToList();
         }
 
         public string GetSqlExpressionForProducts(List<Products> lstProduct)
         {
-            return string.Join(" OR ", lstProduct.Select(x => string.Format("({0} = '{1}' AND {2} = {3})", x.ProductAttribute, x.Product, x.PriceAttribute, x.Price)));
+            return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRD_NM = '{0}' AND ECAP = {1})", x.ProductName, x.Price)));
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect" };
@@ -283,12 +283,12 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
     {
         public bool Equals(Products x, Products y)
         {
-            return x.Product == y.Product && x.Price == y.Price;
+            return x.ProductName == y.ProductName && x.Price == y.Price;
         }
 
         public int GetHashCode(Products obj)
         {
-            return obj.Product.GetHashCode() ^ obj.Price.GetHashCode();
+            return obj.ProductName.GetHashCode() ^ obj.Price.GetHashCode();
         }
     }
 
@@ -317,13 +317,5 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         public string SqlDataType { get; set; }
         public bool IsDirectAttributeValue { get; set; }
         public string InitiateAs { get; set; }
-    }
-
-    public class Products
-    {
-        public string ProductAttribute { get; set; }
-        public string Product { get; set; }
-        public string PriceAttribute { get; set; }
-        public string Price { get; set; }
-    }
+    }    
 }

@@ -105,10 +105,9 @@ namespace Intel.MyDeals.Entities
 
     public class Products
     {
-        public string ProductAttribute { get; set; }
-        public string Product { get; set; }
-        public string PriceAttribute { get; set; }
+        public string ProductName { get; set; }
         public string Price { get; set; }
+        public bool IsValid { get; set; }
     }
 
     public class PriceRuleCriteria
@@ -126,6 +125,9 @@ namespace Intel.MyDeals.Entities
         public Criteria Criterias { get; set; }
         public string CriteriaJson { get; set; }
         public string CriteriaSql { get; set; }
+        public List<Products> ProductCriteria { get; set; }
+        public string ProductCriteriaJson { get; set; }
+        public string ProductCriteriaSql { get; set; }
         public string ChangedBy { get; set; }
         public DateTime ChangeDateTime { get; set; }
         public string ChangeDateTimeFormat { get; set; }

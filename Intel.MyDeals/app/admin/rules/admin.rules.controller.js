@@ -594,6 +594,8 @@
             vm.rule = {};
         }
 
+        vm.ProductCriteria = [{ ProductName: "i3-550", Price: "1000", IsValid: false }, { ProductName: "CM80616003174AH", Price: "1500", IsValid: false }];
+
         vm.saveRule = function (isWithEmail) {
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
@@ -651,7 +653,8 @@
                         EndDate: vm.rule.EndDate,
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
-                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] }
+                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
+                        ProductCriteria: vm.ProductCriteria
                     }
                     vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
