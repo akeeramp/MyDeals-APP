@@ -7,10 +7,10 @@
         </div>
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
-    <div ng-if="vm.isEditmode">
+    <div class="col-md-7" ng-if="vm.isEditmode">
         <div ng-show="false" class="form-group row">
             <label class="control-label col-md-2">Rule:</label>
-            <div class="col-md-5">
+            <div class="col-md-10">
                 <select class="form-control md"
                         kendo-combo-box
                         k-options="vm.ruleOptions"
@@ -20,22 +20,22 @@
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Name:</label>
-            <div class="col-md-5">
+            <div class="col-md-10">
                 <input class="form-control md"
                        type="text"
                        ng-model="vm.rule.Name" ng-change="vm.IsDuplicateTitle($event)"
                        style="width:100%">
             </div>
         </div>
-        <div class="form-group row" ng-if="vm.IsDuplicateName" >
+        <div class="form-group row" ng-if="vm.IsDuplicateName">
             <label class="control-label col-md-2">&nbsp</label>
-            <div class="col-md-5">
+            <div class="col-md-10">
                 <div class="err-Control ng-binding ng-scope" style="">This rule name already exists in another rule.</div>
             </div>
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Owner:</label>
-            <div class="col-md-5">
+            <div class="col-md-10">
                 <select kendo-combo-box
                         k-options="vm.ownerOptions"
                         ng-model="vm.rule.OwnerId"
@@ -44,7 +44,7 @@
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Status:</label>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsActive"
                         on="Active"
@@ -52,8 +52,8 @@
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Stage:</label>
-            <div class="col-md-1" style="margin-left:-15px;">
+            <label class="control-label col-md-2">Stage:</label>
+            <div class="col-md-4" style="margin-left:-15px;">
                 <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
                         ng-model="vm.rule.RuleStage"
                         on="Approved"
@@ -61,15 +61,15 @@
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Automation:</label>
-            <div class="col-md-1" style="margin-left:-15px;">
+            <!--<label class="control-label col-md-1">Automation:</label>
+            <div class="col-md-2" style="margin-left:-15px;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsAutomationIncluded"
                         on="Include"
                         off="Exclude"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
+            </div>-->
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Rule Start Date:</label>
@@ -79,17 +79,17 @@
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
-            <label class="control-label col-md-1">End Date:</label>
+            <label class="control-label col-md-2">End Date:</label>
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="To date"
                        ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
+                       style="width: 100%;margin-left:-15px;" />
             </div>
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Notes:</label>
-            <div class="col-md-5">
+            <div class="col-md-10">
                 <textarea type="textarea" rows="5"
                           ng-model="vm.rule.Notes"
                           style="width:100%" />
@@ -97,7 +97,7 @@
         </div>
         <div ng-if="vm.rule.Id > 0" class="form-group row" style="margin:0px !important;margin-left:-10px !important;">
             <label class="control-label col-md-2">&nbsp;</label>
-            <div class="col-md-5" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
+            <div class="col-md-10" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
                 <span>Last modified by </span>
                 <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
                 <span> on </span>
@@ -106,7 +106,7 @@
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Criteria:</label>
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <div rule-attribute-builder
                      grid-id="'attributeGrid'"
                      operator-settings="operatorSettings"
@@ -115,12 +115,7 @@
                      custom-settings=""></div>
             </div>
         </div>
-        <div ng-show="false" class="form-group row" style="margin-bottom: 50px;">
-            <label class="control-label col-md-2">Product Criteria:</label>
-            <div class="col-md-5">
-                <kendo-grid id="productCriteria" options="vm.ProductCriteriaOptions" k-auto-bind="true" k-data-source="vm.ProductCriteria" style="height:200px !important; max-height:200px !important;" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
-            </div>
-        </div>
+
         <div class="form-group row action_btns">
             <label class="control-label col-md-2"></label>
             <div class="col-md-6">
@@ -130,8 +125,29 @@
             </div>
         </div>
     </div>
+    <div class="form-group row" style="margin-bottom: 50px;" ng-show="vm.isEditmode">
+        <div class="col-md-5">
+            <label class="control-label col-md-12" style="text-align:left">Product Criteria: 
+                <a href="" ng-hide="vm.isProductGridVisible" ng-click="vm.createProductSheet()">Show Grid</a>                    
+            </label>
+            <div class="col-md-12">
+                <button ng-show="vm.isProductGridVisible" class="k-button" id="save" role="button" ng-click="vm.validateProducts(this)">Validate</button>                
+            </div>
+            <div class="col-md-12" style="margin-top:5px">
+                <div id="spreadsheet" style="width: 100%;" k-scope-field="spreadsheet"></div>
+            </div>
+            
+
+        </div>
+    </div>
 </form>
 <style>
+    .k-spreadsheet-action-bar {
+        display:none !important;
+    }
+    .k-spreadsheet-fixed-container{
+        margin-left: -33px;
+    }
     #productCriteria tbody .k-alt {
         background-color: white !important;
         border-right-color: lightgray !important;
@@ -205,4 +221,53 @@
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
     });
+</script>
+<script>
+    function createProductSheet() {        
+        $("#spreadsheet").kendoSpreadsheet({
+            columns: 2,
+            rows: 200,
+            toolbar: false,
+            sheetsbar: false,
+            actionbar: false,
+            sheets: [{
+                name: "Products",
+                rows: [{
+                    height: 25,
+                    cells: [
+                        {
+                            value: "ProductName",
+                            bold: "true",
+                            background: "#045092",
+                            textAlign: "center",
+                            color: "white"
+                        }, {
+                            value: "ProductCost",
+                            bold: "true",
+                            background: "#045092",
+                            textAlign: "center",
+                            color: "white"
+                        }]
+                }],
+                columns: [
+                    { width: 365 },
+                    { width: 160 }
+                ]
+            }]
+        });
+
+        $("#save").click(function () {
+            if (!$(this).hasClass("k-state-disabled")) {
+                //dataSource.sync();
+            }
+        });
+
+        $("#cancel").click(function () {
+            if (!$(this).hasClass("k-state-disabled")) {
+                //dataSource.cancelChanges();
+            }
+        });
+    }
+        
+
 </script>
