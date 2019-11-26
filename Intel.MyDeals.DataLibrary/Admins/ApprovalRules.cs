@@ -118,6 +118,27 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public List<string> GetInvalidProducts(List<string> lstProducts)
+        {
+            List<string> lstInvalidProducts = new List<string>();
+            Procs.dbo.PR_MYDL_PRD_VLD cmd = new Procs.dbo.PR_MYDL_PRD_VLD()
+            {
+                in_prd_nm_list = new type_list(lstProducts.ToArray())
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+
+                while (rdr.Read())
+                {
+                    lstInvalidProducts.Add((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
+                } // while
+            }
+
+            return lstInvalidProducts;
+        }
+
         List<PriceRuleCriteria> GetPriceRuleCriteria(SqlDataReader rdr)
         {
             List<PriceRuleCriteria> rtn = new List<PriceRuleCriteria>();
