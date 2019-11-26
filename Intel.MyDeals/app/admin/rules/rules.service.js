@@ -24,9 +24,14 @@
             isDuplicateTitle: isDuplicateTitle,
             deletePriceRule: deletePriceRule,
             copyPriceRule: copyPriceRule,
+            validateProducts: validateProducts
         }
 
         return service;
+
+        function validateProducts(lstProducts) {
+            return dataService.post(apiBaseUrl + 'ValidateProducts', lstProducts);
+        }
 
         function copyPriceRule(iRuleSid) {
             return dataService.post(apiBaseUrl + 'CopyPriceRule/' + iRuleSid);

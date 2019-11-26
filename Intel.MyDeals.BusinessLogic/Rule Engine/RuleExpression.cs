@@ -117,18 +117,26 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             StringReader stringReader = new StringReader(node.ToString());
             XmlSerializer serializer = new XmlSerializer(typeof(List<Products>), new XmlRootAttribute(strTempXmlRoot));
             List<Products> lstRtn = (List<Products>)serializer.Deserialize(stringReader);
-            return lstRtn.Distinct(new DistinctItemComparerProducts()).OrderBy(x => x.Product).ToList();
+            return lstRtn.Distinct(new DistinctItemComparerProducts()).OrderBy(x => x.ProductName).ToList();
         }
 
         public string GetSqlExpressionForProducts(List<Products> lstProduct)
         {
-            return string.Join(" OR ", lstProduct.Select(x => string.Format("({0} = '{1}' AND {2} = {3})", x.ProductAttribute, x.Product, x.PriceAttribute, x.Price)));
+            return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRD_NM = '{0}' AND ECAP = {1})", x.ProductName, x.Price)));
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect" };
         public string GetSqlExpression(Criteria criteria, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
-            criteria.Rules.Where(x => x.field == "CRE_EMP_NAME").ToList().ForEach(x => { x.value = dicEmployeeName[Convert.ToInt32(x.value)]; });
+            string strSqlCriteria = string.Empty;
+            criteria.BlanketDiscount.RemoveAll(x => x.value == "0" || x.value == string.Empty);
+            if (criteria.BlanketDiscount.Count > 0)
+            {
+                strSqlCriteria = string.Concat("(OBJ_SET_TYPE_CD = ECAP) AND (ECAP_PRICE >= (CAP - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("(CAP * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString()) : criteria.BlanketDiscount.First().value, "))");
+                criteria.Rules.RemoveAll(x => x.field == "OBJ_SET_TYPE_CD" && x.value == "ECAP");
+            }
+
+            criteria.Rules.Where(x => x.field == "CRE_EMP_NAME").ToList().ForEach(x => { x.value = dicEmployeeName.ContainsKey(Convert.ToInt32(x.value)) ? dicEmployeeName[Convert.ToInt32(x.value)] : x.value; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
             criteria.Rules.Where(x => x.type == "date").ToList().ForEach(x => { x.value = Convert.ToDateTime(x.value).ToString("MM/dd/yyyy"); });
@@ -137,17 +145,17 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y, "'"))); });
             criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? string.Concat("'%", x.value, "%'") : string.Concat("'", x.value, "'"); });
             criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
-            string strSqlCriteria = string.Join(" AND ", criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value)));
+            strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
 
             if (criteria.Rules.Where(x => x.type == "list").Count() > 0)
             {
                 criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").ToList().ForEach(x =>
                   {
                       x.@operator = "IN";
-                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", (x.field == "CUST_NM" ? dicCustomerName[Convert.ToInt32(y)] : y).Replace("'", "''"), "'"))), ")");
+                      x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", (x.field == "CUST_NM" && dicCustomerName.ContainsKey(Convert.ToInt32(y)) ? dicCustomerName[Convert.ToInt32(y)] : y).Replace("'", "''"), "'"))), ")");
                   });
 
-                strSqlCriteria = string.Concat(strSqlCriteria, " AND ", string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND")==false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
 
                 List<rule> lstMulti = new List<rule>();
                 criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE").ToList().ForEach(x =>
@@ -156,7 +164,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                                           select new rule
                                           {
                                               type = "string",
-                                              value = x.field == "CUST_NM" ? dicCustomerName[Convert.ToInt32(result)] : result,
+                                              value = x.field == "CUST_NM" && dicCustomerName.ContainsKey(Convert.ToInt32(result)) ? dicCustomerName[Convert.ToInt32(result)] : result,
                                               field = x.field,
                                               @operator = x.@operator
                                           }).ToList();
@@ -164,8 +172,9 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 });
 
                 if (lstMulti.Count > 0)
-                    strSqlCriteria = string.Concat(strSqlCriteria, " AND (", string.Join(" OR ", lstMulti.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, string.Concat("'%", x.value, "%'")))), ")");
+                    strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND (" : "(", string.Join(" OR ", lstMulti.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, string.Concat("'%", x.value, "%'")))), ")");
             }
+
             return strSqlCriteria;
         }
 
@@ -274,12 +283,12 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
     {
         public bool Equals(Products x, Products y)
         {
-            return x.Product == y.Product && x.Price == y.Price;
+            return x.ProductName == y.ProductName && x.Price == y.Price;
         }
 
         public int GetHashCode(Products obj)
         {
-            return obj.Product.GetHashCode() ^ obj.Price.GetHashCode();
+            return obj.ProductName.GetHashCode() ^ obj.Price.GetHashCode();
         }
     }
 
@@ -308,13 +317,5 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         public string SqlDataType { get; set; }
         public bool IsDirectAttributeValue { get; set; }
         public string InitiateAs { get; set; }
-    }
-
-    public class Products
-    {
-        public string ProductAttribute { get; set; }
-        public string Product { get; set; }
-        public string PriceAttribute { get; set; }
-        public string Price { get; set; }
-    }
+    }    
 }

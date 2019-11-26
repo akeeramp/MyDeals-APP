@@ -24,8 +24,8 @@ namespace Intel.MyDeals.DataLibrary
                     @notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
                     @rule_cri = priceRuleCriteria.CriteriaJson,
                     @rule_sql_cri = priceRuleCriteria.CriteriaSql,
-                    @prd_cri = null,
-                    @prd_sql_cri = null,
+                    @prd_cri = priceRuleCriteria.ProductCriteriaJson,
+                    @prd_sql_cri = priceRuleCriteria.ProductCriteriaSql,
                     @is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
                     @is_aprv = priceRuleCriteria.RuleStage,
                     @actv_ind = priceRuleCriteria.IsActive,
@@ -118,6 +118,27 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public List<string> GetInvalidProducts(List<string> lstProducts)
+        {
+            List<string> lstInvalidProducts = new List<string>();
+            Procs.dbo.PR_MYDL_PRD_VLD cmd = new Procs.dbo.PR_MYDL_PRD_VLD()
+            {
+                in_prd_nm_list = new type_list(lstProducts.ToArray())
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+
+                while (rdr.Read())
+                {
+                    lstInvalidProducts.Add((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
+                } // while
+            }
+
+            return lstInvalidProducts;
+        }
+
         List<PriceRuleCriteria> GetPriceRuleCriteria(SqlDataReader rdr)
         {
             List<PriceRuleCriteria> rtn = new List<PriceRuleCriteria>();
@@ -128,6 +149,7 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_OWNER_NAME = DB.GetReaderOrdinal(rdr, "OWNR_EMP_NM");
             int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
             int IDX_RULE_CRITERIA = DB.GetReaderOrdinal(rdr, "RULE_CRI");
+            int IDX_PRD_CRITERIA = DB.GetReaderOrdinal(rdr, "PRD_CRI");
             int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "ACTV_IND");
             int IDX_IS_NORMAL_RULE = DB.GetReaderOrdinal(rdr, "IS_AUTO_INCL");
             int IDX_IS_APPROVED = DB.GetReaderOrdinal(rdr, "IS_APRV");
@@ -147,6 +169,7 @@ namespace Intel.MyDeals.DataLibrary
                     OwnerName = (IDX_OWNER_NAME < 0 || rdr.IsDBNull(IDX_OWNER_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OWNER_NAME),
                     Notes = (IDX_NOTES < 0 || rdr.IsDBNull(IDX_NOTES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTES),
                     CriteriaJson = (IDX_RULE_CRITERIA < 0 || rdr.IsDBNull(IDX_RULE_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_CRITERIA),
+                    ProductCriteriaJson = (IDX_PRD_CRITERIA < 0 || rdr.IsDBNull(IDX_PRD_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CRITERIA),
                     IsActive = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
                     IsAutomationIncluded = (IDX_IS_NORMAL_RULE < 0 || rdr.IsDBNull(IDX_IS_NORMAL_RULE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_NORMAL_RULE),
                     RuleStage = (IDX_IS_APPROVED < 0 || rdr.IsDBNull(IDX_IS_APPROVED)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_APPROVED),

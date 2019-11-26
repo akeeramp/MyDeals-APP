@@ -166,7 +166,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                                 if (scope.dataItem.valueType == undefined)
                                     scope.dataItem.valueType = "{text:\"$\",value:\"$\"}";
                                 html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 137px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                                html += '<select class="opUiContainer sm" kendo-drop-down-list style="width: 60px;" k-ng-model="dataItem.valueType"><option>%</option><option>$</option></select>'
+                                html += '<select class="opUiContainer sm" kendo-drop-down-list style="width: 60px;" k-ng-model="dataItem.valueType"><option value="%">%</option><option value="$">Unit</option></select>'
                             } break;
                         case "date":
                             {

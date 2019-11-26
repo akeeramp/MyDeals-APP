@@ -12,12 +12,12 @@
     function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants) {
         var vm = this;
         vm.ruleId = 0;
-        vm.IsDuplicateName = false;
         vm.isEditmode = false;
         vm.Rules = [];
         vm.rule = {};
         vm.RuleConfig = [];
-        vm.isProductGridVisible = false;
+        vm.BlanketDiscountDollor = "";
+        vm.BlanketDiscountPercentage = "";
 
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -294,7 +294,16 @@
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "WW" },{ Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+                lookups: [{ Value: "Worldwide" }, { Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+            },
+            {
+                field: "HOST_GEO",
+                title: "Customer Geo",
+                type: "list",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookups: [{ Value: "APAC" }, { Value: "ASMO" }, { Value: "EMEA" }, { Value: "IJKK" }, { Value: "PRC" }]
             },
             {
                 field: "PRODUCT_FILTER",
@@ -449,25 +458,22 @@
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME;
                     vm.Rules.splice(0, 0, updatedRule);
                     vm.isEditmode = false;
-                    vm.dataSource.read();
+                    vm.dataSource.read();                    
                     logger.success("Rule has been updated");
                 } else {
-                    vm.IsDuplicateName = true;
+                    kendo.alert("This rule name already exists in another rule.");
                 }
             }, function (response) {
                 logger.error("Unable to update the rule");
             });
         };
 
-        vm.IsDuplicateTitle = function ($event) {
-            if (vm.rule.Name != '') {
-                ruleService.isDuplicateTitle(vm.rule.Id, vm.rule.Name).then(function (response) {
-                    vm.IsDuplicateName = response.data;
-                }, function (response) {
-                });
-            } else {
-                vm.IsDuplicateName = false;
-            }
+        vm.EditBlanketDiscountPercentage = function () {
+            vm.BlanketDiscountDollor = "";
+        };
+
+        vm.EditBlanketDiscountDollor = function () {
+            vm.BlanketDiscountPercentage = "";
         };
 
         var availableAttrs = [];
@@ -488,7 +494,9 @@
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
                         }
-                        vm.isEditmode = true;                        
+                        vm.BlanketDiscountPercentage = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "%").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "%")[0].value : "";
+                        vm.BlanketDiscountDollor = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$")[0].value : "";
+                        vm.isEditmode = true;
                     } break;
                     default: {
                         vm.Rules = response.data;
@@ -586,6 +594,8 @@
             vm.rule = {};
         }
 
+        vm.ProductCriteria = [{ ProductName: "i3-550", Price: "1000", IsValid: false }, { ProductName: "CM80616003174AH", Price: "1500", IsValid: false }];
+
         vm.saveRule = function (isWithEmail) {
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
@@ -643,7 +653,8 @@
                         EndDate: vm.rule.EndDate,
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
-                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [] }
+                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
+                        ProductCriteria: vm.ProductCriteria
                     }
                     vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
@@ -658,6 +669,8 @@
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
+            vm.BlanketDiscountPercentage = "";
+            vm.BlanketDiscountDollor = "";
             vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
         }
 

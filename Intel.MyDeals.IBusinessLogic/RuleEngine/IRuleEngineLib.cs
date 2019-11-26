@@ -16,5 +16,6 @@ namespace Intel.MyDeals.IBusinessLogic
         bool IsDuplicateTitle(int iRuleSid, string strTitle);
         int DeletePriceRule(int iRuleSid);
         int CopyPriceRule(int iRuleSid);
+        List<string> ValidateProducts(List<string> lstProducts);
     }
 }

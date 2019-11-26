@@ -60,17 +60,28 @@ namespace Intel.MyDeals.BusinessLogic
                 lstPriceRuleCriteria.ForEach(x =>
                 {
                     x.Criterias = JsonConvert.DeserializeObject<Criteria>(x.CriteriaJson);
+                    x.ProductCriteria= JsonConvert.DeserializeObject<List<Products>>(x.ProductCriteriaJson);
                 });
             }
             return lstPriceRuleCriteria;
         }
+
+        public List<string> ValidateProducts(List<string> lstProducts)
+        {
+           return new ApprovalRules().GetInvalidProducts(lstProducts);
+        }
+
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
         {
             Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CRE_EMP_NAME").Count() > 0 ? new EmployeeDataLib().GetUsrProfileRole().ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
+            List<string> lstInvalidProducts = ValidateProducts(priceRuleCriteria.ProductCriteria.Select(x => x.ProductName).ToList());
+            priceRuleCriteria.ProductCriteria.ForEach(x => x.IsValid = !lstInvalidProducts.Contains(x.ProductName));
             priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
+            priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
             using (RuleExpressions ruleExpressions = new RuleExpressions())
             {
                 priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
+                priceRuleCriteria.ProductCriteriaSql = ruleExpressions.GetSqlExpressionForProducts(priceRuleCriteria.ProductCriteria);
             }
             return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, isPublish);
         }
