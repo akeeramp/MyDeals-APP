@@ -674,6 +674,28 @@
             vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
         }
 
+        //Get Product(s) from Product Grid
+        vm.validateProducts = function () {
+            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+
+            var sheet = spreadsheet.activeSheet();
+
+            var productList = sheet.range("A1:B200").values();
+            //Get Product Name
+            var prdArray = [];
+            productList.forEach(function (elem) {
+                if (elem && elem[0] != 'ProductName' && elem[0] && elem[1]) {
+                    prdArray.push(elem[0]);
+                }
+            });
+            //Hack Make the MT call to validate -- Ganthi
+            
+        }
+        vm.createProductSheet = function () {
+            vm.isProductGridVisible = !vm.isProductGridVisible;
+            createProductSheet();
+        }
+
         $scope.init();
     }
 })();
