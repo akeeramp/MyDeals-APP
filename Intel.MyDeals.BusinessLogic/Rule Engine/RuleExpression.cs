@@ -132,7 +132,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             criteria.BlanketDiscount.RemoveAll(x => x.value == "0" || x.value == string.Empty);
             if (criteria.BlanketDiscount.Count > 0)
             {
-                strSqlCriteria = string.Concat("(OBJ_SET_TYPE_CD = ECAP) AND (ECAP_PRICE >= (CAP - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("(CAP * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString()) : criteria.BlanketDiscount.First().value, "))");
+                strSqlCriteria = string.Concat("(OBJ_SET_TYPE_CD = 'ECAP') AND (ECAP_PRICE >= (CAP - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("(CAP * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString()) : criteria.BlanketDiscount.First().value, "))");
                 criteria.Rules.RemoveAll(x => x.field == "OBJ_SET_TYPE_CD" && x.value == "ECAP");
             }
 
