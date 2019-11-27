@@ -107,7 +107,6 @@ namespace Intel.MyDeals.Entities
     {
         public string ProductName { get; set; }
         public string Price { get; set; }
-        public bool IsValid { get; set; }
     }
 
     public class PriceRuleCriteria

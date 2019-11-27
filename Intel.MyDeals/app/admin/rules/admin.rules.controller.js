@@ -18,6 +18,7 @@
         vm.RuleConfig = [];
         vm.BlanketDiscountDollor = "";
         vm.BlanketDiscountPercentage = "";
+        vm.ProductCriteria = [];
 
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -401,7 +402,7 @@
             },
             {
                 field: "END_DT_PUSH",
-                title: "End Date Push",
+                title: "End Date Push Days",
                 type: "number",
                 width: 150
             },
@@ -457,8 +458,9 @@
                     var updatedRule = response.data;
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME;
                     vm.Rules.splice(0, 0, updatedRule);
+                    $('#productCriteria').hide();
                     vm.isEditmode = false;
-                    vm.dataSource.read();                    
+                    vm.dataSource.read();
                     logger.success("Rule has been updated");
                 } else {
                     kendo.alert("This rule name already exists in another rule.");
@@ -494,8 +496,11 @@
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
                         }
+                        vm.ProductCriteria = vm.rule.ProductCriteria;
                         vm.BlanketDiscountPercentage = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "%").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "%")[0].value : "";
                         vm.BlanketDiscountDollor = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$")[0].value : "";
+                        $('#productCriteria').show();
+                        vm.dataSourceSpreadSheet.read();
                         vm.isEditmode = true;
                     } break;
                     default: {
@@ -590,11 +595,38 @@
         };
 
         vm.cancel = function () {
+            $('#productCriteria').hide();
             vm.isEditmode = false;
             vm.rule = {};
         }
 
-        vm.ProductCriteria = [{ ProductName: "i3-550", Price: "1000", IsValid: false }, { ProductName: "CM80616003174AH", Price: "1500", IsValid: false }];
+        vm.validateProduct = function () {
+            vm.generateProductCriteria();
+            if (vm.ProductCriteria.length > 0) {
+                var products = [];
+                for (var i = 0; i < vm.ProductCriteria.length; i++) {
+                    products.push(vm.ProductCriteria[i].ProductName);
+                }
+                ruleService.validateProducts(products).then(function (response) {
+                    kendo.alert("<b>Invalid Products: </b></br>" + response.data.join());
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+            }
+        }
+
+        vm.generateProductCriteria = function () {
+            var sheet = $scope.spreadsheet.activeSheet();
+            vm.ProductCriteria = [];
+            for (var i = 0; i < sheet.range("A2:B200").values().length; i++) {
+                if (sheet.range("A2:B200").values()[i][0] != null && sheet.range("A2:B200").values()[i][1] != null) {
+                    var newProduct = {};
+                    newProduct.ProductName = sheet.range("A2:B200").values()[i][0];
+                    newProduct.Price = sheet.range("A2:B200").values()[i][1];
+                    vm.ProductCriteria.push(newProduct);
+                }
+            }
+        }
 
         vm.saveRule = function (isWithEmail) {
             $rootScope.$broadcast('save-criteria');
@@ -643,6 +675,7 @@
                             vm.rule.Criteria[idx].values = [];
                         }
                     }
+                    vm.generateProductCriteria();
                     var priceRuleCriteria = {
                         Id: vm.rule.Id,
                         Name: vm.rule.Name,
@@ -659,9 +692,39 @@
                     vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
             });
-        }
+        }       
+
+        $scope.sheets = [{ name: "Sheet1" }];
+        $scope.$on("kendoWidgetCreated", function (event, widget) {
+            // the event is emitted for every widget; if we have multiple
+            // widgets in this controller, we need to check that the event
+            // is for the one we're interested in.
+            if (widget === $scope.spreadsheet) {
+                var sheets = $scope.spreadsheet.sheets();
+                $scope.spreadsheet.activeSheet(sheets[0]);
+                var sheet = $scope.spreadsheet.activeSheet();
+                sheet.setDataSource(vm.dataSourceSpreadSheet, ["ProductName", "Price"]);
+                sheet.columnWidth(0, 350);
+                sheet.columnWidth(1, 205);
+                sheet.hideRow(0);
+                for (var i = 2; i < 50; i++)
+                    sheet.hideColumn(i);
+                $('#productCriteria').hide();
+            }
+        });
+
+        vm.dataSourceSpreadSheet = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.ProductCriteria);
+                }
+            }
+        });
 
         vm.addNewRule = function () {
+            vm.ProductCriteria = [];
+            $('#productCriteria').show();
+            vm.dataSourceSpreadSheet.read();
             vm.isEditmode = true;
             vm.rule = {};
             vm.rule.Id = 0;
@@ -672,28 +735,6 @@
             vm.BlanketDiscountPercentage = "";
             vm.BlanketDiscountDollor = "";
             vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
-        }
-
-        //Get Product(s) from Product Grid
-        vm.validateProducts = function () {
-            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-
-            var sheet = spreadsheet.activeSheet();
-
-            var productList = sheet.range("A1:B200").values();
-            //Get Product Name
-            var prdArray = [];
-            productList.forEach(function (elem) {
-                if (elem && elem[0] != 'ProductName' && elem[0] && elem[1]) {
-                    prdArray.push(elem[0]);
-                }
-            });
-            //Hack Make the MT call to validate -- Ganthi
-            
-        }
-        vm.createProductSheet = function () {
-            vm.isProductGridVisible = !vm.isProductGridVisible;
-            createProductSheet();
         }
 
         $scope.init();
