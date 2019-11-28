@@ -138,33 +138,55 @@
     </div>
 </form>
 <style>
+    div.k-spreadsheet-formula-bar,
+    .k-resize-handle {
+        display: none !important;
+    }
+    
+    .k-animation-container ul li:nth-child(5), .k-animation-container ul li:nth-child(4) {
+        display: none;
+    }
+
+    .k-spreadsheet-action-bar {
+        display: none !important;
+    }
+
+    .k-spreadsheet-fixed-container {
+        margin-left: -33px;
+    }
+
     .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
         background-color: #f3f3f3 !important;
     }
+
     .k-grid .k-alt {
         background-color: rgba(241, 241, 241, 0.17) !important;
     }
+
     .dealTools .md-icon {
         padding: 4px 0 0 5px;
     }
+
     .true {
-        background-color:rgb(196, 214, 0) !important; 
+        background-color: rgb(196, 214, 0) !important;
     }
+
     .dealTools .md-icon i {
         color: #00AEEF !important;
     }
 
-    .dealTools .md-icon i:hover {
-        color: #003C71 !important;
-    }
+        .dealTools .md-icon i:hover {
+            color: #003C71 !important;
+        }
 
     .dealTools .md-icon-disabled {
         padding: 4px 2px 0 1px;
     }
 
-    .dealTools .md-icon-disabled i {
-        color: #00AEEF;
-    }
+        .dealTools .md-icon-disabled i {
+            color: #00AEEF;
+        }
+
     .dealTools {
         margin-left: -5px !important;
     }
@@ -175,17 +197,17 @@
         width: 100%;
     }
 
-    .dealTools .gridStatusMarker {
-        font-family: arial;
-    }
+        .dealTools .gridStatusMarker {
+            font-family: arial;
+        }
 
-    .dealTools a {
-        text-decoration: none;
-    }
+        .dealTools a {
+            text-decoration: none;
+        }
 
-    .dealTools i:hover {
-        color: #003C71;
-    }
+        .dealTools i:hover {
+            color: #003C71;
+        }
 
     .gridStatusMarker {
         width: 16px;
@@ -198,30 +220,33 @@
         margin-right: 15px;
     }
 
-    .gridStatusMarker.Working {
-        color: #000000;
-        background-color: #FFA300;
-    }
+        .gridStatusMarker.Working {
+            color: #000000;
+            background-color: #FFA300;
+        }
 
-    .gridStatusMarker.Active {
-        color: #000000;
-        background-color: #C4D600;
-    }
+        .gridStatusMarker.Active {
+            color: #000000;
+            background-color: #C4D600;
+        }
 
-    .gridStatusMarker.Cancelled {
-        color: #000000;
-        background-color: #cccccc;
-    }
+        .gridStatusMarker.Cancelled {
+            color: #000000;
+            background-color: #cccccc;
+        }
 
     .dealTools .md-icon {
         padding: 4px 0 0 5px;
     }
-    .ruleName{
-        cursor:pointer;
+
+    .ruleName {
+        cursor: pointer;
     }
-    .ruleName:hover {
-        color: #abadaf;
-    }
+
+        .ruleName:hover {
+            color: #abadaf;
+        }
+
     .k-tabstrip-wrapper, .k-tabstrip-bottom, k-spreadsheet-sheets-bar-add {
         display: none;
     }
