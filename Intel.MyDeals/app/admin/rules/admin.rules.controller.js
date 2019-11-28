@@ -528,6 +528,14 @@
             });
         };
 
+        //Take first character of WF_STG_CD
+        vm.stageOneChar = function (RULE_STAGE) {
+            if (RULE_STAGE == true) {
+                return 'A';
+            } else {
+                return 'D';
+            }
+        }
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
@@ -553,7 +561,7 @@
 
                 }
             },
-            pageSize: 25,
+            pageSize: 10,
             schema: {
                 model: {
                     id: "Id",
@@ -576,16 +584,24 @@
                 refresh: true,
                 pageSizes: gridConstants.pageSizes,
             },
-            columns: [
+            columns: [                
                 {
-                    width: "6%",
-                    template: "<div class='rule'><i role='button' class='rulesGidIcon intelicon-edit' ng-click='vm.editRule(#= Id #)'></i><i role='button' class='rulesGidIcon intelicon-copy-solid' ng-click='vm.copyRule(#=Id #)'></i><i role='button' class='rulesGidIcon intelicon-trash-solid' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                    width: "130px",
+                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' title='#=RuleStage#'>{{vm.stageOneChar(dataItem.RuleStage)}}</div><div class='rule'><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i></div>"
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
-                { field: "Name", title: "Name", width: "15%", filterable: { multi: true, search: true } },
+                {
+                    title: "Name",
+                    field: "Name",
+                    template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'>#= Name #</a></div>",
+                    width: "15%",
+                    filterable: { multi: true, search: true }
+                },
                 { field: "OwnerName", title: "Owner Name", width: "15%", filterable: { multi: true, search: true } },
-                { field: "RuleStage", title: "Rule Stage", filterable: { multi: true, search: true }, template: "<span ng-if='#= RuleStage #'>Approved</span><span ng-if='!#= RuleStage #'>Pending</span>" },
-                { field: "IsActive", title: "Status", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsActive #'>Active</span><span ng-if='!#= IsActive #'>Inactive</span>" },
+                {                    
+                    field: "IsActive", title: "Status", filterable: { multi: true, search: true },
+                    template: "<toggle class='fl toggle-accept' size='btn-sm' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
+                },
                 { field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsAutomationIncluded #'>Included</span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>" },
                 { field: "StartDate", title: "Rule Start Date", filterable: { multi: true, search: true } },
                 { field: "EndDate", title: "Rule End Date", filterable: { multi: true, search: true } },
