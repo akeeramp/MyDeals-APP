@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 
-
 namespace Intel.MyDeals.BusinessLogic
 {
     public class RuleEngineLib : IRuleEngineLib
@@ -60,7 +59,7 @@ namespace Intel.MyDeals.BusinessLogic
                 lstPriceRuleCriteria.ForEach(x =>
                 {
                     x.Criterias = JsonConvert.DeserializeObject<Criteria>(x.CriteriaJson);
-                    x.ProductCriteria= JsonConvert.DeserializeObject<List<Products>>(x.ProductCriteriaJson);
+                    x.ProductCriteria = JsonConvert.DeserializeObject<List<Products>>(x.ProductCriteriaJson);
                 });
             }
             return lstPriceRuleCriteria;
@@ -69,7 +68,7 @@ namespace Intel.MyDeals.BusinessLogic
         public List<string> ValidateProducts(List<string> lstProducts)
         {
             //List<Product> lstProductFromCache = new ProductsLib().GetProducts(true);
-           return new ApprovalRules().GetInvalidProducts(lstProducts);
+            return new ApprovalRules().GetInvalidProducts(lstProducts);
         }
 
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)

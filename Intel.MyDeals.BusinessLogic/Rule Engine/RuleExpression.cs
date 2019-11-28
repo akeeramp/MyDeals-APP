@@ -122,6 +122,10 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
 
         public string GetSqlExpressionForProducts(List<Products> lstProduct)
         {
+            if (lstProduct.Count > 0)
+            {
+                lstProduct.RemoveAll(x => x.Price <= 0);
+            }
             return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRD_NM = '{0}' AND ECAP = {1})", x.ProductName, x.Price)));
         }
 
