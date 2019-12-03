@@ -562,6 +562,7 @@
                 }
             },
             pageSize: 10,
+            sort: { field: "RuleStage", dir: "asc" },
             schema: {
                 model: {
                     id: "Id",
@@ -587,26 +588,57 @@
             columns: [                
                 {
                     width: "130px",
-                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' title='#=RuleStage#'>{{vm.stageOneChar(dataItem.RuleStage)}}</div><div class='rule'><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' title='#=RuleStage#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div > <div class='rule'><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i></div>"
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 {
                     title: "Name",
                     field: "Name",
                     template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'>#= Name #</a></div>",
-                    width: "15%",
+                    width: "20%",
                     filterable: { multi: true, search: true }
-                },
-                { field: "OwnerName", title: "Owner Name", width: "15%", filterable: { multi: true, search: true } },
+                },                
                 {                    
-                    field: "IsActive", title: "Status", filterable: { multi: true, search: true },
+                    field: "IsActive", title: "Status", filterable: { multi: true, search: true },width:"7%",
                     template: "<toggle class='fl toggle-accept' size='btn-sm' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
-                { field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, template: "<span ng-if='#= IsAutomationIncluded #'>Included</span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>" },
-                { field: "StartDate", title: "Rule Start Date", filterable: { multi: true, search: true } },
-                { field: "EndDate", title: "Rule End Date", filterable: { multi: true, search: true } },
-                { field: "Notes", title: "Notes", filterable: { multi: true, search: true } },
-                { field: "ChangedBy", title: "Updated By", filterable: { multi: true, search: true } }
+                {
+                    field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
+                    template: "<span ng-if='#= IsAutomationIncluded #'><i class='intelicon-opportunity-target-approved' style=''></i></span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>"
+                },
+                {
+                    field: "StartDate",
+                    title: "Start Date",
+                    width: "7%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "EndDate",
+                    title: "End Date",
+                    width: "7%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "Notes",
+                    title: "Notes",
+                    template: "<div title='#=Notes#'>#=Notes#</div>",
+                    width: "15%",
+                    filterable: { multi: true, search: false }
+                },
+                {
+                    field: "OwnerName",
+                    title: "Owner Name",
+                    template: "<div title='#=OwnerName#'>#=OwnerName#</div>",
+                    width: "8%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "ChangedBy",
+                    title: "Updated By",
+                    template: "<div title='#=ChangedBy#'>#=ChangedBy#</div>",
+                    width: "8%",
+                    filterable: { multi: true, search: true }
+                }
             ]
         };
 

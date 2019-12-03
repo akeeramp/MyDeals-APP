@@ -138,6 +138,17 @@
     </div>
 </form>
 <style>
+    .k-grid td, .k-grid td div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .toggle-accept {        
+        width: 75% !important;
+    }
+    .k-grid td {
+        height: 30px !important;        
+    }
     div.k-spreadsheet-formula-bar,
     .k-resize-handle {
         display: none !important;
@@ -156,9 +167,16 @@
     }
 
     .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
-        background-color: #f3f3f3 !important;
+        background-color: #ffffff !important;
     }
-
+    #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+        font-size: 12px;
+        border-bottom: solid #dedede 2px;
+    }
+    .k-grid .k-icon {
+        color: #3343a4 !important;
+        opacity: 1;
+    }
     .k-grid .k-alt {
         background-color: rgba(241, 241, 241, 0.17) !important;
     }
@@ -300,7 +318,7 @@
     }
 
     .toggle {
-        width: 120px !important;
+        width: 100% !important;
     }
 
     .rulesGidIcon {
