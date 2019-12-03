@@ -501,6 +501,7 @@
                         vm.BlanketDiscountDollor = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value == "$")[0].value : "";
                         $('#productCriteria').show();
                         vm.dataSourceSpreadSheet.read();
+                        vm.DeleteSpreadsheetAutoHeader();
                         vm.isEditmode = true;
                     } break;
                     default: {
@@ -513,6 +514,11 @@
                 logger.error("Operation failed");
             });
         };
+
+        vm.DeleteSpreadsheetAutoHeader = function () {
+            var sheet = $scope.spreadsheet.activeSheet();
+            sheet.deleteRow(0);
+        }
 
         vm.deleteRule = function (id) {
             kendo.confirm("Are you sure wants to delete?").then(function () {
@@ -666,11 +672,11 @@
         vm.generateProductCriteria = function () {
             var sheet = $scope.spreadsheet.activeSheet();
             vm.ProductCriteria = [];
-            for (var i = 0; i < sheet.range("A2:B200").values().length; i++) {
-                if (sheet.range("A2:B200").values()[i][0] != null && sheet.range("A2:B200").values()[i][1] != null) {
+            for (var i = 0; i < sheet.range("A1:B200").values().length; i++) {
+                if (sheet.range("A1:B200").values()[i][0] != null && sheet.range("A1:B200").values()[i][1] != null) {
                     var newProduct = {};
-                    newProduct.ProductName = sheet.range("A2:B200").values()[i][0];
-                    newProduct.Price = sheet.range("A2:B200").values()[i][1];
+                    newProduct.ProductName = sheet.range("A1:B200").values()[i][0];
+                    newProduct.Price = sheet.range("A1:B200").values()[i][1];
                     vm.ProductCriteria.push(newProduct);
                 }
             }
@@ -754,7 +760,8 @@
                 sheet.setDataSource(vm.dataSourceSpreadSheet, ["ProductName", "Price"]);
                 sheet.columnWidth(0, 350);
                 sheet.columnWidth(1, 205);
-                sheet.hideRow(0);
+                sheet.deleteRow(0);
+                sheet.range("B1:B200").format('$#,##0.00');
                 for (var i = 2; i < 50; i++)
                     sheet.hideColumn(i);
                 $('#productCriteria').hide();
@@ -773,6 +780,7 @@
             vm.ProductCriteria = [];
             $('#productCriteria').show();
             vm.dataSourceSpreadSheet.read();
+            vm.DeleteSpreadsheetAutoHeader();
             vm.isEditmode = true;
             vm.rule = {};
             vm.rule.Id = 0;

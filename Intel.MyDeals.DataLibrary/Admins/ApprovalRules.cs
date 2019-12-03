@@ -5,6 +5,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using System.Data.SqlClient;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+using System.Linq;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -118,7 +119,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public List<string> GetInvalidProducts(List<string> lstProducts)
+        List<string> ValidProducts(List<string> lstProducts)
         {
             List<string> lstInvalidProducts = new List<string>();
             Procs.dbo.PR_MYDL_PRD_VLD cmd = new Procs.dbo.PR_MYDL_PRD_VLD()
@@ -137,6 +138,11 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             return lstInvalidProducts;
+        }
+
+        public List<string> GetInvalidProducts(List<string> lstProducts)
+        {
+            return lstProducts.Except(ValidProducts(lstProducts)).Distinct().ToList();
         }
 
         List<PriceRuleCriteria> GetPriceRuleCriteria(SqlDataReader rdr)
