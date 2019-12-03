@@ -129,7 +129,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRD_NM = '{0}' AND ECAP = {1})", x.ProductName, x.Price)));
         }
 
-        string[] strStringDataTypes = new string[] { "string", "singleselect" };
+        string[] strStringDataTypes = new string[] { "string", "singleselect", "date" };
         public string GetSqlExpression(Criteria criteria, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
             string strSqlCriteria = string.Empty;
@@ -159,7 +159,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                       x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", (x.field == "CUST_NM" && dicCustomerName.ContainsKey(Convert.ToInt32(y)) ? dicCustomerName[Convert.ToInt32(y)] : y).Replace("'", "''"), "'"))), ")");
                   });
 
-                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND")==false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
 
                 List<rule> lstMulti = new List<rule>();
                 criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE").ToList().ForEach(x =>
@@ -321,5 +321,5 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         public string SqlDataType { get; set; }
         public bool IsDirectAttributeValue { get; set; }
         public string InitiateAs { get; set; }
-    }    
+    }
 }
