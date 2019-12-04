@@ -126,7 +126,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             {
                 lstProduct.RemoveAll(x => x.Price <= 0);
             }
-            return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRD_NM = '{0}' AND ECAP = {1})", x.ProductName, x.Price)));
+            return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRODUCT_FILTER = '{0}' AND ECAP_PRICE >= {1})", x.ProductName, x.Price)));
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect", "date" };
