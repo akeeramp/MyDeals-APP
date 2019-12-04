@@ -540,7 +540,7 @@
             if (RULE_STAGE == true) {
                 return 'A';
             } else {
-                return 'D';
+                return 'P';
             }
         }
         vm.dataSource = new kendo.data.DataSource({
@@ -568,7 +568,7 @@
 
                 }
             },
-            pageSize: 10,
+            pageSize: 25,
             sort: { field: "RuleStage", dir: "asc" },
             schema: {
                 model: {
@@ -580,6 +580,9 @@
         });
 
         vm.gridOptions = {
+            toolbar: [
+                { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
+            ],
             dataSource: vm.dataSource,
             filterable: true,
             sortable: true,
@@ -590,12 +593,12 @@
             filter: function (e) { gridUtils.cancelChanges(e); },
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes,
+                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
             },
-            columns: [                
+            columns: [
                 {
-                    width: "130px",
-                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' title='#=RuleStage#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div > <div class='rule'><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                    width: "100px",
+                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div > <div class='rule'><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i></div>"
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 {

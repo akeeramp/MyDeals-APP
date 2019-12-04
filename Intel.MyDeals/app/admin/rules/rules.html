@@ -1,12 +1,19 @@
-﻿<form style="margin-top:15px" class="form-horizontal">
-    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
-        <div class="k-header k-grid-toolbar ng-scope">
-            <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
-                <span class="k-icon k-i-plus"></span>Add New Rule
-            </a>
+﻿<form style="margin-top: 10px;" class="form-horizontal">
+
+    <div ng-if="!vm.isEditmode" class="col-md-12">
+        <h3>Auto-Approval Rules Administration Screen</h3>
+    </div>
+    <div ng-if="!vm.isEditmode" class="row" style="padding: 0px 0px 0px 40px;"> 
+        <div class="col-md-6" style="text-align: left;">
+            <p style="color: #FC4C02">This screen allows DA users to create automated approval rules to streamline their work</p>
         </div>
+    </div>
+
+    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
+        <!-- Grid buttons addeed by script below before styles -->
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
+
     <div ng-if="vm.isEditmode">
         <div ng-show="false" class="form-group row">
             <label class="control-label col-md-2">Rule:</label>
@@ -17,6 +24,10 @@
                         ng-model="vm.rule.Id"
                         style="width:100%"></select>
             </div>
+        </div>
+
+        <div class="col-md-11" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
+            Last modified by <font style="color:orangered">{{vm.rule.ChangedBy}}</font> on <font style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</font>
         </div>
 
         <div class="form-group row">
@@ -49,7 +60,7 @@
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-2">Stage:</label>
+            <label class="control-label col-md-1">Stage:</label>
             <div class="col-md-2" style="margin-left:-15px;">
                 <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
                         ng-model="vm.rule.RuleStage"
@@ -58,7 +69,7 @@
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-2">Automation:</label>
+            <label class="control-label col-md-1">Automation:</label>
             <div class="col-md-2" style="margin-left:-15px;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsAutomationIncluded"
@@ -93,15 +104,7 @@
                           style="width:100%" />
             </div>
         </div>
-        <div ng-if="vm.rule.Id > 0" class="form-group row" style="margin:0px !important;margin-left:-10px !important;">
-            <label class="control-label col-md-2">&nbsp;</label>
-            <div class="col-md-9" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
-                <span>Last modified by </span>
-                <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
-                <span> on </span>
-                <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
-            </div>
-        </div>
+
         <div class="form-group row">
             <label class="control-label col-md-2">Criteria:</label>
             <div class="col-md-9">
@@ -114,6 +117,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group row">
             <label class="control-label col-md-2">Blanket Discount:</label>
             <div class="col-md-6" id="blanket_section">
@@ -124,6 +128,7 @@
                 <span>off of CAP</span>
             </div>
         </div>
+
     </div>
     <div class="form-group row" id="productCriteria">
         <label class="control-label col-md-2">Product Criteria:</label>
@@ -133,26 +138,28 @@
     </div>
     <div class="form-group row action_btns" ng-if="vm.isEditmode">
         <label class="control-label col-md-2"></label>
-        <div class="col-md-6">
+        <div class="col-md-3">
+            <button ng-click="vm.validateProduct()" class="btn btn-primary">Validate Products</button>
+        </div>
+        <div class="col-md-6" style="text-align: right">
             <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save as Draft</button>
             <button ng-click="vm.saveRule(true)" class="btn btn-primary">Save and Publish</button>
             <button ng-click="vm.cancel()" class="btn btn-primary">Cancel</button>
-            <button ng-click="vm.validateProduct()" class="btn btn-primary">Validate Products</button>
         </div>
     </div>
 </form>
+
+<script id="grid_toolbar_addrulebutton" type="text/x-kendo-template">
+    <a role="button" class="k-button k-button-icontext" ng-click="vm.addNewRule()"><span class="k-icon k-i-plus"></span>Add New Rule</a>
+</script>
+
 <style>
-    .k-grid td, .k-grid td div {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
     .toggle-accept {        
         width: 75% !important;
     }
-    .k-grid td {
-        height: 30px !important;        
-    }
+    /*.k-grid td {
+        height: 40px !important;        
+    }*/
 
     /* div.k-spreadsheet-row-header, -- This is left row numbers - keep */
     /* div.k-spreadsheet-column-header, -- This is column title headers - keep */
@@ -171,20 +178,13 @@
         display: none;
     }
 
-    .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, 
-    .k-grid-footer, .k-grid-footer td, .k-scheduler-header {
+    .k-pager-numbers .k-state-selected, .k-scheduler-header {
         background-color: #ffffff !important;
     }
-    #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+
+    #secEngineGrid.k-grid .k-filter-row th {
         font-size: 12px;
         border-bottom: solid #dedede 2px;
-    }
-    .k-grid .k-icon {
-        color: #3343a4 !important;
-        opacity: 1;
-    }
-    .k-grid .k-alt {
-        background-color: rgba(241, 241, 241, 0.17) !important;
     }
 
     .dealTools .md-icon {
@@ -330,7 +330,6 @@
     .rulesGidIcon {
         font-size: 20px;
         margin: 3px;
-        color: #aaa;
         margin-right: 10px;
     }
 
