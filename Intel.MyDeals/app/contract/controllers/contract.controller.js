@@ -456,7 +456,7 @@
 
             // TODO need to check if there are any tracker numbers
             if (!$scope.C_DELETE_CONTRACT) {
-                kendo.alert("Unable to Delete a Contract that contains deals with tracker nnumbers.");
+                kendo.alert("Unable to Delete a Contract that contains deals with tracker numbers.");
                 return;
             }
 

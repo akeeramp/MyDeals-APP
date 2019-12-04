@@ -116,7 +116,7 @@
                     "type": "number",
                     "operator": [
                         "=",
-                        "IN",
+                        //"IN",
                         "!=",
                         "<",
                         "<=",
@@ -128,7 +128,7 @@
                     "type": "numericOrPercentage",
                     "operator": [
                         "=",
-                        "IN",
+                        //"IN",
                         "!=",
                         "<",
                         "<=",
@@ -140,7 +140,7 @@
                     "type": "money",
                     "operator": [
                         "=",
-                        "IN",
+                        //"IN",
                         "!=",
                         "<",
                         "<=",
@@ -179,6 +179,7 @@
                     "type": "list",
                     "operator": [
                         "LIKE",
+                        "IN",
                         "="
                     ]
                 },
@@ -295,7 +296,7 @@
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "Worldwide" }, { Value: "APAC" }, { Value: "PRC" }, { Value: "ASMO" }, { Value: "EMEA" }]
+                lookups: [{ Value: "Worldwide" }, { Value: "APAC" }, { Value: "ASMO" }, { Value: "EMEA" }, { Value: "IJKK" }, { Value: "PRC" } ]
             },
             {
                 field: "HOST_GEO",
@@ -662,10 +663,18 @@
                     products.push(vm.ProductCriteria[i].ProductName);
                 }
                 ruleService.validateProducts(products).then(function (response) {
-                    kendo.alert("<b>Invalid Products: </b></br>" + response.data.join());
+                    if (response.data.length > 0) {
+                        kendo.alert("<b>Invalid Products: </b></br>" + response.data.join(', '));
+                    }
+                    else {
+                        kendo.alert("<b>All Products are Valid</b></br>");
+                    }
                 }, function (response) {
                     logger.error("Operation failed");
                 });
+            }
+            else {
+                kendo.alert("<b>There are no Products to Validate</b></br>");
             }
         }
 
