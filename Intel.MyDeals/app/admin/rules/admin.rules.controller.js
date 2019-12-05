@@ -296,7 +296,7 @@
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "Worldwide" }, { Value: "APAC" }, { Value: "ASMO" }, { Value: "EMEA" }, { Value: "IJKK" }, { Value: "PRC" } ]
+                lookups: [{ Value: "Worldwide" }, { Value: "APAC" }, { Value: "ASMO" }, { Value: "EMEA" }, { Value: "IJKK" }, { Value: "PRC" }]
             },
             {
                 field: "HOST_GEO",
@@ -503,6 +503,7 @@
                         $('#productCriteria').show();
                         vm.dataSourceSpreadSheet.read();
                         vm.DeleteSpreadsheetAutoHeader();
+                        vm.validateProduct(false);
                         vm.isEditmode = true;
                     } break;
                     default: {
@@ -519,6 +520,7 @@
         vm.DeleteSpreadsheetAutoHeader = function () {
             var sheet = $scope.spreadsheet.activeSheet();
             sheet.deleteRow(0);
+            sheet.range("A1:A200").color("black");
         }
 
         vm.deleteRule = function (id) {
@@ -607,9 +609,9 @@
                     template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'>#= Name #</a></div>",
                     width: "20%",
                     filterable: { multi: true, search: true }
-                },                
-                {                    
-                    field: "IsActive", title: "Status", filterable: { multi: true, search: true },width:"7%",
+                },
+                {
+                    field: "IsActive", title: "Status", filterable: { multi: true, search: true }, width: "7%",
                     template: "<toggle class='fl toggle-accept' size='btn-sm' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
                 {
@@ -658,39 +660,14 @@
             vm.rule = {};
         }
 
-        vm.validateProduct = function () {
-            vm.generateProductCriteria();
-            if (vm.ProductCriteria.length > 0) {
-                var products = [];
-                for (var i = 0; i < vm.ProductCriteria.length; i++) {
-                    products.push(vm.ProductCriteria[i].ProductName);
-                }
-                ruleService.validateProducts(products).then(function (response) {
-                    if (response.data.length > 0) {
-                        kendo.alert("<b>Invalid Products: </b></br>" + response.data.join(', '));
-                    }
-                    else {
-                        kendo.alert("<b>All Products are Valid</b></br>");
-                    }
-                }, function (response) {
-                    logger.error("Operation failed");
-                });
-            }
-            else {
-                kendo.alert("<b>There are no Products to Validate</b></br>");
-            }
-        }
-
         vm.generateProductCriteria = function () {
             var sheet = $scope.spreadsheet.activeSheet();
             vm.ProductCriteria = [];
             for (var i = 0; i < sheet.range("A1:B200").values().length; i++) {
-                if (sheet.range("A1:B200").values()[i][0] != null && sheet.range("A1:B200").values()[i][1] != null) {
-                    var newProduct = {};
-                    newProduct.ProductName = sheet.range("A1:B200").values()[i][0];
-                    newProduct.Price = sheet.range("A1:B200").values()[i][1];
-                    vm.ProductCriteria.push(newProduct);
-                }
+                var newProduct = {};
+                newProduct.ProductName = sheet.range("A1:B200").values()[i][0] != null ? jQuery.trim(sheet.range("A1:B200").values()[i][0]) : '';
+                newProduct.Price = sheet.range("A1:B200").values()[i][1] != null ? sheet.range("A1:B200").values()[i][1] : 0;
+                vm.ProductCriteria.push(newProduct);
             }
         }
 
@@ -698,6 +675,7 @@
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
                 var requiredFields = [];
+                vm.generateProductCriteria();
                 if (vm.rule.Name == null || vm.rule.Name == "")
                     requiredFields.push("</br>Rule name");
                 if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
@@ -706,8 +684,12 @@
                     requiredFields.push("</br>Rule start date");
                 if (vm.rule.EndDate == null)
                     requiredFields.push("</br>Rule end date");
-                if (vm.rule.Criteria.filter(x => x.value != "").length == 0)
-                    requiredFields.push("</br>Rule criteria");
+                if (vm.rule.Criteria.filter(x => x.value == "").length > 0)
+                    requiredFields.push("</br>Rule criteria is empty");
+                if (vm.ProductCriteria.filter(x => (x.Price == 0 || x.Price == '') && x.ProductName != '').length > 0)
+                    requiredFields.push("</br>Product in product criteria needs price");
+                if (vm.ProductCriteria.filter(x => x.Price != '' && x.Price > 0 &&  x.ProductName == '').length > 0)
+                    requiredFields.push("</br>Price in product criteria need product");
 
                 var validationFields = [];
                 if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
@@ -741,7 +723,7 @@
                             vm.rule.Criteria[idx].values = [];
                         }
                     }
-                    vm.generateProductCriteria();
+
                     var priceRuleCriteria = {
                         Id: vm.rule.Id,
                         Name: vm.rule.Name,
@@ -753,12 +735,12 @@
                         RuleStage: vm.rule.RuleStage,
                         Notes: vm.rule.Notes,
                         Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
-                        ProductCriteria: vm.ProductCriteria
+                        ProductCriteria: vm.ProductCriteria.filter(x => x.ProductName != '' && x.Price > 0 && x.Price != '')
                     }
                     vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
             });
-        }       
+        }
 
         $scope.sheets = [{ name: "Sheet1" }];
         $scope.$on("kendoWidgetCreated", function (event, widget) {
@@ -771,14 +753,86 @@
                 var sheet = $scope.spreadsheet.activeSheet();
                 sheet.setDataSource(vm.dataSourceSpreadSheet, ["ProductName", "Price"]);
                 sheet.columnWidth(0, 350);
-                sheet.columnWidth(1, 205);
+                sheet.columnWidth(1, 202);
                 sheet.deleteRow(0);
+                sheet.range("A1:A200").textAlign("left");
                 sheet.range("B1:B200").format('$#,##0.00');
+                sheet.range("B1:B200").validation({
+                    dataType: "custom",
+                    from: 'REGEXP_MATCH(B1, "^[0-9]+(\.[0-9]{1,2})?$")',
+                    allowNulls: true,
+                    type: "reject",
+                    titleTemplate: "Invalid Price",
+                    messageTemplate: "Format of the price is invalid"
+                });
                 for (var i = 2; i < 50; i++)
                     sheet.hideColumn(i);
                 $('#productCriteria').hide();
             }
         });
+
+        kendo.spreadsheet.defineFunction("IS_PRODUCT_VALID", function (str) {
+            str = jQuery.trim(str);
+            var isValid = !(jQuery.inArray(str, vm.InvalidProducts) > -1);
+            if (isValid) {
+                var validCells = $('.k-spreadsheet-cell:contains("' + str + '")');
+                for (var i = 0; i < validCells.length; i++) {
+                    if (jQuery.trim($(validCells[i]).text()) == str)
+                        $(validCells[i]).css('color', 'green');
+                }
+            }
+            return isValid;
+        }).args([
+            ["str", "string"]
+        ]);
+
+        vm.InvalidProducts = [];
+        vm.validateProduct = function (showPopup) {
+            vm.generateProductCriteria();
+            if (vm.ProductCriteria.length > 0) {
+                var products = [];
+                for (var i = 0; i < vm.ProductCriteria.length; i++) {
+                    products.push(vm.ProductCriteria[i].ProductName);
+                }
+                ruleService.validateProducts(products).then(function (response) {
+                    vm.InvalidProducts = response.data;
+                    var sheet = $scope.spreadsheet.activeSheet();
+                    sheet.range("A1:A200").validation({
+                        dataType: "custom",
+                        from: 'IS_PRODUCT_VALID(A1)',
+                        allowNulls: true,
+                        messageTemplate: "Product not found!"
+                    });
+                    if (showPopup) {
+                        if (vm.InvalidProducts.length == 0)
+                            kendo.alert("<b>All Products are Valid</b></br>");
+                        else
+                            kendo.alert("<b>Invalid Products:</b></br>" + vm.InvalidProducts.join(", "));
+                    }
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+            }
+            else {
+                if (showPopup)
+                    kendo.alert("<b>There are no Products to Validate</b></br>");
+            }
+        }
+
+        kendo.spreadsheet.defineFunction("REGEXP_MATCH", function (str, pattern, flags) {
+            var rx;
+            try {
+                rx = flags ? new RegExp(pattern, flags) : new RegExp(pattern);
+            } catch (ex) {
+                // could not compile regexp, return some error code
+                return new kendo.spreadsheet.CalcError("REGEXP");
+            }
+            return rx.test(str);
+        }).args([
+            ["str", "string"],
+            ["pattern", "string"],
+            ["flags", ["or", "string", "null"]]
+        ]);
 
         vm.dataSourceSpreadSheet = new kendo.data.DataSource({
             transport: {

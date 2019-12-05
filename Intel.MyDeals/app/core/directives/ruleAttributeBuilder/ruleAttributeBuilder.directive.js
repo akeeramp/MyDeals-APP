@@ -266,7 +266,8 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
             $scope.enterPressed = function (event) {
                 //KeyCode 13 is 'Enter'
                 if (event.keyCode === 13) {
-                    $scope.runRule();
+                    return false;
+                    //$scope.runRule();
                 }
             };
 
