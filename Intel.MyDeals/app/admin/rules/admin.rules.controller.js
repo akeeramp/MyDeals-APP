@@ -688,7 +688,7 @@
                     requiredFields.push("</br>Rule criteria is empty");
                 if (vm.ProductCriteria.filter(x => (x.Price == 0 || x.Price == '') && x.ProductName != '').length > 0)
                     requiredFields.push("</br>Product in product criteria needs price");
-                if (vm.ProductCriteria.filter(x => x.Price != '' && x.Price > 0 &&  x.ProductName == '').length > 0)
+                if (vm.ProductCriteria.filter(x => x.Price != '' && x.Price > 0 && x.ProductName == '').length > 0)
                     requiredFields.push("</br>Price in product criteria need product");
 
                 var validationFields = [];
@@ -703,7 +703,14 @@
                         validationFields.push("</br>Owner cannot be invalid");
                 }
 
-                if (requiredFields.length > 0 || validationFields.length > 0) {
+                var invalidPrice = [];
+                $.each(vm.ProductCriteria.filter(x => x.ProductName != '' && x.Price != ''), function (index, value) {
+                    var rx = new RegExp(regexMoney);
+                    if (rx.test(value.Price) == false)
+                        invalidPrice.push("</br>" + value.ProductName + " (" + value.Price + ")");
+                });
+
+                if (requiredFields.length > 0 || validationFields.length > 0 || invalidPrice.length > 0) {
                     var strAlertMessege = '';
                     if (validationFields.length > 0) {
                         strAlertMessege = "<b>Following scenarios are failed!</b>" + validationFields.join();
@@ -712,6 +719,11 @@
                         if (strAlertMessege != '')
                             strAlertMessege += "</br></br>";
                         strAlertMessege += "<b>Please fill the following required fields!</b>" + requiredFields.join();
+                    }
+                    if (invalidPrice.length > 0) {
+                        if (strAlertMessege != '')
+                            strAlertMessege += "</br></br>";
+                        strAlertMessege += "<b>Below products has invalid price!</b>" + invalidPrice.join();
                     }
                     kendo.alert(strAlertMessege);
                 } else {
@@ -742,6 +754,7 @@
             });
         }
 
+        var regexMoney = "^[0-9]+(\.[0-9]{1,2})?$";
         $scope.sheets = [{ name: "Sheet1" }];
         $scope.$on("kendoWidgetCreated", function (event, widget) {
             // the event is emitted for every widget; if we have multiple
@@ -756,10 +769,11 @@
                 sheet.columnWidth(1, 202);
                 sheet.deleteRow(0);
                 sheet.range("A1:A200").textAlign("left");
+                sheet.range("B1:B200").textAlign("right");
                 sheet.range("B1:B200").format('$#,##0.00');
                 sheet.range("B1:B200").validation({
                     dataType: "custom",
-                    from: 'REGEXP_MATCH(B1, "^[0-9]+(\.[0-9]{1,2})?$")',
+                    from: 'REGEXP_MATCH(B1, "' + regexMoney + '")',
                     allowNulls: true,
                     type: "reject",
                     titleTemplate: "Invalid Price",
@@ -771,43 +785,53 @@
             }
         });
 
-        kendo.spreadsheet.defineFunction("IS_PRODUCT_VALID", function (str) {
-            str = jQuery.trim(str);
-            var isValid = !(jQuery.inArray(str, vm.InvalidProducts) > -1);
-            if (isValid) {
-                var validCells = $('.k-spreadsheet-cell:contains("' + str + '")');
-                for (var i = 0; i < validCells.length; i++) {
-                    if (jQuery.trim($(validCells[i]).text()) == str)
-                        $(validCells[i]).css('color', 'green');
+        $scope.spreadSheetOptions = {
+            change: function (arg) {
+                var str = arg.range.value() != null ? jQuery.trim(arg.range.value()) : '';
+                if (str != '') {
+                    var isValid = jQuery.inArray(str.toLowerCase(), vm.ValidProducts) > -1;
+                    arg.range.color(isValid ? "green" : "black");
                 }
             }
-            return isValid;
-        }).args([
-            ["str", "string"]
-        ]);
+        };
 
-        vm.InvalidProducts = [];
+        kendo.spreadsheet.defineFunction("IS_PRODUCT_VALID", function (str) {
+            str = jQuery.trim(str);
+            var isValid = true;
+            if (jQuery.inArray(str.toLowerCase(), vm.LastValidatedProducts) > -1) {
+                isValid = jQuery.inArray(str.toLowerCase(), vm.ValidProducts) > -1;
+            }
+            return isValid;
+        }).args([["str", "string"]]);
+
+        vm.ValidateProductSheet = function () {
+            var sheet = $scope.spreadsheet.activeSheet();
+            sheet.range("A1:A200").validation({
+                dataType: "custom",
+                from: 'IS_PRODUCT_VALID(A1)',
+                allowNulls: true,
+                messageTemplate: "Product not found!"
+            });
+        }
+
+        vm.ValidProducts = [];
+        vm.LastValidatedProducts = [];
         vm.validateProduct = function (showPopup) {
             vm.generateProductCriteria();
             if (vm.ProductCriteria.length > 0) {
-                var products = [];
+                vm.LastValidatedProducts = [];
                 for (var i = 0; i < vm.ProductCriteria.length; i++) {
-                    products.push(vm.ProductCriteria[i].ProductName);
+                    if (jQuery.inArray(vm.ProductCriteria[i].ProductName.toLowerCase(), vm.LastValidatedProducts) == -1)
+                        vm.LastValidatedProducts.push(vm.ProductCriteria[i].ProductName.toLowerCase());
                 }
-                ruleService.validateProducts(products).then(function (response) {
-                    vm.InvalidProducts = response.data;
-                    var sheet = $scope.spreadsheet.activeSheet();
-                    sheet.range("A1:A200").validation({
-                        dataType: "custom",
-                        from: 'IS_PRODUCT_VALID(A1)',
-                        allowNulls: true,
-                        messageTemplate: "Product not found!"
-                    });
+                ruleService.validateProducts(vm.LastValidatedProducts).then(function (response) {
+                    vm.ValidProducts = response.data;
+                    vm.ValidateProductSheet();
                     if (showPopup) {
-                        if (vm.InvalidProducts.length == 0)
+                        if (vm.ValidProducts.filter(x => x != '').length == vm.LastValidatedProducts.filter(x => x != '').length)
                             kendo.alert("<b>All Products are Valid</b></br>");
-                        else
-                            kendo.alert("<b>Invalid Products:</b></br>" + vm.InvalidProducts.join(", "));
+                        //else
+                        //    kendo.alert("<b>Invalid Products:</b></br>" + vm.ValidProducts.join(", "));
                     }
                 }, function (response) {
                     logger.error("Operation failed");
@@ -828,11 +852,7 @@
                 return new kendo.spreadsheet.CalcError("REGEXP");
             }
             return rx.test(str);
-        }).args([
-            ["str", "string"],
-            ["pattern", "string"],
-            ["flags", ["or", "string", "null"]]
-        ]);
+        }).args([["str", "string"], ["pattern", "string"], ["flags", ["or", "string", "null"]]]);
 
         vm.dataSourceSpreadSheet = new kendo.data.DataSource({
             transport: {
@@ -845,6 +865,8 @@
         vm.addNewRule = function () {
             vm.ProductCriteria = [];
             $('#productCriteria').show();
+            vm.LastValidatedProducts = [];
+            vm.ValidProducts = [];
             vm.dataSourceSpreadSheet.read();
             vm.DeleteSpreadsheetAutoHeader();
             vm.isEditmode = true;

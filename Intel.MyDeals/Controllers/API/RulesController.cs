@@ -99,7 +99,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public List<string> ValidateProducts(List<string> lstProducts)
         {
-            return SafeExecutor(() => _rulesLib.ValidateProducts(lstProducts), $"Unable to get invalid products");
+            return SafeExecutor(() => _rulesLib.ValidateProducts(lstProducts), $"Unable to get valid products");
         }
     }
 }

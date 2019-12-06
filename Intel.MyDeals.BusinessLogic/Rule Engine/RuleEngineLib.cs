@@ -69,7 +69,7 @@ namespace Intel.MyDeals.BusinessLogic
         public List<string> ValidateProducts(List<string> lstProducts)
         {
             //List<Product> lstProductFromCache = new ProductsLib().GetProducts(true);
-            return new ApprovalRules().GetInvalidProducts(lstProducts);
+            return new ApprovalRules().GetValidProducts(lstProducts);
         }
 
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)

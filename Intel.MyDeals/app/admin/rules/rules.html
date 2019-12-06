@@ -132,7 +132,7 @@
     <div class="form-group row" id="productCriteria">
         <label class="control-label col-md-2">Product Criteria:</label>
         <div class="col-md-9">
-            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px;" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px;" k-scope-field="spreadsheet" k-options="spreadSheetOptions" k-sheets="sheets"></kendo-spreadsheet>
         </div>
     </div>
     <div class="form-group row action_btns" ng-if="vm.isEditmode">
@@ -352,6 +352,6 @@
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
         $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name');
-        $($('.k-spreadsheet-column-header').find('div')[2]).find('div').html('Price (US$)');
-    });
+        $($('.k-spreadsheet-column-header').find('div')[2]).find('div').html('Price (US$)');             
+    });    
 </script>
