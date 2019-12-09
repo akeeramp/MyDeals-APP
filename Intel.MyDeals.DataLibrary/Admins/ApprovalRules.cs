@@ -119,9 +119,11 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        List<string> ValidProducts(List<string> lstProducts)
-        {
-            List<string> lstInvalidProducts = new List<string>();
+        public List<string> GetValidProducts(List<string> lstProducts)
+        {            
+            lstProducts.ForEach(x => x = x.Trim().ToLower());
+            lstProducts.RemoveAll(x => x == string.Empty);
+            List<string> lstValidProducts = new List<string>();
             Procs.dbo.PR_MYDL_PRD_VLD cmd = new Procs.dbo.PR_MYDL_PRD_VLD()
             {
                 in_prd_nm_list = new type_list(lstProducts.ToArray())
@@ -133,17 +135,13 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    lstInvalidProducts.Add((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
+                    lstValidProducts.Add((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
                 } // while
             }
 
-            return lstInvalidProducts;
+            return lstValidProducts.Distinct().ToList();
         }
 
-        public List<string> GetInvalidProducts(List<string> lstProducts)
-        {
-            return lstProducts.Except(ValidProducts(lstProducts)).Distinct().ToList();
-        }
 
         List<PriceRuleCriteria> GetPriceRuleCriteria(SqlDataReader rdr)
         {

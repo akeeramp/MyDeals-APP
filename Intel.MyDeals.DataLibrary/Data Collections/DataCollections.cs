@@ -612,6 +612,11 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public static List<DictDropdown> GetDictDropDown(string atrbCd)
+        {
+            return new DropdownDataLib().GetDictDropDown(atrbCd);
+        }
+
         private static List<Dropdown> _getDropdowns;
 
         /// <summary>
@@ -647,7 +652,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public static Dictionary<string, Dictionary<string, string>> _dropdownDict;
+        public static Dictionary<string, Dictionary<string, string>> _dropdownDict;       
 
         /// <summary>
         ///	Returns the values from GetBasicDropdowns, but in Dictionary form for more efficent lookup

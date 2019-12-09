@@ -36,6 +36,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetDictDropDown/{atrbCd}")]
+        public List<DictDropdown> GetDictDropDown(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDictDropDown(atrbCd)
+                , $"Unable to get Dropdowns for {atrbCd}"
+            );
+        }
+
+        [Authorize]
         [Route("GetDistinctDropdownCodes/{atrbCd}")]
         public IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd)
         {
