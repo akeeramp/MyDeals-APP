@@ -3,14 +3,14 @@
     <div ng-if="!vm.isEditmode" class="col-md-12">
         <h3>Auto-Approval Rules Administration Screen</h3>
     </div>
-    <div ng-if="!vm.isEditmode" class="row" style="padding: 0px 0px 0px 40px;">
+    <div ng-if="!vm.isEditmode" class="row" style="padding: 0 0 0 40px;">
         <div class="col-md-6" style="text-align: left;">
             <p style="color: #FC4C02">This screen allows DA users to create automated approval rules to streamline their work</p>
         </div>
     </div>
 
     <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
-        <!-- Grid buttons addeed by script below before styles -->
+        <!-- Grid buttons added by script below before styles -->
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
 
@@ -26,8 +26,8 @@
             </div>
         </div>
 
-        <div class="col-md-11" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
-            Last modified by <font style="color:orangered">{{vm.rule.ChangedBy}}</font> on <font style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</font>
+        <div class="col-md-11" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
+            Last modified by <span style="color:orangered">{{vm.rule.ChangedBy}}</span> on <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
         </div>
 
         <div class="form-group row">
@@ -69,12 +69,12 @@
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Automation:</label>
+            <label class="control-label col-md-1">Rule Type:</label>
             <div class="col-md-2" style="margin-left:-15px;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsAutomationIncluded"
-                        on="Include"
-                        off="Exclude"
+                        on="Approval Rule"
+                        off="Exclusion Rule"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
@@ -82,26 +82,26 @@
 
         <div class="form-group row">
             <label class="control-label col-md-2">Rule Start Date:</label>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="From date"
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
             <label class="control-label col-md-2">End Date:</label>
-            <div class="col-md-3">
-                <input kendo-date-picker
-                       placeholder="To date"
-                       ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
-            </div>
+                <div class="col-md-2">
+                    <input kendo-date-picker
+                           placeholder="To date"
+                           ng-model="vm.rule.EndDate"
+                           style="width: 100%;" />
+                </div>
         </div>
+
+
         <div class="form-group row">
             <label class="control-label col-md-2">Notes:</label>
             <div class="col-md-9">
-                <textarea type="textarea" rows="5"
-                          ng-model="vm.rule.Notes"
-                          style="width:100%" />
+                <textarea type="textarea" rows="5" ng-model="vm.rule.Notes" style="width:100%"></textarea>
             </div>
         </div>
 
@@ -132,18 +132,16 @@
     <div class="form-group row" id="productCriteria">
         <label class="control-label col-md-2">Product Criteria:</label>
         <div class="col-md-9">
-            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px;" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px; margin-right: 25px;  float:left;" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+            <button ng-click="vm.validateProduct(true)" class="btn btn-primary" style="float: left;">Validate Products</button>
         </div>
     </div>
     <div class="form-group row action_btns" ng-if="vm.isEditmode">
         <label class="control-label col-md-2"></label>
-        <div class="col-md-3">
-            <button ng-click="vm.validateProduct(true)" class="btn btn-primary">Validate Products</button>
-        </div>
-        <div class="col-md-6" style="text-align: right">
-            <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save as Draft</button>
-            <button ng-click="vm.saveRule(true)" class="btn btn-primary">Save and Publish</button>
-            <button ng-click="vm.cancel()" class="btn btn-primary">Cancel</button>
+        <div class="col-md-9">
+            <button ng-click="vm.saveRule(false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
+            <button ng-click="vm.saveRule(true)" class="btn btn-primary" style="margin-left: 15px">Save and Publish</button>
+            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
         </div>
     </div>
 </form>
@@ -315,9 +313,6 @@
         .tmpltIcn i {
             font-size: 26px;
         }
-
-    .tmpltContract {
-    }
 
     .tmpltRole {
         font-size: 12px;

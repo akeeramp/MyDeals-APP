@@ -631,13 +631,6 @@
                     filterable: { multi: true, search: true }
                 },
                 {
-                    field: "Notes",
-                    title: "Notes",
-                    template: "<div title='#=Notes#'>#=Notes#</div>",
-                    width: "15%",
-                    filterable: { multi: true, search: false }
-                },
-                {
                     field: "OwnerName",
                     title: "Owner Name",
                     template: "<div title='#=OwnerName#'>#=OwnerName#</div>",
@@ -647,9 +640,16 @@
                 {
                     field: "ChangedBy",
                     title: "Updated By",
-                    template: "<div title='#=ChangedBy#'>#=ChangedBy#</div>",
+                    template: "<div title='#=ChangedBy#'>#=ChangedBy#<br><font style='font-size: 10px;'>#=ChangeDateTimeFormat#</font></div>",
                     width: "8%",
                     filterable: { multi: true, search: true }
+                },
+                {
+                    field: "Notes",
+                    title: "Notes",
+                    template: "<div title='#=Notes#'>#=Notes#</div>",
+                    width: "15%",
+                    filterable: { multi: true, search: false }
                 }
             ]
         };
