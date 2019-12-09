@@ -77,6 +77,16 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetRuleSimulationResults/{ruleList}/{dealsList}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<RulesSimulationResults> GetRuleSimulationResults(List<int> ruleList, List<int> dealsList)
+        {
+            int j = 0;
+            return SafeExecutor(() => _rulesLib.RunRuleSimulations(ruleList, dealsList), $"Unable to get configs of price rule");
+        }
+
+        [Authorize]
         [Route("GetPriceRules/{id}/{strActionName}")]
         public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
         {

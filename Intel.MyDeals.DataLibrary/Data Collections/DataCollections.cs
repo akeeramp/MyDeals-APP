@@ -612,7 +612,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public static List<DictDropdown> GetDictDropDown(string atrbCd)
+        public static List<DictDropDown> GetDictDropDown(string atrbCd)
         {
             return new DropdownDataLib().GetDictDropDown(atrbCd);
         }

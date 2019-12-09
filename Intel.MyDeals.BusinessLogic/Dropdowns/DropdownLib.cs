@@ -47,7 +47,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetDropdowns();
         }
 
-        public List<DictDropdown> GetDictDropDown(string atrbCd)
+        public List<DictDropDown> GetDictDropDown(string atrbCd)
         {
             return _dataCollectionsDataLib.GetDictDropDown(atrbCd);
         }

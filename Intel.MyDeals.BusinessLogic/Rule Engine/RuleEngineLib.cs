@@ -66,6 +66,12 @@ namespace Intel.MyDeals.BusinessLogic
             return lstPriceRuleCriteria;
         }
 
+        public List<RulesSimulationResults> RunRuleSimulations(List<int> rulesToRun, List<int> dealsToTestAgainst)
+        {
+            // First parameter = Run this as a simulation, not an approval.  Might pass in Run at later time for admin page.
+            return new ApprovalRules().GetRuleSimulationsResults(false, rulesToRun, dealsToTestAgainst);
+        }
+
         public List<string> ValidateProducts(List<string> lstProducts)
         {
             //List<Product> lstProductFromCache = new ProductsLib().GetProducts(true);

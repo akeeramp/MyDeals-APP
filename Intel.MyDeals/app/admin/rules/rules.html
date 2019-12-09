@@ -31,9 +31,9 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2">Name:</label>
+            <label class="control-label col-md-2"><span style="color: red">*</span>Name:</label>
             <div class="col-md-9">
-                <input class="form-control md"
+                <input required class="form-control md"
                        type="text"
                        ng-model="vm.rule.Name"
                        style="width:100%">
@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2">Owner:</label>
+            <label class="control-label col-md-2"><span style="color: red">*</span>Owner:</label>
             <div class="col-md-9">
                 <select kendo-combo-box
                         k-options="vm.ownerOptions"
@@ -52,43 +52,45 @@
 
         <div class="form-group row">
             <label class="control-label col-md-2">Status:</label>
-            <div class="col-md-2">
+            <span class="col-md-2" style="float: left;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsActive"
                         on="Active"
                         off="Inactive"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
-            <label class="control-label col-md-1">Stage:</label>
-            <div class="col-md-2" style="margin-left:-15px;">
+            </span>
+
+            <label class="control-label col-md-1" style="float: left;">Stage:</label>
+            <span class="col-md-2" style="margin-left:-15px; float: left;">
                 <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
                         ng-model="vm.rule.RuleStage"
                         on="Approved"
                         off="Pending"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
-            <label class="control-label col-md-1">Rule Type:</label>
-            <div class="col-md-2" style="margin-left:-15px;">
+            </span>
+
+            <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
+            <span class="col-md-2" style="margin-left:-15px; float: left;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsAutomationIncluded"
                         on="Approval Rule"
                         off="Exclusion Rule"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
+            </span>
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2">Rule Start Date:</label>
+            <label class="control-label col-md-2"><span style="color: red">*</span>Rule Start Date:</label>
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="From date"
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
-            <label class="control-label col-md-2">End Date:</label>
+            <label class="control-label col-md-2"><span style="color: red">*</span>End Date:</label>
                 <div class="col-md-2">
                     <input kendo-date-picker
                            placeholder="To date"
@@ -142,6 +144,7 @@
             <button ng-click="vm.saveRule(false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
             <button ng-click="vm.saveRule(true)" class="btn btn-primary" style="margin-left: 15px">Save and Publish</button>
             <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
+            <button ng-click="vm.simulate()" class="btn btn-primary" style="margin-left: 15px">Simulate</button>
         </div>
     </div>
 </form>
@@ -346,7 +349,7 @@
 <script>
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
-        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name');
+        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Lvl 4 or Material Id)');
         $($('.k-spreadsheet-column-header').find('div')[2]).find('div').html('Price (US$)');
     });
 </script>

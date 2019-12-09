@@ -20,6 +20,7 @@
             getFailedRuleTasksByRuleId: getFailedRuleTasksByRuleId,
             getPriceRules: getPriceRules,
             updatePriceRule: updatePriceRule,
+            getRuleSimulationResults: getRuleSimulationResults,
             getPriceRulesConfig: getPriceRulesConfig,
             isDuplicateTitle: isDuplicateTitle,
             deletePriceRule: deletePriceRule,
@@ -55,6 +56,10 @@
 
         function getPriceRules(id, strActionName) {
             return dataService.get(apiBaseUrl + 'GetPriceRules/' + id + "/" + strActionName);
+        }
+
+        function getRuleSimulationResults(ruleList, dealsList) {
+            return dataService.post(apiBaseUrl + 'GetRuleSimulationResults/' + ruleList + "/" + dealsList);
         }
 
         function getRuleSets() {

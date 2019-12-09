@@ -348,7 +348,7 @@
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "ECAP", Value: "VOL_TIER", Value: "KIT", Value: "PROGRAM" }]
+                lookups: [{ Value: "ECAP" }, { Value: "VOL_TIER" }, { Value: "KIT" }, { Value: "PROGRAM" }]
             },
             {
                 field: "SERVER_DEAL_TYPE",
@@ -680,6 +680,27 @@
             }
         }
 
+        vm.simulate = function () {
+            ruleService.getRuleSimulationResults(vm.rule.Id, null).then(function (response) {
+                if (response.data.Id > 0) {
+                    //if (vm.Rules.filter(x => x.Id == response.data.Id).length > 0) {
+                    //    vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);
+                    //}
+                    //var updatedRule = response.data;
+                    //updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME;
+                    //vm.Rules.splice(0, 0, updatedRule);
+                    //$('#productCriteria').hide();
+                    //vm.isEditmode = false;
+                    //vm.dataSource.read();
+                    //logger.success("Rule has been updated");
+                } else {
+                    kendo.alert("This rule has no hits.");
+                }
+            }, function (response) {
+                logger.error("Unable to Simulate the rule");
+            });
+        }
+
         vm.saveRule = function (isWithEmail) {
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
@@ -720,21 +741,21 @@
                 });
 
                 if (requiredFields.length > 0 || validationFields.length > 0 || invalidPrice.length > 0) {
-                    var strAlertMessege = '';
+                    var strAlertMessage = '';
                     if (validationFields.length > 0) {
-                        strAlertMessege = "<b>Following scenarios are failed!</b>" + validationFields.join();
+                        strAlertMessage = "<b>Following scenarios are failed!</b>" + validationFields.join();
                     }
                     if (requiredFields.length > 0) {
-                        if (strAlertMessege != '')
-                            strAlertMessege += "</br></br>";
-                        strAlertMessege += "<b>Please fill the following required fields!</b>" + requiredFields.join();
+                        if (strAlertMessage != '')
+                            strAlertMessage += "</br></br>";
+                        strAlertMessage += "<b>Please fill the following required fields!</b>" + requiredFields.join();
                     }
                     if (invalidPrice.length > 0) {
-                        if (strAlertMessege != '')
-                            strAlertMessege += "</br></br>";
-                        strAlertMessege += "<b>Below products has invalid price!</b>" + invalidPrice.join();
+                        if (strAlertMessage != '')
+                            strAlertMessage += "</br></br>";
+                        strAlertMessage += "<b>Below products has invalid price!</b>" + invalidPrice.join();
                     }
-                    kendo.alert(strAlertMessege);
+                    kendo.alert(strAlertMessage);
                 } else {
                     for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                         if (vm.rule.Criteria[idx].type == "list") {
@@ -884,6 +905,7 @@
             vm.rule.IsAutomationIncluded = true;
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
+            vm.rule.EndDate = new Date(new Date().setFullYear(new Date().getFullYear() + 10)); // Doesn't seem to be populating new item as expected
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
             vm.BlanketDiscountPercentage = "";
             vm.BlanketDiscountDollor = "";

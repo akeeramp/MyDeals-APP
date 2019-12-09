@@ -119,6 +119,41 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public List<RulesSimulationResults> GetRuleSimulationsResults(bool runAsApprovalModeFlag, List<int> RulesToRun, List<int> DealsToTestAgainst)
+        {
+            //OpLog.Log("Simulate Approval Rules");
+            var ret = new List<RulesSimulationResults>();
+            var cmd = new Procs.dbo.PR_MYDL_EXEC_APRV_RULES
+            {
+                in_aprv_mode = runAsApprovalModeFlag,
+                in_deal_ids = new type_int_list(DealsToTestAgainst.ToArray()),
+                in_rule_ids = new type_int_list(RulesToRun.ToArray())
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_APRV_PRCSS_FLG = DB.GetReaderOrdinal(rdr, "APRV_PRCSS_FLG");
+                int IDX_APRV_RULES = DB.GetReaderOrdinal(rdr, "APRV_RULES");
+                int IDX_EXCLD_RULES = DB.GetReaderOrdinal(rdr, "EXCLD_RULES");
+                int IDX_OWNER_EMP_WWID = DB.GetReaderOrdinal(rdr, "OWNER_EMP_WWID");
+                int IDX_WIP_DEAL_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_SID");
+
+                while (rdr.Read())
+                {
+                    ret.Add(new RulesSimulationResults
+                    {
+                        APRV_PRCSS_FLG = (IDX_APRV_PRCSS_FLG < 0 || rdr.IsDBNull(IDX_APRV_PRCSS_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APRV_PRCSS_FLG),
+                        APRV_RULES = (IDX_APRV_RULES < 0 || rdr.IsDBNull(IDX_APRV_RULES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APRV_RULES),
+                        EXCLD_RULES = (IDX_EXCLD_RULES < 0 || rdr.IsDBNull(IDX_EXCLD_RULES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXCLD_RULES),
+                        OWNER_EMP_WWID = (IDX_OWNER_EMP_WWID < 0 || rdr.IsDBNull(IDX_OWNER_EMP_WWID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OWNER_EMP_WWID),
+                        WIP_DEAL_SID = (IDX_WIP_DEAL_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_SID)
+                    });
+                } // while
+            }
+
+            return ret;
+        }
+
         public List<string> GetValidProducts(List<string> lstProducts)
         {            
             lstProducts.ForEach(x => x = x.Trim().ToLower());
@@ -165,7 +200,6 @@ namespace Intel.MyDeals.DataLibrary
 
             while (rdr.Read())
             {
-                int j = 0;
                 rtn.Add(new PriceRuleCriteria
                 {
                     Id = (IDX_RULE_ID < 0 || rdr.IsDBNull(IDX_RULE_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_ID),
@@ -186,6 +220,7 @@ namespace Intel.MyDeals.DataLibrary
                 });
             } // while
             rtn.ForEach(x => x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy HH:mm"));
+
             return rtn;
         }
 

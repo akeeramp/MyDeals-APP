@@ -52,9 +52,7 @@ namespace Intel.MyDeals.Controllers.API
 
         #region Manager User Calls
 
-        private readonly ICustomerLib _customerLib;
-
-		[Authorize]
+        [Authorize]
 		[Route("GetManageUserData/{wwid}")]
 		public List<ManageUsersInfo> GetManageUserData(int wwid)
 		{
@@ -66,7 +64,7 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetManageUserGeos/{wwid}")]
 		public List<string> GetManageUserGeos(int wwid)
 		{
-			return SafeExecutor(() =>  new EmployeesLib().GetManageUserData(wwid).Where(x => x.EMP_WWID == wwid).FirstOrDefault().USR_GEOS.Split(',').ToList()				
+			return SafeExecutor(() =>  new EmployeesLib().GetManageUserData(wwid).FirstOrDefault(x => x.EMP_WWID == wwid)?.USR_GEOS.Split(',').ToList()				
 				, $"Unable to GetManageUserGeos");
 		}
 
@@ -116,7 +114,6 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public OpMsg SetEmployeeVerticalData(EmployeeCustomers data)
         {
-            int j = 0;
             return SafeExecutor(() => new EmployeesLib().SetEmployeeVerticalData(data)
                 , $"Unable to set SetEmployeeVerticalData");
         }

@@ -28,9 +28,9 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<DictDropdown> GetDictDropDown(string atrbCd)
+        public List<DictDropDown> GetDictDropDown(string atrbCd)
         {
-            List<DictDropdown> lstRtn = new List<DictDropdown>();
+            List<DictDropDown> lstRtn = new List<DictDropDown>();
             Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS{ atrb_cd = atrbCd };
 
             try
@@ -41,9 +41,9 @@ namespace Intel.MyDeals.DataLibrary
 
                     while (rdr.Read())
                     {
-                        lstRtn.Add(new DictDropdown
+                        lstRtn.Add(new DictDropDown
                         {
-                            Value = (IDX_value < 0 || rdr.IsDBNull(IDX_value)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_value)
+                            value = (IDX_value < 0 || rdr.IsDBNull(IDX_value)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_value)
                         });
                     }
                 }
@@ -53,7 +53,7 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
                 throw;
             }
-           return lstRtn.OrderBy(x=>x.Value).ToList();
+            return lstRtn.OrderBy(x=>x.value).ToList();
         }
 
         /// <summary>
