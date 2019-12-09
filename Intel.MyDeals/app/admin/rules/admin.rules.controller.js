@@ -317,20 +317,29 @@
             {
                 field: "OP_CD",
                 title: "Op Code",
-                type: "singleselect",
+                type: "list",
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "HJ" }, { Value: "HE" }]
+                lookupUrl: "/api/Dropdown/GetDictDropDown/OP_CD"
             },
             {
-                field: "PRD_DIV",
+                field: "DIV_NM",
                 title: "Product Division",
-                type: "singleselect",
+                type: "list",
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
-                lookups: [{ Value: "ND" }]
+                lookupUrl: "/api/Dropdown/GetDictDropDown/DIV_NM"
+            },
+            {
+                field: "FMLY_NM",
+                title: "Family",
+                type: "list",
+                width: 150,
+                lookupText: "Value",
+                lookupValue: "Value",
+                lookupUrl: "/api/Dropdown/GetDictDropDown/FMLY_NM"
             },
             {
                 field: "PRODUCT_CATEGORIES",

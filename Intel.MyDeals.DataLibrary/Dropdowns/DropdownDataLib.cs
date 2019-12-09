@@ -28,6 +28,34 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public List<DictDropdown> GetDictDropDown(string atrbCd)
+        {
+            List<DictDropdown> lstRtn = new List<DictDropdown>();
+            Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS{ atrb_cd = atrbCd };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_value = DB.GetReaderOrdinal(rdr, "value");
+
+                    while (rdr.Read())
+                    {
+                        lstRtn.Add(new DictDropdown
+                        {
+                            Value = (IDX_value < 0 || rdr.IsDBNull(IDX_value)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_value)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+           return lstRtn.OrderBy(x=>x.Value).ToList();
+        }
+
         /// <summary>
 		/// Get All Generic Dropdowns (ex: Deal Types)
 		/// </summary>

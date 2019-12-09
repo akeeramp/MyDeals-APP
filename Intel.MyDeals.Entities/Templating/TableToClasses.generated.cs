@@ -1945,15 +1945,26 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class Dropdown
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on SAURAVKU-MOBL
-	/// by sauravku
-	/// at 11/18/2019 2:24:06 PM
-	///</summary>
-	
-	[DataContract]
+    [DataContract]
+    public partial class DictDropdown
+    {
+
+        [DataMember]
+        public System.String Key { set; get; }
+
+        [DataMember]
+        public System.String Value { set; get; }
+
+    }
+        ///<summary>
+        /// Class created via template - Do Not Modify!
+        /// To modify this code, re-execute the template, or extend as partial.
+        /// on SAURAVKU-MOBL
+        /// by sauravku
+        /// at 11/18/2019 2:24:06 PM
+        ///</summary>
+
+        [DataContract]
 	public partial class BasicDropdown {
 	
 	[DataMember]
