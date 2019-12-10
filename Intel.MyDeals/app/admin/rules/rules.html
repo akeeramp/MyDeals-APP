@@ -1,19 +1,23 @@
-﻿<form style="margin-top:15px" class="form-horizontal">
-    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
-        <div class="k-header k-grid-toolbar ng-scope">
-            <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
-                <span class="k-icon k-i-plus"></span>Add New Rule
-            </a>
-            <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
-                <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
-            </a>
+﻿<form style="margin-top: 10px;" class="form-horizontal">
+
+    <div ng-if="!vm.isEditmode" class="col-md-12">
+        <h3>Auto-Approval Rules Administration Screen</h3>
+    </div>
+    <div ng-if="!vm.isEditmode" class="row" style="padding: 0 0 0 40px;">
+        <div class="col-md-6" style="text-align: left;">
+            <p style="color: #FC4C02">This screen allows DA users to create automated approval rules to streamline their work</p>
         </div>
+    </div>
+
+    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
+        <!-- Grid buttons added by script below before styles -->
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
+
     <div ng-if="vm.isEditmode">
         <div ng-show="false" class="form-group row">
             <label class="control-label col-md-2">Rule:</label>
-            <div class="col-md-5">
+            <div class="col-md-9">
                 <select class="form-control md"
                         kendo-combo-box
                         k-options="vm.ruleOptions"
@@ -21,10 +25,15 @@
                         style="width:100%"></select>
             </div>
         </div>
+
+        <div class="col-md-11" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
+            Last modified by <span style="color:orangered">{{vm.rule.ChangedBy}}</span> on <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
+        </div>
+
         <div class="form-group row">
-            <label class="control-label col-md-2">Name:</label>
-            <div class="col-md-5">
-                <input class="form-control md"
+            <label class="control-label col-md-2"><span style="color: red">*</span>Name:</label>
+            <div class="col-md-9">
+                <input required class="form-control md"
                        type="text"
                        ng-model="vm.rule.Name"
                        style="width:100%">
@@ -32,87 +41,85 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2">Owner:</label>
-            <div class="col-md-2">
+            <label class="control-label col-md-2"><span style="color: red">*</span>Owner:</label>
+            <div class="col-md-9">
                 <select kendo-combo-box
                         k-options="vm.ownerOptions"
                         ng-model="vm.rule.OwnerId"
                         style="width:100%"></select>
             </div>
-            <label class="control-label col-md-1">Status:</label>
-            <div class="col-md-2">
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-2">Status:</label>
+            <span class="col-md-2" style="float: left;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsActive"
                         on="Active"
                         off="Inactive"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
-        </div>
-        <div class="form-group row">            
-            <label class="control-label col-md-2">Stage:</label>
-            <div class="col-md-2" >
-                <toggle class="fl toggle-accept" ng-disabled="vm.isApprovedButtonReq"
+            </span>
+
+            <label class="control-label col-md-1" style="float: left;">Stage:</label>
+            <span class="col-md-2" style="margin-left:-15px; float: left;">
+                <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
                         ng-model="vm.rule.RuleStage"
                         on="Approved"
                         off="Pending"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
-            <label class="control-label col-md-1">Automation:</label>
-            <div class="col-md-2">
+            </span>
+
+            <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
+            <span class="col-md-2" style="margin-left:-15px; float: left;">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsAutomationIncluded"
-                        on="Inclusion Rule"
+                        on="Approval Rule"
                         off="Exclusion Rule"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
-            </div>
+            </span>
         </div>
+
         <div class="form-group row">
-            <label class="control-label col-md-2">Rule Start Date:</label>
+            <label class="control-label col-md-2"><span style="color: red">*</span>Rule Start Date:</label>
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="From date"
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
-            <label class="control-label col-md-1">End Date:</label>
-            <div class="col-md-2">
-                <input kendo-date-picker
-                       placeholder="To date"
-                       k-ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
-            </div>
+            <label class="control-label col-md-2"><span style="color: red">*</span>End Date:</label>
+                <div class="col-md-2">
+                    <input kendo-date-picker
+                           placeholder="To date"
+                           k-ng-model="vm.rule.EndDate"
+                           style="width: 100%;" />
+                </div>
         </div>
+
+
         <div class="form-group row">
             <label class="control-label col-md-2">Notes:</label>
-            <div class="col-md-5">
-                <textarea type="textarea" rows="5"
-                          ng-model="vm.rule.Notes"
-                          style="width:100%" />
+            <div class="col-md-9">
+                <textarea type="textarea" rows="5" ng-model="vm.rule.Notes" style="width:100%"></textarea>
             </div>
         </div>
-        <div ng-if="vm.rule.Id > 0" class="form-group row" style="margin:0px !important;margin-left:-10px !important;">
-            <label class="control-label col-md-2">&nbsp;</label>
-            <div class="col-md-5" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
-                <span>Last modified by </span>
-                <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
-                <span> on </span>
-                <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
-            </div>
-        </div>
+
         <div class="form-group row">
             <label class="control-label col-md-2">Criteria:</label>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div rule-attribute-builder
                      grid-id="'attributeGrid'"
                      operator-settings="operatorSettings"
                      attribute-settings="attributeSettings"
                      criteria="vm.rule.Criteria"
-                     custom-settings=""></div>
+                     custom-settings="">
+                </div>
             </div>
         </div>
+
         <div class="form-group row">
             <label class="control-label col-md-2">Blanket Discount:</label>
             <div class="col-md-6" id="blanket_section">
@@ -126,47 +133,56 @@
     </div>
     <div class="form-group row" id="productCriteria">
         <label class="control-label col-md-2">Product Criteria:</label>
-        <div class="col-md-5">
-            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width:100%;height:300px;" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+        <div class="col-md-9">
+            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px; margin-right: 25px;  float:left;" k-options="spreadSheetOptions" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+            <button ng-click="vm.validateProduct(true)" class="btn btn-primary" style="float: left;">Validate Products</button>
         </div>
     </div>
     <div class="form-group row action_btns" ng-if="vm.isEditmode">
         <label class="control-label col-md-2"></label>
-        <div class="col-md-6">
-            <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save</button>
-            <button ng-click="vm.cancel()" class="btn btn-primary">Cancel</button>
-            <button ng-click="vm.saveRule(true)" class="btn btn-primary">Publish</button>
-            <button ng-click="vm.validateProduct()" class="btn btn-primary">Validate Products</button>
+        <div class="col-md-9">
+            <button ng-click="vm.saveRule(false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
+            <button ng-click="vm.saveRule(true)" class="btn btn-primary" style="margin-left: 15px">Save and Publish</button>
+            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
+            <button ng-click="vm.simulate()" class="btn btn-primary" style="margin-left: 15px">Simulate</button>
         </div>
     </div>
 </form>
+
+<script id="grid_toolbar_addrulebutton" type="text/x-kendo-template">
+    <a role="button" class="k-button k-button-icontext" ng-click="vm.addNewRule()"><span class="k-icon k-i-plus"></span>Add New Rule</a>
+</script>
+
 <style>
-    .clrGreen {
-        color: #2196f3 !important;
+    #spreadsheetProductCriteria {
+        border: none;
     }
-    .clrRed {
-        color: #ff5722 !important;
-    }
-    .btnYellow {
-        color: #F3D54E !important;
-    }
-    .k-grid td, .k-grid td div {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-    .toggle-accept {        
+
+        #spreadsheetProductCriteria .k-spreadsheet-cell.k-dirty-cell {
+            border: none !important;
+            color: red !important;
+        }
+
+        #spreadsheetProductCriteria .k-spreadsheet-cell.k-valid-cell {
+            color: green !important;
+        }
+
+    .toggle-accept {
         width: 75% !important;
     }
-    .k-grid td {
-        height: 30px !important;        
-    }
-    div.k-spreadsheet-formula-bar,
-    .k-resize-handle {
+    /*.k-grid td {
+        height: 40px !important;
+    }*/
+
+    /* div.k-spreadsheet-row-header, -- This is left row numbers - keep */
+    /* div.k-spreadsheet-column-header, -- This is column title headers - keep */
+    /* div.k-spreadsheet-top-corner, -- This is left select all corner cell - remove */
+    .k-spreadsheet-formula-bar,
+    .k-spreadsheet-top-corner .k-resize-handle, #spreadsheetProductCriteria .k-spreadsheet-name-editor {
         display: none !important;
     }
 
-    .k-spreadsheet-top-corner, .k-spreadsheet-row-header {
+    .k-spreadsheet-row-header { /* Must keep this to display row numbers */
         display: block !important;
     }
 
@@ -174,27 +190,13 @@
         display: none;
     }
 
-    /*.k-spreadsheet-action-bar {
-        display: none !important;
-    }*/
-
-    /*.k-spreadsheet-fixed-container {
-        margin-left: -33px;
-    }*/
-
-    .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
+    .k-pager-numbers .k-state-selected, .k-scheduler-header {
         background-color: #ffffff !important;
     }
-    #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+
+    #secEngineGrid.k-grid .k-filter-row th {
         font-size: 12px;
         border-bottom: solid #dedede 2px;
-    }
-    .k-grid .k-icon {
-        color: #3343a4 !important;
-        opacity: 1;
-    }
-    .k-grid .k-alt {
-        background-color: rgba(241, 241, 241, 0.17) !important;
     }
 
     .dealTools .md-icon {
@@ -281,7 +283,7 @@
             color: #abadaf;
         }
 
-    .k-tabstrip-wrapper, .k-tabstrip-bottom, .k-spreadsheet-sheets-bar-add {
+    .k-tabstrip-wrapper, .k-tabstrip-bottom {
         display: none;
     }
 
@@ -315,9 +317,6 @@
             font-size: 26px;
         }
 
-    .tmpltContract {
-    }
-
     .tmpltRole {
         font-size: 12px;
     }
@@ -339,9 +338,8 @@
 
     .rulesGidIcon {
         font-size: 20px;
-        margin: 2px;
-        color: #aaa;
-        margin-right: 5px;
+        margin: 3px;
+        margin-right: 10px;
     }
 
     .action_btns {
@@ -351,7 +349,7 @@
 <script>
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
-        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name');
+        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Lvl 4 or Material Id)');
         $($('.k-spreadsheet-column-header').find('div')[2]).find('div').html('Price (US$)');
-    });    
+    });
 </script>

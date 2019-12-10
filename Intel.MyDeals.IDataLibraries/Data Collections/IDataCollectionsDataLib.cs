@@ -34,6 +34,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductAlias> GetProductsFromAlias();
 
         List<BasicDropdown> GetBasicDropdowns();
+        List<DictDropDown> GetDictDropDown(string atrbCd);
 
         Dictionary<string, string> GetDropdownDict(string lookupText);
 

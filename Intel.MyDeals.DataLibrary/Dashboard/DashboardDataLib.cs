@@ -48,7 +48,6 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_IS_TENDER = DB.GetReaderOrdinal(rdr, "IS_TENDER");
                     int IDX_NOTES = DB.GetReaderOrdinal(rdr, "NOTES");
                     int IDX_STRT_DTM = DB.GetReaderOrdinal(rdr, "STRT_DTM");
-                    int IDX_TENDER_PUBLISHED = DB.GetReaderOrdinal(rdr, "TENDER_PUBLISHED");
                     int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
                     int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
 
@@ -66,7 +65,6 @@ namespace Intel.MyDeals.DataLibrary
                             IS_TENDER = (IDX_IS_TENDER < 0 || rdr.IsDBNull(IDX_IS_TENDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_TENDER),
                             NOTES = (IDX_NOTES < 0 || rdr.IsDBNull(IDX_NOTES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NOTES),
                             STRT_DTM = (IDX_STRT_DTM < 0 || rdr.IsDBNull(IDX_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_STRT_DTM),
-                            TENDER_PUBLISHED = (IDX_TENDER_PUBLISHED < 0 || rdr.IsDBNull(IDX_TENDER_PUBLISHED)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TENDER_PUBLISHED),
                             TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE),
                             WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD)
                         });

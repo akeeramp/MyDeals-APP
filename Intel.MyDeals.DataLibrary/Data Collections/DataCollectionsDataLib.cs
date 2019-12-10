@@ -176,6 +176,11 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetDropdowns();
         }
 
+        public List<DictDropDown> GetDictDropDown(string atrbCd)
+        {
+            return DataCollections.GetDictDropDown(atrbCd);
+        }
+
         //public List<RetailPull> GetRetailPullSDMList()
         //{
         //	return DataCollections.GetRetailPullList();
