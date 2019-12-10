@@ -11,6 +11,7 @@ namespace Intel.MyDeals.Entities
         public List<UsrProfileRole> DA_Users { get; set; }
         public bool IsElligibleForApproval { get; set; }
         public int CurrentUserWWID { get; set; }
+        public DateTime DefaultEndDate { get; set; }
         public string CurrentUserName { get; set; }
         public operatorSettings operatorSettings { get; set; }
         public List<AttributeSettings> AttributeSettings { get; set; }

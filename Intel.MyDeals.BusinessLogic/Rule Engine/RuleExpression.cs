@@ -126,7 +126,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             {
                 lstProduct.RemoveAll(x => x.Price <= 0);
             }
-            return string.Join(" OR ", lstProduct.Select(x => string.Format("(PRODUCT_FILTER = '{0}' AND ECAP_PRICE >= {1})", x.ProductName, x.Price)));
+            return lstProduct.Count > 0 ? string.Concat("(", string.Join(" OR ", lstProduct.Select(x => string.Format("(PRODUCT_FILTER = '{0}' AND ECAP_PRICE >= {1})", x.ProductName, x.Price))), ")") : string.Empty;
         }
 
         string[] strStringDataTypes = new string[] { "string", "singleselect", "date" };
@@ -136,7 +136,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             criteria.BlanketDiscount.RemoveAll(x => x.value == "0" || x.value == string.Empty);
             if (criteria.BlanketDiscount.Count > 0)
             {
-                strSqlCriteria = string.Concat("(OBJ_SET_TYPE_CD = 'ECAP') AND (ECAP_PRICE >= (CAP - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("(CAP * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString()) : criteria.BlanketDiscount.First().value, "))");
+                strSqlCriteria = string.Concat("(OBJ_SET_TYPE_CD = 'ECAP') AND (ECAP_PRICE >= (CAP_PRICE - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("(CAP_PRICE * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString()) : criteria.BlanketDiscount.First().value, "))");
                 criteria.Rules.RemoveAll(x => x.field == "OBJ_SET_TYPE_CD" && x.value == "ECAP");
             }
 

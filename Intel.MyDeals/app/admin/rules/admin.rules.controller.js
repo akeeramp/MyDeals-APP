@@ -525,7 +525,16 @@
                         $('#productCriteria').show();
                         vm.dataSourceSpreadSheet.read();
                         vm.DeleteSpreadsheetAutoHeader();
-                        vm.validateProduct(false);
+                        if (vm.ProductCriteria.length > 198) {
+                            var sheet = $scope.spreadsheet.activeSheet();
+                            for (var i = 198; i <= 200; i++) {
+                                if (vm.ProductCriteria[i - 1].ProductName != '') {
+                                    sheet.range("A" + i).value(vm.ProductCriteria[i - 1].ProductName);
+                                    sheet.range("B" + i).value(vm.ProductCriteria[i - 1].Price);
+                                }
+                            }
+                        }
+                        vm.validateProduct(false, false, false);
                         vm.isEditmode = true;
                     } break;
                     default: {
@@ -543,6 +552,17 @@
             var sheet = $scope.spreadsheet.activeSheet();
             sheet.deleteRow(0);
             sheet.range("A1:A200").color("black");
+            sheet.range("A1:A200").textAlign("left");
+            sheet.range("B1:B200").textAlign("right");
+            sheet.range("B1:B200").format('$#,##0.00');
+            sheet.range("B1:B200").validation({
+                dataType: "custom",
+                from: 'REGEXP_MATCH(B1)',
+                allowNulls: true,
+                type: "reject",
+                titleTemplate: "Invalid Price",
+                messageTemplate: "Format of the price is invalid. This should be greater than zero."
+            });
         }
 
         vm.deleteRule = function (id) {
@@ -740,86 +760,149 @@
                 logger.error("Unable to Simulate the rule");
             });
         }
+        var invalidPrice = [];
+        var duplicateProducts = [];
+        var invalidProducts = [];
+        vm.ValidateDuplicateInvalidProducts = function () {
+            invalidPrice = [];
+            $.each(vm.ProductCriteria.filter(x => x.ProductName != '' && x.Price != ''), function (index, value) {
+                if ($.isNumeric(value.Price) == false || parseFloat(value.Price) <= 0)
+                    invalidPrice.push(value.ProductName + " (" + value.Price + ")");
+            });
 
+            duplicateProducts = [];
+            $.each(vm.ProductCriteria.filter(x => x.ProductName != ''), function (index, value) {
+                if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() == value.ProductName.toLowerCase()).length > 1)
+                    duplicateProducts.push(value.ProductName);
+            });
+            if (invalidProducts.length > 0) {
+                var tempProductCriteria = vm.ProductCriteria.filter(x => x.ProductName != '');
+                vm.ProductCriteria = [];
+                $.each($.unique(invalidProducts), function (index, value) {
+                    var newProduct = {};
+                    newProduct.ProductName = tempProductCriteria.filter(x => x.ProductName.toLowerCase() == value.toLowerCase())[0].ProductName;
+                    newProduct.Price = tempProductCriteria.filter(x => x.ProductName.toLowerCase() == value.toLowerCase())[0].Price;
+                    vm.ProductCriteria.push(newProduct);
+                });
+                $.each(tempProductCriteria, function (index, value) {
+                    if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() == value.ProductName.toLowerCase()).length == 0) {
+                        var newProduct = {};
+                        newProduct.ProductName = value.ProductName;
+                        newProduct.Price = value.Price;
+                        vm.ProductCriteria.push(newProduct);
+                    }
+                });
+                vm.dataSourceSpreadSheet.read();
+                vm.DeleteSpreadsheetAutoHeader();
+                var sheet = $scope.spreadsheet.activeSheet();
+                if (vm.ProductCriteria.length > 198) {
+                    for (var i = 198; i <= 200; i++) {
+                        if (vm.ProductCriteria[i - 1].ProductName != '') {
+                            sheet.range("A" + i).value(vm.ProductCriteria[i - 1].ProductName);
+                            sheet.range("B" + i).value(vm.ProductCriteria[i - 1].Price);
+                        }
+                    }
+                }
+                for (var i = 1; i <= vm.ProductCriteria.length; i++) {
+                    var str = sheet.range("A" + i).value() != null ? jQuery.trim(sheet.range("A" + i).value()) : '';
+                    if (str != '') {
+                        var isValid = jQuery.inArray(str.toLowerCase(), vm.ValidProducts) > -1;
+                        sheet.range("A" + i).color(isValid ? "green" : "black");
+                    }
+                }
+            }
+        }
+        var isProductValidated = false;
         vm.saveRule = function (isWithEmail) {
             $rootScope.$broadcast('save-criteria');
             $timeout(function () {
-                var requiredFields = [];
-                vm.generateProductCriteria();
-                if (vm.rule.Name == null || vm.rule.Name == "")
-                    requiredFields.push("</br>Rule name");
-                if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
-                    requiredFields.push("</br>Rule owner");
-                if (vm.rule.StartDate == null)
-                    requiredFields.push("</br>Rule start date");
-                if (vm.rule.EndDate == null)
-                    requiredFields.push("</br>Rule end date");
-                if (vm.rule.Criteria.filter(x => x.value == "").length > 0)
-                    requiredFields.push("</br>Rule criteria is empty");
-                if (vm.ProductCriteria.filter(x => (x.Price == 0 || x.Price == '') && x.ProductName != '').length > 0)
-                    requiredFields.push("</br>Product in product criteria needs price");
-                if (vm.ProductCriteria.filter(x => x.Price != '' && x.Price > 0 && x.ProductName == '').length > 0)
-                    requiredFields.push("</br>Price in product criteria need product");
+                if (isProductValidated == false)
+                    vm.validateProduct(false, true, isWithEmail);
+                else {
+                    var requiredFields = [];
+                    if (vm.rule.Name == null || vm.rule.Name == "")
+                        requiredFields.push("Rule name");
+                    if (vm.rule.OwnerId == null || vm.rule.OwnerId == 0)
+                        requiredFields.push("Rule owner");
+                    if (vm.rule.StartDate == null)
+                        requiredFields.push("Rule start date");
+                    if (vm.rule.EndDate == null)
+                        requiredFields.push("Rule end date");
+                    if (vm.rule.Criteria.filter(x => x.value == "").length > 0)
+                        requiredFields.push("Rule criteria is empty");
+                    if (vm.ProductCriteria.filter(x => (x.Price == 0 || x.Price == '') && x.ProductName != '').length > 0)
+                        requiredFields.push("Product in product criteria needs price");
+                    if (vm.ProductCriteria.filter(x => x.Price != '' && x.Price > 0 && x.ProductName == '').length > 0)
+                        requiredFields.push("Price in product criteria need product");
 
-                var validationFields = [];
-                if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
-                    var dtEffFrom = new Date(vm.rule.StartDate);
-                    var dtEffTo = new Date(vm.rule.EndDate);
-                    if (dtEffFrom >= dtEffTo)
-                        validationFields.push("</br>Rule start date cannot be greater than Rule end date");
-                }
-                if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
-                    if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
-                        validationFields.push("</br>Owner cannot be invalid");
-                }
-
-                var invalidPrice = [];
-                $.each(vm.ProductCriteria.filter(x => x.ProductName != '' && x.Price != ''), function (index, value) {
-                    var rx = new RegExp(regexMoney);
-                    if (rx.test(value.Price) == false)
-                        invalidPrice.push("</br>" + value.ProductName + " (" + value.Price + ")");
-                });
-
-                if (requiredFields.length > 0 || validationFields.length > 0 || invalidPrice.length > 0) {
-                    var strAlertMessage = '';
-                    if (validationFields.length > 0) {
-                        strAlertMessage = "<b>Following scenarios are failed!</b>" + validationFields.join();
+                    var validationFields = [];
+                    if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
+                        var dtEffFrom = new Date(vm.rule.StartDate);
+                        var dtEffTo = new Date(vm.rule.EndDate);
+                        if (dtEffFrom >= dtEffTo)
+                            validationFields.push("Rule start date cannot be greater than Rule end date");
                     }
-                    if (requiredFields.length > 0) {
-                        if (strAlertMessage != '')
-                            strAlertMessage += "</br></br>";
-                        strAlertMessage += "<b>Please fill the following required fields!</b>" + requiredFields.join();
+                    if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
+                        if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
+                            validationFields.push("Owner cannot be invalid");
                     }
-                    if (invalidPrice.length > 0) {
-                        if (strAlertMessage != '')
-                            strAlertMessage += "</br></br>";
-                        strAlertMessage += "<b>Below products has invalid price!</b>" + invalidPrice.join();
-                    }
-                    kendo.alert(strAlertMessage);
-                } else {
-                    for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
-                        if (vm.rule.Criteria[idx].type == "list") {
-                            vm.rule.Criteria[idx].values = vm.rule.Criteria[idx].value;
-                            vm.rule.Criteria[idx].value = "-";
-                        } else {
-                            vm.rule.Criteria[idx].values = [];
+                    if (requiredFields.length > 0 || validationFields.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0 || invalidProducts.length > 0) {
+                        var strAlertMessage = '';
+                        if (validationFields.length > 0) {
+                            strAlertMessage = "<b>Following scenarios are failed!</b>" + validationFields.join("</br>");
                         }
-                    }
 
-                    var priceRuleCriteria = {
-                        Id: vm.rule.Id,
-                        Name: vm.rule.Name,
-                        OwnerId: vm.rule.OwnerId,
-                        IsActive: vm.rule.IsActive,
-                        IsAutomationIncluded: vm.rule.IsAutomationIncluded,
-                        StartDate: vm.rule.StartDate,
-                        EndDate: vm.rule.EndDate,
-                        RuleStage: vm.rule.RuleStage,
-                        Notes: vm.rule.Notes,
-                        Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
-                        ProductCriteria: vm.ProductCriteria.filter(x => x.ProductName != '' && x.Price > 0 && x.Price != '')
+                        if (invalidProducts.length > 0) {
+                            strAlertMessage += "<b>Invalid products exist, please fix and click on 'Validate Products':</b>";
+                            $.each($.unique(invalidProducts), function (index, value) {
+                                strAlertMessage += "</br>" + value;
+                            });
+                        }
+
+                        if (requiredFields.length > 0) {
+                            if (strAlertMessage != '')
+                                strAlertMessage += "</br></br>";
+                            strAlertMessage += "<b>Please fill the following required fields!</b>" + requiredFields.join("</br>");
+                        }
+                        if (invalidPrice.length > 0) {
+                            if (strAlertMessage != '')
+                                strAlertMessage += "</br></br>";
+                            strAlertMessage += "<b>Below products has invalid price!</b></br>" + invalidPrice.join("</br>");
+                        }
+
+                        if (duplicateProducts.length > 0) {
+                            if (strAlertMessage != '')
+                                strAlertMessage += "</br></br>";
+                            strAlertMessage += "<b>Duplicate products found!</b></br>" + $.unique(duplicateProducts).join("</br>");
+                        }
+
+                        kendo.alert(strAlertMessage);
+                    } else {
+                        for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
+                            if (vm.rule.Criteria[idx].type == "list") {
+                                vm.rule.Criteria[idx].values = vm.rule.Criteria[idx].value;
+                                vm.rule.Criteria[idx].value = "-";
+                            } else {
+                                vm.rule.Criteria[idx].values = [];
+                            }
+                        }
+
+                        var priceRuleCriteria = {
+                            Id: vm.rule.Id,
+                            Name: vm.rule.Name,
+                            OwnerId: vm.rule.OwnerId,
+                            IsActive: vm.rule.IsActive,
+                            IsAutomationIncluded: vm.rule.IsAutomationIncluded,
+                            StartDate: vm.rule.StartDate,
+                            EndDate: vm.rule.EndDate,
+                            RuleStage: vm.rule.RuleStage,
+                            Notes: vm.rule.Notes,
+                            Criterias: { Rules: vm.rule.Criteria.filter(x => x.value != ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
+                            ProductCriteria: vm.ProductCriteria.filter(x => x.ProductName != '' && x.Price > 0 && x.Price != '')
+                        }
+                        isProductValidated = false;
+                        vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                     }
-                    vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                 }
             });
         }
@@ -843,11 +926,11 @@
                 sheet.range("B1:B200").format('$#,##0.00');
                 sheet.range("B1:B200").validation({
                     dataType: "custom",
-                    from: 'REGEXP_MATCH(B1, "' + regexMoney + '")',
+                    from: 'REGEXP_MATCH(B1)',
                     allowNulls: true,
                     type: "reject",
                     titleTemplate: "Invalid Price",
-                    messageTemplate: "Format of the price is invalid"
+                    messageTemplate: "Format of the price is invalid. This should be greater than zero."
                 });
                 for (var i = 2; i < 50; i++)
                     sheet.hideColumn(i);
@@ -886,7 +969,7 @@
 
         vm.ValidProducts = [];
         vm.LastValidatedProducts = [];
-        vm.validateProduct = function (showPopup) {
+        vm.validateProduct = function (showPopup, isSave, isWithMail) {
             vm.generateProductCriteria();
             if (vm.ProductCriteria.length > 0) {
                 vm.LastValidatedProducts = [];
@@ -896,12 +979,40 @@
                 }
                 ruleService.validateProducts(vm.LastValidatedProducts).then(function (response) {
                     vm.ValidProducts = response.data;
+                    invalidProducts = [];
+                    $.each($.unique($(vm.LastValidatedProducts.filter(x => x != '')).not(vm.ValidProducts.filter(x => x != ''))), function (index, value) {
+                        invalidProducts.push(value.toLowerCase());
+                    });
+                    if (isSave) {
+                        isProductValidated = true;
+                        vm.saveRule(isWithMail);
+                    }
                     vm.ValidateProductSheet();
+                    vm.ValidateDuplicateInvalidProducts();
                     if (showPopup) {
-                        if (vm.ValidProducts.filter(x => x != '').length == vm.LastValidatedProducts.filter(x => x != '').length)
+                        if (invalidProducts.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0) {
+                            var strAlertMessage = '';
+                            if (invalidProducts.length > 0) {
+                                strAlertMessage += "<b>Invalid products exist, please fix:</b>";
+                                $.each($.unique(invalidProducts), function (index, value) {
+                                    strAlertMessage += "</br>" + value;
+                                });
+                            }
+                            if (invalidPrice.length > 0) {
+                                if (strAlertMessage != '')
+                                    strAlertMessage += "</br></br>";
+                                strAlertMessage += "<b>Below products has invalid price!</b></br>" + invalidPrice.join("</br>");
+                            }
+
+                            if (duplicateProducts.length > 0) {
+                                if (strAlertMessage != '')
+                                    strAlertMessage += "</br></br>";
+                                strAlertMessage += "<b>Duplicate products found!</b></br>" + $.unique(duplicateProducts).join("</br>");
+                            }
+
+                            kendo.alert(strAlertMessage);
+                        } else if (vm.ValidProducts.filter(x => x != '').length == vm.LastValidatedProducts.filter(x => x != '').length)
                             kendo.alert("<b>All Products are Valid</b></br>");
-                        //else
-                        //    kendo.alert("<b>Invalid Products:</b></br>" + vm.ValidProducts.join(", "));
                     }
                 }, function (response) {
                     logger.error("Operation failed");
@@ -913,16 +1024,9 @@
             }
         }
 
-        kendo.spreadsheet.defineFunction("REGEXP_MATCH", function (str, pattern, flags) {
-            var rx;
-            try {
-                rx = flags ? new RegExp(pattern, flags) : new RegExp(pattern);
-            } catch (ex) {
-                // could not compile regexp, return some error code
-                return new kendo.spreadsheet.CalcError("REGEXP");
-            }
-            return rx.test(str);
-        }).args([["str", "string"], ["pattern", "string"], ["flags", ["or", "string", "null"]]]);
+        kendo.spreadsheet.defineFunction("REGEXP_MATCH", function (str) {
+            return $.isNumeric(str) && parseFloat(str) > 0;
+        }).args([["str", "string"]]);
 
         vm.dataSourceSpreadSheet = new kendo.data.DataSource({
             transport: {
@@ -945,11 +1049,12 @@
             vm.rule.IsAutomationIncluded = true;
             vm.rule.IsActive = true;
             vm.rule.StartDate = new Date();
-            vm.rule.EndDate = new Date(new Date().setFullYear(new Date().getFullYear() + 10)); // Doesn't seem to be populating new item as expected
+            vm.rule.EndDate = vm.RuleConfig.DefaultEndDate;
             vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
             vm.BlanketDiscountPercentage = "";
             vm.BlanketDiscountDollor = "";
             vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
+            isProductValidated = false;
         }
 
         //Export to Excel
