@@ -33,7 +33,7 @@
 
         $scope.getConstant = function () {
             // If user has closed the banner message he wont see it for the current session again.
-            constantsService.getConstantsByName("PRC_RULE_WWID").then(function (data) {
+            constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
                 if (!!data.data) {
                     vm.adminEmailIDs = data.data.CNST_VAL_TXT == 'NA'
                         ? "" : data.data.CNST_VAL_TXT;
