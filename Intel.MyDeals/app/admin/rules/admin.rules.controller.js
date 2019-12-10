@@ -699,7 +699,10 @@
         }
 
         vm.simulate = function () {
-            ruleService.getRuleSimulationResults(vm.rule.Id, null).then(function (response) {
+            var data = [];
+            data.push(vm.rule.Id, 0);
+
+            ruleService.getRuleSimulationResults(data).then(function (response) {
                 if (response.data.Id > 0) {
                     //if (vm.Rules.filter(x => x.Id == response.data.Id).length > 0) {
                     //    vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);

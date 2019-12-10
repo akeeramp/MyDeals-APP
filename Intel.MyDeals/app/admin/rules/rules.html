@@ -91,12 +91,12 @@
                        style="width: 100%;" />
             </div>
             <label class="control-label col-md-2"><span style="color: red">*</span>End Date:</label>
-            <div class="col-md-2">
-                <input kendo-date-picker
-                       placeholder="To date"
-                       ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
-            </div>
+                <div class="col-md-2">
+                    <input kendo-date-picker
+                           placeholder="To date"
+                           k-ng-model="vm.rule.EndDate"
+                           style="width: 100%;" />
+                </div>
         </div>
 
 
@@ -163,14 +163,9 @@
             color: red !important;
         }
 
-        #spreadsheetProductCriteria .k-spreadsheet-cell {
-            font-family: "Intel Clear";
-            font-size: 13px;
+        #spreadsheetProductCriteria .k-spreadsheet-cell.k-valid-cell {
+            color: green !important;
         }
-
-            #spreadsheetProductCriteria .k-spreadsheet-cell.k-valid-cell {
-                color: green !important;
-            }
 
     .toggle-accept {
         width: 75% !important;

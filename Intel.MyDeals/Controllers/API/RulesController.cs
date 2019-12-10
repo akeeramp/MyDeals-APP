@@ -77,11 +77,14 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetRuleSimulationResults/{ruleList}/{dealsList}")]
+        [Route("GetRuleSimulationResults")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<RulesSimulationResults> GetRuleSimulationResults(List<int> ruleList, List<int> dealsList)
+        public List<RulesSimulationResults> GetRuleSimulationResults(dynamic data)
         {
+            //List<int> ruleList, List<int> dealsList
+            List<int> ruleList = new List<int>(){82};
+            List<int> dealsList = new List<int>();
             int j = 0;
             return SafeExecutor(() => _rulesLib.RunRuleSimulations(ruleList, dealsList), $"Unable to get configs of price rule");
         }
