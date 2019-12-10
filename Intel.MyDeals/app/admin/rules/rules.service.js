@@ -58,8 +58,8 @@
             return dataService.get(apiBaseUrl + 'GetPriceRules/' + id + "/" + strActionName);
         }
 
-        function getRuleSimulationResults(ruleList, dealsList) {
-            return dataService.post(apiBaseUrl + 'GetRuleSimulationResults/' + ruleList + "/" + dealsList);
+        function getRuleSimulationResults(data) {
+            return dataService.post(apiBaseUrl + 'GetRuleSimulationResults', data); //data will be 2 lists, ruleIDs and dealIDs
         }
 
         function getRuleSets() {
