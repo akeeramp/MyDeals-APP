@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
+    <div ng-if="!vm.isEditmode" class="col-md-12" >
         <!-- Grid buttons added by script below before styles -->
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
@@ -90,8 +90,8 @@
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
-            <label class="control-label col-md-2"><span style="color: red">*</span>End Date:</label>
-                <div class="col-md-2">
+            <label class="control-label col-md-1"><span style="color: red">*</span>End Date:</label>
+                <div class="col-md-2" style="margin-left:-15px">
                     <input kendo-date-picker
                            placeholder="To date"
                            k-ng-model="vm.rule.EndDate"
@@ -150,39 +150,47 @@
 </form>
 
 <script id="grid_toolbar_addrulebutton" type="text/x-kendo-template">
-    <a role="button" class="k-button k-button-icontext" ng-click="vm.addNewRule()"><span class="k-icon k-i-plus"></span>Add New Rule</a>
+    <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
+        <span class="k-icon k-i-plus" style="color: white !important"></span>Add New Rule
+    </a>
+    <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
+        <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
+    </a>
 </script>
 
 <style>
-    #spreadsheetProductCriteria {
-        border: none;
+    .clrGreen {
+        color: #2196f3 !important;
     }
 
-        #spreadsheetProductCriteria .k-spreadsheet-cell.k-dirty-cell {
-            border: none !important;
-            color: red !important;
-        }
+    .clrRed {
+        color: #ff5722 !important;
+    }
 
-        #spreadsheetProductCriteria .k-spreadsheet-cell.k-valid-cell {
-            color: green !important;
-        }
+    .btnYellow {
+        color: #F3D54E !important;
+    }
+
+    .k-grid td, .k-grid td div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
     .toggle-accept {
         width: 75% !important;
     }
-    /*.k-grid td {
-        height: 40px !important;
-    }*/
 
-    /* div.k-spreadsheet-row-header, -- This is left row numbers - keep */
-    /* div.k-spreadsheet-column-header, -- This is column title headers - keep */
-    /* div.k-spreadsheet-top-corner, -- This is left select all corner cell - remove */
-    .k-spreadsheet-formula-bar,
-    .k-spreadsheet-top-corner .k-resize-handle, #spreadsheetProductCriteria .k-spreadsheet-name-editor {
+    .k-grid td {
+        height: 30px !important;
+    }
+
+    div.k-spreadsheet-formula-bar,
+    .k-resize-handle {
         display: none !important;
     }
 
-    .k-spreadsheet-row-header { /* Must keep this to display row numbers */
+    .k-spreadsheet-top-corner, .k-spreadsheet-row-header {
         display: block !important;
     }
 
@@ -190,13 +198,30 @@
         display: none;
     }
 
-    .k-pager-numbers .k-state-selected, .k-scheduler-header {
+    /*.k-spreadsheet-action-bar {
+        display: none !important;
+    }*/
+
+    /*.k-spreadsheet-fixed-container {
+        margin-left: -33px;
+    }*/
+
+    .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
         background-color: #ffffff !important;
     }
 
-    #secEngineGrid.k-grid .k-filter-row th {
-        font-size: 12px;
-        border-bottom: solid #dedede 2px;
+        #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+            font-size: 12px;
+            border-bottom: solid #dedede 2px;
+        }
+
+    .k-grid .k-icon {
+        color: #3343a4 !important;
+        opacity: 1;
+    }
+
+    .k-grid .k-alt {
+        background-color: rgba(241, 241, 241, 0.17) !important;
     }
 
     .dealTools .md-icon {
@@ -283,7 +308,7 @@
             color: #abadaf;
         }
 
-    .k-tabstrip-wrapper, .k-tabstrip-bottom {
+    .k-tabstrip-wrapper, .k-tabstrip-bottom, .k-spreadsheet-sheets-bar-add {
         display: none;
     }
 
@@ -317,6 +342,9 @@
             font-size: 26px;
         }
 
+    .tmpltContract {
+    }
+
     .tmpltRole {
         font-size: 12px;
     }
@@ -338,8 +366,9 @@
 
     .rulesGidIcon {
         font-size: 20px;
-        margin: 3px;
-        margin-right: 10px;
+        margin: 2px;
+        color: #aaa;
+        margin-right: 5px;
     }
 
     .action_btns {

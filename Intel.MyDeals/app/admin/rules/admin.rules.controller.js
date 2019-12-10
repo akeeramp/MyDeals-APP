@@ -679,9 +679,16 @@
                 {
                     field: "ChangedBy",
                     title: "Updated By",
-                    template: "<div title='#=ChangedBy#'>#=ChangedBy#<br><font style='font-size: 10px;'>#=ChangeDateTimeFormat#</font></div>",
+                    template: "<div title='#=ChangedBy# @#=ChangeDateTimeFormat#'>#=ChangedBy#<br><font style='font-size: 10px;'>#=ChangeDateTimeFormat#</font></div>",
                     width: "8%",
                     filterable: { multi: true, search: true }
+                },                
+                {
+                    field: "ChangeDateTime",
+                    title: "Updated Date",
+                    template: "<div title='#=ChangeDateTime#'>#=ChangeDateTime#</div>",
+                    width: "1%",
+                    hidden: true
                 },
                 {
                     field: "Notes",
@@ -689,13 +696,6 @@
                     template: "<div title='#=Notes#'>#=Notes#</div>",
                     width: "15%",
                     filterable: { multi: true, search: false }
-                },
-                {
-                    field: "ChangeDateTime",
-                    title: "Updated Date",
-                    template: "<div title='#=ChangeDateTime#'>#=ChangeDateTime#</div>",
-                    width: "1%",
-                    hidden: true
                 }
             ]
         };
