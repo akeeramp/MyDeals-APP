@@ -134,7 +134,7 @@
     <div class="form-group row" id="productCriteria">
         <label class="control-label col-md-2">Product Criteria:</label>
         <div class="col-md-9">
-            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px; margin-right: 25px;  float:left;" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px; margin-right: 25px;  float:left;" k-options="spreadSheetOptions" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
             <button ng-click="vm.validateProduct(true)" class="btn btn-primary" style="float: left;">Validate Products</button>
         </div>
     </div>
