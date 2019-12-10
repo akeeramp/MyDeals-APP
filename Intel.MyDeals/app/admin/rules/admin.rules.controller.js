@@ -319,8 +319,8 @@
                 title: "Op Code",
                 type: "list",
                 width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
+                lookupText: "value",
+                lookupValue: "value",
                 lookupUrl: "/api/Dropdown/GetDictDropDown/OP_CD"
             },
             {
@@ -328,8 +328,8 @@
                 title: "Product Division",
                 type: "list",
                 width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
+                lookupText: "value",
+                lookupValue: "value",
                 lookupUrl: "/api/Dropdown/GetDictDropDown/DIV_NM"
             },
             {
@@ -337,8 +337,8 @@
                 title: "Family",
                 type: "list",
                 width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
+                lookupText: "value",
+                lookupValue: "value",
                 lookupUrl: "/api/Dropdown/GetDictDropDown/FMLY_NM"
             },
             {
