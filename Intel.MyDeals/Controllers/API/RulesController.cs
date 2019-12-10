@@ -1,8 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
-using Intel.Opaque;
-using Intel.RulesEngine;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
@@ -80,13 +77,10 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleSimulationResults")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<RulesSimulationResults> GetRuleSimulationResults(dynamic data)
+        public List<RulesSimulationResults> GetRuleSimulationResults(List<int[]> data)
         {
-            //List<int> ruleList, List<int> dealsList
-            List<int> ruleList = new List<int>(){82};
-            List<int> dealsList = new List<int>();
-            int j = 0;
-            return SafeExecutor(() => _rulesLib.RunRuleSimulations(ruleList, dealsList), $"Unable to get configs of price rule");
+            // data list has 2 items, first is rules list array, second is deals list array
+            return SafeExecutor(() => _rulesLib.RunRuleSimulations(data), $"Unable to get configs of price rule");
         }
 
         [Authorize]

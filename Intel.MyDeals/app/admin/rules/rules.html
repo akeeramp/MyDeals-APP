@@ -134,7 +134,7 @@
     <div class="form-group row" id="productCriteria">
         <label class="control-label col-md-2">Product Criteria:</label>
         <div class="col-md-9">
-            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 600px; height: 300px; margin-right: 25px;  float:left;" k-options="spreadSheetOptions" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 602px; height: 300px; margin-right: 25px;  float:left;" k-options="spreadSheetOptions" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
             <button ng-click="vm.validateProduct(true)" class="btn btn-primary" style="float: left;">Validate Products</button>
         </div>
     </div>
@@ -144,7 +144,7 @@
             <button ng-click="vm.saveRule(false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
             <button ng-click="vm.saveRule(true)" class="btn btn-primary" style="margin-left: 15px">Save and Publish</button>
             <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
-            <button ng-click="vm.simulate()" class="btn btn-primary" style="margin-left: 15px">Simulate</button>
+            <button ng-click="vm.simulate()" class="btn btn-primary" style="margin-left: 15px; background-color:#C4D600; color:#000000">Simulate Running this Rule</button>
         </div>
     </div>
 </form>

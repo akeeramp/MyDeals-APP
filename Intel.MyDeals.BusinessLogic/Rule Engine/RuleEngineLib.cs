@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<MyOpRule> GetBusinessRules()
         {
-            //List<MyOpRule> AttrbRules
+            //List<MyOpRule> AtrbRules
             return MyRulesConfiguration.AttrbRules;
         }
 
@@ -38,8 +38,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public RuleConfig GetPriceRulesConfig()
         {
-            RuleConfig ruleConfig = new RuleConfig();
-            ruleConfig = new ApprovalRules().GetPriceRulesConfig();
+            var ruleConfig = new ApprovalRules().GetPriceRulesConfig();
             ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").OrderBy(x => x.NAME).ToList();
             return ruleConfig;
         }
@@ -66,8 +65,10 @@ namespace Intel.MyDeals.BusinessLogic
             return lstPriceRuleCriteria;
         }
 
-        public List<RulesSimulationResults> RunRuleSimulations(List<int> rulesToRun, List<int> dealsToTestAgainst)
+        public List<RulesSimulationResults> RunRuleSimulations(List<int[]> dataList) // dataList list has 2 items, first is rules list array, second is deals list array
         {
+            List<int> rulesToRun = new List<int>(dataList[0]);
+            List<int> dealsToTestAgainst = new List<int>(dataList[1]);
             // First parameter = Run this as a simulation, not an approval.  Might pass in Run at later time for admin page.
             return new ApprovalRules().GetRuleSimulationsResults(false, rulesToRun, dealsToTestAgainst);
         }
@@ -81,7 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
         {
             priceRuleCriteria.Criterias.BlanketDiscount.Where(y => y.valueType.value == "%" && y.value != string.Empty && !(Convert.ToInt32(y.value) <= 70)).ToList().ForEach(z => z.value = "70");
-            Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CRE_EMP_NAME").Count() > 0 ? new EmployeeDataLib().GetUsrProfileRole().ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
+            Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Any(x => x.field == "CRE_EMP_NAME") ? new EmployeeDataLib().GetUsrProfileRole().ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
             priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
             priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
             using (RuleExpressions ruleExpressions = new RuleExpressions())
