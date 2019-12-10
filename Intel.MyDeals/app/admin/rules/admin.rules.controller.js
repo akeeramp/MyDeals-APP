@@ -7,9 +7,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants']
+    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService']
 
-    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants) {
+    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants, constantsService) {
         var vm = this;
         vm.ruleId = 0;
         vm.isEditmode = false;
@@ -19,7 +19,8 @@
         vm.BlanketDiscountDollor = "";
         vm.BlanketDiscountPercentage = "";
         vm.ProductCriteria = [];
-
+        vm.isApprovedButtonReq = true;
+        vm.adminEmailIDs = '';
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
                 vm.RuleConfig = response.data;
@@ -28,6 +29,17 @@
             });
 
             vm.GetRules(0, "GET_RULES");
+        }
+
+        $scope.getConstant = function () {
+            // If user has closed the banner message he wont see it for the current session again.
+            constantsService.getConstantsByName("PRC_RULE_WWID").then(function (data) {
+                if (!!data.data) {
+                    vm.adminEmailIDs = data.data.CNST_VAL_TXT == 'NA'
+                        ? "" : data.data.CNST_VAL_TXT;
+                    vm.isApprovedButtonReq = vm.adminEmailIDs.indexOf(usrEmail) > -1 ? false : true;
+                }
+            });
         }
 
         $scope.operatorSettings = {
@@ -462,6 +474,7 @@
                     vm.isEditmode = false;
                     vm.dataSource.read();
                     logger.success("Rule has been updated");
+                    
                 } else {
                     kendo.alert("This rule name already exists in another rule.");
                 }
@@ -542,6 +555,13 @@
                 return 'D';
             }
         }
+        vm.stageOneCharStatus = function (IsAutomationIncluded) {
+            if (IsAutomationIncluded == true) {
+                return 'intelicon-plus-solid clrGreen';
+            } else {
+                return 'intelicon-minus-solid clrRed';
+            }
+        }
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
@@ -594,7 +614,7 @@
             columns: [                
                 {
                     width: "130px",
-                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' title='#=RuleStage#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div > <div class='rule'><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Active#} else {#Draft#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div ><div class='rule'><i title='#if(IsAutomationIncluded == true){#Inclusion Rule#} else {#Exclusion Rule#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i><i ng-if='vm.isApprovedButtonReq' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.approveRule(#= Id #)'></i></div>"
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 {
@@ -602,11 +622,21 @@
                     field: "Name",
                     template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'>#= Name #</a></div>",
                     width: "20%",
-                    filterable: { multi: true, search: true }
-                },                
+                    filterable: { multi: true, search: true },
+                    encoded: true
+                },
+                {
+                    field: "RuleStage",
+                    title: "RuleStage",                    
+                    width: "1%",
+                    hidden: true
+                },
                 {                    
-                    field: "IsActive", title: "Status", filterable: { multi: true, search: true },width:"7%",
-                    template: "<toggle class='fl toggle-accept' size='btn-sm' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
+                    field: "IsActive",
+                    title: "Status",
+                    filterable: { multi: true, search: true },
+                    width: "7%",
+                    template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' offstyle = 'btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
                 {
                     field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
@@ -641,9 +671,16 @@
                 {
                     field: "ChangedBy",
                     title: "Updated By",
-                    template: "<div title='#=ChangedBy#'>#=ChangedBy#</div>",
+                    template: "<div title='#=ChangedBy# @#=ChangeDateTime#'>#=ChangedBy#</div>",
                     width: "8%",
                     filterable: { multi: true, search: true }
+                },
+                {
+                    field: "ChangeDateTime",
+                    title: "Updated Date",
+                    template: "<div title='#=ChangeDateTime#'>#=ChangeDateTime#</div>",
+                    width: "1%",
+                    hidden: true
                 }
             ]
         };
@@ -793,6 +830,11 @@
             vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.RuleConfig.CurrentUserWWID).length == 0 ? null : vm.RuleConfig.CurrentUserWWID;
         }
 
+        //Export to Excel
+        vm.exportToExcel = function () {
+            gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
+        }
+        $scope.getConstant();
         $scope.init();
     }
 })();

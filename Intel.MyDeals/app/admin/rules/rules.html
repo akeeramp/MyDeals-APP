@@ -4,6 +4,9 @@
             <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
                 <span class="k-icon k-i-plus"></span>Add New Rule
             </a>
+            <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
+                <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
+            </a>
         </div>
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
@@ -30,16 +33,14 @@
 
         <div class="form-group row">
             <label class="control-label col-md-2">Owner:</label>
-            <div class="col-md-5">
+            <div class="col-md-2">
                 <select kendo-combo-box
                         k-options="vm.ownerOptions"
                         ng-model="vm.rule.OwnerId"
                         style="width:100%"></select>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-2">Status:</label>
-            <div class="col-md-1">
+            <label class="control-label col-md-1">Status:</label>
+            <div class="col-md-2">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsActive"
                         on="Active"
@@ -47,9 +48,11 @@
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Stage:</label>
-            <div class="col-md-1" style="margin-left:-15px;">
-                <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
+        </div>
+        <div class="form-group row">            
+            <label class="control-label col-md-2">Stage:</label>
+            <div class="col-md-2" >
+                <toggle class="fl toggle-accept" ng-disabled="vm.isApprovedButtonReq"
                         ng-model="vm.rule.RuleStage"
                         on="Approved"
                         off="Pending"
@@ -57,11 +60,11 @@
                         offstyle="btn-danger"></toggle>
             </div>
             <label class="control-label col-md-1">Automation:</label>
-            <div class="col-md-1" style="margin-left:-15px;">
+            <div class="col-md-2">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsAutomationIncluded"
-                        on="Include"
-                        off="Exclude"
+                        on="Inclusion Rule"
+                        off="Exclusion Rule"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
@@ -78,7 +81,7 @@
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="To date"
-                       ng-model="vm.rule.EndDate"
+                       k-ng-model="vm.rule.EndDate"
                        style="width: 100%;" />
             </div>
         </div>
@@ -138,6 +141,15 @@
     </div>
 </form>
 <style>
+    .clrGreen {
+        color: #2196f3 !important;
+    }
+    .clrRed {
+        color: #ff5722 !important;
+    }
+    .btnYellow {
+        color: #F3D54E !important;
+    }
     .k-grid td, .k-grid td div {
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -158,7 +170,7 @@
         display: block !important;
     }
 
-    .k-animation-container ul li:nth-child(5), .k-animation-container ul li:nth-child(4) {
+    .k-spreadsheet-cell-context-menu li:nth-child(5), .k-spreadsheet-cell-context-menu li:nth-child(4) {
         display: none;
     }
 
@@ -210,7 +222,7 @@
         }
 
     .dealTools {
-        margin-left: -5px !important;
+        /*margin-left: -5px !important;*/
     }
 
     .dealTools {
@@ -327,9 +339,9 @@
 
     .rulesGidIcon {
         font-size: 20px;
-        margin: 3px;
+        margin: 2px;
         color: #aaa;
-        margin-right: 10px;
+        margin-right: 5px;
     }
 
     .action_btns {
