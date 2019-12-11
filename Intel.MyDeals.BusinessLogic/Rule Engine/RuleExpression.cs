@@ -178,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 if (lstMulti.Count > 0)
                     strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND (" : "(", string.Join(" OR ", lstMulti.Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, string.Concat("'%", x.value, "%'")))), ")");
             }
-
+            strSqlCriteria = strSqlCriteria.Trim().EndsWith("AND") ? strSqlCriteria.Trim().Remove(strSqlCriteria.Trim().LastIndexOf("AND"), 3).Trim() : strSqlCriteria.Trim();
             return strSqlCriteria;
         }
 
