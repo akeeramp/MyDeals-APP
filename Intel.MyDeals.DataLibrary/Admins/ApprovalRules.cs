@@ -315,24 +315,26 @@ namespace Intel.MyDeals.DataLibrary
 
 
 
-        //public List<string> GetSuggestion(string strCategory, string strSearchKey)
-        //{
-        //    List<string> lstRtn = new List<string>();
-        //    var cmd = new Procs.dbo.PR_MYDL_GET_RULE_SUGG
-        //    {
-        //        category = strCategory,
-        //        key = strSearchKey
-        //    };
-        //    using (var rdr = DataAccess.ExecuteDataSet(cmd))
-        //    {
-        //        if (rdr.Tables.Count > 0)
-        //        {
-        //            lstRtn = (from result in rdr.Tables[0].AsEnumerable()
-        //                      select result["result"].ToString()).ToList();
-        //        }
-        //    }
-        //    return lstRtn;
-        //}
+        public List<string> GetSuggestion(string strCategory, string strSearchKey)
+        {
+            List<string> lstRtn = new List<string>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_RULE_SUGG
+            {
+                category = strCategory,
+                key = strSearchKey
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "result");
+
+                while (rdr.Read())
+                {
+                    lstRtn.Add((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
+                } // while
+            }
+            return lstRtn;
+        }
 
 
 

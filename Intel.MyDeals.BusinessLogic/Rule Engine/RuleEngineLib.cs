@@ -45,8 +45,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
-            // Removed internal call for now, not used yet
-            return null; // new OpDataCollectorDataLib().GetSuggestion(strCategory, strSearchKey);
+            return new ApprovalRules().GetSuggestion(strCategory, strSearchKey);
         }
 
         public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)

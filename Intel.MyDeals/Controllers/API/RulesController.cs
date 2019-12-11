@@ -32,7 +32,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetSuggestion/{strCategory}/{strSearchKey}")]
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
-            return SafeExecutor(() => _rulesLib.GetSuggestion(strCategory, strSearchKey), $"Unable to get Business Rules");
+            return SafeExecutor(() => _rulesLib.GetSuggestion(strCategory, strSearchKey), $"Unable to get suggestions");
         }
 
         [Authorize]

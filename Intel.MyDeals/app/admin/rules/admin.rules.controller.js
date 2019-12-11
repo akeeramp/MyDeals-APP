@@ -260,16 +260,16 @@
                 vm.rule.OwnerId = this.value();
             }
         };
-
+        var allowedRoleForCreatedBy = ['GA', 'FSE'];
         $scope.attributeSettings = [
             {
                 field: "CRE_EMP_NAME",
                 title: "Created by name",
-                type: "singleselect",
+                type: "list",
                 width: 150.0,
                 lookupText: "NAME",
                 lookupValue: "EMP_WWID",
-                lookupUrl: "/api/Employees/GetUsrProfileRole"
+                lookupUrl: "/api/Employees/GetUsrProfileRoleByRoleCd/" + allowedRoleForCreatedBy.join()
             },
             {
                 field: "WIP_DEAL_OBJ_SID",
@@ -327,6 +327,13 @@
                 dimKey: 20
             },
             {
+                field: "DEAL_DESC",
+                title: "Deal Description",
+                type: "string",
+                width: 150,
+                dimKey: 20
+            },
+            {
                 field: "OP_CD",
                 title: "Op Code",
                 type: "list",
@@ -354,13 +361,13 @@
                 lookupUrl: "/api/Dropdown/GetDictDropDown/FMLY_NM"
             },
             {
-                field: "PRODUCT_CATEGORIES",
+                field: "PRD_CAT_NM",
                 title: "Product Verticals",
-                type: "singleselect",
+                type: "list",
                 width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [{ Value: "ECAP" }, { Value: "VOL_TIER" }, { Value: "KIT" }, { Value: "PROGRAM" }]
+                lookupText: "value",
+                lookupValue: "value",
+                lookupUrl: "/api/Dropdown/GetDictDropDown/PRD_CAT_NM"
             },
             {
                 field: "SERVER_DEAL_TYPE",
@@ -436,6 +443,27 @@
                 lookupText: "Value",
                 lookupValue: "Value",
                 lookups: [{ Value: "Yes" }, { Value: "No" }]
+            },
+            {
+                field: "MTRL_ID",
+                title: "Material Id",
+                type: "list",
+                width: 150,
+                lookupText: "value",
+                lookupValue: "value",
+                lookupUrl: "/api/Dropdown/GetDictDropDown/MTRL_ID"
+            },
+            {
+                field: "DEAL_PRD_NM",
+                title: "Level 4",
+                type: "autocomplete",
+                width: 150
+            },
+            {
+                field: "PCSR_NBR",
+                title: "Processor Number",
+                type: "autocomplete",
+                width: 150,
             }
         ];
 
@@ -446,7 +474,7 @@
         vm.copyRule = function (id) {
             ruleService.copyPriceRule(id).then(function (response) {
                 if (response.data > 0) {
-                    var sourceRule = vm.Rules.filter(x => x.Id === id)[0];
+                    var sourceRule = vm.Rules.filter(x => x.Id == id)[0];
                     var copiedRule = {};
                     copiedRule.Id = response.data;
                     copiedRule.Name = sourceRule.Name + " (Copy)";
