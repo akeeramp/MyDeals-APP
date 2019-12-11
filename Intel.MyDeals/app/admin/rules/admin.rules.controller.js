@@ -668,6 +668,7 @@
             sortable: true,
             selectable: true,
             resizable: true,
+            scrollable: true,
             columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
@@ -677,7 +678,7 @@
             },
             columns: [
                 {
-                    width: "130px",
+                    width: "160px",
                     template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div ><div class='rule'><i title='#if(IsAutomationIncluded == true){#Inclusion Rule#} else {#Exclusion Rule#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i><i ng-if='vm.isApprovedButtonReq' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.approveRule(#= Id #)'></i></div>"
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
