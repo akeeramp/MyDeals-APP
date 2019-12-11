@@ -140,7 +140,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 strSqlCriteria = string.Concat("(OBJ_SET_TYPE_CD = 'ECAP') AND (ECAP_PRICE >= (CAP_PRICE - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("(CAP_PRICE * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString()) : criteria.BlanketDiscount.First().value, "))");
                 criteria.Rules.RemoveAll(x => x.field == "OBJ_SET_TYPE_CD" && x.value == "ECAP");
             }
-            criteria.Rules.Where(x => strStringDataTypes.Contains(x.field)).ToList().ForEach(x => x.field = "PRODUCT_FILTER");
+            criteria.Rules.Where(x => strProductFilters.Contains(x.field)).ToList().ForEach(x => x.field = "PRODUCT_FILTER");
             criteria.Rules.Where(x => x.field == "CRE_EMP_NAME").ToList().ForEach(x => { x.value = dicEmployeeName.ContainsKey(Convert.ToInt32(x.value)) ? dicEmployeeName[Convert.ToInt32(x.value)] : x.value; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
             criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });

@@ -447,11 +447,8 @@
             {
                 field: "MTRL_ID",
                 title: "Material Id",
-                type: "list",
-                width: 150,
-                lookupText: "value",
-                lookupValue: "value",
-                lookupUrl: "/api/Dropdown/GetDictDropDown/MTRL_ID"
+                type: "autocomplete",
+                width: 150
             },
             {
                 field: "DEAL_PRD_NM",
@@ -462,8 +459,11 @@
             {
                 field: "PCSR_NBR",
                 title: "Processor Number",
-                type: "autocomplete",
+                type: "list",
                 width: 150,
+                lookupText: "value",
+                lookupValue: "value",
+                lookupUrl: "/api/Dropdown/GetDictDropDown/PCSR_NBR"
             }
         ];
 
