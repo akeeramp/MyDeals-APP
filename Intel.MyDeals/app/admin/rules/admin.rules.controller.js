@@ -7,9 +7,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService']
+    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal']
 
-    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants, constantsService) {
+    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal) {
         var vm = this;
         vm.ruleId = 0;
         vm.isEditmode = false;
@@ -29,6 +29,30 @@
             });
 
             vm.GetRules(0, "GET_RULES");
+        }
+
+        vm.openRulesSimulation = function (dataItem) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'rulesSimulationModal',
+                controller: 'rulesSimulationModalCtrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return angular.copy(dataItem);
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (returnData) {
+                //if (returnData !== undefined && returnData !== null) {
+                //    $scope.context.USR_CUST = returnData;
+                //}
+            }, function () { });
         }
 
         $scope.getConstant = function () {
@@ -791,6 +815,7 @@
                 logger.error("<b style='color:red;'>Error: Unable to Simulate the rule due to system error</b>");
             });
         }
+
         var invalidPrice = [];
         var duplicateProducts = [];
         var invalidProducts = [];
@@ -873,37 +898,28 @@
                             validationFields.push("Rule start date cannot be greater than Rule end date");
                     }
                     if (vm.rule.OwnerId != undefined && vm.rule.OwnerId != null) {
-                        if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length == 0)
+                        if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length === 0)
                             validationFields.push("Owner cannot be invalid");
                     }
                     if (requiredFields.length > 0 || validationFields.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0 || invalidProducts.length > 0) {
+                        var maxItemsSize = 10;
                         var strAlertMessage = "";
                         if (validationFields.length > 0) {
                             strAlertMessage = "<b>Following scenarios are failed!</b></br>" + validationFields.join("</br>");
                         }
 
-                        if (invalidProducts.length > 0) {
-                            if (strAlertMessage !== "")
-                                strAlertMessage += "</br></br>";
-                            strAlertMessage += "<b>Invalid products exist, please fix:</b></br>" + $.unique(invalidProducts).join("</br>");
-                        }
-
                         if (requiredFields.length > 0) {
                             if (strAlertMessage !== "")
                                 strAlertMessage += "</br></br>";
-                            strAlertMessage += "<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>");
-                        }
-                        if (invalidPrice.length > 0) {
-                            if (strAlertMessage !== "")
-                                strAlertMessage += "</br></br>";
-                            strAlertMessage += "<b>Below products has invalid price!</b></br>" + invalidPrice.join("</br>");
+                            strAlertMessage += "<b>Please fill the following required fields!</b></br>" +requiredFields.join("</br>");
                         }
 
-                        if (duplicateProducts.length > 0) {
-                            if (strAlertMessage !== "")
-                                strAlertMessage += "</br></br>";
-                            strAlertMessage += "<b>Duplicate products found!</b></br>" + $.unique(duplicateProducts).join("</br>");
-                        }
+                        // Replaced with a generalized function call and restricted popup size to not flow off bottom
+                        strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
+
+                        strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price!");
+
+                        strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify.");
 
                         kendo.alert(strAlertMessage);
                     } else {
@@ -1017,22 +1033,16 @@
                         vm.saveRule(isWithMail, false);
                     }                    
                     if (showPopup) {
+                        var maxItemsSize = 10;
                         if (invalidProducts.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0) {
                             var strAlertMessage = "";
-                            if (invalidProducts.length > 0) {
-                                strAlertMessage += "<b>Invalid products exist, please fix:</b></br>" + $.unique(invalidProducts).join("</br>");
-                            }
-                            if (invalidPrice.length > 0) {
-                                if (strAlertMessage !== "")
-                                    strAlertMessage += "</br></br>";
-                                strAlertMessage += "<b>Below products has invalid price!</b></br>" + invalidPrice.join("</br>");
-                            }
 
-                            if (duplicateProducts.length > 0) {
-                                if (strAlertMessage !== "")
-                                    strAlertMessage += "</br></br>";
-                                strAlertMessage += "<b>Duplicate products found!</b></br>" + $.unique(duplicateProducts).join("</br>");
-                            }
+                            // Replaced with a generalized function call and restricted popup size to not flow off bottom
+                            strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
+
+                            strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price!");
+
+                            strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify.");
 
                             kendo.alert(strAlertMessage);
                         } else if (vm.ValidProducts.filter(x => x !== "").length === vm.LastValidatedProducts.filter(x => x !== "").length)
@@ -1046,6 +1056,20 @@
                 if (showPopup)
                     kendo.alert("<b>There are no Products to Validate</b></br>");
             }
+        }
+
+        function myFunction(itemsList, maxItemsSize, itemsMessage) {
+            var retString = "";
+            if (itemsList.length > 0) {
+                var truncatedMatchedItems = itemsList.slice(0, maxItemsSize).map(function (data) { return " " + data });
+                retString += "</br></br>";
+                if (truncatedMatchedItems.length < itemsList.length) {
+                    retString += "<b>" + itemsMessage + " (top " + maxItemsSize + " of " + itemsList.length + " items)</b></br>" + $.unique(truncatedMatchedItems).join("</br>");
+                } else {
+                    retString += "<b>" + itemsMessage + "</b></br>" + $.unique(itemsList).join("</br>");
+                }
+            }
+            return retString;
         }
 
         kendo.spreadsheet.defineFunction("REGEXP_MATCH", function (str) {

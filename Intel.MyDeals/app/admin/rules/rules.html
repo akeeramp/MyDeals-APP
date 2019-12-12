@@ -1,4 +1,6 @@
 ﻿<form style="margin-top: 10px;" class="form-horizontal">
+    
+    <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
     <div ng-if="!vm.isEditmode" class="col-md-12">
         <h3>Auto-Approval Rules Administration Screen</h3>
@@ -157,6 +159,9 @@
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
         <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
     </a>
+<!--    <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.openRulesSimulation('test')">
+        <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Simulate
+    </a>-->
 </script>
 
 <style>
@@ -382,7 +387,7 @@
 <script>
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
-        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Lvl 4 or Material Id)');
+        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
         $($('.k-spreadsheet-column-header').find('div')[2]).find('div').html('Price (US$)');
     });
 </script>

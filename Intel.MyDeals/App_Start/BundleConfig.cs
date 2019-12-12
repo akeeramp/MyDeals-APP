@@ -154,6 +154,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/productAlias/productAlias.service.js"
                 , "~/app/admin/productIncExc/admin.productEntryIncExc.controller.js"
                 , "~/app/admin/productIncExc/productEntryIncExc.service.js"
+                , "~/app/admin/rules/rulesSimulationModal.controller.js"
                 , "~/app/admin/rules/admin.rules.controller.js"
                 , "~/app/admin/rules/rules.service.js"
                 , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
