@@ -86,12 +86,12 @@
                 <div class="tooltipPriceRule">
                     <toggle class="fl toggle-accept"
                             ng-model="vm.rule.IsAutomationIncluded"
-                            on="Approval Rule"
+                            on="Auto Approval"
                             off="Exclusion Rule"
                             onstyle="btn-success"
                             offstyle="btn-danger"></toggle>
                     <span ng-if="vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approval Rule</span>
-                    <span ng-if="!vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleRed">Exclusion Rule</span>
+                    <span ng-if="!vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleRed">Exclusion from Automation</span>
                 </div>
             </span>
         </div>
