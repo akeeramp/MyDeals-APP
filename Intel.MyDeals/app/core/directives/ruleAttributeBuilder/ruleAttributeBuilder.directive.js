@@ -139,13 +139,14 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                     }).ToArray()[0];
 
                 var fieldType = field.type;
-                var fieldValue = field.field;
+                var fieldValue = field.field;                
                 if (scope.dataItem.operator === "IN") {
                     html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     if (helpMsg["IN"] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg["IN"] + '</div>';
                 } else {
                     switch (fieldType) {
                         case "string":
+                        case "string_with_in":
                             {
                                 html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
@@ -158,6 +159,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                                 html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
                         case "money":
+                        case "money_with_limited_op":
                             {
                                 html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
@@ -209,7 +211,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                                 html += 'k-auto-close="false" ';
                                 html += 'k-data-source="lookupDs.' + key + '" ';
                                 html += 'class="opUiContainer sm" ';
-                                html += 'style="min-width: 200px; max-width: 200px;"></select>{{dataItem.value}}';
+                                html += 'style="min-width: 200px; max-width: 100%;"></select>{{dataItem.value}}';
                             } break;
                         case "singleselect":
                             {
@@ -254,8 +256,12 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                             {
                                 html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
-                    }
+                    }                  
+
                     if (helpMsg[fieldType] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg[fieldType] + '</div>';
+
+                    if (field.post_label != undefined && field.post_label != '')
+                        html += '<span style="margin-left: 5px;padding: 6px;font-size: 13px;background-color: #fafafa;border-radius: 3px;color: #444444;border: 1px solid #e5e5e5;">' + field.post_label + '<span>';
                 }
 
                 var x = angular.element(html);

@@ -203,7 +203,7 @@
             border-width: 1px;
             border-style:solid;
             visibility: hidden;
-            width: 80%;
+            width: 60%;
             background-color: #555;
             color: #fff;
             text-align: center;
@@ -212,7 +212,7 @@
             position: absolute;
             z-index: 1;
             bottom: -110%;
-            left: 25%;
+            left: 35%;
             margin-left: -60px;
             opacity: 0;
             transition: opacity 0.3s;
@@ -459,11 +459,15 @@
     .action_btns {
         margin-bottom: 20px;
     }
+
+    .abValue {
+        max-width: 58%;
+    }
 </style>
 <script>
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
         $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
-        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');
+        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');        
     });
 </script>

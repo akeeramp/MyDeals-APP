@@ -113,6 +113,9 @@
                 {
                     "type": "string",
                     "uiType": "textbox"
+                }, {
+                    "type": "string_with_in",
+                    "uiType": "textbox"
                 },
                 {
                     "type": "autocomplete",
@@ -128,6 +131,10 @@
                 },
                 {
                     "type": "money",
+                    "uiType": "numeric"
+                },
+                {
+                    "type": "money_with_limited_op",
                     "uiType": "numeric"
                 },
                 {
@@ -150,87 +157,47 @@
             "types2operator": [
                 {
                     "type": "number",
-                    "operator": [
-                        "=",
-                        //"IN",
-                        "!=",
-                        "<",
-                        "<=",
-                        ">",
-                        ">="
-                    ]
+                    "operator": ["=", "!=", "<", "<=", ">", ">="]
                 },
                 {
                     "type": "numericOrPercentage",
-                    "operator": [
-                        "=",
-                        //"IN",
-                        "!=",
-                        "<",
-                        "<=",
-                        ">",
-                        ">="
-                    ],
+                    "operator": ["=", "<", ">"],
                 },
                 {
                     "type": "money",
-                    "operator": [
-                        "=",
-                        //"IN",
-                        "!=",
-                        "<",
-                        "<=",
-                        ">",
-                        ">="
-                    ]
+                    "operator": ["=", "!=", "<", "<=", ">", ">="]
+                },
+                {
+                    "type": "money_with_limited_op",
+                    "operator": ["=", "<", ">"]
                 },
                 {
                     "type": "date",
-                    "operator": [
-                        "=",
-                        "!=",
-                        "<",
-                        "<=",
-                        ">",
-                        ">="
-                    ]
+                    "operator": ["=", "!=", "<", "<=", ">", ">="]
                 },
                 {
                     "type": "string",
-                    "operator": [
-                        "LIKE",
-                        "=",
-                        "!="
-                    ]
+                    "operator": ["LIKE", "=", "!="]
+                },
+                {
+                    "type": "string_with_in",
+                    "operator": ["LIKE", "=", "!=", "IN"]
                 },
                 {
                     "type": "autocomplete",
-                    "operator": [
-                        "LIKE",
-                        "=",
-                        "!="
-                    ]
+                    "operator": ["LIKE", "=", "!="]
                 },
                 {
                     "type": "list",
-                    "operator": [
-                        "LIKE",
-                        "IN",
-                        "="
-                    ]
+                    "operator": ["LIKE", "IN", "="]
                 },
                 {
                     "type": "bool",
-                    "operator": [
-                        "=",
-                        "!="
-                    ]
+                    "operator": ["=", "!="]
                 },
                 {
                     "type": "singleselect",
-                    "operator": [
-                        "="
-                    ]
+                    "operator": ["="]
                 }
             ]
         };
@@ -423,13 +390,13 @@
             {
                 field: "COMP_SKU",
                 title: "Meet Comp Sku",
-                type: "string",
+                type: "string_with_in",
                 width: 150
             },
             {
                 field: "ECAP_PRICE",
                 title: "ECAP (Price)",
-                type: "money",
+                type: "money_with_limited_op",
                 width: 150,
                 dimKey: 20,
                 format: "{0:c}"
@@ -455,9 +422,10 @@
             },
             {
                 field: "END_DT_PUSH",
-                title: "End Date Push Days",
+                title: "End Date Push",
                 type: "number",
-                width: 150
+                width: 150,
+                post_label: "Days"
             },
             {
                 field: "HAS_TRCK",
@@ -911,7 +879,7 @@
                         if (requiredFields.length > 0) {
                             if (strAlertMessage !== "")
                                 strAlertMessage += "</br></br>";
-                            strAlertMessage += "<b>Please fill the following required fields!</b></br>" +requiredFields.join("</br>");
+                            strAlertMessage += "<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>");
                         }
 
                         // Replaced with a generalized function call and restricted popup size to not flow off bottom
@@ -921,7 +889,7 @@
 
                         strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify.");
 
-                        kendo.alert(strAlertMessage);
+                        kendo.alert(JQuery.trim(strAlertMessage));
                     } else {
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                             if (vm.rule.Criteria[idx].type === "list") {
@@ -1031,7 +999,7 @@
                     vm.ValidateDuplicateInvalidProducts();
                     if (isSave) {
                         vm.saveRule(isWithMail, false);
-                    }                    
+                    }
                     if (showPopup) {
                         var maxItemsSize = 10;
                         if (invalidProducts.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0) {
