@@ -4,17 +4,17 @@
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
 
-        <div class="row">
+<!--        <div class="row">
                 <div class="col-md-6">
                     <div class="desc role-title">Update selections for:</div>
                     <div class="nm">{{LST_NM}}, {{FRST_NM}}</div>
                 </div>
-        </div>
+        </div>-->
         
         <div class="row">
             <label class="control-label col-md-2"><span style="color: red">*</span>Deals List:</label>
             <div class="col-md-9">
-                <input class="form-control md" type="text" k-ng-model="DealsList" style="width:100%">
+                <input type="text" ng-model="dealsList" required class="k-textbox" />{{dealsList}}
             </div>
         </div>
     
@@ -22,30 +22,13 @@
             <div class="col-md-12">
                 {{selectedIds}}
                 <div class="desc role-title" style="margin-top: 15px;">Edit by selecting from customers dropdown:</div>
-                <!--<select kendo-multi-select k-options="selectOptions" id="selCustomers" class="selCustomers" k-ng-model="selectedIds"></select>-->
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-11 row">
-            <div op-control-flat
-                 ng-model="contractData"
-                 op-cd="'CUST_MBR_SID'"
-                 op-type="'COMBOBOX'"
-                 op-label="'Customer:'"
-                 op-lookup-url="'/api/Customers/GetMyCustomerNames'"
-                 op-lookup-text="'CUST_NM'"
-                 op-lookup-value="'CUST_SID'"
-                 op-selected-object="'Customer'"
-                 op-is-stealth="true"
-                 op-is-form="true"
-                 op-ui-mode="'VERTICAL'"></div>
+                <select kendo-multi-select k-options="selectOptions" k-ng-model="selectedIds"></select>
             </div>
         </div>
         
         <!--<div ng-show="isDropdownsLoaded" class="col-md-12">-->
         <div class="col-md-12">
-            <div kendo-grid="grid" id="grdDisplaySimulationResults" class="dispResults" expand-k-grid options="gridOptions"></div>
+            <div kendo-grid="grid" id="someGrid" class="dispResults" expand-k-grid options="gridOptions"></div>
         </div>
 
         <div class="row">
@@ -53,7 +36,7 @@
                 <button class="btn btn-default" type="button" style="width: 90%;" ng-click="cancel()">Cancel</button>
             </div>
             <div class="col-md-4" style="text-align: center;">
-                <button class="btn btn-primary" type="button" style="width: 90%;" ng-click="ok()">Save and Close</button>
+                <button class="btn btn-primary" type="button" style="width: 90%;" ng-click="ok()">Run Simulation Now</button>
             </div>
         </div>
     </div>
@@ -62,8 +45,7 @@
 
 <style>
     .dispResults {
-        margin-bottom: 330px !important; 
-        max-height: 150px; 
+        max-height: 350px; 
         overflow: auto;
     }
 

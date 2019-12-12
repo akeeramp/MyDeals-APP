@@ -1,99 +1,127 @@
-﻿angular
-    .module('app.admin')
-    .controller('rulesSimulationModalCtrl', rulesSimulationModalCtrl)
-    .run(SetRequestVerificationToken);
+﻿    angular
+        .module('app.admin')
+        .controller('rulesSimulationModalCtrl', rulesSimulationModalCtrl)
+        .run(SetRequestVerificationToken);
 
 
-SetRequestVerificationToken.$inject = ['$http'];
+    SetRequestVerificationToken.$inject = ['$http'];
 
-rulesSimulationModalCtrl.$inject = ['ruleService', '$scope', '$uibModalInstance', 'dataItem', 'logger', '$timeout'];
+    rulesSimulationModalCtrl.$inject = ['ruleService', '$scope', '$uibModalInstance', 'dataItem', 'logger', '$timeout', 'gridConstants'];
 
-function rulesSimulationModalCtrl(ruleService, $scope, $uibModalInstance, dataItem, logger, $timeout) {
-    $scope.Rules = [];
-    $scope.DealsList = "";
-    $scope.RuleConfig = [];
-    $scope.selectedIds = "123";
+    function rulesSimulationModalCtrl(ruleService, $scope, $uibModalInstance, dataItem, logger, $timeout, gridConstants) {
+        $scope.Rules = [];
+        $scope.dealsList = "";
+        $scope.RuleConfig = [];
+        $scope.selectedIds = "123";
+        $scope.selectedIds = [];
+        $scope.dataCollection = [];
 
-    $scope.init = function () {
-        ruleService.getPriceRulesConfig().then(function (response) {
-            $scope.RuleConfig = response.data;
-        }, function (response) {
-            logger.error("Operation failed");
-        });
+        $scope.gridOptions = {
+            dataSource: new kendo.data.DataSource({
+                type: "json",
+                data: $scope.dataCollection
+            }),
+            filterable: gridConstants.filterable,
+            sortable: true,
+            selectable: true,
+            resizable: true,
+            groupable: true,
+            height: 450,
+            columns: [
+                {
+                    field: "WIP_DEAL_SID",
+                    title: "1"
+                },
+                {
+                    field: "APRV_RULES",
+                    title: "2"
+                },
+                {
+                    field: "EXCLD_RULES",
+                    title: "3"
+                },
+                {
+                    field: "OWNER_EMP_WWID",
+                    title: "4"
+                },
+                {
+                    field: "APRV_PRCSS_FLG",
+                    title: "Hosted Geo"
+                }]
+        }
 
-        $scope.GetRules(0, "GET_RULES");
-    }
-
-    $scope.GetRules = function (id, actionName) {
-        ruleService.getPriceRules(0, "GET_RULES").then(function (response) {
-            $scope.Rules = response.data;
-            $scope.dataSource.read();
-        }, function (response) {
-            logger.error("Simulation: Loading of Rules Data failed");
-        });
-    };
-
-
-
-
-    $scope.selectOptions = {
-        change: function () {
-            $scope.$apply(function () {
-                if ($scope.selectedIds.length > 0) { // Safety check for empty list
-                    var lastSelected = $scope.selectedIds[$scope.selectedIds.length - 1];
-                    if (lastSelected.CUST_NM === 'All Customers') // If they just selected All Custs, clear out their list and leave only this one.
-                    {
-                        $scope.selectedIds = [];
-                        $scope.selectedIds.push(lastSelected);
-                    }
-                    else if ($scope.selectedIds[0].CUST_NM === 'All Customers') {
-                        $scope.selectedIds = [];
-                        $scope.selectedIds.push(lastSelected);
-                    }
-                }
+        $scope.init = function () {
+            ruleService.getPriceRulesConfig().then(function (response) {
+                $scope.RuleConfig = response.data;
+            }, function (response) {
+                logger.error("Operation failed");
             });
-        },
-        placeholder: "Select customers...",
-        dataTextField: "CUST_NM",
-        dataValueField: "CUST_NM_SID",
-        valuePrimitive: false, // false makes us go to object, not ID only
-        autoClose: false,
-        dataSource: $scope.custdataSource
-    };
+
+            $scope.GetRules(0, "GET_RULES");
+        }
+
+        $scope.GetRules = function (id, actionName) {
+            ruleService.getPriceRules(0, "GET_RULES").then(function (response) {
+                $scope.Rules = response.data;
+                $scope.selectOptions.dataSource.read();
+
+            }, function (response) {
+                logger.error("Simulation: Loading of Rules Data failed");
+            });
+        };
+
+        $scope.selectOptions = {
+            placeholder: "Select rules to test...",
+            dataTextField: "Name",
+            dataValueField: "Id",
+            valuePrimitive: true,
+            autoBind: false,
+            dataSource: {
+                transport: {
+                    read: function (e) {
+
+                        e.success($scope.Rules);
+
+                    } 
+                }
+            }
+        };
 
 
-    $timeout(function () {
-         //Set active indicator filter to default = true
-        $("#grdDisplaySimulationResults").data("kendoGrid").dataSource.filter({
-            field: "ACTV_IND",
-            operator: "eq",
-            value: true
-        });
 
-        // If this page passes a WWID, Force filter upon that WWID.
-        //if ($location.search().id !== undefined) {
-        //    $("#grdDisplaySimulationResults").data("kendoGrid").dataSource.filter({
-        //        field: "EMP_WWID",
-        //        operator: "eq",
-        //        value: $location.search().id
-        //    });
-        //}
-    }, 50);
+        $scope.ok = function() {
+            // Save the selected customers list here.
+            var s = $scope;
+            var saveIds = [];
+            var saveNames = [];
 
+            // Run the simulation now
+            var data = new Array();
+            var dataRuleIds = [];
+            //dataRuleIds.push(parseInt(vm.rule.Id, 10));
+            dataRuleIds.push(82);  // Test for multiple, can remove
+            var dataDealsIds = [];
 
-    $scope.LST_NM = "Ho";
-    $scope.FRST_NM = "Bart";
+            data.push(dataRuleIds, dataDealsIds);
+            ruleService.getRuleSimulationResults(data).then(function (response) {
+                if (response.data.length > 0) {
+                    var j = 1;
+                    var combo = $("#someGrid").data("kendoGrid");
+                    combo.dataSource.data(response.data);
+                    var blah = 0;
+                    // Display data here
+                } else {
+                    kendo.alert("<b>This rule matches no deals presently</b>");
+                }
+            }, function (response) {
+                logger.error("<b style='color:red;'>Error: Unable to Simulate the rule due to system error</b>");
+            });
+        };
 
-    $scope.ok = function() {
-        // Save the selected customers list here.
-        var saveIds = [];
-        var saveNames = [];
-    };
+        $scope.cancel = function () {
+            $uibModalInstance.close();
+        };
 
-    $scope.cancel = function () {
-        $uibModalInstance.close();
-    };
+        $scope.init();
 
-    $scope.init();
-
-}
+    }
