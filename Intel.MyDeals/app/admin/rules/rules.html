@@ -1,5 +1,5 @@
 ﻿<form style="margin-top: 10px;" class="form-horizontal">
-    
+
     <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
     <div ng-if="!vm.isEditmode" class="col-md-12">
@@ -55,32 +55,44 @@
         <div class="form-group row">
             <label class="control-label col-md-2">Status:</label>
             <span class="col-md-2" style="float: left;">
-                <toggle class="fl toggle-accept"
-                        ng-model="vm.rule.IsActive"
-                        on="Active"
-                        off="Inactive"
-                        onstyle="btn-success"
-                        offstyle="btn-danger"></toggle>
+                <div class="tooltipPriceRule">
+                    <toggle class="fl toggle-accept"
+                            ng-model="vm.rule.IsActive"
+                            on="Active"
+                            off="Inactive"
+                            onstyle="btn-success"
+                            offstyle="btn-danger"></toggle>
+                    <span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
+                    <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>
+                </div>
             </span>
 
             <label class="control-label col-md-1" style="float: left;">Stage:</label>
             <span class="col-md-2" style="margin-left:-15px; float: left;">
-                <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
-                        ng-model="vm.rule.RuleStage"
-                        on="Approved"
-                        off="Pending"
-                        onstyle="btn-success"
-                        offstyle="btn-danger"></toggle>
+                <div class="tooltipPriceRule">
+                    <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
+                            ng-model="vm.rule.RuleStage"
+                            on="Approved"
+                            off="Pending"
+                            onstyle="btn-success"
+                            offstyle="btn-danger"></toggle>
+                    <span ng-if="vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approved</span>
+                    <span ng-if="!vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleYellow">Pending Approval</span>
+                </div>
             </span>
 
             <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
             <span class="col-md-2" style="margin-left:-15px; float: left;">
-                <toggle class="fl toggle-accept"
-                        ng-model="vm.rule.IsAutomationIncluded"
-                        on="Approval Rule"
-                        off="Exclusion Rule"
-                        onstyle="btn-success"
-                        offstyle="btn-danger"></toggle>
+                <div class="tooltipPriceRule">
+                    <toggle class="fl toggle-accept"
+                            ng-model="vm.rule.IsAutomationIncluded"
+                            on="Approval Rule"
+                            off="Exclusion Rule"
+                            onstyle="btn-success"
+                            offstyle="btn-danger"></toggle>
+                    <span ng-if="vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approval Rule</span>
+                    <span ng-if="!vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleRed">Exclusion Rule</span>
+                </div>
             </span>
         </div>
 
@@ -165,10 +177,75 @@
 </script>
 
 <style>
-    #spreadsheetProductCriteria .k-dirty-cell {
-        border: none !important;
-        color: red !important;
+    .tooltipPriceRule {
+        position: relative;
+        display: inline-block;
+        width: 100%;
     }
+
+        .tooltipPriceRule .tooltipPriceRuleGreen {
+            background-color: green !important;
+            color: white !important;
+        }
+
+        .tooltipPriceRule .tooltipPriceRuleRed {
+            background-color: red !important;
+            color: white !important;
+        }
+
+        .tooltipPriceRule .tooltipPriceRuleYellow {
+            background-color: yellow !important;
+            color: black !important;
+        }
+
+        .tooltipPriceRule .tooltipPriceRuletext {
+            border-color: darkgray;
+            border-width: 1px;
+            border-style:solid;
+            visibility: hidden;
+            width: 80%;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: -110%;
+            left: 25%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltipPriceRule .tooltipPriceRuletext::after {
+                content: "";
+                position: absolute;
+                top: -33%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: transparent transparent #555 transparent;
+            }
+
+        .tooltipPriceRule:hover .tooltipPriceRuletext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    #spreadsheetProductCriteria {
+        border: none;
+    }
+
+        #spreadsheetProductCriteria .k-dirty-cell {
+            border: none !important;
+            color: red !important;
+        }
+
+        #spreadsheetProductCriteria .k-spreadsheet-formula-bar, #spreadsheetProductCriteria .k-spreadsheet-name-editor {
+            display: none !important;
+        }
 
 
     .clrGreen {
@@ -198,7 +275,6 @@
     }
 
     div.k-spreadsheet-formula-bar,
-    
     .k-spreadsheet-top-corner, .k-spreadsheet-row-header {
         display: block !important;
     }
@@ -387,7 +463,7 @@
 <script>
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
-        $($('.k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
-        $($('.k-spreadsheet-column-header').find('div')[2]).find('div').html('Price (US$)');
+        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
+        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');
     });
 </script>
