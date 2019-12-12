@@ -784,41 +784,50 @@
             });
         }
 
+        vm.AddProduct = function (productName) {
+            productName = jQuery.trim(productName).toLocaleLowerCase();
+            if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() == productName).length == 0) {
+                var newProduct = {};
+                newProduct.ProductName = tempProductCriteria.filter(x => x.ProductName.toLowerCase() == productName)[0].ProductName;
+                newProduct.Price = tempProductCriteria.filter(x => x.ProductName.toLowerCase() == productName)[0].Price;
+                vm.ProductCriteria.push(newProduct);
+            }
+        }
+
         var invalidPrice = [];
         var duplicateProducts = [];
         var invalidProducts = [];
+        var tempProductCriteria = [];
         vm.ValidateDuplicateInvalidProducts = function () {
             invalidPrice = [];
+            var sheet = $scope.spreadsheet.activeSheet();
             $.each(vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price !== ""), function (index, value) {
                 if ($.isNumeric(value.Price) === false || parseFloat(value.Price) <= 0)
-                    invalidPrice.push(value.ProductName + " (" + value.Price + ")");
+                    invalidPrice.push(value.ProductName.toLocaleLowerCase());
             });
 
             duplicateProducts = [];
             $.each(vm.ProductCriteria.filter(x => x.ProductName !== ""), function (index, value) {
                 if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() === value.ProductName.toLowerCase()).length > 1)
-                    duplicateProducts.push(value.ProductName);
+                    duplicateProducts.push(value.ProductName.toLocaleLowerCase());
             });
-            if (invalidProducts.length > 0) {
-                var tempProductCriteria = vm.ProductCriteria.filter(x => x.ProductName !== "");
+            if (invalidProducts.length > 0 || duplicateProducts.length > 0 || invalidPrice.length > 0) {
+                tempProductCriteria = vm.ProductCriteria.filter(x => x.ProductName !== "");
                 vm.ProductCriteria = [];
                 $.each($.unique(invalidProducts), function (index, value) {
-                    var newProduct = {};
-                    newProduct.ProductName = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === value.toLowerCase())[0].ProductName;
-                    newProduct.Price = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === value.toLowerCase())[0].Price;
-                    vm.ProductCriteria.push(newProduct);
+                    vm.AddProduct(value);
+                });
+                $.each($.unique(invalidPrice), function (index, value) {
+                    vm.AddProduct(value);
+                });
+                $.each($.unique(duplicateProducts), function (index, value) {
+                    vm.AddProduct(value);
                 });
                 $.each(tempProductCriteria, function (index, value) {
-                    if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() === value.ProductName.toLowerCase()).length === 0) {
-                        var newProduct = {};
-                        newProduct.ProductName = value.ProductName;
-                        newProduct.Price = value.Price;
-                        vm.ProductCriteria.push(newProduct);
-                    }
+                    vm.AddProduct(value.ProductName);
                 });
                 vm.dataSourceSpreadSheet.read();
                 vm.DeleteSpreadsheetAutoHeader();
-                var sheet = $scope.spreadsheet.activeSheet();
                 var i;
                 if (vm.ProductCriteria.length > 198) {
                     for (i = 198; i <= vm.ProductCriteria.length; i++) {
@@ -831,11 +840,16 @@
                 for (i = 1; i <= vm.ProductCriteria.length; i++) {
                     var str = sheet.range("A" + i).value() != null ? jQuery.trim(sheet.range("A" + i).value()) : "";
                     if (str !== "") {
+                        var isDuplicateOrInvalidProduct = jQuery.inArray(str.toLowerCase(), duplicateProducts) > -1 || jQuery.inArray(str.toLowerCase(), invalidPrice) > -1;
                         var isValid = jQuery.inArray(str.toLowerCase(), vm.ValidProducts) > -1;
-                        sheet.range("A" + i).color(isValid ? "green" : "black");
+                        sheet.range("A" + i).color(isDuplicateOrInvalidProduct ? "orange" : (isValid ? "green" : "black"));
                     }
                 }
+            } else {
+                sheet.range("A1:A200").color("green");
             }
+            sheet.range("A1:B200").fontSize(12);
+            sheet.range("A1:B200").fontFamily("Intel Clear");
         }
 
         vm.saveRule = function (isWithEmail, isProductValidationRequired) {
@@ -885,11 +899,11 @@
                         // Replaced with a generalized function call and restricted popup size to not flow off bottom
                         strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
 
-                        strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price!");
+                        strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price! Please enter valid Price for highlighted products in orange");
 
-                        strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify.");
+                        strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify highlighted products in orange.");
 
-                        kendo.alert(JQuery.trim(strAlertMessage));
+                        kendo.alert(jQuery.trim(strAlertMessage));
                     } else {
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
                             if (vm.rule.Criteria[idx].type === "list") {
@@ -954,8 +968,9 @@
             change: function (arg) {
                 var str = arg.range.value() != null ? jQuery.trim(arg.range.value()) : "";
                 if (str !== "") {
+                    var isDuplicateOrInvalidProduct = jQuery.inArray(str.toLowerCase(), duplicateProducts) > -1 || jQuery.inArray(str.toLowerCase(), invalidPrice) > -1;
                     var isValid = jQuery.inArray(str.toLowerCase(), vm.ValidProducts) > -1;
-                    arg.range.color(isValid ? "green" : "black");
+                    arg.range.color(isDuplicateOrInvalidProduct ? "orange" : (isValid ? "green" : "black"));
                 }
             }
         };
@@ -1008,11 +1023,11 @@
                             // Replaced with a generalized function call and restricted popup size to not flow off bottom
                             strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
 
-                            strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price!");
+                            strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price! Please enter valid Price for highlighted products in orange");
 
-                            strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify.");
+                            strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify highlighted products in orange.");
 
-                            kendo.alert(strAlertMessage);
+                            kendo.alert(jQuery.trim(strAlertMessage));
                         } else if (vm.ValidProducts.filter(x => x !== "").length === vm.LastValidatedProducts.filter(x => x !== "").length)
                             kendo.alert("<b>All Products are Valid</b></br>");
                     }
