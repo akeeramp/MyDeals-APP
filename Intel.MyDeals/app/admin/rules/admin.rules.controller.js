@@ -7,10 +7,12 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal']
+    RuleController.$inject = ['$rootScope','$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal','rid']
 
-    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal) {
+    function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
         var vm = this;
+        vm.reloadNotReq = false;
+        vm.rid = rid;
         vm.ruleId = 0;
         vm.isEditmode = false;
         vm.Rules = [];
@@ -562,6 +564,11 @@
                         vm.Rules = response.data;
                         vm.isEditmode = false;
                         vm.dataSource.read();
+                        //adding filter
+                        if (rid != 0) {
+                            vm.dataSource.filter({ field: "Id", value: vm.rid == 0 ? null : vm.rid });
+                        }
+                        
                     } break;
                 }
             }, function (response) {
@@ -641,7 +648,7 @@
                 }
             },
             pageSize: 25,
-            sort: { field: "RuleStage", dir: "asc" },
+            sort: { field: "RuleStage", dir: "asc" },            
             schema: {
                 model: {
                     id: "Id",
@@ -650,7 +657,16 @@
                 }
             },
         });
-
+        //Remove Filter
+        vm.removeFilter = function () {
+            vm.dataSource.filter({});
+            vm.rid = 0;
+            var url = document.location.href;
+            var lastLoc = url.lastIndexOf('/');
+            url = url.substring(0, lastLoc + 1);
+            document.location.href = url;            
+        }
+        
         vm.gridOptions = {
             toolbar: [
                 { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
@@ -759,6 +775,7 @@
             $('#productCriteria').hide();
             vm.isEditmode = false;
             vm.rule = {};
+            vm.reloadNotReq = false;
         }
 
         vm.generateProductCriteria = function () {

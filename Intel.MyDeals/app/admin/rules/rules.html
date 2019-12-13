@@ -172,6 +172,9 @@
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
         <span class="k-icon k-i-plus" style="color: white !important"></span>Add New Rule
     </a>
+    <a ng-if="vm.rid != 0" role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.removeFilter()">
+        <span class="k-icon intelicon-cancel-filter-solid" style="color: white !important"></span>Remove Filter
+    </a>
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
         <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
     </a>
@@ -180,6 +183,9 @@
     </a>
 </script>
 <style>
+    .k-button{
+        cursor: pointer !important;
+    }
     .k-grid-toolbar > .k-grid-add > .k-icon{
         font-size: 18px !important;
         margin-top: 3px;

@@ -216,11 +216,17 @@
             },
             {
                 state: 'admin.rules',
-                abstract: false,
+                abstract: true,
                 config: {
+                    url: 'rules/:rid',
                     templateUrl: 'app/admin/rules/rules.html',
-                    url: 'rules',
                     controller: 'RuleController as vm',
+                    resolve: {
+                        rid: ['$stateParams', 'objsetService', function ($stateParams, objsetService) {
+                            return $stateParams.rid;
+                        }],
+                    }
+
                 }
             },
             {
