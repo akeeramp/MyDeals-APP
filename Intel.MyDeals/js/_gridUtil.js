@@ -1696,7 +1696,7 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
 
 //Export To Excel for Price Rule
 gridUtils.dsToExcelPriceRule = function (grid, ds, title, onlyVisible) {
-    debugger;
+
     var rows = [{ cells: [] }];
     var rowsProd = [{ cells: [] }];
     var gridColumns = grid.columns;
@@ -1720,8 +1720,8 @@ gridUtils.dsToExcelPriceRule = function (grid, ds, title, onlyVisible) {
                 : gridColumns[i].title;
 
             rows[0].cells.push({
-                value: colTitle,
-                textAlign: "center",
+                value: colTitle == 'Automation' ? "Rule Type" : colTitle,
+                textAlign: "left",
                 background: "#0071C5",
                 color: "#ffffff",
                 wrap: false,
@@ -1735,11 +1735,11 @@ gridUtils.dsToExcelPriceRule = function (grid, ds, title, onlyVisible) {
     }
 
     // set prod title
-    var titles = ["Name","Rule Stage", "Status", "Start Date", "End Date", "Notes", "Owner Name", "Updated By", "Updated Date"];
+    var titles = ["Name", "Rule Stage", "Status", "Rule Type", "Start Date", "End Date", "Owner Name", "Updated By", "Updated Date","Notes"];
     for (var t = 0; t < titles.length; t++) {
         rowsProd[0].cells.push({
             value: titles[t],
-            textAlign: "center",
+            textAlign: "left",
             background: "#0071C5",
             color: "#ffffff",
             wrap: true
@@ -1777,6 +1777,15 @@ gridUtils.dsToExcelPriceRule = function (grid, ds, title, onlyVisible) {
 
                             // Generate the template content for the current cell.
                             var newHtmlVal = columnTemplate(dataItem);
+                            if (gridColumns[c].field == 'RuleStage') {
+                                newHtmlVal = newHtmlVal.toLowerCase() == 'true' ? 'Approved' : 'Pending Approval'
+                            }
+                            if (gridColumns[c].field == 'IsActive') {
+                                newHtmlVal = newHtmlVal.toLowerCase() == 'true' ? 'Active' : 'Inactive'
+                            }
+                            if (gridColumns[c].field == 'IsAutomationIncluded') {
+                                newHtmlVal = newHtmlVal.toLowerCase() == 'true' ? 'Auto Approval' : 'Exclusion from Automation'
+                            }
                             newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
                             elem.innerHTML = newHtmlVal;
 
