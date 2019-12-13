@@ -47,7 +47,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (priceRuleCriteria.Id > 0)
             {
-                priceRuleCriteria.ChangeDateTimeFormat = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm");
+                priceRuleCriteria.ChangeDateTimeFormat = DateTime.UtcNow.ToString("MM/dd/yyyy h:mm tt");
                 priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
             }
             return priceRuleCriteria;
@@ -219,7 +219,7 @@ namespace Intel.MyDeals.DataLibrary
                     ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
                 });
             } // while
-            rtn.ForEach(x => x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy HH:mm"));
+            rtn.ForEach(x => x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt"));
 
             return rtn;
         }

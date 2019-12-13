@@ -29,7 +29,7 @@
         </div>
 
         <div class="col-md-11" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
-            Last modified by <span style="color:orangered">{{vm.rule.ChangedBy}}</span> on <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
+            Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} GMT</span>
         </div>
 
         <div class="form-group row">
@@ -53,7 +53,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2">Status:</label>
+            <label class="control-label col-md-2">Rule Status:</label>
             <span class="col-md-2" style="float: left;">
                 <div class="tooltipPriceRule">
                     <toggle class="fl toggle-accept"
@@ -68,13 +68,13 @@
                 </div>
             </span>
 
-            <label class="control-label col-md-1" style="float: left;">Stage:</label>
+            <label class="control-label col-md-2" style="float: left;">Approval Status:</label>
             <span class="col-md-2" style="margin-left:-15px; float: left;">
                 <div class="tooltipPriceRule">
                     <toggle class="fl toggle-accept" ng-disabled="vm.isApprovedButtonReq"
                             ng-model="vm.rule.RuleStage"
                             on="Approved"
-                            off="Pending"
+                            off="Pending Approval"
                             onstyle="btn-success"
                             offstyle="btn-danger"
                             title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}"></toggle>
@@ -89,6 +89,7 @@
                     <toggle class="fl toggle-accept"
                             ng-model="vm.rule.IsAutomationIncluded"
                             on="Auto Approval"
+                            ng-click="vm.toggleType(vm.rule.IsAutomationIncluded)"
                             off="Exclusion Rule"
                             onstyle="btn-success"
                             offstyle="btn-danger"
@@ -137,7 +138,7 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row" id="blanketDiscountSection">
             <label class="control-label col-md-2">Blanket Discount:</label>
             <div class="col-md-6" id="blanket_section">
                 <span>Requested ECAP must be no less than</span>
@@ -159,9 +160,9 @@
         <label class="control-label col-md-2"></label>
         <div class="col-md-9">
             <button ng-click="vm.saveRule(false,true)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
-            <button ng-click="vm.saveRule(true,true)" class="btn btn-primary" style="margin-left: 15px">Save and Publish</button>
+            <button ng-click="vm.saveRule(true,true)" class="btn btn-primary" style="margin-left: 15px">Save and Send for Approval</button>
             <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
-            <button ng-click="vm.simulate()" class="btn btn-primary" style="margin-left: 15px; background-color:#C4D600; color:#000000">Simulate Running this Rule</button>
+            <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;">Simulate Running this Rule</button>
         </div>
     </div>
     <div class="form-group row" id="productCriteria">&nbsp;</div>
@@ -175,7 +176,7 @@
         <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
     </a>
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.openRulesSimulation('test')">
-        <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Simulate
+        <span class="intelicon-lab" style="color: white !important; margin-right:5px"></span>Simulate Running Rules
     </a>
 </script>
 
@@ -196,55 +197,14 @@
             color: white !important;
         }
 
-        .tooltipPriceRule .tooltipPriceRuleRed {
-            background-color: red !important;
-            color: white !important;
-        }
+    .btn-success {
+         background-color: #11EE7A;
+         color: #000000;
+     }   
 
-        .tooltipPriceRule .tooltipPriceRuleYellow {
-            background-color: yellow !important;
-            color: black !important;
-        }
-
-        .tooltipPriceRule .tooltipPriceRuletext {
-            border-color: darkgray;
-            border-width: 1px;
-            border-style:solid;
-            visibility: hidden;
-            width: auto;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: -110%;
-            left: 35%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltipPriceRule .tooltipPriceRuletext::after {
-                content: "";
-                position: absolute;
-                top: -33%;
-                left: 50%;
-                margin-left: -5px;
-                border-width: 5px;
-                border-style: solid;
-                border-color: transparent transparent #555 transparent;
-            }
-
-        .tooltipPriceRule:hover .tooltipPriceRuletext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-    */
-
-            
+     .btn-danger {
+         background-color: #EE7A11;
+     }  
 
     #spreadsheetProductCriteria {
         border: none;
