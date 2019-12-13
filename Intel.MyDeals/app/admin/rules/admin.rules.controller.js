@@ -470,7 +470,7 @@
                     var copiedRule = {};
                     copiedRule.Id = response.data;
                     copiedRule.Name = sourceRule.Name + " (Copy)";
-                    copiedRule.RuleStage = false;
+                    copiedRule.RuleStage = sourceRule.IsAutomationIncluded == false ? true : false;
                     copiedRule.ChangeDateTime = new Date();
                     copiedRule.ChangedBy = vm.RuleConfig.CurrentUserName;
                     copiedRule.IsActive = sourceRule.IsActive;
@@ -557,6 +557,7 @@
                         }
                         vm.validateProduct(false, false, false);
                         vm.isEditmode = true;
+                        vm.toggleType(vm.rule.IsAutomationIncluded);
                     } break;
                     default: {
                         vm.Rules = response.data;
@@ -745,13 +746,8 @@
         vm.toggleType = function (currentState) {
             if (currentState !== true) {
                 $('#productCriteria').hide();
-                $('#blanketDiscountSection').hide();
-                vm.BlanketDiscountDollor = "";
-                vm.BlanketDiscountPercentage = "";
-
             } else {
                 $('#productCriteria').show();
-                $('#blanketDiscountSection').show();
             }
         }
 
@@ -764,10 +760,11 @@
         vm.generateProductCriteria = function () {
             var sheet = $scope.spreadsheet.activeSheet();
             vm.ProductCriteria = [];
-            for (var i = 0; i < sheet.range("A1:B200").values().length; i++) {
+            var tempRange = sheet.range("A1:B200").values().filter(x => !(x[0] == null && x[1] == null));
+            for (var i = 0; i < tempRange.length; i++) {
                 var newProduct = {};
-                newProduct.ProductName = sheet.range("A1:B200").values()[i][0] != null ? jQuery.trim(sheet.range("A1:B200").values()[i][0]) : '';
-                newProduct.Price = sheet.range("A1:B200").values()[i][1] != null ? sheet.range("A1:B200").values()[i][1] : 0;
+                newProduct.ProductName = tempRange[i][0] != null ? jQuery.trim(tempRange[i][0]) : '';
+                newProduct.Price = tempRange[i][1] != null ? tempRange[i][1] : 0;
                 vm.ProductCriteria.push(newProduct);
             }
         }
@@ -799,10 +796,10 @@
         vm.AddProduct = function (productName) {
             productName = jQuery.trim(productName).toLocaleLowerCase();
             if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() === productName).length === 0) {
-                var newProduct = {};
-                newProduct.ProductName = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === productName)[0].ProductName;
-                newProduct.Price = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === productName)[0].Price;
-                vm.ProductCriteria.push(newProduct);
+                var products = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === productName);
+                for (var i = 0; i < products.length; i++) {
+                    vm.ProductCriteria.push(products[i]);
+                }
             }
         }
 
@@ -865,7 +862,7 @@
         }
 
         vm.saveRule = function (isWithEmail, isProductValidationRequired) {
-            if (isProductValidationRequired)
+            if (isProductValidationRequired && vm.rule.IsAutomationIncluded)
                 vm.validateProduct(false, true, isWithEmail);
             else {
                 $rootScope.$broadcast('save-criteria');
@@ -881,7 +878,7 @@
                         requiredFields.push("Rule end date");
                     if (vm.rule.Criteria.filter(x => x.value === "").length > 0)
                         requiredFields.push("Rule criteria is empty");
-                    if (vm.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)
+                    if (vm.rule.IsAutomationIncluded && vm.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)
                         requiredFields.push("A price in product criteria needs a product added");
 
                     var validationFields = [];
@@ -895,7 +892,7 @@
                         if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length === 0)
                             validationFields.push("Owner cannot be invalid");
                     }
-                    if (requiredFields.length > 0 || validationFields.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0 || invalidProducts.length > 0) {
+                    if (requiredFields.length > 0 || validationFields.length > 0 || (vm.rule.IsAutomationIncluded && (invalidPrice.length > 0 || duplicateProducts.length > 0 || invalidProducts.length > 0))) {
                         var maxItemsSize = 10;
                         var strAlertMessage = "";
                         if (validationFields.length > 0) {
@@ -908,13 +905,14 @@
                             strAlertMessage += "<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>");
                         }
 
-                        // Replaced with a generalized function call and restricted popup size to not flow off bottom
-                        strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
+                        if (vm.rule.IsAutomationIncluded) {
+                            // Replaced with a generalized function call and restricted popup size to not flow off bottom
+                            strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
 
-                        strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price! Please enter valid Price for highlighted products in orange");
+                            strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price! Please enter valid Price for highlighted products in orange");
 
-                        strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and highlighted in orange. Please remove duplicates before publishing.");
-
+                            strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and highlighted in orange. Please remove duplicates before publishing.");
+                        }
                         kendo.alert(jQuery.trim(strAlertMessage));
                     } else {
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
@@ -936,8 +934,8 @@
                             EndDate: vm.rule.EndDate,
                             RuleStage: vm.rule.RuleStage,
                             Notes: vm.rule.Notes,
-                            Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
-                            ProductCriteria: vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "")
+                            Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
+                            ProductCriteria: vm.rule.IsAutomationIncluded ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : []
                         }
                         vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                     }
@@ -978,6 +976,7 @@
 
         $scope.spreadSheetOptions = {
             change: function (arg) {
+                //var currCell = $('.k-spreadsheet-name-editor .k-input').val(); //This may need in future
                 var str = arg.range.value() != null ? jQuery.trim(arg.range.value()) : "";
                 if (str !== "") {
                     var isDuplicateOrInvalidProduct = jQuery.inArray(str.toLowerCase(), duplicateProducts) > -1 || jQuery.inArray(str.toLowerCase(), invalidPrice) > -1;

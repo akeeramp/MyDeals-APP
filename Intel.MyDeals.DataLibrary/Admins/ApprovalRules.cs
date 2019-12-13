@@ -28,7 +28,7 @@ namespace Intel.MyDeals.DataLibrary
                     @prd_cri = priceRuleCriteria.ProductCriteriaJson,
                     @prd_sql_cri = priceRuleCriteria.ProductCriteriaSql,
                     @is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
-                    @is_aprv = priceRuleCriteria.RuleStage,
+                    @is_aprv = priceRuleCriteria.IsAutomationIncluded == false ? true : priceRuleCriteria.RuleStage,
                     @actv_ind = priceRuleCriteria.IsActive,
                     @usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                     @is_publ = isPublish
@@ -155,7 +155,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         public List<string> GetValidProducts(List<string> lstProducts)
-        {            
+        {
             lstProducts.ForEach(x => x = x.Trim().ToLower());
             lstProducts.RemoveAll(x => x == string.Empty);
             List<string> lstValidProducts = new List<string>();
