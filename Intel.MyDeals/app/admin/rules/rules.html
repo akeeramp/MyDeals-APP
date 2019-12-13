@@ -71,13 +71,13 @@
             <label class="control-label col-md-2" style="float: left;">Approval Status:</label>
             <span class="col-md-2" style="margin-left:-15px; float: left;">
                 <div class="tooltipPriceRule">
-                    <toggle class="fl toggle-accept" ng-disabled="vm.isApprovedButtonReq"
+                    <toggle class="fl toggle-accept" ng-disabled="((vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false))"
                             ng-model="vm.rule.RuleStage"
                             on="Approved"
                             off="Pending Approval"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}"></toggle>
+                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}" ></toggle>
                     <!--<span ng-if="vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approved</span>
                     <span ng-if="!vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleYellow">Pending Approval</span>-->
                 </div>
@@ -138,7 +138,7 @@
             </div>
         </div>
 
-        <div class="form-group row" id="blanketDiscountSection">
+        <div class="form-group row" ng-if="vm.rule.IsAutomationIncluded" >
             <label class="control-label col-md-2">Blanket Discount:</label>
             <div class="col-md-6" id="blanket_section">
                 <span>Requested ECAP must be no less than</span>
