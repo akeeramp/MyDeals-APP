@@ -710,7 +710,8 @@
                     title: "Rule Status",
                     filterable: { multi: true, search: true },
                     width: "7%",
-                    template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
+                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#if(IsActive == true){#Active#} else {#Inactive#}#</div>"
+                    //template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
                 {
                     field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
@@ -760,10 +761,21 @@
         };
 
         vm.toggleType = function (currentState) {
+            // Ganthi - DO NOT REMOVE THIS - IT IS PART OF "US505889 - Price Rules: Exclusions for Automation" requirements, clear out fields and hide if exclusion rule.
+            // This hides fields if the rule is an exclusion rule, also clears out unwanted values that shouldn't be part of exclusion rule.
             if (currentState !== true) {
+                vm.BlanketDiscountDollor = "";
+                vm.BlanketDiscountPercentage = "";
+
+                var sheet = $scope.spreadsheet.activeSheet();
+                sheet.range("A0:B199").clear();
+
+                //$('#blanketDiscountSection').hide(); // Hidden due to IsAutomationIncluded
                 $('#productCriteria').hide();
+                var g = 0;
             } else {
                 $('#productCriteria').show();
+                //$('#blanketDiscountSection').show(); // Displayed due to IsAutomationIncluded
             }
         }
 

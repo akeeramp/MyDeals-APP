@@ -91,6 +91,8 @@
         $scope.runSimulation = function () {
             // Makes scope available
             var s = $scope;
+            var comboClear = window.$("#someGrid").data("kendoGrid");
+            comboClear.dataSource.data([]);
 
             // Run the simulation now
             var data = new Array();
@@ -121,8 +123,8 @@
         };
 
         $scope.resetForm = function () {
-            var combo = window.$("#someGrid").data("kendoGrid");
-            combo.dataSource.data([]);
+            var comboClear = window.$("#someGrid").data("kendoGrid");
+            comboClear.dataSource.data([]);
 
             $scope.dealsList = "";
             $scope.selectedIds = [];

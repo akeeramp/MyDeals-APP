@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2"><span style="color: red">*</span>Name:</label>
+            <label class="control-label isRequired col-md-2">Name:</label>
             <div class="col-md-9">
                 <input required class="form-control md"
                        type="text"
@@ -43,7 +43,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2"><span style="color: red">*</span>Owner:</label>
+            <label class="control-label isRequired col-md-2">Owner:</label>
             <div class="col-md-9">
                 <select kendo-combo-box
                         k-options="vm.ownerOptions"
@@ -101,14 +101,14 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-2"><span style="color: red">*</span>Rule Start Date:</label>
+            <label class="control-label isRequired col-md-2">Rule Start Date:</label>
             <div class="col-md-2">
                 <input kendo-date-picker
                        placeholder="From date"
                        k-ng-model="vm.rule.StartDate"
                        style="width: 100%;" />
             </div>
-            <label class="control-label col-md-1"><span style="color: red">*</span>End Date:</label>
+            <label class="control-label isRequired col-md-1">End Date:</label>
             <div class="col-md-2" style="margin-left:-15px">
                 <input kendo-date-picker
                        placeholder="To date"
@@ -161,7 +161,7 @@
         <div class="col-md-9">
             <button ng-click="vm.saveRule(false,true)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
             <button ng-click="vm.saveRule(true,true)" class="btn btn-primary" style="margin-left: 15px">Save and Send for Approval</button>
-            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
+            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel / Return to Rules Navigation</button>
             <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;">Simulate Running this Rule</button>
         </div>
     </div>
@@ -338,6 +338,10 @@
 
     .true {
         background-color: rgb(196, 214, 0) !important;
+    }
+
+    .isRequired:before {
+        content: "*";
     }
 
     .dealTools .md-icon i {
