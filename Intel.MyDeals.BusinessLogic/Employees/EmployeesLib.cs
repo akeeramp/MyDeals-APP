@@ -20,6 +20,11 @@ namespace Intel.MyDeals.BusinessLogic
             return DataCollections.GetUsrProfileRole().Where(e => e.USR_ACTV_IND).OrderBy(e => e.LST_NM).ToList();
         }
 
+        public List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode)
+        {
+            return DataCollections.GetUsrProfileRole().Where(e => strRoleCode.Contains(e.ROLE_NM)).ToList();
+        }
+
         public OpMsg SetOpUserToken(OpUserTokenParameters data)
         {
             new EmployeeDataLib().SetOpUserToken(data);
