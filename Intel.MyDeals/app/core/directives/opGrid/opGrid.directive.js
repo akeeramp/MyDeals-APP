@@ -2501,16 +2501,32 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }
 
                             if (hasResolved && cnt > 0 && cnt == 1 && $scope.isOvlpAccess) {
-                                return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<span class='lnk btnYes' ng-click='acceptOvlp(" + e.value + ",\"Y\")' ><i class='intelicon-check' style='font-size: 12px !important;'></i> Yes </span > <span class='or'>&nbsp;OR&nbsp;</span> <span class='lnk btnNo' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-close-max' style='font-size: 10px !important;padding-right: 3px;'></i>&nbsp;No</span>"
+                                return "<span class=\"grpTitle\" style='font-weight:bold'>" +
+                                    e.value +
+                                    "</span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;<span class='lnk btnYes' ng-click='acceptOvlp(" +
+                                    e.value +
+                                    ",\"Y\")'><i class='intelicon-check' style='font-size: 12px !important;'></i> Yes </span > <span class='or'>&nbsp;OR&nbsp;</span> <span class='lnk btnNo' ng-click='rejectOvlp(" +
+                                    e.value +
+                                    ")'><i class='intelicon-close-max' style='font-size: 10px !important;padding-right: 3px;'></i>&nbsp;No</span>";
                             }
                             else if (hasResolved && cnt > 1 && $scope.isOvlpAccess) {
-                                return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with another Draft deal, please correct and revalidate.</span>&nbsp;<span class='lnk btnYes' ng-click='rejectOvlp(" + e.value + ")'><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</span>"
+                                return "<span class=\"grpTitle\" style='font-weight:bold'>" +
+                                    e.value +
+                                    " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching another Draft deal.  Please correct and revalidate.</span>&nbsp;<span class='lnk btnYes' ng-click='rejectOvlp(" +
+                                    e.value +
+                                    ")'><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</span>";
                             }
                             else if (!hasResolved) {
-                                return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<span class='undolnk' ng-click='acceptOvlp(" + e.value + ", \"N\")'><i class='intelicon-home-outlined intelicon-undo' style='font-size: 10px !important;padding-right: 3px;'></i>Undo</span>"
+                                return "<span class=\"grpTitle\" style='font-weight:bold'>" +
+                                    e.value +
+                                    " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;<span class='undolnk' ng-click='acceptOvlp(" +
+                                    e.value +
+                                    ", \"N\")'><i class='intelicon-home-outlined intelicon-undo' style='font-size: 10px !important;padding-right: 3px;'></i>Undo</span>";
                             }
                             else {
-                                return "<span class=\"grpTitle\" style='font-weight:bold'>" + e.value + " </span> <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;letter-spacing:0.07em '>Please correct and revalidate</span>"
+                                return "<span class=\"grpTitle\" style='font-weight:bold'>" +
+                                    e.value +
+                                    " </span> <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;letter-spacing:0.07em '>Please correct and revalidate.</span>";
                             }
 
                         },

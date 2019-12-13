@@ -1,42 +1,47 @@
 ﻿<script type="text/ng-template" id="rulesSimulationModal">
     <div class="modal-header modalBlueBody">
-        <h3 class="modal-title" id="modal-title">Simulate Approval Rules</h3>
+        <h3 class="modal-title" id="modal-title">Simulate Approval Rules Execution</h3>
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
-
-<!--        <div class="row">
-                <div class="col-md-6">
-                    <div class="desc role-title">Update selections for:</div>
-                    <div class="nm">{{LST_NM}}, {{FRST_NM}}</div>
-                </div>
-        </div>-->
         
         <div class="row">
-            <label class="control-label col-md-2"><span style="color: red">*</span>Deals List:</label>
+            <div class="headerNotes"><b>Note: </b>Under simulation, if you select any specific rules, they will be executed regardless of their Approval Status or Rules Status.  
+            If no rules are selected, then all currently Active and Approved rules will be executed under simulation mode conditions.</div>
+        </div>
+
+        <div class="row">
+            <label class="myLabel col-md-2">Deals List:</label>
             <div class="col-md-9">
-                <input type="text" ng-model="dealsList" required class="k-textbox" />{{dealsList}}
+                <input style="width:100%;" type="text" ng-model="dealsList" required class="k-textbox" />
+                <span class="description">Enter deal numbers as a comma seperated list</span>
             </div>
         </div>
     
         <div class="row">
-            <div class="col-md-12">
-                {{selectedIds}}
-                <div class="desc role-title" style="margin-top: 15px;">Edit by selecting from customers dropdown:</div>
-                <select kendo-multi-select k-options="selectOptions" k-ng-model="selectedIds"></select>
+            <label class="myLabel col-md-2">Rules List:</label>
+            <div class="col-md-9">
+                <!--{{selectedIds}}-->
+                <select kendo-multi-select id="multiselect" multiple="multiple" k-options="selectOptions" k-ng-model="selectedIds"></select>
+                <span class="description">All selected rules will be run regardless of thier Approval Status or Rules Status</span>
             </div>
         </div>
         
-        <!--<div ng-show="isDropdownsLoaded" class="col-md-12">-->
+    
+    <div class="row">
         <div class="col-md-12">
             <div kendo-grid="grid" id="someGrid" class="dispResults" expand-k-grid options="gridOptions"></div>
         </div>
+    </div>
 
-        <div class="row">
+        <div class="row buttonBar">
             <div class="col-md-4" style="text-align: center;">
-                <button class="btn btn-default" type="button" style="width: 90%;" ng-click="cancel()">Cancel</button>
+                <button class="btn btn-default" type="button" style="width: 90%;" ng-click="close()">Close Window</button>
             </div>
             <div class="col-md-4" style="text-align: center;">
-                <button class="btn btn-primary" type="button" style="width: 90%;" ng-click="ok()">Run Simulation Now</button>
+                <button class="btn btn-default" type="button" style="width: 90%;" ng-click="resetForm()">Reset Form</button>
+            </div>
+            <div class="col-md-4" style="text-align: center;">
+                <button class="btn btn-success" type="button" style="width: 90%;" ng-click="runSimulation()">Run Simulation Now</button>
             </div>
         </div>
     </div>
@@ -55,6 +60,13 @@
         height: 300px !important;
     }
 
+    .headerNotes {
+        font-size: 11px;
+        font-style: italic;
+        padding: 0 0 5px 20px;
+        color: #000000;
+    }
+
     .role-title {
         font-family: "Intel Clear", "Arial";
         font-size: 14px;
@@ -62,6 +74,24 @@
         font-weight: 600;
         color: #000000;
         padding: 4px 0;
+    }
+
+    .isRequired:before {
+        content: "*";
+    }
+
+    .buttonBar {
+        padding: 10px 0 0 0;
+    }
+
+    .myLabel {
+        font-weight: 400;
+        text-align: right;
+        padding: 0 0 0 15px;
+    }
+
+    .description {
+        text-align: right;
     }
 
     .info-container {

@@ -690,10 +690,10 @@
                 },
                 {
                     field: "IsActive",
-                    title: "Status",
+                    title: "Rule Status",
                     filterable: { multi: true, search: true },
                     width: "7%",
-                    template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' offstyle = 'btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
+                    template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
                 {
                     field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
@@ -742,6 +742,19 @@
             ]
         };
 
+        vm.toggleType = function(currentState) {
+            if (currentState !== true) {
+                $('#productCriteria').hide();
+                $('#blanketDiscountSection').hide();
+                vm.BlanketDiscountDollor = "";
+                vm.BlanketDiscountPercentage = "";
+
+            } else {
+                $('#productCriteria').show();
+                $('#blanketDiscountSection').show();
+            }
+        }
+
         vm.cancel = function () {
             $('#productCriteria').hide();
             vm.isEditmode = false;
@@ -763,7 +776,6 @@
             var data = new Array();
             var dataRuleIds = [];
             dataRuleIds.push(parseInt(vm.rule.Id, 10));
-            //dataRuleIds.push(65);  // Test for multiple, can remove
             var dataDealsIds = [];
 
             data.push(dataRuleIds, dataDealsIds);
@@ -772,24 +784,24 @@
                 if (response.data.length > 0) {
                     var maxSize = 100;
                     var matchedDealsList = response.data.slice(0, maxSize).map(function (data) { return " " + data["WIP_DEAL_SID"] });
-                    var ruleType = vm.rule.IsAutomationIncluded === true ? "<b style='color:green;'>Approve Deals Rule</b>" : "<b style='color:red;'>Exclude Deals Rule</b>";
-                    var postMessage = "<br>" + response.data.length + " deals matched this rule";
+                    var ruleType = vm.rule.IsAutomationIncluded === true ? "Approve Deals Rule" : "<b style='color:red;'>Exclude Deals Rule</b>";
+                    var postMessage = "<br>" + response.data.length + " deals currently match this rule";
                     if (response.data.length > maxSize) postMessage += ", only the first " + maxSize + " are displayed";
-                    kendo.alert("<span style='color: blue;'>Rule <b>" + vm.rule.Name + "</b> (" + ruleType + ") matches these deals: </span><br>" + matchedDealsList + "<span style='color: blue;'>" + postMessage + "<span>");
+                    kendo.alert("<span style='color: blue;'>Rule <b>" + vm.rule.Name + "</b> (" + ruleType + ") matches these deals: </span><br><br>" + matchedDealsList + "<span style='color: blue;'><br>" + postMessage + "<span>");
                 } else {
-                    kendo.alert("<b>This rule matches no deals presently</b>");
+                    kendo.alert("<b>There are no deals that currently match this rule</b>");
                 }
             }, function (response) {
-                logger.error("<b style='color:red;'>Error: Unable to Simulate the rule due to system error</b>");
+                logger.error("<b style='color:red;'>Error: Unable to Simulate this rule due to system errors</b>");
             });
         }
 
         vm.AddProduct = function (productName) {
             productName = jQuery.trim(productName).toLocaleLowerCase();
-            if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() == productName).length == 0) {
+            if (vm.ProductCriteria.filter(x => x.ProductName.toLowerCase() === productName).length === 0) {
                 var newProduct = {};
-                newProduct.ProductName = tempProductCriteria.filter(x => x.ProductName.toLowerCase() == productName)[0].ProductName;
-                newProduct.Price = tempProductCriteria.filter(x => x.ProductName.toLowerCase() == productName)[0].Price;
+                newProduct.ProductName = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === productName)[0].ProductName;
+                newProduct.Price = tempProductCriteria.filter(x => x.ProductName.toLowerCase() === productName)[0].Price;
                 vm.ProductCriteria.push(newProduct);
             }
         }
@@ -870,7 +882,7 @@
                     if (vm.rule.Criteria.filter(x => x.value === "").length > 0)
                         requiredFields.push("Rule criteria is empty");
                     if (vm.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)
-                        requiredFields.push("Price in product criteria need product");
+                        requiredFields.push("A price in product criteria needs a product added");
 
                     var validationFields = [];
                     if (vm.rule.StartDate != null && vm.rule.EndDate != null) {
@@ -1048,6 +1060,7 @@
                 retString += "</br></br>";
                 if (truncatedMatchedItems.length < itemsList.length) {
                     retString += "<b>" + itemsMessage + " (top " + maxItemsSize + " of " + itemsList.length + " items)</b></br>" + $.unique(truncatedMatchedItems).join("</br>");
+                    retString += "<br>...<br>";
                 } else {
                     retString += "<b>" + itemsMessage + "</b></br>" + $.unique(itemsList).join("</br>");
                 }
