@@ -153,15 +153,18 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
 
             if (criteria.Rules.Where(x => x.type == "list").Count() > 0)
             {
-                criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").ToList().ForEach(x =>
-                {
-                    x.@operator = "IN";
-                    x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
-                });
-                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
+                criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y, "'"))); });
+                criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
+                criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
+                    {
+                        x.@operator = "IN";
+                        x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
+                    });
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value))));
 
                 List<rule> lstMulti = new List<rule>();
-                criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE").ToList().ForEach(x =>
+                criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
                 {
                     List<rule> lstTemp = (from result in x.values
                                           select new rule
@@ -184,18 +187,22 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         string GetFromDictionary(string strValue, string strField, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
             string strRtn = strValue;
-            switch (strField)
+            int iKey = 0;
+            if (Int32.TryParse(strValue, out iKey))
             {
-                case "CUST_NM":
-                    {
-                        strRtn = dicCustomerName.ContainsKey(Convert.ToInt32(strValue)) ? dicCustomerName[Convert.ToInt32(strValue)] : strValue;
-                    }
-                    break;
-                case "CRE_EMP_NAME":
-                    {
-                        strRtn = dicEmployeeName.ContainsKey(Convert.ToInt32(strValue)) ? dicEmployeeName[Convert.ToInt32(strValue)] : strValue;
-                    }
-                    break;
+                switch (strField)
+                {
+                    case "CUST_NM":
+                        {
+                            strRtn = dicCustomerName.ContainsKey(Convert.ToInt32(iKey)) ? dicCustomerName[Convert.ToInt32(iKey)] : strValue;
+                        }
+                        break;
+                    case "CRE_EMP_NAME":
+                        {
+                            strRtn = dicEmployeeName.ContainsKey(Convert.ToInt32(iKey)) ? dicEmployeeName[Convert.ToInt32(iKey)] : strValue;
+                        }
+                        break;
+                }
             }
             return strRtn;
         }

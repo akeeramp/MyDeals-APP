@@ -536,7 +536,7 @@
                         vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.rule.OwnerId).length === 0 ? null : vm.rule.OwnerId;
                         vm.rule.Criteria = vm.rule.Criterias.Rules.filter(x => availableAttrs.indexOf(x.field) > -1);
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
-                            if (vm.rule.Criteria[idx].type === "list") {
+                            if (vm.rule.Criteria[idx].type === "list" && vm.rule.Criteria[idx].operator != "IN") {
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
                         }
@@ -742,7 +742,7 @@
             ]
         };
 
-        vm.toggleType = function(currentState) {
+        vm.toggleType = function (currentState) {
             if (currentState !== true) {
                 $('#productCriteria').hide();
                 $('#blanketDiscountSection').hide();
@@ -913,14 +913,14 @@
 
                         strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price! Please enter valid Price for highlighted products in orange");
 
-                        strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify highlighted products in orange.");
+                        strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and highlighted in orange. Please remove duplicates before publishing.");
 
                         kendo.alert(jQuery.trim(strAlertMessage));
                     } else {
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
-                            if (vm.rule.Criteria[idx].type === "list") {
+                            if (vm.rule.Criteria[idx].type === "list" && vm.rule.Criteria[idx].operator != "IN") {
                                 vm.rule.Criteria[idx].values = vm.rule.Criteria[idx].value;
-                                vm.rule.Criteria[idx].value = "-";
+                                vm.rule.Criteria[idx].value = "";
                             } else {
                                 vm.rule.Criteria[idx].values = [];
                             }
@@ -936,7 +936,7 @@
                             EndDate: vm.rule.EndDate,
                             RuleStage: vm.rule.RuleStage,
                             Notes: vm.rule.Notes,
-                            Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== ""), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
+                            Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.BlanketDiscountPercentage, valueType: { value: "%" } }, { value: vm.BlanketDiscountDollor, valueType: { value: "$" } }] },
                             ProductCriteria: vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "")
                         }
                         vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
@@ -1037,7 +1037,7 @@
 
                             strAlertMessage += myFunction(invalidPrice, maxItemsSize, "Below products has invalid price! Please enter valid Price for highlighted products in orange");
 
-                            strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and removed!  Please verify highlighted products in orange.");
+                            strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and highlighted in orange. Please remove duplicates before publishing.");
 
                             kendo.alert(jQuery.trim(strAlertMessage));
                         } else if (vm.ValidProducts.filter(x => x !== "").length === vm.LastValidatedProducts.filter(x => x !== "").length)
