@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode)
         {
-            return DataCollections.GetUsrProfileRole().Where(e => strRoleCode.Contains(e.ROLE_NM)).ToList();
+            return DataCollections.GetUsrProfileRole().Where(e => strRoleCode.Contains(e.ROLE_NM)).OrderBy(x=>x.NAME).ToList();
         }
 
         public OpMsg SetOpUserToken(OpUserTokenParameters data)
