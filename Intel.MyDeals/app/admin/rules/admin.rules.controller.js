@@ -677,7 +677,11 @@
             if (vm.rule != null && vm.rule.Id != null && vm.rule.Id > 0) {
                 ruleService.updateRuleStatus(vm.rule.Id, vm.rule.IsActive).then(function (response) {
                     if (response.data > 0) {
+                        var changedDt = new Date();
                         vm.Rules.filter(x => x.Id == response.data)[0].IsActive = vm.rule.IsActive;
+                        vm.Rules.filter(x => x.Id == response.data)[0].ChangedBy = vm.RuleConfig.CurrentUserName;
+                        vm.Rules.filter(x => x.Id == response.data)[0].ChangeDateTime = changedDt;
+                        vm.Rules.filter(x => x.Id == response.data)[0].ChangeDateTimeFormat = changedDt.getMonth() + "/" + changedDt.getDay() + "/" + changedDt.getFullYear();
                         vm.dataSource.read();
                         logger.success("Rule's status has been updated successfully");
                     }

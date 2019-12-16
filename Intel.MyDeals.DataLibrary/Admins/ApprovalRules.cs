@@ -58,7 +58,8 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE_ACTV_IND
             {
                 rule_sid = iRuleId,
-                actv_ind = isActive
+                actv_ind = isActive,
+                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
