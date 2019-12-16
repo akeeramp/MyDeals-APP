@@ -63,7 +63,7 @@
                 if (!!data.data) {
                     vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA"
                         ? "" : data.data.CNST_VAL_TXT;
-                    vm.isApprovedButtonReq = vm.adminEmailIDs.indexOf(usrEmail) > -1 ? false : true;
+                    vm.isApprovedButtonReq = vm.adminEmailIDs.indexOf(usrEmail) > -1 ? true : false;
                 }
             });
         }
@@ -560,6 +560,11 @@
                         vm.validateProduct(false, false, false);
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
+                        if (vm.rule.IsActive == true && vm.rule.IsAutomationIncluded == true) {
+                            vm.isApprovedButtonReq = true;
+                        } else {
+                            vm.isApprovedButtonReq = false;
+                        }
                     } break;
                     default: {
                         vm.Rules = response.data;
@@ -1132,6 +1137,11 @@
         vm.exportToExcel = function () {
             gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
         }
+        vm.approveRule = function () {
+            vm.rule.RuleStage = true;  
+            vm.saveRule(true, true);
+        }
+
         $scope.getConstant();
         $scope.init();
     }
