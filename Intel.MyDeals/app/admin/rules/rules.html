@@ -62,7 +62,7 @@
                             off="Inactive"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}"></toggle>
+                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}" ng-change="vm.RuleStatusChange()"></toggle>
                     <!--<span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
                     <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>-->
                 </div>

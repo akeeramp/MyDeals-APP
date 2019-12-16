@@ -25,10 +25,15 @@
             isDuplicateTitle: isDuplicateTitle,
             deletePriceRule: deletePriceRule,
             copyPriceRule: copyPriceRule,
-            validateProducts: validateProducts
+            validateProducts: validateProducts,
+            updateRuleStatus: updateRuleStatus
         }
 
         return service;
+
+        function updateRuleStatus(iRuleId, isActive) {
+            return dataService.post(apiBaseUrl + 'UpdateRuleStatus/' + iRuleId + "/" + isActive);
+        }
 
         function validateProducts(lstProducts) {
             return dataService.post(apiBaseUrl + 'ValidateProducts', lstProducts);
@@ -39,7 +44,7 @@
         }
 
         function deletePriceRule(iRuleSid) {
-            return dataService.post(apiBaseUrl + 'DeletePriceRule/' + iRuleSid );
+            return dataService.post(apiBaseUrl + 'DeletePriceRule/' + iRuleSid);
         }
 
         function isDuplicateTitle(iRuleSid, strTitle) {
@@ -51,7 +56,7 @@
         }
 
         function updatePriceRule(priceRuleCriteria, isWithEmail) {
-            return dataService.post(apiBaseUrl + 'UpdatePriceRule/' +  isWithEmail, priceRuleCriteria);
+            return dataService.post(apiBaseUrl + 'UpdatePriceRule/' + isWithEmail, priceRuleCriteria);
         }
 
         function getPriceRules(id, strActionName) {

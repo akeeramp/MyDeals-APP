@@ -7,7 +7,7 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope','$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal','rid']
+    RuleController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal', 'rid']
 
     function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
         var vm = this;
@@ -574,7 +574,7 @@
                         if (rid != 0) {
                             vm.dataSource.filter({ field: "Id", value: vm.rid == 0 ? null : vm.rid });
                         }
-                        
+
                     } break;
                 }
             }, function (response) {
@@ -654,7 +654,7 @@
                 }
             },
             pageSize: 25,
-            sort: { field: "RuleStage", dir: "asc" },            
+            sort: { field: "RuleStage", dir: "asc" },
             schema: {
                 model: {
                     id: "Id",
@@ -670,9 +670,25 @@
             var url = document.location.href;
             var lastLoc = url.lastIndexOf('/');
             url = url.substring(0, lastLoc + 1);
-            document.location.href = url;            
+            document.location.href = url;
         }
-        
+
+        vm.RuleStatusChange = function () {
+            if (vm.rule != null && vm.rule.Id != null && vm.rule.Id > 0) {
+                ruleService.updateRuleStatus(vm.rule.Id, vm.rule.IsActive).then(function (response) {
+                    if (response.data > 0) {
+                        vm.Rules.filter(x => x.Id == response.data)[0].IsActive = vm.rule.IsActive;
+                        vm.dataSource.read();
+                        logger.success("Rule's status has been updated successfully");
+                    }
+                    else
+                        logger.error("Unable to update rule's status");
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+            }
+        }
+
         vm.gridOptions = {
             toolbar: [
                 { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
@@ -1138,7 +1154,7 @@
             gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
         }
         vm.approveRule = function () {
-            vm.rule.RuleStage = !vm.rule.RuleStage;  
+            vm.rule.RuleStage = !vm.rule.RuleStage;
             vm.saveRule(true, true);
         }
 

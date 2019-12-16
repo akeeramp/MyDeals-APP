@@ -53,6 +53,26 @@ namespace Intel.MyDeals.DataLibrary
             return priceRuleCriteria;
         }
 
+        public int UpdateRuleStatus(int iRuleId, bool isActive)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE_ACTV_IND
+            {
+                rule_sid = iRuleId,
+                actv_ind = isActive
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_RULE_SID = DB.GetReaderOrdinal(rdr, "RULE_SID");
+
+                while (rdr.Read())
+                {
+                    iRuleId = (IDX_RULE_SID < 0 || rdr.IsDBNull(IDX_RULE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_SID);
+                } // while
+            }
+            return iRuleId;
+        }
+
         public int DeletePriceRule(int iRuleSid)
         {
             var cmd = new Procs.dbo.PR_MYDL_DEL_PRC_RULE
