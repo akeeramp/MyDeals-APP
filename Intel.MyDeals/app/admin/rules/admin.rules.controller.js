@@ -1138,7 +1138,7 @@
             gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
         }
         vm.approveRule = function () {
-            vm.rule.RuleStage = true;  
+            vm.rule.RuleStage = !vm.rule.RuleStage;  
             vm.saveRule(true, true);
         }
 

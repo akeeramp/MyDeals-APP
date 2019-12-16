@@ -159,7 +159,7 @@
     <div class="form-group row action_btns" ng-if="vm.isEditmode">
         <label class="control-label col-md-2"></label>
         <div class="col-md-9">
-            <button ng-if="((vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false))" ng-click="vm.approveRule()" class="btn btn-success" style="margin-left: 15px">Approve Rule</button>
+            <button ng-if="((vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false))" ng-click="vm.approveRule()" class="btn btn-{{vm.rule.RuleStage != true ? 'success' : 'danger'}}" style="margin-left: 15px">{{vm.rule.RuleStage != true ? 'Approve Rule' : 'Cancel Approval'}}</button>
             <button ng-click="vm.saveRule(false,true)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
             <button ng-click="vm.saveRule(true,true)" class="btn btn-primary" style="margin-left: 15px">Save and Send for Approval</button>
             <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel / Return to Rules Navigation</button>
