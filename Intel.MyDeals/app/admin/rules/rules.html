@@ -62,7 +62,7 @@
                             off="Inactive"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}" ng-change="vm.RuleStatusChange((vm.rule.Id), (vm.rule.IsActive))"></toggle>
+                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}" ng-click="vm.UpdateRuleIndicator((vm.rule.Id), (vm.rule.IsActive),'STATUS_IND',true)"></toggle>
                     <!--<span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
                     <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>-->
                 </div>
@@ -77,7 +77,7 @@
                             off="Pending Approval"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}" ></toggle>
+                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}" ng-click="vm.UpdateRuleIndicator((vm.rule.Id), (vm.rule.RuleStage),'APPROVAL_IND',!((!vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false)))" ></toggle>
                     <!--<span ng-if="vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approved</span>
                     <span ng-if="!vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleYellow">Pending Approval</span>-->
                 </div>

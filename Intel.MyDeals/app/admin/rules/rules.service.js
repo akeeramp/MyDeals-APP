@@ -26,13 +26,13 @@
             deletePriceRule: deletePriceRule,
             copyPriceRule: copyPriceRule,
             validateProducts: validateProducts,
-            updateRuleStatus: updateRuleStatus
+            updateRuleIndicator: updateRuleIndicator
         }
 
         return service;
 
-        function updateRuleStatus(iRuleId, isActive) {
-            return dataService.post(apiBaseUrl + 'UpdateRuleStatus/' + iRuleId + "/" + isActive);
+        function updateRuleIndicator(iRuleId, isTrue, strActionName) {
+            return dataService.post(apiBaseUrl + 'UpdateRuleIndicator/' + iRuleId + "/" + isTrue + "/" + strActionName);
         }
 
         function validateProducts(lstProducts) {

@@ -673,19 +673,27 @@
             document.location.href = url;
         }
 
-        vm.RuleStatusChange = function (ruleId, isActive) {
-            if (ruleId != null && ruleId > 0) {
-                ruleService.updateRuleStatus(ruleId, isActive).then(function (response) {
-                    if (response.data.Id > 0) {
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = vm.rule.IsActive;
+        vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
+            if (isEnabled && ruleId != null && ruleId > 0) {
+                ruleService.updateRuleIndicator(ruleId, isTrue, strActionName).then(function (response) {
+                    if (response.data.Id > 0) {                        
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
-                        vm.dataSource.read();
-                        logger.success("Rule has been updated successfully with " + (vm.rule.IsActive ? "Active" : "Inactive") + " status");
+                        switch (strActionName) {
+                            case "STATUS_IND": {
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
+                            } break;
+                            case "APPROVAL_IND": {
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
+                                logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
+                            } break;
+                        }
+                        vm.dataSource.read();                       
                     }
                     else
-                        logger.error("Unable to update rule's status");
+                        logger.error("Unable to update rule's indicator");
                 }, function (response) {
                     logger.error("Operation failed");
                 });

@@ -17,6 +17,6 @@ namespace Intel.MyDeals.IBusinessLogic
         int DeletePriceRule(int iRuleSid);
         int CopyPriceRule(int iRuleSid);
         List<string> ValidateProducts(List<string> lstProducts);
-        PriceRuleCriteria UpdateRuleStatus(int iRuleId, bool isActive);
+        PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName);
     }
 }

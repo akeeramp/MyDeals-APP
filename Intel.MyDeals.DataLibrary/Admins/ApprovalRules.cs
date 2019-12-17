@@ -54,14 +54,15 @@ namespace Intel.MyDeals.DataLibrary
             return priceRuleCriteria;
         }
 
-        public PriceRuleCriteria UpdateRuleStatus(int iRuleId, bool isActive)
+        public PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName)
         {
             PriceRuleCriteria priceRuleCriteria = new PriceRuleCriteria();
-            var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE_ACTV_IND
+            var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE_IND
             {
                 rule_sid = iRuleId,
-                actv_ind = isActive,
-                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                ind_sts = isTrue,
+                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                actn_nm= strActionName
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))

@@ -91,10 +91,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("UpdateRuleStatus/{iRuleId}/{isActive}")]
-        public PriceRuleCriteria UpdateRuleStatus(int iRuleId, bool isActive)
+        [Route("UpdateRuleIndicator/{iRuleId}/{isTrue}/{strActionName}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName)
         {
-            return SafeExecutor(() => _rulesLib.UpdateRuleStatus(iRuleId, isActive), $"Unable to update rule status");
+            return SafeExecutor(() => _rulesLib.UpdateRuleIndicator(iRuleId, isTrue, strActionName), $"Unable to update rule indicator");
         }
 
         [Authorize]

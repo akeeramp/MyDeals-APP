@@ -78,9 +78,9 @@ namespace Intel.MyDeals.BusinessLogic
             return new ApprovalRules().GetValidProducts(lstProducts);
         }
 
-        public PriceRuleCriteria UpdateRuleStatus(int iRuleId, bool isActive)
+        public PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName)
         {
-            return new ApprovalRules().UpdateRuleStatus(iRuleId, isActive);
+            return new ApprovalRules().UpdateRuleIndicator(iRuleId, isTrue, strActionName);
         }
 
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
