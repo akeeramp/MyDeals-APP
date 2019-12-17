@@ -482,8 +482,8 @@
         vm.UpdateRuleActions = function (priceRuleCriteria, isSubmit) {
             ruleService.updatePriceRule(priceRuleCriteria, isSubmit).then(function (response) {
                 if (response.data.Id > 0) {
-                    if (vm.Rules.filter(x => x.Id === response.data.Id).length > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id !== response.data.Id);
+                    if (vm.Rules.filter(x => x.Id == response.data.Id).length > 0) {
+                        vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);
                     }
                     var updatedRule = response.data;
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME;
@@ -593,7 +593,7 @@
             kendo.confirm("Are you sure wants to delete?").then(function () {
                 ruleService.deletePriceRule(id).then(function (response) {
                     if (response.data > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id !== response.data);
+                        vm.Rules = vm.Rules.filter(x => x.Id != response.data);
                         vm.dataSource.read();
                         logger.success("Rule has been deleted");
                     }
