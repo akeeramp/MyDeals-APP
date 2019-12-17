@@ -673,9 +673,9 @@
             document.location.href = url;
         }
 
-        vm.RuleStatusChange = function (ruleId, isActive) {         
+        vm.RuleStatusChange = function (ruleId, isActive) {
             if (ruleId != null && ruleId > 0) {
-                ruleService.updateRuleStatus(ruleId, isActive).then(function (response) {                   
+                ruleService.updateRuleStatus(ruleId, isActive).then(function (response) {
                     if (response.data.Id > 0) {
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = vm.rule.IsActive;
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
@@ -988,7 +988,7 @@
                             RuleStage: vm.rule.RuleStage,
                             Notes: vm.rule.Notes,
                             Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
-                            ProductCriteria: vm.rule.IsAutomationIncluded ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : []
+                            ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : []
                         }
                         vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
                     }
@@ -1100,6 +1100,12 @@
                 });
             }
             else {
+                invalidPrice = [];
+                duplicateProducts = [];
+                invalidProducts = [];
+                if (isSave) {
+                    vm.saveRule(isWithMail, false);
+                }
                 if (showPopup)
                     kendo.alert("<b>There are no Products to Validate</b></br>");
             }

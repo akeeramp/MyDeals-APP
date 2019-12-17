@@ -83,7 +83,7 @@ namespace Intel.MyDeals.BusinessLogic
             return new ApprovalRules().UpdateRuleStatus(iRuleId, isActive);
         }
 
-            public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
         {
             string[] lstAllowedRole = new string[] { "GA", "FSE" };
             priceRuleCriteria.Criterias.BlanketDiscount.Where(y => y.valueType.value == "%" && y.value != string.Empty && !(Convert.ToInt32(y.value) <= 70)).ToList().ForEach(z => z.value = "70");
