@@ -47,14 +47,16 @@ namespace Intel.MyDeals.DataLibrary
 
             if (priceRuleCriteria.Id > 0)
             {
-                priceRuleCriteria.ChangeDateTimeFormat = DateTime.UtcNow.ToString("MM/dd/yyyy h:mm tt");
+                priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
+                priceRuleCriteria.ChangeDateTimeFormat = priceRuleCriteria.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
                 priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
             }
             return priceRuleCriteria;
         }
 
-        public int UpdateRuleStatus(int iRuleId, bool isActive)
+        public PriceRuleCriteria UpdateRuleStatus(int iRuleId, bool isActive)
         {
+            PriceRuleCriteria priceRuleCriteria = new PriceRuleCriteria();
             var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE_ACTV_IND
             {
                 rule_sid = iRuleId,
@@ -71,7 +73,14 @@ namespace Intel.MyDeals.DataLibrary
                     iRuleId = (IDX_RULE_SID < 0 || rdr.IsDBNull(IDX_RULE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_SID);
                 } // while
             }
-            return iRuleId;
+            priceRuleCriteria.Id = iRuleId;
+            if (priceRuleCriteria.Id > 0)
+            {
+                priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
+                priceRuleCriteria.ChangeDateTimeFormat = priceRuleCriteria.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
+                priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
+            }
+            return priceRuleCriteria;
         }
 
         public int DeletePriceRule(int iRuleSid)

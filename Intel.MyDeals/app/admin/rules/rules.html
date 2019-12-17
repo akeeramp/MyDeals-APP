@@ -62,7 +62,7 @@
                             off="Inactive"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}" ng-change="vm.RuleStatusChange()"></toggle>
+                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}" ng-change="vm.RuleStatusChange((vm.rule.Id), (vm.rule.IsActive))"></toggle>
                     <!--<span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
                     <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>-->
                 </div>
@@ -497,5 +497,6 @@
         $('#bodyContent').attr('style', 'overflow: auto !important');
         $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
         $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');        
+        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').attr('title', 'Requested ECAP must be greater than or equal to the floor price entered');
     });
 </script>

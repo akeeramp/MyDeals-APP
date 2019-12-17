@@ -673,17 +673,16 @@
             document.location.href = url;
         }
 
-        vm.RuleStatusChange = function () {
-            if (vm.rule != null && vm.rule.Id != null && vm.rule.Id > 0) {
-                ruleService.updateRuleStatus(vm.rule.Id, vm.rule.IsActive).then(function (response) {
-                    if (response.data > 0) {
-                        var changedDt = new Date();
-                        vm.Rules.filter(x => x.Id == response.data)[0].IsActive = vm.rule.IsActive;
-                        vm.Rules.filter(x => x.Id == response.data)[0].ChangedBy = vm.RuleConfig.CurrentUserName;
-                        vm.Rules.filter(x => x.Id == response.data)[0].ChangeDateTime = changedDt;
-                        vm.Rules.filter(x => x.Id == response.data)[0].ChangeDateTimeFormat = changedDt.getMonth() + "/" + changedDt.getDay() + "/" + changedDt.getFullYear();
+        vm.RuleStatusChange = function (ruleId, isActive) {         
+            if (ruleId != null && ruleId > 0) {
+                ruleService.updateRuleStatus(ruleId, isActive).then(function (response) {                   
+                    if (response.data.Id > 0) {
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = vm.rule.IsActive;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
                         vm.dataSource.read();
-                        logger.success("Rule's status has been updated successfully");
+                        logger.success("Rule has been updated successfully with " + (vm.rule.IsActive ? "Active" : "Inactive") + " status");
                     }
                     else
                         logger.error("Unable to update rule's status");

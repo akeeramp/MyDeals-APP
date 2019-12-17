@@ -92,7 +92,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [Route("UpdateRuleStatus/{iRuleId}/{isActive}")]
-        public int UpdateRuleStatus(int iRuleId, bool isActive)
+        public PriceRuleCriteria UpdateRuleStatus(int iRuleId, bool isActive)
         {
             return SafeExecutor(() => _rulesLib.UpdateRuleStatus(iRuleId, isActive), $"Unable to update rule status");
         }
