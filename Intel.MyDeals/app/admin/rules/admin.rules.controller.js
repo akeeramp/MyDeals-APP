@@ -468,23 +468,9 @@
         vm.copyRule = function (id) {
             ruleService.copyPriceRule(id).then(function (response) {
                 if (response.data > 0) {
-                    var sourceRule = vm.Rules.filter(x => x.Id == id)[0];
-                    var copiedRule = {};
-                    copiedRule.Id = response.data;
-                    copiedRule.Name = sourceRule.Name + " (Copy)";
-                    copiedRule.RuleStage = sourceRule.IsAutomationIncluded == false ? true : false;
-                    copiedRule.ChangeDateTime = new Date();
-                    copiedRule.ChangedBy = vm.RuleConfig.CurrentUserName;
-                    copiedRule.IsActive = sourceRule.IsActive;
-                    copiedRule.IsAutomationIncluded = sourceRule.IsAutomationIncluded;
-                    copiedRule.StartDate = sourceRule.StartDate;
-                    copiedRule.EndDate = sourceRule.EndDate;
-                    copiedRule.Notes = sourceRule.Notes;
-                    copiedRule.OwnerName = sourceRule.OwnerName;
-                    vm.Rules.splice(0, 0, copiedRule);
-                    vm.dataSource.read();
+                    vm.editRule(response.data);                   
                     logger.success("Rule has been copied");
-                    vm.editRule(copiedRule.Id);
+
                 } else {
                     logger.error("Unable to copy the rule");
                 }
@@ -493,8 +479,8 @@
             });
         }
 
-        vm.UpdateRuleActions = function (priceRuleCriteria, isWithEmail) {
-            ruleService.updatePriceRule(priceRuleCriteria, isWithEmail).then(function (response) {
+        vm.UpdateRuleActions = function (priceRuleCriteria, isSubmit) {
+            ruleService.updatePriceRule(priceRuleCriteria, isSubmit).then(function (response) {
                 if (response.data.Id > 0) {
                     if (vm.Rules.filter(x => x.Id === response.data.Id).length > 0) {
                         vm.Rules = vm.Rules.filter(x => x.Id !== response.data.Id);
@@ -541,6 +527,10 @@
                             if (vm.rule.Criteria[idx].type === "list" && vm.rule.Criteria[idx].operator != "IN") {
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
+                        }
+                        if (vm.Rules.filter(x => x.Id == id).length == 0) {
+                            vm.Rules.splice(0, 0, vm.rule);
+                            vm.dataSource.read();
                         }
                         vm.ProductCriteria = vm.rule.ProductCriteria;
                         vm.BlanketDiscountPercentage = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value === "%").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value === "%")[0].value : "";
@@ -676,7 +666,7 @@
         vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
             if (isEnabled && ruleId != null && ruleId > 0) {
                 ruleService.updateRuleIndicator(ruleId, isTrue, strActionName).then(function (response) {
-                    if (response.data.Id > 0) {                        
+                    if (response.data.Id > 0) {
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
                         vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
@@ -690,7 +680,7 @@
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
-                        vm.dataSource.read();                       
+                        vm.dataSource.read();
                     }
                     else
                         logger.error("Unable to update rule's indicator");
@@ -922,9 +912,9 @@
             sheet.range("A1:B200").fontFamily("Intel Clear");
         }
 
-        vm.saveRule = function (isWithEmail, isProductValidationRequired) {
-            if (isProductValidationRequired && vm.rule.IsAutomationIncluded)
-                vm.validateProduct(false, true, isWithEmail);
+        vm.saveRule = function (isSubmit, isProductValidationRequired) {
+            if (isProductValidationRequired && vm.rule.IsAutomationIncluded && (isSubmit || (vm.rule.IsActive && vm.rule.RuleStage)))
+                vm.validateProduct(false, true, isSubmit);
             else {
                 $rootScope.$broadcast('save-criteria');
                 $timeout(function () {
@@ -953,7 +943,7 @@
                         if (vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == vm.rule.OwnerId).length === 0)
                             validationFields.push("Owner cannot be invalid");
                     }
-                    if (requiredFields.length > 0 || validationFields.length > 0 || (vm.rule.IsAutomationIncluded && (invalidPrice.length > 0 || duplicateProducts.length > 0 || invalidProducts.length > 0))) {
+                    if (requiredFields.length > 0 || validationFields.length > 0 || (vm.rule.IsAutomationIncluded && ((isSubmit || (vm.rule.IsActive && vm.rule.RuleStage))) && (invalidPrice.length > 0 || duplicateProducts.length > 0 || invalidProducts.length > 0))) {
                         var maxItemsSize = 10;
                         var strAlertMessage = "";
                         if (validationFields.length > 0) {
@@ -966,7 +956,7 @@
                             strAlertMessage += "<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>");
                         }
 
-                        if (vm.rule.IsAutomationIncluded) {
+                        if (vm.rule.IsAutomationIncluded && ((isSubmit || (vm.rule.IsActive && vm.rule.RuleStage)))) {
                             // Replaced with a generalized function call and restricted popup size to not flow off bottom
                             strAlertMessage += myFunction(invalidProducts, maxItemsSize, "Invalid products exist, please fix:");
 
@@ -998,7 +988,7 @@
                             Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
                             ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : []
                         }
-                        vm.UpdateRuleActions(priceRuleCriteria, isWithEmail);
+                        vm.UpdateRuleActions(priceRuleCriteria, isSubmit);
                     }
                 });
             }

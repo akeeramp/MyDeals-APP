@@ -62,7 +62,7 @@
                             off="Inactive"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.IsActive == true ? 'Active' : 'Awaiting Approval'}}" ng-click="vm.UpdateRuleIndicator((vm.rule.Id), (vm.rule.IsActive),'STATUS_IND',true)"></toggle>
+                            title="{{vm.rule.IsActive == true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator((vm.rule.Id), (vm.rule.IsActive),'STATUS_IND',true)"></toggle>
                     <!--<span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
                     <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>-->
                 </div>
@@ -161,9 +161,9 @@
         <div class="col-md-9">
             <button ng-if="((vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false))" ng-click="vm.approveRule()" class="btn btn-{{vm.rule.RuleStage != true ? 'success' : 'danger'}}" style="margin-left: 15px">{{vm.rule.RuleStage != true ? 'Approve Rule' : 'Cancel Approval'}}</button>
             <button ng-click="vm.saveRule(false,true)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
-            <button ng-click="vm.saveRule(true,true)" class="btn btn-primary" style="margin-left: 15px">Save and Send for Approval</button>
-            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel / Return to Rules Navigation</button>
-            <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;">Simulate Running this Rule</button>
+            <button ng-click="vm.saveRule(true,true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
+            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
+            <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;">Simulate</button>
         </div>
     </div>
     <div class="form-group row" id="productCriteria">&nbsp;</div>
