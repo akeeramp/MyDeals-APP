@@ -21,7 +21,7 @@
         vm.BlanketDiscountDollor = "";
         vm.BlanketDiscountPercentage = "";
         vm.ProductCriteria = [];
-        vm.isApprovedButtonReq = true;
+        vm.isElligibleForApproval = false;
         vm.adminEmailIDs = "";
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -91,9 +91,8 @@
             // If user has closed the banner message he wont see it for the current session again.
             constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
                 if (!!data.data) {
-                    vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA"
-                        ? "" : data.data.CNST_VAL_TXT;
-                    vm.isApprovedButtonReq = vm.adminEmailIDs.indexOf(usrEmail) > -1 ? true : false;
+                    vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                    vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
                 }
             });
         }
@@ -517,12 +516,13 @@
                     }
                     var updatedRule = response.data;
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId == vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
+                    updatedRule.ActiveStatus = updatedRule.IsActive ? "Active" : "Inactive";
                     vm.Rules.splice(0, 0, updatedRule);
                     $('#productCriteria').hide();
                     vm.isEditmode = false;
                     vm.dataSource.read();
                     $scope.isBusy = false;
-                    logger.success("Rule has been updated");                    
+                    logger.success("Rule has been updated");
                 } else {
                     $scope.isBusy = false;
                     kendo.alert("This rule name already exists in another rule.");
@@ -583,11 +583,6 @@
                         vm.validateProduct(false, false, 'NONE');
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
-                        if (vm.rule.IsActive == true && vm.rule.IsAutomationIncluded == true) {
-                            vm.isApprovedButtonReq = true;
-                        } else {
-                            vm.isApprovedButtonReq = false;
-                        }
                     } break;
                     default: {
                         vm.Rules = response.data;
@@ -718,6 +713,7 @@
                         switch (strActionName) {
                             case "UPDATE_ACTV_IND": {
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].ActiveStatus = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                             } break;
                             case "UPDATE_STAGE_IND": {
@@ -775,13 +771,20 @@
             columns: [
                 {
                     width: "160px",
-                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div ><div class='rule'><i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i><i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i><i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i><i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i><i ng-if='vm.isApprovedButtonReq && dataItem.IsActive == false' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.approveRule(#= Id #)'></i></div>"
+                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div>"
+                    + "<div class='rule'>"
+                    + "<i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>"
+                    + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i>"
+                    + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
+                    + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
+                    + "<i ng-if='(vm.isElligibleForApproval && #= IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
+                    + "</div>"
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 {
                     title: "Name",
                     field: "Name",
-                    template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'>#= Name #</a></div>",
+                    template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'><span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span></a></div>",
                     width: "20%",
                     filterable: { multi: true, search: true },
                     encoded: true
@@ -793,11 +796,11 @@
                     hidden: true
                 },
                 {
-                    field: "IsActive",
+                    field: "ActiveStatus",
                     title: "Rule Status",
                     filterable: { multi: true, search: true },
                     width: "7%",
-                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#if(IsActive == true){#Active#} else {#Inactive#}#</div>"
+                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#= ActiveStatus #</div>"
                     //template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
                 {

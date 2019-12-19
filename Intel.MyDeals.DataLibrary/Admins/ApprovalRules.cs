@@ -13,6 +13,7 @@ namespace Intel.MyDeals.DataLibrary
     {
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction)
         {
+            bool isApproved = priceRuleAction == PriceRuleAction.UPDATE_STAGE_IND ? priceRuleCriteria.RuleStage : priceRuleCriteria.IsAutomationIncluded == false;
             if (!IsDuplicateTitle(priceRuleCriteria.Id, priceRuleCriteria.Name == null ? string.Empty : priceRuleCriteria.Name) || (priceRuleAction != PriceRuleAction.SUBMIT && priceRuleAction != PriceRuleAction.SAVE_AS_DRAFT))
             {
                 //Assing dummy value to avoid overflow
@@ -21,7 +22,7 @@ namespace Intel.MyDeals.DataLibrary
                     priceRuleCriteria.StartDate = DateTime.Now;
                     priceRuleCriteria.EndDate = DateTime.Now;
                 }
-
+                
                 var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE
                 {
                     @rule_sid = priceRuleCriteria.Id,
@@ -34,7 +35,7 @@ namespace Intel.MyDeals.DataLibrary
                     @prd_cri = priceRuleCriteria.ProductCriteriaJson,
                     @prd_sql_cri = priceRuleCriteria.ProductCriteriaSql,
                     @is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
-                    @is_aprv = priceRuleCriteria.IsAutomationIncluded == false ? true : priceRuleCriteria.RuleStage,
+                    @is_aprv = isApproved,
                     @actv_ind = priceRuleCriteria.IsActive,
                     @usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                     @actn_nm = priceRuleAction.ToString("g")
@@ -56,6 +57,7 @@ namespace Intel.MyDeals.DataLibrary
                 priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
                 priceRuleCriteria.ChangeDateTimeFormat = priceRuleCriteria.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
                 priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
+                priceRuleCriteria.RuleStage = isApproved;
             }
             return priceRuleCriteria;
         }
@@ -226,7 +228,11 @@ namespace Intel.MyDeals.DataLibrary
                     ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
                 });
             } // while
-            rtn.ForEach(x => x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt"));
+            rtn.ForEach(x =>
+            {
+                x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
+                x.ActiveStatus = x.IsActive ? "Active" : "Inactive";
+            });
 
             return rtn;
         }

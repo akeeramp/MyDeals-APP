@@ -120,6 +120,7 @@ namespace Intel.MyDeals.Entities
         public string OwnerName { get; set; }
         public int OwnerId { get; set; }
         public bool IsActive { get; set; }
+        public string ActiveStatus { get; set; }
         public bool IsAutomationIncluded { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

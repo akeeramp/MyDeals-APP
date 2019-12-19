@@ -52,7 +52,7 @@
                             off="Inactive"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.IsActive == true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator((vm.rule.Id), (vm.rule.IsActive),'UPDATE_ACTV_IND',true)"></toggle>
+                            title="{{vm.rule.IsActive == true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true)"></toggle>
                     <!--<span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
                     <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>-->
                 </div>
@@ -61,13 +61,13 @@
             <label class="control-label col-md-2" style="float: left;">Approval Status:</label>
             <span class="col-md-2" style="margin-left:-15px; float: left;">
                 <div class="tooltipPriceRule">
-                    <toggle class="fl toggle-accept" ng-disabled="((!vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false))"
+                    <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsActive && vm.rule.IsAutomationIncluded))"
                             ng-model="vm.rule.RuleStage"
                             on="Approved"
                             off="Pending Approval"
                             onstyle="btn-success"
                             offstyle="btn-danger"
-                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}" ng-click="vm.UpdateRuleIndicator((vm.rule.Id), (vm.rule.RuleStage),'UPDATE_STAGE_IND',!((!vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false)))"></toggle>
+                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',(vm.isElligibleForApproval && vm.rule.IsActive && vm.rule.IsAutomationIncluded))"></toggle>
                     <!--<span ng-if="vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approved</span>
                     <span ng-if="!vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleYellow">Pending Approval</span>-->
                 </div>
@@ -91,7 +91,7 @@
         </div>
 
         <div class="form-group row">
-            
+
             <label class="control-label isRequired col-md-2">Owner:</label>
             <div class="col-md-2">
                 <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>
@@ -158,7 +158,7 @@
     <div class="form-group row action_btns" ng-if="vm.isEditmode">
         <label class="control-label col-md-2"></label>
         <div class="col-md-9">
-            <button ng-if="((vm.isApprovedButtonReq) || (vm.rule.IsAutomationIncluded == false))" ng-click="vm.approveRule()" class="btn btn-{{vm.rule.RuleStage != true ? 'success' : 'danger'}}" style="margin-left: 15px">{{vm.rule.RuleStage != true ? 'Approve Rule' : 'Cancel Approval'}}</button>
+            <button ng-if="((vm.isElligibleForApproval) || (vm.rule.IsAutomationIncluded == false))" ng-click="vm.approveRule()" class="btn btn-{{vm.rule.RuleStage != true ? 'success' : 'danger'}}" style="margin-left: 15px">{{vm.rule.RuleStage != true ? 'Approve Rule' : 'Cancel Approval'}}</button>
             <button ng-click="vm.saveRule('SAVE_AS_DRAFT',false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
             <button ng-click="vm.saveRule('SUBMIT',true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
             <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
