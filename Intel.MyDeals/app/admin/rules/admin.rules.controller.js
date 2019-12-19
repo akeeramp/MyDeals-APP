@@ -516,17 +516,19 @@
                         vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);
                     }
                     var updatedRule = response.data;
-                    updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME;
+                    updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId == vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
                     vm.Rules.splice(0, 0, updatedRule);
                     $('#productCriteria').hide();
                     vm.isEditmode = false;
                     vm.dataSource.read();
-                    logger.success("Rule has been updated");
-
+                    $scope.isBusy = false;
+                    logger.success("Rule has been updated");                    
                 } else {
+                    $scope.isBusy = false;
                     kendo.alert("This rule name already exists in another rule.");
                 }
             }, function (response) {
+                $scope.isBusy = false;
                 logger.error("Unable to update the rule");
             });
         };
@@ -698,7 +700,8 @@
 
         vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
             if (isEnabled && ruleId != null && ruleId > 0) {
-                var priceRuleCriteria = { Id : ruleId }
+                $scope.setBusy("Price Rule...", "Please wait while we updating the rule..", null, true);
+                var priceRuleCriteria = { Id: ruleId }
                 switch (strActionName) {
                     case "UPDATE_ACTV_IND": {
                         priceRuleCriteria.IsActive = isTrue;
@@ -723,10 +726,30 @@
                             } break;
                         }
                         vm.dataSource.read();
+                        $scope.isBusy = false;
                     }
-                    else
+                    else {
+                        switch (strActionName) {
+                            case "UPDATE_ACTV_IND": {
+                                vm.rule.IsActive = !isTrue;
+                            } break;
+                            case "UPDATE_STAGE_IND": {
+                                vm.rule.RuleStage = !isTrue;
+                            } break;
+                        }
+                        $scope.isBusy = false;
                         logger.error("Unable to update rule's indicator");
+                    }
                 }, function (response) {
+                    switch (strActionName) {
+                        case "UPDATE_ACTV_IND": {
+                            vm.rule.IsActive = !isTrue;
+                        } break;
+                        case "UPDATE_STAGE_IND": {
+                            vm.rule.RuleStage = !isTrue;
+                        } break;
+                    }
+                    $scope.isBusy = false;
                     logger.error("Operation failed");
                 });
             }
@@ -962,6 +985,7 @@
             if (isProductValidationRequired && vm.rule.IsAutomationIncluded && (strActionName == 'SUBMIT' || (vm.rule.IsActive && vm.rule.RuleStage)))
                 vm.validateProduct(false, true, strActionName);
             else {
+                $scope.setBusy("Price Rule...", "Please wait while we " + (strActionName == 'SUBMIT' ? 'submitting' : 'saving') + " the rule..", null, true);
                 $rootScope.$broadcast('save-criteria');
                 $timeout(function () {
                     var requiredFields = [];
@@ -1010,6 +1034,7 @@
 
                             strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and highlighted in orange. Please remove duplicates before publishing.");
                         }
+                        $scope.isBusy = false;
                         kendo.alert(jQuery.trim(strAlertMessage));
                     } else {
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
@@ -1031,7 +1056,8 @@
                             RuleStage: vm.rule.RuleStage,
                             Notes: vm.rule.Notes,
                             Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
-                            ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : []
+                            ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : [],
+                            OwnerId: vm.rule.OwnerId
                         }
                         vm.UpdatePriceRule(priceRuleCriteria, strActionName);
                     }
