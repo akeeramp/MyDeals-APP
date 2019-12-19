@@ -516,7 +516,7 @@
                         vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);
                     }
                     var updatedRule = response.data;
-                    //updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME;
+                    updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME;
                     vm.Rules.splice(0, 0, updatedRule);
                     $('#productCriteria').hide();
                     vm.isEditmode = false;
