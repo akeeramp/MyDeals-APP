@@ -51,7 +51,7 @@ namespace Intel.MyDeals.BusinessLogic
         public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
         {
             PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            List<PriceRuleCriteria> lstPriceRuleCriteria = new ApprovalRules().GetPriceRuleCriteriaById(id, priceRuleAction);
+            List<PriceRuleCriteria> lstPriceRuleCriteria = new ApprovalRules().GetPriceRuleCriteria(id, priceRuleAction);
             if (priceRuleAction == PriceRuleAction.GET_BY_RULE_ID)
             {
                 lstPriceRuleCriteria.ForEach(x =>
@@ -77,25 +77,23 @@ namespace Intel.MyDeals.BusinessLogic
             //List<Product> lstProductFromCache = new ProductsLib().GetProducts(true);
             return new ApprovalRules().GetValidProducts(lstProducts);
         }
-
-        public PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName)
+        
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction, Dictionary<int, string> dicCustomerName)
         {
-            return new ApprovalRules().UpdateRuleIndicator(iRuleId, isTrue, strActionName);
-        }
-
-        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish, Dictionary<int, string> dicCustomerName)
-        {
-            string[] lstAllowedRole = new string[] { "GA", "FSE" };
-            priceRuleCriteria.Criterias.BlanketDiscount.Where(y => y.valueType.value == "%" && y.value != string.Empty && !(Convert.ToInt32(y.value) <= 70)).ToList().ForEach(z => z.value = "70");
-            Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Any(x => x.field == "CRE_EMP_NAME") ? new EmployeesLib().GetUsrProfileRoleByRoleCode(lstAllowedRole).ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
-            priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
-            priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
-            using (RuleExpressions ruleExpressions = new RuleExpressions())
+            if (priceRuleAction == PriceRuleAction.SAVE_AS_DRAFT || priceRuleAction == PriceRuleAction.SUBMIT)
             {
-                priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
-                priceRuleCriteria.ProductCriteriaSql = ruleExpressions.GetSqlExpressionForProducts(priceRuleCriteria.ProductCriteria);
+                string[] lstAllowedRole = new string[] { "GA", "FSE" };
+                priceRuleCriteria.Criterias.BlanketDiscount.Where(y => y.valueType.value == "%" && y.value != string.Empty && !(Convert.ToInt32(y.value) <= 70)).ToList().ForEach(z => z.value = "70");
+                Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Any(x => x.field == "CRE_EMP_NAME") ? new EmployeesLib().GetUsrProfileRoleByRoleCode(lstAllowedRole).ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
+                priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
+                priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
+                using (RuleExpressions ruleExpressions = new RuleExpressions())
+                {
+                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
+                    priceRuleCriteria.ProductCriteriaSql = ruleExpressions.GetSqlExpressionForProducts(priceRuleCriteria.ProductCriteria);
+                }
             }
-            return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, isPublish);
+            return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, priceRuleAction);
         }
 
         public bool IsDuplicateTitle(int iRuleSid, string strTitle)

@@ -9,7 +9,6 @@ namespace Intel.MyDeals.Entities
     public class RuleConfig
     {
         public List<UsrProfileRole> DA_Users { get; set; }
-        public bool IsElligibleForApproval { get; set; }
         public int CurrentUserWWID { get; set; }
         public DateTime DefaultEndDate { get; set; }
         public string CurrentUserName { get; set; }
@@ -95,7 +94,11 @@ namespace Intel.MyDeals.Entities
         COPY,
         DELETE,
         GET_BY_RULE_ID,
-        GET_RULES
+        GET_RULES,
+        UPDATE_ACTV_IND,
+        UPDATE_STAGE_IND,
+        SAVE_AS_DRAFT,
+        SUBMIT
     }
 
     public class Criteria

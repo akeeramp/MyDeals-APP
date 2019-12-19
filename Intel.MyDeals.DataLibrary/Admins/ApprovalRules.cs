@@ -11,15 +11,21 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class ApprovalRules
     {
-        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, bool isPublish)
+        public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction)
         {
-            if (!IsDuplicateTitle(priceRuleCriteria.Id, priceRuleCriteria.Name))
+            if (!IsDuplicateTitle(priceRuleCriteria.Id, priceRuleCriteria.Name == null ? string.Empty : priceRuleCriteria.Name) || (priceRuleAction != PriceRuleAction.SUBMIT && priceRuleAction != PriceRuleAction.SAVE_AS_DRAFT))
             {
+                //Assing dummy value to avoid overflow
+                if (priceRuleAction != PriceRuleAction.SAVE_AS_DRAFT && priceRuleAction != PriceRuleAction.SUBMIT)
+                {
+                    priceRuleCriteria.StartDate = DateTime.Now;
+                    priceRuleCriteria.EndDate = DateTime.Now;
+                }
+
                 var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE
                 {
                     @rule_sid = priceRuleCriteria.Id,
-                    @rule_nm = priceRuleCriteria.Name.Trim(),
-                    @ownr_wwid = priceRuleCriteria.OwnerId,
+                    @rule_nm = priceRuleCriteria.Name == null ? string.Empty : priceRuleCriteria.Name.Trim(),
                     @strt_dt = priceRuleCriteria.StartDate,
                     @end_dt = priceRuleCriteria.EndDate,
                     @notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
@@ -31,7 +37,7 @@ namespace Intel.MyDeals.DataLibrary
                     @is_aprv = priceRuleCriteria.IsAutomationIncluded == false ? true : priceRuleCriteria.RuleStage,
                     @actv_ind = priceRuleCriteria.IsActive,
                     @usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                    @is_publ = isPublish
+                    @actn_nm = priceRuleAction.ToString("g")
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -45,36 +51,6 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            if (priceRuleCriteria.Id > 0)
-            {
-                priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
-                priceRuleCriteria.ChangeDateTimeFormat = priceRuleCriteria.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
-                priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
-            }
-            return priceRuleCriteria;
-        }
-
-        public PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName)
-        {
-            PriceRuleCriteria priceRuleCriteria = new PriceRuleCriteria();
-            var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE_IND
-            {
-                rule_sid = iRuleId,
-                ind_sts = isTrue,
-                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                actn_nm= strActionName
-            };
-
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_RULE_SID = DB.GetReaderOrdinal(rdr, "RULE_SID");
-
-                while (rdr.Read())
-                {
-                    iRuleId = (IDX_RULE_SID < 0 || rdr.IsDBNull(IDX_RULE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RULE_SID);
-                } // while
-            }
-            priceRuleCriteria.Id = iRuleId;
             if (priceRuleCriteria.Id > 0)
             {
                 priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
@@ -136,7 +112,7 @@ namespace Intel.MyDeals.DataLibrary
             return false;
         }
 
-        public List<PriceRuleCriteria> GetPriceRuleCriteriaById(int id, PriceRuleAction priceRuleAction)
+        public List<PriceRuleCriteria> GetPriceRuleCriteria(int id, PriceRuleAction priceRuleAction)
         {
             var cmd = new Procs.dbo.PR_MYDL_GET_PRC_RULE
             {
@@ -255,97 +231,14 @@ namespace Intel.MyDeals.DataLibrary
             return rtn;
         }
 
-        List<int> lstApprovers = new List<int> { 11500950, 10548414 };
         public RuleConfig GetPriceRulesConfig()
         {
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig.CurrentUserWWID = OpUserStack.MyOpUserToken.Usr.WWID;
             ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
-            ruleConfig.IsElligibleForApproval = lstApprovers.Contains(OpUserStack.MyOpUserToken.Usr.WWID);
             ruleConfig.DefaultEndDate = DateTime.UtcNow.AddYears(10);
-            //ruleConfig.PriceRuleCriteria = GetPriceRuleCriteriaById(iRuleTypeId, PriceRuleAction.GET_BY_RULE_TYPE_ID);
-            //ruleConfig.AttributeSettings = new List<AttributeSettings>();
-            //ruleConfig.operatorSettings = new operatorSettings();
-            //var cmd = new Procs.dbo.PR_MYDL_GET_PRC_RULE_CONFIG
-            //{
-            //    RULE_TYPE_ID = iRuleTypeId
-            //};
-            //using (var rdr = DataAccess.ExecuteDataSet(cmd))
-            //{
-            //    if (rdr.Tables.Count > 0)
-            //    {
-            //        ruleConfig.operatorSettings.operators = (from result in rdr.Tables[0].AsEnumerable()
-            //                                                 select new operators
-            //                                                 {
-            //                                                     id = (int)result["OPERATOR_ID"],
-            //                                                     label = Convert.ToString(result["OPERATOR_TITLE"]),
-            //                                                     @operator = Convert.ToString(result["OPERATOR_SYMBOL"]),
-            //                                                     operCode = Convert.ToString(result["OPERATOR_CD"])
-            //                                                 }).ToList();
-
-            //        ruleConfig.operatorSettings.types = (from result in rdr.Tables[1].AsEnumerable()
-            //                                             select new types
-            //                                             {
-            //                                                 id = (int)result["UI_TYPE_ID"],
-            //                                                 type = Convert.ToString(result["UI_DATA_TYPE"]),
-            //                                                 uiType = Convert.ToString(result["UI_NAME"])
-            //                                             }).ToList();
-
-            //        Dictionary<int, List<int>> dicOperatorsMap = rdr.Tables[2].AsEnumerable().GroupBy(x => (int)x["UI_TYPE_ID"]).ToDictionary(x => x.Key, y => y.Select(z => (int)z["OPERATOR_ID"]).ToList());
-            //        ruleConfig.operatorSettings.types2operator = (from result in dicOperatorsMap
-            //                                                      select new types2operator
-            //                                                      {
-            //                                                          @operator = ruleConfig.operatorSettings.operators.Where(x => result.Value.Contains(x.id)).Select(x => x.@operator).ToList(),
-            //                                                          type = ruleConfig.operatorSettings.types.Where(x => x.id == result.Key).First().type
-            //                                                      }).ToList();
-
-            //        ruleConfig.AttributeSettings = (from result in rdr.Tables[3].AsEnumerable()
-            //                                        select new AttributeSettings
-            //                                        {
-            //                                            field = Convert.ToString(result["ATTR_CODE"]),
-            //                                            title = Convert.ToString(result["TITLE"]),
-            //                                            width = Convert.ToDouble(result["WIDTH"]),
-            //                                            dimKey = result["DIM_KEY"] == DBNull.Value ? 0 : (int)result["DIM_KEY"],
-            //                                            type = ruleConfig.operatorSettings.types.Where(x => x.id == (int)result["UI_TYPE_ID"]).First().type,
-            //                                            lookupText = result["LKUP_TYPE_ID"] == DBNull.Value ? string.Empty : (result["LKUP_TEXT_KEY"] == DBNull.Value && (LookupType)result["LKUP_TYPE_ID"] != LookupType.URL ? "Text" : Convert.ToString(result["LKUP_TEXT_KEY"])),
-            //                                            lookupValue = result["LKUP_TYPE_ID"] == DBNull.Value ? string.Empty : (result["LKUP_VALUE_KEY"] == DBNull.Value && (LookupType)result["LKUP_TYPE_ID"] != LookupType.URL ? "Value" : Convert.ToString(result["LKUP_VALUE_KEY"])),
-            //                                            lookups = result["LKUP_TYPE_ID"] == DBNull.Value ? new List<DropDowns>() : ((LookupType)result["LKUP_TYPE_ID"] != LookupType.URL ? GetLookUps((LookupType)result["LKUP_TYPE_ID"], Convert.ToString(result["LKUP_DATA"])) : new List<DropDowns>()),
-            //                                            lookupUrl = result["LKUP_TYPE_ID"] == DBNull.Value ? string.Empty : ((LookupType)result["LKUP_TYPE_ID"] == LookupType.URL ? Convert.ToString(result["LKUP_DATA"]) : string.Empty)
-            //                                        }).ToList();
-
-            //        ruleConfig.AttributeSettings.Where(x => x.type == "money").ToList().ForEach(x =>
-            //        {
-            //            x.format = "{0:c}";
-            //            x.filterable = "moneyObjFilter";
-            //            x.template = "#= gridUtils.tierDim(data, 'RATE', 'c') #";
-            //        });
-            //    }
-            //}
             return ruleConfig;
         }
-
-        //public List<PriceRuleData> GetPriceRuleData()
-        //{
-        //    List<PriceRuleData> lstPriceRuleData = new List<PriceRuleData>();
-        //    var cmd = new Procs.dbo.PR_MYDL_GET_PRC_RULE_DATA { };
-        //    using (var rdr = DataAccess.ExecuteDataSet(cmd))
-        //    {
-        //        if (rdr.Tables.Count > 0)
-        //        {
-        //            lstPriceRuleData = (from result in rdr.Tables[0].AsEnumerable()
-        //                                select new PriceRuleData
-        //                                {
-        //                                    ContractId = (int)result["CNTRCT_OBJ_SID"],
-        //                                    DealId = (int)result["DC_ID"],
-        //                                    PricingStrategyId = (int)result["PRC_ST_OBJ_SID"]
-        //                                }).ToList();
-        //        }
-        //    }
-        //    return lstPriceRuleData;
-        //}
-
-
-
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
             List<string> lstRtn = new List<string>();
@@ -366,28 +259,5 @@ namespace Intel.MyDeals.DataLibrary
             }
             return lstRtn;
         }
-
-
-
-
-        //List<DropDowns> GetLookUps(LookupType lookupType, string strData)
-        //{
-        //    List<DropDowns> rtn = new List<DropDowns>();
-        //    switch (lookupType)
-        //    {
-        //        case LookupType.COMMA_SEPARATED_DATA:
-        //            {
-        //                rtn = (from result in strData.Split(',')
-        //                       select new DropDowns
-        //                       {
-        //                           Text = result.ToString(),
-        //                           Value = result.ToString(),
-        //                       }).ToList();
-        //            }
-        //            break;
-        //    }
-        //    return rtn;
-        //}
-
     }
 }

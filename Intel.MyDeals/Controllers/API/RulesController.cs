@@ -7,6 +7,7 @@ using Intel.MyDeals.BusinessRules;
 using System.Linq;
 using Intel.MyDeals.Helpers;
 using Intel.MyDeals.App;
+using System;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -89,24 +90,16 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _rulesLib.GetPriceRules(id, strActionName), $"Unable to get price rules");
         }
-
+        
         [Authorize]
-        [Route("UpdateRuleIndicator/{iRuleId}/{isTrue}/{strActionName}")]
+        [Route("UpdatePriceRule/{strActionName}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public PriceRuleCriteria UpdateRuleIndicator(int iRuleId, bool isTrue, string strActionName)
+        public PriceRuleCriteria UpdatePriceRule(string strActionName, PriceRuleCriteria priceRuleCriteria)
         {
-            return SafeExecutor(() => _rulesLib.UpdateRuleIndicator(iRuleId, isTrue, strActionName), $"Unable to update rule indicator");
-        }
-
-        [Authorize]
-        [Route("UpdatePriceRule/{isPublish}")]
-        [HttpPost]
-        [AntiForgeryValidate]
-        public PriceRuleCriteria UpdatePriceRule(bool isPublish, PriceRuleCriteria priceRuleCriteria)
-        {
-            Dictionary<int, string> dicCustomerName = priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CUST_NM").Count() > 0 ? AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2002).ToDictionary(x => x.CUST_SID, y => y.CUST_NM) : new Dictionary<int, string>();
-            return SafeExecutor(() => _rulesLib.UpdatePriceRule(priceRuleCriteria, isPublish, dicCustomerName), $"Unable to save price rule");
+            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
+            Dictionary<int, string> dicCustomerName = (priceRuleAction == PriceRuleAction.SUBMIT || priceRuleAction== PriceRuleAction.SAVE_AS_DRAFT) && priceRuleCriteria.Criterias.Rules.Where(x => x.field == "CUST_NM").Count() > 0 ? AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2002).ToDictionary(x => x.CUST_SID, y => y.CUST_NM) : new Dictionary<int, string>();
+            return SafeExecutor(() => _rulesLib.UpdatePriceRule(priceRuleCriteria, priceRuleAction, dicCustomerName), $"Unable to save price rule");
         }
 
         [Authorize]
