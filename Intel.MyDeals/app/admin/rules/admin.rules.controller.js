@@ -580,6 +580,7 @@
                                 }
                             }
                         }
+                        $scope.isBusy = false;
                         vm.validateProduct(false, false, 'NONE');
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
@@ -592,14 +593,14 @@
                         if (rid != 0) {
                             vm.dataSource.filter({ field: "Id", value: vm.rid == 0 ? null : vm.rid });
                         }
-
+                        $scope.isBusy = false;
                     } break;
-                }
-                $scope.isBusy = false;
+                }                
             }, function (response) {
                 $scope.isBusy = false;
                 logger.error("Operation failed");
-            });
+                });
+            $scope.isBusy = false;
         };
 
         vm.DeleteSpreadsheetAutoHeader = function () {
