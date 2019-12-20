@@ -232,6 +232,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
                 x.ActiveStatus = x.IsActive ? "Active" : "Inactive";
+                x.RuleStageStatus = x.RuleStage ? "Approved" : "Pending Approval";
             });
 
             return rtn;

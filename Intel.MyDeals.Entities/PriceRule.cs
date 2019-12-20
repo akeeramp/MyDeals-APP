@@ -126,6 +126,7 @@ namespace Intel.MyDeals.Entities
         public DateTime EndDate { get; set; }
         public string Notes { get; set; }
         public bool RuleStage { get; set; }
+        public string RuleStageStatus { get; set; }
         public Criteria Criterias { get; set; }
         public string CriteriaJson { get; set; }
         public string CriteriaSql { get; set; }

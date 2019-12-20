@@ -517,6 +517,7 @@
                     var updatedRule = response.data;
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId == vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
                     updatedRule.ActiveStatus = updatedRule.IsActive ? "Active" : "Inactive";
+                    updatedRule.RuleStageStatus = updatedRule.RuleStage ? "Approved" : "Pending Approval";
                     vm.Rules.splice(0, 0, updatedRule);
                     $('#productCriteria').hide();
                     vm.isEditmode = false;
@@ -719,6 +720,7 @@
                             } break;
                             case "UPDATE_STAGE_IND": {
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageStatus = isTrue ? "Approved" : "Pending Approval";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
@@ -791,10 +793,12 @@
                     encoded: true
                 },
                 {
-                    field: "RuleStage",
-                    title: "RuleStage",
+                    field: "RuleStageStatus",
+                    title: "Rule Stage",
+                    filterable: { multi: true, search: true },
                     width: "1%",
-                    hidden: true
+                    hidden: true,
+                    template: "<div style='#if(RuleStage == true){#color: green;#} else {#color: red;#}#'>#= RuleStageStatus #</div>"
                 },
                 {
                     field: "ActiveStatus",
