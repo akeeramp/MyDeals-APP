@@ -23,6 +23,9 @@
         vm.ProductCriteria = [];
         vm.isElligibleForApproval = false;
         vm.adminEmailIDs = "";
+        vm.spinnerMessageHeader = "Price Rule";
+        vm.spinnerMessageDescription = "Please wait while we loading page";
+        vm.isBusyShowFunFact = true;
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
                 vm.RuleConfig = response.data;
@@ -31,38 +34,7 @@
             });
             vm.GetRules(0, "GET_RULES");
         }
-
-        $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
-            $timeout(function () {
-                var newState = msg != undefined && msg !== "";
-                if (isShowFunFact == null) { isShowFunFact = false; }
-
-                // if no change in state, simple update the text
-                if ($scope.isBusy === newState) {
-                    $scope.isBusyMsgTitle = msg;
-                    $scope.isBusyMsgDetail = !detail ? "" : detail;
-                    $scope.isBusyType = msgType;
-                    $scope.isBusyShowFunFact = isShowFunFact;
-                    return;
-                }
-
-                $scope.isBusy = newState;
-                if ($scope.isBusy) {
-                    $scope.isBusyMsgTitle = msg;
-                    $scope.isBusyMsgDetail = !detail ? "" : detail;
-                    $scope.isBusyType = msgType;
-                    $scope.isBusyShowFunFact = isShowFunFact;
-                } else {
-                    $timeout(function () {
-                        $scope.isBusyMsgTitle = msg;
-                        $scope.isBusyMsgDetail = !detail ? "" : detail;
-                        $scope.isBusyType = msgType;
-                        $scope.isBusyShowFunFact = isShowFunFact;
-                    }, 500);
-                }
-            });
-        }
-
+        
         vm.openRulesSimulation = function (dataItem) {
             $scope.context = dataItem;
 
@@ -516,20 +488,18 @@
                     }
                     var updatedRule = response.data;
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId == vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
-                    updatedRule.ActiveStatus = updatedRule.IsActive ? "Active" : "Inactive";
-                    updatedRule.RuleStageStatus = updatedRule.RuleStage ? "Approved" : "Pending Approval";
+                    updatedRule.RuleStatusLabel = updatedRule.IsActive ? "Active" : "Inactive";
+                    updatedRule.RuleStageLabel = updatedRule.RuleStage ? "Approved" : "Pending Approval";
+                    updatedRule.RuleAutomationLabel = updatedRule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
                     vm.Rules.splice(0, 0, updatedRule);
                     $('#productCriteria').hide();
                     vm.isEditmode = false;
                     vm.dataSource.read();
-                    $scope.isBusy = false;
                     logger.success("Rule has been updated");
                 } else {
-                    $scope.isBusy = false;
                     kendo.alert("This rule name already exists in another rule.");
                 }
             }, function (response) {
-                $scope.isBusy = false;
                 logger.error("Unable to update the rule");
             });
         };
@@ -545,7 +515,7 @@
         var availableAttrs = [];
 
         vm.GetRules = function (id, actionName) {
-            $scope.setBusy("Price Rule...", "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..", null, true);
+            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 switch (actionName) {
                     case "GET_BY_RULE_ID": {
@@ -581,7 +551,6 @@
                                 }
                             }
                         }
-                        $scope.isBusy = false;
                         vm.validateProduct(false, false, 'NONE');
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
@@ -594,14 +563,11 @@
                         if (rid != 0) {
                             vm.dataSource.filter({ field: "Id", value: vm.rid == 0 ? null : vm.rid });
                         }
-                        $scope.isBusy = false;
                     } break;
-                }                
+                }
             }, function (response) {
-                $scope.isBusy = false;
                 logger.error("Operation failed");
-                });
-            $scope.isBusy = false;
+            });
         };
 
         vm.DeleteSpreadsheetAutoHeader = function () {
@@ -697,7 +663,7 @@
 
         vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
             if (isEnabled && ruleId != null && ruleId > 0) {
-                $scope.setBusy("Price Rule...", "Please wait while we updating the rule..", null, true);
+                vm.spinnerMessageDescription = "Please wait while we updating the rule..";
                 var priceRuleCriteria = { Id: ruleId }
                 switch (strActionName) {
                     case "UPDATE_ACTV_IND": {
@@ -715,17 +681,16 @@
                         switch (strActionName) {
                             case "UPDATE_ACTV_IND": {
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].ActiveStatus = isTrue ? "Active" : "Inactive";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                             } break;
                             case "UPDATE_STAGE_IND": {
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageStatus = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
                         vm.dataSource.read();
-                        $scope.isBusy = false;
                     }
                     else {
                         switch (strActionName) {
@@ -736,7 +701,6 @@
                                 vm.rule.RuleStage = !isTrue;
                             } break;
                         }
-                        $scope.isBusy = false;
                         logger.error("Unable to update rule's indicator");
                     }
                 }, function (response) {
@@ -748,7 +712,6 @@
                             vm.rule.RuleStage = !isTrue;
                         } break;
                     }
-                    $scope.isBusy = false;
                     logger.error("Operation failed");
                 });
             }
@@ -793,23 +756,23 @@
                     encoded: true
                 },
                 {
-                    field: "RuleStageStatus",
+                    field: "RuleStageLabel",
                     title: "Rule Stage",
                     filterable: { multi: true, search: true },
                     width: "1%",
                     hidden: true,
-                    template: "<div style='#if(RuleStage == true){#color: green;#} else {#color: red;#}#'>#= RuleStageStatus #</div>"
+                    template: "<div style='#if(RuleStage == true){#color: green;#} else {#color: red;#}#'>#= RuleStageLabel #</div>"
                 },
                 {
-                    field: "ActiveStatus",
+                    field: "RuleStatusLabel",
                     title: "Rule Status",
                     filterable: { multi: true, search: true },
                     width: "7%",
-                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#= ActiveStatus #</div>"
+                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#= RuleStatusLabel #</div>"
                     //template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
                 },
                 {
-                    field: "IsAutomationIncluded", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
+                    field: "RuleAutomationLabel", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
                     template: "<span ng-if='#= IsAutomationIncluded #'><i class='intelicon-opportunity-target-approved' style=''></i></span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>"
                 },
                 {
@@ -886,14 +849,13 @@
             vm.ProductCriteria = [];
             var tempRange = sheet.range("A1:B200").values().filter(x => !(x[0] == null && x[1] == null));
             if (tempRange.length > 0) {
-                $scope.setBusy("Price Rule...", "Please wait while we reading the products..", null, true);
+                vm.spinnerMessageDescription = "Please wait while we reading the products..";
                 for (var i = 0; i < tempRange.length; i++) {
                     var newProduct = {};
                     newProduct.ProductName = tempRange[i][0] != null ? jQuery.trim(tempRange[i][0]) : '';
                     newProduct.Price = tempRange[i][1] != null ? tempRange[i][1] : 0;
                     vm.ProductCriteria.push(newProduct);
                 }
-                $scope.isBusy = false;
             }
         }
 
@@ -995,7 +957,7 @@
             else {
                 if (strActionName == 'SAVE_AS_DRAFT' && vm.rule.IsAutomationIncluded)
                     vm.generateProductCriteria();
-                $scope.setBusy("Price Rule...", "Please wait while we " + (strActionName == 'SUBMIT' ? 'submitting' : 'saving') + " the rule..", null, true);
+                vm.spinnerMessageDescription = "Please wait while we " + (strActionName == 'SUBMIT' ? 'submitting' : 'saving') + " the rule..";
                 $rootScope.$broadcast('save-criteria');
                 $timeout(function () {
                     var requiredFields = [];
@@ -1044,7 +1006,6 @@
 
                             strAlertMessage += myFunction(duplicateProducts, maxItemsSize, "Duplicate product entries found and highlighted in orange. Please remove duplicates before publishing.");
                         }
-                        $scope.isBusy = false;
                         kendo.alert(jQuery.trim(strAlertMessage));
                     } else {
                         for (var idx = 0; idx < vm.rule.Criteria.length; idx++) {
@@ -1141,8 +1102,8 @@
         vm.LastValidatedProducts = [];
         vm.validateProduct = function (showPopup, isSave, strActionName) {
             vm.generateProductCriteria();
-            $scope.setBusy("Price Rule...", "Please wait while we validating the products..", null, true);
-            if (vm.ProductCriteria.length > 0) {               
+            vm.spinnerMessageDescription ="Please wait while we validating the products..";
+            if (vm.ProductCriteria.length > 0) {
                 vm.LastValidatedProducts = [];
                 for (var i = 0; i < vm.ProductCriteria.length; i++) {
                     if (jQuery.inArray(vm.ProductCriteria[i].ProductName.toLowerCase(), vm.LastValidatedProducts) === -1)
@@ -1156,10 +1117,9 @@
                     });
                     vm.ValidateProductSheet();
                     vm.ValidateDuplicateInvalidProducts();
-                    $scope.isBusy = false;
                     if (isSave) {
                         vm.saveRule(strActionName, false);
-                    }                    
+                    }
                     if (showPopup) {
                         var maxItemsSize = 10;
                         if (invalidProducts.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0) {
@@ -1177,19 +1137,16 @@
                             kendo.alert("<b>All Products are Valid</b></br>");
                     }
                 }, function (response) {
-                    $scope.isBusy = false;
                     logger.error("Operation failed");
                 });
             }
             else {
-                $scope.isBusy = false;
                 if (isSave) {
                     vm.saveRule(strActionName, false);
                 }
                 if (showPopup)
                     kendo.alert("<b>There are no Products to Validate</b></br>");
             }
-            $scope.isBusy = false;
         }
 
         function myFunction(itemsList, maxItemsSize, itemsMessage) {

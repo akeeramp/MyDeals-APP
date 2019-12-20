@@ -231,8 +231,9 @@ namespace Intel.MyDeals.DataLibrary
             rtn.ForEach(x =>
             {
                 x.ChangeDateTimeFormat = x.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
-                x.ActiveStatus = x.IsActive ? "Active" : "Inactive";
-                x.RuleStageStatus = x.RuleStage ? "Approved" : "Pending Approval";
+                x.RuleStatusLabel = x.IsActive ? "Active" : "Inactive";
+                x.RuleStageLabel = x.RuleStage ? "Approved" : "Pending Approval";
+                x.RuleAutomationLabel = x.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
             });
 
             return rtn;

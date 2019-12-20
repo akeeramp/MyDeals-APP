@@ -120,13 +120,14 @@ namespace Intel.MyDeals.Entities
         public string OwnerName { get; set; }
         public int OwnerId { get; set; }
         public bool IsActive { get; set; }
-        public string ActiveStatus { get; set; }
+        public string RuleStatusLabel { get; set; }
         public bool IsAutomationIncluded { get; set; }
+        public string RuleAutomationLabel { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Notes { get; set; }
         public bool RuleStage { get; set; }
-        public string RuleStageStatus { get; set; }
+        public string RuleStageLabel { get; set; }
         public Criteria Criterias { get; set; }
         public string CriteriaJson { get; set; }
         public string CriteriaSql { get; set; }
