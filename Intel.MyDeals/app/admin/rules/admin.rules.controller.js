@@ -988,6 +988,8 @@
             if (isProductValidationRequired && vm.rule.IsAutomationIncluded && (strActionName == 'SUBMIT' || (vm.rule.IsActive && vm.rule.RuleStage)))
                 vm.validateProduct(false, true, strActionName);
             else {
+                if (strActionName == 'SAVE_AS_DRAFT' && vm.rule.IsAutomationIncluded)
+                    vm.generateProductCriteria();
                 $scope.setBusy("Price Rule...", "Please wait while we " + (strActionName == 'SUBMIT' ? 'submitting' : 'saving') + " the rule..", null, true);
                 $rootScope.$broadcast('save-criteria');
                 $timeout(function () {
@@ -1059,7 +1061,7 @@
                             RuleStage: vm.rule.RuleStage,
                             Notes: vm.rule.Notes,
                             Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
-                            ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price > 0 && x.Price !== "") : [],
+                            ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price !== "") : [],
                             OwnerId: vm.rule.OwnerId
                         }
                         vm.UpdatePriceRule(priceRuleCriteria, strActionName);
