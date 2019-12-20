@@ -1136,8 +1136,8 @@
         vm.LastValidatedProducts = [];
         vm.validateProduct = function (showPopup, isSave, strActionName) {
             vm.generateProductCriteria();
-            if (vm.ProductCriteria.length > 0) {
-                $scope.setBusy("Price Rule...", "Please wait while we validating the products..", null, true);
+            $scope.setBusy("Price Rule...", "Please wait while we validating the products..", null, true);
+            if (vm.ProductCriteria.length > 0) {               
                 vm.LastValidatedProducts = [];
                 for (var i = 0; i < vm.ProductCriteria.length; i++) {
                     if (jQuery.inArray(vm.ProductCriteria[i].ProductName.toLowerCase(), vm.LastValidatedProducts) === -1)
@@ -1151,10 +1151,10 @@
                     });
                     vm.ValidateProductSheet();
                     vm.ValidateDuplicateInvalidProducts();
+                    $scope.isBusy = false;
                     if (isSave) {
                         vm.saveRule(strActionName, false);
-                    }
-                    $scope.isBusy = false;
+                    }                    
                     if (showPopup) {
                         var maxItemsSize = 10;
                         if (invalidProducts.length > 0 || invalidPrice.length > 0 || duplicateProducts.length > 0) {
@@ -1177,12 +1177,14 @@
                 });
             }
             else {
+                $scope.isBusy = false;
                 if (isSave) {
                     vm.saveRule(strActionName, false);
                 }
                 if (showPopup)
                     kendo.alert("<b>There are no Products to Validate</b></br>");
             }
+            $scope.isBusy = false;
         }
 
         function myFunction(itemsList, maxItemsSize, itemsMessage) {
