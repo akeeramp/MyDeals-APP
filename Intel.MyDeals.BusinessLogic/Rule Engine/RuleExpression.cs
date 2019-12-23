@@ -129,7 +129,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             return lstProduct.Count > 0 ? string.Concat("(", string.Join(" OR ", lstProduct.Select(x => string.Format("(PRODUCT_FILTER = '{0}' AND ECAP_PRICE >= {1})", x.ProductName, x.Price))), ")") : string.Empty;
         }
 
-        string[] strStringDataTypes = new string[] { "string", "singleselect", "date", "autocomplete", "string_with_in" };
+        string[] strStringDataTypes = new string[] { "string", "singleselect", "date", "autocomplete", "string_with_in", "string_limited", "string_read_only", "singleselect_ext", "singleselect_read_only" };
         string[] strProductFilters = new string[] { "MTRL_ID", "DEAL_PRD_NM", "PCSR_NBR" };
         public string GetSqlExpression(Criteria criteria, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
@@ -162,7 +162,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value))));
                 criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
                     {
-                        x.@operator = "IN";
+                        x.@operator = x.@operator == "!=" ? "NOT IN" : "IN";
                         x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
                     });
                 strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value))));

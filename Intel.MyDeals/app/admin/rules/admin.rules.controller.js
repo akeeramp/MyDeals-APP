@@ -34,7 +34,7 @@
             });
             vm.GetRules(0, "GET_RULES");
         }
-        
+
         vm.openRulesSimulation = function (dataItem) {
             $scope.context = dataItem;
 
@@ -119,6 +119,9 @@
                 }, {
                     "type": "string_with_in",
                     "uiType": "textbox"
+                }, {
+                    "type": "string_limited",
+                    "uiType": "textbox"
                 },
                 {
                     "type": "autocomplete",
@@ -137,10 +140,6 @@
                     "uiType": "numeric"
                 },
                 {
-                    "type": "money_with_limited_op",
-                    "uiType": "numeric"
-                },
-                {
                     "type": "date",
                     "uiType": "datepicker"
                 },
@@ -155,6 +154,14 @@
                 {
                     "type": "singleselect",
                     "uiType": "combobox"
+                },
+                {
+                    "type": "singleselect_ext",
+                    "uiType": "combobox"
+                },
+                {
+                    "type": "singleselect_read_only",
+                    "uiType": "combobox"
                 }
             ],
             "types2operator": [
@@ -164,15 +171,11 @@
                 },
                 {
                     "type": "numericOrPercentage",
-                    "operator": ["=", "<", ">"],
+                    "operator": ["=", "!=", "<", "<=", ">", ">="],
                 },
                 {
                     "type": "money",
                     "operator": ["=", "!=", "<", "<=", ">", ">="]
-                },
-                {
-                    "type": "money_with_limited_op",
-                    "operator": ["=", "<", ">"]
                 },
                 {
                     "type": "date",
@@ -184,15 +187,19 @@
                 },
                 {
                     "type": "string_with_in",
-                    "operator": ["LIKE", "=", "!=", "IN"]
+                    "operator": ["=", "!=", "LIKE", "IN"]
+                },
+                {
+                    "type": "string_limited",
+                    "operator": ["=", "!=", "IN"]
                 },
                 {
                     "type": "autocomplete",
-                    "operator": ["LIKE", "=", "!="]
+                    "operator": ["=", "!=", "IN"]
                 },
                 {
                     "type": "list",
-                    "operator": ["LIKE", "IN", "="]
+                    "operator": ["=", "!="]
                 },
                 {
                     "type": "bool",
@@ -201,6 +208,14 @@
                 {
                     "type": "singleselect",
                     "operator": ["="]
+                },
+                {
+                    "type": "singleselect_read_only",
+                    "operator": ["="]
+                },
+                {
+                    "type": "singleselect_ext",
+                    "operator": ["=", "!="]
                 }
             ]
         };
@@ -268,13 +283,13 @@
             {
                 field: "WIP_DEAL_OBJ_SID",
                 title: "Deal #",
-                type: "number",
+                type: "string_limited",
                 width: 150
             },
             {
                 field: "OBJ_SET_TYPE_CD",
                 title: "Deal Type",
-                type: "singleselect",
+                type: "singleselect_read_only",
                 width: 150,
                 lookupText: "Value",
                 lookupValue: "Value",
@@ -384,7 +399,7 @@
             {
                 field: "PAYOUT_BASED_ON",
                 title: "Payout Based On",
-                type: "singleselect",
+                type: "singleselect_ext",
                 width: 150,
                 lookupText: "DROP_DOWN",
                 lookupValue: "DROP_DOWN",
@@ -399,7 +414,7 @@
             {
                 field: "ECAP_PRICE",
                 title: "ECAP (Price)",
-                type: "money_with_limited_op",
+                type: "money",
                 width: 150,
                 dimKey: 20,
                 format: "{0:c}"
@@ -1102,7 +1117,7 @@
         vm.LastValidatedProducts = [];
         vm.validateProduct = function (showPopup, isSave, strActionName) {
             vm.generateProductCriteria();
-            vm.spinnerMessageDescription ="Please wait while we validating the products..";
+            vm.spinnerMessageDescription = "Please wait while we validating the products..";
             if (vm.ProductCriteria.length > 0) {
                 vm.LastValidatedProducts = [];
                 for (var i = 0; i < vm.ProductCriteria.length; i++) {
