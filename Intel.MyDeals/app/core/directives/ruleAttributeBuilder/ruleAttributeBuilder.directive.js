@@ -126,11 +126,6 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
             }
 
             $scope.drawValueControl = function (el, scope) {
-                var html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
-                var helpMsg = {};
-                helpMsg["IN"] = 'Enter comma separated values:  <i>example:  500, 600, 700</i>';
-                helpMsg["string"] = 'Use <i style="margin-right: 3px;">*</i> for wildcard searches <i>example:  i7-5*</i>';
-
                 if (scope.dataItem.field === "") return;
 
                 var field = $linq.Enumerable().From(scope.attributeSettings)
@@ -140,6 +135,13 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
 
                 var fieldType = field.type;
                 var fieldValue = field.field;
+                var operator = scope.dataItem.operator;
+                var html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
+                var helpMsg = {};
+                helpMsg["IN"] = 'Enter comma separated values:  <i>example:  500, 600, 700</i>';
+                helpMsg["string_with_in"] = operator == "LIKE" ? '<i>Enter comma separated values: <i>example: Dell, Acer, Samsung</i><br/>Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Del*, Ace*, Sam*</i>' : 'Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Sam*</i>';
+                helpMsg["string"] = helpMsg["string_limited"] = 'Use <i style="margin-right: 3px;">*</i> for wildcard searches <i>example:  i7-5*</i>';
+
                 if (scope.dataItem.operator === "IN") {
                     html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     if (helpMsg["IN"] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg["IN"] + '</div>';
@@ -148,7 +150,6 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                         case "string":
                         case "string_with_in":
                         case "string_limited":
-                        case "string_read_only":
                             {
                                 html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                             } break;
