@@ -139,7 +139,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                 var html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
                 var helpMsg = {};
                 helpMsg["IN"] = 'Enter comma separated values:  <i>example:  500, 600, 700</i>';
-                helpMsg["string_with_in"] = operator == "LIKE" ? '<i>Enter comma separated values: <i>example: Dell, Acer, Samsung</i><br/>Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Del*, Ace*, Sam*</i>' : 'Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Sam*</i>';
+                helpMsg["string_with_in"] = operator == "LIKE" ? 'Enter comma separated values: <i>example: Dell, Acer, Samsung</i><br/>Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Del*, Ace*, Sam*</i>' : 'Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Sam*</i>';
                 helpMsg["string"] = helpMsg["string_limited"] = 'Use <i style="margin-right: 3px;">*</i> for wildcard searches <i>example:  i7-5*</i>';
 
                 if (scope.dataItem.operator === "IN") {

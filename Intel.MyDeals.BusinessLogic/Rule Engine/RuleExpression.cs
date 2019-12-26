@@ -166,7 +166,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 criteria.Rules.Where(x => x.type == "numericOrPercentage").ToList().ForEach(x => { x.field = string.Concat(x.field, (x.valueType == null || x.valueType.value == "%" ? "_PRCNT" : x.valueType.value == "$" ? "_DLLR" : string.Empty)); });
                 criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
                 criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y.Trim(), "'"))); });
-                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? (x.value.Trim().EndsWith("*") ? string.Concat("'", x.value.Trim().Remove(x.value.Trim().Length - 1, 1), "%'") : string.Concat("'%", x.value, "%'")) : (x.@operator == "IN" ? x.value : string.Concat("'", x.value, "'")); });
+                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? (x.value.Trim() != "*" &&  x.value.Trim().EndsWith("*") ? string.Concat("'", x.value.Trim().Remove(x.value.Trim().Length - 1, 1), "%'") : string.Concat("'%", x.value, "%'")) : (x.@operator == "IN" ? x.value : string.Concat("'", x.value, "'")); });
                 criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
                 strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value.Trim()))));
             }
@@ -194,7 +194,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                                               @operator = x.@operator
                                           }).ToList();
                     if (lstMulti.Count > 0)
-                        strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND (" : "(", string.Join(" OR ", lstMulti.Select(y => string.Format("({0} {1} {2})", y.field, y.@operator, y.value.Trim().EndsWith("*") ? string.Concat("'", y.value.Trim().Remove(y.value.Trim().Length - 1, 1), "%'") : string.Concat("'%", y.value.Trim(), "%'")))), ")");
+                        strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND (" : "(", string.Join(" OR ", lstMulti.Select(y => string.Format("({0} {1} {2})", y.field, y.@operator, y.value.Trim()!="*" && y.value.Trim().EndsWith("*") ? string.Concat("'", y.value.Trim().Remove(y.value.Trim().Length - 1, 1), "%'") : string.Concat("'%", y.value.Trim(), "%'")))), ")");
                 });
             }
             strSqlCriteria = strSqlCriteria.Trim().EndsWith("AND") ? strSqlCriteria.Trim().Remove(strSqlCriteria.Trim().LastIndexOf("AND"), 3).Trim() : strSqlCriteria.Trim();
