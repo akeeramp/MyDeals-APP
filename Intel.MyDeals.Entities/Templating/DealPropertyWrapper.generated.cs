@@ -521,8 +521,8 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
-		};
-		public static MyDealsAttribute COMPETITIVE_PRICE = new MyDealsAttribute()
+		};        
+        public static MyDealsAttribute COMPETITIVE_PRICE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "COMPETITIVE_PRICE",
 			ATRB_DESC = "Competitive Price Textbox",
@@ -586,7 +586,7 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
-		public static MyDealsAttribute COST_TEST_FAIL_OVERRIDE = new MyDealsAttribute()
+        public static MyDealsAttribute COST_TEST_FAIL_OVERRIDE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "COST_TEST_FAIL_OVERRIDE",
 			ATRB_DESC = "Deal Cost Test Fail Override",
@@ -3994,7 +3994,23 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CMNT_HIST"
 		};
-		public static MyDealsAttribute TENDER_PUBLISHED = new MyDealsAttribute()
+        public static MyDealsAttribute EXCLUDE_AUTOMATION = new MyDealsAttribute()
+        {
+            ATRB_COL_NM = "EXCLUDE_AUTOMATION",
+            ATRB_DESC = "Exclude Automation from Price Rule",
+            ATRB_LBL = "Exclude Automation",
+            ATRB_MAX_LEN = 1,
+            ATRB_SID = 3008,
+            DATA_TYPE_CD = "BIT",
+            DIM_CD = "DEAL",
+            DIM_SID = 3,
+            DOT_NET_DATA_TYPE = "System.Boolean",
+            FRMT_MSK = "{0}",
+            MJR_MNR_CHG = "MINOR",
+            TGT_COL_TYPE = "INT",
+            UI_TYPE_CD = "CheckBox"
+        };
+        public static MyDealsAttribute TENDER_PUBLISHED = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "TENDER_PUBLISHED",
 			ATRB_DESC = "Is Tender Contract Published",

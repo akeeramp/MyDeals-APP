@@ -8041,44 +8041,58 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
-		///<summary>
-		/// ID: 41037365
-		/// Modified: 7/10/2019 3:22:01 PM
-		/// Parameters: 2
-		///</summary>
-		public partial class PR_MYDL_PUBL_TNDR : SP {
-			public PR_MYDL_PUBL_TNDR() {
-				DatabaseName = "MyDeals";
-				StoredProdedureName = "[dbo].[PR_MYDL_PUBL_TNDR]";
-			}
+        ///<summary>
+        /// ID: 41037365
+        /// Modified: 7/10/2019 3:22:01 PM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_PUBL_TNDR : SP
+        {
+            public PR_MYDL_PUBL_TNDR()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_PUBL_TNDR]";
+            }
 
-			///<summary>
-			/// DataType: int
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
-			public Int32 OBJ_SID {
-				set { SetParmeter("OBJ_SID", value); }
-				get { return (Int32)GetParameter("OBJ_SID"); }
-			}
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 OBJ_SID
+            {
+                set { SetParmeter("OBJ_SID", value); }
+                get { return (Int32)GetParameter("OBJ_SID"); }
+            }
 
-			///<summary>
-			/// DataType: int
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-			public Int32 USER_WWID {
-				set { SetParmeter("USER_WWID", value); }
-				get { return (Int32)GetParameter("USER_WWID"); }
-			}
-		}
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 USER_WWID
+            {
+                set { SetParmeter("USER_WWID", value); }
+                get { return (Int32)GetParameter("USER_WWID"); }
+            }
 
-		///<summary>
-		/// ID: 153037764
-		/// Modified: 9/24/2018 3:29:11 AM
-		/// Parameters: 0
-		///</summary>
-		public partial class PR_MYDL_PUBL_TNDR_TST : SP {
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase in_exclude_ids
+            {
+                set { SetParmeter("in_exclude_ids", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("in_exclude_ids"); }
+            }
+        }
+        ///<summary>
+        /// ID: 153037764
+        /// Modified: 9/24/2018 3:29:11 AM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_PUBL_TNDR_TST : SP {
 			public PR_MYDL_PUBL_TNDR_TST() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_PUBL_TNDR_TST]";

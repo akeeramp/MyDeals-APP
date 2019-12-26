@@ -129,6 +129,9 @@
             },
             "templates": {
                 "ECAP": {
+                    "EXCLUDE_AUTOMATION": {
+                        "Groups": ["Deal Info"]
+                    },
                     "tools": {
                         "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "Payment"]
                     },
@@ -176,7 +179,7 @@
                     },
                     "COMPETITIVE_PRICE": {
                         "Groups": ["Deal Info"]
-                    },
+                    },                    
                     "EXPIRE_FLG": {
                         "Groups": ["All"]
                     },
@@ -723,6 +726,9 @@
                     }
                 },
                 "KIT": {
+                    "EXCLUDE_AUTOMATION": {
+                        "Groups": ["Deal Info"]
+                    },
                     "tools": {
                         "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info", "SubKit", "Payment"]
                     },
@@ -988,7 +994,7 @@
             },
             "requiredForTender": ["VOLUME", "END_CUSTOMER_RETAIL"],
             "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
-            "hideForNonTender": ["MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
-            "hideForStandardDealEditor": ["tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
+            "hideForNonTender": ["EXCLUDE_AUTOMATION","MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
+            "hideForStandardDealEditor": ["EXCLUDE_AUTOMATION","tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
         });
 })();

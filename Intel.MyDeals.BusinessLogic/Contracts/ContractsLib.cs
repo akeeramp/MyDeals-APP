@@ -858,10 +858,10 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
 
-        public bool PublishTenderDeals(int CONTRACT_SID)
+        public bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList)
         {
             OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            return opdc.PublishTenderDeals(CONTRACT_SID);
+            return opdc.PublishTenderDeals(CONTRACT_SID, excludeList);
         }
     }
 }

@@ -2379,6 +2379,24 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
+                Id = 90012,
+                AtrbCd = AttributeCodes.EXCLUDE_AUTOMATION,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                DataType = "object",
+                Label = "Exclude Automation",
+                Width = 120,
+                Template = "#=gridUtils.uiControlExcludeAutomation(data)#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/EXCLUDE_AUTOMATION/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,                
+                ExcelTemplate = "#=EXCLUDE_AUTOMATION#",
+                BypassExport = true
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
                 Id = 3651,
                 AtrbCd = "MISSING_CAP_COST_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },

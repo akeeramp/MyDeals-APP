@@ -172,13 +172,13 @@
 </form>
 
 <script id="grid_toolbar_addrulebutton" type="text/x-kendo-template">
-    <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
+    <a ng-if="!vm.toolKitHidden" role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
         <span class="k-icon k-i-plus" style="color: white !important"></span>Add New Rule
     </a>
-    <a ng-if="vm.rid != 0" role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.removeFilter()">
+    <a ng-if="vm.rid != 0 && !vm.toolKitHidden" role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.removeFilter()">
         <span class="k-icon intelicon-cancel-filter-solid" style="color: white !important"></span>Remove Filter
     </a>
-    <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
+    <a ng-if="!vm.toolKitHidden" role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
         <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export to Excel
     </a>
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.openRulesSimulation('test')">

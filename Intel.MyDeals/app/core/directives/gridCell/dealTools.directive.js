@@ -14,7 +14,8 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             isHistoryEnabled: '<?',
             isQuoteLetterEnabled: '<?',
             isDeleteEnabled: '<?',
-            isSplitEnabled: '<?'
+            isSplitEnabled: '<?',
+            isPublishable: '<?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',

@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 8/14/2019 4:47:49 PM
-On: MHTIPPIN-MOBL
+File Updated: 21-12-2019 12:34:00
+On: SAURAVKU-MOBL1
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -865,6 +865,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string EXCLD_COST_TST = "EXCLD_COST_TST";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 90012
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string EXCLUDE_AUTOMATION = "EXCLUDE_AUTOMATION";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2657,6 +2666,7 @@ namespace Intel.MyDeals.Entities {
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
 		public const string COST_TST_MIGRATION = "COST_TST_MIGRATION";
 		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
+		public const string CUSTOMER_ADMINS_LIST = "CUSTOMER_ADMINS_LIST";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string DCS_DEAL_NOFILTER = "DCS_DEAL_NOFILTER";
@@ -2696,7 +2706,10 @@ namespace Intel.MyDeals.Entities {
 		public const string PGM_NRE_OEM_START_DEAL = "PGM_NRE_OEM_START_DEAL";
 		public const string PGM_NRE_OEM_START_PTR = "PGM_NRE_OEM_START_PTR";
 		public const string PRC_GRP_CD_IGNR = "PRC_GRP_CD_IGNR";
+		public const string PRC_RULE_CUT_OFF_DEAL = "PRC_RULE_CUT_OFF_DEAL";
+		public const string PRC_RULE_EMAIL = "PRC_RULE_EMAIL";
 		public const string PRD_CST_TST_ATRB_MIGRATION = "PRD_CST_TST_ATRB_MIGRATION";
+		public const string PREPROD_USERS_LIST = "PREPROD_USERS_LIST";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
 		public const string RECYCLE_CACHE_COUNT_NODE1 = "RECYCLE_CACHE_COUNT_NODE1";

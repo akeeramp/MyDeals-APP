@@ -185,9 +185,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("PublishTenderContract/{OBJ_SID}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public bool PublishTenderContract(int OBJ_SID)
+        public bool PublishTenderContract(int OBJ_SID, List<int> excludeList)
         {
-            return SafeExecutor(() => _contractsLib.PublishTenderDeals(OBJ_SID)
+            return SafeExecutor(() => _contractsLib.PublishTenderDeals(OBJ_SID, excludeList)
                 , "Unable to save the Contract"
             );
 

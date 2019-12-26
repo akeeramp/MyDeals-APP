@@ -1,88 +1,173 @@
 ﻿
 <div class="dealTools">
+    <div ng-if="isPublishable != true">
+        <div class="dirtyTip" ng-show="dataItem._dirty" title="This deal has been modified"></div>
 
-    <div class="dirtyTip" ng-show="dataItem._dirty" title="This deal has been modified"></div>
+        <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
 
-    <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
-
-    <!-- Checkbox -->
-    <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
-        <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
-    </div>
-
-    <!-- Split group icon -->
-    <div ng-if="isSplitEnabled" class='fl'>
-        <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
-            <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
+        <!-- Checkbox -->
+        <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
+            <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
         </div>
-        <div class='fl md-icon-disabled rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
-            <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
-               title="You cannot split this group while it is being re-dealed."></i>
-        </div>
-    </div>
-
-    <!-- Notes icon -->
-    <div ng-if="isCommentEnabled" class='fl'>
-        <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
-            <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
+        
+        <!-- Split group icon -->
+        <div ng-if="isSplitEnabled" class='fl'>
+            <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
+                <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()" title="Split the Group"></i>
+            </div>
+            <div class='fl md-icon-disabled rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
+                <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
+                   title="You cannot split this group while it is being re-dealed."></i>
+            </div>
         </div>
 
-        <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
-            <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
+        <!-- Notes icon -->
+        <div ng-if="isCommentEnabled" class='fl'>
+            <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
+                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
+            </div>
+
+            <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
+                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
+            </div>
+        </div>
+
+        <!-- History icon -->
+        <div class='fl md-icon' ng-if="isHistoryEnabled">
+            <i class="intelicon-history" ng-attr-title="View Deal History" style="font-size: 20px !important;" title="Click to view deal history" ng-click="clkHistoryIcon(dataItem)"></i>
+        </div>
+
+        <!-- Attachments icon -->
+        <div class='fl md-icon' ng-if="isFileAttachmentEnabled">
+            <i ng-class="getFileIcon(dataItem)" ng-style="getFileStyle(dataItem)" ng-attr-title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkFileIcon(dataItem)"></i>
+        </div>
+
+        <!-- Quote Letter icon -->
+        <div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
+            <i ng-if="showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+        </div>
+        <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
+            <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
+        </div>
+
+        <!-- Cancel/Rollback/Delete icon -->
+        <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}})-->
+        <div class='fl md-icon' ng-if="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+            <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+               title="Unable to delete this deal at this stage"></i>
+            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER !== '1'" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to delete this deal" ng-click="openDeleteDialog()"></i>
+            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to Cancel this deal" ng-click="openCancelDialog()"></i>
+
+            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Hold' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; color: #e7e7e8;"
+               title="Remove deal from Hold before Rollback is allowed"></i>
+            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && (dataItem.WF_STG_CD !== 'Cancelled' && dataItem.WF_STG_CD !== 'Hold') && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to Rollback this deal" ng-click="openRollBackDialog()"></i>
+        </div>
+        <div class='fl md-icon-disabled' ng-if="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
+            <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+               title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
+        </div>
+
+        <!-- Hold icon -->
+        <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false">
+            <i ng-class='getHoldIcon(dataItem)' ng-style="getHoldStyle(dataItem)" ng-attr-title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkHoldIcon(dataItem)"></i>
+        </div>
+        <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1) && isTenderContract == false ">
+            <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
+               title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
+        </div>
+
+
+
+        <div class='clearboth'></div>
+    </div>
+    <div ng-if="isPublishable == true">
+        <!-- Checkbox -->
+        <div class='fl'>
+            <input type="checkbox" ng-model="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
         </div>
     </div>
-
-    <!-- History icon -->
-    <div class='fl md-icon' ng-if="isHistoryEnabled">
-        <i class="intelicon-history" ng-attr-title="View Deal History" style="font-size: 20px !important;" title="Click to view deal history" ng-click="clkHistoryIcon(dataItem)"></i>
-    </div>
-
-    <!-- Attachments icon -->
-    <div class='fl md-icon' ng-if="isFileAttachmentEnabled">
-        <i ng-class="getFileIcon(dataItem)" ng-style="getFileStyle(dataItem)" ng-attr-title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkFileIcon(dataItem)"></i>
-    </div>
-
-    <!-- Quote Letter icon -->
-    <div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
-        <i ng-if="showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
-    </div>
-    <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
-        <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
-    </div>
-
-    <!-- Cancel/Rollback/Delete icon -->
-    <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}})-->
-    <div class='fl md-icon' ng-if="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-        <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
-           title="Unable to delete this deal at this stage"></i>
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER !== '1'" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
-           title="Click to delete this deal" ng-click="openDeleteDialog()"></i>
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
-           title="Click to Cancel this deal" ng-click="openCancelDialog()"></i>
-
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Hold' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; color: #e7e7e8;"
-           title="Remove deal from Hold before Rollback is allowed"></i>
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && (dataItem.WF_STG_CD !== 'Cancelled' && dataItem.WF_STG_CD !== 'Hold') && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
-           title="Click to Rollback this deal" ng-click="openRollBackDialog()"></i>
-    </div>
-    <div class='fl md-icon-disabled' ng-if="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
-        <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
-           title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
-    </div>
-
-    <!-- Hold icon -->
-    <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false">
-        <i ng-class='getHoldIcon(dataItem)' ng-style="getHoldStyle(dataItem)" ng-attr-title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkHoldIcon(dataItem)"></i>
-    </div>
-    <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1) && isTenderContract == false ">
-        <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
-           title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
-    </div>
-	
-	
-
-    <div class='clearboth'></div>
 </div>
 
 <div id="notesDialog"></div>
 <div id="fileDialog"></div>
+<style>
+    .dealTools .md-icon {
+        padding: 4px 0 0 5px;
+    }
+
+        .dealTools .md-icon i {
+            color: #00AEEF;
+        }
+
+            .dealTools .md-icon i:hover {
+                color: #003C71 !important;
+            }
+
+    .dealTools .md-icon-disabled {
+        padding: 4px 2px 0 1px;
+    }
+
+        .dealTools .md-icon-disabled i {
+            color: #00AEEF;
+        }
+
+    .dealTools input[type=radio].with-font,
+    .dealTools input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+        .dealTools input[type=radio].with-font + label:before,
+        .dealTools input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 20px;
+            letter-spacing: 10px;
+            color: #00AEEF;
+            margin-left: 10px;
+        }
+
+        .dealTools input[type=radio].with-font:hover + label:before,
+        .dealTools input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
+        }
+
+        .dealTools input[type=radio].with-font.disabled + label:before,
+        .dealTools input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
+        .dealTools input[type=radio].with-font:checked + label:before,
+        .dealTools input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #C4D600;
+            margin-left: 10px;
+        }
+
+        .dealTools input[type=radio].with-font:focus + label:before,
+        .dealTools input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+            color: #00AEEF;
+        }
+
+        .dealTools input[type=radio].with-font:checked:focus + label:before,
+        .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+            font-weight: bold;
+            color: #C4D600;
+        }
+</style>
+

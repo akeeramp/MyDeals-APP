@@ -509,10 +509,23 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isChecked = document.getElementById('chkDealTools').checked;
                 var data = $scope.contractDs.view();
                 for (var i = 0; i < data.length; i++) {
-                    data[i].isLinked = isChecked;
+                    data[i].isLinked = isChecked;                    
                 }
             }
-
+            $scope.excludeAllItems = function () {
+                var isChecked = document.getElementById('chkDealTools').checked;
+                var data = $scope.contractDs.view();
+                for (var i = 0; i < data.length; i++) {
+                    data[i].EXCLUDE_AUTOMATION = isChecked;
+                    data[i].dirty = true;
+                }
+                $scope.contractDs.sync();
+                $scope.root.selectAllExclusion();
+            }
+            //Call contract.controller.js => addExclusionList()
+            $scope.addExclusionList = function (dataItem) {
+                $scope.root.addExclusionList(dataItem);                
+            }
             $scope.clickPin = function (e, grpName) {
                 var el = $(e.currentTarget);
                 var isPinned;
@@ -1474,7 +1487,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 $(el).appendTo(container);
             }
-
             $scope.bidActnsEditor = function (container, options) {
                 var el = "";
                 var approveActions = [];
@@ -2869,7 +2881,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.$on('fireSaveAndValidateGrid', function (event, args) {
                 $scope.saveAndValidateGrid();
             });
-
+            
             $scope.saveAndValidateGrid = function () {
                 if (!$scope._dirty) return;
 

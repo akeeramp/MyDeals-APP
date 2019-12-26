@@ -19,7 +19,7 @@
             $scope.MEETCOMP_TEST_RESULT = "";
             $scope.COST_TEST_RESULT = "";
         }
-
+        
         $scope.selectedTAB = 'PTR'; // Tender Deals
         $scope._tabDetails = []; // Tender Deals
         $scope.templates = $scope.templates || templateData.data;
@@ -4409,7 +4409,7 @@
             }
         }
 
-        $scope.validateWipDeals = function (callback) {
+        $scope.validateWipDeals = function (callback) {            
             $scope.saveEntireContractBase($state.current.name, true, true, null, null, null, callback);
         }
 
@@ -4804,10 +4804,27 @@
             if (angular.isFunction($scope[_actionName]) && isFired)
                 $scope[_actionName]();
         }
-
+        $scope.exlusionList = [];
+        $scope.addExclusionList = function (dataItem) {            
+            if ($scope.exlusionList.indexOf(dataItem.id) > -1) {
+                $scope.exlusionList.splice($scope.exlusionList.indexOf(dataItem.id), 1);
+            } else {
+                $scope.exlusionList.push(dataItem.id);
+            }
+        }
+        $scope.selectAllExclusion = function (mode) {
+            var isChecked = document.getElementById('chkDealTools').checked;
+            $scope.exlusionList = [];
+            if (isChecked) {
+                for (var i = 0; i < $scope.wipData.length; i++) {
+                    $scope.exlusionList.push($scope.wipData[i].DC_ID);
+                }
+            }                        
+        }
         $scope.publishTenderDeal = function () {
             $scope.setBusy("Publishing deals", "Converting into individual deals. Then we will redirect you to Tender Dashboard.");
-            objsetService.publishTenderDeals($scope.contractData.DC_ID).then(
+            //return;
+            objsetService.publishTenderDeals($scope.contractData.DC_ID, $scope.exlusionList).then(
                 function (data) {
 
                     if (data) {
@@ -4832,7 +4849,7 @@
                 }
             );
         }
-
+        
         $scope.loadPublishGrid = function () {
             // Generates options that kendo's html directives will use
             var root = $scope;	// Access to parent scope
@@ -4843,14 +4860,14 @@
             $scope.msg = "Loading Deals";
             function initGrid(data) {
 
-                $timeout(function () {
+                $timeout(function () {                    
                     var order = 0;
                     var dealTypes = [
                         { dealType: $scope.curPricingTable.OBJ_SET_TYPE_CD, name: $scope.curPricingTable.OBJ_SET_TYPE_CD },
 
                     ];
                     var show = [
-                        "DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
+                        "EXCLUDE_AUTOMATION","DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
                         "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE","DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
                         "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON",
@@ -4881,6 +4898,10 @@
                     var hasDeals = [];
                     for (var x = 0; x < data.length; x++) {
                         if (hasDeals.indexOf(data[x].OBJ_SET_TYPE_CD) < 0) hasDeals.push(data[x].OBJ_SET_TYPE_CD);
+                        //Checking Exclude Automation Presence
+                        if (!data[x].EXCLUDE_AUTOMATION) {
+                            data[x]["EXCLUDE_AUTOMATION"] = false;
+                        }
                     }
 
                     for (var d = 0; d < dealTypes.length; d++) {
@@ -4889,6 +4910,34 @@
                             //root.wipOptions.default.groups.push({ "name": dealType.name, "order": order++ });
 
                             var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[dealType.dealType];
+                            if (wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION') > 0) {
+                                wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'),1)
+                                
+                            }
+                            if (window.usrRole === "GA") {
+                                wipTemplate.columns.unshift({
+                                    field: "EXCLUDE_AUTOMATION",
+                                    title: "Exclude Automation",
+                                    width: 110,
+                                    template: "<div class='dealTools'><div class='fl' ><input type='checkbox' ng-model='dataItem.EXCLUDE_AUTOMATION' class= 'grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}' id = 'lnkChk_{{dataItem.DC_PARENT_ID}}' /> <label for='lnkChk_{{dataItem.DC_PARENT_ID}}' style='margin: 10px 0 0 10px;' title='Check to Exclude From Automated Rule' ng-click='addExclusionList(dataItem)'></label></div ></div>",
+                                    //< div > <input type='checkbox' ng-model='dataItem.EXCLUDE_AUTOMATION'></input></div> ",
+                                    bypassExport: true,
+                                    hidden: false,
+                                    uiType: "CheckBox",
+                                    isDimKey: false,
+                                    isRequired: false,
+                                    sortable: false,
+                                    filterable: false,
+                                    headerTemplate: "<input type='checkbox' ng-click='excludeAllItems()' class='with-font' id='chkDealTools' /><label id='lblExclAutoHeader' for='chkDealTools' style='margin-left: 20px;margin-top: -70px; '>Exclude Automation</label>",
+                                    mjrMnrChg: "MINOR",
+                                    lookupUrl: "",
+                                    lookupText: "",
+                                    lookupValue: "",
+                                    locked: false,
+                                    lockable: false
+                                });
+                            }
+                            
                             wipTemplate.columns.push({
                                 bypassExport: false,
                                 field: "NOTES",

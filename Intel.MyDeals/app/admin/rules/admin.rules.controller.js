@@ -26,6 +26,7 @@
         vm.spinnerMessageHeader = "Price Rule";
         vm.spinnerMessageDescription = "Please wait while we loading page";
         vm.isBusyShowFunFact = true;
+        vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
                 vm.RuleConfig = response.data;
@@ -67,6 +68,21 @@
                     vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
                 }
             });
+            if (window.usrRole != 'DA') {
+                constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
+                    if (!!data.data) {
+                        var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                        vm.toolKitHidden = prcAccess.indexOf(window.usrRole) > -1;
+                        if (vm.toolKitHidden) {
+                            $scope.init();
+                        } else {
+                            document.location.href = "/Dashboard#/portal";
+                        }
+                        
+                    }
+                });
+            }
+            
         }
 
         $scope.operatorSettings = {
@@ -478,7 +494,7 @@
         ];
 
         vm.editRule = function (id) {
-            vm.GetRules(id, "GET_BY_RULE_ID");
+            vm.GetRules(id, "GET_BY_RULE_ID");                      
         }
 
         vm.copyRule = function (id) {
@@ -731,7 +747,7 @@
                 });
             }
         }
-
+        
         vm.gridOptions = {
             toolbar: [
                 { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
@@ -744,7 +760,7 @@
             scrollable: true,
             columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
-            filter: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },            
             pageable: {
                 refresh: true,
                 pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
@@ -759,13 +775,14 @@
                     + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
                     + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
                     + "<i ng-if='(vm.isElligibleForApproval && #= IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
-                    + "</div>"
+                        + "</div>",
+                    hidden: vm.toolKitHidden
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 {
                     title: "Name",
                     field: "Name",
-                    template: "<div><a class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'><span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span></a></div>",
+                    template: "<div ng-if='vm.toolKitHidden'> #= Name #</div><div ng-if='!vm.toolKitHidden'><a  class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'><span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span></a></div>",
                     width: "20%",
                     filterable: { multi: true, search: true },
                     encoded: true
@@ -1223,6 +1240,9 @@
         }
 
         $scope.getConstant();
-        $scope.init();
+        if (window.usrRole == 'DA') {
+            $scope.init();
+        }
+        
     }
 })();

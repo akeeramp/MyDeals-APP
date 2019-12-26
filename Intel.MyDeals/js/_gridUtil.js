@@ -195,6 +195,26 @@ gridUtils.lockedCell = function (e) {
     return false;
 }
 
+gridUtils.uiControlExcludeAutomation = function (dataItem) {
+    var tmplt = '';
+    //JunkYard: Remove After Datapop Security Setup
+    if (dataItem.EXCLUDE_AUTOMATION == 'Yes' && (dataItem.OBJ_SET_TYPE_CD == 'ECAP' || dataItem.OBJ_SET_TYPE_CD == 'KIT') && dataItem.REBATE_TYPE == 'TENDER' && dataItem.PS_WF_STG_CD == "Requested" && window.usrRole == 'GA') {
+        dataItem._behaviors.isReadOnly["EXCLUDE_AUTOMATION"] = false;
+    } else {
+        dataItem._behaviors.isReadOnly["EXCLUDE_AUTOMATION"] = true;
+    }
+    ///JunkYard Complete///
+    if (dataItem.EXCLUDE_AUTOMATION == 'Yes') {
+        tmplt = '<div class="text-center uiControlDiv" ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.EXCLUDE_AUTOMATION}" title="Excluded From Automated rule"><div class="vert-center">Yes</div></div>';
+        //tmplt = '<div class="text-center uiControlDiv isReadOnlyCell" title="Excluded From Automated rule"><div class="vert-center"><i class="intelicon-check-box isReadOnlyCell" style="font-size:20px !important; color:#ed1c24; font-weight:600"></i></div></div>';
+    }else if (dataItem.EXCLUDE_AUTOMATION == 'No') {
+        tmplt = '<div class="text-center uiControlDiv" ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.EXCLUDE_AUTOMATION}"  title="Excluded From Automated rule"><div class="vert-center">No</div></div>';
+    }else {
+        tmplt = '<div class="text-center uiControlDiv" ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.EXCLUDE_AUTOMATION}"  title="Excluded From Automated rule"></div>';
+    }
+    return tmplt;
+}
+
 gridUtils.uiParentControlWrapper = function (dataItem) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
     tmplt += '    <div class="ng-binding vert-center" ng-bind="showStage(dataItem)"></div>';    //note: opGrid's showStage() calls gridUtils.stgFullTitleChar() in this file

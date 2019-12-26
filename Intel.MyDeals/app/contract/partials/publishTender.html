@@ -9,7 +9,7 @@
 							<div class="definePublish">
 								Publishing will separate the deals entered in the table below so that they can be individually approved. 							
 							</div>
-							
+                            
                             <div>                                
                                 <button ng-if="C_CREATE_CONTRACT" class="btn btn-primary prdBtn" ng-click="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
                             </div>
@@ -25,14 +25,96 @@
 
 
 <style>
-.definePublish{font-size: 12px;
-    margin-left: 30px;
-    width: 600px;
-    text-align: left;
-    font-weight: 600;
-    font-style: italic;
-	float: left;
-}
+    .dealTools .md-icon {
+        padding: 4px 0 0 5px;
+    }
+
+        .dealTools .md-icon i {
+            color: #00AEEF;
+        }
+
+            .dealTools .md-icon i:hover {
+                color: #003C71 !important;
+            }
+
+    .dealTools .md-icon-disabled {
+        padding: 4px 2px 0 1px;
+    }
+
+        .dealTools .md-icon-disabled i {
+            color: #00AEEF;
+        }
+
+    .dealTools input[type=radio].with-font,
+    .dealTools input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+        .dealTools input[type=radio].with-font + label:before,
+        .dealTools input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 20px;
+            letter-spacing: 10px;
+            color: #00AEEF;
+            margin-left: 10px;
+        }
+
+        .dealTools input[type=radio].with-font:hover + label:before,
+        .dealTools input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
+        }
+
+        .dealTools input[type=radio].with-font.disabled + label:before,
+        .dealTools input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
+        .dealTools input[type=radio].with-font:checked + label:before,
+        .dealTools input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #C4D600;
+            margin-left: 10px;
+        }
+
+        .dealTools input[type=radio].with-font:focus + label:before,
+        .dealTools input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+            color: #00AEEF;
+        }
+
+        .dealTools input[type=radio].with-font:checked:focus + label:before,
+        .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+            font-weight: bold;
+            color: #C4D600;
+        }
+
+    .btn-save-pub {
+        background-color: #00aeef;
+        font-size: 16px;
+        border: 1px solid #0071c5;
+    }
+    .definePublish {
+        font-size: 12px;
+        margin-left: 30px;
+        width: 600px;
+        text-align: left;
+        font-weight: 600;
+        font-style: italic;
+        float: left;
+    }
 .isReadOnlyCell{background: transparent !important;}
 
 .opUiContainer.md.k-grid td {

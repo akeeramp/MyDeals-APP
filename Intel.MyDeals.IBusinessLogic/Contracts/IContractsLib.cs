@@ -41,6 +41,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool IsDuplicateContractTitle(int dcId, string title);       
 
-        bool PublishTenderDeals(int CONTRACT_SID);
+        bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList);
     }
 }
