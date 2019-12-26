@@ -323,7 +323,7 @@
             {
                 field: "END_CUSTOMER_RETAIL",
                 title: "End Customer",
-                type: "string",
+                type: "string_with_in",
                 width: 150
             },
             {

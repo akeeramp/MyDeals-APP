@@ -59,7 +59,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 if (!strJson.Contains("rule"))
                     strJson = string.Concat("{\"rule\":[", strJson, "]}");
 
-                string[] strStringDataTypes = new string[] { "string", "singleselect" };
+                string[] lstStringDataTypesExt = new string[] { "string", "singleselect" };
                 string strTempXmlRoot = "rules";
                 XNode node = JsonConvert.DeserializeXNode(strJson, strTempXmlRoot);
                 StringReader stringReader = new StringReader(node.ToString());
@@ -89,14 +89,14 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         {
             lstRules.Where(x => x.@operator == "=").ToList().ForEach(x => { x.@operator = "=="; });
             //Sometimes, datatype "double" will have string value as "No YCS2". this will be handled by below lines
-            lstRules.Where(x => !strStringDataTypes.Contains(x.type) && !x.value.Contains(",")).ToList().ForEach(x =>
+            lstRules.Where(x => !lstStringDataTypesExt.Contains(x.type) && !x.value.Contains(",")).ToList().ForEach(x =>
             {
                 if (ConvertToData(x.type, x.value).GetType().Name == "String")
                     x.type = "string";
             });
             //Double quotes will be handled by beow line
-            lstRules.Where(x => strStringDataTypes.Contains(x.type) && x.value.Contains("\"")).ToList().ForEach(x => { x.value = x.value.Replace("\"", "\"\""); });
-            lstRules.Where(x => strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = string.Concat("\"", x.value, "\""); });
+            lstRules.Where(x => lstStringDataTypesExt.Contains(x.type) && x.value.Contains("\"")).ToList().ForEach(x => { x.value = x.value.Replace("\"", "\"\""); });
+            lstRules.Where(x => lstStringDataTypesExt.Contains(x.type)).ToList().ForEach(x => { x.value = string.Concat("\"", x.value, "\""); });
             return string.Join(" AND ", lstRules.Select(x => GetExpression(x)));
         }
 
@@ -129,10 +129,12 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             return lstProduct.Count > 0 ? string.Concat("(", string.Join(" OR ", lstProduct.Select(x => string.Format("(PRODUCT_FILTER = '{0}' AND ECAP_PRICE >= {1})", x.ProductName, x.Price))), ")") : string.Empty;
         }
 
-        string[] strStringDataTypes = new string[] { "string", "singleselect", "date", "autocomplete", "string_with_in", "string_limited", "string_read_only", "singleselect_ext", "singleselect_read_only" };
+        List<string> lstStringDataTypes = new List<string>() { "string", "autocomplete", "string_with_in", "string_limited" };
+        List<string> lstStringDataTypesExt = new List<string>() { "singleselect", "date", "singleselect_ext", "singleselect_read_only" };
         string[] strProductFilters = new string[] { "MTRL_ID", "DEAL_PRD_NM", "PCSR_NBR" };
         public string GetSqlExpression(Criteria criteria, Dictionary<int, string> dicCustomerName, Dictionary<int, string> dicEmployeeName)
         {
+            lstStringDataTypesExt.AddRange(lstStringDataTypes);
             string strSqlCriteria = string.Empty;
             criteria.BlanketDiscount.RemoveAll(x => x.value == "0" || x.value == string.Empty);
             if (criteria.BlanketDiscount.Count > 0)
@@ -141,36 +143,49 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 criteria.Rules.RemoveAll(x => x.field == "OBJ_SET_TYPE_CD" && x.value == "ECAP");
             }
 
+            criteria.Rules.Where(x => lstStringDataTypes.Contains(x.type) && x.@operator == "LIKE" && x.value.Contains(",")).ToList().ForEach(x =>
+            {
+                x.values = x.value.Split(',').ToList();
+                x.value = string.Empty;
+                x.type = "list";
+            });
+
             if (criteria.Rules.Where(x => x.type != "list").Count() > 0)
             {
                 criteria.Rules.Where(x => strProductFilters.Contains(x.field)).ToList().ForEach(x => x.field = "PRODUCT_FILTER");
                 criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
-                criteria.Rules.Where(x => x.type != "list" && x.@operator == "!=").ToList().ForEach(x => { x.@operator = "<>"; });
+
+
+                criteria.Rules.Where(x => lstStringDataTypes.Contains(x.type) && (x.@operator == "=" || x.@operator == "<>") && x.value.Trim().EndsWith("*")).ToList().ForEach(x =>
+                {
+                    x.value = string.Concat(x.value.Trim().Remove(x.value.Trim().Length - 1, 1), x.@operator == "=" ? "*" : "%");
+                    x.@operator = x.@operator == "=" ? "LIKE" : "NOT LIKE";
+                });
+
                 criteria.Rules.Where(x => x.type == "date").ToList().ForEach(x => { x.value = Convert.ToDateTime(x.value).ToString("MM/dd/yyyy"); });
                 criteria.Rules.Where(x => x.type == "numericOrPercentage").ToList().ForEach(x => { x.field = string.Concat(x.field, (x.valueType == null || x.valueType.value == "%" ? "_PRCNT" : x.valueType.value == "$" ? "_DLLR" : string.Empty)); });
-                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
-                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y.Trim(), "'"))); });
-                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && strStringDataTypes.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? string.Concat("'%", x.value, "%'") : (x.@operator == "IN" ? x.value : string.Concat("'", x.value, "'")); });
+                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type) && x.value.Contains("'")).ToList().ForEach(x => { x.value = x.value.Replace("'", "''"); });
+                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type) && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y.Trim(), "'"))); });
+                criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && lstStringDataTypesExt.Contains(x.type)).ToList().ForEach(x => { x.value = x.@operator == "LIKE" ? (x.value.Trim() != "*" &&  x.value.Trim().EndsWith("*") ? string.Concat("'", x.value.Trim().Remove(x.value.Trim().Length - 1, 1), "%'") : string.Concat("'%", x.value, "%'")) : (x.@operator == "IN" ? x.value : string.Concat("'", x.value, "'")); });
                 criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
-                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value))));
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value.Trim()))));
             }
 
             if (criteria.Rules.Where(x => x.type == "list").Count() > 0)
             {
                 criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y.Trim(), "'"))); });
                 criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
-                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value))));
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.value != null && x.value != string.Empty && x.@operator == "IN").Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value.Trim()))));
                 criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
                     {
                         x.@operator = x.@operator == "!=" ? "NOT IN" : "IN";
                         x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
                     });
-                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value))));
-
-                List<rule> lstMulti = new List<rule>();
+                strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND " : string.Empty, string.Join(" AND ", criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, x.value.Trim()))));
+                
                 criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
                 {
-                    List<rule> lstTemp = (from result in x.values
+                    List<rule> lstMulti = (from result in x.values
                                           select new rule
                                           {
                                               type = "string",
@@ -178,11 +193,9 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                                               field = x.field,
                                               @operator = x.@operator
                                           }).ToList();
-                    lstMulti.AddRange(lstTemp);
+                    if (lstMulti.Count > 0)
+                        strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND (" : "(", string.Join(" OR ", lstMulti.Select(y => string.Format("({0} {1} {2})", y.field, y.@operator, y.value.Trim()!="*" && y.value.Trim().EndsWith("*") ? string.Concat("'", y.value.Trim().Remove(y.value.Trim().Length - 1, 1), "%'") : string.Concat("'%", y.value.Trim(), "%'")))), ")");
                 });
-
-                if (lstMulti.Count > 0)
-                    strSqlCriteria = string.Concat(strSqlCriteria, strSqlCriteria != string.Empty && strSqlCriteria.Trim().EndsWith("AND") == false ? " AND (" : "(", string.Join(" OR ", lstMulti.Select(x => string.Format("({0} {1} {2})", x.field, x.@operator, string.Concat("'%", x.value, "%'")))), ")");
             }
             strSqlCriteria = strSqlCriteria.Trim().EndsWith("AND") ? strSqlCriteria.Trim().Remove(strSqlCriteria.Trim().LastIndexOf("AND"), 3).Trim() : strSqlCriteria.Trim();
             return strSqlCriteria;
