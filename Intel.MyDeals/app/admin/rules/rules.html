@@ -16,7 +16,7 @@
 
     <div ng-if="!vm.isEditmode" class="col-md-12">
         <!-- Grid buttons added by script below before styles -->
-        <div id="ruleDetails" kendo-grid class="table ruleDetails" expand-k-grid options="vm.gridOptions"></div>
+        <div id="ruleDetails" kendo-grid class="table ruleDetails opUiContainer md k-grid k-widget" expand-k-grid options="vm.gridOptions"></div>
     </div>
 
     <div ng-if="vm.isEditmode">
@@ -199,7 +199,7 @@
     #btnEnlargeText {
         margin-right: 10px;
         border: 2px solid white;
-        font-size: 18px;
+        font-size: 16px !important;
         padding: 2px;
         border-radius: 3px;
         float: right;

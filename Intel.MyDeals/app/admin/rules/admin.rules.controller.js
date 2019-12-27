@@ -818,7 +818,7 @@
             columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
-            detailTemplate: "<div class='childGrid' kendo-grid k-options='detailInit(dataItem)'></div>",
+            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget' kendo-grid k-options='detailInit(dataItem)'></div>",
             pageable: {
                 refresh: true,
                 pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
