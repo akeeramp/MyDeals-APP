@@ -80,7 +80,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 criteria.Rules.Where(x => x.type != "list" && x.value != string.Empty && x.@operator == "IN").ToList().ForEach(x => { x.value = string.Concat("(", x.value, ")"); });
 
                 lstSqlCriteria.AddRange(criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("{0} {1} {2}", x.field, x.@operator, x.value.Trim())));
-                lstDescription.AddRange(criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\">{1}</span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim())));
+                lstDescription.AddRange(criteria.Rules.Where(x => x.type != "list").Select(x => string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim())));
             }
 
             if (criteria.Rules.Where(x => x.type == "list").Count() > 0)
@@ -89,7 +89,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 {
                     x.value = string.Concat("(", string.Join(",", x.value.Split(',').Select(y => string.Concat("'", y.Trim(), "'"))), ")");
                     lstSqlCriteria.Add(string.Format("{0} {1} {2}", x.field, x.@operator, x.value.Trim()));
-                    lstDescription.Add(string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\">{1}</span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim()));
+                    lstDescription.Add(string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim()));
                 });
 
                 criteria.Rules.Where(x => x.type == "list" && x.@operator != "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
@@ -97,7 +97,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                     x.@operator = x.@operator == "!=" ? "NOT IN" : "IN";
                     x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
                     lstSqlCriteria.Add(string.Format("{0} {1} {2}", x.field, x.@operator, x.value.Trim()));
-                    lstDescription.Add(string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\">{1}</span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim()));
+                    lstDescription.Add(string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim()));
                 });
 
                 criteria.Rules.Where(x => x.type == "list" && x.@operator == "LIKE" && x.values != null && x.values.Count > 0).ToList().ForEach(x =>
@@ -119,7 +119,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                         });
 
                         lstSqlCriteria.Add(string.Join(" OR ", lstMulti.Select(y => string.Format("({0} {1} {2})", y.field, y.@operator, y.value.Trim().EndsWith("%") && y.value.Trim() != "%" ? string.Concat("'", y.value.Trim(), "'") : string.Concat("'%", y.value.Trim(), "%'")))));
-                        lstDescription.Add(string.Join(" OR ", lstMulti.Select(y => string.Format("(<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\">{1}</span><span class=\"rule_value_desc\">{2}</span>)", dicAttributes.ContainsKey(y.field) ? dicAttributes[y.field] : "NA", y.@operator, y.value.Trim().EndsWith("%") && y.value.Trim() != "%" ? string.Concat("'", y.value.Trim(), "'") : string.Concat("'%", y.value.Trim(), "%'")))));
+                        lstDescription.Add(string.Join(" OR ", lstMulti.Select(y => string.Format("(<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">{2}</span>)", dicAttributes.ContainsKey(y.field) ? dicAttributes[y.field] : "NA", y.@operator, y.value.Trim().EndsWith("%") && y.value.Trim() != "%" ? string.Concat("'", y.value.Trim(), "'") : string.Concat("'%", y.value.Trim(), "%'")))));
                     }
                 });
             }
