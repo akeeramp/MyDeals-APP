@@ -586,7 +586,11 @@
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
                     } break;
-                    default: {
+                    default: {                        
+                        //POCO Class to Mock Rule Details - remove after DB developemnt
+                        for (var i = 0; i < response.data.length; i++) {
+                            response.data[i]["Rule_Description"] = '<b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b><br><b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b><br><b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b>';
+                        }
                         vm.Rules = response.data;
                         vm.isEditmode = false;
                         vm.dataSource.read();
@@ -747,7 +751,52 @@
                 });
             }
         }
-        
+        $scope.detailInit = function (parentDataItem) {
+            return {
+                dataSource: {
+                    transport: {
+                        read: function (e) {
+                            e.success(parentDataItem);
+                        },
+                        create: function (e) {
+                        }
+                    },
+                    pageSize: 1,
+                    serverPaging: false,
+                    serverFiltering: false,
+                    serverSorting: false,                    
+                    schema: {
+                        model: {
+                            id: "ID",
+                            fields: {
+                                ID: {
+                                    editable: false, nullable: true
+                                },
+                                Rule_Description: { editable: false, type: "string" }
+                            }
+                        }
+                    },
+                },
+                filterable: false,
+                sortable: true,
+                navigatable: true,
+                resizable: false,
+                reorderable: false,
+                columnMenu: false,
+                groupable: false,                             
+                pageable: false,                
+                columns: [
+                    {
+                        field: "Rule_Description",
+                        title: "Rule Description",
+                        template: "<div title='#=Rule_Description#'>#=Rule_Description#</div>",
+                        width: "15%",
+                        filterable: { multi: true, search: false }
+                    }
+                    
+                ]
+            };
+        };
         vm.gridOptions = {
             toolbar: [
                 { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
@@ -760,10 +809,11 @@
             scrollable: true,
             columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
-            filter: function (e) { gridUtils.cancelChanges(e); },            
+            filter: function (e) { gridUtils.cancelChanges(e); },
+            detailTemplate: "<div class='childGrid' kendo-grid k-options='detailInit(dataItem)'></div>",
             pageable: {
                 refresh: true,
-                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
+                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes http://dojo.telerik.com/@PMcDonou/iVUge
             },
             columns: [
                 {
@@ -844,9 +894,17 @@
                     field: "Notes",
                     title: "Notes",
                     template: "<div title='#=Notes#'>#=Notes#</div>",
+                    width: "10%",
+                    filterable: { multi: true, search: false }
+                },
+                {
+                    field: "Rule_Description",
+                    title: "Rule Description",
+                    template: "<div title='#=Rule_Description#' class='btnHandle classToggle'>#=Rule_Description#</div>",
                     width: "15%",
                     filterable: { multi: true, search: false }
                 }
+                
             ]
         };
 

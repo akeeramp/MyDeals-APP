@@ -16,7 +16,7 @@
 
     <div ng-if="!vm.isEditmode" class="col-md-12">
         <!-- Grid buttons added by script below before styles -->
-        <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
+        <div id="ruleDetails" kendo-grid class="table ruleDetails" expand-k-grid options="vm.gridOptions"></div>
     </div>
 
     <div ng-if="vm.isEditmode">
@@ -184,9 +184,18 @@
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.openRulesSimulation('test')">
         <span class="intelicon-lab" style="color: white !important; margin-right:5px"></span>Simulate Running Rules
     </a>
+    <i id="btnWordWrapControl" class="intelicon-increase-text-outlined" title="Click to Decrese Text"></i>
 </script>
 <style>
-    a:hover{
+    .classToggle {
+        height: 20px;
+    }
+    #btnWordWrapControl {
+        float: right;
+        font-size: 30px;
+        margin-top: 8px;
+    }
+    a:hover {
         text-decoration: none;
     }
     .k-button {
@@ -296,7 +305,7 @@
         white-space: nowrap;
         overflow: hidden;
     }
-
+    
     .toggle-accept {
         width: 75% !important;
     }
@@ -505,5 +514,18 @@
         $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
         $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');
         $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').attr('title', 'Requested ECAP must be greater than or equal to the floor price entered');
-    });
+        $($('.k-grid-header-wrap .k-hierarchy-cell').find('th')[0]).html('<a class="k-icon k-i-expand" href="#" tabindex="-1"></a>');
+
+        $('#btnWordWrapControl').click(function (e) { 
+            if ($('#btnWordWrapControl').attr('class').trim() == 'intelicon-decrease-text-outlined') {
+                $('#btnWordWrapControl').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
+                $('.btnHandle').addClass('classToggle');
+                $('#btnWordWrapControl').attr('title', 'Click me to Expand Cloumn');
+            } else {
+                $('#btnWordWrapControl').removeClass('intelicon-increase-text-outlined').addClass('intelicon-decrease-text-outlined');
+                $('.btnHandle').removeClass('classToggle');
+                $('#btnWordWrapControl').attr('title', 'Click me to remove Expand column');
+            }
+        });        
+    });    
 </script>
