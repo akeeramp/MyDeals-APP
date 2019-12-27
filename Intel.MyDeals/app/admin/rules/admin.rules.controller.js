@@ -588,9 +588,9 @@
                     } break;
                     default: {                        
                         //POCO Class to Mock Rule Details - remove after DB developemnt
-                        for (var i = 0; i < response.data.length; i++) {
-                            response.data[i]["Rule_Description"] = '<b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b><br><b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b><br><b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b>';
-                        }
+                        //for (var i = 0; i < response.data.length; i++) {
+                        //    response.data[i]["Rule_Description"] = '<b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b><br><b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b><br><b>Cust_NM</b>&nbsp;&nbsp;<b>=</b>&nbsp;&nbsp;<b>"Acer"</b>';
+                        //}
                         vm.Rules = response.data;
                         vm.isEditmode = false;
                         vm.dataSource.read();
@@ -772,7 +772,8 @@
                                 ID: {
                                     editable: false, nullable: true
                                 },
-                                Rule_Description: { editable: false, type: "string" }
+                                RuleDescription: { editable: false, type: "string" },
+                                ProductDescription: { editable: false, type: "string" }
                             }
                         }
                     },
@@ -780,19 +781,26 @@
                 filterable: false,
                 sortable: true,
                 navigatable: true,
-                resizable: false,
+                resizable: true,
                 reorderable: false,
                 columnMenu: false,
                 groupable: false,                             
                 pageable: false,                
                 columns: [
                     {
-                        field: "Rule_Description",
+                        field: "RuleDescription",
                         title: "Rule Description",
-                        template: "<div title='#=Rule_Description#'>#=Rule_Description#</div>",
+                        template: "<div title='#=RuleDescription#'>#=RuleDescription#</div>",
                         width: "15%",
                         filterable: { multi: true, search: false }
-                    }
+                    },
+                    {
+                        field: "ProductDescription",
+                        title: "Product Description",
+                        template: "<div title='#=ProductDescription#'>#=ProductDescription#</div>",
+                        width: "15%",
+                        filterable: { multi: true, search: false }
+                    }                   
                     
                 ]
             };
@@ -813,7 +821,7 @@
             detailTemplate: "<div class='childGrid' kendo-grid k-options='detailInit(dataItem)'></div>",
             pageable: {
                 refresh: true,
-                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes http://dojo.telerik.com/@PMcDonou/iVUge
+                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
             },
             columns: [
                 {
@@ -898,9 +906,9 @@
                     filterable: { multi: true, search: false }
                 },
                 {
-                    field: "Rule_Description",
+                    field: "RuleDescription",
                     title: "Rule Description",
-                    template: "<div title='#=Rule_Description#' class='btnHandle classToggle'>#=Rule_Description#</div>",
+                    template: "<div class='btnHandle classToggle'>#=RuleDescription#</div>",
                     width: "15%",
                     filterable: { multi: true, search: false }
                 }

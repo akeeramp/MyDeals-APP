@@ -12962,186 +12962,204 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
-		///<summary>
-		/// ID: 1068957778
-		/// Modified: 12/26/2019 3:04:41 AM
-		/// Parameters: 16
-		///</summary>
-		public partial class PR_MYDL_UPD_PRC_RULE : SP {
-			public PR_MYDL_UPD_PRC_RULE() {
-				DatabaseName = "MyDeals";
-				StoredProdedureName = "[dbo].[PR_MYDL_UPD_PRC_RULE]";
-			}
+        ///<summary>
+        /// ID: 1068957778
+        /// Modified: 12/26/2019 3:04:41 AM
+        /// Parameters: 16
+        ///</summary>
+        public partial class PR_MYDL_UPD_PRC_RULE : SP
+        {
+            public PR_MYDL_UPD_PRC_RULE()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_UPD_PRC_RULE]";
+            }
 
-			///<summary>
-			/// DataType: int
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
-			public Int32 rule_sid {
-				set { SetParmeter("rule_sid", value); }
-				get { return (Int32)GetParameter("rule_sid"); }
-			}
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 rule_sid
+            {
+                set { SetParmeter("rule_sid", value); }
+                get { return (Int32)GetParameter("rule_sid"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar(255)
-			/// Mode: IN
-			/// Max Length: 255
-			///</summary>
-			[SQLParameterAttribute(2, "ParameterDirection.Input", 255, false)]
-			public String rule_nm {
-				set { SetParmeter("rule_nm", value); }
-				get { return (String)GetParameter("rule_nm"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar(255)
+            /// Mode: IN
+            /// Max Length: 255
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 255, false)]
+            public String rule_nm
+            {
+                set { SetParmeter("rule_nm", value); }
+                get { return (String)GetParameter("rule_nm"); }
+            }
 
-			///<summary>
-			/// DataType: date
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
-			public DateTime strt_dt {
-				set { SetParmeter("strt_dt", value); }
-				get { return (DateTime)GetParameter("strt_dt"); }
-			}
+            ///<summary>
+            /// DataType: date
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public DateTime strt_dt
+            {
+                set { SetParmeter("strt_dt", value); }
+                get { return (DateTime)GetParameter("strt_dt"); }
+            }
 
-			///<summary>
-			/// DataType: date
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
-			public DateTime end_dt {
-				set { SetParmeter("end_dt", value); }
-				get { return (DateTime)GetParameter("end_dt"); }
-			}
+            ///<summary>
+            /// DataType: date
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public DateTime end_dt
+            {
+                set { SetParmeter("end_dt", value); }
+                get { return (DateTime)GetParameter("end_dt"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
-			public String notes {
-				set { SetParmeter("notes", value); }
-				get { return (String)GetParameter("notes"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
+            public String notes
+            {
+                set { SetParmeter("notes", value); }
+                get { return (String)GetParameter("notes"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
-			public String rule_cri {
-				set { SetParmeter("rule_cri", value); }
-				get { return (String)GetParameter("rule_cri"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
+            public String rule_cri
+            {
+                set { SetParmeter("rule_cri", value); }
+                get { return (String)GetParameter("rule_cri"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(7, "ParameterDirection.Input", -1, false)]
-			public String rule_sql_cri {
-				set { SetParmeter("rule_sql_cri", value); }
-				get { return (String)GetParameter("rule_sql_cri"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(7, "ParameterDirection.Input", -1, false)]
+            public String rule_sql_cri
+            {
+                set { SetParmeter("rule_sql_cri", value); }
+                get { return (String)GetParameter("rule_sql_cri"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(8, "ParameterDirection.Input", -1, false)]
-			public String prd_cri {
-				set { SetParmeter("prd_cri", value); }
-				get { return (String)GetParameter("prd_cri"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", -1, false)]
+            public String prd_cri
+            {
+                set { SetParmeter("prd_cri", value); }
+                get { return (String)GetParameter("prd_cri"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(9, "ParameterDirection.Input", -1, false)]
-			public String prd_sql_cri {
-				set { SetParmeter("prd_sql_cri", value); }
-				get { return (String)GetParameter("prd_sql_cri"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(9, "ParameterDirection.Input", -1, false)]
+            public String prd_sql_cri
+            {
+                set { SetParmeter("prd_sql_cri", value); }
+                get { return (String)GetParameter("prd_sql_cri"); }
+            }
 
-			///<summary>
-			/// DataType: bit
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
-			public Boolean is_auto_incl {
-				set { SetParmeter("is_auto_incl", value); }
-				get { return (Boolean)GetParameter("is_auto_incl"); }
-			}
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public Boolean is_auto_incl
+            {
+                set { SetParmeter("is_auto_incl", value); }
+                get { return (Boolean)GetParameter("is_auto_incl"); }
+            }
 
-			///<summary>
-			/// DataType: bit
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(11, "ParameterDirection.Input", 0, false)]
-			public Boolean is_aprv {
-				set { SetParmeter("is_aprv", value); }
-				get { return (Boolean)GetParameter("is_aprv"); }
-			}
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(11, "ParameterDirection.Input", 0, false)]
+            public Boolean is_aprv
+            {
+                set { SetParmeter("is_aprv", value); }
+                get { return (Boolean)GetParameter("is_aprv"); }
+            }
 
-			///<summary>
-			/// DataType: bit
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(12, "ParameterDirection.Input", 0, false)]
-			public Boolean actv_ind {
-				set { SetParmeter("actv_ind", value); }
-				get { return (Boolean)GetParameter("actv_ind"); }
-			}
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(12, "ParameterDirection.Input", 0, false)]
+            public Boolean actv_ind
+            {
+                set { SetParmeter("actv_ind", value); }
+                get { return (Boolean)GetParameter("actv_ind"); }
+            }
 
-			///<summary>
-			/// DataType: int
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(13, "ParameterDirection.Input", 0, false)]
-			public Int32 usr_wwid {
-				set { SetParmeter("usr_wwid", value); }
-				get { return (Int32)GetParameter("usr_wwid"); }
-			}
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(13, "ParameterDirection.Input", 0, false)]
+            public Int32 usr_wwid
+            {
+                set { SetParmeter("usr_wwid", value); }
+                get { return (Int32)GetParameter("usr_wwid"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar(20)
-			/// Mode: IN
-			/// Max Length: 20
-			///</summary>
-			[SQLParameterAttribute(14, "ParameterDirection.Input", 20, false)]
-			public String actn_nm {
-				set { SetParmeter("actn_nm", value); }
-				get { return (String)GetParameter("actn_nm"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(14, "ParameterDirection.Input", 20, false)]
+            public String actn_nm
+            {
+                set { SetParmeter("actn_nm", value); }
+                get { return (String)GetParameter("actn_nm"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(15, "ParameterDirection.Input", -1, false)]
-			public String rule_desc {
-				set { SetParmeter("rule_desc", value); }
-				get { return (String)GetParameter("rule_desc"); }
-			}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(15, "ParameterDirection.Input", -1, false)]
+            public String rule_desc
+            {
+                set { SetParmeter("rule_desc", value); }
+                get { return (String)GetParameter("rule_desc"); }
+            }
 
-			///<summary>
-			/// DataType: nvarchar
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(16, "ParameterDirection.Input", -1, false)]
-			public String prd_desc {
-				set { SetParmeter("prd_desc", value); }
-				get { return (String)GetParameter("prd_desc"); }
-			}
-		}
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(16, "ParameterDirection.Input", -1, false)]
+            public String prd_desc
+            {
+                set { SetParmeter("prd_desc", value); }
+                get { return (String)GetParameter("prd_desc"); }
+            }
+        }
 
-		///<summary>
-		/// ID: 1369771937
-		/// Modified: 7/13/2018 1:55:50 AM
-		/// Parameters: 5
-		///</summary>
-		public partial class PR_MYDL_UPD_PRD_ALIAS : SP {
+        ///<summary>
+        /// ID: 1369771937
+        /// Modified: 7/13/2018 1:55:50 AM
+        /// Parameters: 5
+        ///</summary>
+        public partial class PR_MYDL_UPD_PRD_ALIAS : SP {
 			public PR_MYDL_UPD_PRD_ALIAS() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_UPD_PRD_ALIAS]";

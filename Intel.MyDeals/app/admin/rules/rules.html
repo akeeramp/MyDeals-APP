@@ -185,14 +185,24 @@
         <span class="intelicon-lab" style="color: white !important; margin-right:5px"></span>Simulate Running Rules
     </a>
     <i id="btnWordWrapControl" class="intelicon-increase-text-outlined" title="Click to Decrese Text"></i>
+    <i id="btnEnlargeText" class="intelicon-expand" title="Click to Decrese Text size"></i>
 </script>
 <style>
     .classToggle {
         height: 20px;
     }
-    #btnWordWrapControl {
+    #btnWordWrapControl{
         float: right;
-        font-size: 30px;
+        font-size: 30px !important;
+        margin-top: 8px;
+    }
+    #btnEnlargeText {
+        margin-right: 10px;
+        border: 2px solid white;
+        font-size: 18px;
+        padding: 2px;
+        border-radius: 3px;
+        float: right;
         margin-top: 8px;
     }
     a:hover {
@@ -526,6 +536,17 @@
                 $('.btnHandle').removeClass('classToggle');
                 $('#btnWordWrapControl').attr('title', 'Click me to remove Expand column');
             }
-        });        
+        }); 
+        $('#btnEnlargeText').click(function (e) {
+            if ($('#btnEnlargeText').attr('class').trim() == 'intelicon-expand') {
+                $('#btnEnlargeText').removeClass('intelicon-expand').addClass('intelicon-shrink');
+                $('#ruleDetails').removeClass('opUiContainer sm k-grid k-widget').addClass('opUiContainer md k-grid k-widget');
+                $('#btnEnlargeText').attr('title', 'Click me to Decrease Text size');
+            } else {
+                $('#btnEnlargeText').removeClass('intelicon-shrink').addClass('intelicon-expand');
+                $('#ruleDetails').removeClass('opUiContainer md k-grid k-widget').addClass('opUiContainer sm k-grid k-widget');
+                $('#btnEnlargeText').attr('title', 'Click me to Increase Text size');
+            }
+        });
     });    
 </script>
