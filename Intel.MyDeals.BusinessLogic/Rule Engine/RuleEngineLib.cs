@@ -89,8 +89,11 @@ namespace Intel.MyDeals.BusinessLogic
                 priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
                 using (RuleExpressions ruleExpressions = new RuleExpressions())
                 {
-                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias, dicCustomerName, dicEmployeeName);
-                    priceRuleCriteria.ProductCriteriaSql = ruleExpressions.GetSqlExpressionForProducts(priceRuleCriteria.ProductCriteria);
+                    Dictionary<ExpressionType, string> dicExpressions = ruleExpressions.GetExpressions(priceRuleCriteria, dicCustomerName, dicEmployeeName);
+                    priceRuleCriteria.CriteriaSql = dicExpressions[ExpressionType.RuleSql];
+                    priceRuleCriteria.ProductCriteriaSql = dicExpressions[ExpressionType.ProductSql];
+                    priceRuleCriteria.RuleDescription = dicExpressions[ExpressionType.RuleDescription];
+                    priceRuleCriteria.ProductDescription = dicExpressions[ExpressionType.ProductDescription];
                 }
             }
             return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, priceRuleAction);

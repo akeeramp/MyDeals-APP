@@ -137,6 +137,8 @@ namespace Intel.MyDeals.Entities
         public string ChangedBy { get; set; }
         public DateTime ChangeDateTime { get; set; }
         public string ChangeDateTimeFormat { get; set; }
+        public string RuleDescription { get; set; }
+        public string ProductDescription { get; set; }
     }
 
     public class rule

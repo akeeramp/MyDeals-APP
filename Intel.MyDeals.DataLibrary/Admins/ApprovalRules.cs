@@ -22,23 +22,25 @@ namespace Intel.MyDeals.DataLibrary
                     priceRuleCriteria.StartDate = DateTime.Now;
                     priceRuleCriteria.EndDate = DateTime.Now;
                 }
-                
+
                 var cmd = new Procs.dbo.PR_MYDL_UPD_PRC_RULE
                 {
-                    @rule_sid = priceRuleCriteria.Id,
-                    @rule_nm = priceRuleCriteria.Name == null ? string.Empty : priceRuleCriteria.Name.Trim(),
-                    @strt_dt = priceRuleCriteria.StartDate,
-                    @end_dt = priceRuleCriteria.EndDate,
-                    @notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
-                    @rule_cri = priceRuleCriteria.CriteriaJson,
-                    @rule_sql_cri = priceRuleCriteria.CriteriaSql,
-                    @prd_cri = priceRuleCriteria.ProductCriteriaJson,
-                    @prd_sql_cri = priceRuleCriteria.ProductCriteriaSql,
-                    @is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
-                    @is_aprv = isApproved,
-                    @actv_ind = priceRuleCriteria.IsActive,
-                    @usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                    @actn_nm = priceRuleAction.ToString("g")
+                    rule_sid = priceRuleCriteria.Id,
+                    rule_nm = priceRuleCriteria.Name == null ? string.Empty : priceRuleCriteria.Name.Trim(),
+                    strt_dt = priceRuleCriteria.StartDate,
+                    end_dt = priceRuleCriteria.EndDate,
+                    notes = priceRuleCriteria.Notes == null ? string.Empty : priceRuleCriteria.Notes,
+                    rule_cri = priceRuleCriteria.CriteriaJson,
+                    rule_sql_cri = priceRuleCriteria.CriteriaSql,
+                    prd_cri = priceRuleCriteria.ProductCriteriaJson,
+                    prd_sql_cri = priceRuleCriteria.ProductCriteriaSql,
+                    is_auto_incl = priceRuleCriteria.IsAutomationIncluded,
+                    is_aprv = isApproved,
+                    actv_ind = priceRuleCriteria.IsActive,
+                    usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    actn_nm = priceRuleAction.ToString("g"),
+                    rule_desc = priceRuleCriteria.RuleDescription,
+                    prd_desc = priceRuleCriteria.ProductDescription,
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -206,6 +208,8 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_OWNER_WWID = DB.GetReaderOrdinal(rdr, "OWNR_EMP_WWID");
             int IDX_CHG_BY = DB.GetReaderOrdinal(rdr, "CHG_EMP_NM");
             int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+            int IDX_RULE_DESC = DB.GetReaderOrdinal(rdr, "RULE_DESC");
+            int IDX_PRD_DESC = DB.GetReaderOrdinal(rdr, "PRD_DESC");
 
             while (rdr.Read())
             {
@@ -225,7 +229,9 @@ namespace Intel.MyDeals.DataLibrary
                     OwnerId = (IDX_OWNER_WWID < 0 || rdr.IsDBNull(IDX_OWNER_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OWNER_WWID),
                     // FIX CHANGED BY DEFINATION
                     ChangedBy = (IDX_CHG_BY < 0 || rdr.IsDBNull(IDX_CHG_BY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_BY),
-                    ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
+                    ChangeDateTime = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                    RuleDescription = (IDX_RULE_DESC < 0 || rdr.IsDBNull(IDX_RULE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RULE_DESC),
+                    ProductDescription = (IDX_PRD_DESC < 0 || rdr.IsDBNull(IDX_PRD_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_DESC),
                 });
             } // while
             rtn.ForEach(x =>
