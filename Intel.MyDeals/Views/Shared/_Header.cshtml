@@ -281,7 +281,7 @@
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
 
-                    @if (usrRole == "DA" || isDeveloper)
+                    @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Rules Management</a>
