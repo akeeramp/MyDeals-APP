@@ -757,6 +757,7 @@
                     transport: {
                         read: function (e) {
                             e.success(parentDataItem);
+                            vm.productPresent = parentDataItem.ProductDescription.length;
                         },
                         create: function (e) {
                         }
@@ -790,16 +791,17 @@
                     {
                         field: "RuleDescription",
                         title: "Rule Description",
-                        template: "<div title='#=RuleDescription#'>#=RuleDescription#</div>",
-                        width: "15%",
+                        template: "<div>#=RuleDescription#</div>",
+                        width: "50%",
                         filterable: { multi: true, search: false }
                     },
                     {
                         field: "ProductDescription",
                         title: "Product Description",
-                        template: "<div title='#=ProductDescription#'>#=ProductDescription#</div>",
-                        width: "15%",
-                        filterable: { multi: true, search: false }
+                        template: "<div>#=ProductDescription#</div>",
+                        width: "50%",
+                        filterable: { multi: true, search: false },
+                        hidden: vm.productPresent > 0 ? true : false                        
                     }                   
                     
                 ]
