@@ -5,7 +5,7 @@
     <div ng-if="!vm.isEditmode" class="col-md-10">
         <h3>Auto-Approval Rules Administration Screen</h3>
     </div>
-    <div ng-if="!vm.isEditmode" class="col-md-2 ng-scope" style="">
+    <div ng-if="!vm.isEditmode && vm.toolKitHidden == false" class="col-md-2 ng-scope" style="">
         <h3 style="float:right"><a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for help"><i class="intelicon-help-solid" style="color:#3343a4"></i></a></h3>
     </div>
     <div ng-if="!vm.isEditmode" class="row" style="padding: 0 0 0 15px;">
@@ -185,7 +185,7 @@
     <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.openRulesSimulation('test')">
         <span class="intelicon-lab" style="color: white !important; margin-right:5px"></span>Simulate Running Rules
     </a>
-    <i id="btnWordWrapControl" class="intelicon-increase-text-outlined" title="Click to Decrese Text"></i>
+    <i id="btnWordWrapControl" class="intelicon-increase-text-outlined" title="Click me to Expand Cloumn"></i>
     <i id="btnEnlargeText" class="intelicon-expand" title="Click to Decrese Text size"></i>
 </script>
 <style>
