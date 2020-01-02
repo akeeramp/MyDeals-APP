@@ -36,7 +36,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
 
             disposed = true;
         }
-        
+
         List<string> lstStringDataTypes = new List<string>() { "string", "autocomplete", "string_with_in", "string_limited" };
         List<string> lstStringDataTypesExt = new List<string>() { "singleselect", "date", "singleselect_ext", "singleselect_read_only" };
         string strCapPriceCode = "CAP_PRICE";
@@ -128,7 +128,8 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             if (criteria.BlanketDiscount.Count > 0)
             {
                 lstSqlCriteria.Add(string.Concat(strECapPriceCode, " >= (", strCapPriceCode, " - ", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("({1} * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString(), strCapPriceCode) : criteria.BlanketDiscount.First().value, ")"));
-                lstDescription.Add(string.Concat("(<span class=\"rule_attr_desc\">", strECapPriceTitle, "</span>", "<span class=\"rule_operator_desc\"> >= </span>(", "<span class=\"rule_attr_desc\">", strCapPriceTitle, "</span>", "<span class=\"rule_operator_desc\"> - </span>", "<span class=\"rule_value_desc\">", criteria.BlanketDiscount.First().valueType.value == "%" ? string.Format("({1} * {0})", (Convert.ToDouble(criteria.BlanketDiscount.First().value) / 100).ToString(), strCapPriceTitle) : criteria.BlanketDiscount.First().value, criteria.BlanketDiscount.First().valueType.value, "</span>)"));
+                string strBlanketValue = string.Concat(criteria.BlanketDiscount.First().valueType.value == "$" ? "$" : string.Empty, criteria.BlanketDiscount.First().value, criteria.BlanketDiscount.First().valueType.value == "%" ? "%" : string.Empty);
+                lstDescription.Add(string.Concat("(<span class=\"rule_attr_desc\">", strECapPriceTitle, "</span>", "<span class=\"rule_operator_desc\"> >= </span>(", "<span class=\"rule_attr_desc\">", strCapPriceTitle, "</span>", "<span class=\"rule_operator_desc\"> - </span>", "<span class=\"rule_value_desc\">", strBlanketValue, "</span>)"));
             }
 
             string strProductDescription = string.Empty;
@@ -211,9 +212,9 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             dicAttr.Add("DEAL_PRD_NM", "Level 4");
             dicAttr.Add("PCSR_NBR", "Processor Number");
             return dicAttr;
-        } 
-    }    
-    
+        }
+    }
+
     public enum ExpressionType
     {
         RuleSql = 0,
