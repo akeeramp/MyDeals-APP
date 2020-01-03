@@ -392,6 +392,8 @@
     <Content Include="app\admin\beta-rules\rules.html" />
     <Content Include="app\admin\beta-rules\rules.service.js" />
     <Content Include="app\admin\rules\admin.rules.controller.js" />
+    <Content Include="app\admin\rules\ruleDetailsModal.controller.js" />
+    <Content Include="app\admin\rules\ruleDetailsModal.html" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
     <Content Include="app\admin\rules\rulesSimulationModal.controller.js" />

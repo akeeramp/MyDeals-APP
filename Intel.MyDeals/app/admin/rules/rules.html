@@ -17,158 +17,7 @@
     <div ng-if="!vm.isEditmode" class="col-md-12">
         <!-- Grid buttons added by script below before styles -->
         <div id="ruleDetails" kendo-grid class="table ruleDetails opUiContainer md k-grid k-widget" expand-k-grid options="vm.gridOptions"></div>
-    </div>
-
-    <div ng-if="vm.isEditmode">
-        <div ng-show="false" class="form-group row">
-            <label class="control-label col-md-2">Rule:</label>
-            <div class="col-md-9">
-                <select class="form-control md"
-                        kendo-combo-box
-                        k-options="vm.ruleOptions"
-                        ng-model="vm.rule.Id"
-                        style="width:100%"></select>
-            </div>
-        </div>
-
-        <div class="col-md-11" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
-            Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} GMT</span>
-        </div>
-
-        <div class="form-group row">
-            <label class="control-label isRequired col-md-2" autocomplete="off">Name:</label>
-            <div class="col-md-9">
-                <input class="form-control md"
-                       type="text"
-                       ng-model="vm.rule.Name"
-                       style="width:100%">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="control-label col-md-2">Rule Status:</label>
-            <span class="col-md-2" style="float: left;">
-                <div class="tooltipPriceRule">
-                    <toggle class="fl toggle-accept"
-                            ng-model="vm.rule.IsActive"
-                            on="Active"
-                            off="Inactive"
-                            onstyle="btn-success"
-                            offstyle="btn-danger"
-                            title="{{vm.rule.IsActive == true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true)"></toggle>
-                    <!--<span ng-if="vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleGreen">Active</span>
-                    <span ng-if="!vm.rule.IsActive" class="tooltipPriceRuletext tooltipPriceRuleYellow">Awaiting Approval</span>-->
-                </div>
-            </span>
-
-            <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
-            <span class="col-md-2" style="float: left;">
-                <div class="tooltipPriceRule">
-                    <toggle class="fl toggle-accept"
-                            ng-model="vm.rule.IsAutomationIncluded"
-                            on="Auto Approval"
-                            ng-click="vm.toggleType(vm.rule.IsAutomationIncluded)"
-                            off="Exclusion Rule"
-                            onstyle="btn-success"
-                            offstyle="btn-danger"
-                            title="{{vm.rule.IsAutomationIncluded == true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
-                    <!--<span ng-if="vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approval Rule</span>
-                    <span ng-if="!vm.rule.IsAutomationIncluded" class="tooltipPriceRuletext tooltipPriceRuleRed">Exclusion from Automation</span>-->
-                </div>
-            </span>
-
-            <label class="control-label col-md-2" style="float: left;">Approval Status:</label>
-            <span class="col-md-2" style="float: left;">
-                <div class="tooltipPriceRule">
-                    <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsActive && vm.rule.IsAutomationIncluded))"
-                            ng-model="vm.rule.RuleStage"
-                            on="Approved"
-                            off="Pending Approval"
-                            onstyle="btn-success"
-                            offstyle="btn-danger"
-                            title="{{vm.rule.RuleStage == true ? 'Approved' : 'Pending Approval'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',(vm.isElligibleForApproval && vm.rule.IsActive && vm.rule.IsAutomationIncluded))"></toggle>
-                    <!--<span ng-if="vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleGreen">Approved</span>
-                    <span ng-if="!vm.rule.RuleStage" class="tooltipPriceRuletext tooltipPriceRuleYellow">Pending Approval</span>-->
-                </div>
-            </span>
-        </div>
-
-        <div class="form-group row">
-
-            <label class="control-label isRequired col-md-2">Owner:</label>
-            <div class="col-md-2">
-                <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>
-                <!--<select kendo-combo-box
-                        k-options="vm.ownerOptions"
-                        ng-model=""
-                        style="width:100%"></select>-->
-            </div>
-            <label class="control-label isRequired col-md-1">Start Date:</label>
-            <div class="col-md-2">
-                <input kendo-date-picker
-                       placeholder="From date"
-                       k-ng-model="vm.rule.StartDate"
-                       style="width: 100%;" />
-            </div>
-            <label class="control-label isRequired col-md-2">End Date:</label>
-            <div class="col-md-2">
-                <input kendo-date-picker
-                       placeholder="To date"
-                       k-ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
-            </div>
-        </div>
-
-
-        <div class="form-group row">
-            <label class="control-label col-md-2">Notes:</label>
-            <div class="col-md-9">
-                <textarea type="textarea" rows="5" ng-model="vm.rule.Notes" style="width:100%"></textarea>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="control-label col-md-2">Criteria:</label>
-            <div class="col-md-9">
-                <div rule-attribute-builder
-                     grid-id="'attributeGrid'"
-                     operator-settings="operatorSettings"
-                     attribute-settings="attributeSettings"
-                     criteria="vm.rule.Criteria"
-                     custom-settings="">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row" ng-if="vm.rule.IsAutomationIncluded">
-            <label class="control-label col-md-2">Blanket Discount:</label>
-            <div class="col-md-6" id="blanket_section">
-                <span>Requested ECAP must be no less than</span>
-                <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" ng-change="vm.EditBlanketDiscountPercentage()" k-decimals="0" k-format="'#'" k-min="0" k-max="70" style="width: 100px;font-size:11px;" />
-                <span>%&nbsp;Or&nbsp;$</span>
-                <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollor" ng-change="vm.EditBlanketDiscountDollor()" k-format="'n2'" k-min="0" style="width: 130px;font-size:11px;" />
-                <span>off of CAP</span>
-            </div>
-        </div>
-    </div>
-    <div style="display:none;"><!--Dummy button to prevent events while press enter key in textbox--><button /></div>
-    <div class="form-group row" id="productCriteria">
-        <label class="control-label col-md-2">Product Criteria:</label>
-        <div class="col-md-9">
-            <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 602px; height: 300px; margin-right: 25px;  float:left;" k-options="spreadSheetOptions" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
-            <button ng-click="vm.validateProduct(true,false,false)" class="btn btn-primary" style="float: left;">Validate Products</button>
-        </div>
-    </div>
-    <div class="form-group row action_btns" ng-if="vm.isEditmode">
-        <label class="control-label col-md-2"></label>
-        <div class="col-md-9">           
-            <button ng-if="(((vm.isElligibleForApproval) || (vm.rule.IsAutomationIncluded == false))) && vm.rule.RuleStage == false" ng-click="vm.approveRule()" class="btn btn-success" style="margin-left: 15px">Approve Rule</button>
-            <button ng-click="vm.saveRule('SAVE_AS_DRAFT',false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
-            <button ng-click="vm.saveRule('SUBMIT',true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
-            <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
-            <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" ng-disabled="vm.rule.Id == 0">Simulate</button>
-        </div>
-    </div>
+    </div>   
     <div class="form-group row" id="productCriteria">&nbsp;</div>
 </form>
 
@@ -226,8 +75,8 @@
     }
 
     .k-grid-toolbar > .k-grid-add > .k-icon {
-        font-size: 18px !important;
-        margin-top: 3px;
+        font-size: 14px !important;
+        margin-top: 1px;
     }
 
     .btn-success {
@@ -410,17 +259,17 @@
         width: 100%;
     }
 
-        .dealTools .gridStatusMarker {
-            font-family: arial;
-        }
+    .dealTools .gridStatusMarker {
+        font-family: arial;
+    }
 
-        .dealTools a {
-            text-decoration: none;
-        }
+    .dealTools a {
+        text-decoration: none;
+    }
 
-        .dealTools i:hover {
-            color: #003C71;
-        }
+    .dealTools i:hover {
+        color: #003C71;
+    }
 
     .gridStatusMarker {
         width: 16px;
@@ -433,20 +282,20 @@
         margin-right: 5px;
     }
 
-        .gridStatusMarker.Working {
-            color: #000000;
-            background-color: #FFA300;
-        }
+    .gridStatusMarker.Working {
+        color: #000000;
+        background-color: #FFA300;
+    }
 
-        .gridStatusMarker.Active {
-            color: #000000;
-            background-color: #C4D600;
-        }
+    .gridStatusMarker.Active {
+        color: #000000;
+        background-color: #C4D600;
+    }
 
-        .gridStatusMarker.Cancelled {
-            color: #000000;
-            background-color: #cccccc;
-        }
+    .gridStatusMarker.Cancelled {
+        color: #000000;
+        background-color: #cccccc;
+    }
 
     .dealTools .md-icon {
         padding: 4px 0 0 5px;
@@ -456,9 +305,9 @@
         cursor: pointer;
     }
 
-        .ruleName:hover {
-            color: #abadaf;
-        }
+    .ruleName:hover {
+        color: #abadaf;
+    }
 
     .k-tabstrip-wrapper, .k-tabstrip-bottom, .k-spreadsheet-sheets-bar-add {
         display: none;
@@ -475,12 +324,12 @@
         box-shadow: none;
     }
 
-        .k-button:hover {
-            background-color: #00aeef;
-            border-color: #00aeef;
-            color: #fff;
-            box-shadow: none;
-        }
+    .k-button:hover {
+        background-color: #00aeef;
+        border-color: #00aeef;
+        color: #fff;
+        box-shadow: none;
+    }
 
     .tmpltItem {
         width: 100%;
