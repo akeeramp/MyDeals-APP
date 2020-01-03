@@ -9,7 +9,7 @@
 
     RuleModalController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModalInstance', 'RuleConfig', 'dataItem']
 
-    function RuleModalController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModalInstance, RuleConfig, dataItem){
+    function RuleModalController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModalInstance, RuleConfig, dataItem) {
         var vm = this;
         vm.loadCriteria = false;
         vm.isEditmode = true;
@@ -28,11 +28,11 @@
 
         $scope.init = function () {
             vm.RuleConfig = RuleConfig.data;
-            if (dataItem.id == 0) {
-                vm.addNewRule();
-            } else {
-                vm.GetRules(dataItem.id, "GET_BY_RULE_ID");
-            }
+            //if (dataItem.id == 0) {
+            //    vm.addNewRule();
+            //} else {
+            vm.GetRules(dataItem.id, "GET_BY_RULE_ID");
+            //}
         }
 
         vm.openRulesSimulation = function (dataItem) {
@@ -256,16 +256,16 @@
             dataTextField: "NAME",
             dataValueField: "EMP_WWID",
             valueTemplate: '<div class="tmpltItem">' +
-                '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-                '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-                '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
-                '<div class="clearboth"></div>' +
-                '</div>',
+            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+            '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+            '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
+            '<div class="clearboth"></div>' +
+            '</div>',
             template: '<div class="tmpltItem">' +
-                '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-                '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-                '<div class="clearboth"></div>' +
-                '</div>',
+            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
+            '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
+            '<div class="clearboth"></div>' +
+            '</div>',
             footerTemplate: 'Total #: instance.dataSource.total() # items found',
             valuePrimitive: true,
             filter: "contains",
@@ -525,7 +525,7 @@
                     $('#productCriteria').hide();
                     vm.isEditmode = false;
                     vm.dataSource.read();
-                    logger.success("Rule has been updated");                    
+                    logger.success("Rule has been updated");
                 } else {
                     kendo.alert("This rule name already exists in another rule.");
                 }
@@ -545,7 +545,7 @@
         var availableAttrs = [];
 
         vm.GetRules = function (id, actionName) {
-            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
+            vm.spinnerMessageDescription = "Please wait while we " + (id == 0 && actionName == "GET_BY_RULE_ID" ? "initiating" : "loading") + " the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 switch (actionName) {
                     case "GET_BY_RULE_ID": {
@@ -586,7 +586,7 @@
                         vm.toggleType(vm.rule.IsAutomationIncluded);
                         vm.loadCriteria = true;
                     } break;
-                    default: {                        
+                    default: {
                         vm.Rules = response.data;
                         vm.isEditmode = false;
                         vm.dataSource.read();
@@ -616,6 +616,9 @@
                 titleTemplate: "Invalid Price",
                 messageTemplate: "Format of the price is invalid. This should be greater than zero."
             });
+            $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
+            $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');
+            $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').attr('title', 'Requested ECAP must be greater than or equal to the floor price entered');
         }
 
         vm.deleteRule = function (id) {
@@ -825,13 +828,13 @@
                 {
                     width: "160px",
                     template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div>"
-                        + "<div class='rule'>"
-                        + "<i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>"
-                        + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i>"
-                        + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
-                        + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
-                        + "<i ng-if='(vm.isElligibleForApproval && #= IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
-                        + "</div>",
+                    + "<div class='rule'>"
+                    + "<i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>"
+                    + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i>"
+                    + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
+                    + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
+                    + "<i ng-if='(vm.isElligibleForApproval && #= IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
+                    + "</div>",
                     hidden: vm.toolKitHidden
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
@@ -1272,29 +1275,29 @@
             }
         });
 
-        vm.addNewRule = function () {
-            vm.ProductCriteria = [];
-            $('#productCriteria').show();
-            vm.LastValidatedProducts = [];
-            vm.ValidProducts = [];
-            vm.dataSourceSpreadSheet.read();
-            //
-            vm.isEditmode = true;
-            vm.rule = {};
-            vm.rule.Id = 0;
-            vm.rule.IsAutomationIncluded = true;
-            vm.rule.IsActive = true;
-            vm.rule.StartDate = new Date();
-            vm.rule.EndDate = vm.RuleConfig.DefaultEndDate;
-            vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
-            vm.BlanketDiscountPercentage = "";
-            vm.BlanketDiscountDollor = "";
-            //vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.RuleConfig.CurrentUserWWID).length === 0 ? null : vm.RuleConfig.CurrentUserWWID;
-            vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
-            vm.rule.OwnerName = vm.RuleConfig.CurrentUserName;
-            vm.loadCriteria = true;
-            vm.DeleteSpreadsheetAutoHeader();
-        }
+        //vm.addNewRule = function () {
+        //    vm.ProductCriteria = [];
+        //    $('#productCriteria').show();
+        //    vm.LastValidatedProducts = [];
+        //    vm.ValidProducts = [];
+        //    vm.dataSourceSpreadSheet.read();
+        //    //
+        //    vm.isEditmode = true;
+        //    vm.rule = {};
+        //    vm.rule.Id = 0;
+        //    vm.rule.IsAutomationIncluded = true;
+        //    vm.rule.IsActive = true;
+        //    vm.rule.StartDate = new Date();
+        //    vm.rule.EndDate = vm.RuleConfig.DefaultEndDate;
+        //    vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
+        //    vm.BlanketDiscountPercentage = "";
+        //    vm.BlanketDiscountDollor = "";
+        //    //vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.RuleConfig.CurrentUserWWID).length === 0 ? null : vm.RuleConfig.CurrentUserWWID;
+        //    vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
+        //    vm.rule.OwnerName = vm.RuleConfig.CurrentUserName;
+        //    vm.loadCriteria = true;
+        //    vm.DeleteSpreadsheetAutoHeader();
+        //}
 
         //Export to Excel
         vm.exportToExcel = function () {

@@ -88,7 +88,8 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetPriceRules/{id}/{strActionName}")]
         public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
         {
-            return SafeExecutor(() => _rulesLib.GetPriceRules(id, strActionName), $"Unable to get price rules");
+            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
+            return SafeExecutor(() => _rulesLib.GetPriceRules(id, priceRuleAction), $"Unable to get price rules");
         }
         
         [Authorize]

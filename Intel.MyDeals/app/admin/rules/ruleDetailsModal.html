@@ -25,7 +25,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.ChangedBy.length > 0">
+                    <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.Id > 0">
                         Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} GMT</span>
                     </div>
                     <div class="col-md-2" style="font-size: 12px; margin: 0; padding: 0; text-align: right; width:100%">
@@ -197,13 +197,6 @@
             $(this).find('.modal-body').css({
                 'max-height': '100%'
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#bodyContent').attr('style', 'overflow: auto !important');
-            $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
-            $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');
         });
     </script>
     <style>

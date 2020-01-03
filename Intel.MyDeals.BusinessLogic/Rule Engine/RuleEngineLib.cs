@@ -48,10 +48,37 @@ namespace Intel.MyDeals.BusinessLogic
             return new ApprovalRules().GetSuggestion(strCategory, strSearchKey);
         }
 
-        public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
+        public List<PriceRuleCriteria> GetPriceRules(int id, PriceRuleAction priceRuleAction)
         {
-            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            List<PriceRuleCriteria> lstPriceRuleCriteria = new ApprovalRules().GetPriceRuleCriteria(id, priceRuleAction);
+            List<PriceRuleCriteria> lstPriceRuleCriteria = new List<PriceRuleCriteria>();
+            if (id == 0 && priceRuleAction == PriceRuleAction.GET_BY_RULE_ID)
+            {
+                var ruleConfig = new ApprovalRules().GetPriceRulesConfig();
+                lstPriceRuleCriteria.Add(new PriceRuleCriteria
+                {
+                    Id = 0,
+                    Name = string.Empty,
+                    OwnerName = ruleConfig.CurrentUserName,
+                    Notes = string.Empty,
+                    CriteriaJson = "{\"Rules\":[{\"type\":\"singleselect_read_only\",\"field\":\"OBJ_SET_TYPE_CD\",\"operator\":\" = \",\"value\":\"ECAP\",\"values\":[],\"valueType\":null}],\"BlanketDiscount\":[{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\" % \"}},{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\"$\"}}]}",
+                    ProductCriteriaJson = "[]",
+                    IsActive = true,
+                    IsAutomationIncluded = true,
+                    RuleStage = false,
+                    StartDate = DateTime.UtcNow,
+                    EndDate = ruleConfig.DefaultEndDate,
+                    OwnerId = ruleConfig.CurrentUserWWID,
+                    ChangedBy = ruleConfig.CurrentUserName,
+                    ChangeDateTime = DateTime.UtcNow,
+                    RuleDescription = string.Empty,
+                    ProductDescription = string.Empty,
+                });
+            }
+            else
+            {
+                lstPriceRuleCriteria = new ApprovalRules().GetPriceRuleCriteria(id, priceRuleAction);
+            }
+
             if (priceRuleAction == PriceRuleAction.GET_BY_RULE_ID)
             {
                 lstPriceRuleCriteria.ForEach(x =>
@@ -77,7 +104,7 @@ namespace Intel.MyDeals.BusinessLogic
             //List<Product> lstProductFromCache = new ProductsLib().GetProducts(true);
             return new ApprovalRules().GetValidProducts(lstProducts);
         }
-        
+
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction, Dictionary<int, string> dicCustomerName)
         {
             if (priceRuleAction == PriceRuleAction.SAVE_AS_DRAFT || priceRuleAction == PriceRuleAction.SUBMIT)

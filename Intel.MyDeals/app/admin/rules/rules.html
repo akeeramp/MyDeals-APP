@@ -1,5 +1,5 @@
 ﻿<form style="margin-top: 10px;" class="form-horizontal" autocomplete="off">
-    <loading-panel show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+    <loading-panel id="priceRuleLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
     <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
     <div ng-if="!vm.isEditmode" class="col-md-10">
@@ -383,9 +383,6 @@
 <script>
     $(document).ready(function () {
         $('#bodyContent').attr('style', 'overflow: auto !important');
-        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[0]).find('div').html('Product Name (Only Lvl 4 or Material Ids Allowed)');
-        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').html('ECAP Floor (US$)');
-        $($('#spreadsheetProductCriteria .k-spreadsheet-column-header').find('div')[2]).find('div').attr('title', 'Requested ECAP must be greater than or equal to the floor price entered');
         $($('.k-grid-header-wrap .k-hierarchy-cell').find('th')[0]).html('<a class="k-icon k-i-expand" href="#" tabindex="-1"></a>');
 
         $('#btnWordWrapControl').click(function (e) { 

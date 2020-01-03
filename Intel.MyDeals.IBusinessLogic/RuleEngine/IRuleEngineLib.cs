@@ -10,7 +10,7 @@ namespace Intel.MyDeals.IBusinessLogic
         bool RunPriceRules();
         RuleConfig GetPriceRulesConfig();
         List<string> GetSuggestion(string strCategory, string strSearchKey);
-        List<PriceRuleCriteria> GetPriceRules(int id, string strActionName);
+        List<PriceRuleCriteria> GetPriceRules(int id, PriceRuleAction priceRuleAction);
         List<RulesSimulationResults> RunRuleSimulations(List<int[]> dataList); // dataList list has 2 items, first is rules list array, second is deals list array
         PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction, Dictionary<int, string> dicCustomerName);
         bool IsDuplicateTitle(int iRuleSid, string strTitle);
