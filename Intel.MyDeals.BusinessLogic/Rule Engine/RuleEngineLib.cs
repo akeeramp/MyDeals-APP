@@ -62,7 +62,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Notes = string.Empty,
                     CriteriaJson = "{\"Rules\":[{\"type\":\"singleselect_read_only\",\"field\":\"OBJ_SET_TYPE_CD\",\"operator\":\" = \",\"value\":\"ECAP\",\"values\":[],\"valueType\":null}],\"BlanketDiscount\":[{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\" % \"}},{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\"$\"}}]}",
                     ProductCriteriaJson = "[]",
-                    IsActive = true,
+                    IsActive = false,
                     IsAutomationIncluded = true,
                     RuleStage = false,
                     StartDate = DateTime.UtcNow,

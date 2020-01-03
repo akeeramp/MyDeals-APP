@@ -1,10 +1,10 @@
-﻿<form style="margin-top: 0px;" class="form-horizontal" autocomplete="off">
+﻿<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
     <div class="modal-content" id="ruleModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
-            <i id="btnClose" class="intelicon-close-max" ng-click="ok()" title="Click to Close"></i>
-            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Click to Enable dragging"></i>
-            <i id="btnModalEnlargeText" class="intelicon-increase-text-outlined" title="Click to Decrese Text"></i>
-            <h3 id="modalTitle">Rule Configuration Details</h3>
+            <i id="btnClose" class="intelicon-close-max" ng-click="ok()" title="Close this window"></i>
+            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>
+            <i id="btnModalEnlargeText" class="intelicon-increase-text-outlined" title="Click to Decrease Text"></i>
+            <h3 id="modalTitle">Rule Details</h3>
 
         </div>
 
@@ -25,6 +25,20 @@
                         </div>
                     </div>
 
+                    <div class="col-md-11 notes">
+                        Use this page to manage the My Deals '<b>Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule 
+                        Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool 
+                        can potentially impact ALL deals moving through the My Deals application.  As a rule owner, you may be held liable for any rules that improperly 
+                        route deals resulting in an inappropriate transaction.  <a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for My Deals help">
+                        &nbsp;Review training for additional details.</a><br/><br/>
+                    </div>
+
+                    <div class="col-md-11 notes">
+                        <span class="bluebold">NOTE:</span> Price Rules are run against 'submitted' Tender (ECAP) deals in an 
+                        <span class="bluebold">hourly BATCH process</span>.   Each hour (##:00)  all 'active' Price Rules will be run against all 'submitted' ECAP tender 
+                        deals.  It is important to note that Price Rules do not run as deals are created but through the hourly BATCH process.<br/><br/>
+                    </div>
+
                     <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.Id > 0">
                         Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} GMT</span>
                     </div>
@@ -39,14 +53,14 @@
                                    ng-model="vm.rule.Name"
                                    style="width:100%">
                         </div>
-                        <div class="tooltipPriceRule col-md-2">
+                        <div class="col-md-2">
                             <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsAutomationIncluded))"
                                     ng-model="vm.rule.RuleStage"
                                     on="Approved"
                                     off="Approve"
                                     onstyle="btn-success"
                                     offstyle="btn-danger"
-                                    title="{{vm.rule.RuleStage == true ? 'Approved' : 'Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',(vm.isElligibleForApproval && vm.rule.IsActive && vm.rule.IsAutomationIncluded))"></toggle>
+                                    title="{{vm.rule.RuleStage === true ? 'Approved' : 'Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',(vm.isElligibleForApproval && vm.rule.IsActive && vm.rule.IsAutomationIncluded))"></toggle>
                         </div>
                     </div>
 
@@ -57,20 +71,20 @@
                         </div>
                         <label class="control-label col-md-2">Rule Status:</label>
                         <span class="col-md-2" style="float: left;">
-                            <div class="tooltipPriceRule">
+                            <div>
                                 <toggle class="fl toggle-accept" ng-disabled="vm.rule.RuleStage == false"
                                         ng-model="vm.rule.IsActive"
                                         on="Active"
                                         off="Inactive"
                                         onstyle="btn-success"
                                         offstyle="btn-danger"
-                                        title="{{vm.rule.IsActive == true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true, vm.rule.RuleStage)"></toggle>
-                                 </div>
+                                        title="{{vm.rule.IsActive === true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true, vm.rule.RuleStage)"></toggle>
+                            </div>
                         </span>
 
                         <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
                         <span class="col-md-2" style="float: left;">
-                            <div class="tooltipPriceRule">
+                            <div>
                                 <toggle class="fl toggle-accept"
                                         ng-model="vm.rule.IsAutomationIncluded"
                                         on="Auto Approval"
@@ -78,8 +92,8 @@
                                         off="Exclusion Rule"
                                         onstyle="btn-success"
                                         offstyle="btn-danger"
-                                        title="{{vm.rule.IsAutomationIncluded == true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
-                                 </div>
+                                        title="{{vm.rule.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
+                            </div>
                         </span>
 
                         
@@ -135,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="display:none;"><!--Dummy button to prevent events while press enter key in textbox--><button /></div>
+                <div style="display:none;"><!--Dummy button to prevent events while press enter key in textbox--><button></button></div>
                 <div class="form-group row" id="productCriteria">
                     <label class="control-label col-md-2">Product Criteria:</label>
                     <div class="col-md-9">
@@ -143,15 +157,17 @@
                         <button ng-click="vm.validateProduct(true,false,false)" class="btn btn-primary" style="float: left;">Validate Products</button>
                     </div>
                 </div>
-                <div class="form-group row" id="productCriteria">&nbsp;</div>
+                <div class="form-group row">&nbsp;</div> <!-- Dummy label for spacing at bottom -->
+                <label class="control-label col-md-1" style="float: left; height: 50px;">&nbsp;</label>
             </form>
         </div>
+
         <div class="modal-footer">
             <div class="form-group row action_btns">
                 <div class="col-md-7">
                     <button ng-click="vm.saveRule('SAVE_AS_DRAFT',false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
                     <button ng-click="vm.saveRule('SUBMIT',true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
-                    <button ng-click="vm.cancel()" class="btn btn-primary" style="margin-left: 15px">Cancel</button>
+                    <button ng-click="ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
                     <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" ng-disabled="vm.rule.Id == 0">Simulate</button>
                 </div>
             </div>
@@ -163,14 +179,14 @@
         $(".modal-content").resizable({
             handles: 'e, w'
         });
-        //Intializing the Draggble function for the first time
+        //Initializing the Draggable function for the first time
         $('.modal-dialog').draggable();
         //Disabled it cause by default it will be disabled
         $('.modal-dialog').draggable('disable');
-        //Draggble Toggle button for the User- Click to Enable.Disablen
-        $('#btnModalAnchordisable').click(function (e) {
+        //Draggable Toggle button for the User- Click to Enable.Disabled
+        $('#btnModalAnchordisable').click(function () {
             $('.modal-dialog').draggable('disable');
-            if ($('#btnModalAnchordisable').attr('class').trim() == 'intelicon-locked-outlined') {
+            if ($('#btnModalAnchordisable').attr('class').trim() === 'intelicon-locked-outlined') {
                 $('.modal-dialog').draggable('enable');
                 $('#btnModalAnchordisable').removeClass('intelicon-locked-outlined').addClass('intelicon-unlocked-outlined');
                 $('#btnModalAnchordisable').attr('title', 'Click me to Disable Dragging');
@@ -181,8 +197,8 @@
             }
 
         });
-        $('#btnModalEnlargeText').click(function (e) {
-            if ($('#btnModalEnlargeText').attr('class').trim() == 'intelicon-decrease-text-outlined') {
+        $('#btnModalEnlargeText').click(function () {
+            if ($('#btnModalEnlargeText').attr('class').trim() === 'intelicon-decrease-text-outlined') {
                 $('#btnModalEnlargeText').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
                 $('#mainForm').removeClass('bigFont').addClass('fontSmall');
                 $('#btnModalEnlargeText').attr('title', 'Click me to Decrease Text size');
@@ -209,6 +225,20 @@
             /* float: left; */
             border: 1px solid #003c71;
             margin-left: -2px;
+        }
+
+        .notes {
+            font-size: 14px; 
+            margin-left: 40px; 
+            padding: 0;
+        }
+        .bluebold {
+            color: #0071c5; 
+            font-weight: bold;
+        }
+        .redbold {
+            color: red; 
+            font-weight: bold;
         }
 
         .modal-content {
