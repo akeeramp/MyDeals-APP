@@ -621,7 +621,7 @@
                         template: "<div>#=ProductDescription#</div>",
                         width: "50%",
                         filterable: { multi: true, search: false },
-                        hidden: vm.productPresent > 0 ? true : false                        
+                        hidden: vm.productPresent > 0 ? false : true                        
                     }                   
                     
                 ]
