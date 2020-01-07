@@ -62,7 +62,7 @@
                         <label class="control-label col-md-2">Rule Status:</label>
                         <span class="col-md-2" style="float: left;">
                             <div>
-                                <toggle class="fl toggle-accept" ng-disabled="vm.rule.RuleStage == false"
+                                <toggle class="fl toggle-accept" ng-disabled="vm.rule.RuleStage == false && vm.rule.OwnerId == window.usrWwid"
                                         ng-model="vm.rule.IsActive"
                                         on="Active"
                                         off="Inactive"
