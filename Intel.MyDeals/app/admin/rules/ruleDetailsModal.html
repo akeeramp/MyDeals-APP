@@ -13,30 +13,20 @@
 
                 <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
-               
-                    <div ng-show="false" class="form-group row">
-                        <label class="control-label col-md-2">Rule:</label>
-                        <div class="col-md-9">
-                            <select class="form-control md"
-                                    kendo-combo-box
-                                    k-options="vm.ruleOptions"
-                                    ng-model="vm.rule.Id"
-                                    style="width:100%"></select>
-                        </div>
-                    </div>
-
+                <div>
                     <div class="col-md-11 notes">
-                        Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule 
-                        Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool 
-                        can potentially impact ALL deals moving through the My Deals application.  As a rule owner, you may be held liable for any rules that improperly 
+                        Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule
+                        Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool
+                        can potentially impact ALL deals moving through the My Deals application.  As a rule owner, you may be held liable for any rules that improperly
                         route deals resulting in an inappropriate transaction.  <a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for My Deals help">
-                        &nbsp;Review training for additional details.</a><br/><br/>
+                            &nbsp;Review training for additional details.
+                        </a><br /><br />
                     </div>
 
                     <div class="col-md-11 notes">
-                        <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an 
-                        <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'active' Price Rules will be run against all 'Submitted' ECAP tender 
-                        deals.  It is important to note that Price Rules do not run as deals are created but through the <span class="redbold">hourly BATCH process.</span><br/><br/>
+                        <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
+                        <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'active' Price Rules will be run against all 'Submitted' ECAP tender
+                        deals.  It is important to note that Price Rules do not run as deals are created but through the <span class="redbold">hourly BATCH process.</span><br /><br />
                     </div>
 
                     <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.Id > 0">
@@ -67,7 +57,7 @@
                     <div class="form-group row">
                         <label class="control-label isRequired col-md-2">Owner:</label>
                         <div class="col-md-2">
-                            <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>                            
+                            <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>
                         </div>
                         <label class="control-label col-md-2">Rule Status:</label>
                         <span class="col-md-2" style="float: left;">
@@ -96,11 +86,11 @@
                             </div>
                         </span>
 
-                        
+
                     </div>
 
                     <div class="form-group row">
-                        
+
                         <label class="control-label isRequired col-md-2">Start Date:</label>
                         <div class="col-md-2">
                             <input kendo-date-picker
@@ -194,18 +184,18 @@
                 $('#btnModalAnchordisable').attr('title', 'Click me to Enable Dragging');
             }
 
-        });
-        $('#btnModalEnlargeText').click(function () {
-            if ($('#btnModalEnlargeText').attr('class').trim() === 'intelicon-decrease-text-outlined') {
-                $('#btnModalEnlargeText').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
-                $('#mainForm').removeClass('bigFont').addClass('fontSmall');
-                $('#btnModalEnlargeText').attr('title', 'Click me to Decrease Text size');
-            } else {
-                $('#btnModalEnlargeText').removeClass('intelicon-increase-text-outlined').addClass('intelicon-decrease-text-outlined');
-                $('#mainForm').removeClass('fontSmall').addClass('bigFont');
-                $('#btnModalEnlargeText').attr('title', 'Click me to Increase Text size');
-            }
-        });
+    });
+    $('#btnModalEnlargeText').click(function () {
+        if ($('#btnModalEnlargeText').attr('class').trim() === 'intelicon-decrease-text-outlined') {
+            $('#btnModalEnlargeText').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
+            $('#mainForm').removeClass('bigFont').addClass('fontSmall');
+            $('#btnModalEnlargeText').attr('title', 'Click me to Decrease Text size');
+        } else {
+            $('#btnModalEnlargeText').removeClass('intelicon-increase-text-outlined').addClass('intelicon-decrease-text-outlined');
+            $('#mainForm').removeClass('fontSmall').addClass('bigFont');
+            $('#btnModalEnlargeText').attr('title', 'Click me to Increase Text size');
+        }
+    });
 
         $('#modal-window').on('show.bs.modal', function () {
             $(this).find('.modal-body').css({
@@ -225,40 +215,42 @@
             margin-left: -2px;
         }
 
-        .notes {
-            font-size: 14px; 
-            margin-left: 40px; 
-            padding: 0;
-        }
-        .bluebold {
-            color: #0071c5; 
-            font-weight: bold;
-        }
-        .redbold {
-            color: red; 
-            font-weight: bold;
-        }
+    .notes {
+        font-size: 14px;
+        margin-left: 40px;
+        padding: 0;
+    }
+
+    .bluebold {
+        color: #0071c5;
+        font-weight: bold;
+    }
+
+    .redbold {
+        color: red;
+        font-weight: bold;
+    }
 
         /*.modal-content {
             max-height: 600px;
         }*/
 
-        .modal-dialog {
-            width: 90%;
-        }
+    .modal-dialog {
+        width: 90%;
+    }
 
-        .fontSmall {
-            font-size: 12px !important;
-        }
+    .fontSmall {
+        font-size: 12px !important;
+    }
 
-        .bigSmall {
-            font-size: 15px !important;
-        }
+    .bigSmall {
+        font-size: 15px !important;
+    }
 
-        #modalTitle {
-            float: left;
-            margin-top: -30px;
-        }
+    #modalTitle {
+        float: left;
+        margin-top: -30px;
+    }
 
         .modal-body {
             overflow-y: scroll;
@@ -267,49 +259,57 @@
             border-bottom: none;
         }
 
-        .modalBlueBody {
-            background-color: #003C71;
-            color: #ffffff;
-        }
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
 
-        .modal-header {
-            padding: 25px;
-            border-bottom: 1px solid #e5e5e5;
-            min-height: 16.5px;
-        }
+    .modal-header {
+        padding: 25px;
+        border-bottom: 1px solid #e5e5e5;
+        min-height: 16.5px;
+    }
 
-        #btnModalAnchordisable {
-            float: right;
-            margin-left: 94.5%;
-            background: transparent;
-            border: 1px solid #00aeef;
-            padding: 3px;
-            cursor: pointer;
-            font-size: 22px;
-            margin-top: -30px;
-            z-index: 999999999;
-            margin-right: 70px;
-        }
+    .modal {
+        z-index: 5 !important;
+    }
 
-        #btnModalEnlargeText {
-            float: right;
-            background: transparent;
-            border: 1px solid #00aeef;
-            padding: 3px;
-            cursor: pointer;
-            font-size: 22px;
-            margin-top: -30px;
-            z-index: 99999;
-            margin-right: 35px;
-        }
+    .modal-backdrop {
+        z-index: 3 !important;
+    }
 
-        #btnClose {
-            float: right;
-            margin-top: -15px;
-            background: transparent;
-            border: 1px solid #00aeef;
-            padding: 3px;
-            font-size: 22px;
-            cursor: pointer;
-        }
-    </style>
+    #btnModalAnchordisable {
+        float: right;
+        margin-left: 94.5%;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        cursor: pointer;
+        font-size: 22px;
+        margin-top: -30px;
+        z-index: 999999999;
+        margin-right: 70px;
+    }
+
+    #btnModalEnlargeText {
+        float: right;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        cursor: pointer;
+        font-size: 22px;
+        margin-top: -30px;
+        z-index: 99999;
+        margin-right: 35px;
+    }
+
+    #btnClose {
+        float: right;
+        margin-top: -15px;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+</style>

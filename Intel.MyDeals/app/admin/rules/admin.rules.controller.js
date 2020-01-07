@@ -18,15 +18,13 @@
         vm.Rules = [];
         vm.rule = {};
         vm.RuleConfig = [];
-        vm.BlanketDiscountDollor = "";
-        vm.BlanketDiscountPercentage = "";
-        vm.ProductCriteria = [];
         vm.isElligibleForApproval = false;
         vm.adminEmailIDs = "";
         vm.spinnerMessageHeader = "Price Rule";
         vm.spinnerMessageDescription = "Please wait while we loading page";
         vm.isBusyShowFunFact = true;
         vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
+
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
                 vm.RuleConfig = response.data;
@@ -35,6 +33,7 @@
             });
             vm.GetRules(0, "GET_RULES");
         }
+
         vm.openRuleDetailsModal = function (dataItem) {
             $scope.context = dataItem;
 
@@ -62,6 +61,7 @@
                 vm.cancel();
             }, function () { });
         }
+
         vm.openRulesSimulation = function (dataItem) {
             $scope.context = dataItem;
 
@@ -109,265 +109,8 @@
                 });
             }
             
-        }
-                
-        vm.ruleOptions = {
-            placeholder: "Select a Rule ...",
-            dataTextField: "Name",
-            dataValueField: "Id",
-            autoBind: false,
-            dataSource: {
-                type: "json",
-                serverFiltering: true,
-                transport: {
-                    read: function (e) {
-                        e.success(vm.Rules);
-                    }
-                }
-            }
-        };
-
-        vm.ownerOptions = {
-            placeholder: "Select email address...",
-            dataTextField: "NAME",
-            dataValueField: "EMP_WWID",
-            valueTemplate: '<div class="tmpltItem">' +
-            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-            '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-            '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
-            '<div class="clearboth"></div>' +
-            '</div>',
-            template: '<div class="tmpltItem">' +
-            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-            '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-            '<div class="clearboth"></div>' +
-            '</div>',
-            footerTemplate: 'Total #: instance.dataSource.total() # items found',
-            valuePrimitive: true,
-            filter: "contains",
-            maxSelectedItems: 1,
-            autoBind: true,
-            dataSource: {
-                type: "json",
-                serverFiltering: true,
-                transport: {
-                    read: function (e) {
-                        e.success(vm.RuleConfig.DA_Users);
-                    }
-                }
-            },
-            change: function (e) {
-                vm.rule.OwnerId = this.value();
-            }
-        };
-        var allowedRoleForCreatedBy = ['GA', 'FSE'];
-        $scope.attributeSettings = [
-            {
-                field: "CRE_EMP_NAME",
-                title: "Created by name",
-                type: "list",
-                width: 150.0,
-                lookupText: "NAME",
-                lookupValue: "EMP_WWID",
-                lookupUrl: "/api/Employees/GetUsrProfileRoleByRoleCd/" + allowedRoleForCreatedBy.join()
-            },
-            {
-                field: "WIP_DEAL_OBJ_SID",
-                title: "Deal #",
-                type: "string_limited",
-                width: 150
-            },
-            {
-                field: "OBJ_SET_TYPE_CD",
-                title: "Deal Type",
-                type: "singleselect_read_only",
-                width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [{ Value: "ECAP" }]
-            },
-            {
-                field: "CUST_NM",
-                title: "Customer",
-                type: "list",
-                width: 150.0,
-                lookupText: "CUST_NM",
-                lookupValue: "CUST_SID",
-                lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
-            },
-            {
-                field: "END_CUSTOMER_RETAIL",
-                title: "End Customer",
-                type: "string_with_in",
-                width: 150
-            },
-            {
-                field: "GEO_COMBINED",
-                title: "Deal Geo",
-                type: "list",
-                width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [{ Value: "Worldwide" }, { Value: "APAC" }, { Value: "ASMO" }, { Value: "EMEA" }, { Value: "IJKK" }, { Value: "PRC" }]
-            },
-            {
-                field: "HOST_GEO",
-                title: "Customer Geo",
-                type: "list",
-                width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [{ Value: "APAC" }, { Value: "ASMO" }, { Value: "EMEA" }, { Value: "IJKK" }, { Value: "PRC" }]
-            },
-            {
-                field: "PRODUCT_FILTER",
-                title: "Product",
-                type: "string",
-                width: 150,
-                dimKey: 20
-            },
-            {
-                field: "DEAL_DESC",
-                title: "Deal Description",
-                type: "string",
-                width: 150,
-                dimKey: 20
-            },
-            {
-                field: "OP_CD",
-                title: "Op Code",
-                type: "list",
-                width: 150,
-                lookupText: "value",
-                lookupValue: "value",
-                lookupUrl: "/api/Dropdown/GetDictDropDown/OP_CD"
-            },
-            {
-                field: "DIV_NM",
-                title: "Product Division",
-                type: "list",
-                width: 150,
-                lookupText: "value",
-                lookupValue: "value",
-                lookupUrl: "/api/Dropdown/GetDictDropDown/DIV_NM"
-            },
-            {
-                field: "FMLY_NM",
-                title: "Family",
-                type: "list",
-                width: 150,
-                lookupText: "value",
-                lookupValue: "value",
-                lookupUrl: "/api/Dropdown/GetDictDropDown/FMLY_NM"
-            },
-            {
-                field: "PRD_CAT_NM",
-                title: "Product Verticals",
-                type: "list",
-                width: 150,
-                lookupText: "value",
-                lookupValue: "value",
-                lookupUrl: "/api/Dropdown/GetDictDropDown/PRD_CAT_NM"
-            },
-            {
-                field: "SERVER_DEAL_TYPE",
-                title: "Server Deal Type",
-                type: "list",
-                width: 150,
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
-            },
-            {
-                field: "MRKT_SEG",
-                title: "Market Segment",
-                type: "list",
-                width: 150,
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
-            },
-            {
-                field: "PAYOUT_BASED_ON",
-                title: "Payout Based On",
-                type: "singleselect_ext",
-                width: 150,
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
-            },
-            {
-                field: "COMP_SKU",
-                title: "Meet Comp Sku",
-                type: "string_with_in",
-                width: 150
-            },
-            {
-                field: "ECAP_PRICE",
-                title: "ECAP (Price)",
-                type: "money",
-                width: 150,
-                dimKey: 20,
-                format: "{0:c}"
-            },
-            {
-                field: "VOLUME",
-                title: "Ceiling Volume",
-                type: "number",
-                width: 150
-            },
-            {
-                field: "VOL_INCR",
-                title: "Ceiling Volume Increase",
-                type: "numericOrPercentage",
-                width: 150
-            },
-            {
-                field: "END_DT",
-                title: "End Date",
-                type: "date",
-                template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
-                width: 150
-            },
-            {
-                field: "END_DT_PUSH",
-                title: "End Date Push",
-                type: "number",
-                width: 150,
-                post_label: "Days"
-            },
-            {
-                field: "HAS_TRCK",
-                title: "Has Tracker",
-                type: "singleselect",
-                width: 150,
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [{ Value: "Yes" }, { Value: "No" }]
-            },
-            {
-                field: "MTRL_ID",
-                title: "Material Id",
-                type: "autocomplete",
-                width: 150
-            },
-            {
-                field: "DEAL_PRD_NM",
-                title: "Level 4",
-                type: "autocomplete",
-                width: 150
-            },
-            {
-                field: "PCSR_NBR",
-                title: "Processor Number",
-                type: "list",
-                width: 150,
-                lookupText: "value",
-                lookupValue: "value",
-                lookupUrl: "/api/Dropdown/GetDictDropDown/PCSR_NBR"
-            }
-        ];
-
+        }     
+        
         vm.editRule = function (dataItem) {
             //vm.GetRules(id, "GET_BY_RULE_ID"); 
             if (dataItem.id) {
@@ -390,42 +133,8 @@
             }, function (response) {
                 logger.error("Unable to copy the rule");
             });
-        }
-
-        vm.UpdatePriceRule = function (priceRuleCriteria, strActionName) {
-            ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
-                if (response.data.Id > 0) {
-                    if (vm.Rules.filter(x => x.Id == response.data.Id).length > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id != response.data.Id);
-                    }
-                    var updatedRule = response.data;
-                    updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId == vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
-                    updatedRule.RuleStatusLabel = updatedRule.IsActive ? "Active" : "Inactive";
-                    updatedRule.RuleStageLabel = updatedRule.RuleStage ? "Approved" : "Pending Approval";
-                    updatedRule.RuleAutomationLabel = updatedRule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
-                    vm.Rules.splice(0, 0, updatedRule);
-                    $('#productCriteria').hide();
-                    vm.isEditmode = false;
-                    vm.dataSource.read();
-                    logger.success("Rule has been updated");
-                } else {
-                    kendo.alert("This rule name already exists in another rule.");
-                }
-            }, function (response) {
-                logger.error("Unable to update the rule");
-            });
-        };
-
-        vm.EditBlanketDiscountPercentage = function () {
-            vm.BlanketDiscountDollor = "";
-        };
-
-        vm.EditBlanketDiscountDollor = function () {
-            vm.BlanketDiscountPercentage = "";
-        };
-
-        var availableAttrs = [];
-
+        }        
+        
         vm.GetRules = function (id, actionName) {
             vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
@@ -471,6 +180,7 @@
                 return 'intelicon-minus-solid clrRed';
             }
         }
+
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
@@ -571,6 +281,7 @@
                 });
             }
         }
+
         $scope.detailInit = function (parentDataItem) {
             return {
                 dataSource: {
@@ -627,6 +338,7 @@
                 ]
             };
         };
+
         vm.gridOptions = {
             toolbar: [
                 { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
@@ -737,25 +449,6 @@
                 
             ]
         };
-
-        vm.toggleType = function (currentState) {
-            // Ganthi - DO NOT REMOVE THIS - IT IS PART OF "US505889 - Price Rules: Exclusions for Automation" requirements, clear out fields and hide if exclusion rule.
-            // This hides fields if the rule is an exclusion rule, also clears out unwanted values that shouldn't be part of exclusion rule.
-            if (currentState !== true) {
-                vm.BlanketDiscountDollor = "";
-                vm.BlanketDiscountPercentage = "";
-
-                var sheet = $scope.spreadsheet.activeSheet();
-                sheet.range("A0:B199").clear();
-
-                //$('#blanketDiscountSection').hide(); // Hidden due to IsAutomationIncluded
-                $('#productCriteria').hide();
-                var g = 0;
-            } else {
-                $('#productCriteria').show();
-                //$('#blanketDiscountSection').show(); // Displayed due to IsAutomationIncluded
-            }
-        }
                 
         vm.simulate = function () {
             var data = new Array();
@@ -781,29 +474,6 @@
             });
         }
                
-        function myFunction(itemsList, maxItemsSize, itemsMessage) {
-            var retString = "";
-            if (itemsList.length > 0) {
-                var truncatedMatchedItems = itemsList.slice(0, maxItemsSize).map(function (data) { return " " + data });
-                retString += "</br></br>";
-                if (truncatedMatchedItems.length < itemsList.length) {
-                    retString += "<b>" + itemsMessage + " (top " + maxItemsSize + " of " + itemsList.length + " items)</b></br>" + $.unique(truncatedMatchedItems).join("</br>");
-                    retString += "<br>...<br>";
-                } else {
-                    retString += "<b>" + itemsMessage + "</b></br>" + $.unique(itemsList).join("</br>");
-                }
-            }
-            return retString;
-        }
-        
-        vm.dataSourceSpreadSheet = new kendo.data.DataSource({
-            transport: {
-                read: function (e) {
-                    e.success(vm.ProductCriteria);
-                }
-            }
-        });
-
         vm.addNewRule = function () {            
             //Call up Popup
             vm.editRule(0);
@@ -812,10 +482,6 @@
         //Export to Excel
         vm.exportToExcel = function () {
             gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
-        }
-        vm.approveRule = function () {
-            vm.rule.RuleStage = !vm.rule.RuleStage;
-            vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage, "UPDATE_STAGE_IND", true);
         }
 
         $scope.getConstant();

@@ -20,9 +20,6 @@
         vm.ProductCriteria = [];
         vm.isElligibleForApproval = false;
         vm.adminEmailIDs = "";
-        vm.spinnerMessageHeader = "Price Rule";
-        vm.spinnerMessageDescription = "Please wait while we loading page";
-        vm.isBusyShowFunFact = true;
         vm.toolKitHidden = window.usrRole === "DA" ? false : true;
 
         $scope.init = function () {
@@ -230,56 +227,7 @@
                 }
             ]
         };
-
-        vm.ruleOptions = {
-            placeholder: "Select a Rule ...",
-            dataTextField: "Name",
-            dataValueField: "Id",
-            autoBind: false,
-            dataSource: {
-                type: "json",
-                serverFiltering: true,
-                transport: {
-                    read: function (e) {
-                        e.success(vm.Rules);
-                    }
-                }
-            }
-        };
-
-        vm.ownerOptions = {
-            placeholder: "Select email address...",
-            dataTextField: "NAME",
-            dataValueField: "EMP_WWID",
-            valueTemplate: '<div class="tmpltItem">' +
-            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-            '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-            '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
-            '<div class="clearboth"></div>' +
-            "</div>",
-            template: '<div class="tmpltItem">' +
-            '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-            '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.NAME #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-            '<div class="clearboth"></div>' +
-            "</div>",
-            footerTemplate: "Total #: instance.dataSource.total() # items found",
-            valuePrimitive: true,
-            filter: "contains",
-            maxSelectedItems: 1,
-            autoBind: true,
-            dataSource: {
-                type: "json",
-                serverFiltering: true,
-                transport: {
-                    read: function (e) {
-                        e.success(vm.RuleConfig.DA_Users);
-                    }
-                }
-            },
-            change: function (e) {
-                vm.rule.OwnerId = this.value();
-            }
-        };
+                
         var allowedRoleForCreatedBy = ["GA", "FSE"];
         $scope.attributeSettings = [
             {
@@ -491,34 +439,20 @@
         vm.editRule = function (id) {
             vm.GetRules(id, "GET_BY_RULE_ID");
         }
-
-        vm.copyRule = function (id) {
-            ruleService.copyPriceRule(id).then(function (response) {
-                if (response.data > 0) {
-                    vm.editRule(response.data);
-                    logger.success("Rule has been copied");
-
-                } else {
-                    logger.error("Unable to copy the rule");
-                }
-            }, function (response) {
-                logger.error("Unable to copy the rule");
-            });
-        }
-
+        
         vm.UpdatePriceRule = function (priceRuleCriteria, strActionName) {
             ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
                 if (response.data.Id > 0) {
                     if (vm.Rules.filter(x => x.Id === response.data.Id).length > 0) {
                         vm.Rules = vm.Rules.filter(x => x.Id !== response.data.Id);
                     }
-                    var updatedRule = response.data;
+                    var updatedRule = response.data;                   
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId === vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
                     updatedRule.RuleStatusLabel = updatedRule.IsActive ? "Active" : "Inactive";
                     updatedRule.RuleStageLabel = updatedRule.RuleStage ? "Approved" : "Pending Approval";
                     updatedRule.RuleAutomationLabel = updatedRule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
-                    vm.Rules.splice(0, 0, updatedRule);
-                    $("#productCriteria").hide();
+                    vm.rule = updatedRule;
+                    vm.Rules.splice(0, 0, updatedRule);                   
                     vm.isEditmode = false;
                     vm.dataSource.read();
                     logger.success("Rule has been updated");
@@ -616,36 +550,7 @@
             $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[2]).find("div").html("ECAP Floor (US$)");
             $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[2]).find("div").attr("title", "Requested ECAP must be greater than or equal to the floor price entered");
         }
-
-        vm.deleteRule = function (id) {
-            kendo.confirm("Are you sure wants to delete?").then(function () {
-                ruleService.deletePriceRule(id).then(function (response) {
-                    if (response.data > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id !== response.data);
-                        vm.dataSource.read();
-                        logger.success("Rule has been deleted");
-                    }
-                }, function (response) {
-                    logger.error("Unable to delete the rule");
-                });
-            });
-        };
-
-        //Take first character of WF_STG_CD
-        vm.stageOneChar = function (RULE_STAGE) {
-            if (RULE_STAGE === true) {
-                return "A";
-            } else {
-                return "P";
-            }
-        }
-        vm.stageOneCharStatus = function (IsAutomationIncluded) {
-            if (IsAutomationIncluded === true) {
-                return "intelicon-plus-solid clrGreen";
-            } else {
-                return "intelicon-minus-solid clrRed";
-            }
-        }
+        
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
@@ -749,172 +654,6 @@
                 });
             }
         }
-        $scope.detailInit = function (parentDataItem) {
-            return {
-                dataSource: {
-                    transport: {
-                        read: function (e) {
-                            e.success(parentDataItem);
-                            vm.productPresent = parentDataItem.ProductDescription.length;
-                        },
-                        create: function (e) {
-                        }
-                    },
-                    pageSize: 1,
-                    serverPaging: false,
-                    serverFiltering: false,
-                    serverSorting: false,
-                    schema: {
-                        model: {
-                            id: "ID",
-                            fields: {
-                                ID: {
-                                    editable: false, nullable: true
-                                },
-                                RuleDescription: { editable: false, type: "string" },
-                                ProductDescription: { editable: false, type: "string" }
-                            }
-                        }
-                    },
-                },
-                filterable: false,
-                sortable: true,
-                navigatable: true,
-                resizable: true,
-                reorderable: false,
-                columnMenu: false,
-                groupable: false,
-                pageable: false,
-                columns: [
-                    {
-                        field: "RuleDescription",
-                        title: "Rule Description",
-                        template: "<div>#=RuleDescription#</div>",
-                        width: "50%",
-                        filterable: { multi: true, search: false }
-                    },
-                    {
-                        field: "ProductDescription",
-                        title: "Product Description",
-                        template: "<div>#=ProductDescription#</div>",
-                        width: "50%",
-                        filterable: { multi: true, search: false },
-                        hidden: vm.productPresent > 0 ? true : false
-                    }
-
-                ]
-            };
-        };
-        vm.gridOptions = {
-            toolbar: [
-                { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
-            ],
-            dataSource: vm.dataSource,
-            filterable: true,
-            sortable: true,
-            selectable: true,
-            resizable: true,
-            scrollable: true,
-            columnMenu: true,
-            sort: function (e) { gridUtils.cancelChanges(e); },
-            filter: function (e) { gridUtils.cancelChanges(e); },
-            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget' kendo-grid k-options='detailInit(dataItem)'></div>",
-            pageable: {
-                refresh: true,
-                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
-            },
-            columns: [
-                {
-                    width: "160px",
-                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div>"
-                    + "<div class='rule'>"
-                    + "<i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>"
-                    + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i>"
-                    + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
-                    + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
-                    + "<i ng-if='(vm.isElligibleForApproval && #= IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
-                    + "</div>",
-                    hidden: vm.toolKitHidden
-                },
-                { field: "Id", title: "Id", width: "5%", hidden: true },
-                {
-                    title: "Name",
-                    field: "Name",
-                    template: "<div ng-if='vm.toolKitHidden'> #= Name #</div><div ng-if='!vm.toolKitHidden'><a  class='ruleName' title='Click to Edit' ng-click='vm.editRule(#= Id #)'><span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span></a></div>",
-                    width: "20%",
-                    filterable: { multi: true, search: true },
-                    encoded: true
-                },
-                {
-                    field: "RuleStageLabel",
-                    title: "Rule Stage",
-                    filterable: { multi: true, search: true },
-                    width: "1%",
-                    hidden: true,
-                    template: "<div style='#if(RuleStage == true){#color: green;#} else {#color: red;#}#'>#= RuleStageLabel #</div>"
-                },
-                {
-                    field: "RuleStatusLabel",
-                    title: "Rule Status",
-                    filterable: { multi: true, search: true },
-                    width: "7%",
-                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#= RuleStatusLabel #</div>"
-                    //template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
-                },
-                {
-                    field: "RuleAutomationLabel", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
-                    template: "<span ng-if='#= IsAutomationIncluded #'><i class='intelicon-opportunity-target-approved' style=''></i></span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>"
-                },
-                {
-                    field: "StartDate",
-                    title: "Start Date",
-                    width: "7%",
-                    filterable: { multi: true, search: true }
-                },
-                {
-                    field: "EndDate",
-                    title: "End Date",
-                    width: "7%",
-                    filterable: { multi: true, search: true }
-                },
-                {
-                    field: "OwnerName",
-                    title: "Owner Name",
-                    template: "<div title='#=OwnerName#'>#=OwnerName#</div>",
-                    width: "8%",
-                    filterable: { multi: true, search: true }
-                },
-                {
-                    field: "ChangedBy",
-                    title: "Updated By",
-                    template: "<div title='#=ChangedBy# @#=ChangeDateTimeFormat#'>#=ChangedBy#<br><font style='font-size: 10px;'>#=ChangeDateTimeFormat#</font></div>",
-                    width: "8%",
-                    filterable: { multi: true, search: true }
-                },
-                {
-                    field: "ChangeDateTime",
-                    title: "Updated Date",
-                    template: "<div title='#=ChangeDateTime#'>#=ChangeDateTime#</div>",
-                    width: "1%",
-                    hidden: true
-                },
-                {
-                    field: "Notes",
-                    title: "Notes",
-                    template: "<div title='#=Notes#'>#=Notes#</div>",
-                    width: "10%",
-                    filterable: { multi: true, search: false }
-                },
-                {
-                    field: "RuleDescription",
-                    title: "Rule Description",
-                    template: "<div class='btnHandle classToggle'>#=RuleDescription#</div>",
-                    width: "15%",
-                    filterable: { multi: true, search: false }
-                }
-
-            ]
-        };
 
         vm.toggleType = function (currentState) {
             // Ganthi - DO NOT REMOVE THIS - IT IS PART OF "US505889 - Price Rules: Exclusions for Automation" requirements, clear out fields and hide if exclusion rule.
@@ -1277,7 +1016,31 @@
                 }
             }
         });
-        
+
+        //vm.addNewRule = function () {
+        //    vm.ProductCriteria = [];
+        //    $('#productCriteria').show();
+        //    vm.LastValidatedProducts = [];
+        //    vm.ValidProducts = [];
+        //    vm.dataSourceSpreadSheet.read();
+        //    //
+        //    vm.isEditmode = true;
+        //    vm.rule = {};
+        //    vm.rule.Id = 0;
+        //    vm.rule.IsAutomationIncluded = true;
+        //    vm.rule.IsActive = true;
+        //    vm.rule.StartDate = new Date();
+        //    vm.rule.EndDate = vm.RuleConfig.DefaultEndDate;
+        //    vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
+        //    vm.BlanketDiscountPercentage = "";
+        //    vm.BlanketDiscountDollor = "";
+        //    //vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.RuleConfig.CurrentUserWWID).length === 0 ? null : vm.RuleConfig.CurrentUserWWID;
+        //    vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
+        //    vm.rule.OwnerName = vm.RuleConfig.CurrentUserName;
+        //    vm.loadCriteria = true;
+        //    vm.DeleteSpreadsheetAutoHeader();
+        //}
+
         //Export to Excel
         vm.exportToExcel = function () {
             gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
