@@ -14,17 +14,6 @@
                 <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
                 <div>
-                    <div ng-show="false" class="form-group row">
-                        <label class="control-label col-md-2">Rule:</label>
-                        <div class="col-md-9">
-                            <select class="form-control md"
-                                    kendo-combo-box
-                                    k-options="vm.ruleOptions"
-                                    ng-model="vm.rule.Id"
-                                    style="width:100%"></select>
-                        </div>
-                    </div>
-
                     <div class="col-md-11 notes">
                         Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule 
                         Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool 
