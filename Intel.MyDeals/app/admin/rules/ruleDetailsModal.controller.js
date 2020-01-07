@@ -51,10 +51,7 @@
                 }
             });
 
-            modalInstance.result.then(function (returnData) {
-                //if (returnData !== undefined && returnData !== null) {
-                //    $scope.context.USR_CUST = returnData;
-                //}
+            modalInstance.result.then(function (returnData) {                
             }, function () { });
         }
 
@@ -63,7 +60,7 @@
             constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
                 if (!!data.data) {
                     vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
-                    vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
+                    vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(window.usrEmail) > -1 ? true : false;                    
                 }
             });
             if (window.usrRole !== "DA") {
@@ -583,7 +580,7 @@
                         vm.validateProduct(false, false, "NONE");
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
-                        vm.loadCriteria = true;
+                        vm.loadCriteria = true;                        
                     } break;
                     default: {
                         vm.Rules = response.data;
@@ -694,8 +691,8 @@
             document.location.href = url;
         }
 
-        vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled, isApproved) {
-            if (isEnabled && ruleId != null && ruleId > 0 && isApproved) {
+        vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isApproved) {
+            if ( ruleId != null && ruleId > 0 && isApproved) {
                 vm.spinnerMessageDescription = "Please wait while we updating the rule..";
                 var priceRuleCriteria = { Id: ruleId }
                 switch (strActionName) {
@@ -704,22 +701,25 @@
                     } break;
                     case "UPDATE_STAGE_IND": {
                         priceRuleCriteria.RuleStage = isTrue;
+                        priceRuleCriteria.IsActive = isTrue;
                     } break;
                 }
+                
                 ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
                     if (response.data.Id > 0) {
-                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangedBy = response.data.ChangedBy;
-                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
-                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
                         switch (strActionName) {
                             case "UPDATE_ACTV_IND": {
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                             } break;
                             case "UPDATE_STAGE_IND": {
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStage = isTrue;
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
@@ -1277,31 +1277,7 @@
                 }
             }
         });
-
-        //vm.addNewRule = function () {
-        //    vm.ProductCriteria = [];
-        //    $('#productCriteria').show();
-        //    vm.LastValidatedProducts = [];
-        //    vm.ValidProducts = [];
-        //    vm.dataSourceSpreadSheet.read();
-        //    //
-        //    vm.isEditmode = true;
-        //    vm.rule = {};
-        //    vm.rule.Id = 0;
-        //    vm.rule.IsAutomationIncluded = true;
-        //    vm.rule.IsActive = true;
-        //    vm.rule.StartDate = new Date();
-        //    vm.rule.EndDate = vm.RuleConfig.DefaultEndDate;
-        //    vm.rule.Criteria = [{ "type": "singleselect", "field": "OBJ_SET_TYPE_CD", "operator": "=", "value": "ECAP" }];
-        //    vm.BlanketDiscountPercentage = "";
-        //    vm.BlanketDiscountDollor = "";
-        //    //vm.rule.OwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.RuleConfig.CurrentUserWWID).length === 0 ? null : vm.RuleConfig.CurrentUserWWID;
-        //    vm.rule.OwnerId = vm.RuleConfig.CurrentUserWWID;
-        //    vm.rule.OwnerName = vm.RuleConfig.CurrentUserName;
-        //    vm.loadCriteria = true;
-        //    vm.DeleteSpreadsheetAutoHeader();
-        //}
-
+        
         //Export to Excel
         vm.exportToExcel = function () {
             gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
