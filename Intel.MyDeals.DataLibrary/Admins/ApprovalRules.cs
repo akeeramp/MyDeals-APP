@@ -56,7 +56,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (priceRuleCriteria.Id > 0)
             {
-                priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
+                priceRuleCriteria.ChangeDateTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pacific Standard Time");
                 priceRuleCriteria.ChangeDateTimeFormat = priceRuleCriteria.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
                 priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
                 priceRuleCriteria.RuleStage = isApproved;
