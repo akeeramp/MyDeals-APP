@@ -38,7 +38,7 @@
             if (vm.Rules.filter(x => x.Id === updatedRule.Id).length > 0) {
                 vm.Rules = vm.Rules.filter(x => x.Id !== updatedRule.Id);
             }
-            vm.Rules.splice(0, 0, updatedRule);  
+            vm.Rules.splice(0, 0, updatedRule);
             vm.dataSource.read();
         });
 
@@ -66,6 +66,7 @@
             });
 
             modalInstance.result.then(function (returnData) {
+                alert(returnData.Id);
                 vm.cancel();
             }, function () { });
         }
