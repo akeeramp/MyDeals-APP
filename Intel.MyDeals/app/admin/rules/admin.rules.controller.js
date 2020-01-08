@@ -34,6 +34,14 @@
             vm.GetRules(0, "GET_RULES");
         }
 
+        $scope.$on('UpdateRuleClient', function (event, updatedRule) {
+            if (vm.Rules.filter(x => x.Id === updatedRule.Id).length > 0) {
+                vm.Rules = vm.Rules.filter(x => x.Id !== updatedRule.Id);
+            }
+            vm.Rules.splice(0, 0, updatedRule);
+            vm.dataSource.read();
+        });
+
         vm.openRuleDetailsModal = function (dataItem) {
             $scope.context = dataItem;
 
@@ -104,13 +112,13 @@
                         } else {
                             document.location.href = "/Dashboard#/portal";
                         }
-                        
+
                     }
                 });
             }
-            
-        }     
-        
+
+        }
+
         vm.editRule = function (dataItem) {
             //vm.GetRules(id, "GET_BY_RULE_ID"); 
             if (dataItem.id) {
@@ -118,7 +126,7 @@
             } else {
                 var tempDataItem = { "id": dataItem };
                 vm.openRuleDetailsModal(tempDataItem);
-            }            
+            }
         }
 
         vm.copyRule = function (id) {
@@ -133,8 +141,8 @@
             }, function (response) {
                 logger.error("Unable to copy the rule");
             });
-        }        
-        
+        }
+
         vm.GetRules = function (id, actionName) {
             vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
@@ -150,7 +158,7 @@
                 logger.error("Operation failed");
             });
         };
-        
+
         vm.deleteRule = function (id) {
             kendo.confirm("Are you sure wants to delete?").then(function () {
                 ruleService.deletePriceRule(id).then(function (response) {
@@ -296,7 +304,7 @@
                     pageSize: 1,
                     serverPaging: false,
                     serverFiltering: false,
-                    serverSorting: false,                    
+                    serverSorting: false,
                     schema: {
                         model: {
                             id: "ID",
@@ -316,8 +324,8 @@
                 resizable: true,
                 reorderable: false,
                 columnMenu: false,
-                groupable: false,                             
-                pageable: false,                
+                groupable: false,
+                pageable: false,
                 columns: [
                     {
                         field: "RuleDescription",
@@ -332,9 +340,9 @@
                         template: "<div>#=ProductDescription#</div>",
                         width: "50%",
                         filterable: { multi: true, search: false },
-                        hidden: vm.productPresent > 0 ? false : true                        
-                    }                   
-                    
+                        hidden: vm.productPresent > 0 ? false : true
+                    }
+
                 ]
             };
         };
@@ -366,8 +374,8 @@
                     + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i>"
                     + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
                     + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
-                    + "<i ng-if='(vm.isElligibleForApproval && #= IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
-                        + "</div>",
+                    + "<i ng-if='(vm.isElligibleForApproval && #= !IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
+                    + "</div>",
                     hidden: vm.toolKitHidden
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
@@ -446,35 +454,11 @@
                     width: "15%",
                     filterable: { multi: true, search: false }
                 }
-                
+
             ]
         };
-                
-        vm.simulate = function () {
-            var data = new Array();
-            var dataRuleIds = [];
-            dataRuleIds.push(parseInt(vm.rule.Id, 10));
-            var dataDealsIds = [];
 
-            data.push(dataRuleIds, dataDealsIds);
-
-            ruleService.getRuleSimulationResults(data).then(function (response) {
-                if (response.data.length > 0) {
-                    var maxSize = 100;
-                    var matchedDealsList = response.data.slice(0, maxSize).map(function (data) { return " " + data["WIP_DEAL_SID"] });
-                    var ruleType = vm.rule.IsAutomationIncluded === true ? "Approve Deals Rule" : "<b style='color:red;'>Exclude Deals Rule</b>";
-                    var postMessage = "<br>" + response.data.length + " deals currently match this rule";
-                    if (response.data.length > maxSize) postMessage += ", only the first " + maxSize + " are displayed";
-                    kendo.alert("<span style='color: blue;'>Rule <b>" + vm.rule.Name + "</b> (" + ruleType + ") matches these deals: </span><br><br>" + matchedDealsList + "<span style='color: blue;'><br>" + postMessage + "<span>");
-                } else {
-                    kendo.alert("<b>There are no deals that currently match this rule</b>");
-                }
-            }, function (response) {
-                logger.error("<b style='color:red;'>Error: Unable to Simulate this rule due to system errors</b>");
-            });
-        }
-               
-        vm.addNewRule = function () {            
+        vm.addNewRule = function () {
             //Call up Popup
             vm.editRule(0);
         }
@@ -488,6 +472,6 @@
         if (window.usrRole == 'DA') {
             $scope.init();
         }
-        
+
     }
 })();

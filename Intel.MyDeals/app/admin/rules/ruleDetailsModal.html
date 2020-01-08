@@ -13,131 +13,130 @@
 
                 <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
-                <div>
-                    <div class="col-md-11 notes">
-                        Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule
-                        Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool
-                        can potentially impact ALL deals moving through the My Deals application.  As a rule owner, you may be held liable for any rules that improperly
-                        route deals resulting in an inappropriate transaction.  <a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for My Deals help">
-                            &nbsp;Review training for additional details.
-                        </a><br /><br />
-                    </div>
+                <div class="col-md-11 notes">
+                    Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule
+                    Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool
+                    can potentially impact ALL deals moving through the My Deals application.  As a rule owner, you may be held liable for any rules that improperly
+                    route deals resulting in an inappropriate transaction.  <a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for My Deals help">
+                        &nbsp;Review training for additional details.
+                    </a><br /><br />
+                </div>
 
-                    <div class="col-md-11 notes">
-                        <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
-                        <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'active' Price Rules will be run against all 'Submitted' ECAP tender
-                        deals.  It is important to note that Price Rules do not run as deals are created but through the <span class="redbold">hourly BATCH process.</span><br /><br />
-                    </div>
+                <div class="col-md-11 notes">
+                    <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
+                    <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'active' Price Rules will be run against all 'Submitted' ECAP tender
+                    deals.  It is important to note that Price Rules do not run as deals are created but through the <span class="redbold">hourly BATCH process.</span><br /><br />
+                </div>
 
-                    <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.Id > 0">
-                        Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} GMT</span>
-                    </div>
-                    <div class="col-md-2" style="font-size: 12px; margin: 0; padding: 0; text-align: right; width:100%">
-                    </div>
+                <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.Id > 0">
+                    Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} PST</span>
+                </div>
+                <div class="col-md-2" style="font-size: 12px; margin: 0; padding: 0; text-align: right; width:100%">
+                </div>
 
-                    <div class="form-group row">
-                        <label class="control-label isRequired col-md-2" autocomplete="off">Name:</label>
-                        <div class="col-md-7">
-                            <input class="form-control md"
-                                   type="text"
-                                   ng-model="vm.rule.Name"
-                                   style="width:100%">
-                        </div>
-                        <div class="col-md-2">
-                            <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsAutomationIncluded && vm.rule.Id > 0))"
-                                    ng-model="vm.rule.RuleStage"
-                                    on="Approved"
-                                    off="Approve"
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-2" autocomplete="off">Name:</label>
+                    <div class="col-md-7">
+                        <input class="form-control md"
+                               type="text"
+                               ng-model="vm.rule.Name"
+                               style="width:100%">
+                    </div>
+                    <div class="col-md-2">
+                        <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsAutomationIncluded && vm.rule.Id > 0))"
+                                ng-model="vm.rule.RuleStage"
+                                on="Approved"
+                                off="Approve"
+                                onstyle="btn-success"
+                                offstyle="btn-danger"
+                                title="{{vm.rule.RuleStage === true ? 'Click for Pending Approved' : 'Click to Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',((vm.isElligibleForApproval == true && vm.rule.IsAutomationIncluded == true) ? true : false))"></toggle>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-2">Owner:</label>
+                    <div class="col-md-2">
+                        <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>
+                    </div>
+                    <label class="control-label col-md-2">Rule Status:</label>
+                    <span class="col-md-2" style="float: left;">
+                        <div>
+                            <toggle class="fl toggle-accept" ng-disabled="vm.rule.RuleStage == false"
+                                    ng-model="vm.rule.IsActive"
+                                    on="Active"
+                                    off="Inactive"
                                     onstyle="btn-success"
                                     offstyle="btn-danger"
-                                    title="{{vm.rule.RuleStage === true ? 'Click for Pending Approved' : 'Click to Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',((vm.isElligibleForApproval == true && vm.rule.IsAutomationIncluded == true) ? true : false))"></toggle>
+                                    title="{{vm.rule.IsActive === true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true)"></toggle>
+                        </div>
+                    </span>
+
+                    <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
+                    <span class="col-md-2" style="float: left;">
+                        <div>
+                            <toggle class="fl toggle-accept"
+                                    ng-model="vm.rule.IsAutomationIncluded"
+                                    on="Auto Approval"
+                                    ng-click="vm.toggleType(vm.rule.IsAutomationIncluded)"
+                                    off="Exclusion Rule"
+                                    onstyle="btn-success"
+                                    offstyle="btn-danger"
+                                    title="{{vm.rule.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
+                        </div>
+                    </span>
+
+
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="control-label isRequired col-md-2">Start Date:</label>
+                    <div class="col-md-2">
+                        <input kendo-date-picker
+                               placeholder="From date"
+                               k-ng-model="vm.rule.StartDate"
+                               style="width: 100%;" />
+                    </div>
+                    <label class="control-label isRequired col-md-2">End Date:</label>
+                    <div class="col-md-2">
+                        <input kendo-date-picker
+                               placeholder="To date"
+                               k-ng-model="vm.rule.EndDate"
+                               style="width: 100%;" />
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="control-label col-md-2">Notes:</label>
+                    <div class="col-md-9">
+                        <textarea type="textarea" rows="5" ng-model="vm.rule.Notes" style="width:100%"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-md-2">Criteria:</label>
+                    <div ng-if="vm.loadCriteria == true" class="col-md-9">
+                        <div rule-attribute-builder
+                             grid-id="'attributeGrid'"
+                             operator-settings="operatorSettings"
+                             attribute-settings="attributeSettings"
+                             criteria="vm.rule.Criteria"
+                             custom-settings="">
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group row">
-                        <label class="control-label isRequired col-md-2">Owner:</label>
-                        <div class="col-md-2">
-                            <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>
-                        </div>
-                        <label class="control-label col-md-2">Rule Status:</label>
-                        <span class="col-md-2" style="float: left;">
-                            <div>
-                                <toggle class="fl toggle-accept" ng-disabled="vm.rule.RuleStage == false && vm.rule.OwnerId == window.usrWwid"
-                                        ng-model="vm.rule.IsActive"
-                                        on="Active"
-                                        off="Inactive"
-                                        onstyle="btn-success"
-                                        offstyle="btn-danger"
-                                        title="{{vm.rule.IsActive === true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true)"></toggle>
-                            </div>
-                        </span>
-
-                        <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
-                        <span class="col-md-2" style="float: left;">
-                            <div>
-                                <toggle class="fl toggle-accept"
-                                        ng-model="vm.rule.IsAutomationIncluded"
-                                        on="Auto Approval"
-                                        ng-click="vm.toggleType(vm.rule.IsAutomationIncluded)"
-                                        off="Exclusion Rule"
-                                        onstyle="btn-success"
-                                        offstyle="btn-danger"
-                                        title="{{vm.rule.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
-                            </div>
-                        </span>
-
-
+                <div class="form-group row" ng-if="vm.rule.IsAutomationIncluded">
+                    <label class="control-label col-md-2">Blanket Discount:</label>
+                    <div class="col-md-6" id="blanket_section">
+                        <span>Requested ECAP must be no less than</span>
+                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" ng-change="vm.EditBlanketDiscountPercentage()" k-decimals="0" k-format="'#'" k-min="0" k-max="70" style="width: 100px;font-size:11px;" />
+                        <span>%&nbsp;Or&nbsp;$</span>
+                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollor" ng-change="vm.EditBlanketDiscountDollor()" k-format="'n2'" k-min="0" style="width: 130px;font-size:11px;" />
+                        <span>off of CAP</span>
                     </div>
-
-                    <div class="form-group row">
-
-                        <label class="control-label isRequired col-md-2">Start Date:</label>
-                        <div class="col-md-2">
-                            <input kendo-date-picker
-                                   placeholder="From date"
-                                   k-ng-model="vm.rule.StartDate"
-                                   style="width: 100%;" />
-                        </div>
-                        <label class="control-label isRequired col-md-2">End Date:</label>
-                        <div class="col-md-2">
-                            <input kendo-date-picker
-                                   placeholder="To date"
-                                   k-ng-model="vm.rule.EndDate"
-                                   style="width: 100%;" />
-                        </div>
-                    </div>
-
-
-                    <div class="form-group row">
-                        <label class="control-label col-md-2">Notes:</label>
-                        <div class="col-md-9">
-                            <textarea type="textarea" rows="5" ng-model="vm.rule.Notes" style="width:100%"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="control-label col-md-2">Criteria:</label>
-                        <div ng-if="vm.loadCriteria == true" class="col-md-9">
-                            <div rule-attribute-builder
-                                 grid-id="'attributeGrid'"
-                                 operator-settings="operatorSettings"
-                                 attribute-settings="attributeSettings"
-                                 criteria="vm.rule.Criteria"
-                                 custom-settings="">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row" ng-if="vm.rule.IsAutomationIncluded">
-                        <label class="control-label col-md-2">Blanket Discount:</label>
-                        <div class="col-md-6" id="blanket_section">
-                            <span>Requested ECAP must be no less than</span>
-                            <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" ng-change="vm.EditBlanketDiscountPercentage()" k-decimals="0" k-format="'#'" k-min="0" k-max="70" style="width: 100px;font-size:11px;" />
-                            <span>%&nbsp;Or&nbsp;$</span>
-                            <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollor" ng-change="vm.EditBlanketDiscountDollor()" k-format="'n2'" k-min="0" style="width: 130px;font-size:11px;" />
-                            <span>off of CAP</span>
-                        </div>
-                    </div>
+                </div>
              
                 <div style="display:none;"><!--Dummy button to prevent events while press enter key in textbox--><button></button></div>
                 <div class="form-group row" id="productCriteria">
@@ -237,6 +236,7 @@
 
     .modal-dialog {
         width: 90%;
+        margin-top: 100px; /* Put in because top bar was being hidden */
     }
 
     .fontSmall {

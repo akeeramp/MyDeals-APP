@@ -56,7 +56,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (priceRuleCriteria.Id > 0)
             {
-                priceRuleCriteria.ChangeDateTime = DateTime.UtcNow;
+                priceRuleCriteria.ChangeDateTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pacific Standard Time");
                 priceRuleCriteria.ChangeDateTimeFormat = priceRuleCriteria.ChangeDateTime.ToString("MM/dd/yyyy h:mm tt");
                 priceRuleCriteria.ChangedBy = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
                 priceRuleCriteria.RuleStage = isApproved;
@@ -250,7 +250,7 @@ namespace Intel.MyDeals.DataLibrary
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig.CurrentUserWWID = OpUserStack.MyOpUserToken.Usr.WWID;
             ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
-            ruleConfig.DefaultEndDate = DateTime.UtcNow.AddYears(10);
+            ruleConfig.DefaultEndDate = DateTime.Now.AddYears(10);
             return ruleConfig;
         }
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
