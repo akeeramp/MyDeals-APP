@@ -66,7 +66,6 @@
             });
 
             modalInstance.result.then(function (returnData) {
-                alert(returnData.Id);
                 vm.cancel();
             }, function () { });
         }

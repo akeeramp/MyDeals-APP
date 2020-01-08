@@ -442,11 +442,13 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     vm.UpdatePriceRule = function (priceRuleCriteria, strActionName) {
         ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
             if (response.data.Id > 0) {
-                vm.rule = response.data;
-                vm.rule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.rule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === vm.rule.OwnerId)[0].NAME : (vm.rule.OwnerId === vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
-                vm.rule.RuleStatusLabel = vm.rule.IsActive ? "Active" : "Inactive";
-                vm.rule.RuleStageLabel = vm.rule.RuleStage ? "Approved" : "Pending Approval";
-                vm.rule.RuleAutomationLabel = vm.rule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
+                var updatedRule = response.data;
+                updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId === vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
+                updatedRule.RuleStatusLabel = updatedRule.IsActive ? "Active" : "Inactive";
+                updatedRule.RuleStageLabel = updatedRule.RuleStage ? "Approved" : "Pending Approval";
+                updatedRule.RuleAutomationLabel = updatedRule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
+                vm.rule = updatedRule;
+                $rootScope.$broadcast("UpdateRuleClient", updatedRule);
                 vm.isEditmode = false;
                 logger.success("Rule has been updated");
             } else {
@@ -563,6 +565,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                             logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                         } break;
                     }
+                    $rootScope.$broadcast("UpdateRuleClient", vm.rule);
                 }
                 else {
                     switch (strActionName) {
@@ -968,10 +971,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     $scope.ok = function () {
         $("#productCriteria").hide();
         vm.isEditmode = false;
-        if (vm.rule.Id != undefined && vm.rule.Id != null && vm.rule.Id > 0) {
-            $rootScope.$broadcast("UpdateRuleClient", vm.rule);        
-            vm.rule = {};
-        }
+        vm.rule = {};
         $uibModalInstance.close();
     };
 }
