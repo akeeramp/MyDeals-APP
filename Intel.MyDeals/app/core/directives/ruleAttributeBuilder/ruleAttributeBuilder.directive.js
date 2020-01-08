@@ -139,7 +139,8 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                 var html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
                 var helpMsg = {};
                 helpMsg["IN"] = 'Enter comma separated values:  <i>example:  500, 600, 700</i>';
-                helpMsg["string_with_in"] = operator == "LIKE" ? 'Enter comma separated values: <i>example: Dell, Acer, Samsung</i><br/>Use <i style="margin-right: 3px;">%</i> at the end for "Starts With" searches. <i>example: Del%, Samsun%</i><br/>Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Del*, Sam sun*</i>' : 'Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Sam sun*</i>';
+                //helpMsg["string_with_in"] = operator == "LIKE" ? 'Enter comma separated values: <i>example: Dell, Acer, Samsung</i><br/>Use <i style="margin-right: 3px;">%</i> at the end for "Starts With" searches. <i>example: Del%, Samsun%</i><br/>Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Del*, Sam sun*</i>' : 'Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Sam sun*</i>';
+                helpMsg["string_with_in"] = operator == "LIKE" ? 'Enter comma separated values: <i>example: Dell, Acer, Samsung</i><br/>Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Del*, Sam sun*</i>' : 'Use <i style="margin-right: 3px;">*</i> for wildcard searches. <i>example: Sam sun*</i>';
                 helpMsg["string"] = helpMsg["string_limited"] = 'Use <i style="margin-right: 3px;">*</i> for wildcard searches <i>example:  i7-5*</i>';
 
                 if (scope.dataItem.operator === "IN") {

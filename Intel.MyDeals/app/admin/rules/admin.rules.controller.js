@@ -250,6 +250,7 @@
                     } break;
                     case "UPDATE_STAGE_IND": {
                         priceRuleCriteria.RuleStage = isTrue;
+                        priceRuleCriteria.IsActive = isTrue; // also make it active now
                     } break;
                 }
                 ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
@@ -266,6 +267,8 @@
                             case "UPDATE_STAGE_IND": {
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
@@ -278,6 +281,7 @@
                             } break;
                             case "UPDATE_STAGE_IND": {
                                 vm.rule.RuleStage = !isTrue;
+                                vm.rule.IsActive = !isTrue;
                             } break;
                         }
                         logger.error("Unable to update rule's indicator");
@@ -289,6 +293,7 @@
                         } break;
                         case "UPDATE_STAGE_IND": {
                             vm.rule.RuleStage = !isTrue;
+                            vm.rule.IsActive = !isTrue;
                         } break;
                     }
                     logger.error("Operation failed");

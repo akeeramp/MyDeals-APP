@@ -557,8 +557,9 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                         } break;
                         case "UPDATE_STAGE_IND": {
                             vm.rule.RuleStage = isTrue;
-                            vm.rule.IsActive = isTrue;
                             vm.rule.RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                            vm.rule.IsActive = isTrue;
+                            vm.rule.RuleStatusLabel = isTrue ? "Active" : "Inactive";
                             logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                         } break;
                     }
@@ -571,6 +572,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                         } break;
                         case "UPDATE_STAGE_IND": {
                             vm.rule.RuleStage = !isTrue;
+                            vm.rule.IsActive = !isTrue;
                         } break;
                     }
                     logger.error("Unable to update rule's indicator");
@@ -582,6 +584,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                     } break;
                     case "UPDATE_STAGE_IND": {
                         vm.rule.RuleStage = !isTrue;
+                        vm.rule.IsActive = !isTrue;
                     } break;
                 }
                 logger.error("Operation failed");
