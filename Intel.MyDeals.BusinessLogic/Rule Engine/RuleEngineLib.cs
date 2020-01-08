@@ -65,11 +65,11 @@ namespace Intel.MyDeals.BusinessLogic
                     IsActive = false,
                     IsAutomationIncluded = true,
                     RuleStage = false,
-                    StartDate = DateTime.UtcNow,
+                    StartDate = DateTime.Now,
                     EndDate = ruleConfig.DefaultEndDate,
                     OwnerId = ruleConfig.CurrentUserWWID,
                     ChangedBy = ruleConfig.CurrentUserName,
-                    ChangeDateTime = DateTime.UtcNow,
+                    ChangeDateTime = DateTime.Now,
                     RuleDescription = string.Empty,
                     ProductDescription = string.Empty,
                 });

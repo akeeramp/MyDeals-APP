@@ -250,7 +250,7 @@ namespace Intel.MyDeals.DataLibrary
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig.CurrentUserWWID = OpUserStack.MyOpUserToken.Usr.WWID;
             ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
-            ruleConfig.DefaultEndDate = DateTime.UtcNow.AddYears(10);
+            ruleConfig.DefaultEndDate = DateTime.Now.AddYears(10);
             return ruleConfig;
         }
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
