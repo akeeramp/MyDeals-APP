@@ -12,7 +12,6 @@
         var vm = this;
         vm.loadCriteria = false;
         vm.isEditmode = true;
-        vm.Rules = [];
         vm.rule = {};
         vm.RuleConfig = [];
         vm.BlanketDiscountDollor = "";
@@ -443,18 +442,14 @@
         vm.UpdatePriceRule = function (priceRuleCriteria, strActionName) {
             ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
                 if (response.data.Id > 0) {
-                    if (vm.Rules.filter(x => x.Id === response.data.Id).length > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id !== response.data.Id);
-                    }
                     var updatedRule = response.data;                   
                     updatedRule.OwnerName = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId).length > 0 ? vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID === updatedRule.OwnerId)[0].NAME : (updatedRule.OwnerId === vm.RuleConfig.CurrentUserWWID ? vm.RuleConfig.CurrentUserName : "NA");
                     updatedRule.RuleStatusLabel = updatedRule.IsActive ? "Active" : "Inactive";
                     updatedRule.RuleStageLabel = updatedRule.RuleStage ? "Approved" : "Pending Approval";
                     updatedRule.RuleAutomationLabel = updatedRule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
                     vm.rule = updatedRule;
-                    vm.Rules.splice(0, 0, updatedRule);                   
+                    $rootScope.$broadcast("UpdateRuleClient", updatedRule);          
                     vm.isEditmode = false;
-                    vm.dataSource.read();
                     logger.success("Rule has been updated");
                 } else {
                     kendo.alert("This rule name already exists in another rule.");
@@ -491,11 +486,7 @@
                             if (vm.rule.Criteria[idx].type === "list" && vm.rule.Criteria[idx].operator !== "IN") {
                                 vm.rule.Criteria[idx].value = vm.rule.Criteria[idx].values;
                             }
-                        }
-                        if (vm.Rules.filter(x => x.Id === id).length === 0) {
-                            vm.Rules.splice(0, 0, vm.rule);
-                            vm.dataSource.read();
-                        }
+                        }                       
                         vm.ProductCriteria = vm.rule.ProductCriteria;
                         vm.BlanketDiscountPercentage = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value === "%").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value === "%")[0].value : "";
                         vm.BlanketDiscountDollor = vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value === "$").length > 0 ? vm.rule.Criterias.BlanketDiscount.filter(x => x.valueType.value === "$")[0].value : "";
@@ -515,15 +506,6 @@
                         vm.isEditmode = true;
                         vm.toggleType(vm.rule.IsAutomationIncluded);
                         vm.loadCriteria = true;                        
-                    } break;
-                    default: {
-                        vm.Rules = response.data;
-                        vm.isEditmode = false;
-                        vm.dataSource.read();
-                        //adding filter
-                        if (rid !== 0) {
-                            vm.dataSource.filter({ field: "Id", value: vm.rid === 0 ? null : vm.rid });
-                        }
                     } break;
                 }
             }, function (response) {
@@ -551,51 +533,6 @@
             $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[2]).find("div").attr("title", "Requested ECAP must be greater than or equal to the floor price entered");
         }
         
-        vm.dataSource = new kendo.data.DataSource({
-            transport: {
-                read: function (e) {
-                    e.success(vm.Rules);
-                },
-                update: function (e) {
-                },
-                destroy: function (e) {
-                    var modalOptions = {
-                        closeButtonText: "Cancel",
-                        actionButtonText: "Delete Rule",
-                        hasActionButton: true,
-                        headerText: "Delete confirmation",
-                        bodyText: "Are you sure you would like to Delete this Rule ?"
-                    };
-
-                    confirmationModal.showModal({}, modalOptions).then(function (result) {
-
-                    }, function (response) {
-                    });
-                },
-                create: function (e) {
-
-                }
-            },
-            pageSize: 25,
-            sort: { field: "RuleStage", dir: "asc" },
-            schema: {
-                model: {
-                    id: "Id",
-                    fields: {
-                    }
-                }
-            },
-        });
-        //Remove Filter
-        vm.removeFilter = function () {
-            vm.dataSource.filter({});
-            vm.rid = 0;
-            var url = document.location.href;
-            var lastLoc = url.lastIndexOf("/");
-            url = url.substring(0, lastLoc + 1);
-            document.location.href = url;
-        }
-
         vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isApproved) {
             if ( ruleId != null && ruleId > 0 && isApproved) {
                 vm.spinnerMessageDescription = "Please wait while we updating the rule..";
@@ -611,24 +548,24 @@
                 }
                 
                 ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
-                    if (response.data.Id > 0) {
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                    if (response.data.Id > 0) {                       
+                        vm.rule.ChangedBy = response.data.ChangedBy;
+                        vm.rule.ChangeDateTime = response.data.ChangeDateTime;
+                        vm.rule.ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
                         switch (strActionName) {
                             case "UPDATE_ACTV_IND": {
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                vm.rule.IsActive = isTrue;
+                                vm.rule.RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                             } break;
                             case "UPDATE_STAGE_IND": {
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.rule.RuleStage = isTrue;
+                                vm.rule.IsActive = isTrue;
+                                vm.rule.RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
-                        vm.dataSource.read();
+                        $rootScope.$broadcast("UpdateRuleClient", vm.rule);
                     }
                     else {
                         switch (strActionName) {
