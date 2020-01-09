@@ -132,32 +132,6 @@ namespace Intel.MyDeals.BusinessLogic
             return allActnItems;
         }
 
-        public void RunPriceRules()
-        {
-            List<PriceRuleData> lstPriceRuleData = OpDataElementType.PRC_ST.GetPriceRuleData();
-            List<int> lstPsIds = lstPriceRuleData.Select(x => x.PricingStrategyId).Distinct().ToList();
-            string actn = "Approve";
-            foreach (int iPsId in lstPsIds)
-            {
-                Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
-                {
-                    [actn] = lstPriceRuleData.Where(x => x.PricingStrategyId == iPsId).Select(item => new WfActnItem
-                    {
-                        DC_ID = item.DealId,
-                        WF_STG_CD = "Approved"
-                    }).ToList()
-                };
-
-                ContractToken contractToken = new ContractToken("ContractToken Created - ActionPricingStrategies")
-                {
-                    CustId = 0,
-                    ContractId = iPsId,
-                    CopyFromObjType = OpDataElementType.WIP_DEAL
-                };
-                ActionPricingStrategies(contractToken, actnPs);
-            }
-        }
-
         public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();

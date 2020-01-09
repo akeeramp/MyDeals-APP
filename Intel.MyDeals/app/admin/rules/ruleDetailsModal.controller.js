@@ -432,11 +432,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             lookupUrl: "/api/Dropdown/GetDictDropDown/PCSR_NBR"
         }
     ];
-
-    vm.editRule = function (id) {
-        vm.GetRules(id, "GET_BY_RULE_ID");
-    }
-
+    
     vm.UpdatePriceRule = function (priceRuleCriteria, strActionName) {
         ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
             if (response.data.Id > 0) {
@@ -610,14 +606,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             //$('#blanketDiscountSection').show(); // Displayed due to IsAutomationIncluded
         }
     }
-
-    vm.cancel = function () {
-        $("#productCriteria").hide();
-        vm.isEditmode = false;
-        vm.rule = {};
-        vm.reloadNotReq = false;
-    }
-
+    
     vm.generateProductCriteria = function () {
         var sheet = $scope.spreadsheet.activeSheet();
         vm.ProductCriteria = [];
@@ -953,16 +942,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             }
         }
     });
-
-    //Export to Excel
-    vm.exportToExcel = function () {
-        gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
-    }
-    vm.approveRule = function () {
-        vm.rule.RuleStage = !vm.rule.RuleStage;
-        vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage, "UPDATE_STAGE_IND", true);
-    }
-
+    
     $scope.getConstant();
     if (window.usrRole === "DA") {
         $scope.init();

@@ -483,6 +483,5 @@
         if (window.usrRole == 'DA') {
             $scope.init();
         }
-
     }
 })();

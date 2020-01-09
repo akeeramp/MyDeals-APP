@@ -24,17 +24,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             //List<MyOpRule> AtrbRules
             return MyRulesConfiguration.AttrbRules;
-        }
-
-        /// <summary>
-        /// Run the DA price rules here
-        /// </summary>
-        /// <returns></returns>
-        public bool RunPriceRules()
-        {
-            new OpDataCollectorDataLib().GetPriceRuleData();
-            return true;
-        }
+        }        
 
         public RuleConfig GetPriceRulesConfig()
         {

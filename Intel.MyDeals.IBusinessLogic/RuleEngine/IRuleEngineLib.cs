@@ -7,7 +7,6 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IRuleEngineLib
     {
         List<MyOpRule> GetBusinessRules();
-        bool RunPriceRules();
         RuleConfig GetPriceRulesConfig();
         List<string> GetSuggestion(string strCategory, string strSearchKey);
         List<PriceRuleCriteria> GetPriceRules(int id, PriceRuleAction priceRuleAction);
