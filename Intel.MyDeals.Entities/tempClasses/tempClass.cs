@@ -2333,4 +2333,28 @@ public partial class DealTemplateDataGram
         public string HIER_VAL_NM;
 
     }
+
+    public class ReportMasterData
+    {
+        [DataMember]
+        public List<ReportDashboardData> ReportDashboardData;
+
+        [DataMember]
+        public List<ReportDealType> ReportDealType;
+
+        [DataMember]
+        public List<ReportDealStage> ReportDealStage;
+
+        [DataMember]
+        public List<ReportProductCount> ReportProductCount;
+
+        [DataMember]
+        public List<ReportLogDeatils> ReportLogDeatils;
+
+        [DataMember]
+        public List<ReportSummary> ReportSummary;
+
+        [DataMember]
+        public List<ReportName> ReportName;
+    }
 }

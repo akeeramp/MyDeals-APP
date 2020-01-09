@@ -235,10 +235,10 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new PR_MYDL_GET_MEET_COMP
             {
                 obj_sids = new type_int_list(objSetTypeIds.ToArray()),
-                OBJ_TYPE_ID = objTypeId,
-                USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
-                MODE = "M"
+                obj_type_id = objTypeId,
+                usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
+                mode = "M"
             };
 
             try

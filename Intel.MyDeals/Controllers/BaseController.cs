@@ -32,6 +32,7 @@ namespace Intel.MyDeals.Controllers
             ViewBag.IsDeveloper = user.IsDeveloper();
             ViewBag.IsSuper = user.IsSuper();
             ViewBag.IsTester = user.IsTester();
+            ViewBag.IsReportingUser = user.IsReportingUser();
 
             var idsid = user.Usr.Idsid.ToUpper();
             ViewBag.UserVarticals = AppLib.UserSettings[idsid].VerticalSecurity.ToList();
