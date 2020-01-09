@@ -11,7 +11,6 @@ RuleModalController.$inject = [
 function RuleModalController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModalInstance, RuleConfig, dataItem) {
     var vm = this;
     vm.loadCriteria = false;
-    vm.isEditmode = true;
     vm.rule = {};
     vm.RuleConfig = [];
     vm.BlanketDiscountDollor = "";
@@ -432,8 +431,9 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             lookupUrl: "/api/Dropdown/GetDictDropDown/PCSR_NBR"
         }
     ];
-    
+
     vm.UpdatePriceRule = function (priceRuleCriteria, strActionName) {
+        var initialRuleId = priceRuleCriteria.Id;
         ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
             if (response.data.Id > 0) {
                 vm.rule = response.data;
@@ -441,14 +441,13 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                 vm.rule.RuleStatusLabel = vm.rule.IsActive ? "Active" : "Inactive";
                 vm.rule.RuleStageLabel = vm.rule.RuleStage ? "Approved" : "Pending Approval";
                 vm.rule.RuleAutomationLabel = vm.rule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
-                vm.isEditmode = false;
                 vm.IsRefreshGridRequired = true;
-                logger.success("Rule has been updated");
+                logger.success("Rule has been " + (initialRuleId == 0 ? "added" : "updated"));
             } else {
                 kendo.alert("This rule name already exists in another rule.");
             }
         }, function (response) {
-            logger.error("Unable to update the rule");
+            logger.error("Unable to  " + (initialRuleId == 0 ? "add" : "update") + " the rule");
         });
     };
 
@@ -463,7 +462,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     var availableAttrs = [];
 
     vm.GetRules = function (id, actionName) {
-        vm.spinnerMessageDescription = "Please wait while we " + (id === 0 && actionName === "GET_BY_RULE_ID" ? "initiating" : "loading") + " the " + (actionName === "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
+        $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we " + (id === 0 && actionName === "GET_BY_RULE_ID" ? "initiating" : "loading") + " the " + (actionName === "GET_BY_RULE_ID" ? "rule" : "rules") + "..");
         ruleService.getPriceRules(id, actionName).then(function (response) {
             switch (actionName) {
                 case "GET_BY_RULE_ID": {
@@ -496,7 +495,6 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                         }
                     }
                     vm.validateProduct(false, false, "NONE");
-                    vm.isEditmode = true;
                     vm.toggleType(vm.rule.IsAutomationIncluded);
                     vm.loadCriteria = true;
                 } break;
@@ -528,7 +526,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
     vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isApproved) {
         if (ruleId != null && ruleId > 0 && isApproved) {
-            vm.spinnerMessageDescription = "Please wait while we updating the rule..";
+            $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we updating the rule..");
             var priceRuleCriteria = { Id: ruleId }
             switch (strActionName) {
                 case "UPDATE_ACTV_IND": {
@@ -606,13 +604,13 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             //$('#blanketDiscountSection').show(); // Displayed due to IsAutomationIncluded
         }
     }
-    
+
     vm.generateProductCriteria = function () {
         var sheet = $scope.spreadsheet.activeSheet();
         vm.ProductCriteria = [];
         var tempRange = sheet.range("A1:B200").values().filter(x => !(x[0] == null && x[1] == null));
         if (tempRange.length > 0) {
-            vm.spinnerMessageDescription = "Please wait while we reading the products..";
+            $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we reading the products..");
             for (var i = 0; i < tempRange.length; i++) {
                 var newProduct = {};
                 newProduct.ProductName = tempRange[i][0] != null ? jQuery.trim(tempRange[i][0]) : "";
@@ -720,7 +718,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
         else {
             if (strActionName === "SAVE_AS_DRAFT" && vm.rule.IsAutomationIncluded)
                 vm.generateProductCriteria();
-            vm.spinnerMessageDescription = "Please wait while we " + (strActionName === "SUBMIT" ? "submitting" : "saving") + " the rule..";
+            $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we " + (strActionName === "SUBMIT" ? "submitting" : "saving") + " the rule..");
             $rootScope.$broadcast("save-criteria");
             $timeout(function () {
                 var requiredFields = [];
@@ -869,7 +867,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     vm.LastValidatedProducts = [];
     vm.validateProduct = function (showPopup, isSave, strActionName) {
         vm.generateProductCriteria();
-        vm.spinnerMessageDescription = "Please wait while we validating the products..";
+        $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we validating the products..");
         if (vm.ProductCriteria.length > 0) {
             vm.LastValidatedProducts = [];
             for (var i = 0; i < vm.ProductCriteria.length; i++) {
@@ -942,7 +940,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             }
         }
     });
-    
+
     $scope.getConstant();
     if (window.usrRole === "DA") {
         $scope.init();
@@ -950,7 +948,6 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
     $scope.ok = function () {
         $("#productCriteria").hide();
-        vm.isEditmode = false;
         if (vm.IsRefreshGridRequired && vm.rule.Id > 0) {
             $rootScope.$broadcast("UpdateRuleClient", vm.rule);
         }

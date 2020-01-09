@@ -13,7 +13,6 @@
         var vm = this;
         vm.rid = rid;
         vm.ruleId = 0;
-        vm.isEditmode = false;
         vm.Rules = [];
         vm.rule = {};
         vm.RuleConfig = [];
@@ -32,6 +31,10 @@
             });
             vm.GetRules(0, "GET_RULES");
         }
+
+        $scope.$on('UpdateSpinnerDescription', function (event, strDescription) {
+            vm.spinnerMessageDescription = strDescription;
+        });
 
         $scope.$on('UpdateRuleClient', function (event, updatedRule) {
             vm.RefreshGrid(updatedRule);
@@ -153,7 +156,6 @@
             vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 vm.Rules = response.data;
-                vm.isEditmode = false;
                 vm.dataSource.read();
                 //adding filter
                 if (rid != 0) {
