@@ -31,7 +31,7 @@
             }, function (response) {
                 logger.error("Operation failed");
             });
-            vm.GetRules(0, "GET_RULES");
+            vm.GetRules(0, "GET_RULES"); 
         }
 
         $scope.$on('UpdateRuleClient', function (event, updatedRule) {
