@@ -21,7 +21,7 @@
         vm.spinnerMessageHeader = "Price Rule";
         vm.spinnerMessageDescription = "Please wait while we loading page";
         vm.isBusyShowFunFact = true;
-        vm.toolKitHidden = window.usrRole === 'DA' ? false : true;
+        vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
 
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -29,7 +29,7 @@
             }, function (response) {
                 logger.error("Operation failed");
             });
-            vm.GetRules(0, "GET_RULES"); 
+            vm.GetRules(0, "GET_RULES");
         }
 
         $scope.$on('UpdateSpinnerDescription', function (event, strDescription) {
@@ -108,7 +108,7 @@
                     vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
                 }
             });
-            if (window.usrRole !== 'DA') {
+            if (window.usrRole != 'DA') {
                 constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
                     if (!!data.data) {
                         var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
@@ -154,12 +154,12 @@
         }
 
         vm.GetRules = function (id, actionName) {
-            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName === "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
+            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 vm.Rules = response.data;
                 vm.dataSource.read();
                 //adding filter
-                if (rid !== 0) {
+                if (rid != 0) {
                     vm.dataSource.filter({ field: "Id", value: vm.rid });
                     vm.editRule(rid, false);
                 }
@@ -172,7 +172,7 @@
             kendo.confirm("Are you sure want to delete this rule?").then(function () {
                 ruleService.deletePriceRule(id).then(function (response) {
                     if (response.data > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id !== response.data);
+                        vm.Rules = vm.Rules.filter(x => x.Id != response.data);
                         vm.dataSource.read();
                         logger.success("Rule has been deleted");
                     }
@@ -183,15 +183,15 @@
         };
 
         //Take first character of WF_STG_CD
-        vm.stageOneChar = function (ruleStage) {
-            if (ruleStage === true) {
+        vm.stageOneChar = function (RULE_STAGE) {
+            if (RULE_STAGE === true) {
                 return 'A';
             } else {
                 return 'P';
             }
         }
-        vm.stageOneCharStatus = function (isAutomationIncluded) {
-            if (isAutomationIncluded === true) {
+        vm.stageOneCharStatus = function (IsAutomationIncluded) {
+            if (IsAutomationIncluded === true) {
                 return 'intelicon-plus-solid clrGreen';
             } else {
                 return 'intelicon-minus-solid clrRed';
@@ -258,20 +258,20 @@
                 }
                 ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
                     if (response.data.Id > 0) {
-                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangedBy = response.data.ChangedBy;
-                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
-                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
                         switch (strActionName) {
                             case "UPDATE_ACTV_IND": {
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                             } break;
                             case "UPDATE_STAGE_IND": {
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStage = isTrue;
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
@@ -484,7 +484,7 @@
         }
 
         $scope.getConstant();
-        if (window.usrRole === 'DA') {
+        if (window.usrRole == 'DA') {
             $scope.init();
         }
     }
