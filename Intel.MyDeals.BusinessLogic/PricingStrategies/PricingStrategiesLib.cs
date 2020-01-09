@@ -132,32 +132,6 @@ namespace Intel.MyDeals.BusinessLogic
             return allActnItems;
         }
 
-        public void RunPriceRules()
-        {
-            List<PriceRuleData> lstPriceRuleData = OpDataElementType.PRC_ST.GetPriceRuleData();
-            List<int> lstPsIds = lstPriceRuleData.Select(x => x.PricingStrategyId).Distinct().ToList();
-            string actn = "Approve";
-            foreach (int iPsId in lstPsIds)
-            {
-                Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
-                {
-                    [actn] = lstPriceRuleData.Where(x => x.PricingStrategyId == iPsId).Select(item => new WfActnItem
-                    {
-                        DC_ID = item.DealId,
-                        WF_STG_CD = "Approved"
-                    }).ToList()
-                };
-
-                ContractToken contractToken = new ContractToken("ContractToken Created - ActionPricingStrategies")
-                {
-                    CustId = 0,
-                    ContractId = iPsId,
-                    CopyFromObjType = OpDataElementType.WIP_DEAL
-                };
-                ActionPricingStrategies(contractToken, actnPs);
-            }
-        }
-
         public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
@@ -278,30 +252,30 @@ namespace Intel.MyDeals.BusinessLogic
                 //}
 
                 // Check for pending stage... contract setting might bypass it
-                if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending")
+                if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending") 
                 {
                     targetStage = WorkFlowStages.Approved; // Was pending, but contract was set to force it approved, so move it
                 }
 
                 // Check to see if we are passing the Pending threshold for pending actions to be applied
-                if (targetStage == WorkFlowStages.Pending)
+                if (targetStage == WorkFlowStages.Pending) 
                 {
                     psGoingPending.Add(dc.DcID);
                 }
 
                 // Check to see if we are passing the Approved threshold and need to pass actions
-                if (targetStage == WorkFlowStages.Approved)
+                if (targetStage == WorkFlowStages.Approved) 
                 {
                     psGoingActive.Add(dc.DcID);
                 }
 
                 // Simple PS stage change to reflect down to deals history
-                if (targetStage != WorkFlowStages.Pending && targetStage != WorkFlowStages.Approved)
+                if (targetStage != WorkFlowStages.Pending && targetStage != WorkFlowStages.Approved) 
                 {
                     psStageChanges.Add(dc.DcID);
                 }
 
-                if (targetStage != stageIn && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
+                if (targetStage != stageIn && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID)) 
                 {
                     if ((role == RoleTypes.FSE && stageIn == WorkFlowStages.Draft) ||
                         (role == RoleTypes.GA && stageIn == WorkFlowStages.Requested) ||
@@ -320,18 +294,18 @@ namespace Intel.MyDeals.BusinessLogic
 
                 ////if (stratIsTender == 0) // This is not a tender strategy, tag the message
                 ////{
-                //standard manage screen approval
-                opMsgQueue.Messages.Add(new OpMsg
-                {
-                    Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
-                    MsgType = OpMsg.MessageType.Info,
-                    ExtraDetails = dc.DcType,
-                    KeyIdentifiers = new[] { dc.DcID }
-                });
+                    //standard manage screen approval
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
 
-                dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
-                // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
-                // This should probably be a rule item
+                    dc.AddTimelineComment($"Pricing Strategy moved from {stageIn} to {targetStage}.");
+                    // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
+                    // This should probably be a rule item
                 ////}
             }
 

@@ -104,4 +104,7 @@ namespace Intel.MyDeals.Entities
         }
 
     }
+
+
+
 }

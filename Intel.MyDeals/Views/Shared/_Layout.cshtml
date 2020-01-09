@@ -14,22 +14,13 @@
 
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/MyDeals/scripts")
-    <style>
-        .mainBodyStyle {
-            position: absolute;
-            top: 84px;
-            bottom: 15px;
-            left: 0;
-            right: 0;
-            overflow: hidden !important;
-        }
-    </style>
+    
 </head>
 
 <body @Html.RequestVerificationToken()>
     @Html.Partial("_Header")
     <div id="modals"></div>
-    <div id="bodyContent" class="mainBodyStyle" style="">
+    <div id="bodyContent" style="position: absolute; top: 84px; bottom: 15px; left: 0; right: 0; overflow: hidden !important;">
         @RenderBody()
     </div>
     @Html.Partial("_Footer")

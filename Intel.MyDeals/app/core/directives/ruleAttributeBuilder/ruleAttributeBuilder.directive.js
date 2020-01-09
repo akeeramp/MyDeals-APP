@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('ruleAttributeBuilder', ruleAttributeBuilder);
 
-ruleAttributeBuilder.$inject = ['$compile', 'objsetService', '$timeout', '$filter', '$localStorage', '$window', 'ruleService', 'logger', '$linq'];
+ruleAttributeBuilder.$inject = ['$compile', 'objsetService', '$timeout', '$filter', '$localStorage', '$window', 'userPreferencesService', 'logger', '$linq'];
 
-function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $localStorage, $window, ruleService, logger, $linq) {
+function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $localStorage, $window, userPreferencesService, logger, $linq) {
 
     return {
         scope: {
@@ -119,8 +119,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                             type: $scope.fieldDict[x.field],
                             field: x.field,
                             operator: x.operator,
-                            value: x.value,
-                            valueType: x.valueType
+                            value: x.value
                         };
                     }).ToArray();
             }
@@ -139,123 +138,106 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                     }).ToArray()[0];
 
                 var fieldType = field.type;
-                var fieldValue = field.field;
+
                 if (scope.dataItem.operator === "IN") {
-                    html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                    if (helpMsg["IN"] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg["IN"] + '</div>';
+                    html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    if (helpMsg["IN"] !== undefined) html += '<div class="sm-help">' + helpMsg["IN"] + '</div>';
                 } else {
-                    switch (fieldType) {
-                        case "string":
-                            {
-                                html = '<input class="k-textbox" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                            } break;
-                        case "autocomplete":
-                            {
-                                html = '<input kendo-auto-complete k-options="autocompleteOptions" style="width: 200px;font-size:11px;" ng-model="dataItem.value" ng-keyup="suggestionPressed($event,\'' + fieldValue + '\')" k-data-source="suggestionText"/>';
-                            } break;
-                        case "number":
-                            {
-                                html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                            } break;
-                        case "money":
-                            {
-                                html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                            } break;
-                        case "numericOrPercentage":
-                            {
-                                if (scope.dataItem.valueType == undefined)
-                                    scope.dataItem.valueType = "{text:\"$\",value:\"$\"}";
-                                html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 137px;font-size:11px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                                html += '<select class="opUiContainer sm" kendo-drop-down-list style="width: 60px;" k-ng-model="dataItem.valueType"><option>%</option><option>$</option></select>'
-                            } break;
-                        case "date":
-                            {
-                                html = '<input kendo-date-picker k-format="\'MM/dd/yyyy\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                            } break;
-                        case "list":
-                            {
-                                var key = fieldValue.replace(/\./g, "_");
-                                if ($scope.lookupDs[key] === undefined) {
-
-                                    // by url
-                                    if (field.lookupUrl !== undefined && field.lookupUrl !== "") {
-                                        $scope.lookupDs[key] = new kendo.data.DataSource({
-                                            transport: {
-                                                read: {
-                                                    url: field.lookupUrl,
-                                                    dataType: "json"
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    // by local data
-                                    if (field.lookups !== undefined && field.lookups.length > 0) {
-                                        $scope.lookupDs[key] = new kendo.data.DataSource({
-                                            data: field.lookups
-                                        });
-                                    }
-                                }
-
-                                html = '';
-                                html += '<select kendo-multi-select ';
-                                html += 'k-data-text-field="\'' + field.lookupText + '\'" ';
-                                html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
-                                html += 'k-filter="\'contains\'" ';
-                                html += 'k-auto-bind="true" ';
-                                //html += 'k-tag-mode="\'single\'" ';
-                                html += 'k-value-primitive="true" ';
-                                html += 'k-ng-model="dataItem.value" ';
-                                html += 'k-auto-close="false" ';
-                                html += 'k-data-source="lookupDs.' + key + '" ';
-                                html += 'class="opUiContainer sm" ';
-                                html += 'style="min-width: 200px; max-width: 200px;"></select>{{dataItem.value}}';
-                            } break;
-                        case "singleselect":
-                            {
-                                var key = field.field.replace(/\./g, "_");
-                                if ($scope.lookupDs[key] === undefined) {
-
-                                    // by url
-                                    if (field.lookupUrl !== undefined && field.lookupUrl !== "") {
-                                        $scope.lookupDs[key] = new kendo.data.DataSource({
-                                            transport: {
-                                                read: {
-                                                    url: field.lookupUrl,
-                                                    dataType: "json"
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    // by local data
-                                    if (field.lookups !== undefined && field.lookups.length > 0) {
-                                        $scope.lookupDs[key] = new kendo.data.DataSource({
-                                            data: field.lookups
-                                        });
-                                    }
-                                }
-
-                                html = '';
-                                html += '<select kendo-drop-down-list ';
-                                html += 'k-data-text-field="\'' + field.lookupText + '\'" ';
-                                html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
-                                html += 'k-filter="\'contains\'" ';
-                                html += 'k-auto-bind="true" ';
-                                html += 'k-tag-mode="\'single\'" ';
-                                html += 'k-value-primitive="true" ';
-                                html += 'k-ng-model="dataItem.value" ';
-                                html += 'k-auto-close="false" ';
-                                html += 'k-data-source="lookupDs.' + key + '" ';
-                                html += 'class="opUiContainer sm" ';
-                                html += 'style="min-width: 200px; max-width: 400px;"></select>{{dataItem.value}}';
-                            } break;
-                        case "bool":
-                            {
-                                html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
-                            } break;
+                    if (fieldType === "string") {
+                        html = '<input class="k-textbox" style="width: 250px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
                     }
-                    if (helpMsg[fieldType] !== undefined) html += '<div class="sm-help" style="width: 200px;">' + helpMsg[fieldType] + '</div>';
+                    else if (fieldType === "number") {
+                        html = '<input kendo-numeric-text-box k-decimals="0" k-format="\'#\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    }
+                    else if (fieldType === "money") {
+                        html = '<input kendo-numeric-text-box restrict-decimals=true k-format="\'c\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    }
+                    else if (fieldType === "date") {
+                        html = '<input kendo-date-picker k-format="\'MM/dd/yyyy\'" style="width: 200px;" k-ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    }
+                    else if (fieldType === "list") {
+
+                        var key = field.field.replace(/\./g, "_");
+                        if ($scope.lookupDs[key] === undefined) {
+
+                            // by url
+                            if (field.lookupUrl !== undefined && field.lookupUrl !== "") {
+                                $scope.lookupDs[key] = new kendo.data.DataSource({
+                                    transport: {
+                                        read: {
+                                            url: field.lookupUrl,
+                                            dataType: "json"
+                                        }
+                                    }
+                                });
+                            }
+
+                            // by local data
+                            if (field.lookups !== undefined && field.lookups.length > 0) {
+                                $scope.lookupDs[key] = new kendo.data.DataSource({
+                                    data: field.lookups
+                                });
+                            }
+                        }
+
+                        html = '';
+                        html += '<select kendo-multi-select ';
+                        html += 'k-data-text-field="\'' + field.lookupText + '\'" ';
+                        html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
+                        html += 'k-filter="\'contains\'" ';
+                        html += 'k-auto-bind="true" ';
+                        html += 'k-tag-mode="\'single\'" ';
+                        html += 'k-value-primitive="true" ';
+                        html += 'k-ng-model="dataItem.value" ';
+                        html += 'k-auto-close="false" ';
+                        html += 'k-data-source="lookupDs.' + key + '" ';
+                        html += 'class="opUiContainer sm" ';
+                        html += 'style="min-width: 200px; max-width: 400px;"></select>{{dataItem.value}}';
+                    }
+                    else if (fieldType === "singleselect") {
+
+                        var key = field.field.replace(/\./g, "_");
+                        if ($scope.lookupDs[key] === undefined) {
+
+                            // by url
+                            if (field.lookupUrl !== undefined && field.lookupUrl !== "") {
+                                $scope.lookupDs[key] = new kendo.data.DataSource({
+                                    transport: {
+                                        read: {
+                                            url: field.lookupUrl,
+                                            dataType: "json"
+                                        }
+                                    }
+                                });
+                            }
+
+                            // by local data
+                            if (field.lookups !== undefined && field.lookups.length > 0) {
+                                $scope.lookupDs[key] = new kendo.data.DataSource({
+                                    data: field.lookups
+                                });
+                            }
+                        }
+
+                        html = '';
+                        html += '<select kendo-drop-down-list ';
+                        html += 'k-data-text-field="\'' + field.lookupText + '\'" ';
+                        html += 'k-data-value-field="\'' + field.lookupValue + '\'" ';
+                        html += 'k-filter="\'contains\'" ';
+                        html += 'k-auto-bind="true" ';
+                        html += 'k-tag-mode="\'single\'" ';
+                        html += 'k-value-primitive="true" ';
+                        html += 'k-ng-model="dataItem.value" ';
+                        html += 'k-auto-close="false" ';
+                        html += 'k-data-source="lookupDs.' + key + '" ';
+                        html += 'class="opUiContainer sm" ';
+                        html += 'style="min-width: 200px; max-width: 400px;"></select>{{dataItem.value}}';
+                    }
+                    else if (fieldType === "bool") {
+                        html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value" ng-keypress="enterPressed($event)"/>';
+                    }
+
+                    if (helpMsg[fieldType] !== undefined) html += '<div class="sm-help">' + helpMsg[fieldType] + '</div>';
                 }
 
                 var x = angular.element(html);
@@ -269,21 +251,6 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                     $scope.runRule();
                 }
             };
-
-            $scope.suggestionPressed = function (event, fieldValue) {
-                $scope.suggestionText = new kendo.data.DataSource({
-                    transport: {
-                        read: {
-                            url: "/api/Rules/GetSuggestion/" + fieldValue + "/" + event.target.value,
-                            dataType: "json"
-                        }
-                    }
-                });
-            };
-
-            $scope.autocompleteOptions = {
-                filter: "contains"
-            }
 
             $scope.closeField = function (e) {
                 setTimeout(function () {

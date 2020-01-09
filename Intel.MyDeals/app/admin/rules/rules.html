@@ -1,16 +1,22 @@
 ﻿<form style="margin-top:15px" class="form-horizontal">
-    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
-        <div class="k-header k-grid-toolbar ng-scope">
-            <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.addNewRule()">
-                <span class="k-icon k-i-plus"></span>Add New Rule
-            </a>
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Rule Type :</label>
+        <div class="col-md-4">
+            <select class="form-control md"
+                    kendo-combo-box
+                    k-options="vm.ruleTypeOptions"
+                    ng-model="vm.ruleTypeId"
+                    style="width:100%"></select>
         </div>
+        <a role="button" ng-click="vm.addNewRule()">Add New Rule</a>
+    </div>
+    <div ng-if="!vm.isEditmode" class="col-md-12" style="padding-top: 20px;">
         <div kendo-grid class="table" expand-k-grid options="vm.gridOptions"></div>
     </div>
     <div ng-if="vm.isEditmode">
         <div ng-show="false" class="form-group row">
-            <label class="control-label col-md-2">Rule:</label>
-            <div class="col-md-5">
+            <label class="control-label col-md-2">Rule :</label>
+            <div class="col-md-4">
                 <select class="form-control md"
                         kendo-combo-box
                         k-options="vm.ruleOptions"
@@ -20,7 +26,7 @@
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Name:</label>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <input class="form-control md"
                        type="text"
                        ng-model="vm.rule.Name"
@@ -29,7 +35,7 @@
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Owner:</label>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <select kendo-combo-box
                         k-options="vm.ownerOptions"
                         ng-model="vm.rule.OwnerId"
@@ -37,65 +43,46 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label col-md-2">Status:</label>
-            <div class="col-md-1">
+            <label class="control-label col-md-2">Is Active</label>
+            <div class="col-md-4">
                 <toggle class="fl toggle-accept"
                         ng-model="vm.rule.IsActive"
-                        on="Active"
-                        off="Inactive"
+                        on="ON"
+                        off="OFF"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
+                <div class="col-md-4">
+                    <input kendo-date-picker
+                           placeholder="From date"
+                           k-ng-model="vm.rule.StartDate"
+                           style="width: 100%;" />
+                </div>
+                <label class="control-label col-md-1">to</label>
+                <div class="col-md-4">
+                    <input kendo-date-picker
+                           placeholder="To date"
+                           ng-model="vm.rule.EndDate"
+                           style="width: 100%;" />
+                </div>
             </div>
-            <label class="control-label col-md-1">Stage:</label>
-            <div class="col-md-1" style="margin-left:-15px;">
-                <toggle class="fl toggle-accept" ng-disabled="!vm.RuleConfig.IsElligibleForApproval"
-                        ng-model="vm.rule.RuleStage"
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Status</label>
+            <div class="col-md-4">
+                <toggle class="fl toggle-accept"
+                        ng-model="vm.rule.IsApproved"
                         on="Approved"
                         off="Pending"
                         onstyle="btn-success"
                         offstyle="btn-danger"></toggle>
             </div>
-            <label class="control-label col-md-1">Automation:</label>
-            <div class="col-md-1" style="margin-left:-15px;">
-                <toggle class="fl toggle-accept"
-                        ng-model="vm.rule.IsAutomationIncluded"
-                        on="Include"
-                        off="Exclude"
-                        onstyle="btn-success"
-                        offstyle="btn-danger"></toggle>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-2">Rule Start Date:</label>
-            <div class="col-md-2">
-                <input kendo-date-picker
-                       placeholder="From date"
-                       k-ng-model="vm.rule.StartDate"
-                       style="width: 100%;" />
-            </div>
-            <label class="control-label col-md-1">End Date:</label>
-            <div class="col-md-2">
-                <input kendo-date-picker
-                       placeholder="To date"
-                       ng-model="vm.rule.EndDate"
-                       style="width: 100%;" />
-            </div>
         </div>
         <div class="form-group row">
             <label class="control-label col-md-2">Notes:</label>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <textarea type="textarea" rows="5"
                           ng-model="vm.rule.Notes"
                           style="width:100%" />
-            </div>
-        </div>
-        <div ng-if="vm.rule.Id > 0" class="form-group row" style="margin:0px !important;margin-left:-10px !important;">
-            <label class="control-label col-md-2">&nbsp;</label>
-            <div class="col-md-5" style="font-size: 12px;margin: 0px;padding: 0px;text-align: right;">
-                <span>Last modified by </span>
-                <span style="color:orangered">{{vm.rule.ChangedBy}}</span>
-                <span> on </span>
-                <span style="color:orangered">{{vm.rule.ChangeDateTimeFormat}}</span>
             </div>
         </div>
         <div class="form-group row">
@@ -109,48 +96,17 @@
                      custom-settings=""></div>
             </div>
         </div>
-        <div ng-show="false" class="form-group row" style="margin-bottom: 50px;">
-            <label class="control-label col-md-2">Product Criteria:</label>
-            <div class="col-md-5">
-                <kendo-grid id="productCriteria" options="vm.ProductCriteriaOptions" k-auto-bind="true" k-data-source="vm.ProductCriteria" style="height:200px !important; max-height:200px !important;" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
-            </div>
-        </div>
-        <div class="form-group row action_btns">
+        <div class="form-group row">
             <label class="control-label col-md-2"></label>
             <div class="col-md-6">
-                <button ng-click="vm.saveRule(false)" class="btn btn-primary">Save as Draft</button>
-                <button ng-click="vm.cancel()" class="btn btn-primary">Cancel Edits</button>
-                <button ng-click="vm.saveRule(true)" class="btn btn-primary">Save & Publish</button>
+                <button ng-click="vm.saveRule()" class="btn btn-primary">Save</button>
+                <button ng-click="vm.cancel()" class="btn btn-secondary">Cancel</button>
+                <button ng-click="vm.sendEmail()" class="btn btn-secondary">Send Email</button>
             </div>
         </div>
     </div>
 </form>
 <style>
-    #productCriteria tbody .k-alt {
-        background-color: white !important;
-        border-right-color: lightgray !important;
-        border-right-width: 1px !important;
-        border-bottom-style: solid !important;
-    }
-
-    #productCriteria .k-grid-content {
-        height: 100% !important;
-    }
-
-    .k-button {
-        color: #fff;
-        background-color: #0071c5;
-        border-color: #0071c5;
-        box-shadow: none;
-    }
-
-        .k-button:hover {
-            background-color: #00aeef;
-            border-color: #00aeef;
-            color: #fff;
-            box-shadow: none;
-        }
-
     .tmpltItem {
         width: 100%;
     }
@@ -190,13 +146,4 @@
         margin: 3px;
         color: #aaa;
     }
-
-    .action_btns {
-        margin-bottom: 20px;
-    }
 </style>
-<script>
-    $(document).ready(function () {
-        $('#bodyContent').attr('style', 'overflow: auto !important');
-    });
-</script>

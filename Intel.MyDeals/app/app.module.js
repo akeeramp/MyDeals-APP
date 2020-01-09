@@ -20,7 +20,6 @@
          */
         'app.admin',
         'app.advancedSearch',
-        'app.reporting',
         'app.contract',
         'app.costtest',
         'app.dashboard',

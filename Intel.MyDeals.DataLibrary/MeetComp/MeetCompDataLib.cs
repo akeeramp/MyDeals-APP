@@ -178,10 +178,10 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_MEET_COMP
                 {
                     @obj_sids = dt,
-                    obj_type_id = OBJ_TYPE_ID,
-                    usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                    role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
-                    mode = MODE
+                    @OBJ_TYPE_ID = OBJ_TYPE_ID,
+                    @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
+                    @MODE = MODE
                 }))
                 {
                     int IDX_BRND_FMLY = DB.GetReaderOrdinal(rdr, "BRND_FMLY");

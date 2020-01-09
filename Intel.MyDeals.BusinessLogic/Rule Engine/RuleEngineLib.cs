@@ -1,17 +1,16 @@
 ﻿using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
-using Intel.MyDeals.BusinessRules;
-using Intel.MyDeals.Entities;
-using Intel.MyDeals.BusinessLogic.Rule_Engine;
-using Newtonsoft.Json;
-using System;
 using System.Linq;
+using Intel.MyDeals.BusinessRules;
+using Intel.RulesEngine;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public class RuleEngineLib : IRuleEngineLib
     {
+
         /// <summary>
         /// TODO: This parameterless constructor is left as a reminder,
         /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
@@ -32,54 +31,12 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool RunPriceRules()
         {
-            new OpDataCollectorDataLib().GetPriceRuleData();
-            return true;
-        }
-
-        public RuleConfig GetPriceRulesConfig()
-        {
-            RuleConfig ruleConfig = new RuleConfig();
-            ruleConfig = new ApprovalRules().GetPriceRulesConfig();
-            ruleConfig.DA_Users = new EmployeeDataLib().GetUsrProfileRole().Where(x => x.ROLE_NM == "DA").ToList();
-            return ruleConfig;
-        }
-
-        public List<string> GetSuggestion(string strCategory, string strSearchKey)
-        {
-            // Removed internal call for now, not used yet
-            return null; // new OpDataCollectorDataLib().GetSuggestion(strCategory, strSearchKey);
-        }
-
-        public List<PriceRuleCriteria> GetPriceRules(int id, string strActionName)
-        {
-            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            List<PriceRuleCriteria> lstPriceRuleCriteria = new ApprovalRules().GetPriceRuleCriteriaById(id, priceRuleAction);
-            if (priceRuleAction == PriceRuleAction.GET_BY_RULE_ID)
-            {
-                lstPriceRuleCriteria.ForEach(x =>
-                {
-                    x.Criterias = JsonConvert.DeserializeObject<Criteria>(x.CriteriaJson);
-                });
-            }
-            return lstPriceRuleCriteria;
-        }
-        public List<PriceRuleCriteria> SavePriceRule(PriceRuleCriteria priceRuleCriteria, string strActionName, bool isPublish)
-        {
-            PriceRuleAction priceRuleAction = (PriceRuleAction)Enum.Parse(typeof(PriceRuleAction), strActionName, true);
-            if (priceRuleAction == PriceRuleAction.CREATE || priceRuleAction == PriceRuleAction.UPDATE)
-            {
-                priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
-                using (RuleExpressions ruleExpressions = new RuleExpressions())
-                {
-                    priceRuleCriteria.CriteriaSql = ruleExpressions.GetSqlExpression(priceRuleCriteria.Criterias);
-                }
-            }
-            else
-            {
-                //To avoid overflow
-                priceRuleCriteria.StartDate = priceRuleCriteria.EndDate = DateTime.UtcNow;
-            }
-            return new ApprovalRules().SavePriceRule(priceRuleCriteria, priceRuleAction, isPublish);
+            throw new System.NotImplementedException();
+            // 1. Get all the Tender Submitted deals. Bring the PSId of the deal as well (Get the deals which have valid PCT/MCT)
+                  // Implimenet the POC here..Agenda is to get this 100% ready where input conditions are mocked everything esle should be implimeneted completely. 
+            // 2. Get the deals which pass the price rules.
+            // 3. Pass the PSId of the deals which passed the price rules to the existing method
+            //    public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
         }
     }
 }

@@ -4,34 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals.dbo;
 using Intel.MyDeals.Entities;
-using System.Data;
-using System;
 
 namespace Intel.MyDeals.DataLibrary
 {
     public partial class OpDataCollectorDataLib
     {
-        // TODO: REMOVE THIS, IT IS BROKEN MIKE
-        public List<PriceRuleData> GetPriceRuleData()
-        {
-            List<PriceRuleData> lstPriceRuleData = new List<PriceRuleData>();
-            var cmd = new PR_MYDL_GET_PRC_RULE_DATA { };
-            using (var rdr = DataAccess.ExecuteDataSet(cmd))
-            {
-                if (rdr.Tables.Count > 0)
-                {
-                    lstPriceRuleData = (from result in rdr.Tables[0].AsEnumerable()
-                                        select new PriceRuleData
-                                        {
-                                            ContractId = (int)result["CNTRCT_OBJ_SID"],
-                                            DealId = (int)result["DC_ID"],
-                                            PricingStrategyId = (int)result["PRC_ST_OBJ_SID"]
-                                        }).ToList();
-                }
-            }
-            return lstPriceRuleData;
-        }
-
         /// <summary>
         /// Get an object tree from its user displayed ID
         /// </summary>
@@ -90,9 +67,9 @@ namespace Intel.MyDeals.DataLibrary
 
             foreach (OpDataElementType oType in includeTypes)
             {
-                if (!odcs.ContainsKey(oType)) odcs[oType] = new OpDataPacket<OpDataElementType> { PacketType = oType };
+                if (!odcs.ContainsKey(oType)) odcs[oType] = new OpDataPacket<OpDataElementType> {PacketType = oType};
             }
-
+            
             return odcs;
         }
 
