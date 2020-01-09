@@ -126,6 +126,7 @@
         }
 
         vm.editRule = function (dataItem, isCopy) {
+            vm.spinnerMessageDescription = "Please wait while we loading the rule..";
             //vm.GetRules(id, "GET_BY_RULE_ID"); 
             if (dataItem.id) {
                 dataItem.isCopy = isCopy;
