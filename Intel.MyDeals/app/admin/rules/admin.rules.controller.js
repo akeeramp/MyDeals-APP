@@ -21,7 +21,7 @@
         vm.spinnerMessageHeader = "Price Rule";
         vm.spinnerMessageDescription = "Please wait while we loading page";
         vm.isBusyShowFunFact = true;
-        vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
+        vm.toolKitHidden = window.usrRole === 'DA' ? false : true;
 
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -108,7 +108,7 @@
                     vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
                 }
             });
-            if (window.usrRole != 'DA') {
+            if (window.usrRole !== 'DA') {
                 constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
                     if (!!data.data) {
                         var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
@@ -154,12 +154,12 @@
         }
 
         vm.GetRules = function (id, actionName) {
-            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
+            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName === "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 vm.Rules = response.data;
                 vm.dataSource.read();
                 //adding filter
-                if (rid != 0) {
+                if (rid !== 0) {
                     vm.dataSource.filter({ field: "Id", value: vm.rid });
                     vm.editRule(rid, false);
                 }
@@ -169,10 +169,10 @@
         };
 
         vm.deleteRule = function (id) {
-            kendo.confirm("Are you sure wants to delete?").then(function () {
+            kendo.confirm("Are you sure want to delete this rule?").then(function () {
                 ruleService.deletePriceRule(id).then(function (response) {
                     if (response.data > 0) {
-                        vm.Rules = vm.Rules.filter(x => x.Id != response.data);
+                        vm.Rules = vm.Rules.filter(x => x.Id !== response.data);
                         vm.dataSource.read();
                         logger.success("Rule has been deleted");
                     }
@@ -183,15 +183,15 @@
         };
 
         //Take first character of WF_STG_CD
-        vm.stageOneChar = function (RULE_STAGE) {
-            if (RULE_STAGE === true) {
+        vm.stageOneChar = function (ruleStage) {
+            if (ruleStage === true) {
                 return 'A';
             } else {
                 return 'P';
             }
         }
-        vm.stageOneCharStatus = function (IsAutomationIncluded) {
-            if (IsAutomationIncluded === true) {
+        vm.stageOneCharStatus = function (isAutomationIncluded) {
+            if (isAutomationIncluded === true) {
                 return 'intelicon-plus-solid clrGreen';
             } else {
                 return 'intelicon-minus-solid clrRed';
@@ -245,7 +245,7 @@
 
         vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
             if (isEnabled && ruleId != null && ruleId > 0) {
-                vm.spinnerMessageDescription = "Please wait while we updating the rule..";
+                vm.spinnerMessageDescription = "Please wait while we are updating the rule..";
                 var priceRuleCriteria = { Id: ruleId }
                 switch (strActionName) {
                     case "UPDATE_ACTV_IND": {
@@ -258,20 +258,20 @@
                 }
                 ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
                     if (response.data.Id > 0) {
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
-                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangedBy = response.data.ChangedBy;
+                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
+                        vm.Rules.filter(x => x.Id === response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
                         switch (strActionName) {
                             case "UPDATE_ACTV_IND": {
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                vm.Rules.filter(x => x.Id === response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                             } break;
                             case "UPDATE_STAGE_IND": {
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStage = isTrue;
+                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id === response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id === response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
@@ -370,8 +370,9 @@
             sortable: true,
             selectable: true,
             resizable: true,
+            reorderable: true,
             scrollable: true,
-            columnMenu: true,
+            //columnMenu: true, // Remove the three dots and more importantly, the selection of column items
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget' kendo-grid k-options='detailInit(dataItem)'></div>",
@@ -483,7 +484,7 @@
         }
 
         $scope.getConstant();
-        if (window.usrRole == 'DA') {
+        if (window.usrRole === 'DA') {
             $scope.init();
         }
     }
