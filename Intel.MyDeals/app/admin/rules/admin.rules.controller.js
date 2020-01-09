@@ -11,10 +11,8 @@
 
     function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
         var vm = this;
-        vm.reloadNotReq = false;
         vm.rid = rid;
         vm.ruleId = 0;
-        vm.isEditmode = false;
         vm.Rules = [];
         vm.rule = {};
         vm.RuleConfig = [];
@@ -34,13 +32,21 @@
             vm.GetRules(0, "GET_RULES"); 
         }
 
+        $scope.$on('UpdateSpinnerDescription', function (event, strDescription) {
+            vm.spinnerMessageDescription = strDescription;
+        });
+
         $scope.$on('UpdateRuleClient', function (event, updatedRule) {
+            vm.RefreshGrid(updatedRule);
+        });
+
+        vm.RefreshGrid = function (updatedRule) {
             if (vm.Rules.filter(x => x.Id === updatedRule.Id).length > 0) {
                 vm.Rules = vm.Rules.filter(x => x.Id !== updatedRule.Id);
             }
             vm.Rules.splice(0, 0, updatedRule);
             vm.dataSource.read();
-        });
+        }
 
         vm.openRuleDetailsModal = function (dataItem) {
             $scope.context = dataItem;
@@ -119,12 +125,16 @@
 
         }
 
-        vm.editRule = function (dataItem) {
+        vm.editRule = function (dataItem, isCopy) {
+            vm.spinnerMessageDescription = "Please wait while we loading the rule..";
             //vm.GetRules(id, "GET_BY_RULE_ID"); 
             if (dataItem.id) {
+                dataItem.isCopy = isCopy;
                 vm.openRuleDetailsModal(dataItem);
             } else {
-                var tempDataItem = { "id": dataItem };
+                var tempDataItem = {
+                    "id": dataItem, "isCopy": isCopy
+                };
                 vm.openRuleDetailsModal(tempDataItem);
             }
         }
@@ -132,7 +142,7 @@
         vm.copyRule = function (id) {
             ruleService.copyPriceRule(id).then(function (response) {
                 if (response.data > 0) {
-                    vm.editRule(response.data);
+                    vm.editRule(response.data, true);
                     logger.success("Rule has been copied");
 
                 } else {
@@ -147,12 +157,11 @@
             vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
             ruleService.getPriceRules(id, actionName).then(function (response) {
                 vm.Rules = response.data;
-                vm.isEditmode = false;
                 vm.dataSource.read();
                 //adding filter
                 if (rid != 0) {
                     vm.dataSource.filter({ field: "Id", value: vm.rid });
-                    vm.editRule(rid);
+                    vm.editRule(rid, false);
                 }
             }, function (response) {
                 logger.error("Operation failed");
@@ -244,6 +253,7 @@
                     } break;
                     case "UPDATE_STAGE_IND": {
                         priceRuleCriteria.RuleStage = isTrue;
+                        priceRuleCriteria.IsActive = isTrue; // also make it active now
                     } break;
                 }
                 ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
@@ -260,6 +270,8 @@
                             case "UPDATE_STAGE_IND": {
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
                                 vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                                 logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                             } break;
                         }
@@ -272,6 +284,7 @@
                             } break;
                             case "UPDATE_STAGE_IND": {
                                 vm.rule.RuleStage = !isTrue;
+                                vm.rule.IsActive = !isTrue;
                             } break;
                         }
                         logger.error("Unable to update rule's indicator");
@@ -283,6 +296,7 @@
                         } break;
                         case "UPDATE_STAGE_IND": {
                             vm.rule.RuleStage = !isTrue;
+                            vm.rule.IsActive = !isTrue;
                         } break;
                     }
                     logger.error("Operation failed");
@@ -371,7 +385,7 @@
                     template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div>"
                     + "<div class='rule'>"
                     + "<i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>"
-                    + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #)'></i>"
+                    + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #,false)'></i>"
                     + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
                     + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
                     + "<i ng-if='(vm.isElligibleForApproval && #= !IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
@@ -460,7 +474,7 @@
 
         vm.addNewRule = function () {
             //Call up Popup
-            vm.editRule(0);
+            vm.editRule(0, false);
         }
 
         //Export to Excel
@@ -472,6 +486,5 @@
         if (window.usrRole == 'DA') {
             $scope.init();
         }
-
     }
 })();

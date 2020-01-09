@@ -34,14 +34,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
             return SafeExecutor(() => _rulesLib.GetSuggestion(strCategory, strSearchKey), $"Unable to get suggestions");
-        }
-
-        [Authorize]
-        [Route("RunPriceRules")]
-        public bool RunPriceRules()
-        {
-            return SafeExecutor(() => _rulesLib.RunPriceRules(), $"Unable to get Business Rules");
-        }
+        }        
 
         [Authorize]
         [Route("IsDuplicateTitle/{iRuleSid}/{strTitle}")]

@@ -2,19 +2,19 @@
     <loading-panel id="priceRuleLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
     <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
-    <div ng-if="!vm.isEditmode" class="col-md-10">
+    <div class="col-md-10">
         <h3>Auto-Approval Rules Administration Screen</h3>
     </div>
-    <div ng-if="!vm.isEditmode && vm.toolKitHidden == false" class="col-md-2 ng-scope" style="">
+    <div ng-if="vm.toolKitHidden == false" class="col-md-2 ng-scope" style="">
         <h3 style="float:right"><a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for help"><i class="intelicon-help-solid" style="color:#3343a4"></i></a></h3>
     </div>
-    <div ng-if="!vm.isEditmode" class="row" style="padding: 0 0 0 15px;">
+    <div class="row" style="padding: 0 0 0 15px;">
         <div class="col-md-6" style="text-align: left;">
             <p style="color: #FC4C02">This screen allows DA users to create automated approval rules to streamline their work</p>
         </div>
     </div>
 
-    <div ng-if="!vm.isEditmode" class="col-md-12">
+    <div class="col-md-12">
         <!-- Grid buttons added by script below before styles -->
         <div id="ruleDetails" kendo-grid class="table ruleDetails opUiContainer md k-grid k-widget" expand-k-grid options="vm.gridOptions"></div>
     </div>   
@@ -80,9 +80,15 @@
     }
 
     .btn-success {
-        color: #000;
+        color: #000000;
         background-color: #C4D600 !important;
         border-color: #adbd00 !important;
+    }
+        
+    .btn-success[disabled] {
+        color: #b1babf;
+        background-color: #edeff0 !important;
+        border-color: #b1babf !important;
     }
 
     #spreadsheetProductCriteria {
