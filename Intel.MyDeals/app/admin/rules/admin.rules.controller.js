@@ -22,7 +22,7 @@
         vm.spinnerMessageDescription = "Please wait while we loading page";
         vm.isBusyShowFunFact = true;
         vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
-
+        vm.productPresent = true;
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
                 vm.RuleConfig = response.data;
@@ -303,14 +303,36 @@
                 });
             }
         }
+        
 
         $scope.detailInit = function (parentDataItem) {
+            var columns = [];
+            //If Rule Descripsion Present
+            if (parentDataItem.RuleDescription.length > 0) {
+                columns.push({
+                    field: "RuleDescription",
+                    title: "Rule Description",
+                    template: "<div>#=RuleDescription#</div>",
+                    width: "50%",
+                    filterable: { multi: true, search: false }
+                });
+            }
+            //If Peoduct Present
+            if (parentDataItem.ProductDescription.length > 0) {
+                columns.push({
+                    field: "ProductDescription",
+                    title: "Product Description",
+                    template: "<div>#=ProductDescription#</div>",
+                    width: "50%",
+                    filterable: false
+                });
+            }
+            
             return {
                 dataSource: {
                     transport: {
-                        read: function (e) {
-                            e.success(parentDataItem);
-                            vm.productPresent = parentDataItem.ProductDescription.length;
+                        read: function (e) {                            
+                            e.success(parentDataItem);                                                        
                         },
                         create: function (e) {
                         }
@@ -324,40 +346,19 @@
                             id: "ID",
                             fields: {
                                 ID: {
-                                    editable: false, nullable: true
+                                    nullable: true
                                 },
-                                RuleDescription: { editable: false, type: "string" },
-                                ProductDescription: { editable: false, type: "string" }
+                                RuleDescription: { type: "string" },
+                                ProductDescription: { type: "string" }
                             }
                         }
                     },
                 },
                 filterable: false,
-                sortable: true,
-                navigatable: true,
+                sortable: true,                
                 resizable: true,
-                reorderable: false,
-                columnMenu: false,
-                groupable: false,
-                pageable: false,
-                columns: [
-                    {
-                        field: "RuleDescription",
-                        title: "Rule Description",
-                        template: "<div>#=RuleDescription#</div>",
-                        width: "50%",
-                        filterable: { multi: true, search: false }
-                    },
-                    {
-                        field: "ProductDescription",
-                        title: "Product Description",
-                        template: "<div>#=ProductDescription#</div>",
-                        width: "50%",
-                        filterable: { multi: true, search: false },
-                        hidden: vm.productPresent > 0 ? false : true
-                    }
-
-                ]
+                reorderable: false,                
+                columns: columns
             };
         };
 
