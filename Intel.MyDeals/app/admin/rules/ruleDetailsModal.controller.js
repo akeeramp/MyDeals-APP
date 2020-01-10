@@ -598,9 +598,13 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
             //$('#blanketDiscountSection').hide(); // Hidden due to IsAutomationIncluded
             $("#productCriteria").hide();
+            vm.rule.RuleStage = true;
+            vm.rule.IsActive = true;
             var g = 0;
         } else {
             $("#productCriteria").show();
+            vm.rule.RuleStage = false;
+            vm.rule.IsActive = false;
             //$('#blanketDiscountSection').show(); // Displayed due to IsAutomationIncluded
         }
     }

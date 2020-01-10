@@ -392,7 +392,10 @@
                     + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
                     + "<i ng-if='(vm.isElligibleForApproval && #= !IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
                     + "</div>",
-                    hidden: vm.toolKitHidden
+                    hidden: vm.toolKitHidden,
+                    attributes: {
+                        style: "padding-top: 5px"
+                    }
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
                 {

@@ -95,14 +95,14 @@
         border: none;
     }
 
-        #spreadsheetProductCriteria .k-dirty-cell {
-            border: none !important;
-            color: red !important;
-        }
+    #spreadsheetProductCriteria .k-dirty-cell {
+        border: none !important;
+        color: red !important;
+    }
 
-        #spreadsheetProductCriteria .k-spreadsheet-formula-bar, #spreadsheetProductCriteria .k-spreadsheet-name-editor {
-            display: none !important;
-        }
+    #spreadsheetProductCriteria .k-spreadsheet-formula-bar, #spreadsheetProductCriteria .k-spreadsheet-name-editor {
+        display: none !important;
+    }
 
 
     .clrGreen {
@@ -128,7 +128,9 @@
     }
 
     .k-grid td {
-        height: 30px !important;
+        vertical-align: top;
+        padding-top: 3px;
+        height: 25px !important;
     }
 
     div.k-spreadsheet-formula-bar,
@@ -152,10 +154,10 @@
         background-color: #ffffff !important;
     }
 
-        #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
-            font-size: 12px;
-            border-bottom: solid #dedede 2px;
-        }
+    #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+        font-size: 12px;
+        border-bottom: solid #dedede 2px;
+    }
 
     .k-grid .k-icon {
         color: #3343a4 !important;
@@ -182,17 +184,17 @@
         color: #00AEEF !important;
     }
 
-        .dealTools .md-icon i:hover {
-            color: #003C71 !important;
-        }
+    .dealTools .md-icon i:hover {
+        color: #003C71 !important;
+    }
 
     .dealTools .md-icon-disabled {
         padding: 4px 2px 0 1px;
     }
 
-        .dealTools .md-icon-disabled i {
-            color: #00AEEF;
-        }
+    .dealTools .md-icon-disabled i {
+        color: #00AEEF;
+    }
 
     .dealTools {
         /*margin-left: -5px !important;*/
@@ -280,9 +282,9 @@
         width: 35px;
     }
 
-        .tmpltIcn i {
-            font-size: 26px;
-        }
+    .tmpltIcn i {
+        font-size: 26px;
+    }
 
     .tmpltContract {
     }
@@ -319,6 +321,11 @@
 
     .abValue {
         max-width: 58%;
+    }
+
+    /* Next CSS line pads the expand arrow down a bit */
+    .k-i-expand {
+        padding-top: 15px
     }
 </style>
 <script>
