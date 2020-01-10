@@ -4,7 +4,7 @@
             <li gridster-item row="widget.position.row" col="widget.position.col" id="{{widget.id}}" size-x="widget.size.x" size-y="widget.size.y" ng-repeat="widget in dashboardData.currentWidgets">
                 <div class="box" ng-controller="CustomWidgetCtrl">
                     <div class="box-header">
-                        <h3>{{ (widget.name == 'Search My Deals Contracts')?'Search My Deals Report(s)':widget.name }}</h3>
+                        <h3>{{ widget.name }}</h3>
                         <div class="box-header-btns pull-right">
                             <a title="Refresh Widget" ng-show="widget.canRefresh" ng-click="refreshSingleWidget(widget)"><i class="intelicon-refresh"></i></a>
                             <a title="Widget Settings" ng-show="widget.canChangeSettings" ng-click="openSettings(widget)"><i class="intelicon-settings-solid"></i></a>
