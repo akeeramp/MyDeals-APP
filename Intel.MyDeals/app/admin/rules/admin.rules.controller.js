@@ -29,7 +29,7 @@
             }, function (response) {
                 logger.error("Operation failed");
             });
-            vm.GetRules(0, "GET_RULES"); 
+            vm.GetRules(0, "GET_RULES");
         }
 
         $scope.$on('UpdateSpinnerDescription', function (event, strDescription) {
@@ -169,7 +169,7 @@
         };
 
         vm.deleteRule = function (id) {
-            kendo.confirm("Are you sure wants to delete?").then(function () {
+            kendo.confirm("Are you sure want to delete this rule?").then(function () {
                 ruleService.deletePriceRule(id).then(function (response) {
                     if (response.data > 0) {
                         vm.Rules = vm.Rules.filter(x => x.Id != response.data);
@@ -245,7 +245,7 @@
 
         vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
             if (isEnabled && ruleId != null && ruleId > 0) {
-                vm.spinnerMessageDescription = "Please wait while we updating the rule..";
+                vm.spinnerMessageDescription = "Please wait while we are updating the rule..";
                 var priceRuleCriteria = { Id: ruleId }
                 switch (strActionName) {
                     case "UPDATE_ACTV_IND": {
@@ -370,8 +370,9 @@
             sortable: true,
             selectable: true,
             resizable: true,
+            reorderable: true,
             scrollable: true,
-            columnMenu: true,
+            //columnMenu: true, // Remove the three dots and more importantly, the selection of column items
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget' kendo-grid k-options='detailInit(dataItem)'></div>",

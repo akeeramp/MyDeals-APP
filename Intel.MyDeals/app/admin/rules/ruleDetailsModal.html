@@ -3,7 +3,6 @@
         <div class="modal-header modalBlueBody">
             <i id="btnClose" class="intelicon-close-max" ng-click="ok()" title="Close this window"></i>
             <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>
-            <i id="btnModalEnlargeText" class="intelicon-increase-text-outlined" title="Click to Decrease Text"></i>
             <h3 id="modalTitle">Rule Details</h3>
 
         </div>
@@ -24,7 +23,7 @@
 
                 <div class="col-md-11 notes">
                     <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
-                    <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'active' Price Rules will be run against all 'Submitted' ECAP tender
+                    <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'Active' Price Rules will be run against all 'Submitted' ECAP tender
                     deals.  It is important to note that Price Rules do not run as deals are created but through the <span class="redbold">hourly BATCH process.</span><br /><br />
                 </div>
 
@@ -49,7 +48,7 @@
                                 off="Approve"
                                 onstyle="btn-success"
                                 offstyle="btn-danger"
-                                title="{{vm.rule.RuleStage === true ? 'Click for Pending Approved' : 'Click to Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',((vm.isElligibleForApproval == true && vm.rule.IsAutomationIncluded == true) ? true : false))"></toggle>
+                                title="{{vm.rule.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',((vm.isElligibleForApproval == true && vm.rule.IsAutomationIncluded == true) ? true : false))"></toggle>
                     </div>
                 </div>
 
@@ -129,11 +128,11 @@
 
                 <div class="form-group row" ng-if="vm.rule.IsAutomationIncluded">
                     <label class="control-label col-md-2">Blanket Discount:</label>
-                    <div class="col-md-6" id="blanket_section">
+                    <div class="col-md-6" id="blanket_section" style="margin-top: 4px;">
                         <span>Requested ECAP must be no less than</span>
-                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" ng-change="vm.EditBlanketDiscountPercentage()" k-decimals="0" k-format="'#'" k-min="0" k-max="70" style="width: 100px;font-size:11px;" />
+                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" ng-change="vm.EditBlanketDiscountPercentage()" decimals="0" format="'#'" min="0" max="70" style="width: 100px; font-size:11px;" />
                         <span>%&nbsp;Or&nbsp;$</span>
-                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollor" ng-change="vm.EditBlanketDiscountDollor()" k-format="'n2'" k-min="0" style="width: 130px;font-size:11px;" />
+                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollor" ng-change="vm.EditBlanketDiscountDollor()" format="'n2'" min="0" style="width: 130px;font-size:11px;" />
                         <span>off of CAP</span>
                     </div>
                 </div>
@@ -146,8 +145,6 @@
                         <button ng-click="vm.validateProduct(true,false,false)" class="btn btn-primary" style="float: left;">Validate Products</button>
                     </div>
                 </div>
-                <div class="form-group row" style="height: 1px;">&nbsp;</div> <!-- Dummy label for spacing at bottom -->
-                <label class="control-label col-md-1" style="float: left; height: 1px;">&nbsp;</label>
             </form>
         </div>
 
@@ -184,17 +181,6 @@
             }
 
     });
-    $('#btnModalEnlargeText').click(function () {
-        if ($('#btnModalEnlargeText').attr('class').trim() === 'intelicon-decrease-text-outlined') {
-            $('#btnModalEnlargeText').removeClass('intelicon-decrease-text-outlined').addClass('intelicon-increase-text-outlined');
-            $('#mainForm').removeClass('bigFont').addClass('fontSmall');
-            $('#btnModalEnlargeText').attr('title', 'Click me to Decrease Text size');
-        } else {
-            $('#btnModalEnlargeText').removeClass('intelicon-increase-text-outlined').addClass('intelicon-decrease-text-outlined');
-            $('#mainForm').removeClass('fontSmall').addClass('bigFont');
-            $('#btnModalEnlargeText').attr('title', 'Click me to Increase Text size');
-        }
-    });
 
         $('#modal-window').on('show.bs.modal', function () {
             $(this).find('.modal-body').css({
@@ -214,6 +200,10 @@
             margin-left: -2px;
         }
 
+        .k-selectbox {
+            height: 10px;
+            margin-bottom: 10px;
+        }
     .btn-success {
         color: #000000;
         background-color: #C4D600 !important;
@@ -241,11 +231,7 @@
         color: red;
         font-weight: bold;
     }
-
-        /*.modal-content {
-            max-height: 600px;
-        }*/
-
+        
     .modal-dialog {
         width: 90%;
         margin-top: 100px; /* Put in because top bar was being hidden */
@@ -259,7 +245,7 @@
         font-size: 15px !important;
     }
 
-    #modalTitle {
+        #modalTitle {
         float: left;
         margin-top: -30px;
     }
@@ -300,21 +286,9 @@
         font-size: 22px;
         margin-top: -30px;
         z-index: 999999999;
-        margin-right: 70px;
+        margin-right: 35px; 
     }
-
-    #btnModalEnlargeText {
-        float: right;
-        background: transparent;
-        border: 1px solid #00aeef;
-        padding: 3px;
-        cursor: pointer;
-        font-size: 22px;
-        margin-top: -30px;
-        z-index: 99999;
-        margin-right: 35px;
-    }
-
+        
     #btnClose {
         float: right;
         margin-top: -15px;

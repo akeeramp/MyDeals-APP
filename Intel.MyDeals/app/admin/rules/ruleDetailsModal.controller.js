@@ -442,12 +442,12 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                 vm.rule.RuleStageLabel = vm.rule.RuleStage ? "Approved" : "Pending Approval";
                 vm.rule.RuleAutomationLabel = vm.rule.IsAutomationIncluded ? "Auto Approval" : "Exclusion Rule";
                 vm.IsRefreshGridRequired = true;
-                logger.success("Rule has been " + (initialRuleId == 0 ? "added" : "updated"));
+                logger.success("Rule has been " + (initialRuleId === 0 ? "added" : "updated"));
             } else {
                 kendo.alert("This rule name already exists in another rule.");
             }
         }, function (response) {
-            logger.error("Unable to  " + (initialRuleId == 0 ? "add" : "update") + " the rule");
+            logger.error("Unable to  " + (initialRuleId === 0 ? "add" : "update") + " the rule");
         });
     };
 
@@ -526,7 +526,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
     vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isApproved) {
         if (ruleId != null && ruleId > 0 && isApproved) {
-            $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we updating the rule..");
+            $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while we are updating the rule..");
             var priceRuleCriteria = { Id: ruleId }
             switch (strActionName) {
                 case "UPDATE_ACTV_IND": {
@@ -621,9 +621,10 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     }
 
     vm.simulate = function () {
+        $rootScope.$broadcast("UpdateSpinnerDescription", "Please wait while simulations are run..");
         var data = new Array();
         var dataRuleIds = [];
-        dataRuleIds.push(parseInt(vm.rule.Id, 10));
+        dataRuleIds.push(parseInt(vm.rule.Id, 10)); // FYI: 10 is base 10 number system
         var dataDealsIds = [];
 
         data.push(dataRuleIds, dataDealsIds);

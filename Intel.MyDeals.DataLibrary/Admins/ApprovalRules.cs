@@ -14,9 +14,11 @@ namespace Intel.MyDeals.DataLibrary
         public PriceRuleCriteria UpdatePriceRule(PriceRuleCriteria priceRuleCriteria, PriceRuleAction priceRuleAction)
         {
             bool isApproved = priceRuleAction == PriceRuleAction.UPDATE_STAGE_IND ? priceRuleCriteria.RuleStage : priceRuleCriteria.IsAutomationIncluded == false;
+            if (isApproved == false) priceRuleCriteria.IsActive = false; // If IsApproved is unset, make the rule inactive
+
             if (!IsDuplicateTitle(priceRuleCriteria.Id, priceRuleCriteria.Name == null ? string.Empty : priceRuleCriteria.Name) || (priceRuleAction != PriceRuleAction.SUBMIT && priceRuleAction != PriceRuleAction.SAVE_AS_DRAFT))
             {
-                //Assing dummy value to avoid overflow
+                //Assign dummy value to avoid overflow
                 if (priceRuleAction != PriceRuleAction.SAVE_AS_DRAFT && priceRuleAction != PriceRuleAction.SUBMIT)
                 {
                     priceRuleCriteria.StartDate = DateTime.Now;
