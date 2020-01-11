@@ -45,7 +45,7 @@
                         <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsAutomationIncluded && vm.rule.Id > 0))"
                                 ng-model="vm.rule.RuleStage"
                                 on="Approved"
-                                off="Approve"
+                                off="Pending Approval"
                                 onstyle="btn-success"
                                 offstyle="btn-danger"
                                 title="{{vm.rule.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',((vm.isElligibleForApproval == true && vm.rule.IsAutomationIncluded == true) ? true : false))"></toggle>
