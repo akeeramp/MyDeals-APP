@@ -495,7 +495,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                         }
                     }
                     vm.validateProduct(false, false, "NONE");
-                    vm.toggleType(vm.rule.IsAutomationIncluded);
+                    vm.toggleType(vm.rule.IsAutomationIncluded, false);
                     vm.loadCriteria = true;
                 } break;
             }
@@ -586,7 +586,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
         }
     }
 
-    vm.toggleType = function (currentState) {
+    vm.toggleType = function (currentState, toggleButtonEvent) {
         // Ganthi - DO NOT REMOVE THIS - IT IS PART OF "US505889 - Price Rules: Exclusions for Automation" requirements, clear out fields and hide if exclusion rule.
         // This hides fields if the rule is an exclusion rule, also clears out unwanted values that shouldn't be part of exclusion rule.
         if (currentState !== true) {
@@ -598,13 +598,16 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
             //$('#blanketDiscountSection').hide(); // Hidden due to IsAutomationIncluded
             $("#productCriteria").hide();
-            vm.rule.RuleStage = true;
-            vm.rule.IsActive = true;
-            var g = 0;
+            if (toggleButtonEvent) {
+                vm.rule.RuleStage = true;
+                vm.rule.IsActive = true;
+            }
         } else {
             $("#productCriteria").show();
-            vm.rule.RuleStage = false;
-            vm.rule.IsActive = false;
+            if (toggleButtonEvent) {
+                vm.rule.RuleStage = false;
+                vm.rule.IsActive = false;
+            }
             //$('#blanketDiscountSection').show(); // Displayed due to IsAutomationIncluded
         }
     }
