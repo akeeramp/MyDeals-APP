@@ -516,7 +516,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isChecked = document.getElementById('chkDealTools').checked;
                 var data = $scope.contractDs.view();
                 for (var i = 0; i < data.length; i++) {
-                    data[i].EXCLUDE_AUTOMATION = isChecked;
+                    data[i].EXCLUDE_AUTOMATION = isChecked; // This is the select all checking a box, not the value
                     data[i].dirty = true;
                 }
                 $scope.contractDs.sync();

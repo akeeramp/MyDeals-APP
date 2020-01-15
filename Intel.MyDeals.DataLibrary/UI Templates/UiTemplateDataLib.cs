@@ -2382,11 +2382,11 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 90012,
                 AtrbCd = AttributeCodes.EXCLUDE_AUTOMATION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP }, // not sure that KIT should be here...
                 DataType = "object",
                 Label = "Exclude Automation",
                 Width = 120,
-                Template = "#=gridUtils.uiControlExcludeAutomation(data)#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'EXCLUDE_AUTOMATION')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/EXCLUDE_AUTOMATION/",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",

@@ -4911,9 +4911,9 @@
 
                             var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[dealType.dealType];
                             if (wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION') > 0) {
-                                wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'),1)
-                                
+                                wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'),1);
                             }
+
                             if (window.usrRole === "GA") {
                                 wipTemplate.columns.unshift({
                                     field: "EXCLUDE_AUTOMATION",
