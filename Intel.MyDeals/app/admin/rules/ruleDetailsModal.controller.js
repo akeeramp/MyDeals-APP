@@ -45,6 +45,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
         });
 
         modalInstance.result.then(function (returnData) {
+            $rootScope.$broadcast("UpdateRuleClient", vm.rule);
         }, function () { });
     }
 
@@ -719,8 +720,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
         sheet.range("A1:B200").fontSize(12);
         sheet.range("A1:B200").fontFamily("Intel Clear");
     }
-
-    vm.saveRule = function (strActionName, isProductValidationRequired) {
+    vm.updateRuleDraft = function (strActionName, isProductValidationRequired) {
         if (isProductValidationRequired && vm.rule.IsAutomationIncluded && (strActionName === "SUBMIT" || (vm.rule.IsActive && vm.rule.RuleStage)))
             vm.validateProduct(false, true, strActionName);
         else {
@@ -785,20 +785,22 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                             vm.rule.Criteria[idx].values = [];
                         }
                     }
-
+                    vm.rule.IsActive = vm.rule.IsActive == true ? false : true;
+                    vm.rule.RuleStage = vm.rule.RuleStage == true ? false : true;
                     var priceRuleCriteria = {
                         Id: vm.rule.Id,
                         Name: vm.rule.Name,
-                        IsActive: vm.rule.IsActive,
+                        IsActive: vm.rule.IsActive == true ? false : true,
                         IsAutomationIncluded: vm.rule.IsAutomationIncluded,
                         StartDate: vm.rule.StartDate,
                         EndDate: vm.rule.EndDate,
-                        RuleStage: vm.rule.RuleStage,
+                        RuleStage: vm.rule.RuleStage == true ? false : true,
                         Notes: vm.rule.Notes,
                         Criterias: { Rules: vm.rule.Criteria.filter(x => x.value !== null), BlanketDiscount: [{ value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: vm.rule.IsAutomationIncluded ? vm.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
                         ProductCriteria: vm.rule.IsAutomationIncluded && vm.ProductCriteria.length > 0 ? vm.ProductCriteria.filter(x => x.ProductName !== "" && x.Price !== "") : [],
                         OwnerId: vm.rule.OwnerId
                     }
+
                     vm.UpdatePriceRule(priceRuleCriteria, strActionName);
                 }
                 // If submit call, close the dialog afterwards.
@@ -807,6 +809,17 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                 }
             });
         }
+    }
+    vm.saveRule = function (strActionName, isProductValidationRequired) {
+        if (vm.rule.RuleStage) {
+            kendo.confirm("It is an Approved rule. Are you sure that you want to Change this. Click Ok will save the changes and send for Approval.").then(function () {
+                vm.updateRuleDraft(strActionName, isProductValidationRequired);
+            });
+        } else {
+            vm.updateRuleDraft(strActionName, isProductValidationRequired);
+        }
+        
+        
     }
 
     var regexMoney = "^[0-9]+(\.[0-9]{1,2})?$";
