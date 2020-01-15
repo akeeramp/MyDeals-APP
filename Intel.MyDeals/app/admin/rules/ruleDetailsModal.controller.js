@@ -804,10 +804,10 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                     vm.UpdatePriceRule(priceRuleCriteria, strActionName);
                 }
                 // If submit call, close the dialog afterwards.
-                if (strActionName === "SUBMIT") {
-                    vm.IsRefreshGridRequired = true;
-                    $scope.ok();
-                }
+                //if (strActionName === "SUBMIT") {
+                //    vm.IsRefreshGridRequired = true;
+                //    $scope.ok();
+                //}
             });
         }
     }
