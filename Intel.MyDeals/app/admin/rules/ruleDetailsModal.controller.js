@@ -785,8 +785,8 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                             vm.rule.Criteria[idx].values = [];
                         }
                     }
-                    vm.rule.IsActive = vm.rule.IsActive == true ? false : true;
-                    vm.rule.RuleStage = vm.rule.RuleStage == true ? false : true;
+                    vm.rule.IsActive = false;
+                    vm.rule.RuleStage = false;
                     var priceRuleCriteria = {
                         Id: vm.rule.Id,
                         Name: vm.rule.Name,
