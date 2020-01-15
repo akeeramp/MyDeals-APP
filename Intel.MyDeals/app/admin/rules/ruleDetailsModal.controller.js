@@ -805,6 +805,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                 }
                 // If submit call, close the dialog afterwards.
                 if (strActionName === "SUBMIT") {
+                    vm.IsRefreshGridRequired = true;
                     $scope.ok();
                 }
             });
