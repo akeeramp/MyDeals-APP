@@ -46,8 +46,8 @@
             }
             vm.Rules.splice(0, 0, updatedRule);
             vm.dataSource.read();
-            vm.rid = updatedRule.Id;
-            vm.dataSource.filter({ field: "Id", value: updatedRule.Id });
+            //vm.rid = updatedRule.Id;
+            //vm.dataSource.filter({ field: "Id", value: updatedRule.Id });
         }
 
         vm.openRuleDetailsModal = function (dataItem) {
