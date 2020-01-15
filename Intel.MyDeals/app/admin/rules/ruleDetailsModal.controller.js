@@ -498,6 +498,10 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                     vm.validateProduct(false, false, "NONE");
                     vm.toggleType(vm.rule.IsAutomationIncluded, false);
                     vm.loadCriteria = true;
+
+                    // If there is a scroll, set it to top by default
+                    var element = document.getElementById("RulesDetailsBodyDiv");
+                    element.scrollTop = 0;
                 } break;
             }
         }, function (response) {
