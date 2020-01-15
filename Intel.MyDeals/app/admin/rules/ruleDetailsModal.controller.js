@@ -970,7 +970,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
     $scope.ok = function () {
         $("#productCriteria").hide();
-        if (vm.IsRefreshGridRequired && vm.rule.Id > 0) {
+        if (vm.IsRefreshGridRequired) {
             $rootScope.$broadcast("UpdateRuleClient", vm.rule);
         }
         vm.rule = {};
