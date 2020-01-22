@@ -817,7 +817,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     }
     vm.saveRule = function (strActionName, isProductValidationRequired) {
         if (vm.rule.RuleStage) {
-            kendo.confirm("It is an Approved rule. Are you sure that you want to Change this. Click Ok will save the changes and send for Approval.").then(function () {
+            kendo.confirm("Saving these changes will require the rule to be re-approved.  Are you sure that you wish to save the changes?").then(function () {
                 vm.updateRuleDraft(strActionName, isProductValidationRequired);
             });
         } else {

@@ -1196,6 +1196,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 );
                 cleanupData(data);
                 spreadDsSync();
+                // MIKE: ADDING RETURN REMOVED OTHER UNDO BOX.
+                return;
             }
         }
 
@@ -1409,10 +1411,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return result;
         }
 
-        if (myRow.HAS_TRACKER == 1
+        if (myRow.HAS_TRACKER === 1
 			&& (value == null || value.toString().replace(/\s/g, "").length === 0)
 		) {
-            if (myRow.TIER_NBR === undefined || myRow.TIER_NBR == 1) {
+            if (myRow.TIER_NBR === undefined || myRow.TIER_NBR === 1) {
                 var modalOptions = {
                     closeButtonText: 'Close',
                     hasActionButton: false,
@@ -1421,6 +1423,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 };
                 confirmationModal.showModal({}, modalOptions);
             }
+            // MIKE: Want to get undo op on close button of this dialog
+            //$(".k-button[title=Redo]").click();
+            //syncUndoRedoCounters();
+
             result.value = myRow.PTR_USER_PRD; // revert
             result.isNonDelete = true;
         }
