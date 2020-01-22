@@ -1109,24 +1109,35 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
         //}
 
+        var isRangeValueEmptyString =
+            ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
+
+        var hasValueInAtLeastOneCell = false;
+
+        var shenaniganObj = null;
+
         // VOL-TIER
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
 
-            var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
-            var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
+            var isEndVolColChanged =
+                (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
+            var isStrtVolColChanged =
+                (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
 
             // On End_vol col change
             if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged || isProductColumnIncludedInChanges) {
 
                 range.forEachCell(
-                    function (rowIndex, colIndex, value) {
+                    function(rowIndex, colIndex, value) {
                         var myRow = data[(rowIndex - 1)];
 
-                        var letter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex);
+                        var letter = (colIndex > 25)
+                            ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26)
+                            : String.fromCharCode(intA + colIndex);
                         // Get column name out of selected cell
                         var colName = root.letterToCol[letter];
 
@@ -1135,7 +1146,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             var isEndVolUnlimited = false;
                             var numOfTiers = root.numOfPivot(myRow);
 
-                            if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
+                            if (value.value !== null &&
+                                value.value !== undefined &&
+                                value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() &&
+                                colIndex === endVolIndex &&
+                                myRow.TIER_NBR === numOfTiers) {
                                 isEndVolUnlimited = true;
                             }
 
@@ -1144,13 +1159,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
                                     if (value.value != null && value.value !== undefined) {
-                                        value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                        value.value =
+                                            parseInt(value.value.toString().replace(/,/g, '')) ||
+                                            0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                                     } else {
                                         value.value = 0;
                                     }
-                                }
-                                else if (colIndex === rateIndex) {
-                                    value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                } else if (colIndex === rateIndex) {
+                                    value.value =
+                                        parseFloat(value.value) ||
+                                        0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                                 }
 
                                 // Transform negative numbers into positive
@@ -1181,7 +1199,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             if (colIndex == productColIndex) {
                                 shenaniganObj = trackerShenanigans(myRow, value.value);
                                 if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
-                                    value.value = (shenaniganObj.value !== null && shenaniganObj.value !== undefined) ? angular.copy(shenaniganObj.value) : "ERROR";
+                                    value.value = angular.copy(shenaniganObj.value);
                                 }
                             }
 
@@ -1196,39 +1214,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 );
                 cleanupData(data);
                 spreadDsSync();
-                // MIKE: ADDING RETURN REMOVED OTHER UNDO BOX.
-                return;
             }
-        }
+        } else { // NOT VOL-TIER
+            range.forEachCell(
+                function(rowIndex, colIndex, value) {
+                    var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
+                    var myRow = data[(rowIndex - 1)];
 
-        var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
+                    if (value.value !== null &&
+                        value.value !== undefined &&
+                        value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
+                        hasValueInAtLeastOneCell = true;
+                    }
 
-        var hasValueInAtLeastOneCell = false;
-
-        var shenaniganObj = null;
-
-        range.forEachCell(
-            function (rowIndex, colIndex, value) {
-                var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
-                var myRow = data[(rowIndex - 1)];
-
-                if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
-                    hasValueInAtLeastOneCell = true;
-                }
-
-                if (colIndex == productColIndex) {
-                    if (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") { // NOTE: VOL_TIER does this too, but we can't put the vol_tier check here since vol_tier calls speadDs.sync() before this function and thus makes the previous value undefined.
-                        shenaniganObj = trackerShenanigans(myRow, value.value);
-                        if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
-                            value.value = angular.copy(shenaniganObj.value);
+                    if (colIndex == productColIndex) {
+                        if (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM"
+                        ) { // NOTE: VOL_TIER does this too, but we can't put the vol_tier check here since vol_tier calls speadDs.sync() before this function and thus makes the previous value undefined.
+                            shenaniganObj = trackerShenanigans(myRow, value.value);
+                            if (shenaniganObj.isNonDelete && (value.value === undefined || value.value === null)) {
+                                value.value = angular.copy(shenaniganObj.value);
+                            }
                         }
                     }
                 }
-            }
-		);
+            );
+        }
 
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
-            if (shenaniganObj !== null && shenaniganObj.isNonDelete && root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
+            if (shenaniganObj !== null && shenaniganObj.isNonDelete && (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM" || root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER")) {
                 // Revert value if not allowed to delete
                 cleanupData(data);
                 spreadDsSync();
@@ -1411,22 +1424,31 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return result;
         }
 
-        if (myRow.HAS_TRACKER === 1
-			&& (value == null || value.toString().replace(/\s/g, "").length === 0)
+        if (myRow.HAS_TRACKER === "1"
+			&& (value == undefined || value.toString().replace(/\s/g, "").length === 0)
 		) {
-            if (myRow.TIER_NBR === undefined || myRow.TIER_NBR === 1) {
+            if (myRow.TIER_NBR === undefined || myRow.TIER_NBR <= 1) {
                 var modalOptions = {
                     closeButtonText: 'Close',
                     hasActionButton: false,
-                    headerText: 'Cannot remove deal with tracker',
-                    bodyText: 'You cannot remove all products from a deal that has a tracker. Reverting back'
+                    headerText: 'Cannot remove a deal that has a tracker',
+                    bodyText: 'You cannot remove all of the products from a deal that has a tracker. Reverting back to original products and reloading the page.'
                 };
-                confirmationModal.showModal({}, modalOptions);
-            }
-            // MIKE: Want to get undo op on close button of this dialog
-            //$(".k-button[title=Redo]").click();
-            //syncUndoRedoCounters();
 
+                confirmationModal.showModal({}, modalOptions).then(function (result) {
+                    // This is the non-close response - there is no non-close button, so skip!
+                }, function (response) {
+                    // User must dismiss the popup, so force the page to reload since we need to bail on product deletions
+                    $state.go('contract.manager.strategy',
+                        {
+                            cid: $scope.contractData.DC_ID,
+                            sid: $scope.curPricingStrategyId,
+                            pid: $scope.curPricingTableId
+                        },
+                        { reload: true });
+                    root.setBusy("Reverting Back", "Undoing previous product edits.", "Info", true, true);
+                });
+            }
             result.value = myRow.PTR_USER_PRD; // revert
             result.isNonDelete = true;
         }
