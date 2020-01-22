@@ -50,7 +50,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Name = string.Empty,
                     OwnerName = ruleConfig.CurrentUserName,
                     Notes = string.Empty,
-                    CriteriaJson = "{\"Rules\":[{\"type\":\"singleselect_read_only\",\"field\":\"OBJ_SET_TYPE_CD\",\"operator\":\" = \",\"value\":\"ECAP\",\"values\":[],\"valueType\":null}],\"BlanketDiscount\":[{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\" % \"}},{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\"$\"}}]}",
+                    CriteriaJson = "{\"Rules\":[{\"type\":\"singleselect_read_only\",\"field\":\"OBJ_SET_TYPE_CD\",\"operator\":\"=\",\"value\":\"ECAP\",\"values\":[],\"valueType\":null}],\"BlanketDiscount\":[{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\"%\"}},{\"type\":null,\"field\":null,\"operator\":null,\"value\":\"\",\"values\":null,\"valueType\":{\"text\":null,\"value\":\"$\"}}]}",
                     ProductCriteriaJson = "[]",
                     IsActive = false,
                     IsAutomationIncluded = true,
