@@ -1,166 +1,52 @@
 ﻿<div class="widget-search-contract">
-
-    <div style="width: 100%; display: none;" class="widget-md">
-
+    <!-- We are Reverting the Reporting Changes for future -->
+    <div style="width:100%; display:none;" class="widget-md">
+        <div style="text-align: center;">
+            <input type="text" placeholder="Search for deal #, contract, or pricing strategy"
+                   class="k-input searchDashInpt"
+                   ng-model="$root.globalSearchResultsData.searchText"
+                   ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
+        </div>
 
         <div style="text-align: center;">
-            <div style="text-align: center; border: 2px solid #f4f4f4;">
-                <div style="text-align:left">
-                    MYBI Report(s)
-                </div>
-                <div class="btn-group" style="width: 100%;text-align: left;">
-                    <ul style="margin-left: 10px; padding-left: 0px;">
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Search%20Report"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Deal </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Search%20Report"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Details </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Approved%20After%20Start%20Date" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Approved After Start Date </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Drill%20Through%20Target%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Drill Through Target Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Sheet%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Sheet Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Get%20Frontend%20vs%20Regular%20ECAP%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Get Frontend vs Regular ECAP Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/No%20of%20Deal%20Management%20Deals%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> No of Deal Management Deals Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/IDMS%20Reports/IDMS%20Search%20Report-MSBI%20(Historical%20Data)" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> IDMS Search Report  </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div style="text-align: center;border: 2px solid #f4f4f4;">
-                <div style="text-align:left">
-                    New Power BI Report(s)
-                </div>
-                <div class="btn-group" style="width: 100%;text-align: left;">
-                    <ul style="margin-left: 10px; padding-left: 0px;">
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Search%20Report%20Deal"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Deal </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Search%20Report%20Detail"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Details </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Approved%20After%20Start%20Date" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Approved After Start Date </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Drill%20Through%20Target%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Drill Through Target Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Sheet%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Sheet Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Get%20Frontend%20vs%20Regular%20ECAP%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Get Frontend vs Regular ECAP Report </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/No%20of%20Deal%20Management%20Deals%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> No of Deal Management Deals Report </a>
-                        </li>
-                        <li>---- Power BI Query Studio ----</li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/QueryStudioReport_ECAP" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - ECAP </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/Query%20Studio%20Report_PROGRAM" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - PROGRAM </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/Query%20Studio%20Report_KIT" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - KIT </a>
-                        </li>
-                        <li class="reportLink ng-scope">
-                            <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/Query%20Studio%20Report_VOL_TIER" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - VOL_TIER </a>
-                        </li>
-
-                    </ul>
-                </div>
+            <div>Search By:</div>
+            <div class="btn-group">
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_TBL'" uncheckable>Pricing Table</label>
+                <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'WIP_DEAL'" uncheckable>Deals</label>
             </div>
         </div>
     </div>
 
 
     <div style="width: 100%; display: none;" class="widget-sm">
-        <div style="text-align: center; border: 2px solid #f4f4f4;">
-            <div style="text-align:left">
-                MYBI Report(s)
-            </div>
-            <div class="btn-group" style="width: 100%;text-align: left;">
-                <ul style="margin-left: 10px; padding-left: 0px;">
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Search%20Report"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Deal </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Search%20Report"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Details </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Approved%20After%20Start%20Date" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Approved After Start Date </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Drill%20Through%20Target%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Drill Through Target Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Deal%20Management%20Sheet%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Sheet Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/Get%20Frontend%20vs%20Regular%20ECAP%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Get Frontend vs Regular ECAP Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/Deal%20Management%20Reports/No%20of%20Deal%20Management%20Deals%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> No of Deal Management Deals Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a target="_blank" href="http://prdrdmbi.intel.com/ssrs/?reportPath=/Deal%20Management/IDMS%20Reports/IDMS%20Search%20Report-MSBI%20(Historical%20Data)" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> IDMS Search Report  </a>
-                    </li>
-                </ul>
-            </div>
+        <div style="text-align: center;">
+            <input type="text" placeholder="Search"
+                   class="k-input searchDashInptSm"
+                   ng-model="$root.globalSearchResultsData.searchText"
+                   ng-keypress="$root.globalSearchResultsData.enterPressed($event)">
         </div>
-        <div style="text-align: center;border: 2px solid #f4f4f4;">
-            <div style="text-align:left">
-                New Power BI Report(s)
-            </div>
-            <div class="btn-group" style="width: 100%;text-align: left;">
-                <ul style="margin-left: 10px; padding-left: 0px;">
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Search%20Report%20Deal"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Deal </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Search%20Report%20Detail"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Search - Details </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Approved%20After%20Start%20Date" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Approved After Start Date </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Drill%20Through%20Target%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Drill Through Target Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Deal%20Management%20Sheet%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Sheet Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/Get%20Frontend%20vs%20Regular%20ECAP%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Get Frontend vs Regular ECAP Report </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/report/mydeals/DMR/No%20of%20Deal%20Management%20Deals%20Report" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> No of Deal Management Deals Report </a>
-                    </li>
-                    <li>---- Power BI Query Studio ----</li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/QueryStudioReport_ECAP" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - ECAP </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/Query%20Studio%20Report_PROGRAM" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - PROGRAM </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/Query%20Studio%20Report_KIT" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - KIT </a>
-                    </li>
-                    <li class="reportLink ng-scope">
-                        <a href="https://pbiprovisioned.intel.com/Reports/powerbi/mydeals/QSR/Query%20Studio%20Report_VOL_TIER" class="ng-binding"><i class="fa fa-circle-o text-agreen" style=""></i> Deal Management Query Studio - VOL_TIER </a>
-                    </li>
 
-                </ul>
+        <div style="text-align: center;">
+            <div>Search By:</div>
+            <div class="btn-group">
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_TBL'" uncheckable>Pricing Table</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'WIP_DEAL'" uncheckable>Deals</label>
+                </div>
             </div>
         </div>
     </div>
