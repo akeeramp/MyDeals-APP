@@ -1195,6 +1195,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
                             }
 
+                            // This bypasses the delete full line for Program and *Vol Tier to prevent popup message.  Instead, mid tier returns a Please refresh message
+                            if (value.value !== null &&
+                                value.value !== undefined &&
+                                value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
+                                hasValueInAtLeastOneCell = true;
+                            }
 
                             if (colIndex == productColIndex) {
                                 shenaniganObj = trackerShenanigans(myRow, value.value);
@@ -1221,6 +1227,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
                     var myRow = data[(rowIndex - 1)];
 
+                    // This bypasses the delete full line for *Program and Vol Tier to prevent popup message.  Instead, mid tier returns a Please refresh message
                     if (value.value !== null &&
                         value.value !== undefined &&
                         value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
@@ -1463,7 +1470,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function formatStringForDictKey(valueToFormat) {
         var result = "";
         if (valueToFormat != null) {
-            result = valueToFormat.toString().toUpperCase().replace(/\s/g, "")
+            result = valueToFormat.toString().toUpperCase().replace(/\s/g, "");
         }
         return result;
     }
