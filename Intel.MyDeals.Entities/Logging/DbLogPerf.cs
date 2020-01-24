@@ -31,18 +31,18 @@ namespace Intel.MyDeals.Entities.Logging
             OpLogPerfHelper.WireUpAppShutdown();
         }
 
-        public DbLogPerf(string machine_name) : this(machine_name, DEFAULT_MAX_LOGSTACK_SIZE)
+        public DbLogPerf(string machineName) : this(machineName, DEFAULT_MAX_LOGSTACK_SIZE)
         {
         }
 
-        public DbLogPerf(string machine_name, int max_db_logstack)
+        public DbLogPerf(string machineName, int maxDbLogstack)
             : this()
         {
-            if (String.IsNullOrEmpty(MachineName) && !String.IsNullOrEmpty(machine_name))
+            if (string.IsNullOrEmpty(MachineName) && !string.IsNullOrEmpty(machineName))
             {
-                MachineName = machine_name;
+                MachineName = machineName;
             }
-            MAX_LOGSTACK_SIZE = max_db_logstack;
+            MAX_LOGSTACK_SIZE = maxDbLogstack;
             OpLogPerfHelper.WireUpAppShutdown();
         }
 
@@ -51,25 +51,25 @@ namespace Intel.MyDeals.Entities.Logging
         /// </summary>
         /// Note: Whether the writer's logging is enabled or not is determined by its name's presence in the writer's config string or parameter in OpLogPerfHelper.InitWriters()).
         /// Note: This function gets called by OpLogPerfHelper upon initializing writers via OpLogPerfHelper.InitWriters()
-        public static IOpLogPerf ILogPerfFactory(string init_flag, Dictionary<string, object> init_params)
+        public static IOpLogPerf LogPerfFactory(string initFlag, Dictionary<string, object> initParams)
         {
             // Check that the init flag is asking for a db
             // To support extensibility, allow for multiple named factories in other assemblies/classes...
-            string sf = (init_flag ?? "").Trim().ToUpper();
+            string sf = (initFlag ?? "").Trim().ToUpper();
             if (!sf.StartsWith("DB")) { return null; }
 
-            if (init_params != null)
+            if (initParams != null)
             {
                 object mn;
-                if (init_params.TryGetValue("MachineName", out mn))
+                if (initParams.TryGetValue("MachineName", out mn))
                 {
-                    string machineName = String.Format("{0}", mn);
-                    if (!String.IsNullOrEmpty(machineName))
+                    string machineName = string.Format("{0}", mn);
+                    if (!string.IsNullOrEmpty(machineName))
                     {
                         // Only use the non-default constructor if we have a valid machine name...
                         object maxLogStack;
                         int imb = DEFAULT_MAX_LOGSTACK_SIZE;
-                        if (init_params.TryGetValue("max_db_logstack", out maxLogStack))
+                        if (initParams.TryGetValue("max_db_logstack", out maxLogStack))
                         {
                             imb = OpConvertSafe.ToInt(maxLogStack, DEFAULT_MAX_LOGSTACK_SIZE);
                         }
@@ -93,7 +93,7 @@ namespace Intel.MyDeals.Entities.Logging
             {
                 // Add more details to log
                 msg.CLNT_MCHN_NM = MachineName ?? "";
-                msg.SRVR = System.Environment.MachineName;
+                msg.SRVR = Environment.MachineName;
                 msg.LGN_NM = (Utils.ThreadUser ?? "").Trim().ToUpper();
                 msg.USR_NM = (Utils.ThreadUser ?? "").Trim().ToUpper();
 
@@ -193,7 +193,7 @@ namespace Intel.MyDeals.Entities.Logging
         }
 
         /// <summary>
-        /// Returns true if it thinks there is a requset pending to the database, else false.
+        /// Returns true if it thinks there is a request pending to the database, else false.
         /// </summary>
         public bool IsFlushing
         {
@@ -216,13 +216,13 @@ namespace Intel.MyDeals.Entities.Logging
         {
             Flush();
 
-            int max_flush_attempts = 10;
+            int maxFlushAttempts = 10;
 
             // Try to clear out the queue and wait for all messages to be logged
             // But don't wait forever, just a few seconds...
-            while (IsFlushing && max_flush_attempts > 0)
+            while (IsFlushing && maxFlushAttempts > 0)
             {
-                --max_flush_attempts;
+                --maxFlushAttempts;
 
                 // PCL poor man's Thread.Sleep()
                 using (EventWaitHandle tmpEvent = new ManualResetEvent(false))
@@ -244,15 +244,15 @@ namespace Intel.MyDeals.Entities.Logging
         {
             get
             {
-                return _Format;
+                return _format;
             }
             set
             {
-                _Format = value;
+                _format = value;
             }
         }
 
-        private OpLogPerfMessage.FormatMode _Format = OpLogPerfMessage.FormatMode.TwoLine;
+        private OpLogPerfMessage.FormatMode _format = OpLogPerfMessage.FormatMode.TwoLine;
 
         public Func<string> MessageRider { set; get; }
     }

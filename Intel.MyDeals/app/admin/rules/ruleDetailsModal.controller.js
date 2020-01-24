@@ -524,7 +524,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             titleTemplate: "Invalid Price",
             messageTemplate: "Format of the price is invalid. This should be greater than zero."
         });
-        $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[0]).find("div").html("Product Name (Only Lvl 4 or Material Ids Allowed)");
+        $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[0]).find("div").html("Product Name (Only Processor, Lvl 4 or Material Ids Allowed)");
         $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[2]).find("div").html("ECAP Floor (US$)");
         $($("#spreadsheetProductCriteria .k-spreadsheet-column-header").find("div")[2]).find("div").attr("title", "Requested ECAP must be greater than or equal to the floor price entered");
     }

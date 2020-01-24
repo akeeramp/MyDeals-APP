@@ -8,16 +8,16 @@ namespace Intel.MyDeals.Entities.Logging
 {
     public class EmailExLogPerf : IOpLogPerf
     {
-        private static string ToEmailList = "philip.w.eckenroth@intel.com, michael.h.tipping@intel.com, jeffrey.j.yeh@intel.com,mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+        private static string _toEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 
 //// not sure why this #if debug doesn't work, but we aren't getting emails from DEV/ITT/etc servers anymore. temp commenting out.
 //#if DEBUG
 //        private static string ToEmailList = OpUserStack.MyOpUserToken.Usr.Email;
 //#else
-//        private static string ToEmailList = "josephine.a.juang@intel.com, philip.w.eckenroth@intel.com, michael.h.tipping@intel.com, jeffrey.j.yeh@intel.com,mahesh.biradar@intel.com,saurav.kundu@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+//        private static string ToEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 //#endif
 
-        private static string FromEmail = "MyDealsSupport@intel.com";
+        private static string _fromEmail = "MyDealsSupport@intel.com";
         public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
 
         #region Constructors
@@ -32,7 +32,7 @@ namespace Intel.MyDeals.Entities.Logging
 
         public EmailExLogPerf(string emailList, bool appendDetails)
         {
-            ToEmailList = emailList;
+            _toEmailList = emailList;
         }
 
         #endregion Constructors
@@ -42,19 +42,18 @@ namespace Intel.MyDeals.Entities.Logging
         /// </summary>
         /// Note: Whether the writer's logging is enabled or not is determined by its name's presence in the writer's config string or parameter in OpLogPerfHelper.InitWriters()).
         /// Note: This function gets called by OpLogPerfHelper upon initializing writers via OpLogPerfHelper.InitWriters()
-        public static IOpLogPerf ILogPerfFactory(string init_flag, Dictionary<string, object> init_params)
+        public static IOpLogPerf LogPerfFactory(string initFlag, Dictionary<string, object> initParams)
         {
             // Check that the init flag is asking for this writer
             // To support extensibility, allow for multiple named factories in other assemblies/classes...
-            string sf = (init_flag ?? "").Trim().ToUpper();
-            if (!sf.StartsWith("EMAILEX")) { return null; }
-            return new EmailExLogPerf();
+            string sf = (initFlag ?? "").Trim().ToUpper();
+            return !sf.StartsWith("EMAILEX") ? null : new EmailExLogPerf();
         }
 
         /// <summary>
         /// Email an exception
         /// </summary>
-        /// <param name="ex"></param>
+        /// <param name="msg"></param>
         public void Log(OpLogPerfMessage msg)
         {
             // Only email errors
@@ -103,14 +102,14 @@ namespace Intel.MyDeals.Entities.Logging
 
             // TODO Normally we would read config from env conscious config file... settly for hard codding until we can re-establish that
             //string env = DataAccess.Config.CurrentDatabaseOpEnvironment.EnvLoc.EnvType.Name.ToUpper().Trim();
-            string mailToList = ToEmailList;
+            string mailToList = _toEmailList;
 
             // create mail message
             var myMail = new MailMessage
             {
                 Subject = subject,
                 Body = body,
-                From = new MailAddress(FromEmail),
+                From = new MailAddress(_fromEmail),
                 IsBodyHtml = true
             };
             myMail.To.Add(OpUtilities.ParseEmailList(mailToList, ","));
@@ -145,24 +144,9 @@ namespace Intel.MyDeals.Entities.Logging
         /// <summary>
         /// Checks if the writer wants additional details to log, such as threadID
         /// </summary>
-        public bool AppendDetails
-        {
-            get { return true; }
-        }
+        public bool AppendDetails => true;
 
-        public OpLogPerfMessage.FormatMode Format
-        {
-            get
-            {
-                return _Format;
-            }
-            set
-            {
-                _Format = value;
-            }
-        }
-
-        private OpLogPerfMessage.FormatMode _Format = OpLogPerfMessage.FormatMode.TwoLine;
+        public OpLogPerfMessage.FormatMode Format { get; set; } = OpLogPerfMessage.FormatMode.TwoLine;
 
         public Func<string> MessageRider { set; get; }
 
