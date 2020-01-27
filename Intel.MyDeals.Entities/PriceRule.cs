@@ -29,7 +29,9 @@ namespace Intel.MyDeals.Entities
         UPDATE_ACTV_IND,
         UPDATE_STAGE_IND,
         SAVE_AS_DRAFT,
-        SUBMIT
+        SUBMIT,
+        GET_OWNERS,
+        UPDATE_OWNER
     }
 
     public class Criteria

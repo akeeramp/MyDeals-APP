@@ -281,15 +281,21 @@
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
 
-                    @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
-                    {
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1">Rules Management</a>
-                            <ul class="dropdown-menu">
+                   @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
+                   {
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1">Rules Management</a>
+                        <ul class="dropdown-menu">
+                            @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
+                            {
                                 <li><a href="Admin#/rules/">Price Rules</a></li>
-                            </ul>
-                        </li>
-                    }
+                            }@if (isRealSA || isDeveloper)
+                            {
+                                <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
+                            }
+                        </ul>
+                    </li>
+                   }
 
                     @if (env == "LOCAL" && usrWwid == 10548414)
                     {

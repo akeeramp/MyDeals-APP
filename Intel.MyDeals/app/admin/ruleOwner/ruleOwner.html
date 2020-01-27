@@ -1,0 +1,13 @@
+﻿<div class="col-md-12">
+    <h2>Rule Ownership</h2>
+</div>
+<div class="col-md-12" style="padding-top: 20px;">    
+    <loading-panel id="priceRuleLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+    <div id="gridRuleOwners" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.ruleOwnerGridOptions"></div>
+</div>
+<style>
+    .ss-loading-panel {
+        margin-top: 6%;
+        margin-left: 37%;
+    }
+</style>
