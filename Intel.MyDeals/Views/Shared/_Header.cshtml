@@ -92,9 +92,9 @@
                         <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
                             Google Chrome Required <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
                             @if (env != "PROD")
-                                {               
-                                    <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>
-                                }
+                            {
+                                <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>
+                            }
                         </div>
                     </div>
                 </td>
@@ -133,12 +133,12 @@
     <div class="menu-bar {}">
         <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
             @*<li class="dropdown">
-        <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
-        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-        <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
-        <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
-        </ul>
-        </li>*@
+                <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
+                <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
+                </ul>
+                </li>*@
 
             <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
             @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
@@ -155,7 +155,7 @@
             }
 
             @*Instead of using href can use the ui-sref to translate routes,
-        however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
+                however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
@@ -228,7 +228,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                            <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
@@ -281,21 +281,16 @@
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
 
-                   @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
-                   {
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Rules Management</a>
-                        <ul class="dropdown-menu">
-                            @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
-                            {
+                    @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
+                    {
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Rules Management</a>
+                            <ul class="dropdown-menu">
                                 <li><a href="Admin#/rules/">Price Rules</a></li>
-                            }@if (isRealSA || isDeveloper)
-                            {
                                 <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
-                            }
-                        </ul>
-                    </li>
-                   }
+                            </ul>
+                        </li>
+                    }
 
                     @if (env == "LOCAL" && usrWwid == 10548414)
                     {

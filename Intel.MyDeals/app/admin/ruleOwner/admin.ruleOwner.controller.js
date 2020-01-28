@@ -7,9 +7,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleOwnerController.$inject = ['$scope', 'ruleService', 'logger', '$timeout', 'gridConstants']
+    RuleOwnerController.$inject = ['$scope', 'ruleService', 'logger', '$timeout', 'gridConstants', "constantsService"]
 
-    function RuleOwnerController($scope, ruleService, logger, $timeout, gridConstants) {
+    function RuleOwnerController($scope, ruleService, logger, $timeout, gridConstants, constantsService) {
         var vm = this;
         vm.Rules = [];
         vm.RuleConfig = [];
@@ -18,8 +18,15 @@
         vm.spinnerMessageHeader = "Price Rule Owner";
         vm.spinnerMessageDescription = "Please wait while we loading owners..";
         vm.isBusyShowFunFact = true;
+        vm.isElligibleForApproval = false;
+        vm.IsReadOnlyAccess = window.usrRole === "DA" ? false : true;
+        vm.IsSecurityCheckDone = false;
 
         $scope.init = function () {
+            vm.getConstant();
+        }
+
+        vm.initiateRuleOwners = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
                 vm.RuleConfig = response.data;
                 vm.ruleOwnersDdlDataSource.read();
@@ -50,7 +57,7 @@
             vm.EditedRuleId = parseInt(options.model.Id);
             var ownerId = parseInt(options.model.OwnerId);
             vm.SelectedOwnerId = vm.RuleConfig.DA_Users.filter(x => x.EMP_WWID == ownerId).length > 0 ? ownerId : null;
-            var editor = $('<select kendo-combo-box k-options="vm.ownerOptions" k-ng-model="vm.SelectedOwnerId" style= "width:100%" ></select >').appendTo(container);
+            var editor = $('<select kendo-drop-down-list k-options="vm.ownerOptions" k-ng-model="vm.SelectedOwnerId" style= "width:100%" ></select >').appendTo(container);
         }
 
         vm.ownerOptions = {
@@ -66,7 +73,14 @@
             filter: "contains",
             maxSelectedItems: 1,
             autoBind: true,
-            dataSource: vm.ruleOwnersDdlDataSource
+            dataSource: vm.ruleOwnersDdlDataSource,
+            close: function () {
+                var filters = this.dataSource.filter();
+                if (filters) {
+                    //clear applied filters
+                    this.dataSource.filter({});
+                }
+            }
         };
 
         vm.ruleOwnerDataSource = new kendo.data.DataSource({
@@ -139,18 +153,51 @@
                     command: [
                         {
                             name: "edit",
-                            template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
+                            template: "<a ng-if='vm.isElligibleForApproval' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
                         }
                     ],
                     title: " ",
                     width: "5%"
                 },
-                { field: "Id", title: "Id", width: "1%", hidden: true },
-                { field: "OwnerId", title: "OwnerId", width: "1%", hidden: true },
-                { field: "Name", title: "Name", width: "47%", template: "<span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span>" },
-                { field: "OwnerName", title: "Owner Name", width: "47%", filterable: { multi: true, search: true }, editor: vm.ruleOwnerDropDownEditor }
+                { field: "Name", title: "Name", width: "50%", filterable: { multi: true, search: true }, template: "<span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span>" },
+                { field: "OwnerName", title: "Owner Name", width: "45%", filterable: { multi: true, search: true }, editor: vm.ruleOwnerDropDownEditor }
             ]
         };
+
+        vm.getConstant = function () {
+            // If user has closed the banner message he wont see it for the current session again.
+            constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
+                vm.spinnerMessageDescription = "Please wait while we checking approvers..";
+                if (!!data.data) {
+                    var adminEmailIDs = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                    vm.isElligibleForApproval = adminEmailIDs.indexOf(window.usrEmail) > -1 ? true : false;
+                    vm.IsSecurityCheckDone = true;
+                    if (vm.isElligibleForApproval) {
+                        vm.initiateRuleOwners();
+                    }
+                }
+
+                if (vm.isElligibleForApproval == false && window.usrRole !== "DA") {
+                    constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
+                        vm.spinnerMessageDescription = "Please wait while we checking read only access..";
+                        if (!!data.data) {
+                            var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                            vm.IsReadOnlyAccess = prcAccess.indexOf(window.usrRole) > -1;
+                            vm.IsSecurityCheckDone = true;
+                            if (vm.IsReadOnlyAccess) {
+                                vm.initiateRuleOwners();
+                            } else {
+                                document.location.href = "/Dashboard#/portal";
+                            }
+                        } else {
+                            vm.IsSecurityCheckDone = true;
+                        }
+                    });
+                } else {
+                    vm.IsSecurityCheckDone = true;
+                }
+            });
+        }
 
         $scope.init();
     }

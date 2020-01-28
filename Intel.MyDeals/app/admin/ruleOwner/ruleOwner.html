@@ -1,9 +1,13 @@
 ﻿<div class="col-md-12">
     <h2>Rule Ownership</h2>
+    <p style="color: #FC4C02">This screen allows Approvers to update owner of the rules</p>
 </div>
-<div class="col-md-12" style="padding-top: 20px;">    
-    <loading-panel id="priceRuleLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+<loading-panel id="priceRuleLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+<div class="col-md-12" style="padding-top: 20px;" ng-if="vm.IsSecurityCheckDone && (vm.isElligibleForApproval || vm.IsReadOnlyAccess)">
     <div id="gridRuleOwners" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.ruleOwnerGridOptions"></div>
+</div>
+<div class="col-md-12" ng-if="vm.IsSecurityCheckDone && !(vm.isElligibleForApproval || vm.IsReadOnlyAccess)" style="text-align: center;color: red;">
+    <h3>You do not have a permission to access this page!</h3>
 </div>
 <style>
     .ss-loading-panel {
