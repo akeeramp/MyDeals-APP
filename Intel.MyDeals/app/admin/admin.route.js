@@ -307,6 +307,14 @@
                     , url: 'AdminTools'
                     , controller: 'AdminToolsController as vm'
                 }
+            },
+            {
+                state: 'admin.mydealssupport',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/mydealssupport/mydealssupport.html'
+                    , url: 'MyDealsSupport'
+                }
             }
         ];
     }

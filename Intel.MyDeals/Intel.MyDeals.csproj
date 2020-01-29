@@ -356,6 +356,7 @@
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.service.js" />
+    <Content Include="app\admin\mydealssupport\mydealssupport.html" />
     <Content Include="app\admin\notifications\notification.service.js" />
     <Content Include="app\admin\notifications\notifications.controller.js" />
     <Content Include="app\admin\notifications\notifications.html" />
