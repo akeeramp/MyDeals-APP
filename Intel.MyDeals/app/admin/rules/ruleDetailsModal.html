@@ -1,8 +1,8 @@
 ﻿<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
     <div class="modal-content" id="ruleModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
-            <i id="btnClose" class="intelicon-close-max" ng-click="ok()" title="Close this window"></i>
-            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>
+            <i id="btnClose" class="intelicon-close" ng-click="ok()" title="Close this window"></i>
+<!--            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>-->
             <h3 id="modalTitle">Rule Details</h3>
 
         </div>
@@ -166,21 +166,21 @@
         //Initializing the Draggable function for the first time
         $('.modal-dialog').draggable();
         //Disabled it cause by default it will be disabled
-        $('.modal-dialog').draggable('disable');
+        $('.modal-dialog').draggable('enable'); // Was disable
         //Draggable Toggle button for the User- Click to Enable.Disabled
-        $('#btnModalAnchordisable').click(function () {
-            $('.modal-dialog').draggable('disable');
-            if ($('#btnModalAnchordisable').attr('class').trim() === 'intelicon-locked-outlined') {
-                $('.modal-dialog').draggable('enable');
-                $('#btnModalAnchordisable').removeClass('intelicon-locked-outlined').addClass('intelicon-unlocked-outlined');
-                $('#btnModalAnchordisable').attr('title', 'Click me to Disable Dragging');
-            } else {
-                $('.modal-dialog').draggable('disable');
-                $('#btnModalAnchordisable').removeClass('intelicon-unlocked-outlined').addClass('intelicon-locked-outlined');
-                $('#btnModalAnchordisable').attr('title', 'Click me to Enable Dragging');
-            }
+    //    $('#btnModalAnchordisable').click(function () {
+    //        $('.modal-dialog').draggable('disable');
+    //        if ($('#btnModalAnchordisable').attr('class').trim() === 'intelicon-locked-outlined') {
+    //            $('.modal-dialog').draggable('enable');
+    //            $('#btnModalAnchordisable').removeClass('intelicon-locked-outlined').addClass('intelicon-unlocked-outlined');
+    //            $('#btnModalAnchordisable').attr('title', 'Click me to Disable Dragging');
+    //        } else {
+    //            $('.modal-dialog').draggable('disable');
+    //            $('#btnModalAnchordisable').removeClass('intelicon-unlocked-outlined').addClass('intelicon-locked-outlined');
+    //            $('#btnModalAnchordisable').attr('title', 'Click me to Enable Dragging');
+    //        }
 
-    });
+    //});
 
         $('#modal-window').on('show.bs.modal', function () {
             $(this).find('.modal-body').css({
@@ -245,17 +245,17 @@
         font-size: 15px !important;
     }
 
-        #modalTitle {
+    #modalTitle {
         float: left;
-        margin-top: -30px;
+        margin-top: -15px;
     }
 
-        .modal-body {
-            overflow: auto;
-            width: 100%;
-            height: 450px;
-            border-bottom: none;
-        }
+    .modal-body {
+        overflow: auto;
+        width: 100%;
+        height: 450px;
+        border-bottom: none;
+    }
 
     .modalBlueBody {
         background-color: #003C71;
@@ -276,7 +276,7 @@
         z-index: 3 !important;
     }
 
-    #btnModalAnchordisable {
+    /*#btnModalAnchordisable {
         float: right;
         margin-left: 94.5%;
         background: transparent;
@@ -287,13 +287,12 @@
         margin-top: -30px;
         z-index: 999999999;
         margin-right: 35px; 
-    }
+    }*/
         
     #btnClose {
         float: right;
         margin-top: -15px;
         background: transparent;
-        border: 1px solid #00aeef;
         padding: 3px;
         font-size: 22px;
         cursor: pointer;

@@ -182,12 +182,24 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("SaveSalesForceTenderData/{custId}/{contractId}")]
+        [HttpGet]
+        //[HttpPost]
+        //[AntiForgeryValidate]
+        public string SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData)
+        {
+            // Rough this out as a get, bring back as a post since Mule soft will issue the hit as a post.
+
+            return "Blahme";
+        }
+
+        [Authorize]
         [Route("PublishTenderContract/{OBJ_SID}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public bool PublishTenderContract(int OBJ_SID, List<int> excludeList)
+        public bool PublishTenderContract(int objSid, List<int> excludeList)
         {
-            return SafeExecutor(() => _contractsLib.PublishTenderDeals(OBJ_SID, excludeList)
+            return SafeExecutor(() => _contractsLib.PublishTenderDeals(objSid, excludeList)
                 , "Unable to save the Contract"
             );
 

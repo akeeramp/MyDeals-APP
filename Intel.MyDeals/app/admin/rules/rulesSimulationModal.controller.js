@@ -134,6 +134,10 @@
             $uibModalInstance.close();
         };
 
+        $scope.ok = function () {
+            $uibModalInstance.close();
+        };
+
         $scope.init();
 
     }
