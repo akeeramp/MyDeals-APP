@@ -3673,7 +3673,7 @@
                                 cid: $scope.contractData.DC_ID,
                                 sid: pt.DC_PARENT_ID,
                                 pid: pt.DC_ID
-                            }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
+                            }, { reload: true }); // HACK: workaround for the bug where the "view more options" button is un-click-able after saving
 
 
                         });

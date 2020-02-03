@@ -192,15 +192,15 @@
                 config: {
                     abstract: false
                     , template: '<div ui-view></div>'
-					, url: 'CostTest'
+                    , url: 'CostTest'
                 }
             },
             {
                 state: 'admin.costtest.icostproducts',
                 config: {
                     templateUrl: 'app/admin/iCostProducts/iCostProducts.html'
-					, url: '/icostproducts'
-					, controller: 'iCostProductsController as vm'
+                    , url: '/icostproducts'
+                    , controller: 'iCostProductsController as vm'
                 }
             },
             {
@@ -230,37 +230,46 @@
                 }
             },
             {
+                state: 'admin.ruleOwner',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/ruleOwner/ruleOwner.html',
+                    url: 'ruleOwner',
+                    controller: 'RuleOwnerController as vm',
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false
                     , template: '<div ui-view></div>'
-					, url: 'SecurityAttributes'
+                    , url: 'SecurityAttributes'
                 }
             },
             {
                 state: 'admin.securityAttributes.dealTypes',
                 config: {
                     templateUrl: 'app/admin/securityAttributes/adminDealTypes/adminDealTypes.manage.html'
-					, url: '/DealTypes'
-					, controller: 'dealTypesController as vm'
+                    , url: '/DealTypes'
+                    , controller: 'dealTypesController as vm'
                 }
             },
-			{
-			    state: 'admin.securityEngine',
-			    abstract: false,
-			    config: {
-			        templateUrl: 'app/admin/securityEngine/securityEngine.html'
-					, url: 'SecurityEngine'
-					, controller: 'securityEngineController as vm'
-			    }
-			},
+            {
+                state: 'admin.securityEngine',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/securityEngine/securityEngine.html'
+                    , url: 'SecurityEngine'
+                    , controller: 'securityEngineController as vm'
+                }
+            },
             {
                 state: 'admin.dropdowns',
                 abstract: false,
                 config: {
                     templateUrl: 'app/admin/dropdowns/dropdowns.html'
                     , url: 'dropdowns'
-					, controller: 'DropdownsController as vm'
+                    , controller: 'DropdownsController as vm'
                 }
             },
             {
@@ -269,7 +278,7 @@
                 config: {
                     templateUrl: 'app/admin/legalExceptions/legalExceptions.html'
                     , url: 'legalexceptions'
-					, controller: 'legalExceptionsController as vm'
+                    , controller: 'legalExceptionsController as vm'
                 }
             },
             {
@@ -278,7 +287,7 @@
                 config: {
                     templateUrl: 'app/admin/notifications/notifications.html'
                     , url: 'notifications'
-					, controller: 'notificationsController as vm'
+                    , controller: 'notificationsController as vm'
                 }
             },
             {
@@ -297,6 +306,14 @@
                     templateUrl: 'app/admin/admintools/admintools.html'
                     , url: 'AdminTools'
                     , controller: 'AdminToolsController as vm'
+                }
+            },
+            {
+                state: 'admin.mydealssupport',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/mydealssupport/mydealssupport.html'
+                    , url: 'MyDealsSupport'
                 }
             }
         ];

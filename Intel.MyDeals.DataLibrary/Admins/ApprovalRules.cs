@@ -40,6 +40,7 @@ namespace Intel.MyDeals.DataLibrary
                     is_aprv = isApproved,
                     actv_ind = priceRuleCriteria.IsActive,
                     usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    ownr_wwid= priceRuleCriteria.OwnerId,
                     actn_nm = priceRuleAction.ToString("g"),
                     rule_desc = priceRuleCriteria.RuleDescription,
                     prd_desc = priceRuleCriteria.ProductDescription,
