@@ -18,9 +18,49 @@
             getRuleConditionsByRuleId: getRuleConditionsByRuleId,
             getPassedRuleTasksByRuleId: getPassedRuleTasksByRuleId,
             getFailedRuleTasksByRuleId: getFailedRuleTasksByRuleId,
+            getPriceRules: getPriceRules,
+            updatePriceRule: updatePriceRule,
+            getRuleSimulationResults: getRuleSimulationResults,
+            getPriceRulesConfig: getPriceRulesConfig,
+            isDuplicateTitle: isDuplicateTitle,
+            deletePriceRule: deletePriceRule,
+            copyPriceRule: copyPriceRule,
+            validateProducts: validateProducts
         }
 
         return service;
+        
+        function validateProducts(lstProducts) {
+            return dataService.post(apiBaseUrl + 'ValidateProducts', lstProducts);
+        }
+
+        function copyPriceRule(iRuleSid) {
+            return dataService.post(apiBaseUrl + 'CopyPriceRule/' + iRuleSid);
+        }
+
+        function deletePriceRule(iRuleSid) {
+            return dataService.post(apiBaseUrl + 'DeletePriceRule/' + iRuleSid);
+        }
+
+        function isDuplicateTitle(iRuleSid, strTitle) {
+            return dataService.post(apiBaseUrl + 'IsDuplicateTitle/' + iRuleSid + "/" + strTitle);
+        }
+
+        function getPriceRulesConfig() {
+            return dataService.get(apiBaseUrl + 'GetPriceRulesConfig');
+        }
+
+        function updatePriceRule(priceRuleCriteria, strActionName) {
+            return dataService.post(apiBaseUrl + 'UpdatePriceRule/' + strActionName, priceRuleCriteria);
+        }
+
+        function getPriceRules(id, strActionName) {
+            return dataService.get(apiBaseUrl + 'GetPriceRules/' + id + "/" + strActionName);
+        }
+
+        function getRuleSimulationResults(data) {
+            return dataService.post(apiBaseUrl + 'GetRuleSimulationResults', data); //data will be 2 lists, ruleIDs and dealIDs
+        }
 
         function getRuleSets() {
             return dataService.get(apiBaseUrl + 'GetRuleSets');

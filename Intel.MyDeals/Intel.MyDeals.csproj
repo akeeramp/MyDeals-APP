@@ -353,6 +353,7 @@
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.service.js" />
+    <Content Include="app\admin\mydealssupport\mydealssupport.html" />
     <Content Include="app\admin\notifications\notification.service.js" />
     <Content Include="app\admin\notifications\notifications.controller.js" />
     <Content Include="app\admin\notifications\notifications.html" />
@@ -388,9 +389,15 @@
     <Content Include="app\admin\beta-rules\admin.rules.controller.js" />
     <Content Include="app\admin\beta-rules\rules.html" />
     <Content Include="app\admin\beta-rules\rules.service.js" />
+    <Content Include="app\admin\ruleOwner\admin.ruleOwner.controller.js" />
+    <Content Include="app\admin\ruleOwner\ruleOwner.html" />
     <Content Include="app\admin\rules\admin.rules.controller.js" />
+    <Content Include="app\admin\rules\ruleDetailsModal.controller.js" />
+    <Content Include="app\admin\rules\ruleDetailsModal.html" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
+    <Content Include="app\admin\rules\rulesSimulationModal.controller.js" />
+    <Content Include="app\admin\rules\rulesSimulationModal.html" />
     <Content Include="app\admin\securityEngine\securityEngine.controller.js" />
     <Content Include="app\admin\securityEngine\securityEngine.html" />
     <Content Include="app\admin\securityEngine\securityEngine.service.js" />

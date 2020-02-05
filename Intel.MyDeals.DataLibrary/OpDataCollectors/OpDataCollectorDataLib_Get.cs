@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals.dbo;
 using Intel.MyDeals.Entities;
+using System.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -67,9 +68,9 @@ namespace Intel.MyDeals.DataLibrary
 
             foreach (OpDataElementType oType in includeTypes)
             {
-                if (!odcs.ContainsKey(oType)) odcs[oType] = new OpDataPacket<OpDataElementType> {PacketType = oType};
+                if (!odcs.ContainsKey(oType)) odcs[oType] = new OpDataPacket<OpDataElementType> { PacketType = oType };
             }
-            
+
             return odcs;
         }
 

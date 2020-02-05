@@ -970,7 +970,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="CONTRACT_SID"></param>
         /// <param name="USER_WWID"></param>
         /// <returns></returns>
-        public bool PublishTenderDeals(int OBJ_SID)
+        public bool PublishTenderDeals(int OBJ_SID, List<int> excludeList)
         {
             OpLog.Log("PR_MYDL_PUBL_TNDR");
             bool success = false;
@@ -980,7 +980,8 @@ namespace Intel.MyDeals.DataLibrary
                 var ret = DataAccess.ExecuteScalar(new Procs.dbo.PR_MYDL_PUBL_TNDR
                 {
                     @OBJ_SID = OBJ_SID,
-                    @USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                    @USER_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @in_exclude_ids = new type_int_list(excludeList.ToArray()),
                 });
 
                 

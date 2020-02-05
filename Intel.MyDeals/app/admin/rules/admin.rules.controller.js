@@ -7,729 +7,197 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope', 'ruleService', '$scope', 'logger', '$timeout', 'confirmationModal', 'gridConstants']
+    RuleController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal', 'rid']
 
-    function RuleController($rootScope, ruleService, $scope, logger, $timeout, confirmationModal, gridConstants) {
+    function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
         var vm = this;
-        vm.ruleTypeId = 0;
+        vm.rid = rid;
         vm.ruleId = 0;
-        vm.isEditmode = false;
-
-        //--------------------------------------------DataSources----------
-        vm.RuleTypes = [{
-            'Id': 1,
-            'Name': 'Tender DA auto approval',
-            'Approvers': '11579289',
-            'CreaterBy': '11579289',
-            'CreatedDateTime': '',
-            'ChangedBy': '11579289',
-            'ChangedDateTime': '',
-        }];
-
-        vm.ruleTypeId = 1;
-
-        vm.Rules = [{
-            'Id': 1,
-            'RuleTypeId': 1,
-            'Name': 'Mahesh Auto Approval Tender Rules',
-            'IsActive': true,
-            'RuleStatus': true,
-            'OwnerId': 11579289,
-            'StartDate': "01/01/2019",
-            'EndDate': "12/31/2019",
-            'Notes': 'Tender Deals will be auto approved when it passed below rule',
-            'Criteria': [],
-            'CreatedBy': '11579289',
-            'CreatedDateTime': new Date(),
-            'ChangedBy': '11579289',
-            'ChangeDateTime': new Date(),
-        }];
-        //------------------------------------------------------------------------------------------------
-
-        vm.ruleTypeDs = new kendo.data.DataSource({
-            transport: {
-                read: function (e) {
-                    e.success(vm.RuleTypes);
-                }
-            }
-        });
-
-        vm.ruleTypeOptions = {
-            placeholder: "Select a Rule Type...",
-            dataTextField: "Name",
-            dataValueField: "Id",
-            valuePrimitive: true,
-            autoBind: false,
-            autoClose: false,
-            dataSource: vm.ruleTypeDs,
-            change: function (e) {
-                // Cascade dropdown trigger
-            }
-        };
-
-        vm.ruleDs = new kendo.data.DataSource({
-            transport: {
-                read: function (e) {
-                    e.success(vm.Rules);
-                }
-            }
-        });
-
+        vm.Rules = [];
         vm.rule = {};
-
-        vm.ruleOptions = {
-            placeholder: "Select a Rule ...",
-            dataTextField: "Name",
-            dataValueField: "Id",
-            valuePrimitive: true,
-            autoBind: true,
-            autoClose: false,
-            dataSource: vm.ruleDs,
-            change: function (e) {
-                $timeout(function () {
-                    vm.rule = vm.Rules.filter(function (x) {
-                        return x.Id == id
-                    })[0];
-                });
-            }
-        };
-
-        vm.ownerDs = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    url: "/api/Employees/GetUsrProfileRole",
-                    dataType: "json"
-                }
-            }
-        });
-
-        vm.ownerOptions = {
-            placeholder: "Select email address...",
-            dataTextField: "EMAIL_ADDR",
-            dataValueField: "EMP_WWID",
-            valueTemplate: '<div class="tmpltItem">' +
-                '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-                '<div class="fl tmpltContract"><div class="tmpltPrimary">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-                '<div class="fr tmpltRole">#: data.ROLE_NM #</div>' +
-                '<div class="clearboth"></div>' +
-                '</div>',
-            template: '<div class="tmpltItem">' +
-                '<div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>' +
-                '<div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">#: data.LST_NM #, #: data.FRST_NM #</div><div class="tmpltSecondary">#: data.EMAIL_ADDR #</div></div>' +
-                '<div class="clearboth"></div>' +
-                '</div>',
-            footerTemplate: 'Total #: instance.dataSource.total() # items found',
-            valuePrimitive: true,
-            filter: "contains",
-            maxSelectedItems: 1,
-            autoBind: true,
-            dataSource: vm.ownerDs
-        };
-
-        $scope.operatorSettings = {
-            "operators": [
-                {
-                    operator: "LIKE",
-                    operCode: "contains",
-                    label: "contains"
-                },
-                {
-                    operator: "=",
-                    operCode: "eq",
-                    label: "equal to"
-                },
-                {
-                    operator: "IN",
-                    operCode: "in",
-                    label: "in"
-                },
-                {
-                    operator: "!=",
-                    operCode: "neq",
-                    label: "not equal to"
-                },
-                {
-                    operator: "<",
-                    operCode: "lt",
-                    label: "less than"
-                },
-                {
-                    operator: "<=",
-                    operCode: "lte",
-                    label: "less than or equal to"
-                },
-                {
-                    operator: ">",
-                    operCode: "gt",
-                    label: "greater than"
-                },
-                {
-                    operator: ">=",
-                    operCode: "gte",
-                    label: "greater than or equal to"
-                }
-            ],
-            "types": [
-                {
-                    "type": "string",
-                    "uiType": "textbox"
-                },
-                {
-                    "type": "number",
-                    "uiType": "numeric"
-                },
-                {
-                    "type": "money",
-                    "uiType": "numeric"
-                },
-                {
-                    "type": "date",
-                    "uiType": "datepicker"
-                },
-                {
-                    "type": "list",
-                    "uiType": "combobox"
-                },
-                {
-                    "type": "bool",
-                    "uiType": "checkbox"
-                }
-            ],
-            "types2operator": [
-                {
-                    type: "number",
-                    operator: ["<=", "<", "=", "!=", ">", ">=", "IN"]
-                },
-                {
-                    type: "money",
-                    operator: ["<=", "<", "=", "!=", ">", ">=", "IN"]
-                },
-                {
-                    type: "date",
-                    operator: ["<=", "<", "=", "!=", ">", ">="]
-                },
-                {
-                    type: "string",
-                    operator: ["=", "!=", "LIKE"]
-                },
-                {
-                    type: "list",
-                    operator: ["=", "LIKE"]
-                },
-                {
-                    type: "bool",
-                    operator: ["=", "!="]
-                }
-            ]
+        vm.RuleConfig = [];
+        vm.isElligibleForApproval = false;
+        vm.adminEmailIDs = "";
+        vm.spinnerMessageHeader = "Price Rule";
+        vm.spinnerMessageDescription = "Please wait while we loading page";
+        vm.isBusyShowFunFact = true;
+        vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
+        vm.productPresent = true;
+        $scope.init = function () {
+            ruleService.getPriceRulesConfig().then(function (response) {
+                vm.RuleConfig = response.data;
+            }, function (response) {
+                logger.error("Operation failed");
+            });
+            vm.GetRules(0, "GET_RULES");
         }
 
-        $scope.attributeSettings = [
-            {
-                field: "Customer.CUST_NM",
-                title: "Customer",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoMultiSelect({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Customers/GetMyCustomersNameInfo",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "CUST_NM",
-                            dataValueField: "CUST_NM",
-                            tagMode: "single",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "CUST_NM",
-                lookupValue: "CUST_NM",
-                lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
-            }, {
-                field: "CUST_ACCNT_DIV",
-                title: "Division",
-                type: "string",
-                width: 140
-            }, {
-                field: "CNTRCT_TITLE",
-                title: "Contract Title",
-                type: "string",
-                width: 140,
-                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_TITLE#</a>"
-            }, {
-                field: "CNTRCT_OBJ_SID",
-                title: "Contract Id",
-                type: "string",
-                width: 110,
-                template: "<a href='/Contract\\#/manager/#=data.CNTRCT_OBJ_SID#' target='_blank' class='objDealId'>#=data.CNTRCT_OBJ_SID#</a>"
-            }, {
-                field: "PRC_ST_TITLE",
-                title: "Pricing Strategy",
-                type: "string",
-                width: 140,
-                template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
-            }, {
-                field: "CNTRCT_C2A_DATA_C2A_ID",
-                title: "C2A Id",
-                type: "string",
-                width: 100
-            }, {
-                field: "DC_ID",
-                title: "Deal",
-                type: "number",
-                width: 100,
-                filterable: "numObjFilter",
-                template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon><a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
-            }, {
-                field: "WF_STG_CD",
-                title: "Deal Status",
-                type: "list",
-                width: 140,
-                template: "#=gridUtils.stgFullTitleChar(data)#",
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: {
-                                data: [
-                                    "Draft",
-                                    "Requested",
-                                    "Submitted",
-                                    "Pending",
-                                    "Approved",
-                                    "Active",
-                                    "Cancelled"
-                                ]
-                            },
-                            optionLabel: "--Select Status--"
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "Value",
-                lookupValue: "Value",
-                lookups: [
-                    { Value: "Draft" },
-                    { Value: "Requested" },
-                    { Value: "Submitted" },
-                    { Value: "Pending" },
-                    { Value: "Approved" },
-                    { Value: "Active" },
-                    { Value: "Cancelled" }
-                ]
+        $scope.$on('UpdateSpinnerDescription', function (event, strDescription) {
+            vm.spinnerMessageDescription = strDescription;
+        });
 
-            }, {
-                field: "OBJ_SET_TYPE_CD",
-                title: "Deal Type",
-                type: "list",
-                width: 130,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: {
-                                data: [
-                                    "ECAP",
-                                    "KIT",
-                                    "PROGRAM",
-                                    "VOL_TIER"
-                                ]
-                            },
-                            optionLabel: "--Select Value--"
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "OBJ_SET_TYPE_NM",
-                lookupValue: "OBJ_SET_TYPE_CD",
-                lookups: [
-                    { OBJ_SET_TYPE_CD: "ECAP", OBJ_SET_TYPE_NM: "ECAP" },
-                    { OBJ_SET_TYPE_CD: "PROGRAM", OBJ_SET_TYPE_NM: "PROGRAM" },
-                    { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" },
-                    { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }
-                ]
-            }, {
-                field: "DEAL_DESC",
-                title: "Deal Description",
-                type: "string",
-                width: 210,
-                filterable: "objFilter",
-            }, {
-                field: "START_DT",
-                title: "Start Date",
-                type: "date",
-                template: "#if(START_DT==null){#  #}else{# #= moment(START_DT).format('MM/DD/YYYY') # #}#",
-                width: 130
-            }, {
-                field: "END_DT",
-                title: "End Date",
-                type: "date",
-                template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
-                width: 130
-            }, {
-                field: "OEM_PLTFRM_LNCH_DT",
-                title: "OEM Platform Launch Date",
-                type: "date",
-                template: "#if(OEM_PLTFRM_LNCH_DT==null){#  #}else{# #= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') # #}#",
-                width: 130
-            }, {
-                field: "OEM_PLTFRM_EOL_DT",
-                title: "OEM Platform EOL Date",
-                type: "date",
-                template: "#if(OEM_PLTFRM_EOL_DT==null){#  #}else{# #= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') # #}#",
-                width: 130
-            }, {
-                field: "PRODUCT_CATEGORIES",
-                title: "Product Verticals",
-                type: "list",
-                width: 150,
-                filterable: "listMultiProdCatFilter",
-                lookupText: "PRD_CAT_NM",
-                lookupValue: "PRD_CAT_NM",
-                lookupUrl: "/api/Products/GetProductCategories"
-            }, {
-                field: "PRODUCT_FILTER",
-                title: "Product",
-                type: "string",
-                width: 400,
-                dimKey: 20,
-                filterable: "objFilter",
-                template: "#= gridUtils.tenderDim(data, 'PRODUCT_FILTER') #"
-            }, {
-                field: "MRKT_SEG",
-                title: "Market Segment",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG"
-            }, {
-                field: "REBATE_TYPE",
-                title: "Rebate Type",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDistinctDropdownCodes/REBATE_TYPE"
-            }, {
-                field: "TRKR_NBR",
-                title: "Tracker #",
-                type: "string",
-                width: 210,
-                dimKey: 20,
-                filterable: "objFilter",
-                template: "<span id='trk_#= data.DC_ID #'>#= gridUtils.tenderDim(data, 'TRKR_NBR') #</span>"
-            }, {
-                field: "CAP",
-                title: "CAP",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tenderDim(data, 'CAP', 'c') #"
-            }, {
-                field: "ECAP_PRICE",
-                title: "ECAP Price",
-                type: "money",
-                width: 170,
-                dimKey: 20,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tenderDim(data, 'ECAP_PRICE', 'c') #"
-            }, {
-                field: "VOLUME",
-                title: "Ceiling Vol",
-                type: "number",
-                width: 120
-            }, {
-                field: "STRT_VOL",
-                title: "Start Volume",
-                type: "number",
-                width: 170,
-                dimKey: 10,
-                format: "{0:n}",
-                filterable: "numObjFilter",
-                template: "#= gridUtils.tierDim(data, 'STRT_VOL', 'n') #"
-            }, {
-                field: "END_VOL",
-                title: "End Volume",
-                type: "number",
-                width: 170,
-                dimKey: 10,
-                format: "{0:n}",
-                filterable: "numObjFilter",
-                template: "#= gridUtils.tierDim(data, 'END_VOL', 'n') #"
-            }, {
-                field: "RATE",
-                title: "Rate",
-                type: "money",
-                width: 170,
-                dimKey: 10,
-                format: "{0:c}",
-                filterable: "moneyObjFilter",
-                template: "#= gridUtils.tierDim(data, 'RATE', 'c') #"
-            }, {
-                field: "PROGRAM_PAYMENT",
-                title: "Program Payment",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT"
-            }, {
-                field: "PAYOUT_BASED_ON",
-                title: "Payout Based On",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON"
-            }, {
-                field: "SERVER_DEAL_TYPE",
-                title: "Server Deal Type",
-                type: "list",
-                width: 140,
-                filterable: {
-                    ui: function (element) {
-                        element.kendoDropDownList({
-                            dataSource: new kendo.data.DataSource({
-                                type: 'json',
-                                transport: {
-                                    read: {
-                                        url: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
-                                        type: "GET",
-                                        dataType: "json"
-                                    }
-                                }
-                            }),
-                            dataTextField: "DROP_DOWN",
-                            dataValueField: "DROP_DOWN",
-                            valuePrimitive: true
-                        });
-                    },
-                    extra: false
-                },
-                lookupText: "DROP_DOWN",
-                lookupValue: "DROP_DOWN",
-                lookupUrl: "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP"
-            }, {
-                field: "GEO_COMBINED",
-                title: "Geo",
-                type: "string",
-                width: 100
-            }, {
-                field: "TOTAL_DOLLAR_AMOUNT",
-                title: "Total Dollar Amount",
-                type: "number",
-                width: 170,
-                format: "{0:c}",
-                filterable: "moneyObjFilter"
-            }, {
-                field: "CREDIT_VOLUME",
-                title: "Credit Vol",
-                type: "number",
-                width: 120
-            }, {
-                field: "DEBIT_VOLUME",
-                title: "Debit Vol",
-                type: "number",
-                width: 120
-            }, {
-                field: "NET_VOL_PAID",
-                title: "Net Credited Volume",
-                type: "number",
-                filterable: false,
-                sortable: false,
-                width: 120
-            }, {
-                field: "CREDIT_AMT",
-                title: "Credit Amt",
-                type: "number",
-                format: "{0:c}",
-                width: 120
-            }, {
-                field: "DEBIT_AMT",
-                title: "Debit Amt",
-                type: "number",
-                format: "{0:c}",
-                width: 120
-            }, {
-                field: "TOT_QTY_PAID",
-                title: "Total Qty Paid",
-                type: "number",
-                format: "{0:c}",
-                filterable: false,
-                sortable: false,
-                width: 120
-            }, {
-                field: "BLLG_DT",
-                title: "Last Credit Date",
-                type: "string",
-                template: "# if (BLLG_DT !== undefined) { # #=moment(BLLG_DT).format('MM/DD/YYYY')# # } #",
-                width: 140
-            }, {
-                field: "END_CUSTOMER_RETAIL",
-                title: "End Customer",
-                type: "string",
-                width: 140
-            }, {
-                field: "DEAL_GRP_NM ",
-                title: "Kit Name",
-                type: "string",
-                width: 140
-            }, {
-                field: "NOTES",
-                title: "Comments / notes",
-                type: "string",
-                width: 250
-            }, {
-                field: "GEO_APPROVED_BY",
-                title: "GEO Approved By",
-                type: "string",
-                width: 160
-            }, {
-                field: "DIV_APPROVED_BY",
-                title: "DIV Approved By",
-                type: "string",
-                width: 160
-            }, {
-                field: "CRE_EMP_NAME",
-                title: "Created By",
-                type: "string",
-                width: 160
-            }, {
-                field: "CRE_DTM",
-                title: "Created Time",
-                type: "string",
-                template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
-                width: 140
+        $scope.$on('UpdateRuleClient', function (event, updatedRule) {
+            vm.RefreshGrid(updatedRule);
+        });
+
+        vm.RefreshGrid = function (updatedRule) {
+            if (vm.Rules.filter(x => x.Id === updatedRule.Id).length > 0) {
+                vm.Rules = vm.Rules.filter(x => x.Id !== updatedRule.Id);
             }
-        ];
+            vm.Rules.splice(0, 0, updatedRule);
+            vm.dataSource.read();
+            //vm.rid = updatedRule.Id;
+            //vm.dataSource.filter({ field: "Id", value: updatedRule.Id });
+        }
 
-        vm.editRule = function (id) {
-            vm.rule = vm.Rules.filter(function (x) {
-                return x.Id == id
-            })[0];
-            vm.isEditmode = true;
+        vm.openRuleDetailsModal = function (dataItem) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/rules/ruleDetailsModal.html',
+                controller: 'RuleModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                windowClass: 'prdSelector-modal-window',
+                resolve: {
+                    RuleConfig: ['ruleService', function () {
+                        return ruleService.getPriceRulesConfig().then(function (response) {
+                            return response;
+                        });
+                    }],
+                    dataItem: function () {
+                        return angular.copy(dataItem);
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (returnData) {
+                vm.cancel();
+            }, function () { });
+        }
+
+        vm.openRulesSimulation = function (dataItem) {
+            $scope.context = dataItem;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'rulesSimulationModal',
+                controller: 'rulesSimulationModalCtrl',
+                size: 'lg',
+                resolve: {
+                    dataItem: function () {
+                        return angular.copy(dataItem);
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (returnData) {
+                //if (returnData !== undefined && returnData !== null) {
+                //    $scope.context.USR_CUST = returnData;
+                //}
+            }, function () { });
+        }
+
+        $scope.getConstant = function () {
+            // If user has closed the banner message he wont see it for the current session again.
+            constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
+                if (!!data.data) {
+                    vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                    vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
+                }
+            });
+            if (window.usrRole != 'DA') {
+                constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
+                    if (!!data.data) {
+                        var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                        vm.toolKitHidden = prcAccess.indexOf(window.usrRole) > -1;
+                        if (vm.toolKitHidden) {
+                            $scope.init();
+                        } else {
+                            document.location.href = "/Dashboard#/portal";
+                        }
+
+                    }
+                });
+            }
+
+        }
+
+        vm.editRule = function (dataItem, isCopy) {
+            vm.spinnerMessageDescription = "Please wait while we loading the rule..";
+            //vm.GetRules(id, "GET_BY_RULE_ID"); 
+            if (dataItem.id) {
+                dataItem.isCopy = isCopy;
+                vm.openRuleDetailsModal(dataItem);
+            } else {
+                var tempDataItem = {
+                    "id": dataItem, "isCopy": isCopy
+                };
+                vm.openRuleDetailsModal(tempDataItem);
+            }
         }
 
         vm.copyRule = function (id) {
-            var rule = vm.Rules.filter(function (x) {
-                return x.Id == id
-            })[0];
+            ruleService.copyPriceRule(id).then(function (response) {
+                if (response.data > 0) {
+                    vm.editRule(response.data, true);
+                    logger.success("Rule has been copied");
 
-            var idx = 0;
-            var copyRule = {};
-            for (var i = 0; i < vm.Rules.length; i++) {
-                if (vm.Rules[i].Id == id) {
-                    copyRule = angular.copy(vm.Rules[i]);
-                    idx = i;
-                    break;
+                } else {
+                    logger.error("Unable to copy the rule");
                 }
-            }
-            copyRule.Name += '(copy)'
-            copyRule.Id += 1;
-            copyRule.OwnerId = usrWwid;
-            //TODO: Save to API here..after return refresh the grid
-
-            vm.Rules.splice(idx + 1, 0, copyRule);
-            vm.dataSource.read();
+            }, function (response) {
+                logger.error("Unable to copy the rule");
+            });
         }
 
-        vm.deleteRule = function (id) {
-
-            kendo.confirm("Are you sure ?").then(function () {
-                var idx = vm.Rules.findIndex(x => x.Id == id);
-                vm.Rules.splice(idx, 1);
+        vm.GetRules = function (id, actionName) {
+            vm.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
+            ruleService.getPriceRules(id, actionName).then(function (response) {
+                vm.Rules = response.data;
                 vm.dataSource.read();
+                //adding filter
+                if (rid != 0) {
+                    vm.dataSource.filter({ field: "Id", value: vm.rid });
+                    vm.editRule(rid, false);
+                }
+            }, function (response) {
+                logger.error("Operation failed");
             });
+        };
+
+        vm.deleteRule = function (id) {
+            kendo.confirm("Are you sure want to delete this rule?").then(function () {
+                ruleService.deletePriceRule(id).then(function (response) {
+                    if (response.data > 0) {
+                        vm.Rules = vm.Rules.filter(x => x.Id != response.data);
+                        vm.dataSource.read();
+                        logger.success("Rule has been deleted");
+                    }
+                }, function (response) {
+                    logger.error("Unable to delete the rule");
+                });
+            });
+        };
+
+        //Take first character of WF_STG_CD
+        vm.stageOneChar = function (RULE_STAGE) {
+            if (RULE_STAGE === true) {
+                return 'A';
+            } else {
+                return 'P';
+            }
+        }
+        vm.stageOneCharStatus = function (IsAutomationIncluded) {
+            if (IsAutomationIncluded === true) {
+                return 'intelicon-plus-solid clrGreen';
+            } else {
+                return 'intelicon-minus-solid clrRed';
+            }
         }
 
         vm.dataSource = new kendo.data.DataSource({
@@ -738,7 +206,6 @@
                     e.success(vm.Rules);
                 },
                 update: function (e) {
-
                 },
                 destroy: function (e) {
                     var modalOptions = {
@@ -759,6 +226,7 @@
                 }
             },
             pageSize: 25,
+            sort: { field: "RuleStage", dir: "asc" },
             schema: {
                 model: {
                     id: "Id",
@@ -767,60 +235,263 @@
                 }
             },
         });
+        //Remove Filter
+        vm.removeFilter = function () {
+            vm.dataSource.filter({});
+            vm.rid = 0;
+            var url = document.location.href;
+            var lastLoc = url.lastIndexOf('/');
+            url = url.substring(0, lastLoc + 1);
+            document.location.href = url;
+        }
+
+        vm.UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
+            if (isEnabled && ruleId != null && ruleId > 0) {
+                vm.spinnerMessageDescription = "Please wait while we are updating the rule..";
+                var priceRuleCriteria = { Id: ruleId }
+                switch (strActionName) {
+                    case "UPDATE_ACTV_IND": {
+                        priceRuleCriteria.IsActive = isTrue;
+                    } break;
+                    case "UPDATE_STAGE_IND": {
+                        priceRuleCriteria.RuleStage = isTrue;
+                        priceRuleCriteria.IsActive = isTrue; // also make it active now
+                    } break;
+                }
+                ruleService.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
+                    if (response.data.Id > 0) {
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
+                        vm.Rules.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                        switch (strActionName) {
+                            case "UPDATE_ACTV_IND": {
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                logger.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
+                            } break;
+                            case "UPDATE_STAGE_IND": {
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                                vm.Rules.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                                logger.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
+                            } break;
+                        }
+                        vm.dataSource.read();
+                    }
+                    else {
+                        switch (strActionName) {
+                            case "UPDATE_ACTV_IND": {
+                                vm.rule.IsActive = !isTrue;
+                            } break;
+                            case "UPDATE_STAGE_IND": {
+                                vm.rule.RuleStage = !isTrue;
+                                vm.rule.IsActive = !isTrue;
+                            } break;
+                        }
+                        logger.error("Unable to update rule's indicator");
+                    }
+                }, function (response) {
+                    switch (strActionName) {
+                        case "UPDATE_ACTV_IND": {
+                            vm.rule.IsActive = !isTrue;
+                        } break;
+                        case "UPDATE_STAGE_IND": {
+                            vm.rule.RuleStage = !isTrue;
+                            vm.rule.IsActive = !isTrue;
+                        } break;
+                    }
+                    logger.error("Operation failed");
+                });
+            }
+        }
+        
+
+        $scope.detailInit = function (parentDataItem) {
+            var columns = [];
+            //If Rule Descripsion Present
+            if (parentDataItem.RuleDescription.length > 0) {
+                columns.push({
+                    field: "RuleDescription",
+                    title: "Rule Description",
+                    template: "<div>#=RuleDescription#</div>",
+                    width: "50%",
+                    filterable: { multi: true, search: false }
+                });
+            }
+            //If Peoduct Present
+            if (parentDataItem.ProductDescription.length > 0) {
+                columns.push({
+                    field: "ProductDescription",
+                    title: "Product Description",
+                    template: "<div>#=ProductDescription#</div>",
+                    width: "50%",
+                    filterable: false
+                });
+            }
+            
+            return {
+                dataSource: {
+                    transport: {
+                        read: function (e) {                            
+                            e.success(parentDataItem);                                                        
+                        },
+                        create: function (e) {
+                        }
+                    },
+                    pageSize: 1,
+                    serverPaging: false,
+                    serverFiltering: false,
+                    serverSorting: false,
+                    schema: {
+                        model: {
+                            id: "ID",
+                            fields: {
+                                ID: {
+                                    nullable: true
+                                },
+                                RuleDescription: { type: "string" },
+                                ProductDescription: { type: "string" }
+                            }
+                        }
+                    },
+                },
+                filterable: false,
+                sortable: true,                
+                resizable: true,
+                reorderable: false,                
+                columns: columns
+            };
+        };
 
         vm.gridOptions = {
+            toolbar: [
+                { text: "", template: kendo.template($("#grid_toolbar_addrulebutton").html()) }
+            ],
             dataSource: vm.dataSource,
             filterable: true,
             sortable: true,
             selectable: true,
             resizable: true,
-            columnMenu: true,
+            reorderable: true,
+            scrollable: true,
+            //columnMenu: true, // Remove the three dots and more importantly, the selection of column items
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
+            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget' kendo-grid k-options='detailInit(dataItem)'></div>",
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes,
+                pageSizes: [25, 100, 500, "all"] //gridConstants.pageSizes
             },
             columns: [
                 {
-                    width: "6%",
-                    template: "<div class='rule'><i role='button' class='rulesGidIcon intelicon-edit' ng-click='vm.editRule(#= Id #)'></i><i role='button' class='rulesGidIcon intelicon-copy-solid' ng-click='vm.copyRule(#=Id #)'></i><i role='button' class='rulesGidIcon intelicon-trash-solid' ng-click='vm.deleteRule(#= Id #)'></i></div>"
+                    width: "160px",
+                    template: "<div class='fl gridStatusMarker centerText #=RuleStage#' style='overflow: none !important' title='#if(RuleStage == true){#Approved#} else {#Pending Approval#}#'>{{ vm.stageOneChar(dataItem.RuleStage) }}</div>"
+                    + "<div class='rule'>"
+                    + "<i title='#if(IsAutomationIncluded == true){#Auto Approval#} else {#Exclusion from Automation#}#' class='rulesGidIcon {{ vm.stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>"
+                    + "<i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' ng-click='vm.editRule(#= Id #,false)'></i>"
+                    + "<i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' ng-click='vm.copyRule(#=Id #)'></i>"
+                    + "<i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' ng-click='vm.deleteRule(#= Id #)'></i>"
+                    + "<i ng-if='(vm.isElligibleForApproval && #= !IsActive # && #= IsAutomationIncluded # && #= RuleStage == false #)' role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' ng-click='vm.UpdateRuleIndicator(#= Id #, true,\"UPDATE_STAGE_IND\",true)'></i>"
+                    + "</div>",
+                    hidden: vm.toolKitHidden,
+                    attributes: {
+                        style: "padding-top: 5px"
+                    }
                 },
                 { field: "Id", title: "Id", width: "5%", hidden: true },
-                { field: "Name", title: "Name", width: "15%", filterable: { multi: true, search: true } },
-                { field: "IsActive", title: "IsActive", filterable: { multi: true, search: true } },
-                { field: "RuleStatus", title: "Status", filterable: { multi: true, search: true } },
-                { field: "StartDate", title: "Start Date", filterable: { multi: true, search: true } },
-                { field: "EndDate", title: "End Date", filterable: { multi: true, search: true } },
-                { field: "Notes", title: "Notes", filterable: { multi: true, search: true } },
-                { field: "ChangedBy", title: "Changed By", filterable: { multi: true, search: true } },
-                { field: "ChangeDateTime", title: "Change Date", filterable: { multi: true, search: true }, template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(ChangeDateTime)), 'M/d/yyyy hh:mm tt') #", },
+                {
+                    title: "Name",
+                    field: "Name",
+                    template: "<div ng-if='vm.toolKitHidden'> #= Name #</div><div ng-if='!vm.toolKitHidden'><a  class='ruleName' title='Click to Edit' ng-click='vm.editRule(dataItem)'><span>\\#</span><span>#= Id #</span>:&nbsp;<span>#= Name #</span></a></div>",
+                    width: "20%",
+                    filterable: { multi: true, search: true },
+                    encoded: true
+                },
+                {
+                    field: "RuleStageLabel",
+                    title: "Rule Stage",
+                    filterable: { multi: true, search: true },
+                    width: "1%",
+                    hidden: true,
+                    template: "<div style='#if(RuleStage == true){#color: green;#} else {#color: red;#}#'>#= RuleStageLabel #</div>"
+                },
+                {
+                    field: "RuleStatusLabel",
+                    title: "Rule Status",
+                    filterable: { multi: true, search: true },
+                    width: "7%",
+                    template: "<div style='#if(IsActive == true){#color: green;#} else {#color: red;#}#'>#= RuleStatusLabel #</div>"
+                    //template: "<toggle class='fl toggle-accept' on='Active' off='Inactive' size='btn-sm' onstyle='btn-success' offstyle='btn-danger' title='#if(IsActive == true){#Active#} else {#Inactive#}#' ng-model='dataItem.IsActive'>dataItem.IsActive</toggle>"
+                },
+                {
+                    field: "RuleAutomationLabel", title: "Automation", filterable: { multi: true, search: true }, hidden: true,
+                    template: "<span ng-if='#= IsAutomationIncluded #'><i class='intelicon-opportunity-target-approved' style=''></i></span><span ng-if='!#= IsAutomationIncluded #'>Excluded</span>"
+                },
+                {
+                    field: "StartDate",
+                    title: "Start Date",
+                    width: "7%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "EndDate",
+                    title: "End Date",
+                    width: "7%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "OwnerName",
+                    title: "Owner Name",
+                    template: "<div title='#=OwnerName#'>#=OwnerName#</div>",
+                    width: "8%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "ChangedBy",
+                    title: "Updated By",
+                    template: "<div title='#=ChangedBy# @#=ChangeDateTimeFormat#'>#=ChangedBy#<br><font style='font-size: 10px;'>#=ChangeDateTimeFormat#</font></div>",
+                    width: "8%",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "ChangeDateTime",
+                    title: "Updated Date",
+                    template: "<div title='#=ChangeDateTime#'>#=ChangeDateTime#</div>",
+                    width: "1%",
+                    hidden: true
+                },
+                {
+                    field: "Notes",
+                    title: "Notes",
+                    template: "<div title='#=Notes#'>#=Notes#</div>",
+                    width: "10%",
+                    filterable: { multi: true, search: false }
+                },
+                {
+                    field: "RuleDescription",
+                    title: "Rule Description",
+                    template: "<div class='btnHandle classToggle'>#=RuleDescription#</div>",
+                    width: "15%",
+                    filterable: { multi: true, search: false }
+                }
+
             ]
         };
 
-        vm.cancel = function () {
-            vm.isEditmode = false;
-            vm.rule = {};
-        }
-
-        vm.saveRule = function () {
-            $rootScope.$broadcast('save-criteria');
-            $timeout(function () {
-                var idx = vm.Rules.findIndex(x => x.Id == vm.rule.Id);
-                vm.Rules[idx] = vm.rule;
-                vm.isEditmode = false;
-                vm.rule = {};
-                logger.success("Save successful");
-            });
-        }
-
         vm.addNewRule = function () {
-            vm.isEditmode = true;
-            vm.rule = {};
+            //Call up Popup
+            vm.editRule(0, false);
         }
 
-        vm.sendEmail = function () {
-            alert('Todo: TADA!!')
+        //Export to Excel
+        vm.exportToExcel = function () {
+            gridUtils.dsToExcelPriceRule(vm.gridOptions, vm.gridOptions.dataSource, "Price Rule Export.xlsx", false);
+        }
+
+        $scope.getConstant();
+        if (window.usrRole == 'DA') {
+            $scope.init();
         }
     }
 })();

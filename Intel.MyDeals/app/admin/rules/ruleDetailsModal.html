@@ -1,0 +1,300 @@
+﻿<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+    <div class="modal-content" id="ruleModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
+        <div class="modal-header modalBlueBody">
+            <i id="btnClose" class="intelicon-close" ng-click="ok()" title="Close this window"></i>
+<!--            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>-->
+            <h3 id="modalTitle">Rule Details</h3>
+
+        </div>
+
+        <div id="RulesDetailsBodyDiv" class="modal-body">
+            <form id="mainForm" style="margin-top: 10px; max-height:100px" class="form-horizontal bigFont">
+
+                <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
+
+                <div class="col-md-11 notes">
+                    Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule
+                    Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion Rule'.  <span class="redbold">&nbsp;Important:</span> Changes made in this tool
+                    can potentially impact ALL deals moving through the My Deals application.  As a rule owner, you may be held liable for any rules that improperly
+                    route deals resulting in an inappropriate transaction.  <a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for My Deals help">
+                        &nbsp;Review training for additional details.
+                    </a><br /><br />
+                </div>
+
+                <div class="col-md-11 notes">
+                    <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
+                    <span class="redbold">hourly BATCH process</span>.   Each hour (HH:00)  all 'Active' Price Rules will be run against all 'Submitted' ECAP tender
+                    deals.  It is important to note that Price Rules do not run as deals are created but through the <span class="redbold">hourly BATCH process.</span><br /><br />
+                </div>
+
+                <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" ng-if="vm.rule.Id > 0">
+                    Last modified by <span style="color:#00AEEF">{{vm.rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{vm.rule.ChangeDateTimeFormat}} PST</span>
+                </div>
+                <div class="col-md-2" style="font-size: 12px; margin: 0; padding: 0; text-align: right; width:100%">
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-2" autocomplete="off">Name:</label>
+                    <div class="col-md-7">
+                        <input class="form-control md"
+                               type="text"
+                               ng-model="vm.rule.Name"
+                               style="width:100%">
+                    </div>
+                    <div class="col-md-2">
+                        <toggle class="fl toggle-accept" ng-disabled="(!(vm.isElligibleForApproval && vm.rule.IsAutomationIncluded && vm.rule.Id > 0))"
+                                ng-model="vm.rule.RuleStage"
+                                on="Approved"
+                                off="Pending Approval"
+                                onstyle="btn-success"
+                                offstyle="btn-danger"
+                                title="{{vm.rule.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.RuleStage,'UPDATE_STAGE_IND',((vm.isElligibleForApproval == true && vm.rule.IsAutomationIncluded == true) ? true : false))"></toggle>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-2">Owner:</label>
+                    <div class="col-md-2">
+                        <span style="line-height:35px;" title="{{vm.rule.OwnerId}}">{{vm.rule.OwnerName}}</span>
+                    </div>
+                    <label class="control-label col-md-2">Rule Status:</label>
+                    <span class="col-md-2" style="float: left;">
+                        <div>
+                            <toggle class="fl toggle-accept" ng-disabled="vm.rule.RuleStage == false"
+                                    ng-model="vm.rule.IsActive"
+                                    on="Active"
+                                    off="Inactive"
+                                    onstyle="btn-success"
+                                    offstyle="btn-danger"
+                                    title="{{vm.rule.IsActive === true ? 'Active' : 'Inactivate'}}" ng-click="vm.UpdateRuleIndicator(vm.rule.Id, vm.rule.IsActive,'UPDATE_ACTV_IND',true)"></toggle>
+                        </div>
+                    </span>
+
+                    <label class="control-label col-md-1" style="float: left;">Rule Type:</label>
+                    <span class="col-md-2" style="float: left;">
+                        <div>
+                            <toggle class="fl toggle-accept"
+                                    ng-model="vm.rule.IsAutomationIncluded"
+                                    on="Auto Approval"
+                                    ng-click="vm.toggleType(vm.rule.IsAutomationIncluded, true)"
+                                    off="Exclusion Rule"
+                                    onstyle="btn-success"
+                                    offstyle="btn-danger"
+                                    title="{{vm.rule.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
+                        </div>
+                    </span>
+
+
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="control-label isRequired col-md-2">Start Date:</label>
+                    <div class="col-md-2">
+                        <input kendo-date-picker
+                               placeholder="From date"
+                               k-ng-model="vm.rule.StartDate"
+                               style="width: 100%;" />
+                    </div>
+                    <label class="control-label isRequired col-md-2">End Date:</label>
+                    <div class="col-md-2">
+                        <input kendo-date-picker
+                               placeholder="To date"
+                               k-ng-model="vm.rule.EndDate"
+                               style="width: 100%;" />
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="control-label col-md-2">Notes:</label>
+                    <div class="col-md-9">
+                        <textarea type="textarea" rows="5" ng-model="vm.rule.Notes" style="width:100%"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-md-2">Criteria:</label>
+                    <div ng-if="vm.loadCriteria == true" class="col-md-9">
+                        <div rule-attribute-builder
+                             grid-id="'attributeGrid'"
+                             operator-settings="operatorSettings"
+                             attribute-settings="attributeSettings"
+                             criteria="vm.rule.Criteria"
+                             custom-settings="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row" ng-if="vm.rule.IsAutomationIncluded">
+                    <label class="control-label col-md-2">Blanket Discount:</label>
+                    <div class="col-md-6" id="blanket_section" style="margin-top: 4px;">
+                        <span>Requested ECAP must be no less than</span>
+                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountPercentage" ng-change="vm.EditBlanketDiscountPercentage()" decimals="0" format="'#'" min="0" max="70" style="width: 100px; font-size:11px;" />
+                        <span>%&nbsp;Or&nbsp;$</span>
+                        <input kendo-numeric-text-box ng-model="vm.BlanketDiscountDollor" ng-change="vm.EditBlanketDiscountDollor()" format="'n2'" min="0" style="width: 130px;font-size:11px;" />
+                        <span>off of CAP</span>
+                    </div>
+                </div>
+             
+                <div style="display:none;"><!--Dummy button to prevent events while press enter key in textbox--><button></button></div>
+                <div class="form-group row" id="productCriteria">
+                    <label class="control-label col-md-2">Product Criteria:</label>
+                    <div class="col-md-9">
+                        <kendo-spreadsheet id="spreadsheetProductCriteria" style="width: 602px; height: 300px; margin-right: 25px;  float:left;" k-options="spreadSheetOptions" k-scope-field="spreadsheet" k-sheets="sheets"></kendo-spreadsheet>
+                        <button ng-click="vm.validateProduct(true,false,false)" class="btn btn-primary" style="float: left;">Validate Products</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <div class="form-group row action_btns">
+                <div class="col-md-7">
+                    <button ng-click="vm.saveRule('SAVE_AS_DRAFT',false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
+                    <button ng-click="vm.saveRule('SUBMIT',true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
+                    <button ng-click="ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                    <button ng-click="vm.simulate()" class="btn btn-success" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" ng-disabled="vm.rule.Id == 0">Simulate</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+    <script type="text/javascript">
+        
+        //Initializing the Draggable function for the first time
+        $('.modal-dialog').draggable();
+        //Disabled it cause by default it will be disabled
+        $('.modal-dialog').draggable('enable'); // Was disable
+        //Draggable Toggle button for the User- Click to Enable.Disabled
+    //    $('#btnModalAnchordisable').click(function () {
+    //        $('.modal-dialog').draggable('disable');
+    //        if ($('#btnModalAnchordisable').attr('class').trim() === 'intelicon-locked-outlined') {
+    //            $('.modal-dialog').draggable('enable');
+    //            $('#btnModalAnchordisable').removeClass('intelicon-locked-outlined').addClass('intelicon-unlocked-outlined');
+    //            $('#btnModalAnchordisable').attr('title', 'Click me to Disable Dragging');
+    //        } else {
+    //            $('.modal-dialog').draggable('disable');
+    //            $('#btnModalAnchordisable').removeClass('intelicon-unlocked-outlined').addClass('intelicon-locked-outlined');
+    //            $('#btnModalAnchordisable').attr('title', 'Click me to Enable Dragging');
+    //        }
+
+    //});
+
+        $('#modal-window').on('show.bs.modal', function () {
+            $(this).find('.modal-body').css({
+                //'max-height': '80%'
+            });
+        });
+    </script>
+    <style>
+        .modal-footer {  
+            position: fixed;
+            bottom: -59px;
+            width: 100%;
+            background: #efefef;
+            height: 60px;
+            /* float: left; */
+            border: 1px solid #003c71;
+            margin-left: -2px;
+        }
+
+        .k-selectbox {
+            height: 10px;
+            margin-bottom: 10px;
+        }
+    .btn-success {
+        color: #000000;
+        background-color: #C4D600 !important;
+        border-color: #adbd00 !important;
+    }
+        
+    .btn-success[disabled] {
+        color: #b1babf;
+        background-color: #edeff0 !important;
+        border-color: #b1babf !important;
+    }
+
+    .notes {
+        font-size: 14px;
+        margin-left: 40px;
+        padding: 0;
+    }
+
+    .bluebold {
+        color: #0071c5;
+        font-weight: bold;
+    }
+
+    .redbold {
+        color: red;
+        font-weight: bold;
+    }
+        
+    .modal-dialog {
+        width: 90%;
+        margin-top: 100px; /* Put in because top bar was being hidden */
+    }
+
+    .fontSmall {
+        font-size: 12px !important;
+    }
+
+    .bigSmall {
+        font-size: 15px !important;
+    }
+
+    #modalTitle {
+        float: left;
+        margin-top: -15px;
+    }
+
+    .modal-body {
+        overflow: auto;
+        width: 100%;
+        height: 450px;
+        border-bottom: none;
+    }
+
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+
+    .modal-header {
+        padding: 25px;
+        border-bottom: 1px solid #e5e5e5;
+        min-height: 16.5px;
+    }
+
+    .modal {
+        z-index: 5 !important;
+    }
+
+    .modal-backdrop {
+        z-index: 3 !important;
+    }
+
+    /*#btnModalAnchordisable {
+        float: right;
+        margin-left: 94.5%;
+        background: transparent;
+        border: 1px solid #00aeef;
+        padding: 3px;
+        cursor: pointer;
+        font-size: 22px;
+        margin-top: -30px;
+        z-index: 999999999;
+        margin-right: 35px; 
+    }*/
+        
+    #btnClose {
+        float: right;
+        margin-top: -15px;
+        background: transparent;
+        padding: 3px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+</style>

@@ -131,8 +131,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <summary>
         /// Save a Tender contract
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="savePacket"></param>
+        /// <param name="custId"></param>
+        /// <param name="contractId"></param>
+        /// /// <param name="upperContractData"></param>
         /// <returns>MyDealsData</returns>
         public OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket upperContractData)
         {
@@ -144,7 +145,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpDataCollectorFlattenedDictList baseContract = SaveContract(upperContractData.Contract, savePacket);
 
-            int CNTRCT_ID = -100;
+            int updateContractId = -100;
             foreach (var item in baseContract)
             {
                 if (item.Key.ToString() == OpDataElementType.CNTRCT.ToString())
@@ -153,7 +154,7 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         if (itm.ContainsKey("DC_ID"))
                         {
-                            int.TryParse(itm[AttributeCodes.DC_ID].ToString(), out CNTRCT_ID);
+                            int.TryParse(itm[AttributeCodes.DC_ID].ToString(), out updateContractId);
                         }
                     }
                 }
@@ -163,19 +164,19 @@ namespace Intel.MyDeals.BusinessLogic
             SavePacket savePacketPS = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
             {
                 CustId = custId,
-                ContractId = CNTRCT_ID
+                ContractId = updateContractId
             });
 
             foreach (var ps in upperContractData.PricingStrategy)
             {
                 if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
                 {
-                    ps[AttributeCodes.DC_PARENT_ID.ToString()] = CNTRCT_ID;
+                    ps[AttributeCodes.DC_PARENT_ID.ToString()] = updateContractId;
                 }
 
                 if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
                 {
-                    ps[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + ps[AttributeCodes.TITLE.ToString()].ToString();
+                    ps[AttributeCodes.TITLE.ToString()] = updateContractId + ps[AttributeCodes.TITLE.ToString()].ToString();
                 }
             }
 
@@ -209,14 +210,14 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (pt.ContainsKey(AttributeCodes.TITLE.ToString()))
                 {
-                    pt[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + pt[AttributeCodes.TITLE.ToString()].ToString();
+                    pt[AttributeCodes.TITLE.ToString()] = updateContractId + pt[AttributeCodes.TITLE.ToString()].ToString();
                 }
             }
 
             SavePacket savePacketPT = new SavePacket(new ContractToken("ContractToken Created - SavePricingTable")
             {
                 CustId = custId,
-                ContractId = CNTRCT_ID
+                ContractId = updateContractId
             });
 
             OpDataCollectorFlattenedDictList PRC_TBL_DATA = _pricingTablesLib.SavePricingTable(upperContractData.PricingTable, savePacketPT);
@@ -224,6 +225,16 @@ namespace Intel.MyDeals.BusinessLogic
             baseContract.Add(OpDataElementType.PRC_ST, prcPsData[OpDataElementType.PRC_ST]);
             baseContract.Add(OpDataElementType.PRC_TBL, PRC_TBL_DATA[OpDataElementType.PRC_TBL]);
 
+            return baseContract;
+        }
+
+        public OpDataCollectorFlattenedDictList SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData)
+        {
+
+            OpDataCollectorFlattenedDictList baseContract = null;
+
+
+            int r = 100;
             return baseContract;
         }
 
@@ -858,10 +869,10 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
 
-        public bool PublishTenderDeals(int CONTRACT_SID)
+        public bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList)
         {
             OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            return opdc.PublishTenderDeals(CONTRACT_SID);
+            return opdc.PublishTenderDeals(CONTRACT_SID, excludeList);
         }
     }
 }

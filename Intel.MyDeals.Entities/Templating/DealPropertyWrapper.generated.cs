@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/14/2019 4:48:31 PM
+File Updated: 1/14/2020 1:26:45 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1513,6 +1513,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute EXCLUDE_AUTOMATION = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "EXCLUDE_AUTOMATION",
+			ATRB_DESC = "Exclude Automation from Price Rule",
+			ATRB_LBL = "Exclude Automation",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 90012,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute EXPIRE_FLG = new MyDealsAttribute()
 		{

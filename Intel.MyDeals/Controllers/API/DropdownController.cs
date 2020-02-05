@@ -36,6 +36,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetDictDropDown/{atrbCd}")]
+        public List<DictDropDown> GetDictDropDown(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDictDropDown(atrbCd)
+                , $"Unable to get Dropdowns for {atrbCd}"
+            );
+        }
+
+        [Authorize]
         [Route("GetDistinctDropdownCodes/{atrbCd}")]
         public IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd)
         {
@@ -203,7 +212,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <summary>
         /// Gets a list of deal groups given a dealId
         /// </summary>
-        /// <param name="id">A dealId</param>
+        /// <param name="dealId">A dealId</param>
         /// <returns>a list of deal groups</returns>
         [Authorize]
 		[Route("GetDealGroupDropdown/{dealId}")]

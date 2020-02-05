@@ -96,8 +96,8 @@ function objsetService($http, dataService, logger, $q, $location) {
     function createTenderContract(custId, contractId, data) {        
         return dataService.post(apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId, data);
     }
-    function publishTenderDeals(contractId) {
-        return dataService.post(apiBaseContractUrl + 'PublishTenderContract/' + contractId);
+    function publishTenderDeals(contractId, excludeList) {
+        return dataService.post(apiBaseContractUrl + 'PublishTenderContract/' + contractId, excludeList);
     }    
     function createContract(custId, contractId, ct) {
         return dataService.post(apiBaseContractUrl + 'SaveContract/' + custId + '/' + contractId, [ct]);

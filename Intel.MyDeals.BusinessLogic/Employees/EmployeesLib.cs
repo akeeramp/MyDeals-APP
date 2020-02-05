@@ -20,6 +20,11 @@ namespace Intel.MyDeals.BusinessLogic
             return DataCollections.GetUsrProfileRole().Where(e => e.USR_ACTV_IND).OrderBy(e => e.LST_NM).ToList();
         }
 
+        public List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode)
+        {
+            return DataCollections.GetUsrProfileRole().Where(e => strRoleCode.Contains(e.ROLE_NM)).Distinct(new DistinctItemComparerUsrProfileRole()).OrderBy(x=>x.NAME).ToList();
+        }
+
         public OpMsg SetOpUserToken(OpUserTokenParameters data)
         {
             new EmployeeDataLib().SetOpUserToken(data);
@@ -95,5 +100,20 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpMsg("Verticals have been saved");
         }
 
+    }
+
+    class DistinctItemComparerUsrProfileRole : IEqualityComparer<UsrProfileRole>
+    {
+        public bool Equals(UsrProfileRole x, UsrProfileRole y)
+        {
+            //return x.EMP_WWID == y.EMP_WWID && x.EMAIL_ADDR == y.EMAIL_ADDR;
+            return x.EMP_WWID == y.EMP_WWID;
+        }
+
+        public int GetHashCode(UsrProfileRole obj)
+        {
+            //return obj.EMP_WWID.GetHashCode() ^ obj.EMAIL_ADDR.GetHashCode();
+            return obj.EMP_WWID.GetHashCode();
+        }
     }
 }

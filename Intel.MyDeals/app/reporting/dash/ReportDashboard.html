@@ -1,0 +1,507 @@
+﻿<style>
+    .reportLink {
+        font-size:13px;
+    }
+    .filterInfo {
+        width: 450px;
+        background: rgba(0, 0, 0, 0.69);
+        border: 2px solid #8c8c8c;
+        position: fixed;
+        top: 100px;
+        height: 120px;
+        color: #fff;
+        padding: 5px;
+    }
+    .showMore {
+        padding: 3px;
+        background: #2196f3;
+        float: left;
+        margin-top: 10px;
+        cursor: pointer;
+        color: #FFF;
+    }
+    .tableHeader > thead:first-child > tr:first-child > th {
+        background: #FFFFFF;
+        border-right: 1px solid #f2f2f2;
+        border-bottom: 3px solid #2196F3;        
+    }
+    .tableHeader {
+        border: 1px solid #f2f2f2;
+    }
+    .ui-tooltip {
+        /* tooltip container box */
+        white-space: pre-line;
+    }
+
+    .ui-tooltip-content {
+        /* tooltip content */
+        white-space: pre-line;
+    }
+
+    .mainBodyStyle {
+        position: absolute;
+        top: 84px;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        overflow: scroll !important;
+    }
+</style>
+<div class="hold-transition skin-blue sidebar-mini">
+    <div id="reportScopeID" class="wrapper" >
+
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar" style="padding-top:0px">
+                <div class="row">
+                    <div class="col-xs-12 col-md-11 col-md-offset-0" style="width: 94.66667%;">
+                        <!-- Begin sidenav -->
+                        <div class="panel sidenav" ng-repeat="x in vm.getReportCatagory">                            
+                            <div class="panel-heading">{{x.CTGR_NM}}</div>
+                            <div class="panel-body">
+                                <div ng-repeat="s in vm.getReportSubCatagory | filter : x.CTGR_NM">
+                                    <h3>{{s.SUB_CTGR_NM}} </h3>
+                                    <ul>
+                                        <li class="reportLink" ng-repeat="d in vm.masterData['ReportName'] | filter : s.SUB_CTGR_NM">
+                                            <a target="_blank" href="{{d.RPT_URL}}"><i class="fa fa-circle-o text-agreen" style=""></i> {{d.RPT_UNIQ_NM}} </a>
+                                        </li>
+                                    </ul>
+                                </div>                               
+                            </div>                            
+                        </div>
+                        <!-- End sidenav -->
+                    </div>
+                </div>
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Dashboard
+                    <small>Version 1.0</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Report</a></li>
+                    <li class="active">Dashboard</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <!-- Info boxes -->
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="intelicon-gauge" style="font-size:80px"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Deals</span>
+                                <br />
+                                <span kendo-tooltip k-options="vm.toolTipOptions" class="info-box-number" title="{{::vm.dealCountTooltip}}">{{vm.totalDealCount | number : fractionSize}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-red"><i class="intelicon-package" style="font-size: 70px; line-height: 1.3;"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Product Used</span>
+                                <br />
+                                <span class="info-box-number">{{::vm.productUsed}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- fix for small devices only -->
+                    <div class="clearfix visible-sm-block"></div>
+
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><i class="intelicon-user-account-outlined" style="font-size:70px; line-height: 1.3;"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Customer Serviced</span>
+                                <br />
+                                <span class="info-box-number">{{::vm.cutomerServiced}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-yellow"><i class="intelicon-time-lapse-solid" style="font-size:70px; line-height: 1.3;"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Reporting Time </span>
+                                <small style="font-size: 10px;">Captured in Seconds</small>
+                                <span class="info-box-number">{{::vm.masterData["ReportSummary"][0].SUM_AMOUNT}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row" ng-show="vm.isRecordAvailable">
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Report Usage Dashboard</h3>
+                                <div class="box-tools pull-right">
+                                    <!--<button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>-->                                    
+                                    <!--<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-8">                                        
+                                        <div class="chart">
+                                            <!-- Report Chart Canvas -->
+                                            <div id="chart" style="height:300px" ></div>
+                                        </div>
+                                        <!-- /.chart-responsive -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-4">                                        
+                                        <div class="progress-group" ng-repeat="x in vm.masterData['ReportDashboardData'] | limitTo : 5">
+                                            <span class="progress-text">{{x.RPT_NM}}</span>
+                                            <span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
+
+                                            <div class="progress sm">
+                                                <div class='progress-bar progress-bar {{x.COLOR_CD}}' style="width: {{x.TOTAL_TIME*100/x.TOTAL_REPORT_TIME | number : 2}}%"></div>
+                                            </div>
+                                        </div>                                        
+                                        <!-- /.progress-group -->
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- ./box-body -->
+                            
+                            <!-- /.box-footer -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- Main row -->
+                <div class="row" ng-show="vm.isRecordAvailable">
+                    <!-- Left col -->
+                    <div class="col-md-8">
+                        <!-- MAP & BOX PANE -->
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Report Usage Log Chart</h3>
+
+                                <div class="box-tools pull-right">
+                                    <!--<button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>-->
+                                    <!--<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-8">
+                                        <div class="pad">
+                                            <!-- Report will be created here -->
+                                            <div id="chartPie" style="height:342px"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-8">
+                                        <div class="pad">
+                                            <!-- Map will be created here -->
+                                            <div id="chartPiee" style="height:342px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.col -->
+                                    
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                        
+                        <!-- /.row -->
+
+                    </div>
+                    <!-- /.col -->
+
+                    <div class="col-md-4">
+                        <div class="info-box bg-{{x.COLOR}}" ng-repeat="x in vm.masterData['ReportDealType'] | limitTo : 4">
+                            <span class="info-box-icon"><i class="fa fa-circle-o text-white" style=""></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{x.DEAL_TYPE}}</span>
+                                <span class="info-box-number">{{x.Deal_Count | number : fractionSize}}</span>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: {{(x.Deal_Count*100/vm.totalDealCount) | number : 2}}%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    Total Number of Deals - {{vm.totalDealCount | number : fractionSize}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="row" ng-show="vm.isRecordAvailable">
+                    <div class="col-md-12">
+                        <div class="box box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Report(s) Log</h3>
+                                <label class="switch" title='Excluded/Included by USER'>
+                                    <input type="checkbox" ng-click="vm.filterData(vm.reportLogView)" ng-model='vm.reportLogView' title='Click to see Summarized view' checked>
+                                    <span class="slider" title='Click to see Summarized view'><p class={{vm.reportLogView}}></p></span>
+                                </label>
+                                <div class="box-tools pull-right">
+                                    <!--<button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>-->
+                                    <!--<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive" style="height:430px">
+                                    <table class="table no-margin ReportAuditLog tableHeader" ng-if="vm.reportLogView == false">
+                                        <thead>
+                                            <tr>
+                                                <th>Report Name</th>
+                                                <th title="Number of times">Count</th>
+                                                <th title="Total Time Spend">Total Time</th>
+                                                <th title="Average Time Spend">Average</th>
+                                                <th title="Maximum Time Spend">Max Time</th>
+                                                <th title="Minimum Time Spend">Min Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in vm.masterData['ReportDashboardData'] | limitTo : vm.numberOfRecrods ">
+                                                <td>{{x.RPT_NM}}</td>
+                                                <td>{{x.RPT_COUNT}}</td>
+                                                <td>{{x.TOTAL_TIME}}</td>
+                                                <td>{{x.AVG_TIME}}</td>
+                                                <td>{{x.MAX_TIME}}</td>
+                                                <td>{{x.MIN_TIME}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table no-margin ReportAuditLog tableHeader" ng-if="vm.reportLogView == true">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:2px"> </th>
+                                                <th>Report Name</th>
+                                                <th title="Start Time">Start Time</th>
+                                                <th title="End Time">End Time</th>
+                                                <th title="Time Taken">Time Taken</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in vm.masterData['ReportLogDeatils'] | limitTo : vm.numberOfRecrods ">
+                                                <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? 'Check Filter before running the Report' : ''}}"><i ng-if="x.TOTAL_REPORT_TIME_TAKEN > 60" class="intelicon-information-outlined red" ng-class="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
+                                                <td>Deal Management {{x.RPT_ALS_NM}}</td>
+                                                <td>{{x.START_TIME}}</td>
+                                                <td>{{x.END_TIME}}</td>
+                                                <td >{{x.TOTAL_REPORT_TIME_TAKEN}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a ng-if="vm.masterData['ReportLogDeatils'].length > 10 && vm.reportLogView == true" ng-click="showAll(vm.numberOfRecrods)" 
+                                       class="showMore" title={{vm.btnText}} >
+                                        {{vm.btnText}} 
+                                        <i ng-if="vm.btnText == 'Show more '" class="intelicon-down"></i> 
+                                        <i ng-if="vm.btnText == 'Show less '" class="intelicon-up"></i>
+                                    </a>  
+                                    <div class="filterInfo" style="display:none">
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                <table class="table no-margin ReportAuditLog tableHeader">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Filter Name </th>
+                                                            <th>Value</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="x in vm.filterResult ">
+                                                            <td>{{x}}</td>
+                                                            <td>Deal Management {{x}}</td>                                                            
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <i class="intelicon-close-solid" style="cursor: pointer;float: right;font-size: 20px;"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                     </div>
+                </div>
+                 
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->        
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+
+    </div>
+    <!-- ./wrapper -->
+</div>
+<script>
+    function createChart(data, reportBar, dataTotalCount) {
+        
+        $("#chartPiee").kendoChart({
+            title: {
+                position: "bottom",
+                text: "Report Usage by Count"
+            },
+            legend: {
+                visible: false
+            },
+            chartArea: {
+                background: ""
+            },
+            seriesDefaults: {
+                type: "pie",
+                startAngle: 150
+            },
+            series: [{
+                name: "",
+                data: dataTotalCount,                
+                labels: {
+                    visible: false,
+                    background: "transparent",
+                    position: "outsideEnd",
+                    template: "#= category #: \n #= value#%"
+                }
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category # : #= value #%"
+            }
+        });
+        $("#chartPie").kendoChart({
+            title: {
+                position: "bottom",
+                text: "Report Usage by Total Time"
+            },
+            legend: {
+                visible: false
+            },
+            chartArea: {
+                background: ""
+            },
+            seriesDefaults: {
+                type: "pie",
+                startAngle: 150
+            },
+            series: [{
+                name: "",
+                data: reportBar,
+                labels: {
+                    visible: false,
+                    background: "transparent",
+                    position: "outsideEnd",
+                    template: "#= category #: \n #= value#%"
+                }
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category # : #= value #%"
+            }
+        });
+        $("#chart").kendoChart({
+            title: {
+                text: "Report Usage Time Log"
+            },
+            legend: {
+                position: "bottom"
+            },
+            chartArea: {
+                background: ""
+            },
+            seriesDefaults: {
+                type: "line",
+                style: "smooth"
+            },
+            series: data,
+            valueAxis: {
+                labels: {
+                    format: "{0}%"
+                },
+                line: {
+                    visible: false
+                },
+                axisCrossingValue: -10
+            },
+            categoryAxis: {
+                categories: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+                majorGridLines: {
+                    visible: false
+                },
+                labels: {
+                    rotation: "auto"
+                }
+            },
+            tooltip: {
+                visible: true,
+                format: "{0}%",
+                template: "#= series.name #: #= value # (seconds)"
+            }
+        });
+
+
+    }
+
+    $(document).ready(createChart);
+    $(document).bind("kendo:skinChange", createChart);
+</script>
+
+

@@ -40,6 +40,7 @@
     string superPrefix = "";
     List<string> extraUserPrivsDetail = new List<string>();
     bool isDeveloper = opUserToken.IsDeveloper();
+    bool isReportingUser = opUserToken.IsReportingUser();
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
     bool isCustomerAdmin = opUserToken.IsCustomerAdmin();
@@ -87,13 +88,13 @@
                     </div>
                 </td>
                 <td style="vertical-align: top">
-                    <div style="text-align: center;" class="navbar-collapse collapse">
+                    <div style="text-align: left;" class="navbar-collapse collapse">
                         <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
-                            Optimized For Google Chrome <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
+                            Google Chrome Required <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
                             @if (env != "PROD")
-                                {               
-                                    <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>
-                                }
+                            {
+                                <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>
+                            }
                         </div>
                     </div>
                 </td>
@@ -227,7 +228,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
@@ -280,12 +281,13 @@
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
 
-                    @if (usrRole == "DA" || isDeveloper)
+                    @if (usrRole == "DA" || usrRole == "GA" || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Rules Management</a>
                             <ul class="dropdown-menu">
-                                <li><a href="Admin#/rules">Price Rules</a></li>
+                                <li><a href="Admin#/rules/">Price Rules</a></li>
+                                <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
                             </ul>
                         </li>
                     }
@@ -306,9 +308,19 @@
                 <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
             </li>
             <li>
-                <a href="/Help?topic=intro" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
+                <a href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
             </li>
-
+            @if (isReportingUser)
+            {
+                <li class="dropdown">
+                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
+                        <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i class="intelicon-down"></i>
+                    </a>
+                    <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="/reporting#/dashboard">Report Dashboard</a></li>
+                    </ul>
+                </li>
+            }
             @Html.Partial("_Search")
         </ul>
     </div>

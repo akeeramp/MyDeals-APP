@@ -6,6 +6,7 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IEmployeesLib
     {
         List<UsrProfileRole> GetUsrProfileRole();
+        List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode);
 
     }
 }

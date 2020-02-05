@@ -47,6 +47,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetDropdowns();
         }
 
+        public List<DictDropDown> GetDictDropDown(string atrbCd)
+        {
+            return _dataCollectionsDataLib.GetDictDropDown(atrbCd);
+        }
+
         /// <summary>
         /// Get All Simple Dropdowns with grouping of atrbCd
         /// </summary>
