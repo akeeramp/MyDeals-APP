@@ -230,7 +230,6 @@
     <Folder Include="app\admin\services\" />
     <Folder Include="app\dealManager\" />
     <Folder Include="app\errorHandling\" />
-    <Folder Include="app\reporting\" />
     <Folder Include="App_Data\" />
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
@@ -270,6 +269,7 @@
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\QuoteLetterController.cs" />
+    <Compile Include="Controllers\API\ReportingController.cs" />
     <Compile Include="Controllers\API\RulesController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\GeosController.cs" />
@@ -295,6 +295,7 @@
     <Compile Include="Controllers\ConstantsController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\PingController.cs" />
+    <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\TenderManagerController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CostTestController.cs" />
@@ -630,6 +631,11 @@
     <Content Include="app\dashboard\views\copyCntrctDlg.html" />
     <Content Include="app\admin\dataQuality\admin.dataQuality.controller.js" />
     <Content Include="app\dashboard\widgets\recents.html" />
+    <Content Include="app\reporting\dash\ReportDashboard.html" />
+    <Content Include="app\reporting\dash\reporting.dashboard.controller.js" />
+    <Content Include="app\reporting\reporting.module.js" />
+    <Content Include="app\reporting\reporting.route.js" />
+    <Content Include="app\reporting\reporting.service.js" />
     <Content Include="app\shared\services\performanceTestingService.service.js" />
     <Content Include="app\shared\_requestVerificationToken.js" />
     <Content Include="app\shared\services\productSelector.service.js" />
@@ -1300,6 +1306,7 @@
     <Content Include="css\_dashboard.css" />
     <Content Include="css\_dealUtil.css" />
     <Content Include="css\_pocDataFlow.css" />
+    <Content Include="css\_report.css" />
     <Content Include="css\_search.css" />
     <Content Include="css\_secEngine.css" />
     <Content Include="egg\dd\blob.js" />

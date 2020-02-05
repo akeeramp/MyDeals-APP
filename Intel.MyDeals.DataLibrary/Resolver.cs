@@ -40,6 +40,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<INotificationsDataLib, NotificationsDataLib>();
             registerService.RegisterType<IDataQualityDataLib, DataQualityDataLib>();
             registerService.RegisterType<IMyDealsManualDataLib, MyDealsManualDataLib>();
+            registerService.RegisterType<IReportingDataLib, ReportingDataLib>();
         }
     }
 }

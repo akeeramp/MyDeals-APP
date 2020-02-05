@@ -1,4 +1,9 @@
 using Intel.Opaque;
+using System.DirectoryServices;
+using System;
+using System.DirectoryServices.AccountManagement;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals.Entities
 {
@@ -8,7 +13,7 @@ namespace Intel.MyDeals.Entities
         {
             if (obj is bool)
             {
-                return (bool) obj;
+                return (bool)obj;
             }
             return false;
         }
@@ -32,9 +37,9 @@ namespace Intel.MyDeals.Entities
 
         public static bool IsRealSA(this OpUserToken opUserToken)
         {
-            return opUserToken != null && 
+            return opUserToken != null &&
                 opUserToken.Role.RoleTypeCd == "SA" && // And is an SA user
-                opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_CUSTOMERADMIN) && 
+                opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_CUSTOMERADMIN) &&
                 !ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_CUSTOMERADMIN] ?? false); // And is not Customer Admin, else neuter the SA
         }
 
@@ -43,5 +48,40 @@ namespace Intel.MyDeals.Entities
             return opUserToken.Usr.WWID <= 0;
         }
 
+        //TODO: Saurav will Cache this in MT and remove user.GetGroups() call everytime..
+        public static bool IsReportingUser(this OpUserToken opUserToken)
+        {
+            string userName = opUserToken.Usr.Idsid;
+            UserPrincipal user = null;
+            bool isReportingUser = false;
+            try
+            {
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "corpad.intel.com");
+                {
+                    if ((user = UserPrincipal.FindByIdentity(ctx, userName)) != null)
+                    {
+                        PrincipalSearchResult<Principal> groups = user.GetGroups(); //TODO: Need to Cached into MT
+                        string agsRoleName1 = "Cognos BI_NextGen_DealMgmt_DealMgmt_Report_User";
+                        string agsRoleName2 = "Cognos BI_IDMS_NextGen_";
+                        List<string> myList = new List<string>();
+                        var results = groups.ToList().Where(s => s.Name.ToString().Contains(agsRoleName1) || s.Name.ToString().Contains(agsRoleName2)).Select(s => s).ToList();
+                        if (results.Any())
+                        {
+                            isReportingUser = true;
+                        }
+                    }
+                    else
+                    {
+                        isReportingUser = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                isReportingUser = true;
+            }
+
+            return isReportingUser;
+        }
     }
 }

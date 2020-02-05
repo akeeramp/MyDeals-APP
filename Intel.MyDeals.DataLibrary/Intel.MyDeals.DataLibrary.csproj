@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountDataLib.cs" />
+    <Compile Include="Admins\ApprovalRules.cs" />
     <Compile Include="Admins\ConstantsAdminDataLib.cs" />
     <Compile Include="Admins\MarketOpsAdminDataLib.cs" />
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="QuoteLetter\QuoteLetter.designer.cs">
       <DependentUpon>QuoteLetter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporting\ReportingDataLib.cs" />
     <Compile Include="UserPreferences\UserPreferencesDataLib.cs" />
     <Compile Include="RetailPull\RetailPullDataLib.cs" />
     <Compile Include="Files\FilesDataLib.cs" />

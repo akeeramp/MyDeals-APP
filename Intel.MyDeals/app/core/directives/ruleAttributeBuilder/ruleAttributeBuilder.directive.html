@@ -1,13 +1,10 @@
 ﻿<div class="filterContainer">
     <div ng-repeat="dataItem in data" class="filterRow">
-
         <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
-
-        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!tenderAttributeBuilder || !$first"><i class="intelicon-minus-max"></i></span>
-
+        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
         <span class="fl " ng-class="{'disabled-dropdown':$first}">
             <select kendo-drop-down-list
-                    ng-disabled="tenderAttributeBuilder && $first"
+                    ng-disabled="$first"
                     k-placeholder="'Select field'"
                     k-data-text-field="'title'"
                     k-data-value-field="'field'"
@@ -21,10 +18,9 @@
                     class="opUiContainer sm abField"
                     style="width: 200px;"></select>
         </span>
-
         <span class="fl abOperator" ng-class="{'disabled-dropdown':$first}" ng-hide="dataItem.field === ''">
             <select kendo-drop-down-list
-                    ng-disabled="tenderAttributeBuilder && $first"
+                    ng-disabled="$first"
                     k-data-text-field="'label'"
                     k-data-value-field="'operator'"
                     k-ng-model="dataItem.operator"
@@ -35,9 +31,7 @@
                     class="opUiContainer sm"
                     style="width: 150px; margin: 0 15px;"></select>
         </span>
-
         <span class="fl abValue" ng-hide="dataItem.operator === ''"></span>
-
         <div class="clearboth"></div>
     </div>
 
@@ -55,7 +49,7 @@
 	#ruleDropDownList_listbox{min-width:165px !important}
 	.k-animation-container UL{min-width:165px !important}
     .filterContainer {
-        height: 250px;
+        max-height: 250px;
         overflow: auto;
     }
      .filterRow {

@@ -282,12 +282,9 @@
                                     "Draft",
                                     "Requested",
                                     "Submitted",
-                                    "Pending",
-                                    "Approved",
                                     "Won",
                                     "Offer",
                                     "Lost",
-                                    "Active",
                                     "Cancelled"
                                 ]
                             },
@@ -302,12 +299,9 @@
                     { Value: "Draft" },
                     { Value: "Requested" },
                     { Value: "Submitted" },
-                    { Value: "Pending" },
-                    { Value: "Approved" },
                     { Value: "Won" },
                     { Value: "Offer" },
                     { Value: "Lost" },
-                    { Value: "Active" },
                     { Value: "Cancelled" }
                 ]
 

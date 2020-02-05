@@ -4,7 +4,7 @@
 <html ng-app="app" ng-strict-di>
 
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My Deals</title>
@@ -14,13 +14,22 @@
 
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/MyDeals/scripts")
-    
+    <style>
+        .mainBodyStyle {
+            position: absolute;
+            top: 84px;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            overflow: hidden !important;
+        }
+    </style>
 </head>
 
 <body @Html.RequestVerificationToken()>
     @Html.Partial("_Header")
     <div id="modals"></div>
-    <div id="bodyContent" style="position: absolute; top: 84px; bottom: 15px; left: 0; right: 0; overflow: hidden !important;">
+    <div id="bodyContent" class="mainBodyStyle" style="">
         @RenderBody()
     </div>
     @Html.Partial("_Footer")
@@ -32,15 +41,13 @@
     @Scripts.Render("~/bundles/angularModules")
 
     <script>
-    kendo.spreadsheet.defineFunction("iserror", function (value) { 
-        return value;
-    }).args([
-        ["value", "anyvalue"]
-    ]);
+        kendo.spreadsheet.defineFunction("iserror", function (value) {
+            return value;
+        }).args([
+            ["value", "anyvalue"]
+        ]);
 
     </script>
 </body>
 
 </html>
-
-
