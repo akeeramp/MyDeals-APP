@@ -167,7 +167,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
-                new MyOpRule
+                new MyOpRule 
                 {
                     Title="End Vol must be greater than start vol",
                     ActionRule = MyDcActions.CompareStartEndVol,
