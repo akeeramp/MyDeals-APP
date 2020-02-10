@@ -416,6 +416,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "RulesSimulationResults";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Vistex Customer Mapping
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_VISTEX_CUST_MAP]");
+	ds.Tables[0].TableName = "VistexCustomerMapping";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

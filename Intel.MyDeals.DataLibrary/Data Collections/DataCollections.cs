@@ -475,6 +475,21 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<CustomerDivision> _getCustomerDivisions;
 
+        public static List<VistexCustomerMapping> GetVistexCustomerMappings()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if(_getVistexCustomerMappings == null || _getVistexCustomerMappings.Count == 0)
+                {
+                    _getVistexCustomerMappings = new VistexCustomerMappingDataLib().GetVistexCustomerMappings();
+                }
+
+                return _getVistexCustomerMappings;
+            }
+        }
+
+        private static List<VistexCustomerMapping> _getVistexCustomerMappings;
+
         public static MyCustomerDetailsWrapper GetMyCustomers()
         {
             lock (LOCK_OBJECT ?? new object())

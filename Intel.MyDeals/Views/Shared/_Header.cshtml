@@ -212,7 +212,14 @@
                     }
                     @if (isRealSA || isDeveloper)
                     {
-                        <li><a href="Admin#/customers">Customer</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Customer</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/customers">Customer</a></li>
+                                <li><a href="Admin#/vistexcustomermapping">Vistex Customer Mapping</a></li>
+                            </ul>
+                            
+                        </li>
                         <li><a href="Admin#/geo">Geo</a></li>
                         <li><a href="Admin#/funfact">Fun Facts</a></li>
                     }

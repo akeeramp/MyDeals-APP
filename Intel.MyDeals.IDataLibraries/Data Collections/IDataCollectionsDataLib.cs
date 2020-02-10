@@ -23,6 +23,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<CustomerDivision> GetCustomerDivisions();
 
+        List<VistexCustomerMapping> GetVistexCustomerMappings();
+
         List<GeoDimension> GetGeoData();
 
         UiTemplates GetUiTemplates();

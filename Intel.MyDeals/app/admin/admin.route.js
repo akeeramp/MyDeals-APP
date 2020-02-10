@@ -315,7 +315,17 @@
                     templateUrl: 'app/admin/mydealssupport/mydealssupport.html'
                     , url: 'MyDealsSupport'
                 }
+            },
+            {
+                state: 'admin.vistexcustomermapping',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistexcustomermapping/vistexcustomermapping.html'
+                    , url: 'vistexcustomermapping'
+                    , controller: 'VistexcustomermappingController as vm'
+                }
             }
+
         ];
     }
 })();

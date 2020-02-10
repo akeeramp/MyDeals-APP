@@ -252,6 +252,7 @@
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
     <Compile Include="Controllers\API\ReportingController.cs" />
+    <Compile Include="Controllers\API\VistexCustomerMappingController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
@@ -408,6 +409,9 @@
     <Content Include="app\admin\funfact\admin.funfact.controller.js" />
     <Content Include="app\admin\funfact\funfact.html" />
     <Content Include="app\admin\funfact\funfact.service.js" />
+    <Content Include="app\admin\vistexcustomermapping\admin.vistexcustomermapping.controller.js" />
+    <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.html" />
+    <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.service.js" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />

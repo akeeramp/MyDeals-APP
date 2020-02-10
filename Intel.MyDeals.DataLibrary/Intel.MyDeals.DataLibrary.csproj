@@ -145,6 +145,7 @@
     <Compile Include="Timeline\TimelineDataLib.cs" />
     <Compile Include="UI Templates\UiTemplateDataLib.cs" />
     <Compile Include="Funfact\FunfactDataLib.cs" />
+    <Compile Include="VistexCustomerMapping\VistexCustomerMappingDataLib.cs" />
     <Compile Include="WorkFlow\WorkFlowDataLib.cs" />
     <Compile Include="_data\PricingTableData.cs" />
   </ItemGroup>

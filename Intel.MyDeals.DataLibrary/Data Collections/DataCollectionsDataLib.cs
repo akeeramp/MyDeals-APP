@@ -102,6 +102,10 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetCustomerDivisions();
         }
 
+        public List<VistexCustomerMapping> GetVistexCustomerMappings()
+        {
+            return DataCollections.GetVistexCustomerMappings();
+        }
         public List<UsrProfileRole> GetUsrProfileRole()
         {
             return DataCollections.GetUsrProfileRole();
