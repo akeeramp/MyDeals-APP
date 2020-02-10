@@ -175,7 +175,6 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
-<<<<<<< Intel.MyDeals.BusinessRules/MyDcRules/BasicValidationRules.cs
                 new MyOpRule 
                 { 
                     Title="Tier Numbers must match Tier Level", 
@@ -184,10 +183,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() }, 
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate } 
                 }, 
-                new MyOpRule 
-=======
                 new MyOpRule
->>>>>>> Intel.MyDeals.BusinessRules/MyDcRules/BasicValidationRules.cs
                 {
                     Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
                     ActionRule = MyDcActions.ClearSysComments,
