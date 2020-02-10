@@ -120,8 +120,7 @@ namespace Intel.MyDeals.DataLibrary
                     DateTime startTime = DateTime.Now;
                     new CostTestDataLib().RollupResults(new List<int> { contractToken.ContractId });
                     contractToken.AddMark("RollupResults - PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP", TimeFlowMedia.DB, (DateTime.Now - startTime).TotalMilliseconds);
-                }
-                else if (contractToken.ContractId == -1 && contractToken.ContractIdList != null && contractToken.ContractIdList.Any())    // -1 is a trigger for tender multiple contract saves - the contractToken will only have a ContractIdList defined as the full list of contract ids if we are coming from the tenders dashboard
+                } else if (contractToken.ContractId == -1 && contractToken.ContractIdList != null && contractToken.ContractIdList.Any())    // -1 is a trigger for tender multiple contract saves - the contractToken will only have a ContractIdList defined as the full list of contract ids if we are coming from the tenders dashboard
                 {
                     DateTime startTime = DateTime.Now;
                     new CostTestDataLib().RollupResults(contractToken.ContractIdList);
@@ -295,7 +294,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return ret;
             }
-            
+
             DateTime start = DateTime.Now;
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_MNG_WIP_ACTNS
             {
