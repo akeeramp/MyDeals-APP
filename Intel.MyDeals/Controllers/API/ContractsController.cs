@@ -305,7 +305,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("PublishTenderContract/{OBJ_SID}")]
+        [Route("PublishTenderContract/{objSid}")]
         [HttpPost]
         [AntiForgeryValidate]
         public bool PublishTenderContract(int objSid, List<int> excludeList)
