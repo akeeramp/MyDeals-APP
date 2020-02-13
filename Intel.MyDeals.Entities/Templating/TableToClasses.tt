@@ -374,6 +374,25 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "DataQualityUsecase";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Reference Manual Index
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_REF_NAVIGATION @ref_type='UserManual', @actv_only=0");
+	ds.Tables[0].TableName = "RefManualsNavItem";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//Reference Manual Page
+	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_id=1");
+	ds.Tables[0].TableName = "RefManualsPage";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//Rules
+	ds = dbobjects.ExecuteDataSet("PR_MYDL_GET_DICT_DROPDOWNS @atrb_cd = 'OP_CD'");
+	ds.Tables[0].TableName = "DictDropDown";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds = dbobjects.ExecuteDataSet("DECLARE @RULES_IDS AS [dbo].[type_int_list]; INSERT INTO @RULES_IDS VALUES (82); exec PR_MYDL_EXEC_APRV_RULES @in_aprv_mode = 0, @in_rule_ids = @RULES_IDS");
+	ds.Tables[0].TableName = "RulesSimulationResults";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	//Data Quality Usecase
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_RPT_DSBD @CRE_EMP_IDSID='sauravku'");
 	ds.Tables[0].TableName = "ReportDashboardData";

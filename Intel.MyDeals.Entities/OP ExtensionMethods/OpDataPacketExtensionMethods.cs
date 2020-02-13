@@ -45,12 +45,12 @@ namespace Intel.MyDeals.Entities
             if (packet.PacketType != OpDataElementType.WIP_DEAL) return;
             if (dealIds == null) dealIds = new List<int>();
 
-            // Ensure that IN_REDEAL flag is set from DB balue if UI drops it's value (which happens in multi-screen concurrency situations)
-            //List<OpDataElement> inRedealAtrbsCheck = packet.AllDataElements.Where(d => d.AtrbCd == AttributeCodes.IN_REDEAL).ToList();
-            foreach (OpDataElement de in packet.AllDataElements.Where(d => d.AtrbCd == AttributeCodes.IN_REDEAL).ToList())
-            {
-                if (de.AtrbValue.ToString() == "") de.AtrbValue = de.PrevAtrbValue;
-            }
+            //// Ensure that IN_REDEAL flag is set from DB balue if UI drops it's value (which happens in multi-screen concurrency situations)
+            ////List<OpDataElement> inRedealAtrbsCheck = packet.AllDataElements.Where(d => d.AtrbCd == AttributeCodes.IN_REDEAL).ToList();
+            //foreach (OpDataElement de in packet.AllDataElements.Where(d => d.AtrbCd == AttributeCodes.IN_REDEAL).ToList())
+            //{
+            //    if (de.AtrbValue.ToString() == "") de.AtrbValue = de.PrevAtrbValue;
+            //}
 
             OpDataPacket<OpDataElementType> testPacket = fullPacket ?? packet;
             List<int> majorDealIds = testPacket.AllDataElements

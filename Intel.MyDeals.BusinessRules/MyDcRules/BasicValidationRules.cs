@@ -167,7 +167,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
-                new MyOpRule
+                new MyOpRule 
                 {
                     Title="End Vol must be greater than start vol",
                     ActionRule = MyDcActions.CompareStartEndVol,
@@ -175,14 +175,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
-                new MyOpRule
-                {
-                    Title="Tier Numbers must match Tier Level",
-                    ActionRule = MyDcActions.ValidateTierNumber,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-                },
+                new MyOpRule 
+                { 
+                    Title="Tier Numbers must match Tier Level", 
+                    ActionRule = MyDcActions.ValidateTierNumber, 
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }, 
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() }, 
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate } 
+                }, 
                 new MyOpRule
                 {
                     Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages

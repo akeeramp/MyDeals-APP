@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Intel.MyDeals.Entities
-{    
+{
     public static class OpUserTokenExtensionMethods
     {
         private static bool ObjToBool(object obj)
@@ -17,7 +17,7 @@ namespace Intel.MyDeals.Entities
             }
             return false;
         }
-        
+
         public static bool IsSuper(this OpUserToken opUserToken)
         {
             return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_SUPER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] ?? false);
@@ -37,9 +37,9 @@ namespace Intel.MyDeals.Entities
 
         public static bool IsRealSA(this OpUserToken opUserToken)
         {
-            return opUserToken != null && 
+            return opUserToken != null &&
                 opUserToken.Role.RoleTypeCd == "SA" && // And is an SA user
-                opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_CUSTOMERADMIN) && 
+                opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_CUSTOMERADMIN) &&
                 !ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_CUSTOMERADMIN] ?? false); // And is not Customer Admin, else neuter the SA
         }
 
@@ -76,11 +76,11 @@ namespace Intel.MyDeals.Entities
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 isReportingUser = true;
             }
-                 
+
             return isReportingUser;
         }
     }
