@@ -4,23 +4,16 @@
         .module('app.admin')
         .controller('VistexcustomermappingController', VistexcustomermappingController)
         .run(SetRequestVerificationToken);
-
     SetRequestVerificationToken.$inject = ['$http'];
-    VistexcustomermappingController.$inject['vistexcustomermappingService', '$scope', 'logger', 'gridConstants']
+  
+    VistexcustomermappingController.$inject = ['vistexcustomermappingService', '$scope', 'logger', 'gridConstants']
 
     function VistexcustomermappingController(vistexcustomermappingService, $scope, logger, gridConstants) {
 
         var vm = this;
-
-        // Functions
-        //vm.addItem = addItem;
-        //vm.updateItem = updateItem;
-        //vm.deleteItem = deleteItem
-        vm.onChange = onChange;
-
+        
         // Variables
         vm.selectedItem = null;
-        vm.isButtonDisabled = true;
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -33,13 +26,22 @@
                             logger.error("Unable to get Customers.", response, response.statusText);
                         });
                 },
+                update: function (e) {
+                    vistexcustomermappingService.UpdateVistexCustomer(e.data)
+                        .then(function (response) {
+                            e.success(response.data);
+                            logger.success("Vistex Customer Mapping updated.");
+                        }, function (response) {
+                           logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
+                        });
+                },
             },
-            batch: true,
             pageSize: 25,
             schema: {
                 model: {
                     id: "CUST_MBR_SID",
                     fields: {
+                        CUST_MBR_SID: { editable: false },
                         CUST_NM: { editable: false, nullable: true },
                         VISTEX_CUST_FLAG: { type: "boolean" }
                     }
@@ -53,20 +55,30 @@
             sortable: true,
             selectable: true,
             resizable: true,
-            groupable: true,
-            editable: "popup",
+            groupable: false,
+            editable: { mode: "inline", confirmation: false},
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             pageable: {
                 refresh: true,
                 pageSizes: gridConstants.pageSizes
             },
-            change: vm.onChange,
             toolbar: gridUtils.clearAllFiltersToolbar(),
+            edit: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },  
             columns: [
                 {
+                    command: [
+                        { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                    ],
+                    title: " ",
+                    width: "6%"
+                },
+                {
                     field: "CUST_MBR_SID",
-                    title: "Customer Name",
+                    title: "Customer ID",
                     hidden: true
                 },
                 {
@@ -76,22 +88,11 @@
                 {
                     field: "VISTEX_CUST_FLAG",
                     title: "Is Vistex Customer",
-                    width: "10%",
+                    width: "20%",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
+                    editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
                 }]
-        }
-
-        // Gets and sets the selected row
-        function onChange() {
-            vm.selectedItem = $scope.vistexcustomerGrid.select();
-            // TODO: As we need read only grids, disabling the edit and delete buttons.
-            if (vm.selectedItem.length == 0) {
-                vm.isButtonDisabled = true;
-            } else {
-                vm.isButtonDisabled = false;
-            }
-            $scope.$apply();
         }
     }
 })();

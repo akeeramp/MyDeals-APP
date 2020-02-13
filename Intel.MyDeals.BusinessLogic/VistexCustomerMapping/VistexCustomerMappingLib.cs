@@ -7,17 +7,23 @@ using System.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
-    public class VistexCustomerMappingLib :IVistexCustomerMappingDataLib
+    public class VistexCustomerMappingLib : IVistexCustomerMappingLib
     {
         private readonly IVistexCustomerMappingDataLib _vistexCustomerMappingDataLib;
 
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
+        /// <summary>
+        /// Vistex Customer Mapping Lib
+        /// </summary>
+        /// <param name="vistexCustomerMappingDataLib"></param>
+        /// <param name="dataCollectionsDataLib"></param>
         public VistexCustomerMappingLib(IVistexCustomerMappingDataLib vistexCustomerMappingDataLib,IDataCollectionsDataLib dataCollectionsDataLib)
         {
             _vistexCustomerMappingDataLib = vistexCustomerMappingDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
         }
+
 
         public VistexCustomerMappingLib()
         {
@@ -25,15 +31,28 @@ namespace Intel.MyDeals.BusinessLogic
             _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
+
+        /// <summary>
+        /// Get All Vistex Customer Mappings 
+        /// </summary>
+        /// <returns>List of Vistex Customer Mappings Data </returns>
         public List<VistexCustomerMapping> GetVistexCustomerMapping(bool getCachedResult = true)
         {
             return !getCachedResult ? _vistexCustomerMappingDataLib.GetVistexCustomerMappings() : _dataCollectionsDataLib.GetVistexCustomerMappings();
-                
-         }
 
-        public List<VistexCustomerMapping> GetVistexCustomerMappings()
-        {
-            return GetVistexCustomerMapping().OrderBy(c => c.CUST_NM).ToList();
         }
+
+        /// <summary>
+        /// Save Is vistex customer flag Changes 
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public List<VistexCustomerMapping> SetVistexCustomerMapping(CrudModes mode, VistexCustomerMapping data)
+        {
+            return _vistexCustomerMappingDataLib.SetVistexCustomerMapping(mode, data);
+        }
+
+
     }
 }

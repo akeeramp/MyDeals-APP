@@ -8208,33 +8208,33 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.Int32 WIP_DEAL_SID {set;get;}
-	
-	
-	/*
-	private static List<RulesSimulationResults> RulesSimulationResultsFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<RulesSimulationResults>();
-	int IDX_APRV_PRCSS_FLG = DB.GetReaderOrdinal(rdr, "APRV_PRCSS_FLG");
-	int IDX_APRV_RULES = DB.GetReaderOrdinal(rdr, "APRV_RULES");
-	int IDX_EXCLD_RULES = DB.GetReaderOrdinal(rdr, "EXCLD_RULES");
-	int IDX_OWNER_EMP_WWID = DB.GetReaderOrdinal(rdr, "OWNER_EMP_WWID");
-	int IDX_WIP_DEAL_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_SID");
-	
-	while (rdr.Read()){
-	ret.Add(new RulesSimulationResults {
-	APRV_PRCSS_FLG = (IDX_APRV_PRCSS_FLG < 0 || rdr.IsDBNull(IDX_APRV_PRCSS_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_APRV_PRCSS_FLG),
-	APRV_RULES = (IDX_APRV_RULES < 0 || rdr.IsDBNull(IDX_APRV_RULES)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_APRV_RULES),
-	EXCLD_RULES = (IDX_EXCLD_RULES < 0 || rdr.IsDBNull(IDX_EXCLD_RULES)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EXCLD_RULES),
-	OWNER_EMP_WWID = (IDX_OWNER_EMP_WWID < 0 || rdr.IsDBNull(IDX_OWNER_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OWNER_EMP_WWID),
-	WIP_DEAL_SID = (IDX_WIP_DEAL_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_SID)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
+
+
+		/*
+		private static List<RulesSimulationResults> RulesSimulationResultsFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<RulesSimulationResults>();
+		int IDX_APRV_PRCSS_FLG = DB.GetReaderOrdinal(rdr, "APRV_PRCSS_FLG");
+		int IDX_APRV_RULES = DB.GetReaderOrdinal(rdr, "APRV_RULES");
+		int IDX_EXCLD_RULES = DB.GetReaderOrdinal(rdr, "EXCLD_RULES");
+		int IDX_OWNER_EMP_WWID = DB.GetReaderOrdinal(rdr, "OWNER_EMP_WWID");
+		int IDX_WIP_DEAL_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_SID");
+
+		while (rdr.Read()){
+		ret.Add(new RulesSimulationResults {
+		APRV_PRCSS_FLG = (IDX_APRV_PRCSS_FLG < 0 || rdr.IsDBNull(IDX_APRV_PRCSS_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.String>(IDX_APRV_PRCSS_FLG),
+		APRV_RULES = (IDX_APRV_RULES < 0 || rdr.IsDBNull(IDX_APRV_RULES)) ? default(System.Int32) : rdr.GetFieldValue<System.String>(IDX_APRV_RULES),
+		EXCLD_RULES = (IDX_EXCLD_RULES < 0 || rdr.IsDBNull(IDX_EXCLD_RULES)) ? default(System.Int32) : rdr.GetFieldValue<System.String>(IDX_EXCLD_RULES),
+		OWNER_EMP_WWID = (IDX_OWNER_EMP_WWID < 0 || rdr.IsDBNull(IDX_OWNER_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.String>(IDX_OWNER_EMP_WWID),
+		WIP_DEAL_SID = (IDX_WIP_DEAL_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_SID)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
 	} // End of class RulesSimulationResults
 
 	///<summary>
@@ -8244,7 +8244,7 @@ namespace Intel.MyDeals.Entities {
 	/// by kbhara2x
 	/// at 2/10/2020 3:45:59 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class VistexCustomerMapping {
 	

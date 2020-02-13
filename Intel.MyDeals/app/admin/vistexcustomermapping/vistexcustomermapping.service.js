@@ -9,16 +9,21 @@
 
     function vistexcustomermappingService($http, dataService, logger, $q) {
 
-        var apiBaseUrl = "api/VistexCustomerMapping/";
+        var apiBaseUrl = "api/VistexCustomerMappings/";
 
         var service = {
             getVistexCustomersMapList: getVistexCustomersMapList,
+            UpdateVistexCustomer: UpdateVistexCustomer
         }
 
         return service;
 
         function getVistexCustomersMapList() {
             return dataService.get(apiBaseUrl + 'GetVistexCustomersMapList/false');
+        }
+
+        function UpdateVistexCustomer(data) {
+            return dataService.post(apiBaseUrl + 'UpdateVistexCustomer', data);
         }
     }
 })();
