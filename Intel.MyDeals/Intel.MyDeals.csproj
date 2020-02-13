@@ -249,9 +249,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
-    <Compile Include="Controllers\API\ReportingController.cs" />
     <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
-    <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
