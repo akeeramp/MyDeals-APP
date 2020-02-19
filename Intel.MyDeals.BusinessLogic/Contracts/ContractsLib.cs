@@ -243,8 +243,9 @@ namespace Intel.MyDeals.BusinessLogic
                 //public List<TendersSFIDCheck> FetchDealsFromSFIDs(string salesForceIdCntrct, string salesForceIdDeal)
 
                 Thread.Sleep(10000); // sleep 10 seconds
-                int j = 0;
+                int j = 0;  
                 // Do stuff with the messageData object
+                // because
             }
             catch (Exception ex)
             {
