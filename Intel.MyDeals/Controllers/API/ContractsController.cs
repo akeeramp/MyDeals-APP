@@ -182,11 +182,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SaveSalesForceTenderData/{custId}/{contractId}")]
+        [Route("SaveSalesForceTenderData/{contractId}/{dealId}")]
         [HttpGet]
         //[HttpPost]
         //[AntiForgeryValidate]
-        public string SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData)
+        public string SaveSalesForceTenderData(int contractId, int dealId, ContractTransferPacket upperContractData)
         {
             // Rough this out as a get, bring back as a post since Mule soft will issue the hit as a post.
             ContractTransferPacket testData = new ContractTransferPacket();
@@ -292,16 +292,11 @@ namespace Intel.MyDeals.Controllers.API
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
             testData.WipDeals.Add(testDealData);
 
-            // Stage the data and pass 
-            //var blah = SafeExecutor(() => _contractsLib.SaveTenderContract(custId, contractId, testData)
-            //    , "Unable to save the Contract"
-            //);
-            var blah = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(custId, contractId, testData) //upperContractData)
+            bool saveSuccessful = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(contractId, dealId, testData) //upperContractData)
                 , "Unable to save the SalesForce Tender Deal"
             );
 
-            int j = 0;
-            return "Blahme";
+            return saveSuccessful ? "Tender Data Stage Successful" : "Tender Data Stage Failed"; ;
         }
 
         [Authorize]

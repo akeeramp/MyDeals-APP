@@ -736,5 +736,6 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<Funfact> _getFunfactList;
+
     }
 }

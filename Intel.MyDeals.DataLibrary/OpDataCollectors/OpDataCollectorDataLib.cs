@@ -1003,6 +1003,84 @@ namespace Intel.MyDeals.DataLibrary
             return success;
         }
 
+        public bool SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
+        {
+            bool success = false;
+            // TO DO: Fill in with correct passed data after verification
+
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_INS_DSA_RQST_RSPN_LOG()
+                {
+                    in_rqst_type = dataType,
+                    in_deal_lst = new type_int_list(dealsList.ToArray()),
+                    in_json_data = jsonDataPacket
+                };
+
+                using (var ret = DataAccess.ExecuteReader(cmd))
+                {
+                    if (ret != null && ret.HasRows) // ret comes back and has success row = it ran without fail
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return success;
+        }
+
+        public List<TendersSFIDCheck> FetchDealsFromSFIDs(string salesForceIdCntrct, string salesForceIdDeal)
+        {
+            bool success = false;
+            // TO DO: Fill in with correct passed data after verification
+
+            var cmd = new Procs.dbo.PR_CHECK_SF_ID()
+            {
+                CntrctSFID = salesForceIdCntrct,
+                WipSFID = salesForceIdDeal
+            };
+            var ret = new List<TendersSFIDCheck>();
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_Cntrct_SF_ID = DB.GetReaderOrdinal(rdr, "Cntrct_SF_ID");
+                    int IDX_Cntrct_SID = DB.GetReaderOrdinal(rdr, "Cntrct_SID");
+                    int IDX_Wip_SF_ID = DB.GetReaderOrdinal(rdr, "Wip_SF_ID");
+                    int IDX_Wip_SID = DB.GetReaderOrdinal(rdr, "Wip_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new TendersSFIDCheck
+                        {
+                            Cntrct_SF_ID = (IDX_Cntrct_SF_ID < 0 || rdr.IsDBNull(IDX_Cntrct_SF_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Cntrct_SF_ID),
+                            Cntrct_SID = (IDX_Cntrct_SID < 0 || rdr.IsDBNull(IDX_Cntrct_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Cntrct_SID),
+                            Wip_SF_ID = (IDX_Wip_SF_ID < 0 || rdr.IsDBNull(IDX_Wip_SF_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Wip_SF_ID),
+                            Wip_SID = (IDX_Wip_SID < 0 || rdr.IsDBNull(IDX_Wip_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Wip_SID)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
+
+
 
     }
 }

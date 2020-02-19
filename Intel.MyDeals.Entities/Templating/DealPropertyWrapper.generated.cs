@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 1/14/2020 1:26:45 PM
+File Updated: 2/18/2020 10:17:08 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -913,6 +913,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Customer Channel",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2010,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute CUST_CIM_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CUST_CIM_ID",
+			ATRB_DESC = "Customer CIM ID",
+			ATRB_LBL = "Customer CIM ID",
+			ATRB_MAX_LEN = 20,
+			ATRB_SID = 2023,
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
@@ -3770,6 +3786,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute SALESFORCEID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SALESFORCEID",
+			ATRB_DESC = "Sales Force ID",
+			ATRB_LBL = "Sales Force ID",
+			ATRB_MAX_LEN = 20,
+			ATRB_SID = 3715,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "NA",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute SBS_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SBS_NM",
@@ -4281,6 +4313,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute VISTEX_CUST_FLAG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "VISTEX_CUST_FLAG",
+			ATRB_DESC = "Vistex Customer Flag",
+			ATRB_LBL = "Vistex Customer Flag",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 2024,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute VOLUME = new MyDealsAttribute()
 		{

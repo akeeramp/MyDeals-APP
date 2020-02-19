@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 21-12-2019 12:34:00
-On: SAURAVKU-MOBL1
+File Updated: 2/18/2020 10:18:24 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -536,6 +536,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
+		/// ATRB_SID: 2023
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string CUST_CIM_ID = "CUST_CIM_ID";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
 		/// ATRB_SID: 2003
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -870,8 +879,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 90012
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string EXCLUDE_AUTOMATION = "EXCLUDE_AUTOMATION";
 
@@ -2136,6 +2145,15 @@ namespace Intel.MyDeals.Entities {
 		public const string RPU_OVERRIDE_CMNT = "RPU_OVERRIDE_CMNT";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3715
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SALESFORCEID = "SALESFORCEID";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7079
@@ -2424,6 +2442,15 @@ namespace Intel.MyDeals.Entities {
 		public const string VERTICAL_ROLLUP = "VERTICAL_ROLLUP";
 
 		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2024
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string VISTEX_CUST_FLAG = "VISTEX_CUST_FLAG";
+
+		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3321
@@ -2708,6 +2735,7 @@ namespace Intel.MyDeals.Entities {
 		public const string PRC_GRP_CD_IGNR = "PRC_GRP_CD_IGNR";
 		public const string PRC_RULE_CUT_OFF_DEAL = "PRC_RULE_CUT_OFF_DEAL";
 		public const string PRC_RULE_EMAIL = "PRC_RULE_EMAIL";
+		public const string PRC_RULE_READ_ACCESS = "PRC_RULE_READ_ACCESS";
 		public const string PRD_CST_TST_ATRB_MIGRATION = "PRD_CST_TST_ATRB_MIGRATION";
 		public const string PREPROD_USERS_LIST = "PREPROD_USERS_LIST";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";

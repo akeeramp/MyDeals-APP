@@ -380,7 +380,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//Reference Manual Page
-	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_id=1");
+	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_link='Default'");
 	ds.Tables[0].TableName = "RefManualsPage";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -389,7 +389,7 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "DictDropDown";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	ds = dbobjects.ExecuteDataSet("DECLARE @RULES_IDS AS [dbo].[type_int_list]; INSERT INTO @RULES_IDS VALUES (82); exec PR_MYDL_EXEC_APRV_RULES @in_aprv_mode = 0, @in_rule_ids = @RULES_IDS");
+	ds = dbobjects.ExecuteDataSet("DECLARE @RULES_IDS AS [dbo].[type_int_list]; INSERT INTO @RULES_IDS VALUES (0); exec PR_MYDL_EXEC_APRV_RULES @in_aprv_mode = 0, @in_rule_ids = @RULES_IDS");
 	ds.Tables[0].TableName = "RulesSimulationResults";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -416,28 +416,14 @@ using System.Collections.Generic;
 	ds.Tables[6].TableName = "ReportName";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[6], false));
 
-	//Reference Manual Index
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_REF_NAVIGATION @ref_type='UserManual', @actv_only=0");
-	ds.Tables[0].TableName = "RefManualsNavItem";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	//Reference Manual Page
-	ds = dbobjects.ExecuteDataSet("exec PR_MYDL_GET_REF_PAGE @ref_link='Default'");
-	ds.Tables[0].TableName = "RefManualsPage";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	//Rules
-	ds = dbobjects.ExecuteDataSet("PR_MYDL_GET_DICT_DROPDOWNS @atrb_cd = 'OP_CD'");
-	ds.Tables[0].TableName = "DictDropDown";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	ds = dbobjects.ExecuteDataSet("DECLARE @RULES_IDS AS [dbo].[type_int_list]; INSERT INTO @RULES_IDS VALUES (82); exec PR_MYDL_EXEC_APRV_RULES @in_aprv_mode = 0, @in_rule_ids = @RULES_IDS");
-	ds.Tables[0].TableName = "RulesSimulationResults";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
 	//Vistex Customer Mapping
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_VISTEX_CUST_MAP]");
 	ds.Tables[0].TableName = "VistexCustomerMapping";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// TENDERS SFID Check
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_CHECK_SF_ID] '50130000000X14c', '001i000001AWbWu'");
+	ds.Tables[0].TableName = "TendersSFIDCheck";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();

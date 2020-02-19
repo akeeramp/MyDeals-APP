@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.DataLibrary;
@@ -20,14 +22,16 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IDropdownLib _dropdownLib;
         private readonly IPricingStrategiesLib _pricingStrategiesLib;
         private readonly IPricingTablesLib _pricingTablesLib;
+        //private readonly IDsaWorkQueueLib _dsaWorkQueueLib;
 
-        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib, IPricingTablesLib pricingTablesLib, IPricingStrategiesLib pricingStrategiesLib)
+        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib, IPricingTablesLib pricingTablesLib, IPricingStrategiesLib pricingStrategiesLib) //, IDsaWorkQueueLib dsaWorkQueueLib
         {
             _dataCollectorLib = dataCollectorLib;
             _uiTemplateLib = uiTemplateLib;
             _dropdownLib = dropdownLib;
             _pricingStrategiesLib = pricingStrategiesLib;
             _pricingTablesLib = pricingTablesLib;
+            //_dsaWorkQueueLib = dsaWorkQueueLib;
         }
 
         /// <summary>
@@ -228,7 +232,28 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
-        public OpDataCollectorFlattenedDictList SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData)
+        private void DoWorkAsync(string blahme)
+        {
+            try
+            {
+                //MessageData messageData = (MessageData)context;
+                OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+                //"SALESFORCEIDCNTRCT":"50130000000X14c","SALESFORCEIDDEAL":"001i000001AWbWu","DEAL_ID"
+                List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSFIDs("50130000000X14c", "001i000001AWbWu"); //(string salesForceIdCntrct, string salesForceIdDeal)
+                //public List<TendersSFIDCheck> FetchDealsFromSFIDs(string salesForceIdCntrct, string salesForceIdDeal)
+
+                Thread.Sleep(10000); // sleep 10 seconds
+                int j = 0;
+                // Do stuff with the messageData object
+            }
+            catch (Exception ex)
+            {
+                // Remember that the Async code needs to handle its own
+                // exceptions, as the "DoWork" method will never fail
+            }
+        }
+
+        public bool SaveSalesForceTenderData(int contractId, int dealId, ContractTransferPacket upperContractData)
         {
             // load contract header if it exists
             //List<int> passedIds  = new List<int>();
@@ -238,11 +263,51 @@ namespace Intel.MyDeals.BusinessLogic
             //MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
 
             //if (myDealsData[OpDataElementType.CNTRCT].GroupID != null) // No contract header, so make a new one.
+            // Test
+
+            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+            List<int> blahme = new List<int>() {-100};
+            string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
+            bool tenderDataSaved = opdc.SaveTendersDataToStage("TENDER_DEALS", blahme, blahData);
+
+            Task.Factory.StartNew(() => DoWorkAsync("Hija"));
+            int p = 0;
+
+            try
+            {
+                // Save the packet in case inserts fail
+            }
+            catch (Exception ex)
+            {
+                // If insert fails, return failure message 
+            }
+
+            return tenderDataSaved;
+            // End Test
+
+            // TO DO WORK:  
+            // Take contract token data,
+            //      save to message Q data table for processing,
+            //      get SID ID back from DB,
+            //      pass to ASYNC PROC
+            // On Successful save, respond to caller - Success
+            // On Error of Save, respond Failed
+
+            // ASYNC PROC
+            // Read from DB any unprocessed items??/Passed data/ID
+            // Check Tender Folio/Deal by SFIDs (1 call - return contract ID / deal IF for SFIDs)
+            // If Contract doesn't exist, create it, Else Updates if needed (not likely in Folio)
+            // If Deal doesn't exist, create it, Else Updates if needed
+            // Save Packets - If passed
+            // Run PCT
+            // Attempt to push to Submitted if no errors
+            // Get current state of deal, JSONIFY it for Tenders callback
+            // Post to message Q data table for outbound processing, close original SID status as processed
 
 
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
             {
-                CustId = custId,
+                CustId = 2, // Add as lookup above
                 ContractId = contractId
             });
 
@@ -276,7 +341,7 @@ namespace Intel.MyDeals.BusinessLogic
             // START SAVE PS SECTION
             SavePacket savePacketPS = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
             {
-                CustId = custId,
+                CustId = 2, // Add as lookup above
                 ContractId = CNTRCT_ID
             });
 
@@ -334,7 +399,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             SavePacket savePacketPT = new SavePacket(new ContractToken("ContractToken Created - SavePricingTable")
             {
-                CustId = custId,
+                CustId = 2, // Add as lookup above
                 ContractId = CNTRCT_ID
             });
 
@@ -378,7 +443,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             ContractToken savePacketPTR = new ContractToken("ContractToken Created - SavePricingTableRow")
             {
-                CustId = custId,
+                CustId = 2, // Add as lookup above
                 ContractId = CNTRCT_ID
             };
 
@@ -424,7 +489,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             ContractToken savePacketWIP = new ContractToken("ContractToken Created - Save WIP Deal")
             {
-                CustId = custId,
+                CustId = 2, // Add as lookup above
                 ContractId = CNTRCT_ID
             };
 
@@ -435,7 +500,7 @@ namespace Intel.MyDeals.BusinessLogic
             // END SAVE WIP DEAL SECTION
 
             int r = 100;
-            return baseContract;
+            return tenderDataSaved;
         }
 
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
