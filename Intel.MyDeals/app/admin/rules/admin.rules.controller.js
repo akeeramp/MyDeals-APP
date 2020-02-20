@@ -21,7 +21,11 @@
         vm.spinnerMessageHeader = "Price Rule";
         vm.spinnerMessageDescription = "Please wait while we loading page";
         vm.isBusyShowFunFact = true;
-        vm.toolKitHidden = window.usrRole == 'DA' ? false : true;
+        if (window.usrRole == 'DA' || window.usrRole == 'SA') {
+            vm.toolKitHidden = false;
+        } else {
+            vm.toolKitHidden = true;
+        }
         vm.productPresent = true;
         $scope.init = function () {
             ruleService.getPriceRulesConfig().then(function (response) {
@@ -110,7 +114,7 @@
                     vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
                 }
             });
-            if (window.usrRole != 'DA') {
+            if (window.usrRole != 'DA' && window.usrRole != 'SA') {
                 constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
                     if (!!data.data) {
                         var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
@@ -490,7 +494,7 @@
         }
 
         $scope.getConstant();
-        if (window.usrRole == 'DA') {
+        if (window.usrRole == 'DA' || window.usrRole == 'SA') {
             $scope.init();
         }
     }

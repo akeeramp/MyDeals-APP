@@ -18,7 +18,11 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     vm.ProductCriteria = [];
     vm.isElligibleForApproval = false;
     vm.adminEmailIDs = "";
-    vm.toolKitHidden = window.usrRole === "DA" ? false : true;
+    if (window.usrRole == 'DA' || window.usrRole == 'SA') {
+        vm.toolKitHidden = false;
+    } else {
+        vm.toolKitHidden = true;
+    }
     vm.IsRefreshGridRequired = false;
 
     $scope.init = function () {
@@ -57,7 +61,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                 vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(window.usrEmail) > -1 ? true : false;
             }
         });
-        if (window.usrRole !== "DA") {
+        if (window.usrRole != 'DA' && window.usrRole != 'SA') {
             constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
                 if (!!data.data) {
                     var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
@@ -968,7 +972,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     });
 
     $scope.getConstant();
-    if (window.usrRole === "DA") {
+    if (window.usrRole == 'DA' || window.usrRole == 'SA') {
         $scope.init();
     }
 

@@ -1038,7 +1038,7 @@ namespace Intel.MyDeals.DataLibrary
             return success;
         }
 
-        public List<TendersSFIDCheck> FetchDealsFromSFIDs(string salesForceIdCntrct, string salesForceIdDeal)
+        public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal)
         {
             bool success = false;
             // TO DO: Fill in with correct passed data after verification

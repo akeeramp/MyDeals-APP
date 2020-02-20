@@ -2151,7 +2151,7 @@ namespace Intel.MyDeals.Entities {
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
-		public const string SALESFORCEID = "SALESFORCEID";
+		public const string SALESFORCE_ID = "SALESFORCE_ID";
 
 		///<summary>
 		/// DIM_SID: 7

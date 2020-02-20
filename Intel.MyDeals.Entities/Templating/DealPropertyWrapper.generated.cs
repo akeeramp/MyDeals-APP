@@ -3786,9 +3786,9 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute SALESFORCEID = new MyDealsAttribute()
+		public static MyDealsAttribute SALESFORCE_ID = new MyDealsAttribute()
 		{
-			ATRB_COL_NM = "SALESFORCEID",
+			ATRB_COL_NM = "SALESFORCE_ID",
 			ATRB_DESC = "Sales Force ID",
 			ATRB_LBL = "Sales Force ID",
 			ATRB_MAX_LEN = 20,
