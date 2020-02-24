@@ -90,6 +90,7 @@
     <Compile Include="CrudModes.cs" />
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
+    <Compile Include="DsaLogs.cs" />
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="EmployeeCustomers.cs" />

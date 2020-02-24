@@ -303,7 +303,15 @@
                     {
                         <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>//User Customer Assignments
                     }
-
+                    @if (isDeveloper)
+                    {
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">DSA</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/vistex">Vistex</a></li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </li>
 
