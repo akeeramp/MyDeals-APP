@@ -239,6 +239,15 @@
                 }
             },
             {
+                state: 'admin.vistex',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistex.html',
+                    url: 'vistex',
+                    controller: 'VistexController as vm',
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false

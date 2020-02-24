@@ -69,6 +69,7 @@
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="DataQuality\IDataQualityLib.cs" />
+    <Compile Include="DSA\IDsaEngineLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />

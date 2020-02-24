@@ -46,6 +46,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<INotificationsLib, NotificationsLib>();
             registerService.RegisterType<IDataQualityLib, DataQualityLib>();
             registerService.RegisterType<IReportingLib, ReportingLib>();
+            registerService.RegisterType<IDsaEngineLib, DsaEngineLib>();
         }
     }
 }
