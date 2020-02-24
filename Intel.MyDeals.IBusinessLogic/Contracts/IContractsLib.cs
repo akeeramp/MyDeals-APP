@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
@@ -12,7 +13,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, SavePacket savePacket);
 
-        bool SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData);
+        string ExecuteSalesForceTenderData(Guid workId);
+
+        Guid SaveSalesForceTenderData(string jsonDataPacket);
 
         OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket data);
 
