@@ -13,13 +13,18 @@
         var apiBaseUrl = "api/DSA/";
 
         var service = {
-            getVistex: getVistex
+            getVistex: getVistex,
+            getVistexStatuses: getVistexStatuses
         }
 
         return service;
 
         function getVistex() {
             return dataService.get(apiBaseUrl + 'GetVistex');
+        }
+
+        function getVistexStatuses() {
+            return dataService.get(apiBaseUrl + 'GetVistexStatuses');
         }
     }
 })();

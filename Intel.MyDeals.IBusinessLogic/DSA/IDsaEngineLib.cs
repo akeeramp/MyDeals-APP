@@ -7,5 +7,6 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         List<Vistex> GetVistex();
         List<VistexAttributes> GetVistexAttrCollection(int id);
+        List<string> GetVistexStatuses();
     }
 }

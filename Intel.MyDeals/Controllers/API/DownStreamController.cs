@@ -23,6 +23,13 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetVistexStatuses")]
+        public List<string> GetVistexStatuses()
+        {
+            return SafeExecutor(() => _dsaLib.GetVistexStatuses(), $"Unable to get vistex statuses");
+        }
+
+        [Authorize]
         [Route("GetVistexAttrCollection/{id}")]
         public List<VistexAttributes> GetVistexAttrCollection(int id)
         {

@@ -10,7 +10,7 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public int Id { get; set; }
         [DataMember]
-        public int? TransanctionId { get; set; }
+        public Guid? TransanctionId { get; set; }
         [DataMember]
         public int DealId { get; set; }
         [DataMember]
@@ -28,9 +28,9 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public DateTime CreatedOn { get; set; }
         [DataMember]
-        public DateTime SendToPoOn { get; set; }
+        public DateTime? SendToPoOn { get; set; }
         [DataMember]
-        public DateTime ProcessedOn { get; set; }
+        public DateTime? ProcessedOn { get; set; }
     }
 
     public class VistexAttributes
@@ -41,15 +41,16 @@ namespace Intel.MyDeals.Entities
 
     public enum VistexAttribute
     {
-        CUST_NM = 2002,
-        CUST_DIV_NM = 2003,
-        SOLD_TO_ID = 2004,
-        END_CUSTOMER_RETAIL = 3348,
-        PAYOUT_BASED_ON = 35,
-        DEAL_PRD_NM = 7007,
-        MTRL_ID = 7008,
+        DEAL_ID = 3616,
+        OBJ_SET_TYPE_CD = 3002,
+        CUST_NM = 4004,
         PRODUCT_FILTER = 15,
-        VOLUME = 3321
+        START_DT = 3319,
+        END_DT = 3320,
+        MRKT_SEG = 3474,
+        GEO_COMBINED = 3620,
+        VOLUME = 3321,
+        PAYOUT_BASED_ON = 35
     }
 
     public enum VistexStage
@@ -60,13 +61,13 @@ namespace Intel.MyDeals.Entities
         PO_Send_Completed = 4,
         PO_Processing_Complete = 5,
         Line_Skipped = 6,
-        Error = 7
+        Error = 7,
+        PO_Complete = 8
     }
 
     public enum VistexMode
     {
-        Deals = 1,
-        Products = 2,
-        Customer = 3
+        VISTEX_DEALS = 1,
+        TENDER_DEALS = 2
     }
 }
