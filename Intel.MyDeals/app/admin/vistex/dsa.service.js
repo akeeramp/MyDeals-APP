@@ -14,7 +14,8 @@
 
         var service = {
             getVistex: getVistex,
-            getVistexStatuses: getVistexStatuses
+            getVistexStatuses: getVistexStatuses,
+            updateVistexStatus: updateVistexStatus
         }
 
         return service;
@@ -25,6 +26,10 @@
 
         function getVistexStatuses() {
             return dataService.get(apiBaseUrl + 'GetVistexStatuses');
+        }
+
+        function updateVistexStatus(strTransantionId, strVistexStage, strErrorMessage) {
+            return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + strErrorMessage);
         }
     }
 })();

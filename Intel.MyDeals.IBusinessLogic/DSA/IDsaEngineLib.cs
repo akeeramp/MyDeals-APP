@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -8,5 +9,6 @@ namespace Intel.MyDeals.IBusinessLogic
         List<Vistex> GetVistex();
         List<VistexAttributes> GetVistexAttrCollection(int id);
         List<string> GetVistexStatuses();
+        Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, string strErrorMessage);
     }
 }

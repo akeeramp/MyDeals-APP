@@ -115,7 +115,7 @@ namespace Intel.MyDeals.DataLibrary
             DataAccess.ExecuteNonQuery(cmd);
         }
 
-        public void UpdateStatus(Guid batchId, VistexStage vistexStage, string strErrorMessage)
+        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, string strErrorMessage)
         {
             strErrorMessage = strErrorMessage.Trim();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
@@ -125,6 +125,7 @@ namespace Intel.MyDeals.DataLibrary
                 in_err_msg = strErrorMessage != string.Empty ? strErrorMessage : null
             };
             DataAccess.ExecuteNonQuery(cmd);
+            return batchId;
         }
     }
 }

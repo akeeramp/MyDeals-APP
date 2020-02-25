@@ -15,7 +15,8 @@
         vm.spinnerMessageDescription = "Please wait while we loading vistex logs..";
         vm.isBusyShowFunFact = true;
         vm.Vistex = [];
-        vm.SelectedStatus = '';
+        vm.SelectedStatus = null;
+        vm.SelectedTransanctionId = null;
         vm.VistexStatuses = [];
 
         vm.init = function () {
@@ -31,6 +32,15 @@
                 vm.VistexStatusesDataSource.read();
             }, function (response) {
                 logger.error("Unable to get statuses of vistex");
+            });
+        }
+
+        vm.UpdateVistexStatus = function () {
+            vm.spinnerMessageDescription = "Please wait while updating the status..";
+            dsaService.updateVistexStatus(vm.SelectedTransanctionId, vm.SelectedStatus, null).then(function (response) {
+                logger.success("Status has been updated!");
+            }, function (response) {
+                logger.error("Unable to update the status!1");
             });
         }
 
@@ -60,9 +70,16 @@
         });
 
         vm.StatusDropDownEditor = function (container, options) {
+            vm.SelectedTransanctionId = options.model.TransanctionId;
             vm.SelectedStatus = options.model.StatusLabel;
-            var editor = $('<select kendo-drop-down-list k-data-source="vm.VistexStatusesDataSource" k-ng-model="vm.SelectedStatus" style="width:100%"></select>').appendTo(container);
+            var editor = $('<select kendo-drop-down-list k-data-source="vm.VistexStatusesDataSource" k-options="vm.StatusesOptions" k-ng-model="vm.SelectedStatus" style="width:100%"></select>').appendTo(container);
         }
+
+        vm.StatusesOptions = {
+            valuePrimitive: true,
+            maxSelectedItems: 1,
+            autoBind: true
+        };
 
         vm.VistexStatusesDataSource = {
             transport: {
@@ -87,7 +104,7 @@
                 refresh: true
             },
             save: function (e) {
-                kendo.alert("Saved (not in DB)");
+                vm.UpdateVistexStatus();
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
@@ -105,13 +122,13 @@
                     width: "70px"
                 },
                 { field: "TransanctionId", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(TransanctionId == '00000000-0000-0000-0000-000000000000'){#-#} else {##= TransanctionId ##}#</span>" },
-                { field: "DealId", title: "Deal Id", width: "125px",filterable: { multi: true, search: true } },
+                { field: "DealId", title: "Deal Id", width: "125px", filterable: { multi: true, search: true } },
                 { field: "ModeLabel", title: "Mode", width: "125px", filterable: { multi: true, search: true } },
                 { field: "StatusLabel", title: "Status", width: "150px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
                 { field: "Message", title: "Message", filterable: { multi: true, search: true } },
-                { field: "CreatedOn", title: "Created On", width: "125px",filterable: { multi: true, search: true } },
-                { field: "SendToPoOn", title: "Send To PO On", width: "125px",filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },
-                { field: "ProcessedOn", title: "Processed On", width: "125px",filterable: { multi: true, search: true }, template: "<span>#if(ProcessedOn == '1/1/1900'){#-#} else {##= ProcessedOn ##}#</span>" }
+                { field: "CreatedOn", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
+                { field: "SendToPoOn", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },
+                { field: "ProcessedOn", title: "Processed On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(ProcessedOn == '1/1/1900'){#-#} else {##= ProcessedOn ##}#</span>" }
             ]
         };
 

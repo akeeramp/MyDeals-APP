@@ -1,5 +1,7 @@
 ﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 
@@ -34,6 +36,17 @@ namespace Intel.MyDeals.Controllers.API
         public List<VistexAttributes> GetVistexAttrCollection(int id)
         {
             return SafeExecutor(() => _dsaLib.GetVistexAttrCollection(id), $"Unable to get vistex data body");
+        }
+
+        [Authorize]
+        [Route("UpdateVistexStatus/{strTransantionId}/{strVistexStage}/{strErrorMessage}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public Guid UpdateVistexStatus(string strTransantionId, string strVistexStage, string strErrorMessage)
+        {
+            Guid batchId = Guid.Parse(strTransantionId);
+            VistexStage vistexStage = (VistexStage)Enum.Parse(typeof(VistexStage), strVistexStage);
+            return SafeExecutor(() => _dsaLib.UpdateVistexStatus(batchId, vistexStage, strErrorMessage), $"Unable to update vistex status");
         }
     }
 }

@@ -53,5 +53,10 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return lstRtn;
         }
+
+        public Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, string strErrorMessage)
+        {
+            return new VistexAdminDataLib().UpdateStatus(batchId, vistexStage, strErrorMessage);
+        }
     }
 }
