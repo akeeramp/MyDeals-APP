@@ -324,6 +324,15 @@
                     , url: 'vistexcustomermapping'
                     , controller: 'VistexcustomermappingController as vm'
                 }
+            },
+            {
+                state: 'admin.testtenders',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/admintools/testtenders.html'
+                    , url: 'testtenders'
+                    , controller: 'TestTendersController as vm'
+                }
             }
 
         ];
