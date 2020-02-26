@@ -15,13 +15,23 @@
         var service = {
             getVistex: getVistex,
             getVistexStatuses: getVistexStatuses,
-            updateVistexStatus: updateVistexStatus
+            updateVistexStatus: updateVistexStatus,
+            sendVistexData: sendVistexData,
+            getVistexOutBoundData: getVistexOutBoundData
         }
 
         return service;
 
+        function sendVistexData(lstDealIds) {
+            return dataService.post(apiBaseUrl + 'SendVistexData', lstDealIds);
+        }
+
         function getVistex() {
             return dataService.get(apiBaseUrl + 'GetVistex');
+        }
+
+        function getVistexOutBoundData() {
+            return dataService.get(apiBaseUrl + 'GetVistexOutBoundData');
         }
 
         function getVistexStatuses() {

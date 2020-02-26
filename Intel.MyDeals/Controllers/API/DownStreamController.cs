@@ -25,6 +25,13 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetVistexOutBoundData")]
+        public List<Vistex> GetVistexOutBoundData()
+        {
+            return SafeExecutor(() => _dsaLib.GetVistexOutBoundData(), $"Unable to get vistex outbound data");
+        }
+
+        [Authorize]
         [Route("GetVistexStatuses")]
         public List<string> GetVistexStatuses()
         {
@@ -47,6 +54,15 @@ namespace Intel.MyDeals.Controllers.API
             Guid batchId = Guid.Parse(strTransantionId);
             VistexStage vistexStage = (VistexStage)Enum.Parse(typeof(VistexStage), strVistexStage);
             return SafeExecutor(() => _dsaLib.UpdateVistexStatus(batchId, vistexStage, strErrorMessage), $"Unable to update vistex status");
+        }
+
+        [Authorize]
+        [Route("SendVistexData")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<Vistex> SendVistexData(List<int> lstDealIds)
+        {
+            return SafeExecutor(() => _dsaLib.AddVistexData(lstDealIds), $"Unable to send vistex data");
         }
     }
 }

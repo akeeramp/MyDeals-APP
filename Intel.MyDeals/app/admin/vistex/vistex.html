@@ -1,7 +1,16 @@
 ﻿<div class="col-md-12">
-    <h2>Vistex Logs</h2>
-    <p style="color: #FC4C02">This screen shows the data to be sent to the down stream application Vistex</p>
+    <div class="col-md-5">
+        <h2>Vistex Logs</h2>
+        <p style="color: #FC4C02">This screen shows the data to be sent to the down stream application Vistex</p>
+    </div>
+    <div class="col-md-7" style="float:right;margin-top:35px;">
+        <div class="col-md-10"><input class="form-control md" ng-pattern="vm.RegxDealIds" type="text" ng-model="vm.DealIds" placeholder="Deal IDs. Multiple deal IDs can be separated with comma." title="Deal IDs. Multiple deal IDs can be separated with comma." style="width:100%;"></div>        
+        <div class="col-md-2"><button ng-click="vm.SendVistexData()" class="btn btn-primary" style="float: left;">Send Data</button></div>
+        <br />
+        <div ng-if="vm.IsDealIdsValid == false" style="color: #FC4C02;float:right;">Please enter valid Deal Ids</div>
+    </div>
 </div>
+
 <loading-panel id="vistexLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
 <div class="col-md-12">
     <div id="gridVistex" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.vistexOptions">

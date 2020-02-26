@@ -239,6 +239,15 @@
                 }
             },
             {
+                state: 'admin.vistexOutbound',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexOutbound.html',
+                    url: 'vistex/vistexOutbound',
+                    controller: 'VistexOutboundController as vm',
+                }
+            },
+            {
                 state: 'admin.vistex',
                 abstract: false,
                 config: {
