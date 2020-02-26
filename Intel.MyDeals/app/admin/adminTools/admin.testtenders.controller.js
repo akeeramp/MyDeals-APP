@@ -14,6 +14,19 @@
         var vm = this;
         $scope.testTendersData = {};
 
+        $scope.testTendersData.CNTRCT_SF_ID = '50130000000X14c';
+        $scope.testTendersData.CNTRCT_ID = '50130000000X14c';
+        $scope.testTendersData.CNTRCT_CUST = 'Dell';
+        $scope.testTendersData.END_CUST = 'Facebook';
+        $scope.testTendersData.START_DT = '02/28/2020';
+        $scope.testTendersData.END_DT = '02/28/2020';
+        $scope.testTendersData.GEO = 'EMEA';
+        $scope.testTendersData.DEAL_SF_ID = '001i000001AWbWu';
+        $scope.testTendersData.ECAP = '100';
+        $scope.testTendersData.VOLUME = '300';
+        $scope.testTendersData.DEAL_ID = '543212';
+        $scope.testTendersData.PROD_IDs = 'Intel® Xeon® Processor E7-8870 v4';
+
         $scope.ExcutetestTendersData = function () {
             var JsonObj = {
                 'header': {
