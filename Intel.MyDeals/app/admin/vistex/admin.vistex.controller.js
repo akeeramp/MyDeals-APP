@@ -15,6 +15,9 @@
         vm.spinnerMessageDescription = "Please wait while we loading vistex logs..";
         vm.isBusyShowFunFact = true;
         vm.Vistex = [];
+        vm.SelectedStatus = null;
+        vm.SelectedTransanctionId = null;
+        vm.VistexStatuses = [];
 
         vm.init = function () {
             dsaService.getVistex().then(function (response) {
@@ -22,6 +25,22 @@
                 vm.vistexDataSource.read();
             }, function (response) {
                 logger.error("Operation failed");
+            });
+
+            dsaService.getVistexStatuses().then(function (response) {
+                vm.VistexStatuses = response.data;
+                vm.VistexStatusesDataSource.read();
+            }, function (response) {
+                logger.error("Unable to get statuses of vistex");
+            });
+        }
+
+        vm.UpdateVistexStatus = function () {
+            vm.spinnerMessageDescription = "Please wait while updating the status..";
+            dsaService.updateVistexStatus(vm.SelectedTransanctionId, vm.SelectedStatus, null).then(function (response) {
+                logger.success("Status has been updated!");
+            }, function (response) {
+                logger.error("Unable to update the status!1");
             });
         }
 
@@ -31,8 +50,44 @@
                     e.success(vm.Vistex);
                 }
             },
-            pageSize: 25
+            pageSize: 25,
+            schema: {
+                model: {
+                    id: "Id",
+                    fields: {
+                        Id: { editable: false, nullable: false },
+                        TransanctionId: { editable: false, nullable: true },
+                        DealId: { editable: false },
+                        ModeLabel: { editable: false },
+                        StatusLabel: { editable: true },
+                        Message: { editable: true },
+                        CreatedOn: { editable: false, nullable: false },
+                        SendToPoOn: { editable: false, nullable: true },
+                        ProcessedOn: { editable: false, nullable: true },
+                    }
+                }
+            }
         });
+
+        vm.StatusDropDownEditor = function (container, options) {
+            vm.SelectedTransanctionId = options.model.TransanctionId;
+            vm.SelectedStatus = options.model.StatusLabel;
+            var editor = $('<select kendo-drop-down-list k-data-source="vm.VistexStatusesDataSource" k-options="vm.StatusesOptions" k-ng-model="vm.SelectedStatus" style="width:100%"></select>').appendTo(container);
+        }
+
+        vm.StatusesOptions = {
+            valuePrimitive: true,
+            maxSelectedItems: 1,
+            autoBind: true
+        };
+
+        vm.VistexStatusesDataSource = {
+            transport: {
+                read: function (e) {
+                    e.success(vm.VistexStatuses);
+                }
+            }
+        };
 
         vm.vistexOptions = {
             dataSource: vm.vistexDataSource,
@@ -44,18 +99,36 @@
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(true),
+            editable: { mode: "inline", confirmation: false },
             pageable: {
                 refresh: true
             },
+            save: function (e) {
+                vm.UpdateVistexStatus();
+            },
+            edit: function (e) {
+                var commandCell = e.container.find("td:eq(1)");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
             columns: [
-                { field: "TransanctionId", title: "Trans Id", filterable: { multi: true, search: true } },
-                { field: "DealId", title: "Deal Id", filterable: { multi: true, search: true } },
-                { field: "ModeLabel", title: "Mode", filterable: { multi: true, search: true } },
-                { field: "StatusLabel", title: "Status", filterable: { multi: true, search: true } },
+                {
+                    command: [
+                        {
+                            name: "edit",
+                            template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
+                        }
+                    ],
+                    title: " ",
+                    width: "70px"
+                },
+                { field: "TransanctionId", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(TransanctionId == '00000000-0000-0000-0000-000000000000'){#-#} else {##= TransanctionId ##}#</span>" },
+                { field: "DealId", title: "Deal Id", width: "125px", filterable: { multi: true, search: true } },
+                { field: "ModeLabel", title: "Mode", width: "125px", filterable: { multi: true, search: true } },
+                { field: "StatusLabel", title: "Status", width: "150px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
                 { field: "Message", title: "Message", filterable: { multi: true, search: true } },
-                { field: "CreatedOn", title: "Created On", filterable: { multi: true, search: true } },
-                { field: "SendToPoOn", title: "Send To PO On", filterable: { multi: true, search: true } },
-                { field: "ProcessedOn", title: "Processed On", filterable: { multi: true, search: true } }
+                { field: "CreatedOn", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
+                { field: "SendToPoOn", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },
+                { field: "ProcessedOn", title: "Processed On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(ProcessedOn == '1/1/1900'){#-#} else {##= ProcessedOn ##}#</span>" }
             ]
         };
 
