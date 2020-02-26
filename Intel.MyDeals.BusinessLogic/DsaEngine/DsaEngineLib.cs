@@ -25,6 +25,16 @@ namespace Intel.MyDeals.BusinessLogic
             return new VistexAdminDataLib().GetStatuses();
         }
 
+        public List<Vistex> AddVistexData(List<int> lstDealIds)
+        {
+            return new VistexAdminDataLib().AddVistexData(lstDealIds);
+        }
+
+        public List<Vistex> GetVistexOutBoundData()
+        {
+            return new VistexAdminDataLib().GetVistexOutBoundData();
+        }
+
         public List<VistexAttributes> GetVistexAttrCollection(int id)
         {
             List<VistexAttributes> lstRtn = new List<VistexAttributes>();

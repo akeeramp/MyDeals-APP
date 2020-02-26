@@ -414,8 +414,10 @@
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.html" />
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.service.js" />
     <Content Include="app\admin\vistex\admin.vistex.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistexOutbound.controller.js" />
     <Content Include="app\admin\vistex\dsa.service.js" />
     <Content Include="app\admin\vistex\vistex.html" />
+    <Content Include="app\admin\vistex\vistexOutbound.html" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />

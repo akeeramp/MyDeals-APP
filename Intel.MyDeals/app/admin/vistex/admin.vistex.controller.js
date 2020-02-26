@@ -16,8 +16,10 @@
         vm.isBusyShowFunFact = true;
         vm.Vistex = [];
         vm.SelectedStatus = null;
-        vm.SelectedTransanctionId = null;
         vm.VistexStatuses = [];
+        vm.DealIds = "";
+        vm.RegxDealIds = "[0-9,]+$";
+        vm.IsDealIdsValid = true;
 
         vm.init = function () {
             dsaService.getVistex().then(function (response) {
@@ -35,12 +37,55 @@
             });
         }
 
-        vm.UpdateVistexStatus = function () {
+        vm.SendVistexData = function () {
+            if (vm.DealIds != undefined)
+                vm.DealIds = vm.DealIds.replace(/ /g, "");
+            vm.IsDealIdsValid = vm.DealIds != undefined && vm.DealIds != '';
+            if (vm.IsDealIdsValid) {
+                var dealIds = vm.DealIds.trim().split(',');
+                dealIds = dealIds.filter(x => x.trim() != "");
+                if (dealIds.length > 0) {
+                    dsaService.sendVistexData(dealIds).then(function (response) {
+                        if (response.data.length > 0) {
+                            angular.forEach(response.data, function (dataItem) {
+                                vm.Vistex.push(dataItem);
+                            });
+                            vm.vistexDataSource.read();
+                            vm.DealIds = "";
+                            logger.success("Data has been sent!");
+                        } else {
+                            logger.error("Unable to send data!");
+                        }
+                    }, function (response) {
+                        logger.error("Unable to send data!");
+                    });
+                } else {
+                    logger.error("There is no Deal ID to send!");
+                }
+            }
+        }
+
+        vm.VistexDealIdKeyUp = function (event) {
+            return false;
+        }
+
+        vm.UpdateVistexStatus = function (strTransantionId, strErrorMessage) {
+            if (strErrorMessage == '')
+                strErrorMessage = null;
             vm.spinnerMessageDescription = "Please wait while updating the status..";
-            dsaService.updateVistexStatus(vm.SelectedTransanctionId, vm.SelectedStatus, null).then(function (response) {
-                logger.success("Status has been updated!");
+            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, strErrorMessage).then(function (response) {
+                if (response.data == strTransantionId) {
+                    angular.forEach(vm.Vistex.filter(x => x.TransanctionId === response.data), function (dataItem) {
+                        dataItem.Status = vm.SelectedStatus;
+                        dataItem.Message = strErrorMessage == null ? '' : strErrorMessage;
+                    });
+                    vm.vistexDataSource.read();
+                    logger.success("Status has been updated!");
+                } else {
+                    logger.error("Unable to update the status!");
+                }
             }, function (response) {
-                logger.error("Unable to update the status!1");
+                logger.error("Unable to update the status!");
             });
         }
 
@@ -58,20 +103,19 @@
                         Id: { editable: false, nullable: false },
                         TransanctionId: { editable: false, nullable: true },
                         DealId: { editable: false },
-                        ModeLabel: { editable: false },
-                        StatusLabel: { editable: true },
+                        Status: { editable: true },
                         Message: { editable: true },
                         CreatedOn: { editable: false, nullable: false },
                         SendToPoOn: { editable: false, nullable: true },
                         ProcessedOn: { editable: false, nullable: true },
                     }
                 }
-            }
+            },
+            sort: { field: "CreatedOn", dir: "desc" }
         });
 
         vm.StatusDropDownEditor = function (container, options) {
-            vm.SelectedTransanctionId = options.model.TransanctionId;
-            vm.SelectedStatus = options.model.StatusLabel;
+            vm.SelectedStatus = options.model.Status;
             var editor = $('<select kendo-drop-down-list k-data-source="vm.VistexStatusesDataSource" k-options="vm.StatusesOptions" k-ng-model="vm.SelectedStatus" style="width:100%"></select>').appendTo(container);
         }
 
@@ -104,7 +148,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus();
+                vm.UpdateVistexStatus(e.model.TransanctionId, e.model.Message);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
@@ -115,7 +159,7 @@
                     command: [
                         {
                             name: "edit",
-                            template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
+                            template: "<a ng-if='dataItem.TransanctionId != \"00000000-0000-0000-0000-000000000000\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
                         }
                     ],
                     title: " ",
@@ -123,8 +167,7 @@
                 },
                 { field: "TransanctionId", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(TransanctionId == '00000000-0000-0000-0000-000000000000'){#-#} else {##= TransanctionId ##}#</span>" },
                 { field: "DealId", title: "Deal Id", width: "125px", filterable: { multi: true, search: true } },
-                { field: "ModeLabel", title: "Mode", width: "125px", filterable: { multi: true, search: true } },
-                { field: "StatusLabel", title: "Status", width: "150px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
+                { field: "Status", title: "Status", width: "150px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
                 { field: "Message", title: "Message", filterable: { multi: true, search: true } },
                 { field: "CreatedOn", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
                 { field: "SendToPoOn", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },

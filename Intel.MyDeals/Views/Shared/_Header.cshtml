@@ -288,7 +288,16 @@
                     {
                         <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
                     }
-
+                    @if (isDeveloper)
+                    {
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">DSA</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/vistex">Vistex Logs</a></li>
+                                <li><a href="Admin#/vistex/vistexOutbound">Vistex Outbound</a></li>
+                            </ul>
+                        </li>
+                    }
                     @if (usrRole == "DA" || usrRole == "GA" || isRealSA || isDeveloper)
                     {
                         <li class="dropdown-submenu">
@@ -303,16 +312,7 @@
                     @if (env == "LOCAL" && usrWwid == 10548414)
                     {
                         <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>//User Customer Assignments
-                    }
-                    @if (isDeveloper)
-                    {
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1">DSA</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="Admin#/vistex">Vistex</a></li>
-                            </ul>
-                        </li>
-                    }
+                    }                   
                 </ul>
             </li>
 

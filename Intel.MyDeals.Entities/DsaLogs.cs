@@ -14,15 +14,11 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public int DealId { get; set; }
         [DataMember]
-        public Dictionary<VistexAttribute, string> DataBody { get; set; }
+        public string DataBody { get; set; }
         [DataMember]
-        public VistexMode Mode { get; set; }
+        public string Mode { get; set; }
         [DataMember]
-        public string ModeLabel { get; set; }
-        [DataMember]
-        public VistexStage Status { get; set; }
-        [DataMember]
-        public string StatusLabel { get; set; }
+        public string Status { get; set; }
         [DataMember]
         public string Message { get; set; }
         [DataMember]
@@ -43,7 +39,7 @@ namespace Intel.MyDeals.Entities
     {
         DEAL_ID = 3616,
         OBJ_SET_TYPE_CD = 3002,
-        CUST_NM = 4004,
+        CUST_NM = 2002,
         PRODUCT_FILTER = 15,
         START_DT = 3319,
         END_DT = 3320,
@@ -61,8 +57,7 @@ namespace Intel.MyDeals.Entities
         PO_Send_Completed = 4,
         PO_Processing_Complete = 5,
         Line_Skipped = 6,
-        Error = 7,
-        PO_Complete = 8
+        Error = 7
     }
 
     public enum VistexMode

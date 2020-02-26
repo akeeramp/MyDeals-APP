@@ -1,0 +1,15 @@
+﻿<div class="col-md-12">
+    <h2>Vistex Outbound</h2>
+    <p style="color: #FC4C02">This screen shows the outboud data of Vistex</p>
+</div>
+<loading-panel id="vistexLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+<div class="col-md-12">
+    <div id="gridVistex" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.vistexOptions">        
+    </div>
+</div>
+<style>
+    .ss-loading-panel {
+        margin-top: 6%;
+        margin-left: 37%;
+    }
+</style>

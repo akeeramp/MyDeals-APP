@@ -10,5 +10,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<VistexAttributes> GetVistexAttrCollection(int id);
         List<string> GetVistexStatuses();
         Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, string strErrorMessage);
+        List<Vistex> AddVistexData(List<int> lstDealIds);
+        List<Vistex> GetVistexOutBoundData();
     }
 }
