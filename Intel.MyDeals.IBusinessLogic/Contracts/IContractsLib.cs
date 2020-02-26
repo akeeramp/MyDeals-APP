@@ -15,7 +15,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         string ExecuteSalesForceTenderData(Guid workId);
 
-        Guid SaveSalesForceTenderData(string jsonDataPacket);
+        Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket);
 
         OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket data);
 

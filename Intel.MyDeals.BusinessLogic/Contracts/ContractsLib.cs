@@ -266,7 +266,7 @@ namespace Intel.MyDeals.BusinessLogic
             testContractData.Add("CUST_MBR_SID", custId);
             testContractData.Add("START_DT", DateTime.Now.AddMonths(-2).ToString("MM/dd/yyyy")); // 2 months ago
             testContractData.Add("END_DT", DateTime.Now.AddMonths(12).ToString("MM/dd/yyyy")); // a year from now
-            testContractData.Add("TENDER_PUBLISHED", 0);
+            testContractData.Add("TENDER_PUBLISHED", 1);
             testContractData.Add("IS_TENDER", 1);
             testContractData.Add("TITLE", "SalesForce Contract - " + contractSfId);
             testData.Contract.Add(testContractData);
@@ -301,7 +301,7 @@ namespace Intel.MyDeals.BusinessLogic
             return contractId; // Send back the new contract ID here
         }
 
-        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, OpDataCollectorFlattenedItem workRecordDataFields)
+        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields)
         {
             if (dealId > 0) return dealId; // only process new deals for now
 
@@ -396,6 +396,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("HAS_L1", "1"); // From PTR_SYS_PRD
             testDealData.Add("HAS_L2", "0"); // From PTR_SYS_PRD
             testDealData.Add("PRODUCT_CATEGORIES", "DT"); // From PTR_SYS_PRD
+            testDealData.Add("SALESFORCE_ID", dealSfId);
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
             testDealData.Add("IN_REDEAL", "0");
             testDealData.Add("EXCLUDE_AUTOMATION", "Yes");
@@ -406,6 +407,32 @@ namespace Intel.MyDeals.BusinessLogic
                 CustId = 2, // Add as lookup above
                 ContractId = contractId
             });
+
+            // Product Check START
+            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+            {
+                CustId = 2,
+                ContractId = contractId
+            };
+
+            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
+            usrData.Add(new ProductEntryAttribute()
+            {
+                ROW_NUMBER = 1,
+                USR_INPUT = "i3-8300",
+                EXCLUDE = false,
+                FILTER = "Tray",
+                START_DATE = "2/21/2020",
+                END_DATE = "12/26/2020",
+                GEO_COMBINED = "Worldwide",
+                PROGRAM_PAYMENT = "Backend",
+                MOD_USR_INPUT = "",
+                COLUMN_TYPE = true
+            });
+            ProductLookup resultsList = new ProductsLib().TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
+            int t = 0;
+            // Product Check END
+
 
             ContractToken saveContractToken = new ContractToken("ContractToken Created - Save WIP Deal")
             {
@@ -561,8 +588,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Take read packet and turn it into dictionary
             // Test
-            string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
-            OpDataCollectorFlattenedItem myValues = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(blahData);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
+            //string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
+            //OpDataCollectorFlattenedItem myValues = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(blahData);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
             int custId = 2;
             // End Test
 
@@ -572,10 +599,14 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)
             {
-                OpDataCollectorFlattenedItem workRecordDataFields = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(workRecord.Rqst_Json_Data);
+                //OpDataCollectorFlattenedItem workRecordDataFields = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(workRecord.RqstJsonData);
+                TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
                 // Set status
-                string salesForceIdCntrct = workRecordDataFields["SALESFORCEIDCNTRCT"].ToString();
-                string salesForceIdDeal = workRecordDataFields["SALESFORCEIDDEAL"].ToString();
+                int p = 0;
+                //string salesForceIdCntrct = workRecordDataFields["SALESFORCEIDCNTRCT"].ToString();
+                //string salesForceIdDeal = workRecordDataFields["SALESFORCEIDDEAL"].ToString();
+                string salesForceIdCntrct = workRecordDataFields.recordDetails.SBQQ__Quote__c.Id;
+                string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[0].Id; // makes assumption of 1 item
 
                 List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
                 if (sfToMydlIds == null) continue; // we had error on lookup, skip to next to process
@@ -603,13 +634,16 @@ namespace Intel.MyDeals.BusinessLogic
             return "blah";
         }
 
-        public Guid SaveSalesForceTenderData(string jsonDataPacket)
+        public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
         {
             //This just saves the Tenders data to the DB for stage
+            List<int> deadIdList = new List<int>() { -100 };
+
+            string jsonData = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
+
+            // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
             OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            List<int> blahme = new List<int>() {-100};
-            string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
-            return opdc.SaveTendersDataToStage("TENDER_DEALS", blahme, jsonDataPacket);
+            return opdc.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData); //jsonDataPacket
         }
 
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)

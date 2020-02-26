@@ -1063,11 +1063,11 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             retData.Add(new TenderTransferObject
                             {
-                                Rqst_Sid = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
-                                Deal_Id = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                                Btch_Id = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? Guid.Empty : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
-                                Rqst_Json_Data = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
-                                Rqst_Sts = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS)
+                                RqstSid = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+                                DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                                BtchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? Guid.Empty : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
+                                RqstJsonData = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
+                                RqstSts = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS)
                             });
                         }
                     }
@@ -1082,7 +1082,7 @@ namespace Intel.MyDeals.DataLibrary
             if (specificRecord != Guid.Empty) // if we open up other stages to support this, cull down to pending stage below.
             {
                 // Return only the matching item
-                return retData.Where(r => r.Btch_Id == specificRecord).ToList();
+                return retData.Where(r => r.BtchId == specificRecord).ToList();
             }
             
             return retData;

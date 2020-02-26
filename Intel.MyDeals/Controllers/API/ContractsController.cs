@@ -11,6 +11,7 @@ using Intel.Opaque;
 using Intel.MyDeals.Helpers;
 using Intel.Opaque.Data;
 using Intel.MyDeals.BusinessLogic;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -205,21 +206,36 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SaveSalesForceTenderData")]
+        [Route("SaveSalesForceTenderData/{jsonDataPacket}/")] //To be removed once UI is in place
         [HttpGet]
         //[HttpPost]
         //[AntiForgeryValidate]
         public string SaveSalesForceTenderData(string jsonDataPacket)
         {
+            int p = 0;
+            jsonDataPacket = "{\"header\": {\"source_system\": \"pricing_tenders\",\"target_system\": \"mydeals\",\"action\": \"create\",\"xid\": \"152547827hdhdh\"},\"recordDetails\": {\"SBQQ__Quote__c\": {\"Id\": \"a4H2D000000Ct5KUAS\",\"Name\": \"Q-02446\",\"Pricing_Folio_ID_Nm__c\": \"\",\"SBQQ__Account__c\": {\"Id\": \"a4H2D000000Ct5KUAS\",\"Name\": \"Dell\",\"Core_CIM_ID__c\": \"\"},\"Pricing_Deal_Type_Nm__c\": \"ECAP\",\"Pricing_Customer_Nm__c\": \"Facebook\",\"Pricing_Project_Name_Nm__c\": \"FMH\",\"Pricing_ShipmentStDate_Dt__c\": \"02/28/2019\",\"Pricing_ShipmentEndDate_Dt__c\": \"02/28/2019\",\"Pricing_Server_Deal_Type_Nm__c\": \"HPC\",\"Pricing_Region_Nm__c\": \"EMEA\",\"SBQQ__QuoteLine__c\": [{\"Id\": \"a4D2D0000008mK1UAI\",\"Name\": \"QL-0200061\",\"Pricing_Deal_RFQ_Status_Nm__c\": \"\",\"Pricing_ECAP_Price__c\": \"100\",\"Pricing_Meet_Comp_Price_Amt__c\": \"90\",\"Pricing_Unit_Qty__c\": \"300\",\"Pricing_Deal_RFQ_Id__c\": \"543212\",\"Pricing_Status_Nm__c\": \"\",\"SBQQ__Product__c\": {\"Id\": \"a4D2D0000008mK1UAI\",\"Name\": \"Intel® Xeon® Processor E7-8870 v4 (50M Cache, 2.10 GHz)\",\"Core_Product_Name_EPM_ID__c\": \"192283\"},\"Pricing_Competetor_Product__c\": {\"Id\": \"\",\"Name\": \"\"},\"Pricing_Performance_Metric__c\": [{\"Id\": \"a4D2D0000008mK1UAI\",\"Name\": \"PM-000010\",\"Pricing_Performance_Metric_Nm__c\": \"SpecInt\",\"Pricing_Intel_SKU_Performance_Nbr__c\": \"10\",\"Pricing_Comp_SKU_Performance_Nbr__c\": \"9\",\"Pricing_Weighting_Pct__c\": \"100\"}]}],\"Pricing_Comments__c\": [{\"Id\": \"\",\"Name\": \"\",\"Pricing_Question__c\": \"\",\"Pricing_Answer__c\": \"\"}]}}}";
+            TenderTransferRootObject myValues = JsonConvert.DeserializeObject<TenderTransferRootObject>(jsonDataPacket);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
 
-            jsonDataPacket = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
+            Guid saveSuccessful = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(myValues) //upperContractData)
+                , "Unable to save the SalesForce Tender Deal"
+            );
 
+            return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
+        }
+
+        [Authorize]
+        [HttpPost]
+        [AntiForgeryValidate]
+        [Route("SaveSalesForceTenderData")] 
+        public string SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
+        {
             Guid saveSuccessful = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(jsonDataPacket) //upperContractData)
                 , "Unable to save the SalesForce Tender Deal"
             );
 
             return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
         }
+
 
         [Authorize]
         [Route("PublishTenderContract/{objSid}")]
