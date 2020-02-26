@@ -249,6 +249,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\DownStreamController.cs" />
     <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
@@ -412,6 +413,9 @@
     <Content Include="app\admin\vistexcustomermapping\admin.vistexcustomermapping.controller.js" />
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.html" />
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.service.js" />
+    <Content Include="app\admin\vistex\admin.vistex.controller.js" />
+    <Content Include="app\admin\vistex\dsa.service.js" />
+    <Content Include="app\admin\vistex\vistex.html" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />

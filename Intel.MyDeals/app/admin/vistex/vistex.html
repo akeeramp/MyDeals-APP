@@ -1,0 +1,18 @@
+﻿<div class="col-md-12">
+    <h2>Vistex Logs</h2>
+    <p style="color: #FC4C02">This screen shows the data to be sent to the down stream application Vistex</p>
+</div>
+<loading-panel id="vistexLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+<div class="col-md-12">
+    <div id="gridVistex" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.vistexOptions">
+        <div k-detail-template>
+            <div kendo-grid="vistexDataBody" k-options="vm.GetVistexDataBody(dataItem)"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .ss-loading-panel {
+        margin-top: 6%;
+        margin-left: 37%;
+    }
+</style>

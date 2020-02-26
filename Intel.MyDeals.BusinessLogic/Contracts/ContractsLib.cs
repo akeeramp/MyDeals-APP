@@ -13,6 +13,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -233,17 +234,9 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
-        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, MyDealsData myDealsData)
+        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId)
         {
             if (contractId > 0) return contractId; // only process new contract headers
-
-            // load contract header if it exists
-            //List<int> passedIds  = new List<int>();
-            //passedIds.Add(contractId);
-
-            //var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
-            //MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
-
 
             ContractTransferPacket testData = new ContractTransferPacket();
             testData.Contract = new OpDataCollectorFlattenedList();
@@ -251,6 +244,17 @@ namespace Intel.MyDeals.BusinessLogic
             testData.PricingTable = new OpDataCollectorFlattenedList();
             testData.PricingTableRow = new OpDataCollectorFlattenedList();
             testData.WipDeals = new OpDataCollectorFlattenedList();
+
+
+            //// Assumption that this is middle tier located in Cali, so I don't have to set CultureInfo("en-US")
+            //var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, DateTime.Now, null, null);
+            //var strtDt = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.START_DT);
+            //var endDt = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.END_DT);
+            //strtDt.AtrbValue = quarterDetails.QTR_STRT.ToString("d"); // This is likely in the past, just setting the post, might switch to today (DateTime.Now)
+            //endDt.AtrbValue = quarterDetails.QTR_END.ToString("d");
+            //02/10/2020
+            //DateTime.Now.ToString("MM/dd/yyyy")
+            //today.AddDays(duration);
 
             OpDataCollectorFlattenedItem testContractData = new OpDataCollectorFlattenedItem();
             testContractData.Add("DC_ID", -100); // New contract - follow -id convention
@@ -260,6 +264,10 @@ namespace Intel.MyDeals.BusinessLogic
             testContractData.Add("dc_parent_type", "0");
             testContractData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
             testContractData.Add("CUST_MBR_SID", custId);
+            testContractData.Add("START_DT", DateTime.Now.AddMonths(-2).ToString("MM/dd/yyyy")); // 2 months ago
+            testContractData.Add("END_DT", DateTime.Now.AddMonths(12).ToString("MM/dd/yyyy")); // a year from now
+            testContractData.Add("TENDER_PUBLISHED", 1);
+            testContractData.Add("IS_TENDER", 1);
             testContractData.Add("TITLE", "SalesForce Contract - " + contractSfId);
             testData.Contract.Add(testContractData);
 
@@ -293,111 +301,106 @@ namespace Intel.MyDeals.BusinessLogic
             return contractId; // Send back the new contract ID here
         }
 
-        private void DoWorkAsync(string blahme, MyDealsData myDealsData)
+        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields)
         {
-            try
-            {
-                // Temp items - take from packet
-                string salesForceIdCntrct = "50130000000X14d";
-                string salesForceIdDeal = "001i000001AWbWu";
-                int custId = 2;
+            if (dealId > 0) return dealId; // only process new deals for now
 
-                // Step 1: See if we have real IDs for these items - update if we do, add if we don't.
-                OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-                List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+            ContractTransferPacket testData = new ContractTransferPacket();
+            testData.Contract = new OpDataCollectorFlattenedList();
+            testData.PricingStrategy = new OpDataCollectorFlattenedList();
+            testData.PricingTable = new OpDataCollectorFlattenedList();
+            testData.PricingTableRow = new OpDataCollectorFlattenedList();
+            testData.WipDeals = new OpDataCollectorFlattenedList();
 
+            OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
+            testPSData.Add("DC_ID", "-100");
+            testPSData.Add("dc_type", "PRC_ST");
+            testPSData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testPSData.Add("dc_parent_type", "CNTRCT");
+            testPSData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
+            testPSData.Add("TITLE", "PS Title SF1234PS - " + dealSfId);
+            testData.PricingStrategy.Add(testPSData);
 
-                if (sfToMydlIds == null) return; // we had error on lookup - pick up in batch 
+            OpDataCollectorFlattenedItem testPTData = new OpDataCollectorFlattenedItem();
+            testPTData.Add("DC_ID", "-100");
+            testPTData.Add("dc_type", "PRC_TBL");
+            testPTData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testPTData.Add("dc_parent_type", "PRC_ST");
+            testPTData.Add("OBJ_SET_TYPE_CD", "ECAP");
+            testPTData.Add("REBATE_TYPE", "TENDER");
+            testPTData.Add("PAYOUT_BASED_ON", "Consumption");
+            testPTData.Add("MRKT_SEG", "Corp");
+            testPTData.Add("PROGRAM_PAYMENT", "Backend");
+            testPTData.Add("GEO_COMBINED", "Worldwide");
+            testPTData.Add("PROD_INCLDS", "Tray");
+            testPTData.Add("TITLE", "PT Title SF1234PT - " + dealSfId);
+            testData.PricingTable.Add(testPTData);
 
-                int contractId = sfToMydlIds[0].Cntrct_SID;
-                int dealId = sfToMydlIds[0].Wip_SID;
-                // Step 1 End
+            OpDataCollectorFlattenedItem testPTRData = new OpDataCollectorFlattenedItem();
+            testPTRData.Add("DC_ID", "-100");
+            testPTRData.Add("dc_type", "PRC_TBL_ROW");
+            testPTRData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testPTRData.Add("dc_parent_type", "PRC_TBL");
+            testPTRData.Add("ECAP_PRICE", "100");
+            testPTRData.Add("REBATE_TYPE", "TENDER");
+            testPTRData.Add("TITLE", "6260i3-8300");
+            testPTRData.Add("PAYOUT_BASED_ON", "Consumption");
+            testPTRData.Add("OBJ_SET_TYPE_CD", "ECAP");
+            testPTRData.Add("CUST_MBR_SID", "2");
+            testPTRData.Add("START_DT", "09/19/2020");
+            testPTRData.Add("END_DT", "12/28/2020");
+            testPTRData.Add("VOLUME", "1000");
+            testPTRData.Add("END_CUSTOMER_RETAIL", "Cisco");
+            testPTRData.Add("MRKT_SEG", "Corp");
+            testPTRData.Add("PROGRAM_PAYMENT", "Backend");
+            testPTRData.Add("GEO_COMBINED", "Worldwide");
+            testPTRData.Add("PTR_USER_PRD", "i3-8300");
+            testPTRData.Add("PTR_SYS_PRD", "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
+            testPTRData.Add("PROD_INCLDS", "Tray");
+            //testPTRData.Add("PASSED_VALIDATION", "Complete");
+            testPTRData.Add("SYS_COMMENT", "SalesForce Created Pricing Table Row: i3-8300");
+            testData.PricingTableRow.Add(testPTRData);
 
-                // Step 2 - Deal with a contract header
-                if (contractId == 0) // This is a new contract header
-                {
-                    contractId = ProcessSalesForceContractInformation(contractId, salesForceIdCntrct, custId, myDealsData);
-                }
-
-
-                Thread.Sleep(10000); // sleep 10 seconds
-                int j = 0;
-                // Do stuff with the messageData object
-            }
-            catch (Exception ex)
-            {
-                // Remember that the Async code needs to handle its own
-                // exceptions, as the "DoWork" method will never fail
-            }
-        }
-
-        private void DoWorkAsync2(string blahme, MyDealsData myDealsData, ContractTransferPacket upperContractData, int updateContractId)
-        {
-            try
-            {
-                // Temp items - take from packet
-                string salesForceIdCntrct = "50130000000X14d";
-                string salesForceIdDeal = "001i000001AWbWu";
-                int custId = 2;
-
-
-
-
-                SavePacket savePacketPS = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
-                {
-                    CustId = custId,
-                    ContractId = updateContractId
-                });
-
-                foreach (var ps in upperContractData.PricingStrategy)
-                {
-                    if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-                    {
-                        ps[AttributeCodes.DC_PARENT_ID.ToString()] = updateContractId;
-                    }
-
-                    if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
-                    {
-                        ps[AttributeCodes.TITLE.ToString()] = updateContractId + ps[AttributeCodes.TITLE.ToString()].ToString();
-                    }
-                }
-
-                OpDataCollectorFlattenedDictList prcPsData = _pricingStrategiesLib.SavePricingStrategy(upperContractData.PricingStrategy, savePacketPS);
-
-
-                Thread.Sleep(10000); // sleep 10 seconds
-                int j = 0;
-                // Do stuff with the messageData object
-            }
-            catch (Exception ex)
-            {
-                // Remember that the Async code needs to handle its own
-                // exceptions, as the "DoWork" method will never fail
-            }
-        }
-
-        public bool SaveSalesForceTenderData(int contractId, int dealId, ContractTransferPacket upperContractData)
-        {
-            //var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
-            //MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
-
-            //if (myDealsData[OpDataElementType.CNTRCT].GroupID != null) // No contract header, so make a new one.
-            // Test
-
-            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            List<int> blahme = new List<int>() {-100};
-            string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
-            bool tenderDataSaved = opdc.SaveTendersDataToStage("TENDER_DEALS", blahme, blahData);
-
-
-            List<int> passedIds = new List<int>();
-            passedIds.Add(0);
-
-            var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
-            MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
-
-            //Task.Factory.StartNew(() => DoWorkAsync(blahData, myDealsData));
-
+            OpDataCollectorFlattenedItem testDealData = new OpDataCollectorFlattenedItem();
+            testDealData.Add("DC_ID", "0");
+            testDealData.Add("dc_type", "WIP_DEAL");
+            testDealData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testDealData.Add("dc_parent_type", "PRC_TBL_ROW");
+            testDealData.Add("ECAP_PRICE_____20___0", "100");
+            testDealData.Add("PRODUCT_FILTER", "92189");
+            testDealData.Add("REBATE_TYPE", "TENDER");
+            testDealData.Add("WF_STG_CD", "Draft"); // Because this is a new deal
+            testDealData.Add("TITLE", "i3-8300"); // Echo out user product name
+            testDealData.Add("PAYOUT_BASED_ON", "Consumption");
+            //testDealData.Add("CAP", "129"); // From PTR_SYS_PRD
+            //testDealData.Add("YCS2_PRC_IRBT", "No YCS2"); // From PTR_SYS_PRD
+            testDealData.Add("OBJ_SET_TYPE_CD", "ECAP");
+            testDealData.Add("CUST_MBR_SID", "2");
+            testDealData.Add("START_DT", "09/19/2020");
+            testDealData.Add("END_DT", "12/28/2020");
+            testDealData.Add("VOLUME", "1000");
+            testDealData.Add("END_CUSTOMER_RETAIL", "Cisco");
+            //testDealData.Add("ON_ADD_DT", "09/19/2020"); // default to start
+            testDealData.Add("CONSUMPTION_REASON", "None");
+            testDealData.Add("MRKT_SEG", "Corp");
+            testDealData.Add("PROGRAM_PAYMENT", "Backend");
+            //testDealData.Add("REBATE_BILLING_START", "09/19/2020"); // default to start
+            //testDealData.Add("REBATE_BILLING_END", "12/28/2020"); // default to end
+            testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
+            testDealData.Add("GEO_COMBINED", "Worldwide");
+            testDealData.Add("PTR_USER_PRD", "i3-8300");
+            testDealData.Add("PROD_INCLDS", "Tray");
+            //testDealData.Add("CAP_STRT_DT", "12/7/2017"); // From PTR_SYS_PRD
+            //testDealData.Add("CAP_END_DT", "12/31/9999"); // From PTR_SYS_PRD
+            testDealData.Add("PASSED_VALIDATION", "Complete"); // From PTR_SYS_PRD
+            testDealData.Add("HAS_L1", "1"); // From PTR_SYS_PRD
+            testDealData.Add("HAS_L2", "0"); // From PTR_SYS_PRD
+            testDealData.Add("PRODUCT_CATEGORIES", "DT"); // From PTR_SYS_PRD
+            testDealData.Add("SALESFORCE_ID", dealSfId);
+            testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
+            testDealData.Add("IN_REDEAL", "0");
+            testDealData.Add("EXCLUDE_AUTOMATION", "Yes");
+            testData.WipDeals.Add(testDealData);
 
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
             {
@@ -405,316 +408,242 @@ namespace Intel.MyDeals.BusinessLogic
                 ContractId = contractId
             });
 
-            OpDataCollectorFlattenedDictList baseContract = null;
-            int CNTRCT_ID = contractId; // -100
-            baseContract = SaveContract(upperContractData.Contract, savePacket);
-
-            foreach (var item in baseContract)
+            // Product Check START
+            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
             {
-                if (item.Key.ToString() == OpDataElementType.CNTRCT.ToString())
+                CustId = 2,
+                ContractId = contractId
+            };
+
+            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
+            usrData.Add(new ProductEntryAttribute()
+            {
+                ROW_NUMBER = 1,
+                USR_INPUT = "i3-8300",
+                EXCLUDE = false,
+                FILTER = "Tray",
+                START_DATE = "2/21/2020",
+                END_DATE = "12/26/2020",
+                GEO_COMBINED = "Worldwide",
+                PROGRAM_PAYMENT = "Backend",
+                MOD_USR_INPUT = "",
+                COLUMN_TYPE = true
+            });
+            ProductLookup resultsList = new ProductsLib().TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
+            int t = 0;
+            // Product Check END
+
+
+            ContractToken saveContractToken = new ContractToken("ContractToken Created - Save WIP Deal")
+            {
+                CustId = 2, // Add as lookup above
+                ContractId = contractId
+            };
+
+            foreach (var ps in testData.PricingStrategy)
+            {
+                if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+                {
+                    ps[AttributeCodes.DC_PARENT_ID.ToString()] = contractId;
+                }
+
+                if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
+                {
+                    ps[AttributeCodes.TITLE.ToString()] = contractId + ps[AttributeCodes.TITLE.ToString()].ToString();
+                }
+            }
+
+            OpDataCollectorFlattenedDictList prcPsData = _pricingStrategiesLib.SavePricingStrategy(testData.PricingStrategy, savePacket);
+            // END SAVE PS SECTION
+
+            // START SAVE PT SECTION
+            int CONT_PS_ID = -100;
+            foreach (var item in prcPsData)
+            {
+                if (item.Key.ToString() == OpDataElementType.PRC_ST.ToString())
                 {
                     foreach (var itm in item.Value)
                     {
-                        if (itm.ContainsKey("_actions")) //if (itm.ContainsKey("DC_ID"))
+                        if (itm.ContainsKey("_actions"))
                         {
                             List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
 
                             if (actionIdChangeAltId != null)
-                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CNTRCT_ID);
+                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PS_ID);
                         }
                     }
                 }
             }
-            // END SAVE CONTRACT HEADER
-            Task.Factory.StartNew(() => DoWorkAsync2(blahData, myDealsData, upperContractData, CNTRCT_ID));
 
+            foreach (var pt in testData.PricingTable)
+            {
+                if (!pt.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+                {
+                    pt.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PS_ID);
+                }
+                else
+                {
+                    pt[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PS_ID;
+                }
 
-            //string salesForceIdCntrct = "50130000000X14c";
-            //string salesForceIdDeal = "001i000001AWbWu";
-            //int custId = 2;
-            //contractId = 0;
-            //if (contractId > 0) return false; // only process new contract headers
-            //OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            //List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+                if (pt.ContainsKey(AttributeCodes.TITLE.ToString()))
+                {
+                    pt[AttributeCodes.TITLE.ToString()] = contractId + pt[AttributeCodes.TITLE.ToString()].ToString();
+                }
+            }
 
+            OpDataCollectorFlattenedDictList PRC_TBL_DATA = _pricingTablesLib.SavePricingTable(testData.PricingTable, savePacket);
+            // END SAVE PT SECTION
 
-            //if (sfToMydlIds == null) return false; // we had error on lookup - pick up in batch 
+            // START SAVE PTR SECTION, PTR??? - this is a SF deal, so only one PTR allowed
+            int CONT_PT_ID = -100;
+            foreach (var item in PRC_TBL_DATA)
+            {
+                if (item.Key.ToString() == OpDataElementType.PRC_TBL.ToString())
+                {
+                    foreach (var itm in item.Value)
+                    {
+                        if (itm.ContainsKey("_actions"))
+                        {
+                            List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
 
-            //contractId = sfToMydlIds[0].Cntrct_SID;
+                            if (actionIdChangeAltId != null)
+                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PT_ID);
+                        }
+                    }
+                }
+            }
+            foreach (var ptr in testData.PricingTableRow)
+            {
+                if (!ptr.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+                {
+                    ptr.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PT_ID);
+                }
+                else
+                {
+                    ptr[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PT_ID;
+                }
 
-            // load contract header if it exists
-            //List<int> passedIds = new List<int>();
-            //passedIds.Add(contractId);
+                if (ptr.ContainsKey(AttributeCodes.TITLE.ToString()))
+                {
+                    ptr[AttributeCodes.TITLE.ToString()] = contractId + ptr[AttributeCodes.TITLE.ToString()].ToString();
+                }
+            }
+            
+            // Use the other Price Table save call to specifically save the PTR only.
+            OpDataCollectorFlattenedDictList PRC_TBL_ROW_DATA = _pricingTablesLib.SavePricingTable(null, testData.PricingTableRow, null, saveContractToken);
 
-            //var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
-            //MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
+            // END SAVE PTR SECTION
 
+            // START SAVE WIP DEAL SECTION, Sales Force is only sending one deal
+            int CONT_PTR_ID = -100;
+            foreach (var item in PRC_TBL_ROW_DATA)
+            {
+                if (item.Key.ToString() == OpDataElementType.PRC_TBL_ROW.ToString())
+                {
+                    foreach (var itm in item.Value)
+                    {
+                        if (itm.ContainsKey("_actions"))
+                        {
+                            List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
 
-            //ContractTransferPacket testData = new ContractTransferPacket();
-            //testData.Contract = new OpDataCollectorFlattenedList();
-            //testData.PricingStrategy = new OpDataCollectorFlattenedList();
-            //testData.PricingTable = new OpDataCollectorFlattenedList();
-            //testData.PricingTableRow = new OpDataCollectorFlattenedList();
-            //testData.WipDeals = new OpDataCollectorFlattenedList();
+                            if (actionIdChangeAltId != null)
+                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PTR_ID);
+                        }
+                    }
+                }
+            }
+            foreach (var wip in testData.WipDeals)
+            {
+                if (!wip.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+                {
+                    wip.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PTR_ID);
+                }
+                else
+                {
+                    wip[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PTR_ID;
+                }
 
-            //OpDataCollectorFlattenedItem testContractData = new OpDataCollectorFlattenedItem();
-            //testContractData.Add("DC_ID", -100); // New contract - follow -id convention
-            //testContractData.Add("dc_type", "CNTRCT");
-            //testContractData.Add("SALESFORCE_ID", salesForceIdCntrct);
-            //testContractData.Add("DC_PARENT_ID", "0");
-            //testContractData.Add("dc_parent_type", "0");
-            //testContractData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
-            //testContractData.Add("CUST_MBR_SID", custId);
-            //testContractData.Add("TITLE", "SalesForce Contract - " + salesForceIdCntrct);
-            //testData.Contract.Add(testContractData);
+                if (wip.ContainsKey(AttributeCodes.TITLE.ToString()))
+                {
+                    wip[AttributeCodes.TITLE.ToString()] = contractId + wip[AttributeCodes.TITLE.ToString()].ToString();
+                }
+            }
 
-            //SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
-            //{
-            //    CustId = custId, // Add as lookup above
-            //    ContractId = -100
-            //});
-
-            //// START SAVE CONTRACT HEADER - Don't need to check "if new contract, save", but if we support updates, it is if here..
-            //var baseContract = SaveContract(testData.Contract, savePacket);
-
-            //foreach (var item in baseContract)
-            //{
-            //    if (item.Key.ToString() == OpDataElementType.CNTRCT.ToString())
-            //    {
-            //        foreach (var itm in item.Value)
-            //        {
-            //            if (itm.ContainsKey("_actions")) //if (itm.ContainsKey("DC_ID"))
-            //            {
-            //                List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-            //                if (actionIdChangeAltId != null)
-            //                    int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out contractId);
-            //            }
-            //        }
-            //    }
-            //}
-
-
-
-            return tenderDataSaved;
-            // End Test
-
-            // TO DO WORK:  
-            // Take contract token data,
-            //      save to message Q data table for processing,
-            //      get SID ID back from DB,
-            //      pass to ASYNC PROC
-            // On Successful save, respond to caller - Success
-            // On Error of Save, respond Failed
-
-            // ASYNC PROC
-            // Read from DB any unprocessed items??/Passed data/ID
-            // Check Tender Folio/Deal by SFIDs (1 call - return contract ID / deal IF for SFIDs)
-            // If Contract doesn't exist, create it, Else Updates if needed (not likely in Folio)
-            // If Deal doesn't exist, create it, Else Updates if needed
-            // Save Packets - If passed
-            // Run PCT
-            // Attempt to push to Submitted if no errors
-            // Get current state of deal, JSONIFY it for Tenders callback
-            // Post to message Q data table for outbound processing, close original SID status as processed
-
-
-            //SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
-            //{
-            //    CustId = 2, // Add as lookup above
-            //    ContractId = contractId
-            //});
-
-            //OpDataCollectorFlattenedDictList baseContract = null;
-            //int CNTRCT_ID = contractId; // -100
-            //if (contractId <= 0) // If the contract header is a new one, save it and get a real number.
-            //{
-            //    // START SAVE CONTRACT HEADER
-            //    baseContract = SaveContract(upperContractData.Contract, savePacket);
-
-            //    foreach (var item in baseContract)
-            //    {
-            //        if (item.Key.ToString() == OpDataElementType.CNTRCT.ToString())
-            //        {
-            //            foreach (var itm in item.Value)
-            //            {
-            //                if (itm.ContainsKey("_actions")) //if (itm.ContainsKey("DC_ID"))
-            //                {
-            //                    List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-            //                    if (actionIdChangeAltId != null)
-            //                        int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CNTRCT_ID);
-            //                }
-            //            }
-            //        }
-            //    }
-            //    // END SAVE CONTRACT HEADER
-            //}
-
-            //// Do deal check first, if not in, insert
-            //// START SAVE PS SECTION
-            //SavePacket savePacketPS = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
-            //{
-            //    CustId = 2, // Add as lookup above
-            //    ContractId = CNTRCT_ID
-            //});
-
-            //foreach (var ps in upperContractData.PricingStrategy)
-            //{
-            //    if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-            //    {
-            //        ps[AttributeCodes.DC_PARENT_ID.ToString()] = CNTRCT_ID;
-            //    }
-
-            //    if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
-            //    {
-            //        ps[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + ps[AttributeCodes.TITLE.ToString()].ToString();
-            //    }
-            //}
-
-            //OpDataCollectorFlattenedDictList prcPsData = _pricingStrategiesLib.SavePricingStrategy(upperContractData.PricingStrategy, savePacketPS);
-            //// END SAVE PS SECTION
-
-            //// START SAVE PT SECTION
-            //int CONT_PS_ID = -100;
-            //foreach (var item in prcPsData)
-            //{
-            //    if (item.Key.ToString() == OpDataElementType.PRC_ST.ToString())
-            //    {
-            //        foreach (var itm in item.Value)
-            //        {
-            //            if (itm.ContainsKey("_actions"))
-            //            {
-            //                List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-            //                if (actionIdChangeAltId != null)
-            //                    int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PS_ID);
-            //            }
-            //        }
-            //    }
-            //}
-
-            //foreach (var pt in upperContractData.PricingTable)
-            //{
-            //    if (!pt.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-            //    {
-            //        pt.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PS_ID);
-            //    }
-            //    else
-            //    {
-            //        pt[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PS_ID;
-            //    }
-
-            //    if (pt.ContainsKey(AttributeCodes.TITLE.ToString()))
-            //    {
-            //        pt[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + pt[AttributeCodes.TITLE.ToString()].ToString();
-            //    }
-            //}
-
-            //SavePacket savePacketPT = new SavePacket(new ContractToken("ContractToken Created - SavePricingTable")
-            //{
-            //    CustId = 2, // Add as lookup above
-            //    ContractId = CNTRCT_ID
-            //});
-
-            //OpDataCollectorFlattenedDictList PRC_TBL_DATA = _pricingTablesLib.SavePricingTable(upperContractData.PricingTable, savePacketPT);
-            //// END SAVE PT SECTION
-
-            //// START SAVE PTR SECTION, PTR??? - this is a SF deal, so only one PTR allowed
-            //int CONT_PT_ID = -100;
-            //foreach (var item in PRC_TBL_DATA)
-            //{
-            //    if (item.Key.ToString() == OpDataElementType.PRC_TBL.ToString())
-            //    {
-            //        foreach (var itm in item.Value)
-            //        {
-            //            if (itm.ContainsKey("_actions"))
-            //            {
-            //                List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-            //                if (actionIdChangeAltId != null)
-            //                    int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PT_ID);
-            //            }
-            //        }
-            //    }
-            //}
-            //foreach (var ptr in upperContractData.PricingTableRow)
-            //{
-            //    if (!ptr.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-            //    {
-            //        ptr.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PT_ID);
-            //    }
-            //    else
-            //    {
-            //        ptr[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PT_ID;
-            //    }
-
-            //    if (ptr.ContainsKey(AttributeCodes.TITLE.ToString()))
-            //    {
-            //        ptr[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + ptr[AttributeCodes.TITLE.ToString()].ToString();
-            //    }
-            //}
-
-            //ContractToken savePacketPTR = new ContractToken("ContractToken Created - SavePricingTableRow")
-            //{
-            //    CustId = 2, // Add as lookup above
-            //    ContractId = CNTRCT_ID
-            //};
-
-            //// Use the other Price Table save call to specifically save the PTR only.
-            //OpDataCollectorFlattenedDictList PRC_TBL_ROW_DATA = _pricingTablesLib.SavePricingTable(null, upperContractData.PricingTableRow, null, savePacketPTR);
-
-            //// END SAVE PTR SECTION
-
-            //// START SAVE WIP DEAL SECTION, Sales Force is only sending one deal
-            //int CONT_PTR_ID = -100;
-            //foreach (var item in PRC_TBL_ROW_DATA)
-            //{
-            //    if (item.Key.ToString() == OpDataElementType.PRC_TBL_ROW.ToString())
-            //    {
-            //        foreach (var itm in item.Value)
-            //        {
-            //            if (itm.ContainsKey("_actions"))
-            //            {
-            //                List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-            //                if (actionIdChangeAltId != null)
-            //                    int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PTR_ID);
-            //            }
-            //        }
-            //    }
-            //}
-            //foreach (var wip in upperContractData.WipDeals)
-            //{
-            //    if (!wip.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-            //    {
-            //        wip.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PTR_ID);
-            //    }
-            //    else
-            //    {
-            //        wip[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PTR_ID;
-            //    }
-
-            //    if (wip.ContainsKey(AttributeCodes.TITLE.ToString()))
-            //    {
-            //        wip[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + wip[AttributeCodes.TITLE.ToString()].ToString();
-            //    }
-            //}
-
-            //ContractToken savePacketWIP = new ContractToken("ContractToken Created - Save WIP Deal")
-            //{
-            //    CustId = 2, // Add as lookup above
-            //    ContractId = CNTRCT_ID
-            //};
-
-            //// Use the other Price Table save call to specifically save the PTR only.
-            //OpDataCollectorFlattenedDictList WIP_ROW_DATA = _pricingTablesLib.SavePricingTable(null, null, upperContractData.WipDeals, savePacketWIP);
+            // Use the other Price Table save call to specifically save the PTR only.
+            OpDataCollectorFlattenedDictList WIP_ROW_DATA = _pricingTablesLib.SavePricingTable(null, null, testData.WipDeals, saveContractToken);
 
 
             // END SAVE WIP DEAL SECTION
 
-            int r = 100;
-            return tenderDataSaved;
+            return 1;
+        }
+
+        public string ExecuteSalesForceTenderData(Guid workId)
+        {
+            // Processing steps
+            // 1. Read the data from DB, update status to working
+            // 2. tear it apart and make our save objects - need to do cust/prod lookups
+            // 3. Save the objects
+
+            // Take read packet and turn it into dictionary
+            // Test
+            //string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
+            //OpDataCollectorFlattenedItem myValues = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(blahData);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
+            int custId = 2;
+            // End Test
+
+            // Fetch data (START WORK)
+            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+            List<TenderTransferObject> tenderStagedWorkRecords = opdc.FetchTendersStagedData("TENDER_DEALS", workId);
+
+            foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)
+            {
+                //OpDataCollectorFlattenedItem workRecordDataFields = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(workRecord.RqstJsonData);
+                TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
+                // Set status
+                int p = 0;
+                //string salesForceIdCntrct = workRecordDataFields["SALESFORCEIDCNTRCT"].ToString();
+                //string salesForceIdDeal = workRecordDataFields["SALESFORCEIDDEAL"].ToString();
+                string salesForceIdCntrct = workRecordDataFields.recordDetails.SBQQ__Quote__c.Id;
+                string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[0].Id; // makes assumption of 1 item
+
+                List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+                if (sfToMydlIds == null) continue; // we had error on lookup, skip to next to process
+
+                int contractId = sfToMydlIds[0].Cntrct_SID;
+                int dealId = sfToMydlIds[0].Wip_SID;
+
+                List<int> passedIds = new List<int>() { contractId };
+
+                var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
+                MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
+
+                // Step 2 - Deal with a contract header
+                if (contractId == 0) // This is a new contract header
+                {
+                    contractId = ProcessSalesForceContractInformation(contractId, salesForceIdCntrct, custId);
+                }
+
+                if (dealId == 0)// This is a new deal entry
+                {
+                    dealId = ProcessSalesForceDealInformation(dealId, contractId, salesForceIdDeal, custId, myDealsData, workRecordDataFields);
+                    int q = 0;
+                }
+            }
+            return "blah";
+        }
+
+        public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
+        {
+            //This just saves the Tenders data to the DB for stage
+            List<int> deadIdList = new List<int>() { -100 };
+
+            string jsonData = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
+
+            // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
+            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+            return opdc.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData); //jsonDataPacket
         }
 
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)

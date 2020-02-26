@@ -90,6 +90,7 @@
     <Compile Include="CrudModes.cs" />
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
+    <Compile Include="DsaLogs.cs" />
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="EmployeeCustomers.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Templating\TemplateExtensions\DcsProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DealTemplateDataGram.cs" />
     <Compile Include="TenderActionItem.cs" />
+    <Compile Include="TenderTransferObjects.cs" />
     <Compile Include="TimeFlowHelper.cs" />
     <Compile Include="TimeFlowItem.cs" />
     <Compile Include="TimeFlowMedia.cs" />

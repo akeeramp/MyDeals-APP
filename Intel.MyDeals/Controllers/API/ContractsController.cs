@@ -11,6 +11,7 @@ using Intel.Opaque;
 using Intel.MyDeals.Helpers;
 using Intel.Opaque.Data;
 using Intel.MyDeals.BusinessLogic;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -182,122 +183,59 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SaveSalesForceTenderData/{contractId}/{dealId}")]
+        [Route("ExecuteSalesForceTenderData")]
+        [HttpGet]
+        public string TestPath()
+        {
+            // Path to catch all unprocessed items
+            Guid workId = Guid.Empty;
+            return SafeExecutor(() => _contractsLib.ExecuteSalesForceTenderData(workId)
+                , "Unable to save the Contract"
+            );
+        }
+
+        [Authorize]
+        [Route("ExecuteSalesForceTenderData/{workId}/")]
+        [HttpGet]
+        public string TestPath(Guid workId)
+        {
+            // Path to kick off any ad-hoc needed runs via admin page
+            return SafeExecutor(() => _contractsLib.ExecuteSalesForceTenderData(workId)
+                , "Unable to save the Contract"
+            );
+        }
+
+        [Authorize]
+        [Route("SaveSalesForceTenderData/{jsonDataPacket}/")] //To be removed once UI is in place
         [HttpGet]
         //[HttpPost]
         //[AntiForgeryValidate]
-        public string SaveSalesForceTenderData(int contractId, int dealId, ContractTransferPacket upperContractData)
+        public string SaveSalesForceTenderData(string jsonDataPacket)
         {
-            // Rough this out as a get, bring back as a post since Mule soft will issue the hit as a post.
-            ContractTransferPacket testData = new ContractTransferPacket();
-            testData.Contract = new OpDataCollectorFlattenedList();
-            testData.PricingStrategy = new OpDataCollectorFlattenedList();
-            testData.PricingTable = new OpDataCollectorFlattenedList();
-            testData.PricingTableRow = new OpDataCollectorFlattenedList();
-            testData.WipDeals = new OpDataCollectorFlattenedList();
+            int p = 0;
+            jsonDataPacket = "{\"header\": {\"source_system\": \"pricing_tenders\",\"target_system\": \"mydeals\",\"action\": \"create\",\"xid\": \"152547827hdhdh\"},\"recordDetails\": {\"SBQQ__Quote__c\": {\"Id\": \"a4H2D000000Ct5KUAS\",\"Name\": \"Q-02446\",\"Pricing_Folio_ID_Nm__c\": \"\",\"SBQQ__Account__c\": {\"Id\": \"a4H2D000000Ct5KUAS\",\"Name\": \"Dell\",\"Core_CIM_ID__c\": \"\"},\"Pricing_Deal_Type_Nm__c\": \"ECAP\",\"Pricing_Customer_Nm__c\": \"Facebook\",\"Pricing_Project_Name_Nm__c\": \"FMH\",\"Pricing_ShipmentStDate_Dt__c\": \"02/28/2019\",\"Pricing_ShipmentEndDate_Dt__c\": \"02/28/2019\",\"Pricing_Server_Deal_Type_Nm__c\": \"HPC\",\"Pricing_Region_Nm__c\": \"EMEA\",\"SBQQ__QuoteLine__c\": [{\"Id\": \"a4D2D0000008mK1UAI\",\"Name\": \"QL-0200061\",\"Pricing_Deal_RFQ_Status_Nm__c\": \"\",\"Pricing_ECAP_Price__c\": \"100\",\"Pricing_Meet_Comp_Price_Amt__c\": \"90\",\"Pricing_Unit_Qty__c\": \"300\",\"Pricing_Deal_RFQ_Id__c\": \"543212\",\"Pricing_Status_Nm__c\": \"\",\"SBQQ__Product__c\": {\"Id\": \"a4D2D0000008mK1UAI\",\"Name\": \"Intel® Xeon® Processor E7-8870 v4 (50M Cache, 2.10 GHz)\",\"Core_Product_Name_EPM_ID__c\": \"192283\"},\"Pricing_Competetor_Product__c\": {\"Id\": \"\",\"Name\": \"\"},\"Pricing_Performance_Metric__c\": [{\"Id\": \"a4D2D0000008mK1UAI\",\"Name\": \"PM-000010\",\"Pricing_Performance_Metric_Nm__c\": \"SpecInt\",\"Pricing_Intel_SKU_Performance_Nbr__c\": \"10\",\"Pricing_Comp_SKU_Performance_Nbr__c\": \"9\",\"Pricing_Weighting_Pct__c\": \"100\"}]}],\"Pricing_Comments__c\": [{\"Id\": \"\",\"Name\": \"\",\"Pricing_Question__c\": \"\",\"Pricing_Answer__c\": \"\"}]}}}";
+            TenderTransferRootObject myValues = JsonConvert.DeserializeObject<TenderTransferRootObject>(jsonDataPacket);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
 
-            OpDataCollectorFlattenedItem testContractData = new OpDataCollectorFlattenedItem();
-            testContractData.Add("DC_ID", "-100");
-            testContractData.Add("dc_type", "CNTRCT");
-            testContractData.Add("DC_PARENT_ID", "0");
-            testContractData.Add("dc_parent_type", "0");
-            testContractData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
-            testContractData.Add("CUST_MBR_SID", "2");
-            testContractData.Add("TITLE", "Contract Title SF1234");
-            testData.Contract.Add(testContractData);
-
-            OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
-            testPSData.Add("DC_ID", "-100");
-            testPSData.Add("dc_type", "PRC_ST");
-            testPSData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
-            testPSData.Add("dc_parent_type", "CNTRCT");
-            testPSData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
-            testPSData.Add("TITLE", "PS Title SF1234PS");
-            testData.PricingStrategy.Add(testPSData);
-
-            OpDataCollectorFlattenedItem testPTData = new OpDataCollectorFlattenedItem();
-            testPTData.Add("DC_ID", "-100");
-            testPTData.Add("dc_type", "PRC_TBL");
-            testPTData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
-            testPTData.Add("dc_parent_type", "PRC_ST");
-            testPTData.Add("OBJ_SET_TYPE_CD", "ECAP");
-            testPTData.Add("REBATE_TYPE", "TENDER");
-            testPTData.Add("PAYOUT_BASED_ON", "Consumption");
-            testPTData.Add("MRKT_SEG", "Corp");
-            testPTData.Add("PROGRAM_PAYMENT", "Backend");
-            testPTData.Add("GEO_COMBINED", "Worldwide");
-            testPTData.Add("PROD_INCLDS", "Tray");
-            testPTData.Add("TITLE", "PT Title SF1234PT");
-            testData.PricingTable.Add(testPTData);
-
-            OpDataCollectorFlattenedItem testPTRData = new OpDataCollectorFlattenedItem();
-            testPTRData.Add("DC_ID", "-100");
-            testPTRData.Add("dc_type", "PRC_TBL_ROW");
-            testPTRData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
-            testPTRData.Add("dc_parent_type", "PRC_TBL");
-            testPTRData.Add("ECAP", "100");
-            testPTRData.Add("REBATE_TYPE", "TENDER");
-            testPTRData.Add("PAYOUT_BASED_ON", "Consumption");
-            testPTRData.Add("OBJ_SET_TYPE_CD", "ECAP");
-            testPTRData.Add("CUST_MBR_SID", "2");
-            testPTRData.Add("START_DT", "09/19/2020");
-            testPTRData.Add("END_DT", "12/28/2020");
-            testPTRData.Add("VOLUME", "1000");
-            testPTRData.Add("END_CUSTOMER_RETAIL", "Cisco");
-            testPTRData.Add("MRKT_SEG", "Corp");
-            testPTRData.Add("PROGRAM_PAYMENT", "Backend");
-            testPTRData.Add("GEO_COMBINED", "Worldwide");
-            testPTRData.Add("PTR_USER_PRD", "i3-8300");
-            testPTRData.Add("PTR_SYS_PRD", "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
-            testPTRData.Add("PROD_INCLDS", "Tray");
-            //testPTRData.Add("PASSED_VALIDATION", "Complete");
-            testPTRData.Add("SYS_COMMENT", "SalesForce Created Pricing Table Row: i3-8300");
-            testData.PricingTableRow.Add(testPTRData);
-
-            OpDataCollectorFlattenedItem testDealData = new OpDataCollectorFlattenedItem();
-            testDealData.Add("DC_ID", "0");
-            testDealData.Add("dc_type", "WIP_DEAL");
-            testDealData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
-            testDealData.Add("dc_parent_type", "PRC_TBL_ROW");
-            testDealData.Add("ECAP", "100");
-            testDealData.Add("PRODUCT_FILTER", "92189");
-            testDealData.Add("REBATE_TYPE", "TENDER");
-            testDealData.Add("WF_STG_CD", "Draft"); // Because this is a new deal
-            testDealData.Add("TITLE", "i3-8300"); // Echo out user product name
-            testDealData.Add("PAYOUT_BASED_ON", "Consumption");
-            //testDealData.Add("CAP", "129"); // From PTR_SYS_PRD
-            //testDealData.Add("YCS2_PRC_IRBT", "No YCS2"); // From PTR_SYS_PRD
-            testDealData.Add("OBJ_SET_TYPE_CD", "ECAP");
-            testDealData.Add("CUST_MBR_SID", "2");
-            testDealData.Add("START_DT", "09/19/2020");
-            testDealData.Add("END_DT", "12/28/2020");
-            testDealData.Add("VOLUME", "1000");
-            testDealData.Add("END_CUSTOMER_RETAIL", "Cisco");
-            //testDealData.Add("ON_ADD_DT", "09/19/2020"); // default to start
-            testDealData.Add("CONSUMPTION_REASON", "None");
-            testDealData.Add("MRKT_SEG", "Corp");
-            testDealData.Add("PROGRAM_PAYMENT", "Backend");
-            //testDealData.Add("REBATE_BILLING_START", "09/19/2020"); // default to start
-            //testDealData.Add("REBATE_BILLING_END", "12/28/2020"); // default to end
-            testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
-            testDealData.Add("GEO_COMBINED", "Worldwide");
-            testDealData.Add("PTR_USER_PRD", "i3-8300");
-            testDealData.Add("PROD_INCLDS", "Tray");
-            //testDealData.Add("CAP_STRT_DT", "12/7/2017"); // From PTR_SYS_PRD
-            //testDealData.Add("CAP_END_DT", "12/31/9999"); // From PTR_SYS_PRD
-            testDealData.Add("PASSED_VALIDATION", "Complete"); // From PTR_SYS_PRD
-            testDealData.Add("HAS_L1", "1"); // From PTR_SYS_PRD
-            testDealData.Add("HAS_L2", "0"); // From PTR_SYS_PRD
-            testDealData.Add("PRODUCT_CATEGORIES", "DT"); // From PTR_SYS_PRD
-            testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
-            testData.WipDeals.Add(testDealData);
-
-            bool saveSuccessful = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(contractId, dealId, testData) //upperContractData)
+            Guid saveSuccessful = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(myValues) //upperContractData)
                 , "Unable to save the SalesForce Tender Deal"
             );
 
-            return saveSuccessful ? "Tender Data Stage Successful" : "Tender Data Stage Failed"; ;
+            return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
         }
+
+        [Authorize]
+        [HttpPost]
+        [AntiForgeryValidate]
+        [Route("SaveSalesForceTenderData")] 
+        public string SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
+        {
+            Guid saveSuccessful = SafeExecutor(() => _contractsLib.SaveSalesForceTenderData(jsonDataPacket) //upperContractData)
+                , "Unable to save the SalesForce Tender Deal"
+            );
+
+            return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
+        }
+
 
         [Authorize]
         [Route("PublishTenderContract/{objSid}")]

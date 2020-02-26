@@ -1003,10 +1003,9 @@ namespace Intel.MyDeals.DataLibrary
             return success;
         }
 
-        public bool SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
+        public Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
         {
-            bool success = false;
-            // TO DO: Fill in with correct passed data after verification
+            Guid myGuid = Guid.Empty;
 
             try
             {
@@ -1019,13 +1018,58 @@ namespace Intel.MyDeals.DataLibrary
 
                 using (var ret = DataAccess.ExecuteReader(cmd))
                 {
-                    if (ret != null && ret.HasRows) // ret comes back and has success row = it ran without fail
+                    int IDX_RESULT = DB.GetReaderOrdinal(ret, "RESULT");
+
+                    while (ret.Read())
                     {
-                        success = true;
+                        myGuid = ret.GetFieldValue<System.Guid>(IDX_RESULT);
                     }
-                    else
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return myGuid;
+        }
+
+        public List<TenderTransferObject> FetchTendersStagedData(string dataType, Guid specificRecord)
+        {
+            Guid myGuid = Guid.Empty;
+
+            // Uses TenderTransferObjects class
+            List<TenderTransferObject> retData = new List<TenderTransferObject>();
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA()
+                {
+                    in_rqst_type = dataType
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    if (rdr != null && rdr.HasRows) // ret comes back and has success row = it ran without fail
                     {
-                        success = false;
+                        int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+                        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                        int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                        int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+                        int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
+
+                        while (rdr.Read())
+                        {
+                            retData.Add(new TenderTransferObject
+                            {
+                                RqstSid = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+                                DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                                BtchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? Guid.Empty : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
+                                RqstJsonData = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
+                                RqstSts = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS)
+                            });
+                        }
                     }
                 }
             }
@@ -1035,7 +1079,13 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
 
-            return success;
+            if (specificRecord != Guid.Empty) // if we open up other stages to support this, cull down to pending stage below.
+            {
+                // Return only the matching item
+                return retData.Where(r => r.BtchId == specificRecord).ToList();
+            }
+            
+            return retData;
         }
 
         public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal)
