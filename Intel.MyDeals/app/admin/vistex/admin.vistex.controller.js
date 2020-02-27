@@ -173,7 +173,7 @@
                 },
                 { field: "TransanctionId", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(TransanctionId == '00000000-0000-0000-0000-000000000000'){#-#} else {##= TransanctionId ##}#</span>" },
                 { field: "DealId", title: "Deal Id", width: "125px", filterable: { multi: true, search: true } },
-                { field: "Status", title: "Status", width: "150px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
+                { field: "Status", title: "Status", width: "250px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
                 { field: "Message", title: "Message", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
                 { field: "CreatedOn", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
                 { field: "SendToPoOn", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },

@@ -141,7 +141,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 in_btch_id = batchId,
                 in_rqst_sts = vistexStage.ToString("g"),
-                in_err_msg = strErrorMessage != string.Empty ? strErrorMessage : null
+                in_err_msg = strErrorMessage != string.Empty && strErrorMessage != "null" ? strErrorMessage : null
             };
             DataAccess.ExecuteNonQuery(cmd);
             return batchId;
