@@ -2103,6 +2103,17 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'TERMS')#"
             });
+            items.Add(new UiTemplateContainerItem  // WIP ECAP types for now
+            {
+                Id = 3716,
+                AtrbCd = AttributeCodes.QUOTE_LN_ID,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Quote Line ID",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'QUOTE_LN_ID')#"
+            });
             items.Add(new UiTemplateContainerItem  // WIP VT types
             {
                 Id = 3490,

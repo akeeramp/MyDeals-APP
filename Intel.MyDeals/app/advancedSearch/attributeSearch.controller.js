@@ -560,6 +560,11 @@
                 type: "string",
                 width: 140
             }, {
+                field: "QUOTE_LN_ID",
+                title: "Quote Line Id",
+                type: "string",
+                width: 140
+            }, {
                 field: "DEAL_GRP_NM ",
                 title: "Kit Name",
                 type: "string",

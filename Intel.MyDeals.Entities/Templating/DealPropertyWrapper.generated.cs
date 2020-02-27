@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/18/2020 10:17:08 AM
+File Updated: 2/26/2020 3:56:23 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -3544,6 +3544,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute QUOTE_LN_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "QUOTE_LN_ID",
+			ATRB_DESC = "Quote Line ID",
+			ATRB_LBL = "Quote Line ID",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3716,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "NA",
+			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute RATE = new MyDealsAttribute()

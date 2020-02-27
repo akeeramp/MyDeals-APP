@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/18/2020 10:18:24 AM
+File Updated: 2/26/2020 3:55:40 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2008,6 +2008,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string QTY = "QTY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3716
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string QUOTE_LN_ID = "QUOTE_LN_ID";
 
 		///<summary>
 		/// DIM_SID: 3
