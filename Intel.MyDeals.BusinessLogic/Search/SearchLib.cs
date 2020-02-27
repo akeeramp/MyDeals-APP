@@ -170,7 +170,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 AttributeCodes.END_CUSTOMER_RETAIL,
                 AttributeCodes.QLTR_PROJECT,
-                AttributeCodes.QUOTE_LN_ID,
+                //AttributeCodes.QUOTE_LN_ID,
                 AttributeCodes.TRKR_NBR,
                 AttributeCodes.TITLE,
                 AttributeCodes.WF_STG_CD
