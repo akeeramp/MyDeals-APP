@@ -20,6 +20,7 @@
         vm.DealIds = "";
         vm.RegxDealIds = "[0-9,]+$";
         vm.IsDealIdsValid = true;
+        vm.EnteredMessage = "";
 
         vm.init = function () {
             dsaService.getVistex().then(function (response) {
@@ -69,18 +70,18 @@
             return false;
         }
 
-        vm.UpdateVistexStatus = function (strTransantionId, strErrorMessage) {
-            if (strErrorMessage == '')
-                strErrorMessage = null;
+        vm.UpdateVistexStatus = function (strTransantionId) {
+            if (vm.EnteredMessage == '')
+                vm.EnteredMessage = null;
             vm.spinnerMessageDescription = "Please wait while updating the status..";
-            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, strErrorMessage).then(function (response) {
+            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, vm.EnteredMessage).then(function (response) {
                 if (response.data == strTransantionId) {
                     angular.forEach(vm.Vistex.filter(x => x.TransanctionId === response.data), function (dataItem) {
                         dataItem.Status = vm.SelectedStatus;
-                        dataItem.Message = strErrorMessage == null ? '' : strErrorMessage;
+                        dataItem.Message = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
                     });
                     vm.vistexDataSource.read();
-                    logger.success("Status has been updated!");
+                    logger.success("Status has been updated with the message!");
                 } else {
                     logger.error("Unable to update the status!");
                 }
@@ -113,6 +114,11 @@
             },
             sort: { field: "CreatedOn", dir: "desc" }
         });
+
+        vm.MessageEditor = function (container, options) {
+            vm.EnteredMessage = options.model.Message;
+            var editor = $('<input class="form-control md" type="text" ng-model="vm.EnteredMessage" placeholder="Enter your message here.." title="Enter your message here.." style="width:95%;">').appendTo(container);
+        }
 
         vm.StatusDropDownEditor = function (container, options) {
             vm.SelectedStatus = options.model.Status;
@@ -148,7 +154,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.TransanctionId, e.model.Message);
+                vm.UpdateVistexStatus(e.model.TransanctionId);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
@@ -168,7 +174,7 @@
                 { field: "TransanctionId", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(TransanctionId == '00000000-0000-0000-0000-000000000000'){#-#} else {##= TransanctionId ##}#</span>" },
                 { field: "DealId", title: "Deal Id", width: "125px", filterable: { multi: true, search: true } },
                 { field: "Status", title: "Status", width: "150px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
-                { field: "Message", title: "Message", filterable: { multi: true, search: true } },
+                { field: "Message", title: "Message", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
                 { field: "CreatedOn", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
                 { field: "SendToPoOn", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },
                 { field: "ProcessedOn", title: "Processed On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(ProcessedOn == '1/1/1900'){#-#} else {##= ProcessedOn ##}#</span>" }
