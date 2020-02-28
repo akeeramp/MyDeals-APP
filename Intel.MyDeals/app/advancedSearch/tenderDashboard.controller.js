@@ -562,6 +562,11 @@
                 type: "string",
                 width: 140
             }, {
+                field: "QUOTE_LN_ID",
+                title: "Quote Line Id",
+                type: "string",
+                width: 140
+            }, {
                 field: "DEAL_GRP_NM ",
                 title: "Kit Name",
                 type: "string",
@@ -657,6 +662,11 @@
                 source: null
             }, {
                 field: "END_CUSTOMER_RETAIL",
+                operator: "LIKE",
+                value: "",
+                source: null
+            }, {
+                field: "QUOTE_LN_ID",
                 operator: "LIKE",
                 value: "",
                 source: null

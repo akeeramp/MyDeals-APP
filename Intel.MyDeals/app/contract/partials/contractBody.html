@@ -2,7 +2,7 @@
 <div ng-include="'app/contract/partials/ptModals/renameTitleModal.html'"></div>
 
 <div id="secContainerWrapper" class="fadeInAnim" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
-	<div id="secHeader" ng-class="{'noborders': !isPtr && !isWip && isTenderWidgetVisible != true}">
+	<div id="secHeader" ng-class="{'noborders': !isPtr && !isWip && isTenderWidgetVisible != true}" ng-style="{'height':isTenderWidgetVisible ? '0px' : '68px' }">
 		<div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
 			<div class="col-md-11"

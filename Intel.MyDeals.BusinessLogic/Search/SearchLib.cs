@@ -170,6 +170,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 AttributeCodes.END_CUSTOMER_RETAIL,
                 AttributeCodes.QLTR_PROJECT,
+                //AttributeCodes.QUOTE_LN_ID,
                 AttributeCodes.TRKR_NBR,
                 AttributeCodes.TITLE,
                 AttributeCodes.WF_STG_CD
@@ -294,6 +295,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.CAP.ATRB_SID,
                     Attributes.YCS2_PRC_IRBT.ATRB_SID,
                     Attributes.QLTR_PROJECT.ATRB_SID,
+                    Attributes.QUOTE_LN_ID.ATRB_SID,
                     Attributes.QLTR_BID_GEO.ATRB_SID,
                     Attributes.GEO_COMBINED.ATRB_SID
                 });
@@ -628,6 +630,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PS_WF_STG_CD.ATRB_SID,
                 Attributes.QLTR_BID_GEO.ATRB_SID,
                 Attributes.QLTR_PROJECT.ATRB_SID,
+                Attributes.QUOTE_LN_ID.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.SERVER_DEAL_TYPE.ATRB_SID,
                 Attributes.START_DT.ATRB_SID,
