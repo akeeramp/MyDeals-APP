@@ -15,7 +15,6 @@
         $scope.testTendersData = {};
 
         $scope.testTendersData.CNTRCT_SF_ID = '50130000000X14c';
-        $scope.testTendersData.CNTRCT_ID = '50130000000X14c';
         $scope.testTendersData.CNTRCT_CUST = 'Dell';
         $scope.testTendersData.END_CUST = 'Facebook';
         $scope.testTendersData.START_DT = '02/28/2020';
@@ -41,7 +40,7 @@
                         'Name': 'Q-02446',
                         'Pricing_Folio_ID_Nm__c': '',
                         'SBQQ__Account__c': {
-                            'Id': $scope.testTendersData.CNTRCT_ID,
+                            'Id': $scope.testTendersData.CNTRCT_SF_ID,
                             'Name': $scope.testTendersData.CNTRCT_CUST,
                             'Core_CIM_ID__c': ''
                         },
@@ -63,7 +62,7 @@
                                 'Pricing_Deal_RFQ_Id__c': $scope.testTendersData.DEAL_ID,
                                 'Pricing_Status_Nm__c': '',
                                 'SBQQ__Product__c': {
-                                    'Id': '001i000001AWbWu',
+                                    'Id': $scope.testTendersData.DEAL_SF_ID,
                                     'Name': $scope.testTendersData.PROD_IDs,
                                     'Core_Product_Name_EPM_ID__c': '192283'
                                 },
@@ -73,7 +72,7 @@
                                 },
                                 'Pricing_Performance_Metric__c': [
                                     {
-                                        'Id': '001i000001AWbWu',
+                                        'Id': $scope.testTendersData.DEAL_SF_ID,
                                         'Name': 'PM-000010',
                                         'Pricing_Performance_Metric_Nm__c': 'SpecInt',
                                         'Pricing_Intel_SKU_Performance_Nbr__c': '10',
