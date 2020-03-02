@@ -46,7 +46,8 @@ namespace Intel.MyDeals.Entities
         MRKT_SEG = 3474,
         GEO_COMBINED = 3620,
         VOLUME = 3321,
-        PAYOUT_BASED_ON = 35
+        PAYOUT_BASED_ON = 35,
+        END_CUSTOMER_RETAIL = 3348
     }
 
     public enum VistexStage
