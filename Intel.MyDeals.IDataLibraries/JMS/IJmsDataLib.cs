@@ -29,5 +29,7 @@ namespace Intel.MyDeals.IDataLibrary
         Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
 
         void Publish(string brokerURI, string userName, string queueName, List<string> data);
+
+        Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket);
     }
 }

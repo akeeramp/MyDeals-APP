@@ -72,6 +72,7 @@
     <Compile Include="DSA\IDsaEngineLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />
+    <Compile Include="Integration\IIntegrationLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
     <Compile Include="ManualEngine\IManualEngineLib.cs" />

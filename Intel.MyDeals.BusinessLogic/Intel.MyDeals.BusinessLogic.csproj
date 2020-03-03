@@ -105,6 +105,7 @@
     <Compile Include="EcapTracker\EcapTrackerLib.cs" />
     <Compile Include="Employees\EmployeeHelpers.cs" />
     <Compile Include="Files\FilesLib.cs" />
+    <Compile Include="Integration\IntegrationLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
     <Compile Include="ManualEngine\ManualEngineLib.cs" />
     <Compile Include="NotificationsLib\NotificationsLib.cs" />

@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace Intel.MyDeals.Entities
 {
+    public class ProductEpmObject
+    {
+        public int PrdGrpEpmId { get; set; }
+        public int PcsrNbrSid { get; set; }
+        public string EdwPcsrNbr { get; set; }
+        public string MydlPcsrNbr { get; set; }
+    }
+
     public class TenderTransferObject
     {
         public int RqstSid { get; set; }

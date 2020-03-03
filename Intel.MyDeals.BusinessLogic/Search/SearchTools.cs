@@ -79,7 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string atrb = arSections[0];
                 arSections[1] = arSections[1].Trim().Replace("'", "");
 
-                // Special case... CAP is a string becuase of ranges and "NO CAP" be we will treatit in the filter like a number
+                // Special case... CAP is a string because of ranges and "NO CAP" be we will treat it in the filter like a number
                 if (atrb != AttributeCodes.CAP)
                 {
                     FieldInfo fieldInfo = typeof(Attributes).GetField(atrb);

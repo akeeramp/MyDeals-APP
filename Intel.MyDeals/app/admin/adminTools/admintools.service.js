@@ -11,6 +11,7 @@
     function adminTools(dataService, logger, $q) {
         var apiBaseUrl = "api/dataquality/";
         var apiPostBaseUrl = "api/Contracts/v1/";
+        var apiIntegrationUrl = "api/Integration/";
 
         var service = {
             ExecuteCostGapFiller: ExecuteCostGapFiller,
@@ -24,7 +25,7 @@
         }
 
         function ExecutePostTest(jsonDataPacket) {
-            return dataService.post(apiPostBaseUrl + 'SaveSalesForceTenderData/', jsonDataPacket);
+            return dataService.post(apiIntegrationUrl + 'SaveSalesForceTenderData/', jsonDataPacket);
         }
     }
 })();

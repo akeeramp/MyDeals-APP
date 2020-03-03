@@ -234,41 +234,38 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
-        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId)
+        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
         {
             if (contractId > 0) return contractId; // only process new contract headers
 
             ContractTransferPacket testData = new ContractTransferPacket();
             testData.Contract = new OpDataCollectorFlattenedList();
-            testData.PricingStrategy = new OpDataCollectorFlattenedList();
-            testData.PricingTable = new OpDataCollectorFlattenedList();
-            testData.PricingTableRow = new OpDataCollectorFlattenedList();
-            testData.WipDeals = new OpDataCollectorFlattenedList();
+            //testData.PricingStrategy = new OpDataCollectorFlattenedList();
+            //testData.PricingTable = new OpDataCollectorFlattenedList();
+            //testData.PricingTableRow = new OpDataCollectorFlattenedList();
+            //testData.WipDeals = new OpDataCollectorFlattenedList();
 
+            // Pull needed data
+            string strtDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentStDate_Dt__c;
+            string endDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentEndDate_Dt__c;
+            string quoteLineId = workRecordDataFields.recordDetails.SBQQ__Quote__c.Name;
+            string contractTitle = "SalesForce Contract - " + quoteLineId + " - " + contractSfId;
 
-            //// Assumption that this is middle tier located in Cali, so I don't have to set CultureInfo("en-US")
-            //var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, DateTime.Now, null, null);
-            //var strtDt = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.START_DT);
-            //var endDt = cntrctDEs.FirstOrDefault(d => d.AtrbCd == AttributeCodes.END_DT);
-            //strtDt.AtrbValue = quarterDetails.QTR_STRT.ToString("d"); // This is likely in the past, just setting the post, might switch to today (DateTime.Now)
-            //endDt.AtrbValue = quarterDetails.QTR_END.ToString("d");
-            //02/10/2020
-            //DateTime.Now.ToString("MM/dd/yyyy")
-            //today.AddDays(duration);
-
+            // Place in standard header packet
             OpDataCollectorFlattenedItem testContractData = new OpDataCollectorFlattenedItem();
             testContractData.Add("DC_ID", -100); // New contract - follow -id convention
             testContractData.Add("dc_type", "CNTRCT");
             testContractData.Add("SALESFORCE_ID", contractSfId);
+            testContractData.Add("QUOTE_LN_ID", quoteLineId); // not sure if we need this
             testContractData.Add("DC_PARENT_ID", "0");
             testContractData.Add("dc_parent_type", "0");
             testContractData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
             testContractData.Add("CUST_MBR_SID", custId);
-            testContractData.Add("START_DT", DateTime.Now.AddMonths(-2).ToString("MM/dd/yyyy")); // 2 months ago
-            testContractData.Add("END_DT", DateTime.Now.AddMonths(12).ToString("MM/dd/yyyy")); // a year from now
+            testContractData.Add("START_DT", strtDt); // 2 months ago - DateTime.Now.AddMonths(-2).ToString("MM/dd/yyyy")
+            testContractData.Add("END_DT", endDt); // a year from now - DateTime.Now.AddMonths(12).ToString("MM/dd/yyyy")
             testContractData.Add("TENDER_PUBLISHED", 1);
             testContractData.Add("IS_TENDER", 1);
-            testContractData.Add("TITLE", "SalesForce Contract - " + contractSfId);
+            testContractData.Add("TITLE", contractTitle);
             testData.Contract.Add(testContractData);
 
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
@@ -301,7 +298,7 @@ namespace Intel.MyDeals.BusinessLogic
             return contractId; // Send back the new contract ID here
         }
 
-        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields)
+        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int currRecord)
         {
             if (dealId > 0) return dealId; // only process new deals for now
 
@@ -312,21 +309,82 @@ namespace Intel.MyDeals.BusinessLogic
             testData.PricingTableRow = new OpDataCollectorFlattenedList();
             testData.WipDeals = new OpDataCollectorFlattenedList();
 
+            string strtDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentStDate_Dt__c; //02/28/2019
+            string endDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentEndDate_Dt__c; //02/28/2019
+            string endCust = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Customer_Nm__c; //Facebook
+            string prjNm = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Project_Name_Nm__c; //FMH
+            string svrType = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Server_Deal_Type_Nm__c; //HPC
+            string rgn = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Region_Nm__c; //EMEA
+            string dealType = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Deal_Type_Nm__c; //ECAP
+            // Embedded Array Items
+            string quoteLineId = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Name; //QL-0200061
+            string ecapPrice = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_ECAP_Price__c; //100
+            string qty = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_Unit_Qty__c; //300
+            string usrPrdNm = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].SBQQ__Product__c.Name; //Intel® Xeon® Processor E7-8870 v4 (50M Cache, 2.10 GHz)
+            string prdLkupNbr = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].SBQQ__Product__c.Core_Product_Name_EPM_ID__c; //192283
+            string meetCompPrc = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_Meet_Comp_Price_Amt__c; //90
+            string compPrd = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_Competetor_Product__c.Name; // Diplocotus
+            // Rest are meet comp - take only the first one
+            string perfMetric = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
+                .Pricing_Performance_Metric__c[0].Pricing_Performance_Metric_Nm__c; // SpecInt
+            string intelSku = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
+                .Pricing_Performance_Metric__c[0].Pricing_Intel_SKU_Performance_Nbr__c; // 10
+            string compSku = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
+                .Pricing_Performance_Metric__c[0].Pricing_Comp_SKU_Performance_Nbr__c; // 9
+
+            // Product EPM ID Lookup
+            //PR_MYDL_PRD_PCSR_EPM_MAP_DTL
+            int epmId = 0;
+            Int32.TryParse(prdLkupNbr, out epmId);
+
+            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+            //ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)
+            ProductEpmObject productLookupObj = opdc.FetchProdFromProcessorEpmMap(epmId);
+
+            if (productLookupObj == null) return 0; // Bail out
+            // Product Check START
+            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+            {
+                CustId = custId,
+                ContractId = contractId
+            };
+
+            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
+            usrData.Add(new ProductEntryAttribute()
+            {
+                ROW_NUMBER = 1,
+                USR_INPUT = productLookupObj.MydlPcsrNbr,
+                EXCLUDE = false,
+                FILTER = "Tray", // Do we assume this?
+                START_DATE = strtDt,
+                END_DATE = endDt,
+                GEO_COMBINED = rgn,
+                PROGRAM_PAYMENT = "Backend",
+                MOD_USR_INPUT = "",
+                COLUMN_TYPE = true
+            });
+            ProductLookup resultsList = new ProductsLib().TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
+            var blahg = JsonConvert.SerializeObject(resultsList.ValidProducts["1"]);
+            int t = 0;
+            // Product Check END
+
+            // Need to do a product lookup here, first by ID to get name, then by TranslateProducts
+
             OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
-            testPSData.Add("DC_ID", "-100");
+            testPSData.Add("DC_ID", -201 - currRecord); // first record save is -201, others should be -202...
             testPSData.Add("dc_type", "PRC_ST");
-            testPSData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testPSData.Add("DC_PARENT_ID", contractId); // Had to get parent of this level, so set it, other levels must be returned
             testPSData.Add("dc_parent_type", "CNTRCT");
             testPSData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
-            testPSData.Add("TITLE", "PS Title SF1234PS - " + dealSfId);
+            testPSData.Add("TITLE", "PS - " + quoteLineId); // Assume that SF enforces uniqueness here, if not, add dealSfId
             testData.PricingStrategy.Add(testPSData);
 
             OpDataCollectorFlattenedItem testPTData = new OpDataCollectorFlattenedItem();
-            testPTData.Add("DC_ID", "-100");
+            testPTData.Add("DC_ID", -301 - currRecord); // first record save is -301, others should be -302...
             testPTData.Add("dc_type", "PRC_TBL");
-            testPTData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testPTData.Add("DC_PARENT_ID", -201 - currRecord); //Not passed - set it func due to single object saves
             testPTData.Add("dc_parent_type", "PRC_ST");
-            testPTData.Add("OBJ_SET_TYPE_CD", "ECAP");
+            testPTData.Add("OBJ_SET_TYPE_CD", dealType);
             testPTData.Add("REBATE_TYPE", "TENDER");
             testPTData.Add("PAYOUT_BASED_ON", "Consumption");
             testPTData.Add("MRKT_SEG", "Corp");
@@ -337,24 +395,24 @@ namespace Intel.MyDeals.BusinessLogic
             testData.PricingTable.Add(testPTData);
 
             OpDataCollectorFlattenedItem testPTRData = new OpDataCollectorFlattenedItem();
-            testPTRData.Add("DC_ID", "-100");
+            testPTRData.Add("DC_ID", -401 - currRecord); // first record save is -401, others should be -402...
             testPTRData.Add("dc_type", "PRC_TBL_ROW");
-            testPTRData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testPTRData.Add("DC_PARENT_ID", -301 - currRecord); //Not passed - set it func due to single object saves
             testPTRData.Add("dc_parent_type", "PRC_TBL");
-            testPTRData.Add("ECAP_PRICE", "100");
+            testPTRData.Add("ECAP_PRICE", ecapPrice);
             testPTRData.Add("REBATE_TYPE", "TENDER");
             testPTRData.Add("TITLE", "6260i3-8300");
             testPTRData.Add("PAYOUT_BASED_ON", "Consumption");
-            testPTRData.Add("OBJ_SET_TYPE_CD", "ECAP");
+            testPTRData.Add("OBJ_SET_TYPE_CD", dealType);
             testPTRData.Add("CUST_MBR_SID", "2");
-            testPTRData.Add("START_DT", "09/19/2020");
-            testPTRData.Add("END_DT", "12/28/2020");
-            testPTRData.Add("VOLUME", "1000");
-            testPTRData.Add("END_CUSTOMER_RETAIL", "Cisco");
+            testPTRData.Add("START_DT", strtDt);
+            testPTRData.Add("END_DT", endDt);
+            testPTRData.Add("VOLUME", qty);
+            testPTRData.Add("END_CUSTOMER_RETAIL", endCust);
             testPTRData.Add("MRKT_SEG", "Corp");
             testPTRData.Add("PROGRAM_PAYMENT", "Backend");
-            testPTRData.Add("GEO_COMBINED", "Worldwide");
-            testPTRData.Add("PTR_USER_PRD", "i3-8300");
+            testPTRData.Add("GEO_COMBINED", rgn);
+            testPTRData.Add("PTR_USER_PRD", usrPrdNm);
             testPTRData.Add("PTR_SYS_PRD", "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
             testPTRData.Add("PROD_INCLDS", "Tray");
             //testPTRData.Add("PASSED_VALIDATION", "Complete");
@@ -362,24 +420,24 @@ namespace Intel.MyDeals.BusinessLogic
             testData.PricingTableRow.Add(testPTRData);
 
             OpDataCollectorFlattenedItem testDealData = new OpDataCollectorFlattenedItem();
-            testDealData.Add("DC_ID", "0");
+            testDealData.Add("DC_ID", -501 - currRecord); // first record save is -501, others should be -502...
             testDealData.Add("dc_type", "WIP_DEAL");
-            testDealData.Add("DC_PARENT_ID", "-100"); //Not passed - set it func due to single object saves
+            testDealData.Add("DC_PARENT_ID", -401 - currRecord); //Not passed - set it func due to single object saves
             testDealData.Add("dc_parent_type", "PRC_TBL_ROW");
-            testDealData.Add("ECAP_PRICE_____20___0", "100");
+            testDealData.Add("ECAP_PRICE_____20___0", ecapPrice);
             testDealData.Add("PRODUCT_FILTER", "92189");
             testDealData.Add("REBATE_TYPE", "TENDER");
             testDealData.Add("WF_STG_CD", "Draft"); // Because this is a new deal
-            testDealData.Add("TITLE", "i3-8300"); // Echo out user product name
+            testDealData.Add("TITLE", usrPrdNm); // Echo out user product name
             testDealData.Add("PAYOUT_BASED_ON", "Consumption");
             //testDealData.Add("CAP", "129"); // From PTR_SYS_PRD
             //testDealData.Add("YCS2_PRC_IRBT", "No YCS2"); // From PTR_SYS_PRD
-            testDealData.Add("OBJ_SET_TYPE_CD", "ECAP");
+            testDealData.Add("OBJ_SET_TYPE_CD", dealType);
             testDealData.Add("CUST_MBR_SID", "2");
-            testDealData.Add("START_DT", "09/19/2020");
-            testDealData.Add("END_DT", "12/28/2020");
-            testDealData.Add("VOLUME", "1000");
-            testDealData.Add("END_CUSTOMER_RETAIL", "Cisco");
+            testDealData.Add("START_DT", strtDt);
+            testDealData.Add("END_DT", endDt);
+            testDealData.Add("VOLUME", qty);
+            testDealData.Add("END_CUSTOMER_RETAIL", endCust);
             //testDealData.Add("ON_ADD_DT", "09/19/2020"); // default to start
             testDealData.Add("CONSUMPTION_REASON", "None");
             testDealData.Add("MRKT_SEG", "Corp");
@@ -387,7 +445,7 @@ namespace Intel.MyDeals.BusinessLogic
             //testDealData.Add("REBATE_BILLING_START", "09/19/2020"); // default to start
             //testDealData.Add("REBATE_BILLING_END", "12/28/2020"); // default to end
             testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
-            testDealData.Add("GEO_COMBINED", "Worldwide");
+            testDealData.Add("GEO_COMBINED", rgn);
             testDealData.Add("PTR_USER_PRD", "i3-8300");
             testDealData.Add("PROD_INCLDS", "Tray");
             //testDealData.Add("CAP_STRT_DT", "12/7/2017"); // From PTR_SYS_PRD
@@ -404,60 +462,35 @@ namespace Intel.MyDeals.BusinessLogic
 
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
             {
-                CustId = 2, // Add as lookup above
+                CustId = custId, // Add as lookup above
                 ContractId = contractId
             });
-
-            // Product Check START
-            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
-            {
-                CustId = 2,
-                ContractId = contractId
-            };
-
-            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
-            usrData.Add(new ProductEntryAttribute()
-            {
-                ROW_NUMBER = 1,
-                USR_INPUT = "i3-8300",
-                EXCLUDE = false,
-                FILTER = "Tray",
-                START_DATE = "2/21/2020",
-                END_DATE = "12/26/2020",
-                GEO_COMBINED = "Worldwide",
-                PROGRAM_PAYMENT = "Backend",
-                MOD_USR_INPUT = "",
-                COLUMN_TYPE = true
-            });
-            ProductLookup resultsList = new ProductsLib().TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
-            int t = 0;
-            // Product Check END
-
 
             ContractToken saveContractToken = new ContractToken("ContractToken Created - Save WIP Deal")
             {
-                CustId = 2, // Add as lookup above
+                CustId = custId, // Add as lookup above
                 ContractId = contractId
             };
 
-            foreach (var ps in testData.PricingStrategy)
-            {
-                if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-                {
-                    ps[AttributeCodes.DC_PARENT_ID.ToString()] = contractId;
-                }
+            // Set in data up front
+            //foreach (var ps in testData.PricingStrategy)
+            //{
+            //    if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
+            //    {
+            //        ps[AttributeCodes.DC_PARENT_ID.ToString()] = contractId;
+            //    }
 
-                if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
-                {
-                    ps[AttributeCodes.TITLE.ToString()] = contractId + ps[AttributeCodes.TITLE.ToString()].ToString();
-                }
-            }
+            //    if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
+            //    {
+            //        ps[AttributeCodes.TITLE.ToString()] = contractId + ps[AttributeCodes.TITLE.ToString()].ToString();
+            //    }
+            //}
 
             OpDataCollectorFlattenedDictList prcPsData = _pricingStrategiesLib.SavePricingStrategy(testData.PricingStrategy, savePacket);
             // END SAVE PS SECTION
 
             // START SAVE PT SECTION
-            int CONT_PS_ID = -100;
+            int CONT_PS_ID = -201 - currRecord;
             foreach (var item in prcPsData)
             {
                 if (item.Key.ToString() == OpDataElementType.PRC_ST.ToString())
@@ -496,7 +529,7 @@ namespace Intel.MyDeals.BusinessLogic
             // END SAVE PT SECTION
 
             // START SAVE PTR SECTION, PTR??? - this is a SF deal, so only one PTR allowed
-            int CONT_PT_ID = -100;
+            int CONT_PT_ID = -301 - currRecord;
             foreach (var item in PRC_TBL_DATA)
             {
                 if (item.Key.ToString() == OpDataElementType.PRC_TBL.ToString())
@@ -536,7 +569,7 @@ namespace Intel.MyDeals.BusinessLogic
             // END SAVE PTR SECTION
 
             // START SAVE WIP DEAL SECTION, Sales Force is only sending one deal
-            int CONT_PTR_ID = -100;
+            int CONT_PTR_ID = -401 - currRecord;
             foreach (var item in PRC_TBL_ROW_DATA)
             {
                 if (item.Key.ToString() == OpDataElementType.PRC_TBL_ROW.ToString())
@@ -573,6 +606,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Use the other Price Table save call to specifically save the PTR only.
             OpDataCollectorFlattenedDictList WIP_ROW_DATA = _pricingTablesLib.SavePricingTable(null, null, testData.WipDeals, saveContractToken);
 
+            //-501 - currRecord;
+            // Update the Meet Comp data now.
 
             // END SAVE WIP DEAL SECTION
 
@@ -590,7 +625,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Test
             //string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
             //OpDataCollectorFlattenedItem myValues = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(blahData);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
-            int custId = 2;
+            int custId;
             // End Test
 
             // Fetch data (START WORK)
@@ -599,52 +634,58 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)
             {
-                //OpDataCollectorFlattenedItem workRecordDataFields = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(workRecord.RqstJsonData);
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
-                // Set status
-                int p = 0;
-                //string salesForceIdCntrct = workRecordDataFields["SALESFORCEIDCNTRCT"].ToString();
-                //string salesForceIdDeal = workRecordDataFields["SALESFORCEIDDEAL"].ToString();
-                string salesForceIdCntrct = workRecordDataFields.recordDetails.SBQQ__Quote__c.Id;
-                string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[0].Id; // makes assumption of 1 item
 
-                List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
-                if (sfToMydlIds == null) continue; // we had error on lookup, skip to next to process
-
-                int contractId = sfToMydlIds[0].Cntrct_SID;
-                int dealId = sfToMydlIds[0].Wip_SID;
-
-                List<int> passedIds = new List<int>() { contractId };
-
-                var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
-                MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
-
-                // Step 2 - Deal with a contract header
-                if (contractId == 0) // This is a new contract header
+                // expect that we might have more then one deal, so walk through those records
+                for (int i = 0; i < workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c.Count(); i++) 
                 {
-                    contractId = ProcessSalesForceContractInformation(contractId, salesForceIdCntrct, custId);
-                }
+                    string salesForceIdCntrct = workRecordDataFields.recordDetails.SBQQ__Quote__c.Id;
+                    string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[i].Id; 
+                    string custCimId = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__Account__c.Core_CIM_ID__c; // empty string still returns Dell ID
 
-                if (dealId == 0)// This is a new deal entry
-                {
-                    dealId = ProcessSalesForceDealInformation(dealId, contractId, salesForceIdDeal, custId, myDealsData, workRecordDataFields);
-                    int q = 0;
+                    custId = opdc.FetchCustFromCimId(custCimId); // update the customer ID based on CIM ID
+
+                    List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+                    if (sfToMydlIds == null) continue; // we had error on lookup, skip to next to process
+
+                    int contractId = sfToMydlIds[0].Cntrct_SID;
+                    int dealId = sfToMydlIds[0].Wip_SID;
+
+                    List<int> passedIds = new List<int>() {contractId};
+
+                    var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
+                        ? WorkFlowStages.Requested
+                        : WorkFlowStages.Draft;
+                    MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds,
+                        new List<OpDataElementType> {OpDataElementType.CNTRCT}); // Make the save object
+
+                    // Step 2 - Deal with a contract header
+                    if (contractId == 0) // This is a new contract header
+                    {
+                        contractId = ProcessSalesForceContractInformation(contractId, salesForceIdCntrct, custId,
+                            workRecordDataFields);
+                    }
+
+                    if (dealId == 0) // This is a new deal entry
+                    {
+                        dealId = ProcessSalesForceDealInformation(dealId, contractId, salesForceIdDeal, custId, myDealsData, workRecordDataFields, i);
+                    }
                 }
             }
             return "blah";
         }
 
-        public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
-        {
-            //This just saves the Tenders data to the DB for stage
-            List<int> deadIdList = new List<int>() { -100 };
+        //public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
+        //{
+        //    //This just saves the Tenders data to the DB for stage
+        //    List<int> deadIdList = new List<int>() { -100 };
 
-            string jsonData = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
+        //    string jsonData = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
 
-            // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
-            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            return opdc.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData); //jsonDataPacket
-        }
+        //    // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
+        //    OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+        //    return opdc.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData); //jsonDataPacket
+        //}
 
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {

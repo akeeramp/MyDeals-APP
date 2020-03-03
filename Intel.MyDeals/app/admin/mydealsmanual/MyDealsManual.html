@@ -14,8 +14,8 @@
 <!--</div>-->
 
 <!--<div class="col-md-10">-->
-    <div id="handbook-page-content-wrapper">
-        <div id="handbook-page-content" ng-bind-html="to_trusted()" class="container-fluid" style="margin-right:200px">
+    <div id="handbook-page-content-wrapper" class="container-fluid">
+        <div id="handbook-page-content" ng-bind-html="to_trusted()" style="padding-left: 10px;">
             <!--This is where the content will be inserted with ng-bind-html="myPageContent". -->
         </div>
     </div>
@@ -51,10 +51,12 @@
     }
 
     #handbook-page-content-wrapper {
-        width: 100%;
+        width: 95%;
         position: absolute;
-        margin-left: 220px;
-        margin-right: 20px;
+        margin-left: 210px;
+        left: 45px; 
+        width: 80%;
+        background-color: blanchedalmond;
     }
 
     #handbook-wrapper.toggled #handbook-page-content-wrapper {

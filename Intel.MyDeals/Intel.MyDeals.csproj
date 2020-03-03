@@ -250,6 +250,7 @@
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
+    <Compile Include="Controllers\API\IntegrationController.cs" />
     <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />

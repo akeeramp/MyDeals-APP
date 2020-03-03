@@ -1093,7 +1093,7 @@ namespace Intel.MyDeals.DataLibrary
             bool success = false;
             // TO DO: Fill in with correct passed data after verification
 
-            var cmd = new Procs.dbo.PR_CHECK_SF_ID()
+            var cmd = new Procs.dbo.PR_MYDL_CHECK_SF_ID()
             {
                 CntrctSFID = salesForceIdCntrct,
                 WipSFID = salesForceIdDeal
@@ -1128,6 +1128,85 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             return ret;
+        }
+
+        public int FetchCustFromCimId(string custCimId)
+        {
+            int retCustId = 0;
+            // TO DO: Fill in with correct passed data after verification
+
+            var cmd = new Procs.dbo.PR_MYDL_CUST_CIM_ID_MAP_DTL()
+            {
+                in_cust_cim_id = custCimId
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+                    //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+
+                    while (rdr.Read())
+                    {
+                        retCustId = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retCustId;
+        }
+
+        public ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)
+        {
+            ProductEpmObject retObj = new ProductEpmObject();
+
+            var cmd = new Procs.dbo.PR_MYDL_PRD_PCSR_EPM_MAP_DTL()
+            {
+                in_prd_epm_id = epmId
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_PRD_GRP_EPM_ID = DB.GetReaderOrdinal(rdr, "PRD_GRP_EPM_ID");
+                    int IDX_PCSR_NBR_SID = DB.GetReaderOrdinal(rdr, "PCSR_NBR_SID");
+                    int IDX_EDW_PCSR_NBR = DB.GetReaderOrdinal(rdr, "EDW_PCSR_NBR");
+                    int IDX_MYDL_PCSR_NBR = DB.GetReaderOrdinal(rdr, "MYDL_PCSR_NBR");
+                    //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+
+                    while (rdr.Read())
+                    {
+                        retObj.PrdGrpEpmId = (IDX_PRD_GRP_EPM_ID < 0 || rdr.IsDBNull(IDX_PRD_GRP_EPM_ID))
+                            ? default(System.Int32)
+                            : rdr.GetFieldValue<System.Int32>(IDX_PRD_GRP_EPM_ID);
+                        retObj.PrdGrpEpmId = (IDX_PCSR_NBR_SID < 0 || rdr.IsDBNull(IDX_PCSR_NBR_SID))
+                            ? default(System.Int32)
+                            : rdr.GetFieldValue<System.Int32>(IDX_PCSR_NBR_SID);
+                        retObj.EdwPcsrNbr = (IDX_EDW_PCSR_NBR < 0 || rdr.IsDBNull(IDX_EDW_PCSR_NBR))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_EDW_PCSR_NBR);
+                        retObj.MydlPcsrNbr = (IDX_MYDL_PCSR_NBR < 0 || rdr.IsDBNull(IDX_MYDL_PCSR_NBR))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_MYDL_PCSR_NBR);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retObj;
         }
 
 

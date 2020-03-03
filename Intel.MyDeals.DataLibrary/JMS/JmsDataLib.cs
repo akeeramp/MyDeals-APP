@@ -12,6 +12,7 @@ using Intel.MyDeals.DataAccessLib;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using Intel.Opaque;
+using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.DataLibrary
@@ -477,5 +478,41 @@ namespace Intel.MyDeals.DataLibrary
 
             return modifiedURL;
         }
+
+
+        // INTEGRATION TEST ITEMS
+        public Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
+        {
+            Guid myGuid = Guid.Empty;
+
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_INS_DSA_RQST_RSPN_LOG()
+                {
+                    in_rqst_type = dataType,
+                    in_deal_lst = new type_int_list(dealsList.ToArray()),
+                    in_json_data = jsonDataPacket
+                };
+
+                using (var ret = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_RESULT = DB.GetReaderOrdinal(ret, "RESULT");
+
+                    while (ret.Read())
+                    {
+                        myGuid = ret.GetFieldValue<System.Guid>(IDX_RESULT);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return myGuid;
+        }
+
     }
 }
