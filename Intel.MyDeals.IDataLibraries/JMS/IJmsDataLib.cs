@@ -3,6 +3,7 @@ using System.Data;
 using Intel.Opaque.Tools;
 using System.Collections;
 using System.Collections.Generic;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
 {
@@ -30,6 +31,18 @@ namespace Intel.MyDeals.IDataLibrary
 
         void Publish(string brokerURI, string userName, string queueName, List<string> data);
 
+        // Integration Items
         Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket);
+
+        List<TenderTransferObject> FetchTendersStagedData(string dataType, Guid specificRecord);
+
+        List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal);
+
+        int FetchCustFromCimId(string custCimId);
+
+        ProductEpmObject FetchProdFromProcessorEpmMap(int epmId);
+
+        Boolean SaveVistexResponseData(int epmId);
+
     }
 }

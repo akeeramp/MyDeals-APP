@@ -13,10 +13,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, SavePacket savePacket);
 
-        string ExecuteSalesForceTenderData(Guid workId);
-
-        //Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket);
-
         OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket data);
 
         MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket);
@@ -47,5 +43,8 @@ namespace Intel.MyDeals.IBusinessLogic
         bool IsDuplicateContractTitle(int dcId, string title);       
 
         bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList);
+
+        // Salesforce Process Data Call - can't move out of here due to reliance upon built in processing items for opDataCollectors
+        string ExecuteSalesForceTenderData(Guid workId);
     }
 }

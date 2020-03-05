@@ -200,7 +200,7 @@ namespace Intel.MyDeals.DataLibrary
                 }
             });
 
-            // If there is nothing to send to the DB, just pre-empt the whole process.  Just make sure that you also account for solo actions without save data (DE33251)
+            // If there is nothing to send to the DB, just preempt the whole process.  Just make sure that you also account for solo actions without save data (DE33251)
             if (dtData.Rows.Count != 0 || dtAction.Rows.Count != 0)
             {
                 dsImport.Tables.Add(dtData); // Add the ATTRIBUTES table to the import data set

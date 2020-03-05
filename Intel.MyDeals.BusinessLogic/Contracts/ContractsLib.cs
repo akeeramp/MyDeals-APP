@@ -234,24 +234,25 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
+
+
+
+        #region TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
+
         private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
         {
             if (contractId > 0) return contractId; // only process new contract headers
 
             ContractTransferPacket testData = new ContractTransferPacket();
             testData.Contract = new OpDataCollectorFlattenedList();
-            //testData.PricingStrategy = new OpDataCollectorFlattenedList();
-            //testData.PricingTable = new OpDataCollectorFlattenedList();
-            //testData.PricingTableRow = new OpDataCollectorFlattenedList();
-            //testData.WipDeals = new OpDataCollectorFlattenedList();
 
-            // Pull needed data
+            // Pull needed data out of JSON
             string strtDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentStDate_Dt__c;
             string endDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentEndDate_Dt__c;
             string quoteLineId = workRecordDataFields.recordDetails.SBQQ__Quote__c.Name;
             string contractTitle = "SalesForce Contract - " + quoteLineId + " - " + contractSfId;
 
-            // Place in standard header packet
+            // Place into standard tender header packet
             OpDataCollectorFlattenedItem testContractData = new OpDataCollectorFlattenedItem();
             testContractData.Add("DC_ID", -100); // New contract - follow -id convention
             testContractData.Add("dc_type", "CNTRCT");
@@ -268,7 +269,7 @@ namespace Intel.MyDeals.BusinessLogic
             testContractData.Add("TITLE", contractTitle);
             testData.Contract.Add(testContractData);
 
-            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
+            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveTendersHeader")
             {
                 CustId = custId, // Add as lookup above
                 ContractId = -100
@@ -296,6 +297,42 @@ namespace Intel.MyDeals.BusinessLogic
             // END SAVE CONTRACT HEADER
 
             return contractId; // Send back the new contract ID here
+        }
+
+        private PRD_TRANSLATION_RESULTS LookupProducts(string usrInputProd, string strtDt, string endDt, string geoCombined, int custId, int contractId)
+        {
+            PRD_TRANSLATION_RESULTS retItem = new PRD_TRANSLATION_RESULTS();
+
+            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+            {
+                CustId = custId,
+                ContractId = contractId
+            };
+            
+            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
+            usrData.Add(new ProductEntryAttribute()
+            {
+                ROW_NUMBER = 1,
+                USR_INPUT = usrInputProd,
+                EXCLUDE = false,
+                FILTER = "Tray", // Do we assume this?
+                START_DATE = strtDt,
+                END_DATE = endDt,
+                GEO_COMBINED = geoCombined,
+                PROGRAM_PAYMENT = "Backend",
+                MOD_USR_INPUT = "",
+                COLUMN_TYPE = true
+            });
+            ProductsLib plib = new ProductsLib();
+            ProductLookup resultsList = plib.TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
+            // Need to get resultsList down to a single product json string - if it fails, return the null empty object
+            // Clean up the below - make it correct with Saurav's help...
+
+            string prdSting = JsonConvert.SerializeObject(resultsList.ValidProducts["1"]); // step 1 to get to something usable
+            Dictionary<string, List<PRD_TRANSLATION_RESULTS>> ab = JsonConvert.DeserializeObject<Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(prdSting); // step 2 ab is trash name
+            retItem = ab[usrInputProd][0];
+
+            return retItem;
         }
 
         private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int currRecord)
@@ -332,43 +369,33 @@ namespace Intel.MyDeals.BusinessLogic
             string compSku = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
                 .Pricing_Performance_Metric__c[0].Pricing_Comp_SKU_Performance_Nbr__c; // 9
 
-            // Product EPM ID Lookup
-            //PR_MYDL_PRD_PCSR_EPM_MAP_DTL
+            // Product Check START
+            // Get product item here - clean up the MyTranslatedProduct function, expect null back if no product matched
             int epmId = 0;
             Int32.TryParse(prdLkupNbr, out epmId);
 
-            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            //ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)
-            ProductEpmObject productLookupObj = opdc.FetchProdFromProcessorEpmMap(epmId);
+            JmsDataLib jmsDataLib = new JmsDataLib();
+            ProductEpmObject productLookupObj = jmsDataLib.FetchProdFromProcessorEpmMap(epmId);
 
-            if (productLookupObj == null) return 0; // Bail out
-            // Product Check START
-            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
-            {
-                CustId = custId,
-                ContractId = contractId
-            };
+            if (productLookupObj == null) return 0; // Bail out - no products matched
 
-            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
-            usrData.Add(new ProductEntryAttribute()
-            {
-                ROW_NUMBER = 1,
-                USR_INPUT = productLookupObj.MydlPcsrNbr,
-                EXCLUDE = false,
-                FILTER = "Tray", // Do we assume this?
-                START_DATE = strtDt,
-                END_DATE = endDt,
-                GEO_COMBINED = rgn,
-                PROGRAM_PAYMENT = "Backend",
-                MOD_USR_INPUT = "",
-                COLUMN_TYPE = true
-            });
-            ProductLookup resultsList = new ProductsLib().TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
-            var blahg = JsonConvert.SerializeObject(resultsList.ValidProducts["1"]);
-            int t = 0;
+            PRD_TRANSLATION_RESULTS myTranslatedProduct = LookupProducts(productLookupObj.MydlPcsrNbr, strtDt, endDt, rgn, custId, contractId);
+
+            string someProduct = JsonConvert.SerializeObject(myTranslatedProduct);
+
+            if (myTranslatedProduct == null) return -1; // Bail out, no returned data - might need to beef this up some for missing cap and the like
+
+            int myPrdMbrSid = myTranslatedProduct.PRD_MBR_SID;
+
             // Product Check END
 
-            // Need to do a product lookup here, first by ID to get name, then by TranslateProducts
+            // Meetcomp Start
+
+            // Meetcomp End
+
+
+
+
 
             OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
             testPSData.Add("DC_ID", -201 - currRecord); // first record save is -201, others should be -202...
@@ -413,7 +440,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPTRData.Add("PROGRAM_PAYMENT", "Backend");
             testPTRData.Add("GEO_COMBINED", rgn);
             testPTRData.Add("PTR_USER_PRD", usrPrdNm);
-            testPTRData.Add("PTR_SYS_PRD", "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
+            testPTRData.Add("PTR_SYS_PRD", someProduct); // "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
             testPTRData.Add("PROD_INCLDS", "Tray");
             //testPTRData.Add("PASSED_VALIDATION", "Complete");
             testPTRData.Add("SYS_COMMENT", "SalesForce Created Pricing Table Row: i3-8300");
@@ -425,7 +452,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("DC_PARENT_ID", -401 - currRecord); //Not passed - set it func due to single object saves
             testDealData.Add("dc_parent_type", "PRC_TBL_ROW");
             testDealData.Add("ECAP_PRICE_____20___0", ecapPrice);
-            testDealData.Add("PRODUCT_FILTER", "92189");
+            testDealData.Add("PRODUCT_FILTER", myPrdMbrSid); //"92189");
             testDealData.Add("REBATE_TYPE", "TENDER");
             testDealData.Add("WF_STG_CD", "Draft"); // Because this is a new deal
             testDealData.Add("TITLE", usrPrdNm); // Echo out user product name
@@ -446,7 +473,7 @@ namespace Intel.MyDeals.BusinessLogic
             //testDealData.Add("REBATE_BILLING_END", "12/28/2020"); // default to end
             testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
             testDealData.Add("GEO_COMBINED", rgn);
-            testDealData.Add("PTR_USER_PRD", "i3-8300");
+            testDealData.Add("PTR_USER_PRD", usrPrdNm); //"i3-8300");
             testDealData.Add("PROD_INCLDS", "Tray");
             //testDealData.Add("CAP_STRT_DT", "12/7/2017"); // From PTR_SYS_PRD
             //testDealData.Add("CAP_END_DT", "12/31/9999"); // From PTR_SYS_PRD
@@ -454,7 +481,8 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("HAS_L1", "1"); // From PTR_SYS_PRD
             testDealData.Add("HAS_L2", "0"); // From PTR_SYS_PRD
             testDealData.Add("PRODUCT_CATEGORIES", "DT"); // From PTR_SYS_PRD
-            testDealData.Add("SALESFORCE_ID", dealSfId);
+            testDealData.Add("SALESFORCE_ID", dealSfId); // Sales Force ID 3715
+            testDealData.Add("QUOTE_LN_ID", quoteLineId); // Quote Line ID 3716
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
             testDealData.Add("IN_REDEAL", "0");
             testDealData.Add("EXCLUDE_AUTOMATION", "Yes");
@@ -562,7 +590,7 @@ namespace Intel.MyDeals.BusinessLogic
                     ptr[AttributeCodes.TITLE.ToString()] = contractId + ptr[AttributeCodes.TITLE.ToString()].ToString();
                 }
             }
-            
+
             // Use the other Price Table save call to specifically save the PTR only.
             OpDataCollectorFlattenedDictList PRC_TBL_ROW_DATA = _pricingTablesLib.SavePricingTable(null, testData.PricingTableRow, null, saveContractToken);
 
@@ -629,35 +657,39 @@ namespace Intel.MyDeals.BusinessLogic
             // End Test
 
             // Fetch data (START WORK)
-            OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-            List<TenderTransferObject> tenderStagedWorkRecords = opdc.FetchTendersStagedData("TENDER_DEALS", workId);
+            //OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
+            JmsDataLib jmsDataLib = new JmsDataLib();
+
+            List<TenderTransferObject> tenderStagedWorkRecords = jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
 
             foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)
             {
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
                 // expect that we might have more then one deal, so walk through those records
-                for (int i = 0; i < workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c.Count(); i++) 
+                for (int i = 0; i < workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c.Count(); i++)
                 {
                     string salesForceIdCntrct = workRecordDataFields.recordDetails.SBQQ__Quote__c.Id;
-                    string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[i].Id; 
+                    string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[i].Id;
                     string custCimId = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__Account__c.Core_CIM_ID__c; // empty string still returns Dell ID
 
-                    custId = opdc.FetchCustFromCimId(custCimId); // update the customer ID based on CIM ID
+                    custId = jmsDataLib.FetchCustFromCimId(custCimId); // update the customer ID based on CIM ID
 
-                    List<TendersSFIDCheck> sfToMydlIds = opdc.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+                    List<TendersSFIDCheck> sfToMydlIds = jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
                     if (sfToMydlIds == null) continue; // we had error on lookup, skip to next to process
 
                     int contractId = sfToMydlIds[0].Cntrct_SID;
                     int dealId = sfToMydlIds[0].Wip_SID;
 
-                    List<int> passedIds = new List<int>() {contractId};
+                    List<int> passedIds = new List<int>() { contractId };
 
                     var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
                         ? WorkFlowStages.Requested
                         : WorkFlowStages.Draft;
                     MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds,
-                        new List<OpDataElementType> {OpDataElementType.CNTRCT}); // Make the save object
+                        new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
+
+                    OpUserStack.TendersAutomatedUserToken();
 
                     // Step 2 - Deal with a contract header
                     if (contractId == 0) // This is a new contract header
@@ -674,19 +706,9 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return "blah";
         }
+        #endregion TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
 
-        //public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
-        //{
-        //    //This just saves the Tenders data to the DB for stage
-        //    List<int> deadIdList = new List<int>() { -100 };
-
-        //    string jsonData = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
-
-        //    // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
-        //    OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
-        //    return opdc.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData); //jsonDataPacket
-        //}
-
+        // This is old tenders management page header and body below
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             List<int> dealIds = data[0]["dealIds"].ToString().Split(',').Select(Int32.Parse).ToList();

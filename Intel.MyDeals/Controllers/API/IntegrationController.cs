@@ -29,5 +29,18 @@ namespace Intel.MyDeals.Controllers.API
             return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
         }
 
+        //[Route("ExecuteSalesForceTenderData")]
+        //Can't be here since it relies on Contract Controller parts to execute the saves
+
+        [HttpPost]
+        [Route("SaveVistexResponseData")]
+        public string SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
+        {
+            Boolean saveSuccessful = _integrationLib.SaveVistexResponseData(jsonDataPacket);
+
+            return "blah";
+        }
+
+
     }
 }

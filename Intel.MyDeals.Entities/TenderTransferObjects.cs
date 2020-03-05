@@ -14,6 +14,27 @@ namespace Intel.MyDeals.Entities
         public string MydlPcsrNbr { get; set; }
     }
 
+    public class DealResponse
+    {
+        public string DealId { get; set; }
+        public string ErrMessage { get; set; }
+    }
+    public class VistexResponseHeader
+    {
+        public string SourceSystem { get; set; }
+        public string TargetSystem { get; set; }
+        public string Action { get; set; }
+        public string BatchId { get; set; }
+        public List<DealResponse> DealResponses { get; set; }
+    }
+    public class VistexResponseMsg
+    {
+        public VistexResponseHeader VistexResponseHeader { get; set; }
+    }
+
+
+    // Mahesh JSON objects
+
     public class TenderTransferObject
     {
         public int RqstSid { get; set; }

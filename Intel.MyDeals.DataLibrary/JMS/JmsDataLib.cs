@@ -480,7 +480,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        // INTEGRATION TEST ITEMS
+        #region TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
         public Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
         {
             Guid myGuid = Guid.Empty;
@@ -513,6 +513,186 @@ namespace Intel.MyDeals.DataLibrary
 
             return myGuid;
         }
+
+        public List<TenderTransferObject> FetchTendersStagedData(string dataType, Guid specificRecord)
+        {
+            Guid myGuid = Guid.Empty;
+
+            // Uses TenderTransferObjects class
+            List<TenderTransferObject> retData = new List<TenderTransferObject>();
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA()
+                {
+                    in_rqst_type = dataType
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    if (rdr != null && rdr.HasRows) // ret comes back and has success row = it ran without fail
+                    {
+                        int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+                        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                        int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                        int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+                        int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
+
+                        while (rdr.Read())
+                        {
+                            retData.Add(new TenderTransferObject
+                            {
+                                RqstSid = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+                                DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                                BtchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? Guid.Empty : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
+                                RqstJsonData = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
+                                RqstSts = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS)
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            if (specificRecord != Guid.Empty) // if we open up other stages to support this, cull down to pending stage below.
+            {
+                // Return only the matching item
+                return retData.Where(r => r.BtchId == specificRecord).ToList();
+            }
+
+            return retData;
+        }
+
+        public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal)
+        {
+            bool success = false;
+            // TO DO: Fill in with correct passed data after verification
+
+            var cmd = new Procs.dbo.PR_MYDL_CHECK_SF_ID()
+            {
+                CntrctSFID = salesForceIdCntrct,
+                WipSFID = salesForceIdDeal
+            };
+            var ret = new List<TendersSFIDCheck>();
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_Cntrct_SF_ID = DB.GetReaderOrdinal(rdr, "Cntrct_SF_ID");
+                    int IDX_Cntrct_SID = DB.GetReaderOrdinal(rdr, "Cntrct_SID");
+                    int IDX_Wip_SF_ID = DB.GetReaderOrdinal(rdr, "Wip_SF_ID");
+                    int IDX_Wip_SID = DB.GetReaderOrdinal(rdr, "Wip_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new TendersSFIDCheck
+                        {
+                            Cntrct_SF_ID = (IDX_Cntrct_SF_ID < 0 || rdr.IsDBNull(IDX_Cntrct_SF_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Cntrct_SF_ID),
+                            Cntrct_SID = (IDX_Cntrct_SID < 0 || rdr.IsDBNull(IDX_Cntrct_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Cntrct_SID),
+                            Wip_SF_ID = (IDX_Wip_SF_ID < 0 || rdr.IsDBNull(IDX_Wip_SF_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Wip_SF_ID),
+                            Wip_SID = (IDX_Wip_SID < 0 || rdr.IsDBNull(IDX_Wip_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Wip_SID)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
+
+        public int FetchCustFromCimId(string custCimId)
+        {
+            int retCustId = 0;
+            // TO DO: Fill in with correct passed data after verification
+
+            var cmd = new Procs.dbo.PR_MYDL_CUST_CIM_ID_MAP_DTL()
+            {
+                in_cust_cim_id = custCimId
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+                    //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+
+                    while (rdr.Read())
+                    {
+                        retCustId = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retCustId;
+        }
+
+        public ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)
+        {
+            ProductEpmObject retObj = new ProductEpmObject();
+
+            var cmd = new Procs.dbo.PR_MYDL_PRD_PCSR_EPM_MAP_DTL()
+            {
+                in_prd_epm_id = epmId
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_PRD_GRP_EPM_ID = DB.GetReaderOrdinal(rdr, "PRD_GRP_EPM_ID");
+                    int IDX_PCSR_NBR_SID = DB.GetReaderOrdinal(rdr, "PCSR_NBR_SID");
+                    int IDX_EDW_PCSR_NBR = DB.GetReaderOrdinal(rdr, "EDW_PCSR_NBR");
+                    int IDX_MYDL_PCSR_NBR = DB.GetReaderOrdinal(rdr, "MYDL_PCSR_NBR");
+                    //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+
+                    while (rdr.Read())
+                    {
+                        retObj.PrdGrpEpmId = (IDX_PRD_GRP_EPM_ID < 0 || rdr.IsDBNull(IDX_PRD_GRP_EPM_ID))
+                            ? default(System.Int32)
+                            : rdr.GetFieldValue<System.Int32>(IDX_PRD_GRP_EPM_ID);
+                        retObj.PrdGrpEpmId = (IDX_PCSR_NBR_SID < 0 || rdr.IsDBNull(IDX_PCSR_NBR_SID))
+                            ? default(System.Int32)
+                            : rdr.GetFieldValue<System.Int32>(IDX_PCSR_NBR_SID);
+                        retObj.EdwPcsrNbr = (IDX_EDW_PCSR_NBR < 0 || rdr.IsDBNull(IDX_EDW_PCSR_NBR))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_EDW_PCSR_NBR);
+                        retObj.MydlPcsrNbr = (IDX_MYDL_PCSR_NBR < 0 || rdr.IsDBNull(IDX_MYDL_PCSR_NBR))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_MYDL_PCSR_NBR);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retObj;
+        }
+
+        public Boolean SaveVistexResponseData(int epmId)
+        {
+            return false;
+        }
+
+        #endregion TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
 
     }
 }

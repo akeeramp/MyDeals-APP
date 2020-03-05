@@ -170,6 +170,25 @@ namespace Intel.MyDeals.Entities
             return MyOpUserToken;
         }
 
+        public static void TendersAutomatedUserToken()
+        {
+            OpUserToken unitOpUserToken = new OpUserToken
+            {
+                Role = new OpRoleType
+                {
+                    RoleTypeCd = "GA"
+                },
+                Usr = new OpUser
+                {
+                    FirstName = "Tenders",
+                    LastName = "Salesforce",
+                    WWID = 90000054,
+                    Idsid = "dmyGA"
+                }
+            };
+            EmulateUnitTester(unitOpUserToken);
+        }
+
         /// <summary>
         /// Ensures the OpUserToken contains values.
         /// </summary>

@@ -1834,6 +1834,14 @@ namespace Intel.MyDeals.BusinessRules
                         bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
                         totalOfAtrb += safeParse;
 
+                        // added this to prevent user from saving 0 as QTY breaking DSAs, only triggers for QTY and 0/improper values.
+                        if (atrb.AtrbCd == AttributeCodes.QTY && safeParse == 0)
+                        {
+                            atrb.AtrbValue = 1;  // Just default it to 1 since QTY must be populated and at least 1 unit.
+                            atrb.State = OpDataElementState.Modified; // Force it modified to save
+                            continue; // Dispense with the QTY validation message filled in below.
+                        }
+
                         if (!isNumber)
                         {
                             AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
@@ -1842,6 +1850,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
                         }
+                        
                     }
                 }
             }

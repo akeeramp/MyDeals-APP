@@ -1,15 +1,9 @@
 ﻿extern alias opaqueTools;
-using Intel.MyDeals.DataLibrary;
 using System;
-using System.Data;
-using opaqueTools.Intel.Opaque.Tools;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
-using System.Collections;
 using System.Collections.Generic;
 using Intel.MyDeals.Entities;
-using Intel.Opaque;
-using Intel.Opaque.DBAccess;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -21,13 +15,6 @@ namespace Intel.MyDeals.BusinessLogic
         public IntegrationLib(IJmsDataLib jmsDataLib)
         {
             _jmsDataLib = jmsDataLib;
-        }
-
-        public void IntegrationTest()
-        {
-            //string m_idsid = "mhtippin";
-
-            JmsDataLib jmsConnection = new JmsDataLib();
         }
 
         public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
@@ -42,6 +29,15 @@ namespace Intel.MyDeals.BusinessLogic
             myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData);
 
             return myGuid;
+        }
+
+        public Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
+        {
+            // TODO: get the response message, turn it into something to pass Kannan, then call out last status change to close out whole transaction
+            //foreach deal item - strip deal data and place into list of deal / err pairs - Kannan to provide new type
+            // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
+            //return _jmsDataLib.SaveVistexResponseData(jsonData);
+            return false;
         }
 
 
