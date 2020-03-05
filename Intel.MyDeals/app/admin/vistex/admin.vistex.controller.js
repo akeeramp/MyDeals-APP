@@ -70,11 +70,11 @@
             return false;
         }
 
-        vm.UpdateVistexStatus = function (strTransantionId) {
+        vm.UpdateVistexStatus = function (strTransantionId, dealId) {
             if (vm.EnteredMessage == '')
                 vm.EnteredMessage = null;
             vm.spinnerMessageDescription = "Please wait while updating the status..";
-            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, vm.EnteredMessage).then(function (response) {
+            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, vm.EnteredMessage).then(function (response) {
                 if (response.data == strTransantionId) {
                     angular.forEach(vm.Vistex.filter(x => x.TransanctionId === response.data), function (dataItem) {
                         dataItem.Status = vm.SelectedStatus;
@@ -154,7 +154,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.TransanctionId);
+                vm.UpdateVistexStatus(e.model.TransanctionId, e.model.DealId);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");

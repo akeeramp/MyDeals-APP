@@ -38,8 +38,8 @@
             return dataService.get(apiBaseUrl + 'GetVistexStatuses');
         }
 
-        function updateVistexStatus(strTransantionId, strVistexStage, strErrorMessage) {
-            return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + strErrorMessage);
+        function updateVistexStatus(strTransantionId, strVistexStage, dealId, strErrorMessage) {
+            return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + dealId + "/" + strErrorMessage);
         }
     }
 })();

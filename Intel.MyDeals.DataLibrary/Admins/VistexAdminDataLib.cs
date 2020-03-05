@@ -6,6 +6,7 @@ using Intel.Opaque.DBAccess;
 using System.Data.SqlClient;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
+using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -134,14 +135,26 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
-        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, string strErrorMessage)
+        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int dealId, string strErrorMessage)
         {
+            var myDict = new Dictionary<int, string>
+            {
+                { dealId, strErrorMessage }
+            };
+
+            type_int_dictionary opPair = new type_int_dictionary();
+            opPair.AddRows(myDict.Select(itm => new OpPair<int, string>
+            {
+                First = itm.Key,
+                Second = itm.Value
+            }));
+
             strErrorMessage = strErrorMessage.Trim();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
             {
                 in_btch_id = batchId,
                 in_rqst_sts = vistexStage.ToString("g"),
-                in_err_msg = strErrorMessage != string.Empty && strErrorMessage != "null" ? strErrorMessage : null
+                in_deal_rspn_err = opPair
             };
             DataAccess.ExecuteNonQuery(cmd);
             return batchId;

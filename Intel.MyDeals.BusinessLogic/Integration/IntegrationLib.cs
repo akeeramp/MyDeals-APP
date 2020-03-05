@@ -33,11 +33,16 @@ namespace Intel.MyDeals.BusinessLogic
 
         public Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
         {
-            // TODO: get the response message, turn it into something to pass Kannan, then call out last status change to close out whole transaction
-            //foreach deal item - strip deal data and place into list of deal / err pairs - Kannan to provide new type
-            // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
-            //return _jmsDataLib.SaveVistexResponseData(jsonData);
-            return false;
+            // Vistex returned response processing - if it saves data to DB, return true, else return false.
+            Guid batchId = new Guid(jsonDataPacket.VistexResponseHeader.BatchId);
+            Dictionary<int, string> dealsMessages = new Dictionary<int, string>();
+
+            foreach (DealResponse response in jsonDataPacket.VistexResponseHeader.DealResponses)
+            {
+                dealsMessages.Add(response.DealId, response.ErrMessage);
+            }
+
+            return _jmsDataLib.SaveVistexResponseData(batchId, dealsMessages);
         }
 
 

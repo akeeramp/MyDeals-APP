@@ -686,10 +686,38 @@ namespace Intel.MyDeals.DataLibrary
 
             return retObj;
         }
-
-        public Boolean SaveVistexResponseData(int epmId)
+        
+        public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages)
         {
-            return false;
+            type_int_dictionary opDealMessages = new type_int_dictionary();
+            opDealMessages.AddRows(dealsMessages.Select(itm => new Opaque.Tools.OpPair<int, string>
+            {
+                First = itm.Key,
+                Second = itm.Value
+            }));
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
+            {
+                in_btch_id = batchId,
+                in_rqst_sts = "PO_Processing_Complete", // Default close the 
+                in_deal_rspn_err = opDealMessages
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+                //throw;
+            }
+
+            return true;
         }
 
         #endregion TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER

@@ -34,11 +34,11 @@ namespace Intel.MyDeals.Controllers.API
 
         [HttpPost]
         [Route("SaveVistexResponseData")]
-        public string SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
+        public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
         {
             Boolean saveSuccessful = _integrationLib.SaveVistexResponseData(jsonDataPacket);
 
-            return "blah";
+            return saveSuccessful;
         }
 
 

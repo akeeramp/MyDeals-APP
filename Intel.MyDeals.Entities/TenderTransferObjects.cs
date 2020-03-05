@@ -14,10 +14,10 @@ namespace Intel.MyDeals.Entities
         public string MydlPcsrNbr { get; set; }
     }
 
-    public class DealResponse
+    #region Vistex Response Object
+    public class VistexResponseMsg
     {
-        public string DealId { get; set; }
-        public string ErrMessage { get; set; }
+        public VistexResponseHeader VistexResponseHeader { get; set; }
     }
     public class VistexResponseHeader
     {
@@ -27,11 +27,12 @@ namespace Intel.MyDeals.Entities
         public string BatchId { get; set; }
         public List<DealResponse> DealResponses { get; set; }
     }
-    public class VistexResponseMsg
+    public class DealResponse
     {
-        public VistexResponseHeader VistexResponseHeader { get; set; }
+        public int DealId { get; set; }
+        public string ErrMessage { get; set; }
     }
-
+    #endregion Vistex Response Object
 
     // Mahesh JSON objects
 
