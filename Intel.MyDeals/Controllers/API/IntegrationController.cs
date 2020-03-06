@@ -6,7 +6,6 @@ using System.Web.Http;
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/Integration")]
-    [AllowAnonymous]
     public class IntegrationController : ApiController
     {
         private readonly IIntegrationLib _integrationLib;
@@ -23,7 +22,6 @@ namespace Intel.MyDeals.Controllers.API
 
         [HttpPost]
         [Route("SaveSalesForceTenderData")]
-        [AllowAnonymous]
         public string SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
         {
             // User and Password validate here.......
