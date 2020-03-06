@@ -24,7 +24,6 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         [Route("SaveSalesForceTenderData")]
         [AllowAnonymous]
-        [Authorize]
         public string SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
         {
             // User and Password validate here.......
