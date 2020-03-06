@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 1 Data Access Layer", "Intel MyDeals 1 Data Access Layer", "{A18EE0E6-6970-447C-94BD-B363F7D2C433}"
 EndProject
@@ -90,6 +90,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.CacheRecycle", "Intel.MyDeals.Utilities\Intel.MyDeals.CacheRecycle\Intel.MyDeals.CacheRecycle.csproj", "{A6EACEAB-4733-42D0-B649-8CD282917574}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.BusinessRules.Test", "Intel.MyDeals.BusinessRules.Test\Intel.MyDeals.BusinessRules.Test.csproj", "{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 9 Console Jobs", "Intel MyDeals 9 Console Jobs", "{5376498F-F788-4B34-A51E-BEC1B8A05DD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VistexService", "..\..\..\..\POC\Vistex\Vistex\Vistex\VistexService.csproj", "{6592A3B5-44A3-47F9-998F-89A4BB240327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -280,6 +284,16 @@ Global
 		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.perf|Any CPU.Build.0 = Release|Any CPU
 		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.itt|Any CPU.ActiveCfg = Release|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.itt|Any CPU.Build.0 = Release|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.perf|Any CPU.ActiveCfg = Release|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.perf|Any CPU.Build.0 = Release|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6592A3B5-44A3-47F9-998F-89A4BB240327}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -301,84 +315,10 @@ Global
 		{CDBA81B2-F2C2-4ABE-93F6-394B4472B3DA} = {6C43C3EB-57A7-475A-AF9C-871FA9B1BE93}
 		{A6EACEAB-4733-42D0-B649-8CD282917574} = {731204FA-2896-4FC7-85FA-C27BE5BDBE7C}
 		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4} = {ED7EFC47-D39F-4FB2-9C7D-63C201F66D01}
+		{6592A3B5-44A3-47F9-998F-89A4BB240327} = {5376498F-F788-4B34-A51E-BEC1B8A05DD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection_tfs04
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
-		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
-		SccProjectName1 = Intel.MyDeals.DataAccessLib
-		SccLocalPath1 = Intel.MyDeals.DataAccessLib
-		SccProjectUniqueName2 = Intel.MyDeals.Entities\\Intel.MyDeals.Entities.csproj
-		SccProjectTopLevelParentUniqueName2 = Intel.Mydeals.sln
-		SccProjectName2 = Intel.MyDeals.Entities
-		SccLocalPath2 = Intel.MyDeals.Entities
-		SccProjectUniqueName3 = Intel.MyDeals.DataLibrary\\Intel.MyDeals.DataLibrary.csproj
-		SccProjectTopLevelParentUniqueName3 = Intel.Mydeals.sln
-		SccProjectName3 = Intel.MyDeals.DataLibrary
-		SccLocalPath3 = Intel.MyDeals.DataLibrary
-		SccProjectUniqueName4 = Intel.MyDeals.BusinessLogic\\Intel.MyDeals.BusinessLogic.csproj
-		SccProjectTopLevelParentUniqueName4 = Intel.Mydeals.sln
-		SccProjectName4 = Intel.MyDeals.BusinessLogic
-		SccLocalPath4 = Intel.MyDeals.BusinessLogic
-		SccProjectUniqueName5 = Intel.MyDeals.BusinessRules\\Intel.MyDeals.BusinessRules.csproj
-		SccProjectTopLevelParentUniqueName5 = Intel.Mydeals.sln
-		SccProjectName5 = Intel.MyDeals.BusinessRules
-		SccLocalPath5 = Intel.MyDeals.BusinessRules
-		SccProjectUniqueName6 = Intel.MyDeals.App\\Intel.MyDeals.App.csproj
-		SccProjectTopLevelParentUniqueName6 = Intel.Mydeals.sln
-		SccProjectName6 = Intel.MyDeals.App
-		SccLocalPath6 = Intel.MyDeals.App
-		SccProjectUniqueName7 = Intel.MyDeals\\Intel.MyDeals.csproj
-		SccProjectName7 = Intel.MyDeals
-		SccLocalPath7 = Intel.MyDeals
-		SccProjectUniqueName8 = Intel.MyDeals.Tests\\Intel.MyDeals.Tests.csproj
-		SccProjectName8 = Intel.MyDeals.Tests
-		SccLocalPath8 = Intel.MyDeals.Tests
-		SccProjectUniqueName9 = Intel.MyDeals.Entities.Test\\Intel.MyDeals.Entities.Test.csproj
-		SccProjectTopLevelParentUniqueName9 = Intel.Mydeals.sln
-		SccProjectName9 = Intel.MyDeals.Entities.Test
-		SccLocalPath9 = Intel.MyDeals.Entities.Test
-		SccProjectUniqueName10 = Intel.MyDeals.DataLibrary.Test\\Intel.MyDeals.DataLibrary.Test.csproj
-		SccProjectTopLevelParentUniqueName10 = Intel.Mydeals.sln
-		SccProjectName10 = Intel.MyDeals.DataLibrary.Test
-		SccLocalPath10 = Intel.MyDeals.DataLibrary.Test
-		SccProjectUniqueName11 = Intel.MyDeals.BusinessLogic.Test\\Intel.MyDeals.BusinessLogic.Test.csproj
-		SccProjectTopLevelParentUniqueName11 = Intel.Mydeals.sln
-		SccProjectName11 = Intel.MyDeals.BusinessLogic.Test
-		SccLocalPath11 = Intel.MyDeals.BusinessLogic.Test
-		SccProjectUniqueName12 = Intel.MyDeals.App.Test\\Intel.MyDeals.App.Test.csproj
-		SccProjectTopLevelParentUniqueName12 = Intel.Mydeals.sln
-		SccProjectName12 = Intel.MyDeals.App.Test
-		SccLocalPath12 = Intel.MyDeals.App.Test
-		SccProjectUniqueName13 = Intel.MyDeals.IBusinessLogic\\Intel.MyDeals.IBusinessLogic.csproj
-		SccProjectTopLevelParentUniqueName13 = Intel.Mydeals.sln
-		SccProjectName13 = Intel.MyDeals.IBusinessLogic
-		SccLocalPath13 = Intel.MyDeals.IBusinessLogic
-		SccProjectUniqueName14 = DependencyResolver\\Intel.MyDeals.DependencyResolver.csproj
-		SccProjectTopLevelParentUniqueName14 = Intel.Mydeals.sln
-		SccProjectName14 = DependencyResolver
-		SccLocalPath14 = DependencyResolver
-		SccProjectUniqueName15 = Intel.MyDeals.IDataLibraries\\Intel.MyDeals.IDataLibrary.csproj
-		SccProjectTopLevelParentUniqueName15 = Intel.Mydeals.sln
-		SccProjectName15 = Intel.MyDeals.IDataLibraries
-		SccLocalPath15 = Intel.MyDeals.IDataLibraries
-		SccProjectUniqueName16 = Intel.Mydeals.JMSQueue\\Intel.Mydeals.JMSQueue.csproj
-		SccProjectTopLevelParentUniqueName16 = Intel.Mydeals.sln
-		SccProjectName16 = Intel.Mydeals.JMSQueue
-		SccLocalPath16 = Intel.Mydeals.JMSQueue
-		SccProjectUniqueName17 = Intel.MyDeals.Utilities\\Intel.MyDeals.CacheRecycle\\Intel.MyDeals.CacheRecycle.csproj
-		SccProjectTopLevelParentUniqueName17 = Intel.Mydeals.sln
-		SccProjectName17 = Intel.MyDeals.Utilities/Intel.MyDeals.CacheRecycle
-		SccLocalPath17 = Intel.MyDeals.Utilities\\Intel.MyDeals.CacheRecycle
-		SccProjectUniqueName18 = Intel.MyDeals.BusinessRules.Test\\Intel.MyDeals.BusinessRules.Test.csproj
-		SccProjectTopLevelParentUniqueName18 = Intel.Mydeals.sln
-		SccProjectName18 = Intel.MyDeals.BusinessRules.Test
-		SccLocalPath18 = Intel.MyDeals.BusinessRules.Test
+		SolutionGuid = {F0833D76-D2F9-40D0-B013-ACB43C34A35D}
 	EndGlobalSection
 EndGlobal
