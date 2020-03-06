@@ -6,6 +6,7 @@ using System.Web.Http;
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/Integration")]
+    [AllowAnonymous]
     public class IntegrationController : ApiController
     {
         private readonly IIntegrationLib _integrationLib;
@@ -22,8 +23,12 @@ namespace Intel.MyDeals.Controllers.API
 
         [HttpPost]
         [Route("SaveSalesForceTenderData")]
+        [AllowAnonymous]
+        [Authorize]
         public string SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
         {
+            // User and Password validate here.......
+            // 1. With authorise attribute
             Guid saveSuccessful = _integrationLib.SaveSalesForceTenderData(jsonDataPacket);
 
             return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
