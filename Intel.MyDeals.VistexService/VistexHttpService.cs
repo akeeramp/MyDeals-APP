@@ -76,7 +76,7 @@ namespace Vistex
             }
         }
 
-        public ResponseType VistexCustomer()
+        ResponseType GetResponse(string strMethodName)
         {
             ResponseType responseType = ResponseType.None;
             using (var client = new HttpClient())
@@ -86,7 +86,7 @@ namespace Vistex
                 //HTTP GET
                 try
                 {
-                    var responseTask = client.GetAsync("GetVistexStatuses");
+                    var responseTask = client.GetAsync(strMethodName);
                     responseTask.Wait();
 
                     HttpResponseMessage result = responseTask.Result;
@@ -123,6 +123,11 @@ namespace Vistex
                 }
             }
             return responseType;
+        }
+
+        public ResponseType GetVistexOutBoundData()
+        {
+            return GetResponse("GetVistexOutBoundData");
         }
     }
 }
