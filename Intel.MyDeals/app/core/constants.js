@@ -288,6 +288,9 @@
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Payment"]
+                    },
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
@@ -433,6 +436,9 @@
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
+                    },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Payment"]
                     },
                     "TERMS": {
                         "Groups": ["Deal Info"]
@@ -600,6 +606,9 @@
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
+                    },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Payment"]
                     },
                     "TERMS": {
                         "Groups": ["Deal Info"]
@@ -941,6 +950,9 @@
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
+                    },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Payment"]
                     },
                     "TERMS": {
                         "Groups": ["Deal Info"]

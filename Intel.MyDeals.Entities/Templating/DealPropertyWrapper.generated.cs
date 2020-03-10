@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/9/2020 4:01:03 PM
+File Updated: 3/10/2020 3:44:58 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -3146,6 +3146,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute PERIOD_PROFILE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PERIOD_PROFILE",
+			ATRB_DESC = "Period Profile",
+			ATRB_LBL = "Period Profile",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3717,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute PNL_SPLIT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PNL_SPLIT",
@@ -3574,7 +3590,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "NA",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3889,22 +3905,6 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Server Deal Type",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 3347,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
-		};
-		public static MyDealsAttribute SETTLEMENT_PERIOD = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "SETTLEMENT_PERIOD",
-			ATRB_DESC = "Settlement Period",
-			ATRB_LBL = "Settlement Period",
-			ATRB_MAX_LEN = 50,
-			ATRB_SID = 3717,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
