@@ -3900,6 +3900,7 @@
             ps.DC_PARENT_ID = ct.DC_ID;
             ps.PRC_TBL = [];
             ps.TITLE = $scope.newStrategy.TITLE;
+            ps.IS_HYBRID_PRC_STRAT = ($scope.newStrategy.IS_HYBRID_PRC_STRAT === true? 1:0);
 
             // Add to DB first... then add to screen
             objsetService.createPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
@@ -3914,6 +3915,7 @@
                         $scope.setBusy("", "");
                     }, 1000);
                     $scope.newStrategy.TITLE = "";
+                    $scope.newStrategy.IS_HYBRID_PRC_STRAT = true;
                     $scope.curPricingStrategy = ps;
                     $scope.curPricingStrategyId = ps.DC_ID;
                     $scope.addStrategyDisabled = false;

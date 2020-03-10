@@ -5,6 +5,7 @@ using Intel.MyDeals.IDataLibrary;
 using System;
 using System.Linq;
 using Intel.MyDeals.BusinessRules;
+using Intel.MyDeals.DataLibrary;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -15,6 +16,11 @@ namespace Intel.MyDeals.BusinessLogic
         public MeetCompLib(IMeetCompDataLib meetCompCollectorLib)
         {
             _meetCompCollectorLib = meetCompCollectorLib;
+        }
+
+        public MeetCompLib()
+        {
+            _meetCompCollectorLib = new MeetCompDataLib();
         }
 
         /// <summary>

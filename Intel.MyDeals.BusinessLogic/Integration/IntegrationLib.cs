@@ -34,10 +34,10 @@ namespace Intel.MyDeals.BusinessLogic
         public Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
         {
             // Vistex returned response processing - if it saves data to DB, return true, else return false.
-            Guid batchId = new Guid(jsonDataPacket.VistexResponseHeader.BatchId);
+            Guid batchId = new Guid(jsonDataPacket.vistexResponseHeader.BatchId);
             Dictionary<int, string> dealsMessages = new Dictionary<int, string>();
 
-            foreach (DealResponse response in jsonDataPacket.VistexResponseHeader.DealResponses)
+            foreach (VistexResponseMsg.VistexResponseHeader.DealResponse response in jsonDataPacket.vistexResponseHeader.DealResponses)
             {
                 dealsMessages.Add(response.DealId, response.ErrMessage);
             }

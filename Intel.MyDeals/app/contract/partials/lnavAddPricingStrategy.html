@@ -18,6 +18,18 @@
                     <button ng-show="!addStrategyDisabled" class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" ng-click="customAddPsValidate()">Add</button>
                     <button ng-show="addStrategyDisabled" class="btn btn-sm btn-primary btn-pending" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;">Add</button>
                     <div class="clearboth"></div>
+                    
+                    <!--Make this pretty -->
+                    <div class="fl ptLnavSubTitle">Create Agreement at Pricing Strategy</div>
+                    <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
+                    <input type="checkbox" 
+                           id="inptPrcHybridCheck"
+                           ng-model="newStrategy.IS_HYBRID_PRC_STRAT"
+                           ng-class="{isError: newStrategy._behaviors.isError.IS_HYBRID_PRC_STRAT}"
+                           style="margin-top: 12px; height: 16px; width: 16px;"/>
+                    <div class="clearboth"></div>
+                    <!--END Make this pretty -->
+
                     <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
                 </div>
                 <div ng-if="!C_ADD_PRICING_STRATEGY">
@@ -54,6 +66,7 @@
         opacity: 0;
         color: #f3D54E;
     }
+
     .help-add-ps i {
         font-size: 40px;
         color: #f3D54E;

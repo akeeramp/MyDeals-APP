@@ -46,6 +46,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PRD_EXCLDS,
                                 AttributeCodes.MRKT_SEG,
+                                AttributeCodes.SETTLEMENT_PERIOD,
                                 AttributeCodes.PAYOUT_BASED_ON }
                         }
                     }
@@ -162,6 +163,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.RATE,
                                 AttributeCodes.OEM_PLTFRM_EOL_DT,
                                 AttributeCodes.OEM_PLTFRM_LNCH_DT,
+                                AttributeCodes.SETTLEMENT_PERIOD,
                                 AttributeCodes.TERMS }
                         }
                     }

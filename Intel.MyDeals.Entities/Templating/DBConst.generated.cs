@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/26/2020 3:55:40 PM
+File Updated: 3/9/2020 3:56:51 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1389,6 +1389,15 @@ namespace Intel.MyDeals.Entities {
 		public const string IS_FINANCE_ADMIN = "IS_FINANCE_ADMIN";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3718
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_HYBRID_PRC_STRAT = "IS_HYBRID_PRC_STRAT";
+
+		///<summary>
 		/// DIM_SID: 50
 		/// DIM_CD: SECUR
 		/// ATRB_SID: 5043
@@ -2197,6 +2206,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string SERVER_DEAL_TYPE = "SERVER_DEAL_TYPE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3717
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SETTLEMENT_PERIOD = "SETTLEMENT_PERIOD";
 
 		///<summary>
 		/// DIM_SID: 7

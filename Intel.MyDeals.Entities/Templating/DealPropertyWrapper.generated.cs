@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/26/2020 3:56:23 PM
+File Updated: 3/9/2020 4:01:03 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2442,6 +2442,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
+		public static MyDealsAttribute IS_HYBRID_PRC_STRAT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_HYBRID_PRC_STRAT",
+			ATRB_DESC = "Is a Hybrid Pricing Strategy",
+			ATRB_LBL = "Is Hybrid PS",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3718,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute IS_SUPER_USER = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "IS_SUPER_USER",
@@ -3873,6 +3889,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Server Deal Type",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 3347,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute SETTLEMENT_PERIOD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SETTLEMENT_PERIOD",
+			ATRB_DESC = "Settlement Period",
+			ATRB_LBL = "Settlement Period",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3717,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,

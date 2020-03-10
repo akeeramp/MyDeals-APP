@@ -267,6 +267,7 @@ namespace Intel.MyDeals.BusinessLogic
             testContractData.Add("TENDER_PUBLISHED", 1);
             testContractData.Add("IS_TENDER", 1);
             testContractData.Add("TITLE", contractTitle);
+            testContractData.Add("PASSED_VALIDATION", "Complete");
             testData.Contract.Add(testContractData);
 
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveTendersHeader")
@@ -335,6 +336,41 @@ namespace Intel.MyDeals.BusinessLogic
             return retItem;
         }
 
+        private void EnterMeetCompData(int contractId, int dealId, int prdId, string usrInputProd, string myPrdCat, string compBench, string iaBench, string compPrice, string compProduct, int custId)
+        {
+            int myCompBench = int.TryParse(compBench, out myCompBench) ? myCompBench : 0;
+            int myIaBench = int.TryParse(iaBench, out myIaBench) ? myIaBench : 0;
+            int myCompPrice = int.TryParse(compPrice, out myCompPrice) ? myCompPrice : 0;
+
+            MeetCompUpdate mcUpdate = new MeetCompUpdate()
+            {
+                COMP_BNCH = myCompBench,
+                COMP_OVRRD_FLG = false,
+                COMP_OVRRD_RSN = "",
+                COMP_PRC = myCompPrice,
+                COMP_SKU = compProduct,
+                CUST_NM_SID = custId,
+                DEAL_OBJ_SID = dealId,
+                DEAL_PRD_TYPE = "CPU",
+                GRP = "PRD",
+                GRP_PRD_NM = usrInputProd,
+                GRP_PRD_SID = prdId.ToString(),
+                IA_BNCH = myIaBench,
+                MEET_COMP_UPD_FLG = 'Y',
+                PRD_CAT_NM = myPrdCat
+            };
+
+            List<MeetCompUpdate> mcu = new List<MeetCompUpdate>();
+            mcu.Add(mcUpdate);
+            mcUpdate.GRP = "DEAL"; // Make the one change for record 2 in this packet
+            mcu.Add(mcUpdate);
+
+
+            MeetCompLib _meetCompLib = new MeetCompLib();
+            List<MeetCompResult> meetCompResult = _meetCompLib.UpdateMeetCompProductDetails(contractId, OpDataElementType.PRC_TBL_ROW.ToId(), mcu);
+            int p = 0;
+        }
+
         private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int currRecord)
         {
             if (dealId > 0) return dealId; // only process new deals for now
@@ -371,8 +407,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Product Check START
             // Get product item here - clean up the MyTranslatedProduct function, expect null back if no product matched
-            int epmId = 0;
-            Int32.TryParse(prdLkupNbr, out epmId);
+            int epmId = int.TryParse(prdLkupNbr, out epmId) ? epmId : 0;
 
             JmsDataLib jmsDataLib = new JmsDataLib();
             ProductEpmObject productLookupObj = jmsDataLib.FetchProdFromProcessorEpmMap(epmId);
@@ -386,16 +421,9 @@ namespace Intel.MyDeals.BusinessLogic
             if (myTranslatedProduct == null) return -1; // Bail out, no returned data - might need to beef this up some for missing cap and the like
 
             int myPrdMbrSid = myTranslatedProduct.PRD_MBR_SID;
+            string myPrdCat = myTranslatedProduct.PRD_CAT_NM;
 
             // Product Check END
-
-            // Meetcomp Start
-
-            // Meetcomp End
-
-
-
-
 
             OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
             testPSData.Add("DC_ID", -201 - currRecord); // first record save is -201, others should be -202...
@@ -404,6 +432,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPSData.Add("dc_parent_type", "CNTRCT");
             testPSData.Add("OBJ_SET_TYPE_CD", "ALL_TYPES");
             testPSData.Add("TITLE", "PS - " + quoteLineId); // Assume that SF enforces uniqueness here, if not, add dealSfId
+            testPSData.Add("PASSED_VALIDATION", "Complete");
             testData.PricingStrategy.Add(testPSData);
 
             OpDataCollectorFlattenedItem testPTData = new OpDataCollectorFlattenedItem();
@@ -419,6 +448,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPTData.Add("GEO_COMBINED", "Worldwide");
             testPTData.Add("PROD_INCLDS", "Tray");
             testPTData.Add("TITLE", "PT Title SF1234PT - " + dealSfId);
+            testPTData.Add("PASSED_VALIDATION", "Complete");
             testData.PricingTable.Add(testPTData);
 
             OpDataCollectorFlattenedItem testPTRData = new OpDataCollectorFlattenedItem();
@@ -442,7 +472,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPTRData.Add("PTR_USER_PRD", usrPrdNm);
             testPTRData.Add("PTR_SYS_PRD", someProduct); // "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
             testPTRData.Add("PROD_INCLDS", "Tray");
-            //testPTRData.Add("PASSED_VALIDATION", "Complete");
+            testPTRData.Add("PASSED_VALIDATION", "Complete");
             testPTRData.Add("SYS_COMMENT", "SalesForce Created Pricing Table Row: i3-8300");
             testData.PricingTableRow.Add(testPTRData);
 
@@ -634,12 +664,35 @@ namespace Intel.MyDeals.BusinessLogic
             // Use the other Price Table save call to specifically save the PTR only.
             OpDataCollectorFlattenedDictList WIP_ROW_DATA = _pricingTablesLib.SavePricingTable(null, null, testData.WipDeals, saveContractToken);
 
-            //-501 - currRecord;
-            // Update the Meet Comp data now.
+            int WIP_DEAL_ID = -501 - currRecord;
+            foreach (var item in WIP_ROW_DATA)
+            {
+                if (item.Key.ToString() == OpDataElementType.WIP_DEAL.ToString())
+                {
+                    foreach (var itm in item.Value)
+                    {
+                        if (itm.ContainsKey("_actions"))
+                        {
+                            List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
+
+                            if (actionIdChangeAltId != null)
+                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out WIP_DEAL_ID);
+                        }
+                    }
+                }
+            }
 
             // END SAVE WIP DEAL SECTION
 
-            return 1;
+            // Update the Meet Comp data now.
+            // Meetcomp Start
+            EnterMeetCompData(contractId, WIP_DEAL_ID, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, compSku,
+                intelSku, meetCompPrc, compPrd, custId);
+            // Meetcomp End
+
+            // END SAVE WIP DEAL SECTION
+
+            return WIP_DEAL_ID;
         }
 
         public string ExecuteSalesForceTenderData(Guid workId)
@@ -704,6 +757,7 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
             }
+
             return "blah";
         }
         #endregion TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER

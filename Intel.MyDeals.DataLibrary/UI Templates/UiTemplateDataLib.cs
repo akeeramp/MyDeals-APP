@@ -2460,6 +2460,24 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150,
                 IsReadOnly = true,
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.SETTLEMENT_PERIOD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 120,
+                IsDefaultable = true,
+                Label = "Settlement Period",
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PERIOD')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/SETTLEMENT_PERIOD",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,
+                ExcelTemplate = "#=SETTLEMENT_PERIOD#",
+                IsRequired = true
+            });
             //items.Add(new UiTemplateContainerItem  // WIP All types
             //{
             //    Id = 0,
