@@ -36,7 +36,7 @@
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
     <Reference Include="Intel.Opaque.Data">
-      <HintPath>..\..\..\..\..\Work\RDMS\MyDeals\MyDeals_Release\UI\main\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
+      <HintPath>..\..\..\..\Project\MyDeals_Release\UI\main\Intel.MyDeals.App\bin\Debug\Intel.Opaque.Data.dll</HintPath>
     </Reference>
     <Reference Include="Intel.Opaque.DBAccess">
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess.cs" />
     <Compile Include="DsaLogs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

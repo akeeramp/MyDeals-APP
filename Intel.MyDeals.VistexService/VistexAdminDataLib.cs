@@ -44,7 +44,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public VistexAdminDataLib()
         {
-            DataAccess.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MyDealsConnectionString"].ConnectionString;
+            DataAccess.ConnectionString = ConfigurationManager.ConnectionStrings["MyDealsConnectionString"].ConnectionString;
         }
 
 
