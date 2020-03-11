@@ -2,6 +2,10 @@
     <h2>Vistex Customer Mapping</h2>
 </div>
 <br />
-<div class="col-md-12" style="padding-top: 20px;">
+<div ng-show="!accessAllowed" style="margin-left: 20px;">
+    <h3 style="font-weight: bold; color: red">Access to this page is not allowed </h3>
+</div>
+
+<div ng-show="accessAllowed" class="col-md-12" style="padding-top: 20px;">
     <div kendo-grid="vistexcustomerGrid" class="table" expand-k-grid options="vm.gridOptions"></div>
 </div>

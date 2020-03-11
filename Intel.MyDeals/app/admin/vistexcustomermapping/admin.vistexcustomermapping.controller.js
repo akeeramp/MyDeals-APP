@@ -10,6 +10,13 @@
 
     function VistexcustomermappingController(vistexcustomermappingService, $scope, logger, gridConstants) {
 
+        $scope.accessAllowed = true;
+        if (!(window.usrRole === 'SA' || window.isDeveloper)) {
+            // Kick not valid users out of the page
+            $scope.accessAllowed = false;
+            document.location.href = "/Dashboard#/portal";
+        }
+
         var vm = this;
         
         // Variables
