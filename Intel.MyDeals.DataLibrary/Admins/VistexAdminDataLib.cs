@@ -3,21 +3,74 @@ using System.Collections.Generic;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
-using System.Data.SqlClient;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using Intel.Opaque.Tools;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.DataLibrary
 {
     public class VistexAdminDataLib
     {
-        public List<Vistex> GetVistex(bool isBodyRequired)
+        public List<VistexDealOutBound> GetVistexDealOutBoundData()
         {
-            List<Vistex> lstVistex = new List<Vistex>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN
+            List<VistexDealOutBound> lstVistex = new List<VistexDealOutBound>();
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
             {
                 in_rqst_type = VistexMode.VISTEX_DEALS.ToString("g"),
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+
+                while (rdr.Read())
+                {
+                    lstVistex.Add(new VistexDealOutBound
+                    {
+                        VistexAttributes = JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)),
+                        DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                        TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
+                    });
+                } // while
+            }
+            return lstVistex;
+        }
+
+        public List<VistexProductVerticalOutBound> GetVistexProductVeticalsOutBoundData()
+        {
+            List<VistexProductVerticalOutBound> lstVistex = new List<VistexProductVerticalOutBound>();
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
+            {
+                in_rqst_type = VistexMode.PROD_VERT_RULES.ToString("g"),
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+
+                while (rdr.Read())
+                {
+                    lstVistex.Add(new VistexProductVerticalOutBound
+                    {
+                        ProductVertical = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)).ProductVertical,
+                        TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
+                    });
+                } // while
+            }
+            return lstVistex;
+        }
+
+        //Only for internal testing
+        public List<VistexLogs> GetVistexLogs(VistexMode vistexMode)
+        {
+            List<VistexLogs> lstVistex = new List<VistexLogs>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN
+            {
+                in_rqst_type = vistexMode.ToString("g"),
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -33,7 +86,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    lstVistex.Add(new Vistex
+                    lstVistex.Add(new VistexLogs
                     {
                         Id = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
                         CreatedOn = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
@@ -50,14 +103,17 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
+
+        //Only for internal testing
         public List<string> GetStatuses()
         {
             return Enum.GetValues(typeof(VistexStage)).Cast<VistexStage>().Select(v => v.ToString()).ToList();
         }
 
-        public string GetVistexBody(int id)
+        //Only for internal testing
+        public Dictionary<string,string> GetVistexBody(int id)
         {
-            string strJson = string.Empty;
+            Dictionary<string, string> dicRtn = new Dictionary<string, string>();
             var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
             {
                 rqst_sid = id
@@ -69,43 +125,38 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    strJson = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA);
+                    dicRtn = JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA));
                 } // while
             }
 
-            return strJson;
+            return dicRtn;
         }
 
-        public List<Vistex> GetVistexOutBoundData()
+        public VistexProductVerticalOutBound GetProductVerticalBody(int id)
         {
-            List<Vistex> lstVistex = new List<Vistex>();
-            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
+            VistexProductVerticalOutBound lstRtn = new VistexProductVerticalOutBound();
+            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
             {
-                in_rqst_type = VistexMode.VISTEX_DEALS.ToString("g"),
+                rqst_sid = id
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
-                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-                int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+                int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
 
                 while (rdr.Read())
                 {
-                    lstVistex.Add(new Vistex
-                    {
-                        DataBody = (IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA),
-                        DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                        TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
-                    });
+                    lstRtn = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA));
                 } // while
             }
-            return lstVistex;
+
+            return lstRtn;
         }
 
-        public List<Vistex> AddVistexData(List<int> lstDealIds)
+        //Only for internal testing
+        public List<VistexLogs> AddVistexData(List<int> lstDealIds)
         {
-            List<Vistex> lstVistex = new List<Vistex>();
+            List<VistexLogs> lstVistex = new List<VistexLogs>();
             var cmd = new Procs.dbo.PR_MYDL_INS_DSA_RQST_RSPN_LOG
             {
                 in_rqst_type = VistexMode.VISTEX_DEALS.ToString("g"),
@@ -118,7 +169,7 @@ namespace Intel.MyDeals.DataLibrary
                 int iDealIndex = 0;
                 while (rdr.Read())
                 {
-                    lstVistex.Add(new Vistex
+                    lstVistex.Add(new VistexLogs
                     {
                         Id = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
                         DealId = lstDealIds[iDealIndex],
@@ -135,6 +186,7 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
+        //Only for internal testing
         public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int dealId, string strErrorMessage)
         {
             var myDict = new Dictionary<int, string>

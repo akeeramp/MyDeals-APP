@@ -13,7 +13,7 @@
         var apiBaseUrl = "api/DSA/";
 
         var service = {
-            getVistex: getVistex,
+            getVistexLogs: getVistexLogs,
             getVistexStatuses: getVistexStatuses,
             updateVistexStatus: updateVistexStatus,
             sendVistexData: sendVistexData,
@@ -26,12 +26,12 @@
             return dataService.post(apiBaseUrl + 'SendVistexData', lstDealIds);
         }
 
-        function getVistex() {
-            return dataService.get(apiBaseUrl + 'GetVistex');
+        function getVistexLogs(strVistexMode) {
+            return dataService.get(apiBaseUrl + 'GetVistexLogs/' + strVistexMode);
         }
 
         function getVistexOutBoundData() {
-            return dataService.get(apiBaseUrl + 'GetVistexOutBoundData');
+            return dataService.get(apiBaseUrl + 'GetVistexDealOutBoundData');
         }
 
         function getVistexStatuses() {

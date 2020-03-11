@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Intel.MyDeals.Entities
 {
+    //Only for internal testing
     [DataContract]
-    public class Vistex
+    public class VistexLogs
     {
         [DataMember]
         public int Id { get; set; }
         [DataMember]
         public Guid? TransanctionId { get; set; }
         [DataMember]
-        public int DealId { get; set; }
-        [DataMember]
-        public string DataBody { get; set; }
+        public int DealId { get; set; }       
         [DataMember]
         public string Mode { get; set; }
         [DataMember]
@@ -26,6 +26,26 @@ namespace Intel.MyDeals.Entities
         public DateTime? SendToPoOn { get; set; }
         [DataMember]
         public DateTime? ProcessedOn { get; set; }
+    }
+
+    [DataContract]
+    public class VistexDealOutBound
+    {
+        [DataMember]
+        public Guid TransanctionId { get; set; }
+        [DataMember]
+        public int DealId { get; set; }
+        [DataMember]
+        public Dictionary<string, string> VistexAttributes { get; set; }  
+    }
+
+    [DataContract]
+    public class VistexProductVerticalOutBound
+    {
+        [DataMember]
+        public Guid TransanctionId { get; set; }
+        [DataMember]
+        public List<ProductCategory> ProductVertical { get; set; }
     }
 
     public class VistexAttributes
