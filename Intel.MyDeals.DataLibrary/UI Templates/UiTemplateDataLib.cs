@@ -2463,19 +2463,19 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.SETTLEMENT_PERIOD,
+                AtrbCd = AttributeCodes.PERIOD_PROFILE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 120,
                 IsDefaultable = true,
-                Label = "Settlement Period",
+                Label = "Period Profile",
                 UiType = "DROPDOWN",
-                Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PERIOD')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/SETTLEMENT_PERIOD",
+                Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,
                 IsSortable = true,
-                ExcelTemplate = "#=SETTLEMENT_PERIOD#",
+                ExcelTemplate = "#=PERIOD_PROFILE#",
                 IsRequired = true
             });
             //items.Add(new UiTemplateContainerItem  // WIP All types
