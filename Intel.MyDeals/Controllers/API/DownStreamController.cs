@@ -18,17 +18,18 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetVistex")]
-        public List<Vistex> GetVistex()
+        [Route("GetVistexLogs/{strVistexMode}")]
+        public List<VistexLogs> GetVistexLogs(string strVistexMode)
         {
-            return SafeExecutor(() => _dsaLib.GetVistex(), $"Unable to get vistex data");
+            VistexMode vistexMode = (VistexMode)Enum.Parse(typeof(VistexMode), strVistexMode);
+            return SafeExecutor(() => _dsaLib.GetVistexLogs(vistexMode), $"Unable to get vistex data");
         }
 
         [Authorize]
-        [Route("GetVistexOutBoundData")]
-        public List<Vistex> GetVistexOutBoundData()
+        [Route("GetVistexDealOutBoundData")]
+        public List<VistexDealOutBound> GetVistexDealOutBoundData()
         {
-            return SafeExecutor(() => _dsaLib.GetVistexOutBoundData(), $"Unable to get vistex outbound data");
+            return SafeExecutor(() => _dsaLib.GetVistexDealOutBoundData(), $"Unable to get vistex outbound data");
         }
 
         [Authorize]
@@ -60,7 +61,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("SendVistexData")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<Vistex> SendVistexData(List<int> lstDealIds)
+        public List<VistexLogs> SendVistexData(List<int> lstDealIds)
         {
             return SafeExecutor(() => _dsaLib.AddVistexData(lstDealIds), $"Unable to send vistex data");
         }

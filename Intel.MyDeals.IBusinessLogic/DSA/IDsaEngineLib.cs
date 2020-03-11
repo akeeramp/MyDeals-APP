@@ -6,11 +6,11 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IDsaEngineLib
     {
-        List<Vistex> GetVistex();
+        List<VistexLogs> GetVistexLogs(VistexMode vistexMode);
         List<VistexAttributes> GetVistexAttrCollection(int id);
         List<string> GetVistexStatuses();
         Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, int DealId, string strErrorMessage);
-        List<Vistex> AddVistexData(List<int> lstDealIds);
-        List<Vistex> GetVistexOutBoundData();
+        List<VistexLogs> AddVistexData(List<int> lstDealIds);
+        List<VistexDealOutBound> GetVistexDealOutBoundData();
     }
 }

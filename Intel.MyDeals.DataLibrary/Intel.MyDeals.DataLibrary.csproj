@@ -65,6 +65,10 @@
     <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
       <HintPath>..\Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Intel.MyDeals.BusinessLogic\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />

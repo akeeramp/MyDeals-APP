@@ -4,17 +4,16 @@ using System.Runtime.Serialization;
 
 namespace Intel.MyDeals.Entities
 {
+    //Only for internal testing
     [DataContract]
-    public class Vistex
+    public class VistexLogs
     {
         [DataMember]
         public int Id { get; set; }
         [DataMember]
         public Guid? TransanctionId { get; set; }
         [DataMember]
-        public int DealId { get; set; }
-        [DataMember]
-        public string DataBody { get; set; }
+        public int DealId { get; set; }       
         [DataMember]
         public string Mode { get; set; }
         [DataMember]
@@ -29,25 +28,41 @@ namespace Intel.MyDeals.Entities
         public DateTime? ProcessedOn { get; set; }
     }
 
+    [DataContract]
+    public class VistexDealOutBound
+    {
+        [DataMember]
+        public Guid TransanctionId { get; set; }
+        [DataMember]
+        public int DealId { get; set; }
+        [DataMember]
+        public Dictionary<string, string> VistexAttributes { get; set; }  
+    }
+
+    [DataContract]
+    public class VistexProductVerticalOutBound
+    {
+        [DataMember]
+        public Guid TransanctionId { get; set; }
+        [DataMember]
+        public List<ProductCategory> ProductVertical { get; set; }
+    }
+
     public class VistexAttributes
     {
         public string VistexAttribute { get; set; }
         public string Value { get; set; }
     }
 
-    public enum VistexAttribute
+    public enum ResponseType
     {
-        DEAL_ID = 3616,
-        OBJ_SET_TYPE_CD = 3002,
-        CUST_NM = 2002,
-        PRODUCT_FILTER = 15,
-        START_DT = 3319,
-        END_DT = 3320,
-        MRKT_SEG = 3474,
-        GEO_COMBINED = 3620,
-        VOLUME = 3321,
-        PAYOUT_BASED_ON = 35,
-        END_CUSTOMER_RETAIL = 3348
+        None = 0,
+        UnableToReachServer,
+        Unauthorized,
+        Success,
+        Failed,
+        Unknown,
+        ConnectionClosed
     }
 
     public enum VistexStage
@@ -64,6 +79,7 @@ namespace Intel.MyDeals.Entities
     public enum VistexMode
     {
         VISTEX_DEALS = 1,
-        TENDER_DEALS = 2
+        TENDER_DEALS = 2,
+        PROD_VERT_RULES = 3
     }
 }

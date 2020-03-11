@@ -23,7 +23,7 @@
         vm.EnteredMessage = "";
 
         vm.init = function () {
-            dsaService.getVistex().then(function (response) {
+            dsaService.getVistexLogs('VISTEX_DEALS').then(function (response) {
                 vm.Vistex = response.data;
                 vm.vistexDataSource.read();
             }, function (response) {

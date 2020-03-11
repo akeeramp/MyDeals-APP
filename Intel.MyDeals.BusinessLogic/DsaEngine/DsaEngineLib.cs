@@ -2,7 +2,6 @@
 using Intel.MyDeals.IBusinessLogic;
 using System.Collections.Generic;
 using Intel.MyDeals.DataLibrary;
-using Newtonsoft.Json;
 using System.Linq;
 using System;
 
@@ -15,9 +14,9 @@ namespace Intel.MyDeals.BusinessLogic
 
         }
 
-        public List<Vistex> GetVistex()
+        public List<VistexLogs> GetVistexLogs(VistexMode vistexMode)
         {
-            return new VistexAdminDataLib().GetVistex(false);
+            return new VistexAdminDataLib().GetVistexLogs(vistexMode);
         }
 
         public List<string> GetVistexStatuses()
@@ -25,42 +24,26 @@ namespace Intel.MyDeals.BusinessLogic
             return new VistexAdminDataLib().GetStatuses();
         }
 
-        public List<Vistex> AddVistexData(List<int> lstDealIds)
+        public List<VistexLogs> AddVistexData(List<int> lstDealIds)
         {
             return new VistexAdminDataLib().AddVistexData(lstDealIds);
         }
 
-        public List<Vistex> GetVistexOutBoundData()
+        public List<VistexDealOutBound> GetVistexDealOutBoundData()
         {
-            return new VistexAdminDataLib().GetVistexOutBoundData();
+            return new VistexAdminDataLib().GetVistexDealOutBoundData();
         }
 
         public List<VistexAttributes> GetVistexAttrCollection(int id)
         {
             List<VistexAttributes> lstRtn = new List<VistexAttributes>();
-            string strJson = new VistexAdminDataLib().GetVistexBody(id);
-            try
-            {
-                if (strJson.Contains("DEAL_ID"))
-                {
-                    Dictionary<VistexAttribute, string> dicRtn = JsonConvert.DeserializeObject<Dictionary<VistexAttribute, string>>(strJson);
-                    lstRtn = (from result in dicRtn
-                              select new VistexAttributes
-                              {
-                                  VistexAttribute = result.Key.ToString("g"),
-                                  Value = result.Value
-                              }).ToList();
-                }
-                else
-                {
-                    lstRtn.Add(new VistexAttributes { VistexAttribute = "Illegal Json", Value = strJson });
-                }
-
-            }
-            catch (Exception ex)
-            {
-                lstRtn.Add(new VistexAttributes { VistexAttribute = "Illegal Attribute", Value = strJson });
-            }
+            Dictionary<string, string> dicRtn = new VistexAdminDataLib().GetVistexBody(id);
+            lstRtn = (from result in dicRtn
+                      select new VistexAttributes
+                      {
+                          VistexAttribute = result.Key,
+                          Value = result.Value
+                      }).ToList();
             return lstRtn;
         }
 
