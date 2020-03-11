@@ -36,7 +36,7 @@
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
     <Reference Include="Intel.Opaque.Data">
-      <HintPath>..\..\..\..\Project\MyDeals_Release\UI\main\Intel.MyDeals.App\bin\Debug\Intel.Opaque.Data.dll</HintPath>
+      <HintPath>..\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
     </Reference>
     <Reference Include="Intel.Opaque.DBAccess">
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
@@ -46,7 +46,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Project\MyDeals_Release\UI\main\Intel.MyDeals.DataAccessLib\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Shared Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
