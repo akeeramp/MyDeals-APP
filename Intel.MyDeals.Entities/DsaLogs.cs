@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Intel.MyDeals.Entities
@@ -35,19 +34,15 @@ namespace Intel.MyDeals.Entities
         public string Value { get; set; }
     }
 
-    public enum VistexAttribute
+    public enum ResponseType
     {
-        DEAL_ID = 3616,
-        OBJ_SET_TYPE_CD = 3002,
-        CUST_NM = 2002,
-        PRODUCT_FILTER = 15,
-        START_DT = 3319,
-        END_DT = 3320,
-        MRKT_SEG = 3474,
-        GEO_COMBINED = 3620,
-        VOLUME = 3321,
-        PAYOUT_BASED_ON = 35,
-        END_CUSTOMER_RETAIL = 3348
+        None = 0,
+        UnableToReachServer,
+        Unauthorized,
+        Success,
+        Failed,
+        Unknown,
+        ConnectionClosed
     }
 
     public enum VistexStage
@@ -64,6 +59,7 @@ namespace Intel.MyDeals.Entities
     public enum VistexMode
     {
         VISTEX_DEALS = 1,
-        TENDER_DEALS = 2
+        TENDER_DEALS = 2,
+        PROD_VERT_RULES = 3
     }
 }

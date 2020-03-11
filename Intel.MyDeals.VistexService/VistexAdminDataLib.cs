@@ -91,12 +91,12 @@ namespace Intel.MyDeals.DataLibrary
             return Enum.GetValues(typeof(VistexStage)).Cast<VistexStage>().Select(v => v.ToString()).ToList();
         }
 
-        public void SendFailureMessage(ResponseType responseType)
+        public void SendFailureMessage(ResponseType responseType, string strEmails)
         {
             var cmd = new Procs.dbo.PR_SQL_DB_MAIL
             {
                 from_user_email = ConfigurationManager.AppSettings["FromEmail"],
-                to_user_email = ConfigurationManager.AppSettings["ToEmails"],
+                to_user_email = strEmails,
                 subject = "Error occured in Vistex services",
                 message = string.Concat("Unable to invoke service of Vistex due to the reason : ", VistexHttpService.GetResposnseMessage(responseType)),
                 dce_cc_list = string.Empty,

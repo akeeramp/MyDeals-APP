@@ -43,11 +43,11 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (strJson.Contains("DEAL_ID"))
                 {
-                    Dictionary<VistexAttribute, string> dicRtn = JsonConvert.DeserializeObject<Dictionary<VistexAttribute, string>>(strJson);
+                    Dictionary<string, string> dicRtn = JsonConvert.DeserializeObject<Dictionary<string, string>>(strJson);
                     lstRtn = (from result in dicRtn
                               select new VistexAttributes
                               {
-                                  VistexAttribute = result.Key.ToString("g"),
+                                  VistexAttribute = result.Key,
                                   Value = result.Value
                               }).ToList();
                 }
