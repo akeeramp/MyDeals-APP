@@ -117,7 +117,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.TransanctionId, e.model.DealId);
+                vm.UpdateVistexStatus(e.model.TransanctionId);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
