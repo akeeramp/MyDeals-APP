@@ -34,6 +34,11 @@ namespace Intel.MyDeals.BusinessLogic
             return new VistexAdminDataLib().GetVistexDealOutBoundData();
         }
 
+        public List<ProductCategory> GetProductVerticalBody(int id)
+        {
+            return new VistexAdminDataLib().GetProductVerticalBody(id);
+        }
+
         public List<VistexAttributes> GetVistexAttrCollection(int id)
         {
             List<VistexAttributes> lstRtn = new List<VistexAttributes>();
@@ -47,9 +52,14 @@ namespace Intel.MyDeals.BusinessLogic
             return lstRtn;
         }
 
-        public Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, int dealId, string strErrorMessage)
+        public Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)
         {
             return new VistexAdminDataLib().UpdateStatus(batchId, vistexStage, dealId, strErrorMessage);
         }
-    }
+
+        public List<VistexProductVerticalOutBound> GetVistexProductVeticalsOutBoundData()
+        {
+            return new VistexAdminDataLib().GetVistexProductVeticalsOutBoundData();
+        }
+        }
 }

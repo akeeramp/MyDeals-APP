@@ -30,7 +30,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     lstVistex.Add(new VistexDealOutBound
                     {
-                        VistexAttributes = JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)),
+                        VistexAttributes = (from result in JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)) select new VistexAttributes { Value = result.Value, VistexAttribute = result.Key }).ToList(),
                         DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
                         TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
                     });
@@ -111,7 +111,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         //Only for internal testing
-        public Dictionary<string,string> GetVistexBody(int id)
+        public Dictionary<string, string> GetVistexBody(int id)
         {
             Dictionary<string, string> dicRtn = new Dictionary<string, string>();
             var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
@@ -132,9 +132,9 @@ namespace Intel.MyDeals.DataLibrary
             return dicRtn;
         }
 
-        public VistexProductVerticalOutBound GetProductVerticalBody(int id)
+        public List<ProductCategory> GetProductVerticalBody(int id)
         {
-            VistexProductVerticalOutBound lstRtn = new VistexProductVerticalOutBound();
+            List<ProductCategory> lstRtn = new List<ProductCategory>();
             var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
             {
                 rqst_sid = id
@@ -146,7 +146,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    lstRtn = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA));
+                    lstRtn = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>(((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA)).Replace("\"CRE_DT\"", "\"CRE_DTM\"").Replace("\"CHG_DT\"", "\"CHG_DTM\"")).ProductVertical;
                 } // while
             }
 
@@ -187,11 +187,11 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         //Only for internal testing
-        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int dealId, string strErrorMessage)
+        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)
         {
             var myDict = new Dictionary<int, string>
             {
-                { dealId, strErrorMessage }
+                { dealId.HasValue? dealId.Value:0, strErrorMessage }
             };
 
             type_int_dictionary opPair = new type_int_dictionary();

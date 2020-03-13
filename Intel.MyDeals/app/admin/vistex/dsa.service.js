@@ -17,7 +17,8 @@
             getVistexStatuses: getVistexStatuses,
             updateVistexStatus: updateVistexStatus,
             sendVistexData: sendVistexData,
-            getVistexOutBoundData: getVistexOutBoundData
+            getVistexOutBoundData: getVistexOutBoundData,
+            getVistexProductVeticalsOutBoundData: getVistexProductVeticalsOutBoundData
         }
 
         return service;
@@ -32,6 +33,10 @@
 
         function getVistexOutBoundData() {
             return dataService.get(apiBaseUrl + 'GetVistexDealOutBoundData');
+        }
+
+        function getVistexProductVeticalsOutBoundData() {
+            return dataService.get(apiBaseUrl + 'GetVistexProductVeticalsOutBoundData');
         }
 
         function getVistexStatuses() {

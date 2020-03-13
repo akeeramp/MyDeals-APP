@@ -239,6 +239,24 @@
                 }
             },
             {
+                state: 'admin.vistexProductVertical',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexProductVertical.html',
+                    url: 'vistex/vistexProductVertical',
+                    controller: 'VistexProductVerticalController as vm',
+                }
+            },
+            {
+                state: 'admin.vistexProductVerticalOutbound',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexProductVerticalOutbound.html',
+                    url: 'vistex/vistexProductVerticalOutbound',
+                    controller: 'VistexProductVerticalOutboundController as vm',
+                }
+            },
+            {
                 state: 'admin.vistexOutbound',
                 abstract: false,
                 config: {

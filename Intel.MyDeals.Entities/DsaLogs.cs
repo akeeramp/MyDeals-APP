@@ -36,7 +36,7 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public int DealId { get; set; }
         [DataMember]
-        public Dictionary<string, string> VistexAttributes { get; set; }  
+        public List<VistexAttributes> VistexAttributes { get; set; }  
     }
 
     [DataContract]

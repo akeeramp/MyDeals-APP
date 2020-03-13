@@ -17,7 +17,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -416,9 +416,13 @@
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.service.js" />
     <Content Include="app\admin\vistex\admin.vistex.controller.js" />
     <Content Include="app\admin\vistex\admin.vistexOutbound.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistexProductVertical.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistexProductVerticalOutbound.controller.js" />
     <Content Include="app\admin\vistex\dsa.service.js" />
     <Content Include="app\admin\vistex\vistex.html" />
     <Content Include="app\admin\vistex\vistexOutbound.html" />
+    <Content Include="app\admin\vistex\vistexProductVertical.html" />
+    <Content Include="app\admin\vistex\vistexProductVerticalOutbound.html" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />

@@ -33,6 +33,13 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetVistexProductVeticalsOutBoundData")]
+        public List<VistexProductVerticalOutBound> GetVistexProductVeticalsOutBoundData()
+        {
+            return SafeExecutor(() => _dsaLib.GetVistexProductVeticalsOutBoundData(), $"Unable to get vistex outbound data");
+        }
+        
+        [Authorize]
         [Route("GetVistexStatuses")]
         public List<string> GetVistexStatuses()
         {
@@ -47,10 +54,17 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetProductVerticalBody/{id}")]
+        public List<ProductCategory> GetProductVerticalBody(int id)
+        {
+            return SafeExecutor(() => _dsaLib.GetProductVerticalBody(id), $"Unable to get vistex data body");
+        }
+
+        [Authorize]
         [Route("UpdateVistexStatus/{strTransantionId}/{strVistexStage}/{dealId}/{strErrorMessage}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public Guid UpdateVistexStatus(string strTransantionId, string strVistexStage, int dealId, string strErrorMessage)
+        public Guid UpdateVistexStatus(string strTransantionId, string strVistexStage, int? dealId, string strErrorMessage)
         {
             Guid batchId = Guid.Parse(strTransantionId);
             VistexStage vistexStage = (VistexStage)Enum.Parse(typeof(VistexStage), strVistexStage);
