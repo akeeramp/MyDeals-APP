@@ -85,6 +85,7 @@
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
     <Compile Include="Funfact\IFunfactDataLib.cs" />
     <Compile Include="VistexCustomerMapping\IVistexCustomerMappingDataLib.cs" />
+    <Compile Include="VistexService\IVistexServiceDataLib.cs" />
     <Compile Include="Workflow\IWorkFlowDataLib.cs" />
   </ItemGroup>
   <ItemGroup>

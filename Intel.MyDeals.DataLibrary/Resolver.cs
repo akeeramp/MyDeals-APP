@@ -14,6 +14,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ICustomerCalendarDataLib, CustomerCalendarDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
             registerService.RegisterType<IVistexCustomerMappingDataLib, VistexCustomerMappingDataLib>();
+            registerService.RegisterType<IVistexServiceDataLib, VistexServiceDataLib>();
             registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();
             registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
             registerService.RegisterType<IOpDataCollectorDataLib, OpDataCollectorDataLib>();

@@ -67,7 +67,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Intel.MyDeals.BusinessLogic\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Shared Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -150,6 +150,7 @@
     <Compile Include="UI Templates\UiTemplateDataLib.cs" />
     <Compile Include="Funfact\FunfactDataLib.cs" />
     <Compile Include="VistexCustomerMapping\VistexCustomerMappingDataLib.cs" />
+    <Compile Include="VistexService\VistexServiceDataLib.cs" />
     <Compile Include="WorkFlow\WorkFlowDataLib.cs" />
     <Compile Include="_data\PricingTableData.cs" />
   </ItemGroup>

@@ -290,6 +290,7 @@
     <Compile Include="Controllers\API\TimelineController.cs" />
     <Compile Include="Controllers\API\MeetCompController.cs" />
     <Compile Include="Controllers\API\FunfactController.cs" />
+    <Compile Include="Controllers\API\VistexServiceController.cs" />
     <Compile Include="Controllers\API\WorkFlowController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HelpController.cs" />

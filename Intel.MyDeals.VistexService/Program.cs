@@ -1,75 +1,184 @@
-﻿using Intel.MyDeals.DataLibrary;
-using System;
+﻿using System;
 using System.Configuration;
-using System.Linq;
-using Intel.MyDeals.Entities;
-using Vistex;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Intel.MyDeals.VistexService
 {
-    class Program
+    public partial class Program
     {
-        static int iMaximumAttempts = Convert.ToInt32(ConfigurationManager.AppSettings["MaximumAttempts"]);
-        static void Main(string[] args)
-        {
-            int iAttempts = 1;
-            Console.WriteLine("Please select retry option:\n1.Auto Retry\n2.Manual Retry");
-            string strRetryKey = Console.ReadKey().Key.ToString().Remove(0, 1);
-            bool isAutoRetry = strRetryKey == "1";
-            Console.WriteLine("\nPlease wait while requesting service..");
-            ResponseType responseType = ResponseType.None;
-            List<VistexLogs> lstTransId = new List<VistexLogs>();
-            do
-            {
-                if (iAttempts > 1)
-                {
-                    if (!isAutoRetry)
-                    {
-                        Console.WriteLine("\nYou have selected manual retry. Please press any key for next try..");
-                        Console.ReadKey();
-                    }
-                    responseType = ResponseType.None;
-                }
-                Console.WriteLine(string.Format("\n{0} to push below Batch IDs..", iAttempts > 1 ? "Retrying" : "Trying"));
-                using (VistexAdminDataLib vistexAdminDataLib = new VistexAdminDataLib())
-                {
-                    lstTransId.AddRange((from result in vistexAdminDataLib.GetVistexDealOutBoundData()
-                                         select new VistexLogs
-                                         {
-                                             DealId = result.DealId,
-                                             TransanctionId = result.TransanctionId
-                                         }).ToList());
-                    if (lstTransId.Count() > 0)
-                        Console.WriteLine(string.Join("\n", lstTransId.Select(x => x.TransanctionId).Distinct()));
-                    else
-                        Console.WriteLine("There is no outbound data to push..");
-                }
-                using (VistexHttpService vistexHttpService = new VistexHttpService())
-                {
-                    responseType = vistexHttpService.GetVistexOutBoundData();
-                }
-                Console.WriteLine(VistexHttpService.GetResposnseMessage(responseType));
-                iAttempts++;
-            } while (responseType != ResponseType.Success && iAttempts <= iMaximumAttempts);
 
-            if (responseType != ResponseType.Success && iAttempts >= iMaximumAttempts)
+        #region Properties
+        private static bool _debugMode;
+        private const int ErrorReturn = 1;
+        private const int SuccessReturn = 0;
+
+        static int iMaximumAttempts = Convert.ToInt32(ConfigurationManager.AppSettings["MaximumAttempts"]);
+        #endregion
+
+        static int Main(string[] args)
+        {
+            #region Arg Checking
+            if (args.Length == 0)
             {
-                using (VistexAdminDataLib vistexAdminDataLib = new VistexAdminDataLib())
-                {
-                    foreach (VistexLogs temp in lstTransId)
-                    {
-                        Console.WriteLine(string.Concat("Rolling back for transanction Id ", temp.TransanctionId, ", Deal Id: ", temp.DealId));
-                        vistexAdminDataLib.UpdateStatus(temp.TransanctionId.Value, VistexStage.PO_Error_Rollback, temp.DealId, "Failure in service call..");
-                    }
-                    Console.WriteLine("\nSending alert mail..\nPlease enter Email Ids to receive alert mail:");
-                    vistexAdminDataLib.SendFailureMessage(responseType, Console.ReadLine());
-                }
-                Console.WriteLine("Alert mail has been sent");
+                DisplayHelp(true, false);
+                return ErrorReturn;
+            }
+            #endregion Arg Checking
+
+            var myArgs = new VistexParams(args);
+
+            //JmsQCommon.Log(myArgs.ToString());
+
+            DoAction(myArgs).Wait();
+
+            //JmsQCommon.Log("Done.");
+
+            if (!myArgs.pauseOnEnd) return SuccessReturn;
+
+            PressAnyKeyToContinue();
+
+            //return SuccessReturn; 
+            // Program should end at this point...
+
+
+            //int iAttempts = 1;
+            //Console.WriteLine("Please select retry option:\n1.Auto Retry\n2.Manual Retry");
+            //string strRetryKey = Console.ReadKey().Key.ToString().Remove(0, 1);
+            //bool isAutoRetry = strRetryKey == "1";
+            //Console.WriteLine("\nPlease wait while requesting service..");
+            //ResponseType responseType = ResponseType.None;
+            //List<VistexLogs> lstTransId = new List<VistexLogs>();
+            //do
+            //{
+            //    if (iAttempts > 1)
+            //    {
+            //        if (!isAutoRetry)
+            //        {
+            //            Console.WriteLine("\nYou have selected manual retry. Please press any key for next try..");
+            //            Console.ReadKey();
+            //        }
+            //        responseType = ResponseType.None;
+            //    }
+            //    Console.WriteLine(string.Format("\n{0} to push below Batch IDs..", iAttempts > 1 ? "Retrying" : "Trying"));
+            //    using (VistexAdminDataLib vistexAdminDataLib = new VistexAdminDataLib())
+            //    {
+            //lstTransId.AddRange((from result in vistexAdminDataLib.GetVistexDealOutBoundData()
+            //                     select new VistexLogs
+            //                     {
+            //                         DealId = result.DealId,
+            //                         TransanctionId = result.TransanctionId
+            //                     }).ToList());
+            //        if (lstTransId.Count() > 0)
+            //            Console.WriteLine(string.Join("\n", lstTransId.Select(x => x.TransanctionId).Distinct()));
+            //        else
+            //            Console.WriteLine("There is no outbound data to push..");
+            //    }
+            //    using (VistexHttpService vistexHttpService = new VistexHttpService())
+            //    {
+            //        responseType = vistexHttpService.GetVistexOutBoundData();
+            //    }
+            //    Console.WriteLine(VistexHttpService.GetResposnseMessage(responseType));
+            //    iAttempts++;
+            //} while (responseType != ResponseType.Success && iAttempts <= iMaximumAttempts);
+
+            //if (responseType != ResponseType.Success && iAttempts >= iMaximumAttempts)
+            //{
+            //    using (VistexAdminDataLib vistexAdminDataLib = new VistexAdminDataLib())
+            //    {
+            //        foreach (VistexLogs temp in lstTransId)
+            //        {
+            //            Console.WriteLine(string.Concat("Rolling back for transanction Id ", temp.TransanctionId, ", Deal Id: ", temp.DealId));
+            //            vistexAdminDataLib.UpdateStatus(temp.TransanctionId.Value, VistexStage.PO_Error_Rollback, temp.DealId, "Failure in service call..");
+            //        }
+            //        Console.WriteLine("\nSending alert mail..\nPlease enter Email Ids to receive alert mail:");
+            //        vistexAdminDataLib.SendFailureMessage(responseType, Console.ReadLine());
+            //    }
+            //    Console.WriteLine("Alert mail has been sent");
+            //}
+
+            //Console.WriteLine("\nPress any key to exit...");
+            //Console.ReadKey();
+
+            return SuccessReturn;
+        }
+
+        private static async Task DoAction(VistexParams myArgs)
+        {
+            if (myArgs.sleepSeconds > 0)
+            {
+                //JmsQCommon.Log("Sleeping for {0} seconds.", myArgs.sleepSeconds);
+                //Thread.Sleep(myArgs.sleepSeconds * 1000);
+                //JmsQCommon.Log("Done sleeping.");
             }
 
-            Console.WriteLine("\nPress any key to exit...");
-            Console.ReadKey();
+            // Set JobType Mode Flag
+            switch (myArgs.jobMode)
+            {
+                case JobMode.VistexSendDeals:
+                    Console.WriteLine("Sending Vistex deals to SAP PO...");
+                    await SendDataToSapPo();
+                    break;
+                case JobMode.TendersProcessDeals:
+                    Console.WriteLine("Processing Tenders deals in My Deals...");
+                    // Not implemented yet
+                    break;
+                case JobMode.TestVistexPipeline:
+                    await SendDataToSapPo();
+                    //await GetMaxGroupId(); // Offband test
+                    Console.WriteLine("Starting: Testing Connection to Vistex SAP PO...");
+                    //Dictionary<string, string> myResponse = VistexHttpService.TestVistexConnection();
+                    //Console.WriteLine("Job Status : " + myResponse["Status"]);
+                    //Console.WriteLine("Returned Data : " + myResponse["Data"]);
+                    //Console.WriteLine(".................................................");
+                    //Console.WriteLine("Completed: Testing Connection to Vistex SAP PO...");
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid Operation...");
+                    //JmsQCommon.Log("Invalid job mode");
+                    break;
+            }
         }
+
+
+        private static void PressAnyKeyToContinue()
+        {
+#if DEBUG
+            //JmsQCommon.Log("Press any key to continue...");
+            Console.ReadKey(true);
+#endif
+        }
+
+        private static void DisplayHelp(bool clear, bool tryConnectToService)
+        {
+            if (clear)
+            {
+                Console.Clear();
+            }
+            Console.WriteLine(VistexParams.GetHelpMessage());
+
+            if (!tryConnectToService)
+            {
+                return;
+            }
+
+            Console.WriteLine("Trying to connect to service...");
+
+            const string MSK = @"
+==============================================================================
+{0}
+==============================================================================
+";
+            //if (ConnectToService(true))
+            //{
+            //}
+            //else
+            //{
+            //    Console.WriteLine(MSK, "ERROR! Failed to connect to service.  Ensure service is running and settings are correct.");
+            //}
+        }
+
+
     }
 }

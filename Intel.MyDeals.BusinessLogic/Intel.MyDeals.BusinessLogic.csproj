@@ -149,6 +149,7 @@
     <Compile Include="UserPreferences\UserPreferencesLib.cs" />
     <Compile Include="Funfact\FunfactLib.cs" />
     <Compile Include="VistexCustomerMapping\VistexCustomerMappingLib.cs" />
+    <Compile Include="VistexService\VistexServiceLib.cs" />
     <Compile Include="WorkFlow\WorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>
