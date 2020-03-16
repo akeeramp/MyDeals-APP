@@ -2465,7 +2465,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PERIOD_PROFILE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 120,
+                Width = 160,
                 IsDefaultable = true,
                 Label = "Period Profile",
                 UiType = "DROPDOWN",
