@@ -13,7 +13,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
 
-        Dictionary<string, string> PublishSapPo(string url);
+        Dictionary<string, string> PublishSapPo(string url, string jsonData);
 
         Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
 

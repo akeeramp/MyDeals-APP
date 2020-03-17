@@ -108,40 +108,55 @@ namespace Intel.MyDeals.VistexService
         }
 
 
-        // Bring this in later to push SAP connection up into layers
-        //public static async Task<Dictionary<string, string>> PublishSapPo()
-        //{
-        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-        //    var xmlRecords = string.Empty;
-        //    try
-        //    {
-        //        //JmsQCommon.Log("GetPricingRecordsXml");
+        //Bring this in later to push SAP connection up into layers
+        public static async Task<Dictionary<string, string>> PublishDealsToSapPo()
+        {
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+            var xmlRecords = string.Empty;
+            try
+            {
+                //JmsQCommon.Log("GetPricingRecordsXml");
+                string jsonData = "{" +
+                                "\"Mydeals\": {" +
+                                "\"Cust_no\": \"9666\"," +
+                                "\"Deal_id\": \"54556\"," +
+                                "\"END_DT\": \"5556\"," +
+                                "\"GEO_COMBINED\": \"556\"," +
+                                "\"MRKT_SEG\": \"5556\"," +
+                                "\"OBJ_SET_TYPE_CD\": \"859\"," +
+                                "\"PAYOUT_BASED_ON\": \"88\"," +
+                                "\"PRODUCT_FILTER\": \"8559\"," +
+                                "\"START_DT\": \"899\"," +
+                                "\"VOLUME\": \"899\"" +
+                                "}" +
+                                "}";
 
-        //        var publishSapPoUrl = vistexController + "PublishSapPo";
-        //        HttpResponseMessage response = await MyDealsClient.GetAsync(publishSapPoUrl); 
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            xmlRecords = await response.Content.ReadAsStringAsync();
-        //        }
-        //        else
-        //        {
-        //            //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-        //        }
-        //        return responseObjectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(xmlRecords);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //JmsQCommon.HandleException(ex);
-        //    }
+                var publishSapPoUrl = vistexController + "PublishDealsToSapPo";
+                //HttpResponseMessage response = await MyDealsClient.GetAsync(publishSapPoUrl);
+                HttpResponseMessage response = await MyDealsClient.PostAsJsonAsync(publishSapPoUrl, jsonData);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+                }
+                return responseObjectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(xmlRecords);
+            }
+            catch (Exception ex)
+            {
+                //JmsQCommon.HandleException(ex);
+            }
 
-        //    return responseObjectDictionary;
-        //}
+            return responseObjectDictionary;
+        }
 
         private static CredentialCache GetCredentials(string url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
             CredentialCache credentialCache = new CredentialCache();
-            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUI"],
+            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
                 StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));
             return credentialCache;
         }
@@ -149,7 +164,7 @@ namespace Intel.MyDeals.VistexService
 
         public static Dictionary<string, string> PublishSapPo()
         {
-            string url = @"http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer";
+            string url = @"https://sappodev.intel.com:8215/RESTAdapter/MyDeals";
 
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
@@ -160,15 +175,17 @@ namespace Intel.MyDeals.VistexService
             // Create POST data and convert it to a byte array.  
             //string json = "{\"Mydeals\": {	\"Cust_no\": \"9666\",	\"Deal_id\": \"54556\",	\"END_DT\": \"5556\",	\"GEO_COMBINED\": \"556\",	\"MRKT_SEG\": \"5556\",	\"OBJ_SET_TYPE_CD\": \"859\",	\"PAYOUT_BASED_ON\": \"88\",	\"PRODUCT_FILTER\": \"8559\",	\"START_DT\": \"899\",	\"VOLUME\": \"899\"	}}";
             string json = "{" +
-                          "\"Customer\": {" +
-                          "\"GDM_SLD_TO_ID\": \"23234\"," +
-                          "\"SLS_ORG_CD\": \"234\"," +
-                          "\"DSTRB_CHNL_CD\": \"34\"," +
-                          "\"REBATE_SOLD_TO_CUSTOMER\": \"34\"," +
-                          "\"REBATE_CUSTOMER_DIVISION\": \"\"," +
-                          "\"GDM_HOSTED_GEO_NM\": \"\"," +
-                          "\"NGRP_REV_CUST_NM\": \"\"," +
-                          "\"NGRP_REV_SUBCUST_NM\": \"\"" +
+                          "\"Mydeals\": {" +
+                          "\"Cust_no\": \"9666\"," +
+                          "\"Deal_id\": \"54556\"," +
+                          "\"END_DT\": \"5556\"," +
+                          "\"GEO_COMBINED\": \"556\"," +
+                          "\"MRKT_SEG\": \"5556\"," +
+                          "\"OBJ_SET_TYPE_CD\": \"859\"," +
+                          "\"PAYOUT_BASED_ON\": \"88\"," +
+                          "\"PRODUCT_FILTER\": \"8559\"," +
+                          "\"START_DT\": \"899\"," +
+                          "\"VOLUME\": \"899\"" +
                           "}" +
                           "}";
 

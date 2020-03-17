@@ -27,11 +27,11 @@ namespace Intel.MyDeals.VistexService
 
             string btchId = records[1].TransanctionId.ToString(); // Safe assumption since above we looked for no records
 
-            //Dictionary<string, string> sendResponse = await DataAccessLayer.PublishSapPo();
+            //Dictionary<string, string> sendResponse = await DataAccessLayer.PublishDealsToSapPo();
             Dictionary<string, string> sendResponse = DataAccessLayer.PublishSapPo();
             if (sendResponse.Count > 0)
             {
-                if (sendResponse["Status"] != "Ok")
+                if (!(sendResponse["Status"] == "Ok" || sendResponse["Status"] == "Accepted"))
                 {
                     Console.WriteLine("There was an error in SAP PO: " + sendResponse["Status"]);
                     Console.WriteLine("Rolling the transaction back");

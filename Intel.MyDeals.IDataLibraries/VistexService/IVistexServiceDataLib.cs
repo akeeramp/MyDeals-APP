@@ -13,7 +13,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
 
-        Dictionary<string, string> PublishSapPo(string url);
+        Dictionary<string, string> PublishSapPo(string url, string jsonData);
 
         void OnException(Exception e);
 

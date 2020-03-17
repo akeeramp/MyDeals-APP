@@ -96,7 +96,7 @@ namespace Intel.MyDeals.VistexService
 
         public static Dictionary<string, string> TestVistexConnection()
         {
-            string url = @"http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer";
+            string url = @"https://sappodev.intel.com:8215/RESTAdapter/MyDeals";
 
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
@@ -107,15 +107,17 @@ namespace Intel.MyDeals.VistexService
             // Create POST data and convert it to a byte array.  
             //string json = "{\"Mydeals\": {	\"Cust_no\": \"9666\",	\"Deal_id\": \"54556\",	\"END_DT\": \"5556\",	\"GEO_COMBINED\": \"556\",	\"MRKT_SEG\": \"5556\",	\"OBJ_SET_TYPE_CD\": \"859\",	\"PAYOUT_BASED_ON\": \"88\",	\"PRODUCT_FILTER\": \"8559\",	\"START_DT\": \"899\",	\"VOLUME\": \"899\"	}}";
             string json = "{" +
-                          "\"Customer\": {" +
-                          "\"GDM_SLD_TO_ID\": \"23234\"," +
-                          "\"SLS_ORG_CD\": \"234\"," +
-                          "\"DSTRB_CHNL_CD\": \"34\"," +
-                          "\"REBATE_SOLD_TO_CUSTOMER\": \"34\"," +
-                          "\"REBATE_CUSTOMER_DIVISION\": \"\"," +
-                          "\"GDM_HOSTED_GEO_NM\": \"\"," +
-                          "\"NGRP_REV_CUST_NM\": \"\"," +
-                          "\"NGRP_REV_SUBCUST_NM\": \"\"" +
+                          "\"Mydeals\": {" +
+                          "\"Cust_no\": \"9666\"," +
+                          "\"Deal_id\": \"54556\"," +
+                          "\"END_DT\": \"5556\"," +
+                          "\"GEO_COMBINED\": \"556\"," +
+                          "\"MRKT_SEG\": \"5556\"," +
+                          "\"OBJ_SET_TYPE_CD\": \"859\"," +
+                          "\"PAYOUT_BASED_ON\": \"88\"," +
+                          "\"PRODUCT_FILTER\": \"8559\"," +
+                          "\"START_DT\": \"899\"," +
+                          "\"VOLUME\": \"899\"" +
                           "}" +
                           "}";
 

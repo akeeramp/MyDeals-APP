@@ -27,9 +27,9 @@ namespace Intel.MyDeals.BusinessLogic
             _vistexServiceDataLib.SetVistexDealOutBoundStage(btchId, rqstStatus);
         }
         
-        public Dictionary<string, string> PublishSapPo(string url)
+        public Dictionary<string, string> PublishSapPo(string url, string jsonData)
         {
-            return _vistexServiceDataLib.PublishSapPo((url));
+            return _vistexServiceDataLib.PublishSapPo(url, jsonData);
         }
 
         // Testing helpers

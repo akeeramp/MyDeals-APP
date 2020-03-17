@@ -5,7 +5,6 @@ using Apache.NMS.ActiveMQ;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.IO;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.Entities;
@@ -14,7 +13,6 @@ using Intel.MyDeals.DataAccessLib;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using System.Net;
-using System.Net.Mime;
 using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
@@ -91,45 +89,27 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public Dictionary<string, string> PublishSapPo(string url)
+        public Dictionary<string, string> PublishSapPo(string url, string jsonData)
         {
-            // Create a request using a URL that can receive a post.   
+            // Create a request using a URL that can receive a post.  All current Vistex channels are post methods.
             WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
-            // Set the Method property of the request to POST.  
+            request.Credentials = GetVistexCredentials(url);
             request.Method = "POST";
 
-            // Create POST data and convert it to a byte array.  
-            //string json = "{\"Mydeals\": {	\"Cust_no\": \"9666\",	\"Deal_id\": \"54556\",	\"END_DT\": \"5556\",	\"GEO_COMBINED\": \"556\",	\"MRKT_SEG\": \"5556\",	\"OBJ_SET_TYPE_CD\": \"859\",	\"PAYOUT_BASED_ON\": \"88\",	\"PRODUCT_FILTER\": \"8559\",	\"START_DT\": \"899\",	\"VOLUME\": \"899\"	}}";
-            string json = "{" +
-                          "\"Customer\": {" +
-                          "\"GDM_SLD_TO_ID\": \"23234\"," +
-                          "\"SLS_ORG_CD\": \"234\"," +
-                          "\"DSTRB_CHNL_CD\": \"34\"," +
-                          "\"REBATE_SOLD_TO_CUSTOMER\": \"34\"," +
-                          "\"REBATE_CUSTOMER_DIVISION\": \"\"," +
-                          "\"GDM_HOSTED_GEO_NM\": \"\"," +
-                          "\"NGRP_REV_CUST_NM\": \"\"," +
-                          "\"NGRP_REV_SUBCUST_NM\": \"\"" +
-                          "}" +
-                          "}";
-
-            byte[] byteArray = Encoding.UTF8.GetBytes(json);
-
-            //Set the ContentType property of the WebRequest.
+            // Convert POST data as a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
             request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
             request.ContentLength = byteArray.Length;
-
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
 
             Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
 
             try
             {
+                // Get the request stream, write data, then close the stream
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+
                 WebResponse response = request.GetResponse(); // Get the response.  
                 responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
@@ -215,11 +195,11 @@ namespace Intel.MyDeals.DataLibrary
 
 
         #region Private Helpers
-        private static CredentialCache GetCredentials(string url)
+        private static CredentialCache GetVistexCredentials(string url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
             CredentialCache credentialCache = new CredentialCache();
-            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUI"],
+            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
                 StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));
             return credentialCache;
         }
