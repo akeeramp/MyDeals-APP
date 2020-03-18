@@ -51,7 +51,7 @@ namespace Intel.MyDeals.Entities.Logging
         /// </summary>
         /// Note: Whether the writer's logging is enabled or not is determined by its name's presence in the writer's config string or parameter in OpLogPerfHelper.InitWriters()).
         /// Note: This function gets called by OpLogPerfHelper upon initializing writers via OpLogPerfHelper.InitWriters()
-        public static IOpLogPerf LogPerfFactory(string initFlag, Dictionary<string, object> initParams)
+        public static IOpLogPerf ILogPerfFactory(string initFlag, Dictionary<string, object> initParams)
         {
             // Check that the init flag is asking for a db
             // To support extensibility, allow for multiple named factories in other assemblies/classes...
