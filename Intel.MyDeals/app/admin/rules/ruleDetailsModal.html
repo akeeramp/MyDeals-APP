@@ -1,8 +1,8 @@
-﻿<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
     <div class="modal-content" id="ruleModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
             <i id="btnClose" class="intelicon-close" ng-click="ok()" title="Close this window"></i>
-<!--            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>-->
+            <!--            <i id="btnModalAnchordisable" class="intelicon-locked-outlined" title="Move or Resize this window"></i>-->
             <h3 id="modalTitle">Rule Details</h3>
 
         </div>
@@ -136,7 +136,7 @@
                         <span>off of CAP</span>
                     </div>
                 </div>
-             
+
                 <div style="display:none;"><!--Dummy button to prevent events while press enter key in textbox--><button></button></div>
                 <div class="form-group row" id="productCriteria">
                     <label class="control-label col-md-2">Product Criteria:</label>
@@ -161,13 +161,13 @@
 
     </div>
 </form>
-    <script type="text/javascript">
-        
-        //Initializing the Draggable function for the first time
-        $('.modal-dialog').draggable();
-        //Disabled it cause by default it will be disabled
-        $('.modal-dialog').draggable('enable'); // Was disable
-        //Draggable Toggle button for the User- Click to Enable.Disabled
+<!--<script type="text/javascript">
+
+    //Initializing the Draggable function for the first time
+    $('.modal-dialog').draggable();
+    //Disabled it cause by default it will be disabled
+    $('.modal-dialog').draggable('enable'); // Was disable
+    //Draggable Toggle button for the User- Click to Enable.Disabled
     //    $('#btnModalAnchordisable').click(function () {
     //        $('.modal-dialog').draggable('disable');
     //        if ($('#btnModalAnchordisable').attr('class').trim() === 'intelicon-locked-outlined') {
@@ -182,39 +182,40 @@
 
     //});
 
-        $('#modal-window').on('show.bs.modal', function () {
-            $(this).find('.modal-body').css({
-                //'max-height': '80%'
-            });
+    $('#modal-window').on('show.bs.modal', function () {
+        $(this).find('.modal-body').css({
+            //'max-height': '80%'
         });
-    </script>
-    <style>
-        .modal-footer {  
-            position: fixed;
-            bottom: -59px;
-            width: 100%;
-            background: #efefef;
-            height: 60px;
-            /* float: left; */
-            border: 1px solid #003c71;
-            margin-left: -2px;
-        }
+    });
+</script>-->
+<style>
+    #ruleModal .modal-footer {
+        position: fixed;
+        bottom: -59px;
+        width: 100%;
+        background: #efefef;
+        height: 60px;
+        /* float: left; */
+        border: 1px solid #003c71;
+        margin-left: -2px;
+    }
 
-        .k-selectbox {
-            height: 10px;
-            margin-bottom: 10px;
-        }
+    .k-selectbox {
+        height: 10px;
+        margin-bottom: 10px;
+    }
+
     .btn-success {
         color: #000000;
         background-color: #C4D600 !important;
         border-color: #adbd00 !important;
     }
-        
-    .btn-success[disabled] {
-        color: #b1babf;
-        background-color: #edeff0 !important;
-        border-color: #b1babf !important;
-    }
+
+        .btn-success[disabled] {
+            color: #b1babf;
+            background-color: #edeff0 !important;
+            border-color: #b1babf !important;
+        }
 
     .notes {
         font-size: 14px;
@@ -231,7 +232,7 @@
         color: red;
         font-weight: bold;
     }
-        
+
     .modal-dialog {
         width: 90%;
         margin-top: 100px; /* Put in because top bar was being hidden */
@@ -250,7 +251,7 @@
         margin-top: -15px;
     }
 
-    .modal-body {
+    #ruleModal .modal-body {
         overflow: auto;
         width: 100%;
         height: 450px;
@@ -262,18 +263,23 @@
         color: #ffffff;
     }
 
-    .modal-header {
+    #ruleModal .modal-header {
         padding: 25px;
         border-bottom: 1px solid #e5e5e5;
         min-height: 16.5px;
     }
 
-    .modal {
-        z-index: 5 !important;
+    div[index="0"] {
+        z-index: 3 !important;
     }
 
     .modal-backdrop {
-        z-index: 3 !important;
+        display: none !important;
+    }
+
+    div[index="1"] .modal-dialog {
+        width: 500px;
+        margin-top: 15%;
     }
 
     /*#btnModalAnchordisable {
@@ -286,9 +292,9 @@
         font-size: 22px;
         margin-top: -30px;
         z-index: 999999999;
-        margin-right: 35px; 
+        margin-right: 35px;
     }*/
-        
+
     #btnClose {
         float: right;
         margin-top: -15px;
