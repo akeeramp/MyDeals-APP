@@ -5,7 +5,7 @@
         .controller('VistexcustomermappingController', VistexcustomermappingController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
-  
+
     VistexcustomermappingController.$inject = ['vistexcustomermappingService', '$scope', 'logger', 'gridConstants']
 
     function VistexcustomermappingController(vistexcustomermappingService, $scope, logger, gridConstants) {
@@ -18,7 +18,7 @@
         }
 
         var vm = this;
-        
+
         // Variables
         vm.selectedItem = null;
 
@@ -34,13 +34,18 @@
                         });
                 },
                 update: function (e) {
-                    vistexcustomermappingService.UpdateVistexCustomer(e.data)
-                        .then(function (response) {
-                            e.success(response.data);
-                            logger.success("Vistex Customer Mapping updated.");
-                        }, function (response) {
-                           logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
-                        });
+                    if (e.data.VISTEX_CUST_FLAG && (e.data.PERIOD_PROFILE == null || e.data.PERIOD_PROFILE == '')) {
+                        kendo.alert("Default value of <b>Period Profile</b> cannot be empty!");
+                    }
+                    else {
+                        vistexcustomermappingService.UpdateVistexCustomer(e.data)
+                            .then(function (response) {
+                                e.success(response.data);
+                                logger.success("Vistex Customer Mapping updated.");
+                            }, function (response) {
+                                logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
+                            });
+                    }
                 },
             },
             pageSize: 25,
@@ -50,11 +55,34 @@
                     fields: {
                         CUST_MBR_SID: { editable: false },
                         CUST_NM: { editable: false, nullable: true },
-                        VISTEX_CUST_FLAG: { type: "boolean" }
+                        VISTEX_CUST_FLAG: { type: "boolean" },
+                        PERIOD_PROFILE: { editable: true, nullable: true },
                     }
                 }
             }
         });
+
+        vm.PeriodProfileOptions = {
+            placeholder: "Period Profile",
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: {
+                        url: "/api/Dropdown/GetDropdowns/PERIOD_PROFILE"
+                    }
+                }
+            },
+            maxSelectedItems: 1,
+            autoBind: false,
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true
+        };
+
+        vm.PeriodProfileDropDownEditor = function (container, options) {
+            var editor = $('<select kendo-drop-down-list k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
@@ -63,7 +91,7 @@
             selectable: true,
             resizable: true,
             groupable: false,
-            editable: { mode: "inline", confirmation: false},
+            editable: { mode: "inline", confirmation: false },
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             pageable: {
@@ -74,7 +102,7 @@
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span title="Save" class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span title="Cancel" class="k-icon k-i-cancel"></span></a>');
-            },  
+            },
             columns: [
                 {
                     command: [
@@ -99,7 +127,8 @@
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
-                }]
+                },
+                { field: "PERIOD_PROFILE", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor }]
         }
     }
 })();

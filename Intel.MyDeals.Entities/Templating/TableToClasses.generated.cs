@@ -8338,6 +8338,9 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.Boolean VISTEX_CUST_FLAG { set; get; }
 
+        [DataMember]
+        public System.String PERIOD_PROFILE { set; get; }
+
 
         /*
         private static List<VistexCustomerMapping> VistexCustomerMappingFromReader(SqlDataReader rdr){
