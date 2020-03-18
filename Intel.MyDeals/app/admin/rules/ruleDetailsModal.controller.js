@@ -819,16 +819,25 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             });
         }
     }
+
     vm.saveRule = function (strActionName, isProductValidationRequired) {
-        if (vm.rule.RuleStage) {
-            kendo.confirm("Saving these changes will require the rule to be re-approved.  Are you sure that you wish to save the changes?").then(function () {
+        if (vm.rule.RuleStage && isProductValidationRequired) { //To Avoid duplicate confirmation popup
+            var modalOptions = {
+                closeButtonText: 'Cancel',
+                actionButtonText: 'Yes',
+                hasActionButton: true,
+                headerText: 'Saving confirmation',
+                bodyText: 'Saving these changes will require the rule to be re-approved.  Are you sure that you wish to save the changes??'
+            };
+
+            confirmationModal.showModal({}, modalOptions).then(function (result) {
                 vm.updateRuleDraft(strActionName, isProductValidationRequired);
+            }, function (response) {
             });
+
         } else {
             vm.updateRuleDraft(strActionName, isProductValidationRequired);
         }
-        
-        
     }
 
     var regexMoney = "^[0-9]+(\.[0-9]{1,2})?$";
