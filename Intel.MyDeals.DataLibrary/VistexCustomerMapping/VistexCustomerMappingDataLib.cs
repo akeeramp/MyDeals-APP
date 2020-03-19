@@ -71,7 +71,7 @@ namespace Intel.MyDeals.DataLibrary
                     in_cust_mbr_sid = data.CUST_MBR_SID,
                     in_vistex_cust_flag = data.VISTEX_CUST_FLAG,
                     in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                    in_dflt_perd_prfl = data.DFLT_PERD_PRFL
+                    in_dflt_perd_prfl = data.DFLT_PERD_PRFL == null ? string.Empty : data.DFLT_PERD_PRFL
                 }))
                 {
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");

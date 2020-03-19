@@ -34,17 +34,21 @@
                         });
                 },
                 update: function (e) {
-                    if (e.data.VISTEX_CUST_FLAG && (e.data.DFLT_PERD_PRFL == null || e.data.DFLT_PERD_PRFL == '')) {
-                        kendo.alert("Default value of <b>Period Profile</b> cannot be empty!");
-                    }
-                    else {
-                        vistexcustomermappingService.UpdateVistexCustomer(e.data)
-                            .then(function (response) {
-                                e.success(response.data);
-                                logger.success("Vistex Customer Mapping updated.");
-                            }, function (response) {
-                                logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
-                            });
+                    if (e.data.DFLT_PERD_PRFL != null && e.data.DFLT_PERD_PRFL != '' && $("#cmb_DFLT_PERD_PRFL option[value='" + e.data.DFLT_PERD_PRFL + "']").length == 0) {
+                        kendo.alert("Please provide valid <b>Period Profile</b>");
+                    } else {
+                        if (e.data.VISTEX_CUST_FLAG && (e.data.DFLT_PERD_PRFL == null || e.data.DFLT_PERD_PRFL == '')) {
+                            kendo.alert("Default value of <b>Period Profile</b> cannot be empty for Vistex customer!");
+                        }
+                        else {
+                            vistexcustomermappingService.UpdateVistexCustomer(e.data)
+                                .then(function (response) {
+                                    e.success(response.data);
+                                    logger.success("Vistex Customer Mapping updated.");
+                                }, function (response) {
+                                    logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
+                                });
+                        }
                     }
                 },
             },
@@ -63,7 +67,7 @@
         });
 
         vm.PeriodProfileOptions = {
-            placeholder: "Period Profile",
+            placeholder: "Select default period profile..",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
@@ -74,14 +78,14 @@
                 }
             },
             maxSelectedItems: 1,
-            autoBind: false,
+            autoBind: true,
             dataTextField: "DROP_DOWN",
             dataValueField: "DROP_DOWN",
             valuePrimitive: true
         };
 
         vm.PeriodProfileDropDownEditor = function (container, options) {
-            var editor = $('<select kendo-drop-down-list k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+            var editor = $('<select id="cmb_DFLT_PERD_PRFL"  kendo-combo-box k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.gridOptions = {
