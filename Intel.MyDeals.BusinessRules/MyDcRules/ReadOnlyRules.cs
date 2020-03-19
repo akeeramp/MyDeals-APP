@@ -85,7 +85,41 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.PERIOD_PROFILE}
+                                AttributeCodes.PERIOD_PROFILE }
+                        }
+                    }
+                },
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
+                {
+                    Title="Readonly Start Date if Tracker Exists and Is In Past",
+                    ActionRule = MyDcActions.ReadOnlyStartDateIfIsInPastAndHasTracker,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.START_DT }
+                        }
+                    }
+                },
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
+                {
+                    Title="Readonly End Date if Tracker Exists and Is In Past X Days",
+                    ActionRule = MyDcActions.ReadOnlyEndDateIfIsTooOldAndHasTracker,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.END_DT }
                         }
                     }
                 },

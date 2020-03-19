@@ -6,6 +6,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.Opaque.Tools;
 using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 using Newtonsoft.Json.Linq;
@@ -737,6 +738,38 @@ namespace Intel.MyDeals.BusinessRules
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
                 if (de != null && de.AtrbValue != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyStartDateIfIsInPastAndHasTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue != "" && de.IsDateInPast() && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyEndDateIfIsTooOldAndHasTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            //var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check
+            int numDaysInPastLimit = 90; // Set to 90 days, by constant if we can
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+
+                DateTime chkDate = OpConvertSafe.ToDateTime(de.AtrbValue.ToString());
+                // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
+                bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
+
+                if (de != null && de.AtrbValue != "" && isPnr && r.Dc.HasTracker()) de.IsReadOnly = true;
             }
         }
 
