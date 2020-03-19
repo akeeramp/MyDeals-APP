@@ -34,7 +34,7 @@
                         });
                 },
                 update: function (e) {
-                    if (e.data.VISTEX_CUST_FLAG && (e.data.PERIOD_PROFILE == null || e.data.PERIOD_PROFILE == '')) {
+                    if (e.data.VISTEX_CUST_FLAG && (e.data.DFLT_PERD_PRFL == null || e.data.DFLT_PERD_PRFL == '')) {
                         kendo.alert("Default value of <b>Period Profile</b> cannot be empty!");
                     }
                     else {
@@ -128,7 +128,7 @@
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
                 },
-                { field: "PERIOD_PROFILE", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor }]
+                { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor }]
         }
     }
 })();

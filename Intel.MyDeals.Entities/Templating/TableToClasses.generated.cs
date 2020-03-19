@@ -8339,7 +8339,7 @@ namespace Intel.MyDeals.Entities
         public System.Boolean VISTEX_CUST_FLAG { set; get; }
 
         [DataMember]
-        public System.String PERIOD_PROFILE { set; get; }
+        public System.String DFLT_PERD_PRFL { set; get; }
 
 
         /*
