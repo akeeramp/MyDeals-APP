@@ -4,6 +4,22 @@ using System.Collections.Generic;
 namespace Intel.MyDeals.Entities
 {
     // VISTEX Objects
+    #region Vistex Deals Send Packet Object
+    public class VistexSendDealsObj
+    {
+        public string SourceSystem { get; set; }
+        public string TargetSystem { get; set; }
+        public string Action { get; set; }
+        public string BatchId { get; set; }
+        public List<DealResponse> DealResponses { get; set; }
+
+        public class DealResponse
+        {
+            public int DealId { get; set; }
+            public string ErrMessage { get; set; }
+        }
+    }
+    #endregion Vistex Deals Send Packet Object
 
     #region Vistex Response Object - Vistex sending us response for what we sent them
     public class VistexResponseMsg

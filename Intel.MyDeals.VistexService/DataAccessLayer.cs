@@ -60,6 +60,7 @@ namespace Intel.MyDeals.VistexService
         }
         #endregion
 
+        #region MyDeals Data Fetch Calls
         public static async Task<List<VistexDealOutBound>> GetVistexDealOutBoundData()
         {
             List<VistexDealOutBound> records = new List<VistexDealOutBound>();
@@ -106,9 +107,9 @@ namespace Intel.MyDeals.VistexService
                 //JmsQCommon.HandleException(ex);
             }
         }
+        #endregion MyDeals Data Fetch Calls
 
-
-        //Bring this in later to push SAP connection up into layers
+        #region Outbound API Calls (In MyDeals Datalibraries)
         public static async Task<Dictionary<string, string>> PublishDealsToSapPo()
         {
             Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
@@ -151,7 +152,10 @@ namespace Intel.MyDeals.VistexService
 
             return responseObjectDictionary;
         }
+        #endregion Outbound API Calls (In MyDeals Datalibraries)
 
+        //Bring this in later to push SAP connection up into layers
+        #region Outbound API Calls Local (To Be Removed once POST is fixed)
         private static CredentialCache GetCredentials(string url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
@@ -162,7 +166,7 @@ namespace Intel.MyDeals.VistexService
         }
 
 
-        public static Dictionary<string, string> PublishSapPo()
+        public static Dictionary<string, string> PublishDealsToSapPo_Local(string jsonData)
         {
             string url = @"https://sappodev.intel.com:8215/RESTAdapter/MyDeals";
 
@@ -173,23 +177,7 @@ namespace Intel.MyDeals.VistexService
             request.Method = "POST";
 
             // Create POST data and convert it to a byte array.  
-            //string json = "{\"Mydeals\": {	\"Cust_no\": \"9666\",	\"Deal_id\": \"54556\",	\"END_DT\": \"5556\",	\"GEO_COMBINED\": \"556\",	\"MRKT_SEG\": \"5556\",	\"OBJ_SET_TYPE_CD\": \"859\",	\"PAYOUT_BASED_ON\": \"88\",	\"PRODUCT_FILTER\": \"8559\",	\"START_DT\": \"899\",	\"VOLUME\": \"899\"	}}";
-            string json = "{" +
-                          "\"Mydeals\": {" +
-                          "\"Cust_no\": \"9666\"," +
-                          "\"Deal_id\": \"54556\"," +
-                          "\"END_DT\": \"5556\"," +
-                          "\"GEO_COMBINED\": \"556\"," +
-                          "\"MRKT_SEG\": \"5556\"," +
-                          "\"OBJ_SET_TYPE_CD\": \"859\"," +
-                          "\"PAYOUT_BASED_ON\": \"88\"," +
-                          "\"PRODUCT_FILTER\": \"8559\"," +
-                          "\"START_DT\": \"899\"," +
-                          "\"VOLUME\": \"899\"" +
-                          "}" +
-                          "}";
-
-            byte[] byteArray = Encoding.UTF8.GetBytes(json);
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
 
             // Set the ContentType property of the WebRequest.  
             request.ContentType = "application/x-www-form-urlencoded";
@@ -232,7 +220,169 @@ namespace Intel.MyDeals.VistexService
             return responseObjectDictionary;
         }
 
+        public static Dictionary<string, string> PublishCustomersToSapPo_Local(string jsonData)
+        {
+            string url = @"http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer";
 
+            // Create a request using a URL that can receive a post.   
+            WebRequest request = WebRequest.Create(url);
+            request.Credentials = GetCredentials(url);
+            // Set the Method property of the request to POST.  
+            request.Method = "POST";
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+
+            // Set the ContentType property of the WebRequest.  
+            request.ContentType = "application/x-www-form-urlencoded";
+            // Set the ContentLength property of the WebRequest.  
+            request.ContentLength = byteArray.Length;
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                WebResponse response = request.GetResponse(); // Get the response.  
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                }
+
+                response.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                responseObjectDictionary["Status"] = e.Message;
+                //throw;
+            }
+
+            return responseObjectDictionary;
+        }
+
+        public static Dictionary<string, string> PublishProductsToSapPo_Local(string jsonData)
+        {
+            string url = @"http://sappodev.intel.com:8415/RESTAdapter/ProductMain";
+
+            // Create a request using a URL that can receive a post.   
+            WebRequest request = WebRequest.Create(url);
+            request.Credentials = GetCredentials(url);
+            // Set the Method property of the request to POST.  
+            request.Method = "POST";
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+
+            // Set the ContentType property of the WebRequest.  
+            request.ContentType = "application/x-www-form-urlencoded";
+            // Set the ContentLength property of the WebRequest.  
+            request.ContentLength = byteArray.Length;
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                WebResponse response = request.GetResponse(); // Get the response.  
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                }
+
+                response.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                responseObjectDictionary["Status"] = e.Message;
+                //throw;
+            }
+
+            return responseObjectDictionary;
+        }
+
+        public static Dictionary<string, string> PublishVerticalsToSapPo_Local(string jsonData)
+        {
+            string url = @"https://sappodev.intel.com:8215/RESTAdapter/ProductVertical";
+
+            // Create a request using a URL that can receive a post.   
+            WebRequest request = WebRequest.Create(url);
+            request.Credentials = GetCredentials(url);
+            // Set the Method property of the request to POST.  
+            request.Method = "POST";
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+
+            // Set the ContentType property of the WebRequest.  
+            request.ContentType = "application/x-www-form-urlencoded";
+            // Set the ContentLength property of the WebRequest.  
+            request.ContentLength = byteArray.Length;
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                WebResponse response = request.GetResponse(); // Get the response.  
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                }
+
+                response.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                responseObjectDictionary["Status"] = e.Message;
+                //throw;
+            }
+
+            return responseObjectDictionary;
+        }
+
+        #endregion Outbound API Calls Local (To Be Removed once POST is fixed)
 
 
 

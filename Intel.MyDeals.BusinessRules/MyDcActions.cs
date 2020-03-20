@@ -513,16 +513,26 @@ namespace Intel.MyDeals.BusinessRules
             List<string> custList = deUserCustDivs.AtrbValue.ToString().Split(delim).ToList();
             foreach (string divNm in custList)
             {
-                string matchedValue = custs.ToList().Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM).FirstOrDefault();
-                if (string.IsNullOrEmpty(matchedValue))
-                {
-                    foundMisMatch = true;
-                    matchedDivs.Add(divNm);
-                }
-                else
-                {
-                    matchedDivs.Add(matchedValue);
-                }
+                // TO DO: Mike - Bring this back in later
+                //if (divNm != "All")
+                //{
+                string matchedValue = custs.ToList()
+                        .Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM)
+                        .FirstOrDefault();
+                    if (string.IsNullOrEmpty(matchedValue))
+                    {
+                        foundMisMatch = true;
+                        matchedDivs.Add(divNm);
+                    }
+                    else
+                    {
+                        matchedDivs.Add(matchedValue);
+                    }
+                //}
+                //else
+                //{
+                //    matchedDivs.Add("All");
+                //}
             }
 
             string newList = string.Join(delim.ToString(), matchedDivs.OrderBy(m => m));

@@ -36,7 +36,7 @@ namespace Intel.MyDeals.VistexService
 
             if (!myArgs.pauseOnEnd) return SuccessReturn;
 
-            PressAnyKeyToContinue();
+             PressAnyKeyToContinue();
 
             //return SuccessReturn; 
             // Program should end at this point...
@@ -115,15 +115,27 @@ namespace Intel.MyDeals.VistexService
             // Set JobType Mode Flag
             switch (myArgs.jobMode)
             {
-                case JobMode.VistexSendDeals:
-                    Console.WriteLine("Sending Vistex deals to SAP PO...");
+                case JobMode.SendDealsVistex:
+                    Console.WriteLine("Sending Deals Data to Vistex and SAP PO...");
                     await SendDataToSapPo();
                     break;
-                case JobMode.TendersProcessDeals:
+                case JobMode.SendCustomersVistex:
+                    Console.WriteLine("Sending Customers to Vistex from My Deals...");
+                    await SendCustomersToSapPo();
+                    break;
+                case JobMode.SendProductsVistex:
+                    Console.WriteLine("Sending Products to Vistex from My Deals...");
+                    await SendProductsToSapPo();
+                    break;
+                case JobMode.SendVerticalsVistex:
+                    Console.WriteLine("Sending Verticals to Vistex from My Deals...");
+                    await SendVerticalsToSapPo();
+                    break;
+                case JobMode.ProcessDealsTenders:
                     Console.WriteLine("Processing Tenders deals in My Deals...");
                     // Not implemented yet
                     break;
-                case JobMode.TestVistexPipeline:
+                case JobMode.TestPipelines:
                     await SendDataToSapPo();
                     //await GetMaxGroupId(); // Offband test
                     Console.WriteLine("Starting: Testing Connection to Vistex SAP PO...");

@@ -9,23 +9,29 @@ namespace Intel.MyDeals.VistexService
     {
         UNKNOWN,
 
-        VistexSendDeals,
-        TendersProcessDeals,
-        TestVistexPipeline
+        SendDealsVistex,
+        SendCustomersVistex,
+        SendProductsVistex,
+        SendVerticalsVistex,
+        ProcessDealsTenders,
+        TestPipelines
     }
 
     public class JobModeCode
     {
-        public const char VistexSendDeals = 'V';
-        public const char TendersProcessDeals = 'T';
-        public const char TestVistexPipeline = 'X';
+        public const char SendDealsVistex = 'D';
+        public const char SendCustomersVistex = 'C';
+        public const char SendProductsVistex = 'P';
+        public const char SendVerticalsVistex = 'V';
+        public const char ProcessDealsTenders = 'T';
+        public const char TestPipelines = 'X';
     }
 
     class VistexParams
     {
         public int sleepSeconds = 0;
         public JobMode jobMode = JobMode.UNKNOWN;
-        public char jobType = JobModeCode.VistexSendDeals; // Default to run as upload since jobmode is defaulted to upload
+        public char jobType = JobModeCode.SendDealsVistex; // Default to run as SendDealsVistex is nothing is passed
         public bool pauseOnEnd = false;
         public bool displayHelpOnly = false;
         public bool outputLogging = false;
@@ -202,31 +208,46 @@ namespace Intel.MyDeals.VistexService
                 {
                     switch (arr[1].Trim())
                     {
-                        case "vistexvenddeals":
-                        case "vsd":
-                        case "vs":
-                        case "v":
+                        case "senddealsvistex":
+                        case "sd":
                             displayHelpOnly = false;
-                            jobMode = JobMode.VistexSendDeals;
-                            jobType = JobModeCode.VistexSendDeals;
+                            jobMode = JobMode.SendDealsVistex;
+                            jobType = JobModeCode.SendDealsVistex;
                             break;
 
-                        case "tendersprocessdeals":
-                        case "tpd":
+                        case "sendcustomersvistex":
+                        case "sc":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.SendCustomersVistex;
+                            jobType = JobModeCode.SendCustomersVistex;
+                            break;
+
+                        case "sendproductsvistex":
+                        case "sp":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.SendProductsVistex;
+                            jobType = JobModeCode.SendProductsVistex;
+                            break;
+
+                        case "sendverticalsvistex":
+                        case "sv":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.SendVerticalsVistex;
+                            jobType = JobModeCode.SendVerticalsVistex;
+                            break;
+
+                        case "processdealstenders":
                         case "tp":
-                        case "t":
                             displayHelpOnly = false;
-                            jobMode = JobMode.TendersProcessDeals;
-                            jobType = JobModeCode.TendersProcessDeals;
+                            jobMode = JobMode.ProcessDealsTenders;
+                            jobType = JobModeCode.ProcessDealsTenders;
                             break;
 
-                        case "testvistexpipeline":
-                        case "tvp":
-                        case "tv":
-                        case "x":
+                        case "testpipelines":
+                        case "test":
                             displayHelpOnly = false;
-                            jobMode = JobMode.TestVistexPipeline;
-                            jobType = JobModeCode.TestVistexPipeline;
+                            jobMode = JobMode.TestPipelines;
+                            jobType = JobModeCode.TestPipelines;
                             break;
 
                         default:
@@ -240,40 +261,6 @@ namespace Intel.MyDeals.VistexService
                 }
             }
 
-            foreach (string env_arg in fa.Where(s => s.StartsWith("/dir:")))
-            {
-                var arr = env_arg.Split(':');
-                if (arr.Length > 1)
-                {
-                    switch (arr[1].Trim())
-                    {
-                        case "sender":
-                        case "send":
-                            displayHelpOnly = false;
-                            break;
-
-                        case "receiver":
-                        case "rec":
-                            displayHelpOnly = false;
-                            break;
-
-                        case "both":
-                        case "b":
-                        case "sr":
-                        case "sendrec":
-                            displayHelpOnly = false;
-                            break;
-
-                        default:
-                            errorMessages.Add(String.Format("Invalid Direction: {0}", arr[1]));
-                            break;
-                    }
-                }
-                else
-                {
-                    errorMessages.Add("Missing Direction Input Parameter.");
-                }
-            }
         }
 
         private VistexParams(VistexParams master_param)
@@ -291,59 +278,6 @@ namespace Intel.MyDeals.VistexService
             this.jobMode = JobMode.UNKNOWN;
             this.jobType = ' '; // Not set
             this.sleepSeconds = 0;
-        }
-
-        public static VistexParams ParseMode(string mode, VistexParams master_param)
-        {
-            if (String.IsNullOrEmpty(mode) || mode.Trim().Length == 0) { return null; }
-
-            mode = mode.Trim().ToUpper();
-
-            switch (mode[0]) // Look at the first char...
-            {
-                case 'S':
-                    {
-                        int temp_sleep;
-                        //int set_sleep = JmsQCommon.DefaultSleepSeconds;
-
-                        if (mode.Length > 1 && Int32.TryParse(mode.Replace("S", ""), out temp_sleep) && temp_sleep > 0)
-                        {
-                            //set_sleep = temp_sleep;
-                        }
-
-                        return null;
-                        //return new JMSQParams(master_param)
-                        //{
-                        //    sleepSeconds = set_sleep
-                        //};
-                    }
-                case 'D':
-                    //return new JMSQParams(master_param)
-                    //{
-                    //    diagnosticsMode = true,
-                    //    debugMode = true
-                    //};
-
-                case 'U':
-                    //return new JMSQParams(master_param)
-                    //{
-                    //    jobDir = ParseJobDir(mode),
-                    //    jobMode = JobMode.Upload,
-                    //    jobType = JobModeCode.Upload
-                    //};
-
-                case 'E':
-                    //return new JMSQParams(master_param)
-                    //{
-                    //    jobDir = ParseJobDir(mode),
-                    //    jobMode = JobMode.Expire,
-                    //    jobType = JobModeCode.Expire
-                    //};
-                    return null;
-
-                default:
-                    return null;
-            }
         }
 
         public string ValididationMessages
@@ -395,13 +329,18 @@ namespace Intel.MyDeals.VistexService
         }
 
         private const string HelpMessage = @"
-JMS Queue Help ({0})
-This command line tool is part of the MyDeals framework for talking to SAP.
+Vistex Service Help ({0})
+This command line tool is part of the MyDeals framework for talking to Vistes SAP
+PO and Tenders Mulesoft.
 Supported command line options:
 
-/mode:<mode> = JMS Queue Mode, where <mode> is:
-   ul (or upload) = Upload data to SAP.
-   exp (or expire) = Expire Price.
+/mode:<mode> = Processing Queue Mode, where <mode> is:
+   sd (or senddealsvistex) = Send Deals Data to Vistex.
+   sc (or sendcustomersvistex) = Send Customers Data to Vistex.
+   sp (or sendproductsvistex) = Send Products Data to Vistex.
+   sv (or sendverticalsvistex) = Send Verticals Data to Vistex.
+   tp (or processdealstenders) = Process Deals sent from Tenders.
+   test (or testpipelines) = Testing Mode.
 
 /log = Write details to output log file.
 /diag = Perform diagnostics.
@@ -414,9 +353,8 @@ Supported command line options:
 (no parameters) = This message.
 
 As of MyDeals 1.0, there is no default mode.
-You must pass in a specific mode (and dir when required).
+You must pass in a specific mode.
 ";
     }
-
 
 }
