@@ -167,6 +167,26 @@ namespace Intel.MyDeals.VistexService
         {
             Console.WriteLine("SendVerticalsToSapPo - Not Implemented Yet...");
             // Step 1: Gather Verticals Data from MyDeals - DB call
+
+
+
+            ResponseType responseType = ResponseType.None;
+            List<VistexDealOutBound> records = new List<VistexDealOutBound>();
+            // Might want to put re-trys into below call since it only returns data
+            records = await DataAccessLayer.GetVistexDealOutBoundData("PROD_VERT_RULES");
+            if (records.Count == 0)
+            {
+                Console.WriteLine("There is no outbound data to push..");
+                return;
+            }
+
+            string btchId = records[1].TransanctionId.ToString(); // Safe assumption since above we looked for no records
+
+
+
+
+
+
             // Package it here as per JSON template from Saurav (TO DO)  Trash data for now
             string jsonData = "{" +
                               "\"ProductVertical\": [" +

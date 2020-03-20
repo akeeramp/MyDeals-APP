@@ -25,6 +25,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Route("GetVistexDealOutBoundData/{packetType}")]
+        [HttpGet]
         public List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType)
         {
             return _vistexServiceLib.GetVistexDealOutBoundData(packetType);

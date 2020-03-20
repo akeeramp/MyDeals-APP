@@ -60,8 +60,39 @@ namespace Intel.MyDeals.VistexService
         }
         #endregion
 
+
+
+
         #region MyDeals Data Fetch Calls
         public static async Task<List<VistexDealOutBound>> GetVistexDealOutBoundData()
+        {
+            List<VistexDealOutBound> records = new List<VistexDealOutBound>();
+            var xmlRecords = string.Empty;
+            try
+            {
+                //JmsQCommon.Log("GetPricingRecordsXml");
+
+                var dealsRecordsXmlUrl = vistexController + "GetVistexDealOutBoundData";
+                HttpResponseMessage response = await MyDealsClient.GetAsync(dealsRecordsXmlUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+                }
+                return records = JsonConvert.DeserializeObject<List<VistexDealOutBound>>(xmlRecords);
+            }
+            catch (Exception ex)
+            {
+                //JmsQCommon.HandleException(ex);
+            }
+
+            return records;
+        }
+
+        public static async Task<List<VistexDealOutBound>> GetVistexDealOutBoundData(string dataType)
         {
             List<VistexDealOutBound> records = new List<VistexDealOutBound>();
             var xmlRecords = string.Empty;

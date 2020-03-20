@@ -19,6 +19,23 @@ namespace Intel.MyDeals.Entities
             public string ErrMessage { get; set; }
         }
     }
+
+    public class VistexSendVertical
+    {
+        public List<VerticalData> ProductVertical { get; set; }
+
+        public class VerticalData
+        {
+            public string GDM_PRD_TYPE_NM { get; set; }
+            public string GDM_VRT_NM { get; set; }
+            public string OPR_BUSNS_UN_CD { get; set; }
+            public DateTime VALID_TO { get; set; }
+            public string DIV_SHRT_NM { get; set; }
+            public string DEAL_PRD_TYPE_NM { get; set; }
+            public string DEAL_VRT_NM { get; set; }
+            public string ACTIVE_IND { get; set; }
+        }
+    }
     #endregion Vistex Deals Send Packet Object
 
     #region Vistex Response Object - Vistex sending us response for what we sent them
