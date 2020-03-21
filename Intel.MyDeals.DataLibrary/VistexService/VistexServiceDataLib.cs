@@ -70,6 +70,34 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
+        public List<VistexQueueObject> GetVistexDataOutBound(string packetType)
+        {
+            List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
+            {
+                in_rqst_type = packetType
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+
+                while (rdr.Read())
+                {
+                    lstVistex.Add(new VistexQueueObject
+                    {
+                        BatchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID),
+                        DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                        RqstJsonData = (IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? string.Empty : rdr.GetFieldValue<string>(IDX_JSON_DATA)
+                    });
+                } // while
+            }
+            return lstVistex;
+        }
+
+
         public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus)
         {
             // Add type_int_dictionary here later
@@ -80,6 +108,55 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     in_btch_id = btchId,
                     in_rqst_sts = rqstStatus,
+                };
+                DataAccess.ExecuteNonQuery(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+        }
+
+        public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
+        {
+            VistexDFDataLoadObject vistexData = new VistexDFDataLoadObject();
+            var cmd = new Procs.dbo.PR_MYDL_VISTEX_GET_GEO_DSS_PRD_CUST
+            {
+                MODE = runMode
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BATCH_ID");
+                int IDX_BATCH_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "BATCH_RQST_JSON_DATA");
+
+                // Only 1 record of data for these guys
+                while (rdr.Read())
+                {
+                    vistexData.BatchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID))
+                        ? default(System.Int32)
+                        : rdr.GetFieldValue<System.Int32>(IDX_BTCH_ID);
+                    vistexData.JsonData = (IDX_BATCH_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_BATCH_RQST_JSON_DATA))
+                        ? string.Empty
+                        : rdr.GetFieldValue<string>(IDX_BATCH_RQST_JSON_DATA);
+                } // while
+            }
+            return vistexData;
+        }
+        
+        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        {
+            // Add type_int_dictionary here later
+            OpLog.Log("Vistex - SetVistexDealOutBoundStage");
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_VISTEX_UPD_GEO_DSS_PRD_CUST
+                {
+                    MODE = responseObj.RunMode,
+                    BATCH_ID = responseObj.BatchId,
+                    BATCH_MESSAGE = responseObj.BatchMessage,
+                    BATCH_NAME = responseObj.BatchName,
+                    BATCH_STATUS = responseObj.BatchStatus
                 };
                 DataAccess.ExecuteNonQuery(cmd);
             }

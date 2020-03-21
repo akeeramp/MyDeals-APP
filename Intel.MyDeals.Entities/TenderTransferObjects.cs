@@ -20,6 +20,28 @@ namespace Intel.MyDeals.Entities
         }
     }
 
+    public class VistexQueueObject
+    {
+        public int DealId { get; set; }
+        public Guid BatchId { get; set; }
+        public string RqstJsonData { get; set; }
+    }
+
+    public class VistexDFDataLoadObject // Customers and Products
+    {
+        public int BatchId { get; set; }
+        public string JsonData { get; set; }
+    }
+
+    public class VistexDFDataResponseObject // Customers and Products
+    {
+        public string RunMode { get; set; }
+        public int BatchId { get; set; }
+        public string BatchMessage { get; set; }
+        public string BatchName { get; set; }
+        public string BatchStatus { get; set; }
+    }
+
     public class VistexSendVertical
     {
         public List<VerticalData> ProductVertical { get; set; }

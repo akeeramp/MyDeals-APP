@@ -22,11 +22,26 @@ namespace Intel.MyDeals.BusinessLogic
             return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType);
         }
 
+        public List<VistexQueueObject> GetVistexDataOutBound(string packetType)
+        {
+            return _vistexServiceDataLib.GetVistexDataOutBound(packetType);
+        }
+
         public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus)
         {
             _vistexServiceDataLib.SetVistexDealOutBoundStage(btchId, rqstStatus);
         }
-        
+
+        public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
+        {
+            return _vistexServiceDataLib.GetVistexDFStageData(runMode);
+        }
+
+        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        {
+            _vistexServiceDataLib.UpdateVistexDFStageData(responseObj);
+        }
+
         public Dictionary<string, string> PublishSapPo(string url, string jsonData)
         {
             return _vistexServiceDataLib.PublishSapPo(url, jsonData);

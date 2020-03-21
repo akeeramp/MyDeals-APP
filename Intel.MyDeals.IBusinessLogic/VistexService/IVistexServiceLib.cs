@@ -11,7 +11,13 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType);
 
+        List<VistexQueueObject> GetVistexDataOutBound(string packetType);
+
         void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
+
+        VistexDFDataLoadObject GetVistexDFStageData(string runMode);
+
+        void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj);
 
         Dictionary<string, string> PublishSapPo(string url, string jsonData);
 

@@ -120,6 +120,36 @@ namespace Intel.MyDeals.VistexService
             return records;
         }
 
+
+        public static async Task<List<VistexQueueObject>> GetVistexDataOutBound(string dataType)
+        {
+            List<VistexQueueObject> records = new List<VistexQueueObject>();
+            var xmlRecords = string.Empty;
+            try
+            {
+                //JmsQCommon.Log("GetPricingRecordsXml");
+
+                var dealsRecordsXmlUrl = vistexController + "GetVistexDataOutBound/" + dataType;
+                HttpResponseMessage response = await MyDealsClient.GetAsync(dealsRecordsXmlUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+                }
+                List<VistexQueueObject> blah = JsonConvert.DeserializeObject<List<VistexQueueObject>>(xmlRecords);
+                return records = JsonConvert.DeserializeObject<List<VistexQueueObject>>(xmlRecords);
+            }
+            catch (Exception ex)
+            {
+                //JmsQCommon.HandleException(ex);
+            }
+
+            return records;
+        }
+
         public static async Task SetVistexDealOutBoundStage(string btchId, string rqstStatus)
         {
             try
@@ -128,6 +158,50 @@ namespace Intel.MyDeals.VistexService
 
                 //JmsQCommon.Log("UpdateRecordStagesAndNotifyErrors");
                 HttpResponseMessage response = await MyDealsClient.GetAsync(dealsStatusUpdateUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    //JmsQCommon.HandleException(new Exception("UpdateRecordStagesAndNotifyErrors - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+                }
+            }
+            catch (Exception ex)
+            {
+                //JmsQCommon.HandleException(ex);
+            }
+        }
+        //GetVistexDFStageData
+        public static async Task<VistexDFDataLoadObject> GetVistexDFStageData(string runMode)
+        {
+            VistexDFDataLoadObject retRecord = new VistexDFDataLoadObject();
+            var xmlRecords = string.Empty;
+            try
+            {
+                var fetchVistexDFData = vistexController + "GetVistexDFStageData/" + runMode;
+                HttpResponseMessage response = await MyDealsClient.GetAsync(fetchVistexDFData);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+                }
+                retRecord = JsonConvert.DeserializeObject<VistexDFDataLoadObject>(xmlRecords);
+            }
+            catch (Exception ex)
+            {
+                //JmsQCommon.HandleException(ex);
+            }
+
+            return retRecord;
+        }
+
+        public static async Task UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        {
+            try
+            {
+                var updatehVistexDFData = vistexController + "UpdateVistexDFStageData";
+
+                HttpResponseMessage response = await MyDealsClient.PostAsJsonAsync(updatehVistexDFData, responseObj);
                 if (!response.IsSuccessStatusCode)
                 {
                     //JmsQCommon.HandleException(new Exception("UpdateRecordStagesAndNotifyErrors - " + response.ReasonPhrase + " Url" + response.RequestMessage));
@@ -401,7 +475,7 @@ namespace Intel.MyDeals.VistexService
                     responseObjectDictionary["Data"] = responseFromServer;
                 }
 
-                response.Close();
+                //response.Close();
             }
             catch (Exception e)
             {

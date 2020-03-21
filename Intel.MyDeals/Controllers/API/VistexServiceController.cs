@@ -31,11 +31,32 @@ namespace Intel.MyDeals.Controllers.API
             return _vistexServiceLib.GetVistexDealOutBoundData(packetType);
         }
 
+        [Route("GetVistexDataOutBound/{packetType}")]
+        [HttpGet]
+        public List<VistexQueueObject> GetVistexDataOutBound(string packetType)
+        {
+            return _vistexServiceLib.GetVistexDataOutBound(packetType);
+        }
+
         [Route("SetVistexDealOutBoundStage/{btchId}/{rqstStatus}")]
         [HttpGet]
         public void SetVistexDealOutBoundStage(string btchId, string rqstStatus)
         {
             _vistexServiceLib.SetVistexDealOutBoundStage(new Guid(btchId), rqstStatus);
+        }
+
+        [Route("GetVistexDFStageData/{runMode}")]
+        [HttpGet]
+        public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
+        {
+            return _vistexServiceLib.GetVistexDFStageData(runMode);
+        }
+
+        [Route("UpdateVistexDFStageData")]
+        [HttpPost]
+        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        {
+            _vistexServiceLib.UpdateVistexDFStageData(responseObj);
         }
 
         [Route("PublishDealsToSapPo")]
