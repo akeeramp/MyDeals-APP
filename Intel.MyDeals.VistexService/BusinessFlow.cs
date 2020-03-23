@@ -127,7 +127,7 @@ namespace Intel.MyDeals.VistexService
             records = await DataAccessLayer.GetVistexDataOutBound("PROD_VERT_RULES");
             if (records.Count == 0)
             {
-                Console.WriteLine("There is no outbound data to push..");
+                Console.WriteLine("There is no outbound data to push.."); 
                 return true;
             }
 
