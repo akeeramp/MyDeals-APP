@@ -33,10 +33,16 @@ namespace Intel.MyDeals.Entities
         public string JsonData { get; set; }
     }
 
+    public class VistexDFResponse
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+    }
+
     public class VistexDFDataResponseObject // Customers and Products
     {
         public string RunMode { get; set; }
-        public int BatchId { get; set; }
+        public string BatchId { get; set; }
         public string BatchMessage { get; set; }
         public string BatchName { get; set; }
         public string BatchStatus { get; set; }

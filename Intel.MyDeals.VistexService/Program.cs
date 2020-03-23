@@ -54,19 +54,20 @@ namespace Intel.MyDeals.VistexService
             {
                 case JobMode.SendDealsVistex:
                     Console.WriteLine("Sending Deals Data to Vistex and SAP PO...");
-                    await SendDataToSapPo();
+                    await SendDataToSapPo("D");
                     break;
                 case JobMode.SendCustomersVistex:
                     Console.WriteLine("Sending Customers to Vistex from My Deals...");
-                    await SendDfDataToSapPo("C");
+                    await SendDataToSapPo("C");
                     break;
                 case JobMode.SendProductsVistex:
                     Console.WriteLine("Sending Products to Vistex from My Deals...");
-                    await SendDfDataToSapPo("P");
+                    await SendDataToSapPo("P");
                     break;
                 case JobMode.SendVerticalsVistex:
                     Console.WriteLine("Sending Verticals to Vistex from My Deals...");
                     await SendVerticalsToSapPo();
+                    Console.ReadLine();
                     break;
                 case JobMode.ProcessDealsTenders:
                     Console.WriteLine("Processing Tenders deals in My Deals...");
