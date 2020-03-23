@@ -11,7 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType);
 
-        List<VistexQueueObject> GetVistexDataOutBound(string packetType);
+        List<VistexDFDataResponseObject> GetVistexDataOutBound(string packetType);
 
         void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
 
@@ -22,6 +22,8 @@ namespace Intel.MyDeals.IBusinessLogic
         Dictionary<string, string> PublishSapPo(string url, string jsonData);
 
         Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
+
+        VistexDFDataResponseObject GetVistexStageData(string runMode);
 
         string GetMaxGroupId();
 

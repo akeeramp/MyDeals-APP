@@ -153,7 +153,7 @@ namespace Intel.MyDeals.DataLibrary
                 var cmd = new Procs.dbo.PR_MYDL_VISTEX_UPD_GEO_DSS_PRD_CUST
                 {
                     MODE = responseObj.RunMode,
-                    BATCH_ID = responseObj.BatchId,
+                    BATCH_ID = Convert.ToInt32(responseObj.BatchId),
                     BATCH_MESSAGE = responseObj.BatchMessage,
                     BATCH_NAME = responseObj.BatchName,
                     BATCH_STATUS = responseObj.BatchStatus

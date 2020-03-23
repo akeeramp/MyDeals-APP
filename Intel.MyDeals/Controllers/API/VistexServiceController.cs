@@ -33,7 +33,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetVistexDataOutBound/{packetType}")]
         [HttpGet]
-        public List<VistexQueueObject> GetVistexDataOutBound(string packetType)
+        public List<VistexDFDataResponseObject> GetVistexDataOutBound(string packetType)
         {
             return _vistexServiceLib.GetVistexDataOutBound(packetType);
         }
@@ -47,9 +47,9 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetVistexDFStageData/{runMode}")]
         [HttpGet]
-        public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
+        public VistexDFDataResponseObject GetVistexDFStageData(string runMode)
         {
-            return _vistexServiceLib.GetVistexDFStageData(runMode);
+            return _vistexServiceLib.GetVistexStageData(runMode);
         }
 
         [Route("UpdateVistexDFStageData")]

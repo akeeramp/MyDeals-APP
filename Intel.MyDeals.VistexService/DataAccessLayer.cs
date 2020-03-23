@@ -18,6 +18,14 @@ namespace Intel.MyDeals.VistexService
     {
         private static string vistexAPIbaseUrl = GetAppSetting("MyDealsService");
         private static string vistexController = "/api/VistexService/";
+        //Connection Master - > Can be moved to App.Config
+        public static Dictionary<string, string> conDict = new Dictionary<string, string>()
+        {
+            {"D", "https://sappodev.intel.com:8215/RESTAdapter/MyDeals"},
+            {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
+            {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
+            {"V", "https://sappodev.intel.com:8215/RESTAdapter/ProductVertical"},
+        };
 
         private static HttpClient MyDealsClient
         {
@@ -121,9 +129,9 @@ namespace Intel.MyDeals.VistexService
         }
 
 
-        public static async Task<List<VistexQueueObject>> GetVistexDataOutBound(string dataType)
+        public static async Task<List<VistexDFDataResponseObject>> GetVistexDataOutBound(string dataType)
         {
-            List<VistexQueueObject> records = new List<VistexQueueObject>();
+            List<VistexDFDataResponseObject> records = new List<VistexDFDataResponseObject>();
             var xmlRecords = string.Empty;
             try
             {
@@ -139,8 +147,8 @@ namespace Intel.MyDeals.VistexService
                 {
                     //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
                 }
-                List<VistexQueueObject> blah = JsonConvert.DeserializeObject<List<VistexQueueObject>>(xmlRecords);
-                return records = JsonConvert.DeserializeObject<List<VistexQueueObject>>(xmlRecords);
+                List<VistexDFDataResponseObject> blah = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
+                return records = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
             }
             catch (Exception ex)
             {
@@ -155,8 +163,7 @@ namespace Intel.MyDeals.VistexService
             try
             {
                 var dealsStatusUpdateUrl = vistexController + "SetVistexDealOutBoundStage/" + btchId + "/" + rqstStatus;
-
-                //JmsQCommon.Log("UpdateRecordStagesAndNotifyErrors");
+                                
                 HttpResponseMessage response = await MyDealsClient.GetAsync(dealsStatusUpdateUrl);
                 if (!response.IsSuccessStatusCode)
                 {
@@ -169,9 +176,9 @@ namespace Intel.MyDeals.VistexService
             }
         }
         //GetVistexDFStageData
-        public static async Task<VistexDFDataLoadObject> GetVistexDFStageData(string runMode)
+        public static async Task<VistexDFDataResponseObject> GetVistexDFStageData(string runMode)
         {
-            VistexDFDataLoadObject retRecord = new VistexDFDataLoadObject();
+            VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;
             try
             {
@@ -185,7 +192,7 @@ namespace Intel.MyDeals.VistexService
                 {
                     //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
                 }
-                retRecord = JsonConvert.DeserializeObject<VistexDFDataLoadObject>(xmlRecords);
+                retRecord = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
             }
             catch (Exception ex)
             {
@@ -270,7 +277,7 @@ namespace Intel.MyDeals.VistexService
             return credentialCache;
         }
 
-
+        //TODO: Remove after Testing -- Saurav
         public static Dictionary<string, string> PublishDealsToSapPo_Local(string jsonData)
         {
             string url = @"https://sappodev.intel.com:8215/RESTAdapter/MyDeals";
@@ -325,9 +332,10 @@ namespace Intel.MyDeals.VistexService
             return responseObjectDictionary;
         }
 
+        //TODO: Remove after Testing -- Saurav
         public static Dictionary<string, string> PublishCustomersToSapPo_Local(string jsonData)
         {
-            string url = @"http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer";
+            string url = @"";
 
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
@@ -379,9 +387,10 @@ namespace Intel.MyDeals.VistexService
             return responseObjectDictionary;
         }
 
+        //TODO: Remove after Testing -- Saurav
         public static Dictionary<string, string> PublishProductsToSapPo_Local(string jsonData)
         {
-            string url = @"http://sappodev.intel.com:8415/RESTAdapter/ProductMain";
+            string url = "";// @vistexProductConnection;
 
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
@@ -433,10 +442,12 @@ namespace Intel.MyDeals.VistexService
             return responseObjectDictionary;
         }
 
+        //TODO: Remove after Testing -- Saurav
         public static Dictionary<string, string> PublishVerticalsToSapPo_Local(string jsonData)
         {
-            string url = @"https://sappodev.intel.com:8215/RESTAdapter/ProductVertical";
-
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
+            string url = "";// @vistexProductVerticalConnection;
+            
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
             request.Credentials = GetCredentials(url);
@@ -457,10 +468,71 @@ namespace Intel.MyDeals.VistexService
             dataStream.Close();
 
             Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+            WebResponse response = request.GetResponse(); // Get the response.
+
+            try
+            {                  
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                }                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                responseObjectDictionary["Status"] = e.Message;
+                //throw;
+            }
+            finally
+            {
+                response.Close();
+            }
+
+            return responseObjectDictionary;
+        }
+
+        //For Deal - Product - Customer - Product Vertical
+        public static Dictionary<string, string> PublishToSapPo(string jsonData, string mode)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
+            string url = "";
+
+            //URL Setting - Reading from Key Value Pair
+            url = @conDict[mode];
+            
+            // Create a request using a URL that can receive a post.   
+            WebRequest request = WebRequest.Create(url);
+            request.Credentials = GetCredentials(url);
+            // Set the Method property of the request to POST.  
+            request.Method = "POST";
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+
+            // Set the ContentType property of the WebRequest.  
+            request.ContentType = "application/x-www-form-urlencoded";
+            // Set the ContentLength property of the WebRequest.  
+            request.ContentLength = byteArray.Length;
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+            WebResponse response = request.GetResponse(); // Get the response.
 
             try
             {
-                WebResponse response = request.GetResponse(); // Get the response.  
                 responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
                 // Get the stream containing content returned by the server.  
@@ -474,8 +546,6 @@ namespace Intel.MyDeals.VistexService
                     // Display the content.  
                     responseObjectDictionary["Data"] = responseFromServer;
                 }
-
-                //response.Close();
             }
             catch (Exception e)
             {
@@ -483,16 +553,14 @@ namespace Intel.MyDeals.VistexService
                 responseObjectDictionary["Status"] = e.Message;
                 //throw;
             }
+            finally
+            {
+                response.Close();
+            }
 
             return responseObjectDictionary;
         }
-
         #endregion Outbound API Calls Local (To Be Removed once POST is fixed)
-
-
-
-
-
 
 
         // Test routine
