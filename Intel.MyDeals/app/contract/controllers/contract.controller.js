@@ -295,6 +295,14 @@
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
+        //PS object is holding the Pricing Strategy ID with Pricing Stratagy Status
+        $scope.PS = {};
+        if ($scope.contractData.PRC_ST) {
+            for (var n = 0; n < $scope.contractData.PRC_ST.length; n++) {
+                $scope.PS[$scope.contractData.PRC_ST[n].DC_ID] = $scope.contractData.PRC_ST[n].IS_HYBRID_PRC_STRAT;
+            }
+        }
+
         var isCopyTender = (copyContractData !== undefined && copyContractData.data.length > 0 && copyContractData.data[0].IS_TENDER === "1");
         if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1" || isCopyTender || $scope.isTenderContract) {
             $scope.isTenderContract = true;
