@@ -3,8 +3,10 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
@@ -12,6 +14,37 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class FilesDataLib : IFilesDataLib
     {
+        public List<MeetComp> ExtractMeetCompFile(byte[] fileData)
+        {
+            List<MeetComp> lstRtn = new List<MeetComp>();
+            using (MemoryStream memStream = new MemoryStream(fileData))
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(memStream))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+
+                    // get number of rows and columns in the sheet
+                    int rows = worksheet.Dimension.Rows;
+                    //int columns = worksheet.Dimension.Columns;
+
+                    // loop through the worksheet rows and columns
+                    for (int i = 2; i <= rows; i++)
+                    {
+                        lstRtn.Add(new MeetComp
+                        {
+                            CUST_NM = worksheet.Cells[i, 1].Value.ToString(),
+                            HIER_VAL_NM = worksheet.Cells[i, 2].Value.ToString(),
+                            MEET_COMP_PRD = worksheet.Cells[i, 3].Value.ToString(),
+                            MEET_COMP_PRC = Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString()),
+                            IA_BNCH = Convert.ToDecimal(worksheet.Cells[i, 5].Value.ToString()),
+                            COMP_BNCH = Convert.ToDecimal(worksheet.Cells[i, 6].Value.ToString())
+                        });
+                    }
+                }
+            }
+            return lstRtn.Distinct(new DistinctItemComparerMeetComp()).ToList();
+        }
+
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>

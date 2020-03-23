@@ -40,6 +40,9 @@
     <Reference Include="Apache.NMS.ActiveMQ">
       <HintPath>..\Shared Libraries\Apache.NMS.ActiveMQ.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\Shared Libraries\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\Shared Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>

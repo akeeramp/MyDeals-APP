@@ -358,6 +358,8 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\meetComp\bulkUploadMeetCompModal.controller.js" />
+    <Content Include="app\admin\meetComp\bulkUploadMeetCompModal.html" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.service.js" />
     <Content Include="app\admin\mydealssupport\mydealssupport.html" />

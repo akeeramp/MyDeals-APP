@@ -166,7 +166,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE, int OBJ_TYPE_ID)
         {
             OpLog.Log("GetMeetCompProductDetails");
-            
+
             var ret = new List<MeetCompResult>();
             var cmd = new Procs.dbo.PR_MYDL_GET_MEET_COMP { };
 
@@ -433,6 +433,19 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return ret;
+        }
+    }
+
+    public class DistinctItemComparerMeetComp : IEqualityComparer<MeetComp>
+    {
+        public bool Equals(MeetComp x, MeetComp y)
+        {
+            return x.CUST_NM == y.CUST_NM && x.HIER_VAL_NM == y.HIER_VAL_NM && x.MEET_COMP_PRD == y.MEET_COMP_PRD && x.MEET_COMP_PRC == y.MEET_COMP_PRC && x.IA_BNCH == y.IA_BNCH && x.COMP_BNCH == y.COMP_BNCH;
+        }
+
+        public int GetHashCode(MeetComp obj)
+        {
+            return obj.CUST_NM.GetHashCode() ^ obj.HIER_VAL_NM.GetHashCode() ^ obj.MEET_COMP_PRD.GetHashCode() ^ obj.MEET_COMP_PRC.GetHashCode() ^ obj.IA_BNCH.GetHashCode() ^ obj.COMP_BNCH.GetHashCode();
         }
     }
 }

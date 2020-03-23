@@ -1,0 +1,157 @@
+﻿<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+    <div class="modal-content" id="meetCompModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
+        <div class="modal-header modalBlueBody">
+            <i id="btnClose" class="intelicon-close" ng-click="vm.ok()" title="Close this window"></i>
+            <h3 id="modalTitle">Bulk Upload - Meet Comp</h3>
+        </div>
+        <div id="modalBodyDiv" class="modal-body">
+            <div id="extractMeetComp" ng-if="vm.ExtractedMeetComp.length <= 0">
+                <div class="col-md-11 notes">
+                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate entries will be ignored. Your attachment will upload after clicking the "Extract Meet Comp" button.</span><br /><br />
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-11">
+                        <input class="fileAttachmentRequired" id="fileUploader" type="file" name="files" kendo-upload="files"
+                               k-upload="vm.filePostAddParams"
+                               k-success="vm.onSuccess"
+                               k-error="vm.onError"
+                               k-complete="vm.onComplete"
+                               k-select="vm.onFileSelect"
+                               k-options="vm.fileUploadOptions" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <a href="#">Click here to download the template</a>
+                    </div>
+                    <div class="col-md-3">
+                        <button ng-click="vm.uploadFile()" class="btn btn-primary" style="margin-left: 15px">Extract Meet Comp</button>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="vm.ExtractedMeetComp.length > 0">
+                <div id="gridMeetCompUpload" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.MeetCompOptions">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" ng-if="vm.ExtractedMeetComp.length > 0">
+            <div class="form-group row action_btns">
+                <div class="col-md-10">
+                    <button class="btn btn-primary" style="margin-left: 15px">Validate Meet Comp</button>
+                    <button class="btn btn-primary" style="margin-left: 15px">Submit Meet Comp</button>
+                    <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    #gridMeetCompUpload {
+        height: 395px !important;
+    }
+
+        #gridMeetCompUpload .k-grid-content {
+            height: 245px !important;
+        }
+
+    #meetCompModal .modal-footer {
+        position: fixed;
+        bottom: -59px;
+        width: 100%;
+        background: #efefef;
+        height: 60px;
+        /* float: left; */
+        border: 1px solid #003c71;
+        margin-left: -2px;
+    }
+
+    #modalBodyDiv .row {
+        margin-left: 20px;
+    }
+
+    .k-selectbox {
+        height: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-success {
+        color: #000000;
+        background-color: #C4D600 !important;
+        border-color: #adbd00 !important;
+    }
+
+        .btn-success[disabled] {
+            color: #b1babf;
+            background-color: #edeff0 !important;
+            border-color: #b1babf !important;
+        }
+
+    .notes {
+        font-size: 14px;
+        margin-left: 40px;
+        padding: 0;
+    }
+
+    .bluebold {
+        color: #0071c5;
+        font-weight: bold;
+    }
+
+    .redbold {
+        color: red;
+        font-weight: bold;
+    }
+
+    .modal-dialog {
+        width: 750px;
+        margin-top: 100px; /* Put in because top bar was being hidden */
+    }
+
+    .fontSmall {
+        font-size: 12px !important;
+    }
+
+    .bigSmall {
+        font-size: 15px !important;
+    }
+
+    #modalTitle {
+        float: left;
+        margin-top: -15px;
+    }
+
+    #meetCompModal .modal-body {
+        overflow: auto;
+        width: 100%;
+        max-height: 450px;
+        border-bottom: none;
+    }
+
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+
+    #meetCompModal .modal-header {
+        padding: 25px;
+        border-bottom: 1px solid #e5e5e5;
+        min-height: 16.5px;
+    }
+
+    div[index="0"] {
+        z-index: 3 !important;
+    }
+
+    .modal-backdrop {
+        display: none !important;
+    }
+
+    #btnClose {
+        float: right;
+        margin-top: -15px;
+        background: transparent;
+        padding: 3px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+</style>

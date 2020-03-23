@@ -8,9 +8,9 @@
         .run(SetRequestVerificationToken);
 
     SetRequestVerificationToken.$inject = ['$http'];
-    meetCompController.$inject = ['$scope', 'dataService', 'meetCompService', 'logger', '$localStorage', 'confirmationModal', '$linq', 'gridConstants', '$timeout', '$q'];
+    meetCompController.$inject = ['$scope', 'dataService', 'meetCompService', 'logger', '$localStorage', 'confirmationModal', '$linq', 'gridConstants', '$timeout', '$q', '$uibModal'];
 
-    function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q) { 
+    function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q, $uibModal) { 
         var vm = this;
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
@@ -43,6 +43,21 @@
             });
         }
         vm.isAcess = false;
+
+        vm.OpenBulkUploadMeetCompModal = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/meetComp/bulkUploadMeetCompModal.html',
+                controller: 'BulkUploadMeetCompModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                windowClass: 'prdSelector-modal-window'
+            });
+
+            modalInstance.result.then(function (returnData) {
+            }, function () { });
+        }
         
         if ((usrRole == 'GA' && isSuper) || usrRole == 'DA' || usrRole == 'Legal' || usrRole == 'SA') {
             vm.isAcess = true;            
