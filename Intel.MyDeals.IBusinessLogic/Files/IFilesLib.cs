@@ -5,6 +5,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IFilesLib
     {
+        List<MeetComp> ExtractMeetCompFile(byte[] fileData);
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>

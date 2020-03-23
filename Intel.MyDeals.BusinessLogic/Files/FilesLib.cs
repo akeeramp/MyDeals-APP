@@ -23,6 +23,11 @@ namespace Intel.MyDeals.BusinessLogic
             _filesDataLib = new FilesDataLib();
         }
 
+        public List<MeetComp> ExtractMeetCompFile(byte[] fileData)
+        {
+            return _filesDataLib.ExtractMeetCompFile(fileData);
+        }
+
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>

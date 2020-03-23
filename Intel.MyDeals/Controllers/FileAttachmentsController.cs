@@ -24,7 +24,7 @@ namespace Intel.MyDeals.Controllers
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>
-        [Authorize]        
+        [Authorize]
         public ActionResult Save(IEnumerable<HttpPostedFileBase> files, int custMbrSid, int objSid, int objTypeSid)
         {
             string response = string.Empty;
@@ -63,12 +63,12 @@ namespace Intel.MyDeals.Controllers
                         }
 
                         var result = _filesLib.SaveFileAttachment(fileAttachment, textBytes);
-                        
+
                         if (result)
                         {
                             new FilesLib().UpdateFileAttachmentBit(objTypeSid, objSid);
                         }
-                      
+
                         response = result ? string.Empty :
                             response += HttpUtility.HtmlEncode($"File {fileAttachment.FILE_NM} did not save properly. Please try again\n");
                     }
@@ -76,6 +76,25 @@ namespace Intel.MyDeals.Controllers
             }
 
             return Json(response);
+        }
+
+        [Authorize]
+        public ActionResult ExtractMeetCompFile(IEnumerable<HttpPostedFileBase> files)
+        {
+            List<MeetComp> lstMeetComps = new List<MeetComp>();
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    using (StreamReader reader = new StreamReader(file.InputStream))
+                    {
+                        byte[] textBytes = new byte[file.InputStream.Length];
+                        file.InputStream.Read(textBytes, 0, textBytes.Length);
+                        lstMeetComps.AddRange(_filesLib.ExtractMeetCompFile(textBytes));
+                    }
+                }
+            }
+            return lstMeetComps.Count > 0 ? Json(lstMeetComps) : Json(string.Empty);
         }
     }
 }
