@@ -48,7 +48,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetVistexDFStageData/{runMode}")]
         [HttpGet]
-        public VistexDFDataResponseObject GetVistexDFStageData(string runMode) //TC-CUSTOMERS
+        public VistexDFDataResponseObject GetVistexDFStageData(string runMode) //TC-CUSTOMERS, PRODUCTS
         {
             return _vistexServiceLib.GetVistexStageData(runMode);
         }

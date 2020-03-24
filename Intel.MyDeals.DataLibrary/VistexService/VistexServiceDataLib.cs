@@ -117,7 +117,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public VistexDFDataLoadObject GetVistexDFStageData(string runMode) // CUSTOMERS
+        public VistexDFDataLoadObject GetVistexDFStageData(string runMode) //TC-CUSTOMERS, PRODUCTS
         {
             VistexDFDataLoadObject vistexData = new VistexDFDataLoadObject();
             var cmd = new Procs.dbo.PR_MYDL_VISTEX_GET_GEO_DSS_PRD_CUST

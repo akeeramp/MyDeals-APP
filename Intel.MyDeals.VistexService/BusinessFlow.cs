@@ -9,7 +9,7 @@ namespace Intel.MyDeals.VistexService
 {
     public partial class Program
     {
-        private static async Task SendDFDataToSapPo(string runMode) //TC-CUSTOMERS
+        private static async Task SendDFDataToSapPo(string runMode) //TC-CUSTOMERS, PRODUCTS
         {
             List<VistexDFDataResponseObject> dataRecord = new List<VistexDFDataResponseObject>();
             dataRecord = await DataAccessLayer.GetVistexDFStageData(runMode);

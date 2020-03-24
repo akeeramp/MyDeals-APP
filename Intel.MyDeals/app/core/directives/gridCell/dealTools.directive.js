@@ -216,9 +216,9 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             // This will return Pricing Strategy enabled or not to show hold icon
             $scope.getHoldVisibility = function (dataItem) {
                 var isPSEnabled = {};
-                isPSEnabled = JSON.parse(dataItem.OBJ_PATH_HASH)
-                if ($scope.$parent.$parent.$parent.PS[isPSEnabled.PS] == 1) {
-                    return true
+                if (dataItem.OBJ_PATH_HASH !== undefined) {
+                    isPSEnabled = JSON.parse(dataItem.OBJ_PATH_HASH);
+                    if ($scope.$parent.$parent.$parent.PS[isPSEnabled.PS] === 1) return true; // $scope.$parent.$parent.$parent.PS = 0 if isPSEnabled is undefined.
                 }
                 return false;
             }

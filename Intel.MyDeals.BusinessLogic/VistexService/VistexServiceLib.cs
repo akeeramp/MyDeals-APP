@@ -101,7 +101,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _vistexServiceDataLib.GetVistexDFStageData(runMode);
         }
 
-        public VistexDFDataResponseObject GetVistexStageData(string runMode) //TC-CUSTOMER
+        public VistexDFDataResponseObject GetVistexStageData(string runMode) //TC-CUSTOMER, PRODUCTS
         {
             VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
             dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
@@ -117,7 +117,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId) //TC-CUSTOMER/DEALS
+        public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId) //TC-CUSTOMER, PRODUCTS/DEALS
         {
             // Step 2: Post Data to SAP PO API
             Dictionary<string, string> sendResponse = new Dictionary<string, string>();

@@ -176,7 +176,7 @@ namespace Intel.MyDeals.VistexService
             }
         }
         //GetVistexDFStageData
-        public static async Task<List<VistexDFDataResponseObject>> GetVistexDFStageData(string runMode)//TC-CUSTOMER
+        public static async Task<List<VistexDFDataResponseObject>> GetVistexDFStageData(string runMode)//TC-CUSTOMER, PRODUCTS
         {
             List<VistexDFDataResponseObject> retRecord = new List<VistexDFDataResponseObject>();
             var xmlRecords = string.Empty;
