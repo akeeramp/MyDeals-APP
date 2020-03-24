@@ -162,6 +162,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/rules/ruleDetailsModal.controller.js"
                 , "~/app/admin/rules/rules.service.js"
                 , "~/app/admin/vistex/admin.vistex.controller.js"
+                , "~/app/admin/vistex/admin.vistexTestAPI.controller.js"
                 , "~/app/admin/vistex/admin.vistexOutbound.controller.js"
                 , "~/app/admin/vistex/admin.vistexProductVertical.controller.js"
                 , "~/app/admin/vistex/admin.vistexProductVerticalOutbound.controller.js"

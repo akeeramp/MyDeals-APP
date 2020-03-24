@@ -275,6 +275,15 @@
                 }
             },
             {
+                state: 'admin.vistextestapi',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistextestapi.html'
+                    , url: 'vistex/vistextestapi'
+                    , controller: 'VistexTestAPIController as vm'
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false
@@ -360,7 +369,7 @@
                     , url: 'vistexcustomermapping'
                     , controller: 'VistexcustomermappingController as vm'
                 }
-            },
+            },            
             {
                 state: 'admin.testtenders',
                 abstract: false,

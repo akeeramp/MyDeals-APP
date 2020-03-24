@@ -133,6 +133,31 @@ namespace Intel.MyDeals.VistexService
             return records.FirstOrDefault();
         }
 
+
+        public static async Task<VistexDFDataResponseObject> GetVistexVerticalStageData(string runMode)//TC-Vertical
+        {
+            VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
+            var xmlRecords = string.Empty;
+            try
+            {
+                var fetchVistexDFData = vistexController + "GetVistexDataOutBound/" + runMode;
+                HttpResponseMessage response = await MyDealsClient.GetAsync(fetchVistexDFData);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                }
+                
+                retRecord = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
+            }
+            catch (Exception ex)
+            {
+                //JmsQCommon.HandleException(ex);
+            }
+
+            return retRecord;
+        }
+
+
         public static async Task SetVistexDealOutBoundStage(string btchId, string rqstStatus)
         {
             try
@@ -151,9 +176,9 @@ namespace Intel.MyDeals.VistexService
             }
         }
         //GetVistexDFStageData
-        public static async Task<VistexDFDataResponseObject> GetVistexDFStageData(string runMode)//TC-CUSTOMER
+        public static async Task<List<VistexDFDataResponseObject>> GetVistexDFStageData(string runMode)//TC-CUSTOMER
         {
-            VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
+            List<VistexDFDataResponseObject> retRecord = new List<VistexDFDataResponseObject>();
             var xmlRecords = string.Empty;
             try
             {
@@ -167,7 +192,7 @@ namespace Intel.MyDeals.VistexService
                 {
                     //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
                 }
-                retRecord = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
+                retRecord = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
             }
             catch (Exception ex)
             {

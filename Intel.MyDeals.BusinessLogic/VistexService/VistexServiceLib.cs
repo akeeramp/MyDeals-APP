@@ -59,18 +59,19 @@ namespace Intel.MyDeals.BusinessLogic
             //return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
-        public List<VistexDFDataResponseObject> GetVistexDataOutBound(string packetType)
+        public VistexDFDataResponseObject GetVistexDataOutBound(string packetType)
         {
-            List<VistexQueueObject> records = new List<VistexQueueObject>();
-            List<VistexDFDataResponseObject> lstResponse = new List<VistexDFDataResponseObject>();
-            //for(int i = 0; i < 1000; i++)
-            while(true)
+            List<VistexQueueObject> records = new List<VistexQueueObject>();            
+            VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
+            records = _vistexServiceDataLib.GetVistexDataOutBound(packetType);
+            if(records.Count == 0)
             {
-                records = _vistexServiceDataLib.GetVistexDataOutBound(packetType);
-                if(records.Count == 0)
-                {
-                    break;
-                }
+                responseObj.BatchId = "0";
+                responseObj.BatchMessage = "No Vertical to be Uploaded";
+                responseObj.BatchName = "Product Vertical";
+            }
+            else
+            {
                 string jsonData = "";
                 Guid batchId = new Guid();
 
@@ -80,12 +81,14 @@ namespace Intel.MyDeals.BusinessLogic
                     batchId = r.BatchId;
                 }
 
-                VistexDFDataResponseObject responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
-                lstResponse.Add(responseObj);
+                responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
+
                 //UpDate Status
-                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete"); 
+                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");
+
             }
-            return lstResponse;            
+
+            return responseObj;            
         }
 
         public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus)

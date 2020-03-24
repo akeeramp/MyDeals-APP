@@ -34,7 +34,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetVistexDataOutBound/{packetType}")]
         [HttpGet]
-        public List<VistexDFDataResponseObject> GetVistexDataOutBound(string packetType)
+        public VistexDFDataResponseObject GetVistexDataOutBound(string packetType)
         {
             return _vistexServiceLib.GetVistexDataOutBound(packetType);
         }

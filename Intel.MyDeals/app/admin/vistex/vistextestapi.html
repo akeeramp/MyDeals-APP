@@ -1,0 +1,111 @@
+﻿<div class="col-md-12">
+    <div class="col-md-5">
+        <h2>Vistex API Call</h2>
+        <p style="color: #FC4C02">This screen allow to Test SAP PO API calls</p>
+    </div>
+
+</div>
+
+<div class="col-md-12" style="margin-top: 15px">
+    <div class="col-md-1" style="font-size:14px; font-weight:bold">API Name: </div>
+    <div class="col-md-2">
+        <select id="comboApiName" class="opUiContainer md"
+                kendo-combo-box
+                k-options="vm.vistexApiNames"
+                k-ng-model="vm.selectedApiID"
+                k-value-primitive="false"
+                style="width: 230px; float: left"></select>
+    </div>
+    <div class="col-md-2">
+        <button ng-click="vm.runAPI()" class="btn btn-primary" style="float: left;">Simulate</button>
+    </div>
+</div>
+
+<div class="col-md-12" style="margin-top:20px" ng-show="vm.responseData.length > 0">
+    <div class="box box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Simulation Log</h3>
+            <div class="box-body">
+                <table class="table no-margin ReportAuditLog tableHeader">
+                    <thead>
+                        <tr>
+                            <th style="width:2px"> </th>
+                            <th>API Name</th>
+                            <th title="Start Time">Batch ID </th>
+                            <th title="End Time">Status</th>
+                            <th title="End Time">Message</th>
+                            <th title="Time Taken">Start Time</th>
+                            <th title="Time Taken">End Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in vm.responseData | limitTo : vm.numberOfRecrods ">
+                            <td></td>
+                            <td>{{x.BatchName}}</td>
+                            <td>{{x.BatchId}}</td>                            
+                            <td>{{x.BatchStatus}}</td>
+                            <td>{{x.BatchMessage}}</td>
+                            <td>{{x.START_TIME}}</td>
+                            <td>{{x.END_TIME}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="col-md-12" style="margin-top:10px">
+        </div>
+        <style>
+            .ss-loading-panel {
+                margin-top: 6%;
+                margin-left: 37%;
+            }
+        </style>
+        <style>
+            .reportLink {
+                font-size: 13px;
+            }
+            .filterInfo {
+                width: 450px;
+                background: rgba(0, 0, 0, 0.69);
+                border: 2px solid #8c8c8c;
+                position: fixed;
+                top: 100px;
+                height: 120px;
+                color: #fff;
+                padding: 5px;
+            }
+            .showMore {
+                padding: 3px;
+                background: #2196f3;
+                float: left;
+                margin-top: 10px;
+                cursor: pointer;
+                color: #FFF;
+            }
+            .tableHeader > thead:first-child > tr:first-child > th {
+                background: #FFFFFF;
+                border-right: 1px solid #f2f2f2;
+                border-bottom: 3px solid #2196F3;
+            }
+            .tableHeader {
+                border: 1px solid #f2f2f2;
+            }
+            .ui-tooltip {
+                /* tooltip container box */
+                white-space: pre-line;
+            }
+            .ui-tooltip-content {
+                /* tooltip content */
+                white-space: pre-line;
+            }
+            .mainBodyStyle {
+                position: absolute;
+                top: 84px;
+                bottom: 15px;
+                left: 0;
+                right: 0;
+                overflow: scroll !important;
+            }
+        </style>

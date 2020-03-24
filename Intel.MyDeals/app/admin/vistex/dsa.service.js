@@ -11,6 +11,7 @@
     function dsaService($http, dataService, logger, $q) {
 
         var apiBaseUrl = "api/DSA/";
+        var vistexApiBase = "api/VistexService/";
 
         var service = {
             getVistexLogs: getVistexLogs,
@@ -18,7 +19,8 @@
             updateVistexStatus: updateVistexStatus,
             sendVistexData: sendVistexData,
             getVistexOutBoundData: getVistexOutBoundData,
-            getVistexProductVeticalsOutBoundData: getVistexProductVeticalsOutBoundData
+            getVistexProductVeticalsOutBoundData: getVistexProductVeticalsOutBoundData,
+            callAPI: callAPI
         }
 
         return service;
@@ -45,6 +47,15 @@
 
         function updateVistexStatus(strTransantionId, strVistexStage, dealId, strErrorMessage) {
             return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + dealId + "/" + strErrorMessage);
+        }
+
+        function callAPI(apiName, runMode) {           
+            if (runMode == "V") {
+                return dataService.get(vistexApiBase + apiName + '/PROD_VERT_RULES');
+            } else {
+                return dataService.get(vistexApiBase + apiName + '/' + runMode);
+            }
+            
         }
     }
 })();
