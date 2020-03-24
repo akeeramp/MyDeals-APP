@@ -18,17 +18,18 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetVistexDealOutBoundData")]
         [HttpGet]
-        public List<VistexDealOutBound> GetVistexDealOutBoundData()
+        public VistexDFDataResponseObject GetVistexDealOutBoundData() //TC-Deals Not Used
         {
             string packetType = "VISTEX_DEALS";
-            return _vistexServiceLib.GetVistexDealOutBoundData(packetType);
+            string runMode = "D";
+            return _vistexServiceLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
-        [Route("GetVistexDealOutBoundData/{packetType}")]
+        [Route("GetVistexDealOutBoundData/{packetType}/{runMode}")] //TC-DEALS
         [HttpGet]
-        public List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType)
+        public VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode)
         {
-            return _vistexServiceLib.GetVistexDealOutBoundData(packetType);
+            return _vistexServiceLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
         [Route("GetVistexDataOutBound/{packetType}")]
@@ -47,7 +48,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetVistexDFStageData/{runMode}")]
         [HttpGet]
-        public VistexDFDataResponseObject GetVistexDFStageData(string runMode)
+        public VistexDFDataResponseObject GetVistexDFStageData(string runMode) //TC-CUSTOMERS
         {
             return _vistexServiceLib.GetVistexStageData(runMode);
         }

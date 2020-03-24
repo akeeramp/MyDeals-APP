@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using Intel.Opaque.Utilities.Server;
 using System.Configuration;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -32,9 +33,30 @@ namespace Intel.MyDeals.BusinessLogic
 
         // Start actual functions here
 
-        public List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType)
+        public VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode) //TC-DEALS
         {
-            return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType);
+            List<VistexQueueObject> dataRecords = new List<VistexQueueObject>();
+            dataRecords = _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
+            // Construct the send JSON from the list of bodies we got
+
+            VistexDealsDataLoadObject tempObj = new VistexDealsDataLoadObject();
+            tempObj.SourceSystem = "My Deals";
+            tempObj.TargetSystem = "Vistex";
+            tempObj.Action = "create";
+            tempObj.BatchId = dataRecords[0].BatchId;
+            tempObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
+
+            string jsonData = JsonConvert.SerializeObject(tempObj);
+
+            VistexDFDataResponseObject responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecords[0].BatchId.ToString());
+
+            //UpDate Status
+            UpdateVistexDFStageData(responseObj);
+
+            return responseObj;
+
+
+            //return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
         public List<VistexDFDataResponseObject> GetVistexDataOutBound(string packetType)
@@ -76,10 +98,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _vistexServiceDataLib.GetVistexDFStageData(runMode);
         }
 
-        public VistexDFDataResponseObject GetVistexStageData(string runMode)
+        public VistexDFDataResponseObject GetVistexStageData(string runMode) //TC-CUSTOMER
         {
             VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
             dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
+
             string jsonData = dataRecord.JsonData;
 
             VistexDFDataResponseObject responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString());
@@ -88,12 +111,10 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateVistexDFStageData(responseObj);
 
             return responseObj;
-
-            //return _vistexServiceDataLib.GetVistexDFStageData(runMode);
         }
 
 
-        public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId)
+        public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId) //TC-CUSTOMER/DEALS
         {
             // Step 2: Post Data to SAP PO API
             Dictionary<string, string> sendResponse = new Dictionary<string, string>();
@@ -107,7 +128,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //Parsing Response from SAP PO
                 VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
                 //Assigning Message Body to be Tranferred 
-                responseObj.BatchMessage = visResponse.Message;
+                responseObj.BatchMessage = visResponse.Message ?? string.Empty;
                 //API Type                
                 responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 //Status of the Call
@@ -116,7 +137,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             return responseObj;
         }
-        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj) //TC-CUSTOMER
         {
             _vistexServiceDataLib.UpdateVistexDFStageData(responseObj);
         }
@@ -139,7 +160,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         //MyDeals -> SAP PO push
-        private static CredentialCache GetCredentials(string url)
+        private static CredentialCache GetCredentials(string url) //TC-COSTOMER
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
             CredentialCache credentialCache = new CredentialCache();
@@ -150,11 +171,12 @@ namespace Intel.MyDeals.BusinessLogic
                 StringEncrypter.StringDecrypt(vistexPWD, "Vistex_Password")));
             return credentialCache;
         }
-        public static Dictionary<string, string> PublishToSapPo(string jsonData, string mode)
+        public static Dictionary<string, string> PublishToSapPo(string jsonData, string mode) //TC-CUSTOMER
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
             string url = "";
 
+            jsonData = jsonData.Replace("CustomerBRD", "Customer");
             //URL Setting - Reading from Key Value Pair
             url = @conDict[mode];
 

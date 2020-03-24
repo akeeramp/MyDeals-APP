@@ -6,7 +6,7 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface IVistexServiceDataLib
     {
-        List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType);
+        List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode);
 
         List<VistexQueueObject> GetVistexDataOutBound(string packetType);
 

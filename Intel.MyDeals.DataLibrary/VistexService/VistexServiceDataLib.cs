@@ -43,9 +43,9 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        public List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType)
+        public List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode) //TC-DEALS
         {
-            List<VistexDealOutBound> lstVistex = new List<VistexDealOutBound>();
+            List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
             {
                 in_rqst_type = packetType
@@ -59,13 +59,13 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    lstVistex.Add(new VistexDealOutBound
+                    lstVistex.Add(new VistexQueueObject
                     {
-                        VistexAttributes = (from result in JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)) select new VistexAttributes { Value = result.Value, VistexAttribute = result.Key }).ToList(),
                         DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                        TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
+                        BatchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID),
+                        RqstJsonData = (IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? string.Empty : rdr.GetFieldValue<string>(IDX_JSON_DATA)
                     });
-                } // while
+                } 
             }
             return lstVistex;
         }
@@ -117,7 +117,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
+        public VistexDFDataLoadObject GetVistexDFStageData(string runMode) // CUSTOMERS
         {
             VistexDFDataLoadObject vistexData = new VistexDFDataLoadObject();
             var cmd = new Procs.dbo.PR_MYDL_VISTEX_GET_GEO_DSS_PRD_CUST

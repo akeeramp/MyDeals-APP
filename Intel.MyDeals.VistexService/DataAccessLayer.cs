@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Intel.MyDeals.Entities;
@@ -100,36 +101,8 @@ namespace Intel.MyDeals.VistexService
             return records;
         }
 
-        public static async Task<List<VistexDealOutBound>> GetVistexDealOutBoundData(string dataType)
-        {
-            List<VistexDealOutBound> records = new List<VistexDealOutBound>();
-            var xmlRecords = string.Empty;
-            try
-            {
-                //JmsQCommon.Log("GetPricingRecordsXml");
 
-                var dealsRecordsXmlUrl = vistexController + "GetVistexDealOutBoundData";
-                HttpResponseMessage response = await MyDealsClient.GetAsync(dealsRecordsXmlUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    xmlRecords = await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
-                return records = JsonConvert.DeserializeObject<List<VistexDealOutBound>>(xmlRecords);
-            }
-            catch (Exception ex)
-            {
-                //JmsQCommon.HandleException(ex);
-            }
-
-            return records;
-        }
-
-
-        public static async Task<List<VistexDFDataResponseObject>> GetVistexDataOutBound(string dataType)
+        public static async Task<VistexDFDataResponseObject> GetVistexDataOutBound(string dataType, string runMode) // TC-DEALS
         {
             List<VistexDFDataResponseObject> records = new List<VistexDFDataResponseObject>();
             var xmlRecords = string.Empty;
@@ -137,7 +110,7 @@ namespace Intel.MyDeals.VistexService
             {
                 //JmsQCommon.Log("GetPricingRecordsXml");
 
-                var dealsRecordsXmlUrl = vistexController + "GetVistexDataOutBound/" + dataType;
+                var dealsRecordsXmlUrl = vistexController + "GetVistexDealOutBoundData/" + dataType + "/" + runMode;
                 HttpResponseMessage response = await MyDealsClient.GetAsync(dealsRecordsXmlUrl);
                 if (response.IsSuccessStatusCode)
                 {
@@ -148,14 +121,16 @@ namespace Intel.MyDeals.VistexService
                     //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
                 }
                 List<VistexDFDataResponseObject> blah = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
-                return records = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
+                VistexDFDataResponseObject arg = blah.FirstOrDefault();
+                //return records = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
+                return arg;
             }
             catch (Exception ex)
             {
                 //JmsQCommon.HandleException(ex);
             }
 
-            return records;
+            return records.FirstOrDefault();
         }
 
         public static async Task SetVistexDealOutBoundStage(string btchId, string rqstStatus)
@@ -176,7 +151,7 @@ namespace Intel.MyDeals.VistexService
             }
         }
         //GetVistexDFStageData
-        public static async Task<VistexDFDataResponseObject> GetVistexDFStageData(string runMode)
+        public static async Task<VistexDFDataResponseObject> GetVistexDFStageData(string runMode)//TC-CUSTOMER
         {
             VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;

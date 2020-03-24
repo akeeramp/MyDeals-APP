@@ -9,7 +9,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IVistexServiceLib
     {
-        List<VistexDealOutBound> GetVistexDealOutBoundData(string packetType);
+        VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode);
 
         List<VistexDFDataResponseObject> GetVistexDataOutBound(string packetType);
 

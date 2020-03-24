@@ -9,7 +9,7 @@ namespace Intel.MyDeals.VistexService
 {
     public partial class Program
     {
-        private static async Task SendDataToSapPo(string runMode)
+        private static async Task SendDFDataToSapPo(string runMode) //TC-CUSTOMERS
         {
             VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
             dataRecord = await DataAccessLayer.GetVistexDFStageData(runMode);
@@ -18,31 +18,55 @@ namespace Intel.MyDeals.VistexService
             {
                 Console.WriteLine("There is no outbound data to push..");
             }
-            else if(dataRecord.BatchStatus.ToLower() == "processed")
+            else
+            {
+                if (dataRecord.BatchStatus.ToLower() == "processed")
+                {
+                    Console.WriteLine("Outbound data pushed to SAP completed successfully..");
+                }
+                else
+                {
+                    Console.WriteLine("Data pushed to SAP Completed, Status: " + dataRecord.BatchStatus + " - " + dataRecord.BatchMessage);
+                }
+
+            }
+
+        }
+
+        private static async Task SendDealsDataToSapPo(string runMode) //TC-DEALS
+        {
+            VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
+            dataRecord = await DataAccessLayer.GetVistexDataOutBound("VISTEX_DEALS", runMode);
+
+            if (dataRecord.BatchId == "0")
+            {
+                Console.WriteLine("There is no outbound data to push..");
+            }
+            else if (dataRecord.BatchStatus.ToLower() == "processed")
             {
                 Console.WriteLine("Outbound data pushed to SAP successfully..");
             }
 
         }
-        
+
         private static async Task<bool> SendVerticalsToSapPo()
         {
             // Step 1: Gather Verticals Data from MyDeals - DB call
-            List<VistexDFDataResponseObject> records = new List<VistexDFDataResponseObject>();
-            records = await DataAccessLayer.GetVistexDataOutBound("PROD_VERT_RULES");
+            VistexDFDataResponseObject records = new VistexDFDataResponseObject();
+            records = await DataAccessLayer.GetVistexDataOutBound("PROD_VERT_RULES", "V");
             //for(int i = 0; )
-            if (records.Count == 0)
-            {
-                Console.WriteLine("There is no outbound data to push.."); 
-                return true;
-            }
-            else
-            {
-                foreach(VistexDFDataResponseObject r in records)
-                {
-                    Console.WriteLine("Batch Id: " + r.BatchId + "  " + "Status: " + r.BatchStatus + " " + "Message: " + r.BatchMessage);
-                }
-            }
+            //if (records.Count == 0)
+            //{
+            //    Console.WriteLine("There is no outbound data to push.."); 
+            //    return true;
+            //}
+            //else
+            //{
+            //    foreach(VistexDFDataResponseObject r in records)
+            //    {
+            //        Console.WriteLine("Batch Id: " + r.BatchId + "  " + "Status: " + r.BatchStatus + " " + "Message: " + r.BatchMessage);
+            //    }
+            //}
             return true;
 
         }
