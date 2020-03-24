@@ -54,6 +54,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_LOW_NET_PRC = DB.GetReaderOrdinal(rdr, "LOW_NET_PRC");
                     int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
                     int IDX_MKT_SEG = DB.GetReaderOrdinal(rdr, "MKT_SEG");
+                    int IDX_OBJ_PATH_HASH = DB.GetReaderOrdinal(rdr, "OBJ_PATH_HASH");
                     int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
                     int IDX_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_EOL_DT");
                     int IDX_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_LNCH_DT");
@@ -98,6 +99,7 @@ namespace Intel.MyDeals.DataLibrary
                             LOW_NET_PRC = (IDX_LOW_NET_PRC < 0 || rdr.IsDBNull(IDX_LOW_NET_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_LOW_NET_PRC),
                             MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
                             MKT_SEG = (IDX_MKT_SEG < 0 || rdr.IsDBNull(IDX_MKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MKT_SEG),
+                            OBJ_PATH_HASH = (IDX_OBJ_PATH_HASH < 0 || rdr.IsDBNull(IDX_OBJ_PATH_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_PATH_HASH),
                             OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                             OEM_PLTFRM_EOL_DT = (IDX_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_EOL_DT),
                             OEM_PLTFRM_LNCH_DT = (IDX_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_LNCH_DT),

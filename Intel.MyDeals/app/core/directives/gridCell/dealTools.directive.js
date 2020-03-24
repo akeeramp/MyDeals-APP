@@ -218,7 +218,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 var isPSEnabled = {};
                 if (dataItem.OBJ_PATH_HASH !== undefined) {
                     isPSEnabled = JSON.parse(dataItem.OBJ_PATH_HASH);
-                    if ($scope.$parent.$parent.$parent.PS[isPSEnabled.PS] === 1) return true; // $scope.$parent.$parent.$parent.PS = 0 if isPSEnabled is undefined.
+                    if ($scope.$parent.$parent.$parent.PS[isPSEnabled.PS] === "1") return true; // $scope.$parent.$parent.$parent.PS = 0 if isPSEnabled is undefined.
                 }
                 return false;
             }
@@ -233,7 +233,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 }
                 else {
                     if ((!!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold === true) && dataItem.WF_STG_CD !== 'Cancelled') return 'CanHold';
-                    else return 'NoHold';
+                        else return 'NoHold';
                 }
             }
             $scope.holdItems = {
