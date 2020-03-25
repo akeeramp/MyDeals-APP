@@ -66,9 +66,9 @@ namespace Intel.MyDeals.BusinessLogic
             records = _vistexServiceDataLib.GetVistexDataOutBound(packetType);
             if(records.Count == 0)
             {
+                responseObj.BatchName = "PRODUCT_VERTICAL";
                 responseObj.BatchId = "0";
                 responseObj.BatchMessage = "No Vertical to be Uploaded";
-                responseObj.BatchName = "Product Vertical";
             }
             else
             {
@@ -82,7 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
-
+                responseObj.BatchName = "PRODUCT_VERTICAL";
                 //UpDate Status
                 SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");
 
@@ -104,14 +104,21 @@ namespace Intel.MyDeals.BusinessLogic
         public VistexDFDataResponseObject GetVistexStageData(string runMode) //VTX_OBJ: CUSTOMER, PRODUCTS
         {
             VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
+            VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
             dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
-
-            string jsonData = dataRecord.JsonData;
-
-            VistexDFDataResponseObject responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString());
-
-            //UpDate Status
-            UpdateVistexDFStageData(responseObj);
+            if (dataRecord.BatchId <= 0)
+            {
+                responseObj.BatchName = runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD";
+                responseObj.BatchId = "0";
+                responseObj.BatchMessage = "No data to be Uploaded";                
+            }
+            else
+            {
+                string jsonData = dataRecord.JsonData;
+                responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString());
+                //UpDate Status
+                UpdateVistexDFStageData(responseObj);
+            }           
 
             return responseObj;
         }
@@ -135,8 +142,19 @@ namespace Intel.MyDeals.BusinessLogic
                 //API Type                
                 responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 //Status of the Call
-                responseObj.BatchStatus = visResponse.Status == "S" ? "PROCESSED" : "FAILED";
-            }           
+                responseObj.BatchStatus = visResponse.Status == "S" ? "PROCESSED" : visResponse.Status == "E" ? "ERROR" : "FAILED";
+            }
+            else
+            {
+                responseObj.RunMode = runMode;
+                //Batch ID
+                responseObj.BatchId = BatchId;
+                //VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse);
+                responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
+                responseObj.BatchMessage = sendResponse["Message"];
+                responseObj.BatchStatus = "ERROR";
+
+            }
 
             return responseObj;
         }
@@ -208,10 +226,10 @@ namespace Intel.MyDeals.BusinessLogic
             dataStream.Close();
 
             Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-            WebResponse response = request.GetResponse(); // Get the response.
-
+                        
             try
             {
+                WebResponse response = request.GetResponse(); // Get the response.
                 responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
                 // Get the stream containing content returned by the server.  
@@ -229,13 +247,11 @@ namespace Intel.MyDeals.BusinessLogic
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-                //throw;
-            }
-            finally
-            {
-                response.Close();
-            }
+                
+                responseObjectDictionary.Add("Status", e.Message );
+                responseObjectDictionary.Add("Message", e.Message);
+                
+            }            
 
             return responseObjectDictionary;
         }

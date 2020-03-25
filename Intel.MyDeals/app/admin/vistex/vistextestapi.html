@@ -5,6 +5,7 @@
     </div>
 
 </div>
+<loading-panel id="vistexLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
 
 <div class="col-md-12" style="margin-top: 15px">
     <div class="col-md-1" style="font-size:14px; font-weight:bold">API Name: </div>
@@ -40,9 +41,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="x in vm.responseData | limitTo : vm.numberOfRecrods ">
-                            <td></td>
+                            <td title="{{x.BatchStatus}}"><i ng-if="x.BatchStatus != 'PROCESSED'" class="intelicon-information-outlined red warning"></i></td>
                             <td>{{x.BatchName}}</td>
-                            <td>{{x.BatchId}}</td>                            
+                            <td>{{x.BatchId}}</td>
                             <td>{{x.BatchStatus}}</td>
                             <td>{{x.BatchMessage}}</td>
                             <td>{{x.START_TIME}}</td>
@@ -54,58 +55,65 @@
         </div>
     </div>
 </div>
-        <div class="col-md-12" style="margin-top:10px">
-        </div>
-        <style>
-            .ss-loading-panel {
-                margin-top: 6%;
-                margin-left: 37%;
-            }
-        </style>
-        <style>
-            .reportLink {
-                font-size: 13px;
-            }
-            .filterInfo {
-                width: 450px;
-                background: rgba(0, 0, 0, 0.69);
-                border: 2px solid #8c8c8c;
-                position: fixed;
-                top: 100px;
-                height: 120px;
-                color: #fff;
-                padding: 5px;
-            }
-            .showMore {
-                padding: 3px;
-                background: #2196f3;
-                float: left;
-                margin-top: 10px;
-                cursor: pointer;
-                color: #FFF;
-            }
-            .tableHeader > thead:first-child > tr:first-child > th {
-                background: #FFFFFF;
-                border-right: 1px solid #f2f2f2;
-                border-bottom: 3px solid #2196F3;
-            }
-            .tableHeader {
-                border: 1px solid #f2f2f2;
-            }
-            .ui-tooltip {
-                /* tooltip container box */
-                white-space: pre-line;
-            }
-            .ui-tooltip-content {
-                /* tooltip content */
-                white-space: pre-line;
-            }
-            .mainBodyStyle {
-                position: absolute;
-                top: 84px;
-                bottom: 15px;
-                left: 0;
-                right: 0;
-                overflow: scroll !important;
-            }
-        </style>
+<div class="col-md-12" style="margin-top:10px">
+</div>
+<style>
+    .ss-loading-panel {
+        margin-top: 6%;
+        margin-left: 37%;
+    }
+</style>
+<style>
+    .reportLink {
+        font-size: 13px;
+    }
+
+    .filterInfo {
+        width: 450px;
+        background: rgba(0, 0, 0, 0.69);
+        border: 2px solid #8c8c8c;
+        position: fixed;
+        top: 100px;
+        height: 120px;
+        color: #fff;
+        padding: 5px;
+    }
+
+    .showMore {
+        padding: 3px;
+        background: #2196f3;
+        float: left;
+        margin-top: 10px;
+        cursor: pointer;
+        color: #FFF;
+    }
+
+    .tableHeader > thead:first-child > tr:first-child > th {
+        background: #FFFFFF;
+        border-right: 1px solid #f2f2f2;
+        border-bottom: 3px solid #2196F3;
+    }
+
+    .tableHeader {
+        border: 1px solid #f2f2f2;
+    }
+
+    .ui-tooltip {
+        /* tooltip container box */
+        white-space: pre-line;
+    }
+
+    .ui-tooltip-content {
+        /* tooltip content */
+        white-space: pre-line;
+    }
+
+    .mainBodyStyle {
+        position: absolute;
+        top: 84px;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        overflow: scroll !important;
+    }
+</style>

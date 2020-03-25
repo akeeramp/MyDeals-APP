@@ -52,6 +52,8 @@
         function callAPI(apiName, runMode) {           
             if (runMode == "V") {
                 return dataService.get(vistexApiBase + apiName + '/PROD_VERT_RULES');
+            } else if (runMode == "D") {
+                return dataService.get(vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode);
             } else {
                 return dataService.get(vistexApiBase + apiName + '/' + runMode);
             }

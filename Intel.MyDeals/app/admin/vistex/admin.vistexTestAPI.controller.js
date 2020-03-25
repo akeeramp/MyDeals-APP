@@ -57,13 +57,19 @@
             var selectedIndex = comboboxApi._prev;
             if (vm.apiSelectedCD == "") {
                 logger.warning('Please select an API to run Simulator...');
-            } else {
+            }
+            //} else if (vm.apiSelectedCD == 'D') {
+            //    logger.warning('Deal API is not ready to be Tested');
+            //}
+            else {
                 vm.callAPI(vm.apiSelectedCD);
             }
         }
 
         vm.callAPI = function (mode) {
-            
+            vm.spinnerMessageHeader = "Test your API";
+            vm.spinnerMessageDescription = "Please wait while we are running your API..";
+            vm.isBusyShowFunFact = true;
             var startTime = moment(moment.utc().toDate()).local().format('YYYY-MM-DD HH:mm:ss');
             dsaService.callAPI(vm.apiPair[vm.apiSelectedCD], vm.apiSelectedCD).then(function (response) {
                 if (response.data) {
