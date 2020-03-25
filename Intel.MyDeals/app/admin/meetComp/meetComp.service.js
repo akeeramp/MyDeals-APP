@@ -14,10 +14,20 @@
         var service = {
             getMeetCompData: getMeetCompData,
             activateDeactivateMeetComp: activateDeactivateMeetComp,
-            getMeetCompDIMData: getMeetCompDIMData
+            getMeetCompDIMData: getMeetCompDIMData,
+            validateMeetComps: validateMeetComps,
+            uploadMeetComp: uploadMeetComp,
         }
 
         return service;
+
+        function uploadMeetComp(lstMeetComps) {
+            return dataService.post(apiBaseUrl + 'UploadMeetComp', lstMeetComps);
+        }
+
+        function validateMeetComps(lstMeetComps) {
+            return dataService.post(apiBaseUrl + 'ValidateMeetComps', lstMeetComps);
+        }
 
         function getMeetCompData(data) {
             return dataService.post(apiBaseUrl + 'GetMeetCompData', data );

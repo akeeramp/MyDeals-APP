@@ -434,6 +434,79 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+
+        public Dictionary<int, string> GetValidProducts(List<string> lstProducts)
+        {
+            lstProducts.ForEach(x => x = x.Trim().ToLower());
+            lstProducts.RemoveAll(x => x == string.Empty);
+            Dictionary<int, string> dicValidProducts = new Dictionary<int, string>();
+            Procs.dbo.PR_MYDL_MEET_COMP_PRD_VLD cmd = new Procs.dbo.PR_MYDL_MEET_COMP_PRD_VLD()
+            {
+                in_prd_nm_list = new type_list(lstProducts.ToArray())
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+
+                while (rdr.Read())
+                {
+                    dicValidProducts.Add((IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID), (IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
+                } // while
+            }
+
+            return dicValidProducts;
+        }
+
+        public bool UploadMeetComp(List<MeetComp> lstMeetComp)
+        {
+            bool isProccessed = false;
+            try
+            {
+                Dictionary<int, string> dicValidProducts = GetValidProducts(lstMeetComp.Select(x => x.HIER_VAL_NM.Trim().ToLower()).ToList());
+                List<MyCustomersInformation> lstMyCustomersInformation = DataCollections.GetMyCustomers().CustomerInfo;
+                in_t_meet_comp dt = new in_t_meet_comp();
+
+                lstMeetComp.ForEach(x =>
+                {
+                    x.CUST_MBR_SID = lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
+                    x.PRD_MBR_SID = dicValidProducts.Where(y => y.Value == x.HIER_VAL_NM.Trim().ToLower()).First().Key;
+
+                    dt.AddRow(new MeetCompUpdate
+                    {
+                        COMP_BNCH = x.COMP_BNCH,
+                        IA_BNCH = x.IA_BNCH,
+                        COMP_PRC = x.MEET_COMP_PRC,
+                        COMP_SKU = x.MEET_COMP_PRD,
+                        CUST_NM_SID = x.CUST_MBR_SID,
+                        GRP_PRD_SID = x.PRD_MBR_SID.ToString(),
+                        GRP = string.Empty, //Dummy value since type not null
+                        DEAL_PRD_TYPE = string.Empty, //Dummy value since type not null
+                        PRD_CAT_NM = string.Empty, //Dummy value since type not null
+                        GRP_PRD_NM = string.Empty, //Dummy value since type not null
+                        DEAL_OBJ_SID = 0, //Dummy value since type not null
+                        MEET_COMP_UPD_FLG = 'T', //Dummy value since type not null
+                    });
+                });
+
+                Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP cmd = new Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP()
+                {
+                    USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    var_meet_comp = dt
+                };
+
+                DataAccess.ExecuteNonQuery(cmd);
+                isProccessed = true;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            };
+            return isProccessed;
+        }
+
     }
 
     public class DistinctItemComparerMeetComp : IEqualityComparer<MeetComp>

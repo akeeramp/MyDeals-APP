@@ -9,11 +9,16 @@ BulkUploadMeetCompModalController.$inject = ["$rootScope", "$location", "meetCom
 
 function BulkUploadMeetCompModalController($rootScope, $location, meetCompService, $scope, $stateParams, logger, $timeout, gridConstants, $uibModalInstance) {
     var vm = this;
+    vm.spinnerMessageHeader = "Bulk Upload Meet Comp";
+    vm.spinnerMessageDescription = "Please wait while we importing meet comp data..";
+    vm.isBusyShowFunFact = true;
+    vm.MeetComps = [];
+    vm.MeetCompValidation = null;
+
     var hasUnSavedFiles = false;
     var hasFiles = false;
     var uploadSuccessCount = 0;
     var uploadErrorCount = 0;
-    vm.ExtractedMeetComp = [];
 
     vm.fileUploadOptions = {
         async: {
@@ -43,8 +48,7 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
 
     vm.onSuccess = function (e) {
         uploadSuccessCount++;
-        vm.ExtractedMeetComp = e.response;
-        vm.MeetCompDataSource.read();
+        vm.MeetComps = e.response;
     }
 
     vm.onError = function (e) {
@@ -68,66 +72,183 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         $(".k-upload-selected").click();
     }
 
-    vm.MeetCompDataSource = new kendo.data.DataSource({
+    vm.ValidateMeetComps = function () {
+        vm.generateMeetComps();
+        if (vm.MeetComps.length > 0) {
+            vm.spinnerMessageDescription = "Please wait while validating meet comp data..";
+            meetCompService.validateMeetComps(vm.MeetComps).then(function (response) {
+                vm.MeetCompValidation = response.data;
+                vm.ValidateSheet();
+            }, function (response) {
+                logger.error("Operation failed");
+            });
+        } else
+            kendo.alert("There is no meet comp to validate!");
+    };
+
+    vm.SaveMeetComps = function () {
+        if (vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.DistinctMeetComps.length > 0) {
+            vm.spinnerMessageDescription = "Please wait while uploading meet comp data..";
+            meetCompService.uploadMeetComp(vm.MeetCompValidation.DistinctMeetComps).then(function (response) {
+                if (response.data) {
+                    logger.success("Meet comps are uploaded successfully!");
+                    vm.CloseWindow();
+                }
+                else
+                    logger.error("Unable to upload meet comps!");
+            }, function (response) {
+                logger.error("Unable to upload meet comps!");
+            });
+        } else
+            kendo.alert("There is no meet comp to save!");
+    };
+
+    kendo.spreadsheet.defineFunction("IS_VALID_PRODUCT", function (str) {
+        return !(jQuery.inArray(jQuery.trim(str).toLowerCase(), vm.MeetCompValidation.InValidProducts) > -1);
+    }).args([["str", "string"]]);
+
+    kendo.spreadsheet.defineFunction("IS_VALID_CUSTOMER", function (str) {
+        return !(jQuery.inArray(jQuery.trim(str).toLowerCase(), vm.MeetCompValidation.InValidCustomers) > -1);
+    }).args([["str", "string"]]);
+
+    vm.ValidateSheet = function () {
+        if (vm.MeetCompValidation != null) {
+            vm.MeetComps = vm.MeetCompValidation.DistinctMeetComps;
+            vm.dataSourceSpreadSheet.read();
+            vm.DeleteSpreadsheetAutoHeader();
+
+            if (vm.MeetCompValidation.HasInvalidMeetComp) {
+                var sheet = vm.spreadsheet.activeSheet();
+                sheet.range("A1:A200").validation({
+                    dataType: "custom",
+                    from: "IS_VALID_CUSTOMER(A1)",
+                    allowNulls: true,
+                    messageTemplate: "Unauthorized customer found!"
+                });
+
+                sheet.range("B1:B200").validation({
+                    dataType: "custom",
+                    from: "IS_VALID_PRODUCT(B1)",
+                    allowNulls: true,
+                    messageTemplate: "Product not found!"
+                });
+
+                var maxItemsSize = 10;
+                if (vm.MeetCompValidation.InValidCustomers.length > 0 || vm.MeetCompValidation.InValidProducts.length > 0) {
+                    var strAlertMessage = "";
+                    // Replaced with a generalized function call and restricted popup size to not flow off bottom
+                    if (vm.MeetCompValidation.InValidCustomers.length > 0)
+                        strAlertMessage += myFunction(vm.MeetCompValidation.InValidCustomers, maxItemsSize, "Invalid customers exist, please fix:");
+                    if (vm.MeetCompValidation.InValidProducts.length > 0)
+                        strAlertMessage += myFunction(vm.MeetCompValidation.InValidProducts, maxItemsSize, "Invalid products exist, please fix:");
+                    kendo.alert(jQuery.trim(strAlertMessage));
+                }
+            } else
+                kendo.alert("<b>All meet comps are valid</b></br>");
+        }
+    }
+
+    vm.generateMeetComps = function () {
+        var sheet = vm.spreadsheet.activeSheet();
+        vm.MeetComps = [];
+        var tempRange = sheet.range("A1:F200").values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null));
+        if (tempRange.length > 0) {
+            vm.spinnerMessageDescription = "Please wait while reading meet comp data..";
+            for (var i = 0; i < tempRange.length; i++) {
+                var newMeetComp = {};
+                newMeetComp.CUST_NM = tempRange[i][0] != null ? jQuery.trim(tempRange[i][0]) : "";
+                newMeetComp.HIER_VAL_NM = tempRange[i][1] != null ? jQuery.trim(tempRange[i][1]) : "";
+                newMeetComp.MEET_COMP_PRD = tempRange[i][2] != null ? jQuery.trim(tempRange[i][2]) : "";
+                newMeetComp.MEET_COMP_PRC = tempRange[i][3] != null ? tempRange[i][3] : 0;
+                newMeetComp.IA_BNCH = tempRange[i][4] != null ? tempRange[i][4] : 0;
+                newMeetComp.COMP_BNCH = tempRange[i][5] != null ? tempRange[i][5] : 0;
+                vm.MeetComps.push(newMeetComp);
+            }
+        }
+    }
+
+    vm.sheets = [{ name: "Sheet1" }];
+    $scope.$on("kendoWidgetCreated", function (event, widget) {
+        // the event is emitted for every widget; if we have multiple
+        // widgets in this controller, we need to check that the event
+        // is for the one we're interested in.
+        if (widget === vm.spreadsheet) {
+            var sheets = vm.spreadsheet.sheets();
+            vm.spreadsheet.activeSheet(sheets[0]);
+            var sheet = vm.spreadsheet.activeSheet();
+            sheet.setDataSource(vm.dataSourceSpreadSheet, ["CUST_NM", "HIER_VAL_NM", "MEET_COMP_PRD", "MEET_COMP_PRC", "IA_BNCH", "COMP_BNCH"]);
+            sheet.columnWidth(0, 160);
+            sheet.columnWidth(1, 160);
+            sheet.columnWidth(2, 160);
+            for (var i = 6; i < 50; i++)
+                sheet.hideColumn(i);
+            vm.DeleteSpreadsheetAutoHeader();
+        }
+    });
+
+    vm.DeleteSpreadsheetAutoHeader = function () {
+        var sheet = vm.spreadsheet.activeSheet();
+        sheet.deleteRow(0);
+        sheet.range("A1:C200").color("black");
+        sheet.range("A1:C200").textAlign("left");
+        sheet.range("D1:F200").textAlign("right");
+        sheet.range("D1:F200").format("$#,##0.00");
+        sheet.range("D1:F200").validation({
+            dataType: "custom",
+            from: "REGEXP_MATCH_MONEY(D1)",
+            allowNulls: true,
+            type: "reject",
+            titleTemplate: "Invalid Price",
+            messageTemplate: "Format of the price is invalid. This should be greater than zero."
+        });
+        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
+        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
+        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[4]).find("div").html("Meet Comp Sku");
+        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[6]).find("div").html("Meet Comp Price");
+        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
+        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
+
+        var i;
+        if (vm.MeetComps.length > 198) {
+            for (i = 198; i <= vm.MeetComps.length; i++) {
+                sheet.range("A" + i).value(vm.MeetComps[i - 1].CUST_NM);
+                sheet.range("B" + i).value(vm.MeetComps[i - 1].HIER_VAL_NM);
+                sheet.range("C" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRD);
+                sheet.range("D" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRC);
+                sheet.range("E" + i).value(vm.MeetComps[i - 1].IA_BNCH);
+                sheet.range("F" + i).value(vm.MeetComps[i - 1].COMP_BNCH);
+            }
+        }
+    }
+
+    kendo.spreadsheet.defineFunction("REGEXP_MATCH_MONEY", function (str) {
+        return $.isNumeric(str) && parseFloat(str) > 0;
+    }).args([["str", "string"]]);
+
+    vm.dataSourceSpreadSheet = new kendo.data.DataSource({
         transport: {
             read: function (e) {
-                e.success(vm.ExtractedMeetComp);
-            }
-        },
-        pageSize: 25,
-        schema: {
-            model: {
-                fields: {
-                    CUST_NM: { editable: true, nullable: false },
-                    HIER_VAL_NM: { editable: true, nullable: false },
-                    MEET_COMP_PRD: { editable: true, nullable: false },
-                    MEET_COMP_PRC: { editable: true, nullable: false },
-                    IA_BNCH: { editable: true, nullable: false },
-                    COMP_BNCH: { editable: true, nullable: false }
-                }
+                e.success(vm.MeetComps);
             }
         }
     });
 
-    vm.MeetCompOptions = {
-        dataSource: vm.MeetCompDataSource,
-        filterable: true,
-        sortable: true,
-        selectable: true,
-        resizable: true,
-        columnMenu: true,
-        sort: function (e) { gridUtils.cancelChanges(e); },
-        filter: function (e) { gridUtils.cancelChanges(e); },
-        toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(true),
-        editable: { mode: "inline", confirmation: false },
-        pageable: {
-            refresh: true
-        },
-        save: function (e) {
-
-        },
-        edit: function (e) {
-            var commandCell = e.container.find("td:first");
-            commandCell.html('<a class="k-grid-update" href="#"><span title="Save" class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span title="Cancel" class="k-icon k-i-cancel"></span></a>');
-        },
-        columns: [
-            {
-                command: [
-                    { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>" },
-                ],
-                title: " ",
-                width: "6%"
-            },
-            { field: "CUST_NM", title: "Customer", filterable: { multi: true, search: true } },
-            { field: "HIER_VAL_NM", title: "Product", filterable: { multi: true, search: true } },
-            { field: "MEET_COMP_PRD", title: "Meet Comp SKU", filterable: { multi: true, search: true }, groupable: false },
-            { field: "MEET_COMP_PRC", title: "Meet Comp Price", format: "{0:c}", groupable: false },
-            { field: "IA_BNCH", title: "IA Bench", groupable: false },
-            { field: "COMP_BNCH", title: "Comp Bench", groupable: false },
-        ]
-    };
-
-    vm.ok = function () {
+    vm.CloseWindow = function () {
         $uibModalInstance.close();
     };
+
+    function myFunction(itemsList, maxItemsSize, itemsMessage) {
+        var retString = "";
+        if (itemsList.length > 0) {
+            var truncatedMatchedItems = itemsList.slice(0, maxItemsSize).map(function (data) { return " " + data });
+            retString += "</br></br>";
+            if (truncatedMatchedItems.length < itemsList.length) {
+                retString += "<b>" + itemsMessage + " (top " + maxItemsSize + " of " + itemsList.length + " items)</b></br>" + $.unique(truncatedMatchedItems).join("</br>");
+                retString += "<br>...<br>";
+            } else {
+                retString += "<b>" + itemsMessage + "</b></br>" + $.unique(itemsList).join("</br>");
+            }
+        }
+        return retString;
+    }
 }

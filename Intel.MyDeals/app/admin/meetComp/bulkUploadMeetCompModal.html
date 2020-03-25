@@ -1,13 +1,14 @@
 ﻿<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+    <loading-panel id="meetCompUploadLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
     <div class="modal-content" id="meetCompModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
-            <i id="btnClose" class="intelicon-close" ng-click="vm.ok()" title="Close this window"></i>
+            <i id="btnClose" class="intelicon-close" ng-click="vm.CloseWindow()" title="Close this window"></i>
             <h3 id="modalTitle">Bulk Upload - Meet Comp</h3>
         </div>
         <div id="modalBodyDiv" class="modal-body">
-            <div id="extractMeetComp" ng-if="vm.ExtractedMeetComp.length <= 0">
+            <div id="extractMeetComp" ng-if="vm.MeetComps.length <= 0">
                 <div class="col-md-11 notes">
-                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate entries will be ignored. Your attachment will upload after clicking the "Extract Meet Comp" button.</span><br /><br />
+                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate entries will be ignored. Unauthorized customers will not be allowed. Your attachment will upload after clicking the "Extract Meet Comp" button.</span><br /><br />
                 </div>
                 <div class="form-group row">
                     <div class="col-md-11">
@@ -29,30 +30,249 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="vm.ExtractedMeetComp.length > 0">
-                <div id="gridMeetCompUpload" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.MeetCompOptions">
-                </div>
+            <div ng-if="vm.MeetComps.length > 0">
+                <kendo-spreadsheet id="spreadsheetMeetComp" style="width: 718px; height: 270px; float:left;" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets"></kendo-spreadsheet>
             </div>
         </div>
-        <div class="modal-footer" ng-if="vm.ExtractedMeetComp.length > 0">
+        <div class="modal-footer" ng-if="vm.MeetComps.length > 0">
             <div class="form-group row action_btns">
-                <div class="col-md-10">
-                    <button class="btn btn-primary" style="margin-left: 15px">Validate Meet Comp</button>
-                    <button class="btn btn-primary" style="margin-left: 15px">Submit Meet Comp</button>
-                    <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                <div class="col-md-12">
+                    <button ng-click="vm.ValidateMeetComps()" class="btn btn-primary" style="margin-left: 15px">Validate Imported Meet Comp Data</button>
+                    <button class="btn btn-primary" ng-click="vm.SaveMeetComps()" ng-disabled="!(vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.DistinctMeetComps.length > 0)" style="margin-left: 15px">Save Imported Data</button>
+                    <button ng-click="vm.CloseWindow()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
 <style>
-    #gridMeetCompUpload {
-        height: 395px !important;
+    .ss-loading-panel {
+        margin-top: 6%;
+        margin-left: 37%;
     }
 
-        #gridMeetCompUpload .k-grid-content {
-            height: 245px !important;
+    #spreadsheetMeetComp {
+        border: none;
+    }
+
+        #spreadsheetMeetComp .k-dirty-cell {
+            border: none !important;
+            color: red !important;
         }
+
+        #spreadsheetMeetComp .k-spreadsheet-formula-bar, #spreadsheetMeetComp .k-spreadsheet-name-editor {
+            display: none !important;
+        }
+
+
+    .clrGreen {
+        color: #2196f3 !important;
+    }
+
+    .clrRed {
+        color: #ff5722 !important;
+    }
+
+    .btnYellow {
+        color: #F3D54E !important;
+    }
+    /**/
+    .k-grid td, .k-grid td div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .toggle-accept {
+        width: 75% !important;
+    }
+
+    .k-grid td {
+        vertical-align: top;
+        padding-top: 3px;
+        height: 25px !important;
+    }
+
+    div.k-spreadsheet-formula-bar,
+    .k-spreadsheet-top-corner, .k-spreadsheet-row-header {
+        display: block !important;
+    }
+
+    .k-spreadsheet-cell-context-menu li:nth-child(5), .k-spreadsheet-cell-context-menu li:nth-child(4) {
+        display: none;
+    }
+
+    /*.k-spreadsheet-action-bar {
+        display: none !important;
+    }*/
+
+    /*.k-spreadsheet-fixed-container {
+        margin-left: -33px;
+    }*/
+
+    .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
+        background-color: #ffffff !important;
+    }
+
+        #secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+            font-size: 12px;
+            border-bottom: solid #dedede 2px;
+        }
+
+    .k-grid .k-icon {
+        color: #3343a4 !important;
+        opacity: 1;
+    }
+
+    .k-grid .k-alt {
+        background-color: rgba(241, 241, 241, 0.17) !important;
+    }
+
+    .dealTools .md-icon {
+        padding: 4px 0 0 5px;
+    }
+
+    .true {
+        background-color: rgb(196, 214, 0) !important;
+    }
+
+    .isRequired:before {
+        content: "*";
+    }
+
+    .dealTools .md-icon i {
+        color: #00AEEF !important;
+    }
+
+        .dealTools .md-icon i:hover {
+            color: #003C71 !important;
+        }
+
+    .dealTools .md-icon-disabled {
+        padding: 4px 2px 0 1px;
+    }
+
+        .dealTools .md-icon-disabled i {
+            color: #00AEEF;
+        }
+
+    .dealTools {
+        /*margin-left: -5px !important;*/
+    }
+
+    .dealTools {
+        line-height: 1.8em;
+        height: 100% !important;
+        width: 100%;
+    }
+
+        .dealTools .gridStatusMarker {
+            font-family: arial;
+        }
+
+        .dealTools a {
+            text-decoration: none;
+        }
+
+        .dealTools i:hover {
+            color: #003C71;
+        }
+
+    .gridStatusMarker {
+        width: 16px;
+        color: #000000;
+        background-color: #cccccc;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 4px 2px 4px 7px;
+        margin-left: -10px;
+        margin-right: 5px;
+    }
+
+        .gridStatusMarker.Working {
+            color: #000000;
+            background-color: #FFA300;
+        }
+
+        .gridStatusMarker.Active {
+            color: #000000;
+            background-color: #C4D600;
+        }
+
+        .gridStatusMarker.Cancelled {
+            color: #000000;
+            background-color: #cccccc;
+        }
+
+    .dealTools .md-icon {
+        padding: 4px 0 0 5px;
+    }
+
+    .k-tabstrip-wrapper, .k-tabstrip-bottom, .k-spreadsheet-sheets-bar-add {
+        display: none;
+    }
+
+    .k-button {
+        color: #fff;
+        background-color: #0071c5;
+        border-color: #0071c5;
+        box-shadow: none;
+    }
+
+        .k-button:hover {
+            background-color: #00aeef;
+            border-color: #00aeef;
+            color: #fff;
+            box-shadow: none;
+        }
+
+    .tmpltItem {
+        width: 100%;
+    }
+
+    .tmpltIcn {
+        width: 35px;
+    }
+
+        .tmpltIcn i {
+            font-size: 26px;
+        }
+
+    .tmpltContract {
+    }
+
+    .tmpltRole {
+        font-size: 12px;
+    }
+
+    .tmpltPrimary {
+        font-size: 14px;
+        line-height: 1.1em;
+    }
+
+    .tmpltSecondary {
+        font-size: 12px;
+        line-height: 1.1em;
+        opacity: 0.6;
+    }
+
+    .toggle {
+        width: 100% !important;
+    }
+
+    .action_btns {
+        margin-bottom: 20px;
+    }
+
+    .abValue {
+        max-width: 58%;
+    }
+
+    /* Next CSS line pads the expand arrow down a bit */
+    .k-i-expand {
+        padding-top: 15px
+    }
+
 
     #meetCompModal .modal-footer {
         position: fixed;
