@@ -1657,6 +1657,31 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void PastEndDateExtendOnly(params object[] args)
+        {
+            // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement endDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            DateTime newEndDate = DateTime.Parse(endDate.AtrbValue.ToString());
+            DateTime originalEndDate = DateTime.Parse(endDate.OrigAtrbValue.ToString());
+            DateTime today = DateTime.Today;
+            // DateTime.Compare, <0 If date1 is earlier than date2, 0 If date1 is the same as date2, > 0 If date1 is later than date2
+            if (DateTime.Compare(originalEndDate, today) < 0) // If original end is earlier then today, it was in past, not changed to past
+            {
+                if (endDate.HasValueChanged)
+                {
+                    if (DateTime.Compare(newEndDate, originalEndDate) < 0) // If New end is earlier then Original, wrong way move
+                    {
+                        endDate.AtrbValue = endDate.OrigAtrbValue;
+                        endDate.State = OpDataElementState.Unchanged;
+                        endDate.AddMessage("A Past End Date can only be extended forward in time from " + originalEndDate.ToString("MM/dd/yyyy") + ".  Please adjust the End Date to after that date or the System will reset this value back to the Original End Date.");
+                    }
+                }
+            }
+        }
+
         public static void VolTierMdfVolumeRequired(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

@@ -365,6 +365,14 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="End Date in Past can only Extend",
+                    ActionRule = MyDcActions.PastEndDateExtendOnly,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_DT) && !de.IsDateInPast()).Any()
+                },
                 //new MyOpRule
                 //{
                 //    Title="Make sure End Date is later than Credit Date",
