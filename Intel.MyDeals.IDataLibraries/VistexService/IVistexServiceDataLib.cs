@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -22,6 +23,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
 
+        CredentialCache GetVistexCredentials(string url);
 
         // Test items below
         string GetMaxGroupId();

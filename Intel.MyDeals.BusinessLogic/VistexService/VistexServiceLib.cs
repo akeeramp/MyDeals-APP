@@ -33,7 +33,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         // Start actual functions here
 
-        public VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode) //TC-DEALS
+        public VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode) //VTX_OBJ: DEALS
         {
             List<VistexQueueObject> dataRecords = new List<VistexQueueObject>();
             dataRecords = _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
@@ -59,7 +59,7 @@ namespace Intel.MyDeals.BusinessLogic
             //return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
-        public VistexDFDataResponseObject GetVistexDataOutBound(string packetType)
+        public VistexDFDataResponseObject GetVistexDataOutBound(string packetType) //VTX_OBJ: VERTICALS
         {
             List<VistexQueueObject> records = new List<VistexQueueObject>();            
             VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
@@ -91,17 +91,17 @@ namespace Intel.MyDeals.BusinessLogic
             return responseObj;            
         }
 
-        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus)
+        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus) //VTX_OBJ: VERTICALS
         {
             _vistexServiceDataLib.SetVistexDealOutBoundStage(btchId, rqstStatus);
         }
 
         public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
-        {            
+        {
             return _vistexServiceDataLib.GetVistexDFStageData(runMode);
         }
 
-        public VistexDFDataResponseObject GetVistexStageData(string runMode) //TC-CUSTOMER, PRODUCTS
+        public VistexDFDataResponseObject GetVistexStageData(string runMode) //VTX_OBJ: CUSTOMER, PRODUCTS
         {
             VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
             dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
@@ -117,7 +117,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId) //TC-CUSTOMER, PRODUCTS/DEALS
+        public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
         {
             // Step 2: Post Data to SAP PO API
             Dictionary<string, string> sendResponse = new Dictionary<string, string>();
@@ -140,7 +140,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             return responseObj;
         }
-        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj) //TC-CUSTOMER
+        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj) //VTX_OBJ: CUSTOMER
         {
             _vistexServiceDataLib.UpdateVistexDFStageData(responseObj);
         }
@@ -163,18 +163,23 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         //MyDeals -> SAP PO push
-        private static CredentialCache GetCredentials(string url) //TC-COSTOMER
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-            CredentialCache credentialCache = new CredentialCache();
-            //TODO: Replace with GetEnvConfigs()
-            string vistexUID = "XI_MYDEALS";
-            string vistexPWD = "03924400H0F5xF42140j2551632o36239137w22u223219600F041I09v01302d5Z8k52p260R0260301S09302322302i40e7v7sk1S191";
-            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(vistexUID,
-                StringEncrypter.StringDecrypt(vistexPWD, "Vistex_Password")));
-            return credentialCache;
-        }
-        public static Dictionary<string, string> PublishToSapPo(string jsonData, string mode) //TC-CUSTOMER
+        //private static CredentialCache GetCredentials(string url) //TC-COSTOMER
+        //{
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+        //    CredentialCache credentialCache = new CredentialCache();
+        //    //TODO: Replace with GetEnvConfigs()
+        //    string vistexUID = "XI_MYDEALS";
+        //    string vistexPWD = "03924400H0F5xF42140j2551632o36239137w22u223219600F041I09v01302d5Z8k52p260R0260301S09302322302i40e7v7sk1S191";
+
+        //    credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
+        //        StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));
+        //    return credentialCache;
+
+        //    credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(vistexUID,
+        //        StringEncrypter.StringDecrypt(vistexPWD, "Vistex_Password")));
+        //    return credentialCache;
+        //}
+        public Dictionary<string, string> PublishToSapPo(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
             string url = "";
@@ -185,7 +190,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
+            request.Credentials = _vistexServiceDataLib.GetVistexCredentials(url);
             // Set the Method property of the request to POST.  
             request.Method = "POST";
 

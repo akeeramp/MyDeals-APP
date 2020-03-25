@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Intel.MyDeals.VistexService
@@ -74,15 +73,6 @@ namespace Intel.MyDeals.VistexService
                     // Not implemented yet
                     break;
                 case JobMode.TestPipelines:
-                    //await SendDataToSapPo();
-                    bool succeeded = false;
-                    while (!succeeded)
-                    {
-                        succeeded = await SendVerticalsToSapPo();
-                        System.Threading.Thread.Sleep(5000);
-                    }
-
-                    //await GetMaxGroupId(); // Offband test
                     Console.WriteLine("Starting: Testing Connection to Vistex SAP PO...");
                     //Console.Clear();
                     //Dictionary<string, string> myResponse = VistexHttpService.TestVistexConnection();

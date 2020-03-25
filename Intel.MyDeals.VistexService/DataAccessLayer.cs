@@ -19,7 +19,8 @@ namespace Intel.MyDeals.VistexService
     {
         private static string vistexAPIbaseUrl = GetAppSetting("MyDealsService");
         private static string vistexController = "/api/VistexService/";
-        //Connection Master - > Can be moved to App.Config
+
+        #region Common Settings
         public static Dictionary<string, string> conDict = new Dictionary<string, string>()
         {
             {"D", "https://sappodev.intel.com:8215/RESTAdapter/MyDeals"},
@@ -46,8 +47,6 @@ namespace Intel.MyDeals.VistexService
             }
         }
 
-        #region Common Settings
-
         public static string GetAppSetting(string appSettingName)
         {
             if (String.IsNullOrEmpty(ConfigurationManager.AppSettings[appSettingName]))
@@ -70,39 +69,37 @@ namespace Intel.MyDeals.VistexService
         #endregion
 
 
-
-
         #region MyDeals Data Fetch Calls
-        public static async Task<List<VistexDealOutBound>> GetVistexDealOutBoundData()
-        {
-            List<VistexDealOutBound> records = new List<VistexDealOutBound>();
-            var xmlRecords = string.Empty;
-            try
-            {
-                //JmsQCommon.Log("GetPricingRecordsXml");
+        //public static async Task<List<VistexDealOutBound>> GetVistexDealOutBoundData()
+        //{
+        //    List<VistexDealOutBound> records = new List<VistexDealOutBound>();
+        //    var xmlRecords = string.Empty;
+        //    try
+        //    {
+        //        //JmsQCommon.Log("GetPricingRecordsXml");
 
-                var dealsRecordsXmlUrl = vistexController + "GetVistexDealOutBoundData";
-                HttpResponseMessage response = await MyDealsClient.GetAsync(dealsRecordsXmlUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    xmlRecords = await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
-                return records = JsonConvert.DeserializeObject<List<VistexDealOutBound>>(xmlRecords);
-            }
-            catch (Exception ex)
-            {
-                //JmsQCommon.HandleException(ex);
-            }
+        //        var dealsRecordsXmlUrl = vistexController + "GetVistexDealOutBoundData";
+        //        HttpResponseMessage response = await MyDealsClient.GetAsync(dealsRecordsXmlUrl);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            xmlRecords = await response.Content.ReadAsStringAsync();
+        //        }
+        //        else
+        //        {
+        //            //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+        //        }
+        //        return records = JsonConvert.DeserializeObject<List<VistexDealOutBound>>(xmlRecords);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //JmsQCommon.HandleException(ex);
+        //    }
 
-            return records;
-        }
+        //    return records;
+        //}
 
 
-        public static async Task<VistexDFDataResponseObject> GetVistexDataOutBound(string dataType, string runMode) // TC-DEALS
+        public static async Task<VistexDFDataResponseObject> GetVistexDataOutBound(string dataType, string runMode) //VTX_OBJ: DEALS
         {
             List<VistexDFDataResponseObject> records = new List<VistexDFDataResponseObject>();
             var xmlRecords = string.Empty;
@@ -134,7 +131,7 @@ namespace Intel.MyDeals.VistexService
         }
 
 
-        public static async Task<VistexDFDataResponseObject> GetVistexVerticalStageData(string runMode)//TC-Vertical
+        public static async Task<VistexDFDataResponseObject> GetVistexVerticalStageData(string runMode) //VTX_OBJ: Vertical
         {
             VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;
@@ -158,25 +155,26 @@ namespace Intel.MyDeals.VistexService
         }
 
 
-        public static async Task SetVistexDealOutBoundStage(string btchId, string rqstStatus)
-        {
-            try
-            {
-                var dealsStatusUpdateUrl = vistexController + "SetVistexDealOutBoundStage/" + btchId + "/" + rqstStatus;
+        //public static async Task SetVistexDealOutBoundStage(string btchId, string rqstStatus) 
+        //{
+        //    try
+        //    {
+        //        var dealsStatusUpdateUrl = vistexController + "SetVistexDealOutBoundStage/" + btchId + "/" + rqstStatus;
                                 
-                HttpResponseMessage response = await MyDealsClient.GetAsync(dealsStatusUpdateUrl);
-                if (!response.IsSuccessStatusCode)
-                {
-                    //JmsQCommon.HandleException(new Exception("UpdateRecordStagesAndNotifyErrors - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
-            }
-            catch (Exception ex)
-            {
-                //JmsQCommon.HandleException(ex);
-            }
-        }
+        //        HttpResponseMessage response = await MyDealsClient.GetAsync(dealsStatusUpdateUrl);
+        //        if (!response.IsSuccessStatusCode)
+        //        {
+        //            //JmsQCommon.HandleException(new Exception("UpdateRecordStagesAndNotifyErrors - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //JmsQCommon.HandleException(ex);
+        //    }
+        //}
         //GetVistexDFStageData
-        public static async Task<List<VistexDFDataResponseObject>> GetVistexDFStageData(string runMode)//TC-CUSTOMER, PRODUCTS
+
+        public static async Task<List<VistexDFDataResponseObject>> GetVistexDFStageData(string runMode) //VTX_OBJ: CUSTOMER, PRODUCTS
         {
             List<VistexDFDataResponseObject> retRecord = new List<VistexDFDataResponseObject>();
             var xmlRecords = string.Empty;
@@ -202,364 +200,365 @@ namespace Intel.MyDeals.VistexService
             return retRecord;
         }
 
-        public static async Task UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
-        {
-            try
-            {
-                var updatehVistexDFData = vistexController + "UpdateVistexDFStageData";
+        //public static async Task UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        //{
+        //    try
+        //    {
+        //        var updatehVistexDFData = vistexController + "UpdateVistexDFStageData";
 
-                HttpResponseMessage response = await MyDealsClient.PostAsJsonAsync(updatehVistexDFData, responseObj);
-                if (!response.IsSuccessStatusCode)
-                {
-                    //JmsQCommon.HandleException(new Exception("UpdateRecordStagesAndNotifyErrors - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
-            }
-            catch (Exception ex)
-            {
-                //JmsQCommon.HandleException(ex);
-            }
-        }
+        //        HttpResponseMessage response = await MyDealsClient.PostAsJsonAsync(updatehVistexDFData, responseObj);
+        //        if (!response.IsSuccessStatusCode)
+        //        {
+        //            //JmsQCommon.HandleException(new Exception("UpdateRecordStagesAndNotifyErrors - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //JmsQCommon.HandleException(ex);
+        //    }
+        //}
         #endregion MyDeals Data Fetch Calls
 
         #region Outbound API Calls (In MyDeals Datalibraries)
-        public static async Task<Dictionary<string, string>> PublishDealsToSapPo()
-        {
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-            var xmlRecords = string.Empty;
-            try
-            {
-                //JmsQCommon.Log("GetPricingRecordsXml");
-                string jsonData = "{" +
-                                "\"Mydeals\": {" +
-                                "\"Cust_no\": \"9666\"," +
-                                "\"Deal_id\": \"54556\"," +
-                                "\"END_DT\": \"5556\"," +
-                                "\"GEO_COMBINED\": \"556\"," +
-                                "\"MRKT_SEG\": \"5556\"," +
-                                "\"OBJ_SET_TYPE_CD\": \"859\"," +
-                                "\"PAYOUT_BASED_ON\": \"88\"," +
-                                "\"PRODUCT_FILTER\": \"8559\"," +
-                                "\"START_DT\": \"899\"," +
-                                "\"VOLUME\": \"899\"" +
-                                "}" +
-                                "}";
+        //public static async Task<Dictionary<string, string>> PublishDealsToSapPo()
+        //{
+        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+        //    var xmlRecords = string.Empty;
+        //    try
+        //    {
+        //        //JmsQCommon.Log("GetPricingRecordsXml");
+        //        string jsonData = "{" +
+        //                        "\"Mydeals\": {" +
+        //                        "\"Cust_no\": \"9666\"," +
+        //                        "\"Deal_id\": \"54556\"," +
+        //                        "\"END_DT\": \"5556\"," +
+        //                        "\"GEO_COMBINED\": \"556\"," +
+        //                        "\"MRKT_SEG\": \"5556\"," +
+        //                        "\"OBJ_SET_TYPE_CD\": \"859\"," +
+        //                        "\"PAYOUT_BASED_ON\": \"88\"," +
+        //                        "\"PRODUCT_FILTER\": \"8559\"," +
+        //                        "\"START_DT\": \"899\"," +
+        //                        "\"VOLUME\": \"899\"" +
+        //                        "}" +
+        //                        "}";
 
-                var publishSapPoUrl = vistexController + "PublishDealsToSapPo";
-                //HttpResponseMessage response = await MyDealsClient.GetAsync(publishSapPoUrl);
-                HttpResponseMessage response = await MyDealsClient.PostAsJsonAsync(publishSapPoUrl, jsonData);
-                if (response.IsSuccessStatusCode)
-                {
-                    xmlRecords = await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
-                return responseObjectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(xmlRecords);
-            }
-            catch (Exception ex)
-            {
-                //JmsQCommon.HandleException(ex);
-            }
+        //        var publishSapPoUrl = vistexController + "PublishDealsToSapPo";
+        //        //HttpResponseMessage response = await MyDealsClient.GetAsync(publishSapPoUrl);
+        //        HttpResponseMessage response = await MyDealsClient.PostAsJsonAsync(publishSapPoUrl, jsonData);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            xmlRecords = await response.Content.ReadAsStringAsync();
+        //        }
+        //        else
+        //        {
+        //            //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
+        //        }
+        //        return responseObjectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(xmlRecords);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //JmsQCommon.HandleException(ex);
+        //    }
 
-            return responseObjectDictionary;
-        }
+        //    return responseObjectDictionary;
+        //}
+
         #endregion Outbound API Calls (In MyDeals Datalibraries)
 
         //Bring this in later to push SAP connection up into layers
         #region Outbound API Calls Local (To Be Removed once POST is fixed)
-        private static CredentialCache GetCredentials(string url)
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-            CredentialCache credentialCache = new CredentialCache();
-            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
-                StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));
-            return credentialCache;
-        }
+        //private static CredentialCache GetCredentials(string url)
+        //{
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+        //    CredentialCache credentialCache = new CredentialCache();
+        //    credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
+        //        StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));
+        //    return credentialCache;
+        //}
 
         //TODO: Remove after Testing -- Saurav
-        public static Dictionary<string, string> PublishDealsToSapPo_Local(string jsonData)
-        {
-            string url = @"https://sappodev.intel.com:8215/RESTAdapter/MyDeals";
+        //public static Dictionary<string, string> PublishDealsToSapPo_Local(string jsonData)
+        //{
+        //    string url = @"https://sappodev.intel.com:8215/RESTAdapter/MyDeals";
 
-            // Create a request using a URL that can receive a post.   
-            WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
-            // Set the Method property of the request to POST.  
-            request.Method = "POST";
+        //    // Create a request using a URL that can receive a post.   
+        //    WebRequest request = WebRequest.Create(url);
+        //    request.Credentials = GetCredentials(url);
+        //    // Set the Method property of the request to POST.  
+        //    request.Method = "POST";
 
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+        //    // Create POST data and convert it to a byte array.  
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
 
-            // Set the ContentType property of the WebRequest.  
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
-            request.ContentLength = byteArray.Length;
+        //    // Set the ContentType property of the WebRequest.  
+        //    request.ContentType = "application/x-www-form-urlencoded";
+        //    // Set the ContentLength property of the WebRequest.  
+        //    request.ContentLength = byteArray.Length;
 
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
+        //    // Get the request stream, write data, then close the stream
+        //    Stream dataStream = request.GetRequestStream();
+        //    dataStream.Write(byteArray, 0, byteArray.Length);
+        //    dataStream.Close();
 
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
 
-            try
-            {
-                WebResponse response = request.GetResponse(); // Get the response.  
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+        //    try
+        //    {
+        //        WebResponse response = request.GetResponse(); // Get the response.  
+        //        responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
-                {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                }
+        //        // Get the stream containing content returned by the server.  
+        //        // The using block ensures the stream is automatically closed.
+        //        using (dataStream = response.GetResponseStream())
+        //        {
+        //            // Open the stream using a StreamReader for easy access.  
+        //            StreamReader reader = new StreamReader(dataStream);
+        //            // Read the content.  
+        //            string responseFromServer = reader.ReadToEnd();
+        //            // Display the content.  
+        //            responseObjectDictionary["Data"] = responseFromServer;
+        //        }
 
-                response.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-                //throw;
-            }
+        //        response.Close();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        responseObjectDictionary["Status"] = e.Message;
+        //        //throw;
+        //    }
 
-            return responseObjectDictionary;
-        }
-
-        //TODO: Remove after Testing -- Saurav
-        public static Dictionary<string, string> PublishCustomersToSapPo_Local(string jsonData)
-        {
-            string url = @"";
-
-            // Create a request using a URL that can receive a post.   
-            WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
-            // Set the Method property of the request to POST.  
-            request.Method = "POST";
-
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
-
-            // Set the ContentType property of the WebRequest.  
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
-            request.ContentLength = byteArray.Length;
-
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-
-            try
-            {
-                WebResponse response = request.GetResponse(); // Get the response.  
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
-
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
-                {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                }
-
-                response.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-                //throw;
-            }
-
-            return responseObjectDictionary;
-        }
+        //    return responseObjectDictionary;
+        //}
 
         //TODO: Remove after Testing -- Saurav
-        public static Dictionary<string, string> PublishProductsToSapPo_Local(string jsonData)
-        {
-            string url = "";// @vistexProductConnection;
+        //public static Dictionary<string, string> PublishCustomersToSapPo_Local(string jsonData)
+        //{
+        //    string url = @"";
 
-            // Create a request using a URL that can receive a post.   
-            WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
-            // Set the Method property of the request to POST.  
-            request.Method = "POST";
+        //    // Create a request using a URL that can receive a post.   
+        //    WebRequest request = WebRequest.Create(url);
+        //    request.Credentials = GetCredentials(url);
+        //    // Set the Method property of the request to POST.  
+        //    request.Method = "POST";
 
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+        //    // Create POST data and convert it to a byte array.  
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
 
-            // Set the ContentType property of the WebRequest.  
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
-            request.ContentLength = byteArray.Length;
+        //    // Set the ContentType property of the WebRequest.  
+        //    request.ContentType = "application/x-www-form-urlencoded";
+        //    // Set the ContentLength property of the WebRequest.  
+        //    request.ContentLength = byteArray.Length;
 
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
+        //    // Get the request stream, write data, then close the stream
+        //    Stream dataStream = request.GetRequestStream();
+        //    dataStream.Write(byteArray, 0, byteArray.Length);
+        //    dataStream.Close();
 
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
 
-            try
-            {
-                WebResponse response = request.GetResponse(); // Get the response.  
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+        //    try
+        //    {
+        //        WebResponse response = request.GetResponse(); // Get the response.  
+        //        responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
-                {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                }
+        //        // Get the stream containing content returned by the server.  
+        //        // The using block ensures the stream is automatically closed.
+        //        using (dataStream = response.GetResponseStream())
+        //        {
+        //            // Open the stream using a StreamReader for easy access.  
+        //            StreamReader reader = new StreamReader(dataStream);
+        //            // Read the content.  
+        //            string responseFromServer = reader.ReadToEnd();
+        //            // Display the content.  
+        //            responseObjectDictionary["Data"] = responseFromServer;
+        //        }
 
-                response.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-                //throw;
-            }
+        //        response.Close();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        responseObjectDictionary["Status"] = e.Message;
+        //        //throw;
+        //    }
 
-            return responseObjectDictionary;
-        }
+        //    return responseObjectDictionary;
+        //}
 
         //TODO: Remove after Testing -- Saurav
-        public static Dictionary<string, string> PublishVerticalsToSapPo_Local(string jsonData)
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
-            string url = "";// @vistexProductVerticalConnection;
+        //public static Dictionary<string, string> PublishProductsToSapPo_Local(string jsonData)
+        //{
+        //    string url = "";// @vistexProductConnection;
+
+        //    // Create a request using a URL that can receive a post.   
+        //    WebRequest request = WebRequest.Create(url);
+        //    request.Credentials = GetCredentials(url);
+        //    // Set the Method property of the request to POST.  
+        //    request.Method = "POST";
+
+        //    // Create POST data and convert it to a byte array.  
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+
+        //    // Set the ContentType property of the WebRequest.  
+        //    request.ContentType = "application/x-www-form-urlencoded";
+        //    // Set the ContentLength property of the WebRequest.  
+        //    request.ContentLength = byteArray.Length;
+
+        //    // Get the request stream, write data, then close the stream
+        //    Stream dataStream = request.GetRequestStream();
+        //    dataStream.Write(byteArray, 0, byteArray.Length);
+        //    dataStream.Close();
+
+        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+        //    try
+        //    {
+        //        WebResponse response = request.GetResponse(); // Get the response.  
+        //        responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+        //        // Get the stream containing content returned by the server.  
+        //        // The using block ensures the stream is automatically closed.
+        //        using (dataStream = response.GetResponseStream())
+        //        {
+        //            // Open the stream using a StreamReader for easy access.  
+        //            StreamReader reader = new StreamReader(dataStream);
+        //            // Read the content.  
+        //            string responseFromServer = reader.ReadToEnd();
+        //            // Display the content.  
+        //            responseObjectDictionary["Data"] = responseFromServer;
+        //        }
+
+        //        response.Close();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        responseObjectDictionary["Status"] = e.Message;
+        //        //throw;
+        //    }
+
+        //    return responseObjectDictionary;
+        //}
+
+        //TODO: Remove after Testing -- Saurav
+        //public static Dictionary<string, string> PublishVerticalsToSapPo_Local(string jsonData)
+        //{
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
+        //    string url = "";// @vistexProductVerticalConnection;
             
-            // Create a request using a URL that can receive a post.   
-            WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
-            // Set the Method property of the request to POST.  
-            request.Method = "POST";
+        //    // Create a request using a URL that can receive a post.   
+        //    WebRequest request = WebRequest.Create(url);
+        //    request.Credentials = GetCredentials(url);
+        //    // Set the Method property of the request to POST.  
+        //    request.Method = "POST";
 
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+        //    // Create POST data and convert it to a byte array.  
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
 
-            // Set the ContentType property of the WebRequest.  
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
-            request.ContentLength = byteArray.Length;
+        //    // Set the ContentType property of the WebRequest.  
+        //    request.ContentType = "application/x-www-form-urlencoded";
+        //    // Set the ContentLength property of the WebRequest.  
+        //    request.ContentLength = byteArray.Length;
 
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
+        //    // Get the request stream, write data, then close the stream
+        //    Stream dataStream = request.GetRequestStream();
+        //    dataStream.Write(byteArray, 0, byteArray.Length);
+        //    dataStream.Close();
 
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-            WebResponse response = request.GetResponse(); // Get the response.
+        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+        //    WebResponse response = request.GetResponse(); // Get the response.
 
-            try
-            {                  
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+        //    try
+        //    {                  
+        //        responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
-                {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                }                
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-                //throw;
-            }
-            finally
-            {
-                response.Close();
-            }
+        //        // Get the stream containing content returned by the server.  
+        //        // The using block ensures the stream is automatically closed.
+        //        using (dataStream = response.GetResponseStream())
+        //        {
+        //            // Open the stream using a StreamReader for easy access.  
+        //            StreamReader reader = new StreamReader(dataStream);
+        //            // Read the content.  
+        //            string responseFromServer = reader.ReadToEnd();
+        //            // Display the content.  
+        //            responseObjectDictionary["Data"] = responseFromServer;
+        //        }                
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        responseObjectDictionary["Status"] = e.Message;
+        //        //throw;
+        //    }
+        //    finally
+        //    {
+        //        response.Close();
+        //    }
 
-            return responseObjectDictionary;
-        }
+        //    return responseObjectDictionary;
+        //}
 
-        //For Deal - Product - Customer - Product Vertical
-        public static Dictionary<string, string> PublishToSapPo(string jsonData, string mode)
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
-            string url = "";
+        ////For Deal - Product - Customer - Product Vertical
+        //public static Dictionary<string, string> PublishToSapPo(string jsonData, string mode)
+        //{
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
+        //    string url = "";
 
-            //URL Setting - Reading from Key Value Pair
-            url = @conDict[mode];
+        //    //URL Setting - Reading from Key Value Pair
+        //    url = @conDict[mode];
             
-            // Create a request using a URL that can receive a post.   
-            WebRequest request = WebRequest.Create(url);
-            request.Credentials = GetCredentials(url);
-            // Set the Method property of the request to POST.  
-            request.Method = "POST";
+        //    // Create a request using a URL that can receive a post.   
+        //    WebRequest request = WebRequest.Create(url);
+        //    request.Credentials = GetCredentials(url);
+        //    // Set the Method property of the request to POST.  
+        //    request.Method = "POST";
 
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+        //    // Create POST data and convert it to a byte array.  
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
 
-            // Set the ContentType property of the WebRequest.  
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
-            request.ContentLength = byteArray.Length;
+        //    // Set the ContentType property of the WebRequest.  
+        //    request.ContentType = "application/x-www-form-urlencoded";
+        //    // Set the ContentLength property of the WebRequest.  
+        //    request.ContentLength = byteArray.Length;
 
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
+        //    // Get the request stream, write data, then close the stream
+        //    Stream dataStream = request.GetRequestStream();
+        //    dataStream.Write(byteArray, 0, byteArray.Length);
+        //    dataStream.Close();
 
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-            WebResponse response = request.GetResponse(); // Get the response.
+        //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+        //    WebResponse response = request.GetResponse(); // Get the response.
 
-            try
-            {
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+        //    try
+        //    {
+        //        responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
-                {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-                //throw;
-            }
-            finally
-            {
-                response.Close();
-            }
+        //        // Get the stream containing content returned by the server.  
+        //        // The using block ensures the stream is automatically closed.
+        //        using (dataStream = response.GetResponseStream())
+        //        {
+        //            // Open the stream using a StreamReader for easy access.  
+        //            StreamReader reader = new StreamReader(dataStream);
+        //            // Read the content.  
+        //            string responseFromServer = reader.ReadToEnd();
+        //            // Display the content.  
+        //            responseObjectDictionary["Data"] = responseFromServer;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        responseObjectDictionary["Status"] = e.Message;
+        //        //throw;
+        //    }
+        //    finally
+        //    {
+        //        response.Close();
+        //    }
 
-            return responseObjectDictionary;
-        }
+        //    return responseObjectDictionary;
+        //}
         #endregion Outbound API Calls Local (To Be Removed once POST is fixed)
 
 

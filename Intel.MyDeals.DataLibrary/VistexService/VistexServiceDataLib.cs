@@ -43,7 +43,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        public List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode) //TC-DEALS
+        public List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode) //VTX_OBJ: DEALS
         {
             List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
@@ -70,7 +70,7 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
-        public List<VistexQueueObject> GetVistexDataOutBound(string packetType)
+        public List<VistexQueueObject> GetVistexDataOutBound(string packetType) //VTX_OBJ: VERTICALS
         {
             List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
@@ -98,7 +98,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus)
+        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus) //VTX_OBJ: VERTICALS
         {
             // Add type_int_dictionary here later
             OpLog.Log("Vistex - SetVistexDealOutBoundStage");
@@ -117,7 +117,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public VistexDFDataLoadObject GetVistexDFStageData(string runMode) //TC-CUSTOMERS, PRODUCTS
+        public VistexDFDataLoadObject GetVistexDFStageData(string runMode) //VTX_OBJ: CUSTOMERS, PRODUCTS
         {
             VistexDFDataLoadObject vistexData = new VistexDFDataLoadObject();
             var cmd = new Procs.dbo.PR_MYDL_VISTEX_GET_GEO_DSS_PRD_CUST
@@ -144,7 +144,7 @@ namespace Intel.MyDeals.DataLibrary
             return vistexData;
         }
         
-        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj)
+        public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj) //VTX_OBJ: CUSTOMER
         {
             // Add type_int_dictionary here later
             OpLog.Log("Vistex - SetVistexDealOutBoundStage");
@@ -272,7 +272,7 @@ namespace Intel.MyDeals.DataLibrary
 
 
         #region Private Helpers
-        private static CredentialCache GetVistexCredentials(string url)
+        public CredentialCache GetVistexCredentials(string url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
             CredentialCache credentialCache = new CredentialCache();

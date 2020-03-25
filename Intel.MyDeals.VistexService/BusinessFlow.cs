@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
-using Newtonsoft.Json;
 
 namespace Intel.MyDeals.VistexService
 {
     public partial class Program
     {
-        private static async Task SendDFDataToSapPo(string runMode) //TC-CUSTOMERS, PRODUCTS
+        private static async Task SendDFDataToSapPo(string runMode) //VTX_OBJ: CUSTOMERS, PRODUCTS
         {
             List<VistexDFDataResponseObject> dataRecord = new List<VistexDFDataResponseObject>();
             dataRecord = await DataAccessLayer.GetVistexDFStageData(runMode);
@@ -35,7 +34,7 @@ namespace Intel.MyDeals.VistexService
 
         }
 
-        private static async Task SendDealsDataToSapPo(string runMode) //TC-DEALS
+        private static async Task SendDealsDataToSapPo(string runMode) //VTX_OBJ: DEALS
         {
             VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
             dataRecord = await DataAccessLayer.GetVistexDataOutBound("VISTEX_DEALS", runMode);
@@ -51,9 +50,8 @@ namespace Intel.MyDeals.VistexService
 
         }
 
-        private static async Task<bool> SendVerticalsToSapPo()
+        private static async Task<bool> SendVerticalsToSapPo() //VTX_OBJ: VERTICALS
         {
-            // Step 1: Gather Verticals Data from MyDeals - DB call
             VistexDFDataResponseObject records = new VistexDFDataResponseObject();
             while (true)
             {
