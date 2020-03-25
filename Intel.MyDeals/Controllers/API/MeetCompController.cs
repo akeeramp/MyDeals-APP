@@ -108,7 +108,23 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("ValidateMeetComps")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public MeetCompValidation ValidateMeetComps(List<MeetComp> lstMeetComp)
+        {
+            return SafeExecutor(() => _meetCompLib.ValidateMeetComps(lstMeetComp), $"Unable to validate meet comp");
+        }
 
+        [Authorize]
+        [Route("UploadMeetComp")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public bool UploadMeetComp(List<MeetComp> lstMeetComp)
+        {
+           return SafeExecutor(() => _meetCompLib.UploadMeetComp(lstMeetComp), $"Unable to upload meet comps");
+        }
 
     }
 

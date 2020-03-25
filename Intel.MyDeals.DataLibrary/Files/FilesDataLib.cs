@@ -42,7 +42,8 @@ namespace Intel.MyDeals.DataLibrary
                     }
                 }
             }
-            return lstRtn.Distinct(new DistinctItemComparerMeetComp()).ToList();
+            IEnumerable<string> lstAllowedCustomer = DataCollections.GetMyCustomers().CustomerInfo.Select(x => x.CUST_NM);
+            return lstRtn.Distinct(new DistinctItemComparerMeetComp()).Where(x=> lstAllowedCustomer.Contains(x.CUST_NM)).ToList();
         }
 
         /// <summary>

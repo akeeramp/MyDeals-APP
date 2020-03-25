@@ -39,6 +39,36 @@ namespace Intel.MyDeals.BusinessLogic
             return _meetCompCollectorLib.GetMeetCompDIMData(CUST_MBR_SID, MODE);
         }
 
+        public MeetCompValidation ValidateMeetComps(List<MeetComp> lstMeetComp)
+        {
+            MeetCompValidation meetCompValidation = new MeetCompValidation();
+            //List<string> lstRtn = new List<string>();
+            //IEnumerable<Product> lstProductFromCache = new ProductsLib().GetProducts(true).Where(x => x.PRD_ATRB_SID == 7006 || x.PRD_ATRB_SID == 7007);
+            //lstRtn.AddRange(lstProductFromCache.Where(x => x.PRD_ATRB_SID == 7006 && lstProducts.Contains(x.PCSR_NBR.ToLower())).Select(x => x.PCSR_NBR).ToList());
+            //lstRtn.AddRange(lstProductFromCache.Where(x => x.PRD_ATRB_SID == 7007 && lstProducts.Contains(x.DEAL_PRD_NM.ToLower())).Select(x => x.DEAL_PRD_NM).ToList());
+            //return lstRtn.Distinct().ToList();
+            meetCompValidation.DistinctMeetComps = lstMeetComp.Distinct(new DistinctItemComparerMeetComp()).ToList();
+            meetCompValidation.IsEmptyCustomerAvailable = meetCompValidation.DistinctMeetComps.Where(x => x.CUST_NM.Trim() == string.Empty).Count() > 0;
+            meetCompValidation.IsEmptyMeetCompPriceAvailable = meetCompValidation.DistinctMeetComps.Where(x => x.MEET_COMP_PRC <= 0).Count() > 0;
+            meetCompValidation.IsEmptyMeetCompSkuAvailable = meetCompValidation.DistinctMeetComps.Where(x => x.MEET_COMP_PRD.Trim() == string.Empty).Count() > 0;
+            meetCompValidation.IsEmptyProductAvailable = meetCompValidation.DistinctMeetComps.Where(x => x.HIER_VAL_NM.Trim() == string.Empty).Count() > 0;
+            meetCompValidation.InValidCustomers = meetCompValidation.DistinctMeetComps.Select(x => x.CUST_NM.Trim().ToLower()).Except(DataCollections.GetMyCustomers().CustomerInfo.Select(x => x.CUST_NM.ToLower())).Select(x => x).ToList();
+            meetCompValidation.InValidProducts = meetCompValidation.DistinctMeetComps.Select(x => x.HIER_VAL_NM.Trim().ToLower()).Except(_meetCompCollectorLib.GetValidProducts(meetCompValidation.DistinctMeetComps.Select(x => x.HIER_VAL_NM).ToList()).Select(x => x.Value).ToList()).ToList();
+            meetCompValidation.HasInvalidMeetComp = meetCompValidation.InValidCustomers.Count > 0
+                || meetCompValidation.InValidProducts.Count > 0
+                || meetCompValidation.IsEmptyCustomerAvailable
+                || meetCompValidation.IsEmptyMeetCompPriceAvailable
+                || meetCompValidation.IsEmptyMeetCompSkuAvailable
+                || meetCompValidation.IsEmptyProductAvailable;
+
+            return meetCompValidation;
+        }
+
+        public bool UploadMeetComp(List<MeetComp> lstMeetComp)
+        {
+           return _meetCompCollectorLib.UploadMeetComp(lstMeetComp);
+        }
+
         /// <summary>
         /// Activate/Deactivate Meet Comp Records.
         /// </summary>
