@@ -1664,6 +1664,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement endDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            if (endDate.OrigAtrbValue.ToString() == string.Empty) return; // In initial create, this rule can be bypassed because there isn't an Original Value in DE
+
             DateTime newEndDate = DateTime.Parse(endDate.AtrbValue.ToString());
             DateTime originalEndDate = DateTime.Parse(endDate.OrigAtrbValue.ToString());
             DateTime today = DateTime.Today;
