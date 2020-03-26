@@ -87,9 +87,9 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
     };
 
     vm.SaveMeetComps = function () {
-        if (vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.DistinctMeetComps.length > 0) {
+        if (vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.ValidatedMeetComps.length > 0) {
             vm.spinnerMessageDescription = "Please wait while uploading meet comp data..";
-            meetCompService.uploadMeetComp(vm.MeetCompValidation.DistinctMeetComps).then(function (response) {
+            meetCompService.uploadMeetComp(vm.MeetCompValidation.ValidatedMeetComps).then(function (response) {
                 if (response.data) {
                     logger.success("Meet comps are uploaded successfully!");
                     vm.CloseWindow();
@@ -104,7 +104,7 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
     };
 
     kendo.spreadsheet.defineFunction("IS_VALID_PRODUCT", function (str) {
-        return !(jQuery.inArray(jQuery.trim(str).toLowerCase(), vm.MeetCompValidation.InValidProducts) > -1);
+        return !(jQuery.inArray(jQuery.trim(str).toLowerCase(), vm.MeetCompValidation.InValidProducts) > -1 || jQuery.inArray(jQuery.trim(str).toLowerCase(), vm.MeetCompValidation.ProductsRequiredBench) > -1);
     }).args([["str", "string"]]);
 
     kendo.spreadsheet.defineFunction("IS_VALID_CUSTOMER", function (str) {
@@ -113,7 +113,7 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
 
     vm.ValidateSheet = function () {
         if (vm.MeetCompValidation != null) {
-            vm.MeetComps = vm.MeetCompValidation.DistinctMeetComps;
+            vm.MeetComps = vm.MeetCompValidation.ValidatedMeetComps;
             vm.dataSourceSpreadSheet.read();
             vm.DeleteSpreadsheetAutoHeader();
 
@@ -130,19 +130,30 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
                     dataType: "custom",
                     from: "IS_VALID_PRODUCT(B1)",
                     allowNulls: true,
-                    messageTemplate: "Product not found!"
+                    messageTemplate: vm.MeetCompValidation.ProductsRequiredBench.length > 0 ? "Product not found! or IA or COMP Bench is invalid!" : "Product not found!"
                 });
 
-                var maxItemsSize = 10;
-                if (vm.MeetCompValidation.InValidCustomers.length > 0 || vm.MeetCompValidation.InValidProducts.length > 0) {
-                    var strAlertMessage = "";
-                    // Replaced with a generalized function call and restricted popup size to not flow off bottom
-                    if (vm.MeetCompValidation.InValidCustomers.length > 0)
-                        strAlertMessage += myFunction(vm.MeetCompValidation.InValidCustomers, maxItemsSize, "Invalid customers exist, please fix:");
-                    if (vm.MeetCompValidation.InValidProducts.length > 0)
-                        strAlertMessage += myFunction(vm.MeetCompValidation.InValidProducts, maxItemsSize, "Invalid products exist, please fix:");
-                    kendo.alert(jQuery.trim(strAlertMessage));
-                }
+                var maxItemsSize = 5;
+                var strAlertMessage = "";
+                // Replaced with a generalized function call and restricted popup size to not flow off bottom
+                if (vm.MeetCompValidation.IsEmptyCustomerAvailable)
+                    strAlertMessage += "</br></br>Customer name cannot be empty!, please fix.";
+                if (vm.MeetCompValidation.IsEmptyProductAvailable)
+                    strAlertMessage += "</br></br>Product name cannot be empty!, please fix.";
+                if (vm.MeetCompValidation.IsEmptyMeetCompSkuAvailable)
+                    strAlertMessage += "</br></br>Meet Comp SKU cannot be empty!, please fix.";
+                if (vm.MeetCompValidation.IsEmptyMeetCompPriceAvailable)
+                    strAlertMessage += "</br></br>Meet Comp price should be greater than zero!, please fix.";
+                if (vm.MeetCompValidation.IsInvalidIABenchAvailable)
+                    strAlertMessage += "</br></br>IA Bench should be greater than zero for server products!, please fix.";
+                if (vm.MeetCompValidation.IsInvalidCompBenchAvailable)
+                    strAlertMessage += "</br></br>Comp Bench should be greater than zero for server products!, please fix.";
+                if (vm.MeetCompValidation.InValidCustomers.length > 0)
+                    strAlertMessage += myFunction(vm.MeetCompValidation.InValidCustomers, maxItemsSize, "Invalid customers exist, please fix:");
+                if (vm.MeetCompValidation.InValidProducts.length > 0)
+                    strAlertMessage += myFunction(vm.MeetCompValidation.InValidProducts, maxItemsSize, "Invalid products exist, please fix:");
+                kendo.alert(jQuery.trim(strAlertMessage));
+
             } else
                 kendo.alert("<b>All meet comps are valid</b></br>");
         }
@@ -192,14 +203,23 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         sheet.range("A1:C200").color("black");
         sheet.range("A1:C200").textAlign("left");
         sheet.range("D1:F200").textAlign("right");
-        sheet.range("D1:F200").format("$#,##0.00");
-        sheet.range("D1:F200").validation({
+        sheet.range("D1:D200").format("$#,##0.00");
+        sheet.range("D1:D200").validation({
             dataType: "custom",
             from: "REGEXP_MATCH_MONEY(D1)",
             allowNulls: true,
             type: "reject",
             titleTemplate: "Invalid Price",
             messageTemplate: "Format of the price is invalid. This should be greater than zero."
+        });
+        sheet.range("E1:F200").format("#");
+        sheet.range("E1:F200").validation({
+            dataType: "custom",
+            from: "REGEXP_MATCH_NUMBER(E1)",
+            allowNulls: true,
+            type: "reject",
+            titleTemplate: "Invalid Bench",
+            messageTemplate: "Format of the bench is invalid"
         });
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
@@ -223,6 +243,10 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
 
     kendo.spreadsheet.defineFunction("REGEXP_MATCH_MONEY", function (str) {
         return $.isNumeric(str) && parseFloat(str) > 0;
+    }).args([["str", "string"]]);
+
+    kendo.spreadsheet.defineFunction("REGEXP_MATCH_NUMBER", function (str) {
+        return $.isNumeric(str) && parseInt(str) >= 0;
     }).args([["str", "string"]]);
 
     vm.dataSourceSpreadSheet = new kendo.data.DataSource({
