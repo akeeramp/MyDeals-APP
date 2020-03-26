@@ -15,7 +15,6 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
     var $ctrl = this;
 	$ctrl.popupResult = cellCurrValues;
     $ctrl.placeholderText = "Click to Select...";
-    $ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
 
 	$ctrl.isStartDate = (colName === "START_DT");
 	$ctrl.backDateReason = "";
@@ -50,15 +49,22 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 			var today = new Date();
 
 			$ctrl.isValidDate = true;
+			$ctrl.isDateOverlap = false;
 
 		    // date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
 			if ($ctrl.isStartDate && value > new Date(contractEndDate) && contractIsTender !== "1")
 			{
+				$ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
 			    $ctrl.isValidDate = false;
 			}
 			if (!$ctrl.isStartDate && value < new Date(contractStartDate) && contractIsTender !== "1")
 			{
+				$ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
 			    $ctrl.isValidDate = false;
+			}
+			if ((($ctrl.isStartDate && value < new Date(contractStartDate)) || (!$ctrl.isStartDate && value > new Date(contractEndDate))) && contractIsTender !== '1') {
+				$ctrl.errorMsg = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'Add To Grid', if you want to proceed.";
+				$ctrl.isDateOverlap = true;
 			}
 			if (isOEM)
 			{

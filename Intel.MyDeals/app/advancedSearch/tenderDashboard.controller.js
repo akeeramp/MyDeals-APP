@@ -1792,7 +1792,17 @@
                 }
                 else { // If it passes, do this
                     if ($scope.isValid) {
-                        $scope.copyTenderFolioContract();
+                        if (ct._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && ct.CUST_ACCNT_DIV == "") {
+                            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                                $scope.copyTenderFolioContract();
+                            },
+                                function () {
+                                    return;
+                                });
+                        }
+                        else {
+                            $scope.copyTenderFolioContract();
+                        }
                     } else {
                         $timeout(function () {
                             if (!!$("input.isError")[0]) $("input.isError")[0].focus();

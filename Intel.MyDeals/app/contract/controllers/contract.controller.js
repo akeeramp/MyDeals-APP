@@ -1219,9 +1219,11 @@
             if (oldValue["START_DT"] !== newValue["START_DT"]) {
                 if (moment(oldValue["START_DT"]).format('l') === moment(newValue["START_DT"]).format('l')) return;
                 if (isValidDate('START_DT', oldValue["START_DT"], newValue["START_DT"])) {
-                    pastDateConfirm(newValue["START_DT"], oldValue["START_DT"]);
-                    if (!unWatchStartDate) {
-                        updateQuarterByDates('START_DT', newValue["START_DT"]);
+                    if ($scope.isContractDetailsPage || ($scope.isTenderContract && isTender)) {
+                        pastDateConfirm(newValue["START_DT"], oldValue["START_DT"]);
+                        if (!unWatchStartDate) {
+                            updateQuarterByDates('START_DT', newValue["START_DT"]);
+                        }
                     }
                 }
                 unWatchStartDate = false;
@@ -1230,8 +1232,10 @@
             if (oldValue["END_DT"] !== newValue["END_DT"]) {
                 if (moment(oldValue["END_DT"]).format('l') === moment(newValue["END_DT"]).format('l')) return;
                 if (isValidDate('END_DT', oldValue["END_DT"], newValue["END_DT"])) {
-                    if (!unWatchEndDate) {
-                        updateQuarterByDates('END_DT', newValue["END_DT"]);
+                    if ($scope.isContractDetailsPage || ($scope.isTenderContract && isTender)) {
+                        if (!unWatchEndDate) {
+                            updateQuarterByDates('END_DT', newValue["END_DT"]);
+                        }
                     }
                 }
                 unWatchEndDate = false;
@@ -2846,7 +2850,29 @@
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
-            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr, null, callback);
+            var gData = [];
+            var isDatesOverlap = false;
+            gData = $scope.wipData;
+            if (gData !== undefined && gData !== null) {
+                for (var i = 0; i < gData.length; i++) {
+                    if ((moment(gData[i]["START_DT"]).isBefore($scope.contractData.START_DT) || moment(gData[i]["END_DT"]).isAfter($scope.contractData.END_DT)) && isDatesOverlap == false) {
+                        isDatesOverlap = true;
+                    }
+                }
+            }
+
+            if (isDatesOverlap == false) {
+                $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr, null, callback);
+            }
+            else {
+                kendo.confirm("Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.").then(function () {
+                    $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr, null, callback);
+                },
+                    function () {
+                        $scope.setBusy("", "");
+                        return;
+                    });
+            }
 
             return;
         }
@@ -3900,10 +3926,24 @@
             }
 
             if ($scope.isValid) {
-                if ($scope.isCopyContract) {
-                    $scope.copyContract();
-                } else {
-                    $scope.saveContract();
+                if ($scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && $scope.contractData.CUST_ACCNT_DIV == "") {
+                    kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                        if ($scope.isCopyContract) {
+                            $scope.copyContract();
+                        } else {
+                            $scope.saveContract();
+                        }
+                    },
+                        function () {
+                            return;
+                        });
+                }
+                else {
+                    if ($scope.isCopyContract) {
+                        $scope.copyContract();
+                    } else {
+                        $scope.saveContract();
+                    }
                 }
             } else {
                 $timeout(function () {
