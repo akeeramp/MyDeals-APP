@@ -84,7 +84,7 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
                 responseObj.BatchName = "PRODUCT_VERTICAL";
                 //UpDate Status
-                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");
+                //SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
 
             }
 
@@ -142,7 +142,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //API Type                
                 responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 //Status of the Call
-                responseObj.BatchStatus = visResponse.Status == "S" ? "PROCESSED" : visResponse.Status == "E" ? "ERROR" : "FAILED";
+                responseObj.BatchStatus = "PROCESSED";
             }
             else
             {

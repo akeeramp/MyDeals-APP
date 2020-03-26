@@ -435,11 +435,11 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public Dictionary<int, string> GetValidProducts(List<string> lstProducts)
+        public List<MeetCompProductValidation> GetValidProducts(List<string> lstProducts)
         {
             lstProducts.ForEach(x => x = x.Trim().ToLower());
             lstProducts.RemoveAll(x => x == string.Empty);
-            Dictionary<int, string> dicValidProducts = new Dictionary<int, string>();
+            List<MeetCompProductValidation> lstValidProducts = new List<MeetCompProductValidation>();
             Procs.dbo.PR_MYDL_MEET_COMP_PRD_VLD cmd = new Procs.dbo.PR_MYDL_MEET_COMP_PRD_VLD()
             {
                 in_prd_nm_list = new type_list(lstProducts.ToArray())
@@ -449,14 +449,20 @@ namespace Intel.MyDeals.DataLibrary
             {
                 int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
                 int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+                int IDX_SRV_TYP = DB.GetReaderOrdinal(rdr, "SRV_TYP");
 
                 while (rdr.Read())
                 {
-                    dicValidProducts.Add((IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID), (IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM));
+                    lstValidProducts.Add(new MeetCompProductValidation
+                    {
+                        ProductId = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                        ProductName = ((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM)).ToLower(),
+                        IsServerProduct = (IDX_SRV_TYP < 0 || rdr.IsDBNull(IDX_SRV_TYP)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_SRV_TYP)
+                    });
                 } // while
             }
 
-            return dicValidProducts;
+            return lstValidProducts.Where(x => x.ProductId > 0).ToList();
         }
 
         public bool UploadMeetComp(List<MeetComp> lstMeetComp)
@@ -464,14 +470,14 @@ namespace Intel.MyDeals.DataLibrary
             bool isProccessed = false;
             try
             {
-                Dictionary<int, string> dicValidProducts = GetValidProducts(lstMeetComp.Select(x => x.HIER_VAL_NM.Trim().ToLower()).ToList());
+                List<MeetCompProductValidation> lstValidProducts = GetValidProducts(lstMeetComp.Select(x => x.HIER_VAL_NM.Trim().ToLower()).ToList());
                 List<MyCustomersInformation> lstMyCustomersInformation = DataCollections.GetMyCustomers().CustomerInfo;
                 in_t_meet_comp dt = new in_t_meet_comp();
 
                 lstMeetComp.ForEach(x =>
                 {
                     x.CUST_MBR_SID = lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
-                    x.PRD_MBR_SID = dicValidProducts.Where(y => y.Value == x.HIER_VAL_NM.Trim().ToLower()).First().Key;
+                    x.PRD_MBR_SID = lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()).First().ProductId;
 
                     dt.AddRow(new MeetCompUpdate
                     {
@@ -481,12 +487,12 @@ namespace Intel.MyDeals.DataLibrary
                         COMP_SKU = x.MEET_COMP_PRD,
                         CUST_NM_SID = x.CUST_MBR_SID,
                         GRP_PRD_SID = x.PRD_MBR_SID.ToString(),
-                        GRP = string.Empty, //Dummy value since type not null
-                        DEAL_PRD_TYPE = string.Empty, //Dummy value since type not null
-                        PRD_CAT_NM = string.Empty, //Dummy value since type not null
-                        GRP_PRD_NM = string.Empty, //Dummy value since type not null
-                        DEAL_OBJ_SID = 0, //Dummy value since type not null
-                        MEET_COMP_UPD_FLG = 'T', //Dummy value since type not null
+                        GRP = string.Empty, //Dummy value since type is not null
+                        DEAL_PRD_TYPE = string.Empty, //Dummy value since type is not null
+                        PRD_CAT_NM = string.Empty, //Dummy value since type is not null
+                        GRP_PRD_NM = string.Empty, //Dummy value since type is not null
+                        DEAL_OBJ_SID = 0, //Dummy value since type is not null
+                        MEET_COMP_UPD_FLG = 'T', //Dummy value since type is not null
                     });
                 });
 

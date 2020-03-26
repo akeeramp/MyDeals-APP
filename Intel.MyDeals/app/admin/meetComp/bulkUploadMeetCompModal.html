@@ -38,7 +38,7 @@
             <div class="form-group row action_btns">
                 <div class="col-md-12">
                     <button ng-click="vm.ValidateMeetComps()" class="btn btn-primary" style="margin-left: 15px">Validate Imported Meet Comp Data</button>
-                    <button class="btn btn-primary" ng-click="vm.SaveMeetComps()" ng-disabled="!(vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.DistinctMeetComps.length > 0)" style="margin-left: 15px">Save Imported Data</button>
+                    <button class="btn btn-primary" ng-click="vm.SaveMeetComps()" ng-disabled="!(vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.ValidatedMeetComps.length > 0)" style="margin-left: 15px">Save Imported Data</button>
                     <button ng-click="vm.CloseWindow()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
                 </div>
             </div>
