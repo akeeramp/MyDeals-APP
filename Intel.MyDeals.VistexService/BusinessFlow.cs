@@ -57,7 +57,7 @@ namespace Intel.MyDeals.VistexService
             {
                 records = await DataAccessLayer.GetVistexVerticalStageData("PROD_VERT_RULES");
 
-                if (records.BatchId == "0")
+                if (records.BatchId == "0" || records.BatchStatus == "ERROR")
                 {
                     Console.WriteLine("There is no outbound data to push..");
                     break;
