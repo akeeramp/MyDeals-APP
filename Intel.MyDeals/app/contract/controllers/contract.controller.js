@@ -1433,6 +1433,12 @@
 
 
         $scope.showAddPricingTable = function (ps) {
+
+            // if its hybrid PS and already contains a PS do not allow to create one mor pricing table.
+            if (ps.IS_HYBRID_PRC_STRAT !== undefined && ps.IS_HYBRID_PRC_STRAT == "1" && ps.PRC_TBL != undefined && ps.PRC_TBL.length > 0) {
+                kendo.alert("You add only one Pricing Table within a Hybrid Pricing Stratergy");
+                return;
+            }
             $scope.isAddPricingTableHidden = false;
             $scope.isAddStrategyHidden = true;
             $scope.isAddStrategyBtnHidden = true;
@@ -2444,6 +2450,10 @@
                     //
                     var hasTender = false;
                     var hasNonTender = false;
+                    var dictPayoutBasedon = {};
+                    var dictCustDivision = {};
+                    var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
+
                     var errDeals = [];
                     if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT") {
                         for (var s = 0; s < sData.length; s++) {
@@ -2454,18 +2464,36 @@
                                 } else {
                                     hasNonTender = true;
                                 }
+                                if (isHybridPS) {
+                                    dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
+                                    dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                                }
                             }
                         }
-                        if (errDeals.length > 0 && hasTender && hasNonTender) {
+                        if (errDeals.length > 0) {
                             for (var t = 0; t < errDeals.length; t++) {
                                 var el = sData[errDeals[t]];
                                 if (!el._behaviors) el._behaviors = {};
                                 if (!el._behaviors.isError) el._behaviors.isError = {};
                                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
-                                el._behaviors.isError["REBATE_TYPE"] = true;
-                                el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".");
+                                if (hasTender && hasNonTender) {
+                                    el._behaviors.isError["REBATE_TYPE"] = true;
+                                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".");
+                                }
+                                if (Object.keys(dictPayoutBasedon).length > 1) {
+                                    el._behaviors.isError["PAYOUT_BASED_ON"] = true;
+                                    el._behaviors.validMsg["PAYOUT_BASED_ON"] = "Cannot mix Consumption or Billing type deals in a Hybrid Pricing Stratergy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Cannot mix Consumption or Billing type deals in a Hybrid Pricing Stratergy.");
+                                }
+                                if (Object.keys(dictCustDivision).length > 1) {
+                                    el._behaviors.isError["CUST_ACCNT_DIV"] = true;
+                                    el._behaviors.validMsg["CUST_ACCNT_DIV"] = "Customer Division has to be the same for all the deals within a Hybrid Pricing Stratergy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Customer Division has to be the same for all the deals within a Hybrid Pricing Stratergy.");
+                                }
                             }
                         }
                     }
@@ -2604,6 +2632,8 @@
                 gData = $scope.wipData;
                 var isTenderFlag = "0";
                 if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+                var isHybridPricingStatergy = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
+                var dictGroupType = {};
 
                 //for (var iterator = 0; iterator < gData.length; iterator++) {
                 //    if (gData[iterator].EXPIRE_FLG === true) {
@@ -2662,6 +2692,19 @@
                         if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
+
+                        // Hybrid pricing stratergy logic for DEAL_COMB_TYPE
+                        if (isHybridPricingStatergy) {
+                            dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
+                            if (Object.keys(dictGroupType).length > 1) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                                gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("All deals within a PS should have the same 'Group Type' value");
+                            }
+                        }
                     }
                 }
             }
