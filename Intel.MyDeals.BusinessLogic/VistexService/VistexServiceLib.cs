@@ -84,7 +84,7 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
                 responseObj.BatchName = "PRODUCT_VERTICAL";
                 //UpDate Status
-                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");
+                //SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
 
             }
 
