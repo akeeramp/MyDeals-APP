@@ -6,6 +6,7 @@ namespace Intel.MyDeals.IDataLibrary
     public interface IFilesDataLib
     {
         List<MeetComp> ExtractMeetCompFile(byte[] fileData);
+        FileAttachmentData GetMeetCompTemplateFile();
 
         /// <summary>
         /// Save the specified files as attachments

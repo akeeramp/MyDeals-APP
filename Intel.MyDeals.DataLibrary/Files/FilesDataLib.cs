@@ -61,6 +61,33 @@ namespace Intel.MyDeals.DataLibrary
             return lstRtn.Distinct(new DistinctItemComparerMeetComp()).Where(x => lstAllowedCustomer.Contains(x.CUST_NM.Trim().ToLower())).ToList();
         }
 
+        public FileAttachmentData GetMeetCompTemplateFile()
+        {
+            FileAttachmentData fileAttachmentData = new FileAttachmentData();
+            fileAttachmentData.FILE_NM = "MeetComp.xlsx";
+            fileAttachmentData.IS_COMPRS = false;
+            string strTemplateContent = string.Join("\n", string.Join("\t", "Customer", "Deal Product", "Meet Comp Sku", "Meet Comp Price", "IA Bench", "Comp Bench")
+                , string.Join("\t", "Acer", "E10G41BFLR", "Mellanox 1", "100", "0", "0")
+                , string.Join("\t", "Acer", "AU80610006225AA", "Mellanox 2", "110", "0", "0"));
+            string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets.Add("MeetComp");
+                excelWorksheet.Cells["A1"].LoadFromArrays(arrTemplate);
+                double dblMaxWidthOfColumn = 300;
+                for (int iColumnCount = 1; iColumnCount <= arrTemplate[0].Length; iColumnCount++)
+                {
+                    excelWorksheet.Column(iColumnCount).AutoFit();
+                    if (excelWorksheet.Column(iColumnCount).Width > dblMaxWidthOfColumn)
+                        excelWorksheet.Column(iColumnCount).Width = dblMaxWidthOfColumn;
+                }
+                excelWorksheet.Row(1).Style.Font.Bold = true;
+                excelWorksheet.View.FreezePanes(2, 1);
+                fileAttachmentData.FILE_DATA = excelPackage.GetAsByteArray();
+            }
+            return fileAttachmentData;
+        }
+
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>
