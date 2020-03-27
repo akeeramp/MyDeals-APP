@@ -23,32 +23,38 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
 
-                    // get number of rows and columns in the sheet
-                    int iRows = worksheet.Dimension.Rows;
-                    int iColumns = worksheet.Dimension.Columns;
+                    if (worksheet.Dimension != null)
+                    {
+                        // get number of rows and columns in the sheet
+                        int iRows = worksheet.Dimension.Rows;
+                        int iColumns = worksheet.Dimension.Columns;
 
-                    if (iColumns >= 6)
-                        // loop through the worksheet rows and columns
-                        for (int i = 2; i <= iRows; i++)
+                        if (iColumns >= 6)
                         {
-                            decimal dblMeetCompPrc = 0;
-                            decimal dblIABench = 0;
-                            decimal dblCompBench = 0;
-
-                            decimal.TryParse(worksheet.Cells[i, 4].Value.ToString(), out dblMeetCompPrc);
-                            decimal.TryParse(worksheet.Cells[i, 5].Value.ToString(), out dblIABench);
-                            decimal.TryParse(worksheet.Cells[i, 6].Value.ToString(), out dblCompBench);
-
-                            lstRtn.Add(new MeetComp
+                            // loop through the worksheet rows and columns
+                            for (int i = 2; i <= iRows; i++)
                             {
-                                CUST_NM = worksheet.Cells[i, 1].Value.ToString(),
-                                HIER_VAL_NM = worksheet.Cells[i, 2].Value.ToString(),
-                                MEET_COMP_PRD = worksheet.Cells[i, 3].Value.ToString(),
-                                MEET_COMP_PRC = dblMeetCompPrc,
-                                IA_BNCH = dblIABench,
-                                COMP_BNCH = dblCompBench
-                            });
+                                decimal dblMeetCompPrc = 0;
+                                decimal dblIABench = 0;
+                                decimal dblCompBench = 0;
+
+                                decimal.TryParse(worksheet.Cells[i, 4].Value.ToString(), out dblMeetCompPrc);
+                                decimal.TryParse(worksheet.Cells[i, 5].Value.ToString(), out dblIABench);
+                                decimal.TryParse(worksheet.Cells[i, 6].Value.ToString(), out dblCompBench);
+
+                                lstRtn.Add(new MeetComp
+                                {
+                                    CUST_NM = worksheet.Cells[i, 1].Value.ToString(),
+                                    HIER_VAL_NM = worksheet.Cells[i, 2].Value.ToString(),
+                                    MEET_COMP_PRD = worksheet.Cells[i, 3].Value.ToString(),
+                                    MEET_COMP_PRC = dblMeetCompPrc,
+                                    IA_BNCH = dblIABench,
+                                    COMP_BNCH = dblCompBench
+                                });
+                            }
                         }
+
+                    }
                 }
             }
             IEnumerable<string> lstAllowedCustomer = DataCollections.GetMyCustomers().CustomerInfo.Select(x => x.CUST_NM.ToLower());

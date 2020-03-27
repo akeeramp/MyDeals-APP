@@ -462,7 +462,7 @@ namespace Intel.MyDeals.DataLibrary
                 } // while
             }
 
-            return lstValidProducts.Where(x => x.ProductId > 0).ToList();
+            return lstValidProducts;
         }
 
         public bool UploadMeetComp(List<MeetComp> lstMeetComp)
