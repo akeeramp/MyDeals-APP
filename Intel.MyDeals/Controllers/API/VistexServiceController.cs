@@ -54,11 +54,5 @@ namespace Intel.MyDeals.Controllers.API
             return saveSuccessful;
         }
 
-        [Route("GetMaxGroupId")]
-        public string GetMaxGroupId()
-        {
-            return _vistexServiceLib.GetMaxGroupId();
-        }
-
     }
 }
