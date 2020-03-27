@@ -10,6 +10,7 @@ using Intel.Opaque.Utilities.Server;
 using System.Configuration;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -83,8 +84,9 @@ namespace Intel.MyDeals.BusinessLogic
 
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
                 responseObj.BatchName = "PRODUCT_VERTICAL";
+
                 //UpDate Status
-                //SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
+                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
 
             }
 
@@ -103,23 +105,30 @@ namespace Intel.MyDeals.BusinessLogic
 
         public VistexDFDataResponseObject GetVistexStageData(string runMode) //VTX_OBJ: CUSTOMER, PRODUCTS
         {
-            VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
             VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
-            dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
-            if (dataRecord.BatchId <= 0)
+            if (runMode == "V")
             {
-                responseObj.BatchName = runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD";
-                responseObj.BatchId = "0";
-                responseObj.BatchMessage = "No data to be Uploaded";                
+                responseObj = GetVistexDataOutBound("PROD_VERT_RULES");
             }
             else
             {
-                string jsonData = dataRecord.JsonData;
-                responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString());
-                //UpDate Status
-                UpdateVistexDFStageData(responseObj);
-            }           
-
+                VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
+                
+                dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
+                if (dataRecord.BatchId <= 0)
+                {
+                    responseObj.BatchName = runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD";
+                    responseObj.BatchId = "0";
+                    responseObj.BatchMessage = "No data to be Uploaded";
+                }
+                else
+                {
+                    string jsonData = dataRecord.JsonData;
+                    responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString());
+                    //UpDate Status
+                    UpdateVistexDFStageData(responseObj);
+                }                
+            }
             return responseObj;
         }
 
@@ -131,7 +140,7 @@ namespace Intel.MyDeals.BusinessLogic
             sendResponse = PublishToSapPo(jsonData, runMode);
             VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
             if (sendResponse["Status"].ToLower() == "ok" || sendResponse["Status"].ToLower() == "accepted")
-            {  
+            {                
                 responseObj.RunMode = runMode;
                 //Batch ID
                 responseObj.BatchId = BatchId;
@@ -231,7 +240,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 WebResponse response = request.GetResponse(); // Get the response.
                 responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
-
+                
                 // Get the stream containing content returned by the server.  
                 // The using block ensures the stream is automatically closed.
                 using (dataStream = response.GetResponseStream())
@@ -243,6 +252,7 @@ namespace Intel.MyDeals.BusinessLogic
                     // Display the content.  
                     responseObjectDictionary["Data"] = responseFromServer;
                 }
+                
             }
             catch (Exception e)
             {

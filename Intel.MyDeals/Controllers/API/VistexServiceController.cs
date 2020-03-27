@@ -31,7 +31,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Route("GetVistexDataOutBound/{packetType}")] //VTX_OBJ: VERTICALS
-        [HttpGet]
+        [HttpPost]
         public VistexDFDataResponseObject GetVistexDataOutBound(string packetType)
         {
             return _vistexServiceLib.GetVistexDataOutBound(packetType);
