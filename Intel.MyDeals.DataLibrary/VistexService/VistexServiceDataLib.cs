@@ -17,7 +17,6 @@ using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
-using Newtonsoft.Json;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -92,7 +91,7 @@ namespace Intel.MyDeals.DataLibrary
                         DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
                         RqstJsonData = (IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? string.Empty : rdr.GetFieldValue<string>(IDX_JSON_DATA)
                     });
-                } // while
+                } 
             }
             return lstVistex;
         }
@@ -139,7 +138,7 @@ namespace Intel.MyDeals.DataLibrary
                     vistexData.JsonData = (IDX_BATCH_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_BATCH_RQST_JSON_DATA))
                         ? string.Empty
                         : rdr.GetFieldValue<string>(IDX_BATCH_RQST_JSON_DATA);
-                } // while
+                } 
             }
             return vistexData;
         }
@@ -166,7 +165,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public Dictionary<string, string> PublishSapPo(string url, string jsonData)
+        public Dictionary<string, string> PublishSapPo(string url, string jsonData) //VTX_OBJ: CUSTOMER, PRODUCTS, VERTICALS, DEALS
         {
             // Create a request using a URL that can receive a post.  All current Vistex channels are post methods.
             WebRequest request = WebRequest.Create(url);
@@ -214,64 +213,48 @@ namespace Intel.MyDeals.DataLibrary
             return responseObjectDictionary;
         }
 
+
+        public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages) //VTX_OBJ: DEALS
+        {
+            type_int_dictionary opDealMessages = new type_int_dictionary();
+            opDealMessages.AddRows(dealsMessages.Select(itm => new Opaque.Tools.OpPair<int, string>
+            {
+                First = itm.Key,
+                Second = itm.Value
+            }));
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
+            {
+                in_btch_id = batchId,
+                in_rqst_sts = "PO_Processing_Complete", // Default close the 
+                in_deal_rspn_err = opDealMessages
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+                //throw;
+            }
+
+            return true;
+        }
+
+
+        #region Helper Functions
         public void OnException(Exception e)
         {
             // print the connection exception status
             OpLogPerf.Log("VISTEX - Connection Exception: " + e.Message);
         }
 
-        public Dictionary<string, string> TestConnection(bool noSAP, string brokerURI,
-            string userName,
-            string queueName)
-        {
-            OpLog.Log("Vistex - TestConnection");
-            if (string.IsNullOrEmpty(brokerURI))
-            {
-                userName = vistexUID;
-            }
-            if (noSAP)
-            {
-                return vistexEnvs;
-            }
-            AcknowledgementMode ackMode = AcknowledgementMode.ClientAcknowledge;
-            try
-            {
-                string providerUrl = ModifyURLForCertIgnore(brokerURI);
-
-                ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
-
-                // create the connection
-                connection = queueFactory.CreateConnection(userName, vistexEnvs.ContainsKey("vistexPWD") ? StringEncrypter.StringDecrypt(vistexEnvs["vistexPWD"], "JMS_Password") : "");
-
-                // set the exception listener
-                connection.ExceptionListener += new ExceptionListener(OnException);
-
-                // create the session
-                ISession session = connection.CreateSession(ackMode);
-
-                IQueue destination = session.GetQueue(queueName);
-
-                IMessageProducer msgProducer = session.CreateProducer(destination);
-
-                msgProducer.Close();
-
-                session.Close();
-
-                connection.Close();
-
-                return vistexEnvs;
-            }
-            catch (Exception ex)
-            {
-                connection.Close();
-                throw ex;
-            }
-        }
-
-
-
-
-        #region Private Helpers
         public CredentialCache GetVistexCredentials(string url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
@@ -322,48 +305,6 @@ namespace Intel.MyDeals.DataLibrary
             return modifiedURL;
         }
         #endregion Private Helpers
-
-        #region TestItem
-        public string GetMaxGroupId()
-        {
-            OpLog.Log("JMS - GetMaxGroupId");
-            PairList<int> ret = new PairList<int>();
-
-            try
-            {
-                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_MAX_GRP_ID_SAP_JMS_MSTR()))
-                {
-                    int IDX_JMS_GRP_ID = rdr.GetOrdinal("JMS_GRP_ID");
-                    int IDX_JMS_ID = rdr.GetOrdinal("JMS_ID");
-
-                    while (rdr.Read())
-                    {
-                        int grp_id = 0;
-                        int jms_id = 0;
-
-                        if (
-                            Int32.TryParse(String.Format("{0}", rdr[IDX_JMS_GRP_ID]), out grp_id)
-                            &&
-                            Int32.TryParse(String.Format("{0}", rdr[IDX_JMS_ID]), out jms_id)
-                        )
-                        {
-                            if (grp_id > 0 && jms_id > 0)
-                            {
-                                ret.Add(grp_id, jms_id);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw;
-            }
-
-            return String.Join("|", ret.Select(r => String.Format("{0};{1}", r.First, r.Second)));
-        }
-        #endregion TestItem
 
     }
 }

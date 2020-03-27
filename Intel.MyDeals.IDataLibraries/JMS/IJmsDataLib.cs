@@ -42,7 +42,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         ProductEpmObject FetchProdFromProcessorEpmMap(int epmId);
 
-        bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages);
+        //bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages);
 
     }
 }

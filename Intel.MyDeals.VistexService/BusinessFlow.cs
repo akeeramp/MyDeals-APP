@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
 
@@ -30,8 +29,6 @@ namespace Intel.MyDeals.VistexService
                     }
                 }
             }
-            
-
         }
 
         private static async Task SendDealsDataToSapPo(string runMode) //VTX_OBJ: DEALS
@@ -47,7 +44,6 @@ namespace Intel.MyDeals.VistexService
             {
                 Console.WriteLine("Outbound data pushed to SAP successfully..");
             }
-
         }
 
         private static async Task<bool> SendVerticalsToSapPo() //VTX_OBJ: VERTICALS
@@ -67,24 +63,6 @@ namespace Intel.MyDeals.VistexService
                 }
             }
             return true;
-        }
-
-
-        // Testing routine for comms
-        private static async Task GetMaxGroupId()
-        {
-            var grp_jms_id_pairs = await DataAccessLayer.GetMaxGroupId();
-
-            if (grp_jms_id_pairs != null && grp_jms_id_pairs.Any())
-            {
-                foreach (var pp in grp_jms_id_pairs)
-                {
-                    int x = 0;
-                    //JmsQCommon.Log("Sending pricing records for Group {0}, JMS ID {1}.", pp.First, pp.Second);
-                    //await SendPricingRecordsToQueue(pp.Second, pp.First, jobType);
-                }
-            }
-
         }
 
 

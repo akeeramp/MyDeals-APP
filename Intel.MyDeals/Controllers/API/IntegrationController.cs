@@ -34,14 +34,14 @@ namespace Intel.MyDeals.Controllers.API
         //[Route("ExecuteSalesForceTenderData")]
         //Can't be here since it relies on Contract Controller parts to execute the saves
 
-        [HttpPost]
-        [Route("SaveVistexResponseData")]
-        public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
-        {
-            Boolean saveSuccessful = _integrationLib.SaveVistexResponseData(jsonDataPacket);
+        //[HttpPost]
+        //[Route("SaveVistexResponseData")]
+        //public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
+        //{
+        //    Boolean saveSuccessful = _integrationLib.SaveVistexResponseData(jsonDataPacket);
 
-            return saveSuccessful;
-        }
+        //    return saveSuccessful;
+        //}
 
 
     }

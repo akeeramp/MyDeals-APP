@@ -19,14 +19,12 @@ namespace Intel.MyDeals.IDataLibrary
 
         Dictionary<string, string> PublishSapPo(string url, string jsonData);
 
-        void OnException(Exception e);
+        bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages);
 
-        Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
+        void OnException(Exception e);
 
         CredentialCache GetVistexCredentials(string url);
 
-        // Test items below
-        string GetMaxGroupId();
 
     }
 }

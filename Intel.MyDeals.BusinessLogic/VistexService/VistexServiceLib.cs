@@ -37,16 +37,16 @@ namespace Intel.MyDeals.BusinessLogic
         {
             List<VistexQueueObject> dataRecords = new List<VistexQueueObject>();
             dataRecords = _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
+            
             // Construct the send JSON from the list of bodies we got
+            VistexDealsDataLoadObject buildSendObj = new VistexDealsDataLoadObject();
+            buildSendObj.SourceSystem = "My Deals";
+            buildSendObj.TargetSystem = "Vistex";
+            buildSendObj.Action = "Create";
+            buildSendObj.BatchId = dataRecords[0].BatchId;
+            buildSendObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
 
-            VistexDealsDataLoadObject tempObj = new VistexDealsDataLoadObject();
-            tempObj.SourceSystem = "My Deals";
-            tempObj.TargetSystem = "Vistex";
-            tempObj.Action = "create";
-            tempObj.BatchId = dataRecords[0].BatchId;
-            tempObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
-
-            string jsonData = JsonConvert.SerializeObject(tempObj);
+            string jsonData = JsonConvert.SerializeObject(buildSendObj);
 
             VistexDFDataResponseObject responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecords[0].BatchId.ToString());
 
@@ -54,9 +54,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateVistexDFStageData(responseObj);
 
             return responseObj;
-
-
-            //return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
         public VistexDFDataResponseObject GetVistexDataOutBound(string packetType) //VTX_OBJ: VERTICALS
@@ -83,9 +80,9 @@ namespace Intel.MyDeals.BusinessLogic
 
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
                 responseObj.BatchName = "PRODUCT_VERTICAL";
+
                 //UpDate Status
                 //SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
-
             }
 
             return responseObj;            
@@ -116,13 +113,13 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 string jsonData = dataRecord.JsonData;
                 responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString());
+
                 //UpDate Status
                 UpdateVistexDFStageData(responseObj);
             }           
 
             return responseObj;
         }
-
 
         public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
         {
@@ -133,11 +130,10 @@ namespace Intel.MyDeals.BusinessLogic
             if (sendResponse["Status"].ToLower() == "ok" || sendResponse["Status"].ToLower() == "accepted")
             {  
                 responseObj.RunMode = runMode;
-                //Batch ID
                 responseObj.BatchId = BatchId;
                 //Parsing Response from SAP PO
                 VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
-                //Assigning Message Body to be Tranferred 
+                //Assigning Message Body to be Transferred 
                 responseObj.BatchMessage = visResponse.Message ?? string.Empty;
                 //API Type                
                 responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
@@ -147,57 +143,27 @@ namespace Intel.MyDeals.BusinessLogic
             else
             {
                 responseObj.RunMode = runMode;
-                //Batch ID
                 responseObj.BatchId = BatchId;
-                //VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse);
                 responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 responseObj.BatchMessage = sendResponse["Message"];
                 responseObj.BatchStatus = "ERROR";
-
             }
 
             return responseObj;
         }
+
         public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj) //VTX_OBJ: CUSTOMER
         {
             _vistexServiceDataLib.UpdateVistexDFStageData(responseObj);
         }
 
-        public Dictionary<string, string> PublishSapPo(string url, string jsonData)
+        public Dictionary<string, string> PublishSapPo(string url, string jsonData) //VTX_OBJ: CUSTOMER, PRODUCTS, VERTICAL, DEALS
         {
             return _vistexServiceDataLib.PublishSapPo(url, jsonData);
         }
 
-        // Testing helpers
 
-        public Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName) // used to have password in it
-        {
-            return _vistexServiceDataLib.TestConnection(noSAP, brokerURI, userName, queueName);
-        }
-
-        public string GetMaxGroupId()
-        {
-            return _vistexServiceDataLib.GetMaxGroupId();
-        }
-
-        //MyDeals -> SAP PO push
-        //private static CredentialCache GetCredentials(string url) //TC-COSTOMER
-        //{
-        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-        //    CredentialCache credentialCache = new CredentialCache();
-        //    //TODO: Replace with GetEnvConfigs()
-        //    string vistexUID = "XI_MYDEALS";
-        //    string vistexPWD = "03924400H0F5xF42140j2551632o36239137w22u223219600F041I09v01302d5Z8k52p260R0260301S09302322302i40e7v7sk1S191";
-
-        //    credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
-        //        StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));
-        //    return credentialCache;
-
-        //    credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(vistexUID,
-        //        StringEncrypter.StringDecrypt(vistexPWD, "Vistex_Password")));
-        //    return credentialCache;
-        //}
-        public Dictionary<string, string> PublishToSapPo(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
+        public Dictionary<string, string> PublishToSapPo(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, VERTICAL, DEALS
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
             string url = "";
@@ -254,6 +220,20 @@ namespace Intel.MyDeals.BusinessLogic
             }            
 
             return responseObjectDictionary;
+        }
+
+        public Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS
+        {
+            // Vistex returned response processing - if it saves data to DB, return true, else return false.
+            Guid batchId = new Guid(jsonDataPacket.vistexResponseHeader.BatchId);
+            Dictionary<int, string> dealsMessages = new Dictionary<int, string>();
+
+            foreach (VistexResponseMsg.VistexResponseHeader.DealResponse response in jsonDataPacket.vistexResponseHeader.DealResponses)
+            {
+                dealsMessages.Add(response.DealId, response.ErrMessage);
+            }
+
+            return _vistexServiceDataLib.SaveVistexResponseData(batchId, dealsMessages);
         }
 
 

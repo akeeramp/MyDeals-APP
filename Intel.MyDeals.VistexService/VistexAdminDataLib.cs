@@ -45,27 +45,27 @@ namespace Intel.MyDeals.DataLibrary
             disposed = true;
         }
 
-        public VistexAdminDataLib()
-        {
-            DataAccess.ConnectionString = ConfigurationManager.ConnectionStrings["MyDealsConnectionString"].ConnectionString;
-        }
+        //public VistexAdminDataLib()
+        //{
+        //    DataAccess.ConnectionString = ConfigurationManager.ConnectionStrings["MyDealsConnectionString"].ConnectionString;
+        //}
 
-        public void SendFailureMessage(ResponseType responseType, string strEmails)
-        {
-            var cmd = new Procs.dbo.PR_SQL_DB_MAIL
-            {
-                from_user_email = ConfigurationManager.AppSettings["FromEmail"],
-                to_user_email = strEmails,
-                subject = "Error occured in Vistex services",
-                message = string.Concat("Unable to invoke service of Vistex due to the reason : ", VistexHttpService.GetResposnseMessage(responseType)),
-                dce_cc_list = string.Empty,
-                priority = "1",
-                attachment = string.Empty,
-                query_attachment_filename = string.Empty,
-                dce_bcc_list = null
-            };
-            DataAccess.ExecuteNonQuery(cmd);
-        }
+        //public void SendFailureMessage(ResponseType responseType, string strEmails)
+        //{
+        //    var cmd = new Procs.dbo.PR_SQL_DB_MAIL
+        //    {
+        //        from_user_email = ConfigurationManager.AppSettings["FromEmail"],
+        //        to_user_email = strEmails,
+        //        subject = "Error occured in Vistex services",
+        //        message = string.Concat("Unable to invoke service of Vistex due to the reason : ", VistexHttpService.GetResposnseMessage(responseType)),
+        //        dce_cc_list = string.Empty,
+        //        priority = "1",
+        //        attachment = string.Empty,
+        //        query_attachment_filename = string.Empty,
+        //        dce_bcc_list = null
+        //    };
+        //    DataAccess.ExecuteNonQuery(cmd);
+        //}
 
         //public List<VistexDealOutBound> GetVistexDealOutBoundData()
         //{
@@ -94,152 +94,152 @@ namespace Intel.MyDeals.DataLibrary
         //    return lstVistex;
         //}
 
-        public List<VistexProductVerticalOutBound> GetVistexProductVeticalsOutBoundData()
-        {
-            List<VistexProductVerticalOutBound> lstVistex = new List<VistexProductVerticalOutBound>();
-            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
-            {
-                in_rqst_type = VistexMode.PROD_VERT_RULES.ToString("g"),
-            };
+        //public List<VistexProductVerticalOutBound> GetVistexProductVeticalsOutBoundData()
+        //{
+        //    List<VistexProductVerticalOutBound> lstVistex = new List<VistexProductVerticalOutBound>();
+        //    var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
+        //    {
+        //        in_rqst_type = VistexMode.PROD_VERT_RULES.ToString("g"),
+        //    };
 
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
-                int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+        //    using (var rdr = DataAccess.ExecuteReader(cmd))
+        //    {
+        //        int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+        //        int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
 
-                while (rdr.Read())
-                {
-                    lstVistex.Add(new VistexProductVerticalOutBound
-                    {
-                        ProductVertical = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)).ProductVertical,
-                        TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
-                    });
-                } // while
-            }
-            return lstVistex;
-        }
-
-        //Only for internal testing
-        public List<VistexLogs> GetVistexLogs(VistexMode vistexMode)
-        {
-            List<VistexLogs> lstVistex = new List<VistexLogs>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN
-            {
-                in_rqst_type = vistexMode.ToString("g"),
-            };
-
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
-                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
-                int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
-                int IDX_INTRFC_RQST_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RQST_DTM");
-                int IDX_INTRFC_RSPN_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RSPN_DTM");
-                int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
-                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
-
-                while (rdr.Read())
-                {
-                    lstVistex.Add(new VistexLogs
-                    {
-                        Id = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
-                        CreatedOn = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
-                        DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                        Message = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG),
-                        ProcessedOn = (IDX_INTRFC_RQST_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RQST_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RQST_DTM),
-                        SendToPoOn = (IDX_INTRFC_RSPN_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RSPN_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RSPN_DTM),
-                        Status = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS),
-                        TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
-                    });
-                } // while
-            }
-
-            return lstVistex;
-        }
-
+        //        while (rdr.Read())
+        //        {
+        //            lstVistex.Add(new VistexProductVerticalOutBound
+        //            {
+        //                ProductVertical = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>((IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_DATA)).ProductVertical,
+        //                TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
+        //            });
+        //        } // while
+        //    }
+        //    return lstVistex;
+        //}
 
         //Only for internal testing
-        public List<string> GetStatuses()
-        {
-            return Enum.GetValues(typeof(VistexStage)).Cast<VistexStage>().Select(v => v.ToString()).ToList();
-        }
+        //public List<VistexLogs> GetVistexLogs(VistexMode vistexMode)
+        //{
+        //    List<VistexLogs> lstVistex = new List<VistexLogs>();
+        //    var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN
+        //    {
+        //        in_rqst_type = vistexMode.ToString("g"),
+        //    };
+
+        //    using (var rdr = DataAccess.ExecuteReader(cmd))
+        //    {
+        //        int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+        //        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+        //        int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+        //        int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
+        //        int IDX_INTRFC_RQST_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RQST_DTM");
+        //        int IDX_INTRFC_RSPN_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RSPN_DTM");
+        //        int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
+        //        int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+
+        //        while (rdr.Read())
+        //        {
+        //            lstVistex.Add(new VistexLogs
+        //            {
+        //                Id = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+        //                CreatedOn = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+        //                DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+        //                Message = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG),
+        //                ProcessedOn = (IDX_INTRFC_RQST_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RQST_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RQST_DTM),
+        //                SendToPoOn = (IDX_INTRFC_RSPN_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RSPN_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RSPN_DTM),
+        //                Status = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS),
+        //                TransanctionId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID)
+        //            });
+        //        } // while
+        //    }
+
+        //    return lstVistex;
+        //}
+
 
         //Only for internal testing
-        public Dictionary<string, string> GetVistexBody(int id)
-        {
-            Dictionary<string, string> dicRtn = new Dictionary<string, string>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
-            {
-                rqst_sid = id
-            };
-
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
-
-                while (rdr.Read())
-                {
-                    dicRtn = JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA));
-                } // while
-            }
-
-            return dicRtn;
-        }
-
-        public List<ProductCategory> GetProductVerticalBody(int id)
-        {
-            List<ProductCategory> lstRtn = new List<ProductCategory>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
-            {
-                rqst_sid = id
-            };
-
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
-
-                while (rdr.Read())
-                {
-                    lstRtn = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>(((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA)).Replace("\"CRE_DT\"", "\"CRE_DTM\"").Replace("\"CHG_DT\"", "\"CHG_DTM\"")).ProductVertical;
-                } // while
-            }
-
-            return lstRtn;
-        }
+        //public List<string> GetStatuses()
+        //{
+        //    return Enum.GetValues(typeof(VistexStage)).Cast<VistexStage>().Select(v => v.ToString()).ToList();
+        //}
 
         //Only for internal testing
-        public List<VistexLogs> AddVistexData(List<int> lstDealIds)
-        {
-            List<VistexLogs> lstVistex = new List<VistexLogs>();
-            var cmd = new Procs.dbo.PR_MYDL_INS_DSA_RQST_RSPN_LOG
-            {
-                in_rqst_type = VistexMode.VISTEX_DEALS.ToString("g"),
-                in_deal_lst = new type_int_list(lstDealIds.ToArray()),
-            };
+        //public Dictionary<string, string> GetVistexBody(int id)
+        //{
+        //    Dictionary<string, string> dicRtn = new Dictionary<string, string>();
+        //    var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
+        //    {
+        //        rqst_sid = id
+        //    };
 
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
-                int iDealIndex = 0;
-                while (rdr.Read())
-                {
-                    lstVistex.Add(new VistexLogs
-                    {
-                        Id = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
-                        DealId = lstDealIds[iDealIndex],
-                        Message = string.Empty,
-                        ProcessedOn = default(System.DateTime),
-                        SendToPoOn = default(System.DateTime),
-                        Status = VistexStage.Pending.ToString("g"),
-                        CreatedOn = DateTime.Now,
-                        TransanctionId = default(Guid)
-                    });
-                    iDealIndex++;
-                } // while
-            }
-            return lstVistex;
-        }
+        //    using (var rdr = DataAccess.ExecuteReader(cmd))
+        //    {
+        //        int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+
+        //        while (rdr.Read())
+        //        {
+        //            dicRtn = JsonConvert.DeserializeObject<Dictionary<string, string>>((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA));
+        //        } // while
+        //    }
+
+        //    return dicRtn;
+        //}
+
+        //public List<ProductCategory> GetProductVerticalBody(int id)
+        //{
+        //    List<ProductCategory> lstRtn = new List<ProductCategory>();
+        //    var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_BODY
+        //    {
+        //        rqst_sid = id
+        //    };
+
+        //    using (var rdr = DataAccess.ExecuteReader(cmd))
+        //    {
+        //        int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+
+        //        while (rdr.Read())
+        //        {
+        //            lstRtn = JsonConvert.DeserializeObject<VistexProductVerticalOutBound>(((IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA)).Replace("\"CRE_DT\"", "\"CRE_DTM\"").Replace("\"CHG_DT\"", "\"CHG_DTM\"")).ProductVertical;
+        //        } // while
+        //    }
+
+        //    return lstRtn;
+        //}
+
+        //Only for internal testing
+        //public List<VistexLogs> AddVistexData(List<int> lstDealIds)
+        //{
+        //    List<VistexLogs> lstVistex = new List<VistexLogs>();
+        //    var cmd = new Procs.dbo.PR_MYDL_INS_DSA_RQST_RSPN_LOG
+        //    {
+        //        in_rqst_type = VistexMode.VISTEX_DEALS.ToString("g"),
+        //        in_deal_lst = new type_int_list(lstDealIds.ToArray()),
+        //    };
+
+        //    using (var rdr = DataAccess.ExecuteReader(cmd))
+        //    {
+        //        int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+        //        int iDealIndex = 0;
+        //        while (rdr.Read())
+        //        {
+        //            lstVistex.Add(new VistexLogs
+        //            {
+        //                Id = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+        //                DealId = lstDealIds[iDealIndex],
+        //                Message = string.Empty,
+        //                ProcessedOn = default(System.DateTime),
+        //                SendToPoOn = default(System.DateTime),
+        //                Status = VistexStage.Pending.ToString("g"),
+        //                CreatedOn = DateTime.Now,
+        //                TransanctionId = default(Guid)
+        //            });
+        //            iDealIndex++;
+        //        } // while
+        //    }
+        //    return lstVistex;
+        //}
 
         //Only for internal testing
         //public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)

@@ -1,4 +1,5 @@
-﻿using Intel.MyDeals.Entities;
+﻿using System;
+using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using System.Web.Http;
 
@@ -43,7 +44,16 @@ namespace Intel.MyDeals.Controllers.API
         {
             return _vistexServiceLib.GetVistexStageData(runMode);
         }
-        
+
+        [HttpPost]
+        [Route("SaveVistexResponseData")]
+        public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS_RESPONSE
+        {
+            Boolean saveSuccessful = _vistexServiceLib.SaveVistexResponseData(jsonDataPacket);
+
+            return saveSuccessful;
+        }
+
         [Route("GetMaxGroupId")]
         public string GetMaxGroupId()
         {

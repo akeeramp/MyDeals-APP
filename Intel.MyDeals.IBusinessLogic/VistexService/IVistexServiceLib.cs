@@ -21,11 +21,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         Dictionary<string, string> PublishSapPo(string url, string jsonData);
 
-        Dictionary<string, string> TestConnection(bool noSAP, string brokerURI, string userName, string queueName);
-
         VistexDFDataResponseObject GetVistexStageData(string runMode);
 
-        string GetMaxGroupId();
+        Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
 
     }
 }

@@ -8,6 +8,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket);
 
-        Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
+        //Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
     }
 }
