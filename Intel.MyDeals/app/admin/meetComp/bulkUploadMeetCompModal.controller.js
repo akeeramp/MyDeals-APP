@@ -49,6 +49,8 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
     vm.onSuccess = function (e) {
         uploadSuccessCount++;
         vm.MeetComps = e.response;
+        if (vm.MeetComps.length == 0)
+            kendo.alert('There is no meet comp in the file to upload!');
     }
 
     vm.onError = function (e) {
@@ -130,7 +132,7 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
                     dataType: "custom",
                     from: "IS_VALID_PRODUCT(B1)",
                     allowNulls: true,
-                    messageTemplate: vm.MeetCompValidation.ProductsRequiredBench.length > 0 ? "Product not found! or IA or COMP Bench is invalid!" : "Product not found!"
+                    messageTemplate: vm.MeetCompValidation.ProductsRequiredBench.length > 0 && vm.MeetCompValidation.InValidProducts.length > 0 ? "Product not found! or IA or COMP Bench is invalid!" : (vm.MeetCompValidation.InValidProducts.length > 0 ? "Product not found!" : "IA or COMP Bench is invalid!")
                 });
 
                 var maxItemsSize = 5;

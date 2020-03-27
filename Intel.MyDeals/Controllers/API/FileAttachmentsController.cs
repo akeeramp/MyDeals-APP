@@ -39,6 +39,42 @@ namespace Intel.MyDeals.Controllers.API
         /// Get the contents of the specified file attachment
         /// </summary>
         [HttpGet]
+        [Route("GetMeetCompTemplateFile")]
+        public HttpResponseMessage GetMeetCompTemplateFile()
+        {
+            byte[] fileBodyFinalBytes = null;
+
+            var fileAttahment = SafeExecutor(() => _filesLib.GetMeetCompTemplateFile(), $"Unable to get open template for Meet Comp");
+
+            if (fileAttahment.FILE_DATA.Length > 0)
+            {
+                if (fileAttahment.IS_COMPRS) // Decompress file
+                {
+                    fileBodyFinalBytes = OpZipUtils.DecompressBytes(fileAttahment.FILE_DATA);
+                }
+                else
+                {
+                    fileBodyFinalBytes = fileAttahment.FILE_DATA;
+                }
+            }
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            if (fileBodyFinalBytes != null)
+            {
+                Stream stream = new MemoryStream(fileBodyFinalBytes);
+                result.Content = new StreamContent(stream);
+            }
+            
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fileAttahment.FILE_NM));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get the contents of the specified file attachment
+        /// </summary>
+        [HttpGet]
         [Route("Open/{fileId}")]
         public HttpResponseMessage Open(int fileId)
         {
