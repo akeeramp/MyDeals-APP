@@ -20,8 +20,8 @@ namespace Intel.MyDeals.BusinessLogic
         public static Dictionary<string, string> conDict = new Dictionary<string, string>()
         {
             {"D", "https://sappodev.intel.com:8215/RESTAdapter/MyDeals"},
-            {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
-            {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
+            {"C", "https://sappodev.intel.com:8215/RESTAdapter/VistexCustomer"},
+            {"P", "https://sappodev.intel.com:8215/RESTAdapter/ProductMain"},
             {"V", "https://sappodev.intel.com:8215/RESTAdapter/ProductVertical"},
         };
 
