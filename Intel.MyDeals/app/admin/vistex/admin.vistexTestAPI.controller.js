@@ -21,7 +21,7 @@
             "C": 'GetVistexDFStageData',
             "D": 'GetVistexDealOutBoundData',
             "P": 'GetVistexDFStageData',
-            "V": 'GetVistexDataOutBound'
+            "V": 'GetVistexDFStageData'
         };
         //Creating API
         vm.apiList.push({ API_ID: 1, API_NM: "Customer ", API_CD: "C" });
