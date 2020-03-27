@@ -449,7 +449,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
                 int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
-                int IDX_SRV_TYP = DB.GetReaderOrdinal(rdr, "SRV_TYP");
+                int IDX_SRV_TYP = DB.GetReaderOrdinal(rdr, "SVR_TYP");
 
                 while (rdr.Read())
                 {
@@ -457,7 +457,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ProductId = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
                         ProductName = ((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM)).ToLower(),
-                        IsServerProduct = (IDX_SRV_TYP < 0 || rdr.IsDBNull(IDX_SRV_TYP)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_SRV_TYP)
+                        IsServerProduct = ((IDX_SRV_TYP < 0 || rdr.IsDBNull(IDX_SRV_TYP)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SRV_TYP)) > 0
                     });
                 } // while
             }
@@ -477,12 +477,14 @@ namespace Intel.MyDeals.DataLibrary
                 lstMeetComp.ForEach(x =>
                 {
                     x.CUST_MBR_SID = lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
-                    x.PRD_MBR_SID = lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()).First().ProductId;
-
+                    var product = lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()).First();
+                    x.PRD_MBR_SID = product.ProductId;
+                    decimal dblCompBench = Math.Round(product.IsServerProduct ? x.COMP_BNCH : 0, 0);
+                    decimal dblIABench = Math.Round(product.IsServerProduct ? x.IA_BNCH : 0, 0);
                     dt.AddRow(new MeetCompUpdate
                     {
-                        COMP_BNCH = x.COMP_BNCH,
-                        IA_BNCH = x.IA_BNCH,
+                        COMP_BNCH = dblCompBench,
+                        IA_BNCH = dblIABench,
                         COMP_PRC = x.MEET_COMP_PRC,
                         COMP_SKU = x.MEET_COMP_PRD,
                         CUST_NM_SID = x.CUST_MBR_SID,
