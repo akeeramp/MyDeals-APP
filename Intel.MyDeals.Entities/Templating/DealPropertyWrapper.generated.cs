@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/10/2020 3:44:58 PM
+File Updated: 3/27/2020 1:46:08 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -137,6 +137,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute AR_SETTLEMENT_LVL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "AR_SETTLEMENT_LVL",
+			ATRB_DESC = "AR Settlement Level",
+			ATRB_LBL = "AR Settlement Level",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3719,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute AVG_NET_PRC = new MyDealsAttribute()
 		{
@@ -1220,6 +1236,22 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "PRD",
 			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_PERD_PRFL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_PERD_PRFL",
+			ATRB_DESC = "Vistex Customer Default Period Profile",
+			ATRB_LBL = "Vistex Customer Default Period Profile",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2025,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",

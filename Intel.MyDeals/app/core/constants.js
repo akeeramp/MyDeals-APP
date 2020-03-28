@@ -291,6 +291,9 @@
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
                     },
+                    "AR_SETTLEMENT_LVL": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
@@ -438,6 +441,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
                     },
                     "TERMS": {
@@ -608,6 +614,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
                     },
                     "TERMS": {
@@ -952,6 +961,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
                     },
                     "TERMS": {

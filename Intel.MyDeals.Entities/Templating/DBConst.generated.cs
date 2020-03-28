@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/10/2020 3:45:11 PM
+File Updated: 3/27/2020 1:37:01 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -91,6 +91,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string APAC_GROSS_REV_GROUPING = "APAC_GROSS_REV_GROUPING";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3719
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string AR_SETTLEMENT_LVL = "AR_SETTLEMENT_LVL";
 
 		///<summary>
 		/// DIM_SID: 30
@@ -703,6 +712,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DEVICE_TYPE = "DEVICE_TYPE";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2025
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string DFLT_PERD_PRFL = "DFLT_PERD_PRFL";
 
 		///<summary>
 		/// DIM_SID: 3

@@ -85,7 +85,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.PERIOD_PROFILE }
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL}
                         }
                     }
                 },
@@ -215,6 +216,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.OEM_PLTFRM_EOL_DT,
                                 AttributeCodes.OEM_PLTFRM_LNCH_DT,
                                 AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL,
                                 AttributeCodes.TERMS }
                         }
                     }
@@ -240,7 +242,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly if TENDER",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.AtrbValue != null
                         && String.Equals(de.AtrbValue.ToString(),"TENDER", StringComparison.OrdinalIgnoreCase)).Any(),
@@ -249,7 +251,12 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.REBATE_TYPE }
+                            Target = new[]
+                            {
+                                AttributeCodes.REBATE_TYPE,
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL
+                            }
                         }
                     }
                 },
@@ -267,10 +274,39 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.QLTR_BID_GEO, AttributeCodes.QLTR_PROJECT, AttributeCodes.END_CUSTOMER_RETAIL }
+                            Target = new[] 
+                            {
+                                AttributeCodes.QLTR_BID_GEO,
+                                AttributeCodes.QLTR_PROJECT,
+                                AttributeCodes.END_CUSTOMER_RETAIL
+                            }
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="Read Only and Blank value if Rebate Type is...",
+                    ActionRule = MyDcActions.DisableForActivityOrAccrual,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && (de.HasValue("MDF ACTIVITY") ||
+                                                                                                                 de.HasValue("MDF ACCRUAL") ||
+                                                                                                                 de.HasValue("NRE ACCRUAL")) ).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[]
+                            {
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL
+                            }
+                        }
+                    }
+                },
+
                 new MyOpRule
                 {
                     Title="Server Deal Type Read Only if Product is not SvrWS",
@@ -314,7 +350,9 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.TRGT_RGN,
                                 AttributeCodes.REBATE_BILLING_START,
                                 AttributeCodes.REBATE_BILLING_END,
-                                AttributeCodes.BACK_DATE_RSN
+                                AttributeCodes.BACK_DATE_RSN,
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL
                             } // Items to set readonly
                         }
                     }

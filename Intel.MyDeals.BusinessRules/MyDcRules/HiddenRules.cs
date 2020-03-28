@@ -16,17 +16,17 @@ namespace Intel.MyDeals.BusinessRules
 				{
 					Title="Sync Hidden",
 					ActionRule = MyDcActions.SyncHiddenItems,
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
 				},
 
                 new MyOpRule
                 {
                     Title="Show Expire YCS2 if frontend deal is active",
                     ActionRule = MyDcActions.ShowExpireYCS2,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
                 },
 
-    //            new MyOpRule
+                //            new MyOpRule
 				//{
 				//	Title="Hidden if NOT Consumption",
 				//	ActionRule = MyDcActions.ExecuteActions,

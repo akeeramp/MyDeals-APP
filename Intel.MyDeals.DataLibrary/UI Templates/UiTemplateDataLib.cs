@@ -285,6 +285,34 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3717,
+                AtrbCd = AttributeCodes.PERIOD_PROFILE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 160,
+                IsDefaultable = true,
+                Label = "Period Profile",
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3719,
+                AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 240,
+                IsDefaultable = true,
+                Label = "AR Settlement Level",
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'AR_SETTLEMENT_LVL')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
 
             #endregion PRICING TABLE
 
@@ -292,7 +320,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 200,
                 AtrbCd = AttributeCodes.DC_ID,
                 IsKey = true,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -302,7 +330,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3659,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
                 Label = "Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -312,7 +340,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 7093,
                 AtrbCd = AttributeCodes.PTR_SYS_INVLD_PRD,
                 Label = "Invalid Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -325,7 +353,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3686,
                 AtrbCd = AttributeCodes.PRD_DRAWING_ORD,
                 Label = "Invalid Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -336,7 +364,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3591,
                 AtrbCd = AttributeCodes.CUST_ACCNT_DIV,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 120,
@@ -348,7 +376,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3658,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
                 Label = "Contract Product *",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -356,7 +384,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3663,
                 AtrbCd = AttributeCodes.PRD_EXCLDS,
                 Label = "Exclude Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -366,7 +394,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3201,
                 AtrbCd = AttributeCodes.DEAL_GRP_NM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -377,7 +405,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3680,
                 AtrbCd = AttributeCodes.DEAL_DESC,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 200,
@@ -386,7 +414,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 36,
+                Id = 21,
                 AtrbCd = AttributeCodes.TIER_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
@@ -396,7 +424,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 36,
+                Id = 20,
                 AtrbCd = AttributeCodes.STRT_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
@@ -406,7 +434,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 36,
+                Id = 6,
                 AtrbCd = AttributeCodes.END_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
@@ -416,7 +444,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 36,
+                Id = 56,
                 AtrbCd = AttributeCodes.RATE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
@@ -426,7 +454,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 5,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
@@ -437,7 +465,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 86,
                 AtrbCd = AttributeCodes.CAP,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
@@ -448,7 +476,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 201,
                 AtrbCd = "YCS2",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
@@ -459,7 +487,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 22,
                 AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
@@ -467,10 +495,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Total Dollar Amount *",
                 IsRequired = true
             });
-
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 3559,
                 AtrbCd = AttributeCodes.ORIG_ECAP_TRKR_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
@@ -483,7 +510,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 3560,
                 AtrbCd = AttributeCodes.ADJ_ECAP_UNIT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
@@ -493,7 +520,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 3603,
                 AtrbCd = AttributeCodes.FRCST_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
@@ -503,7 +530,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3321,
                 AtrbCd = AttributeCodes.VOLUME,
                 Label = "Ceiling Volume",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -513,7 +540,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 30,
+                Id = 3319,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Label = "Deal Start Date *",
@@ -523,7 +550,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 31,
+                Id = 3320,
                 AtrbCd = AttributeCodes.END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Label = "Deal End Date *",
@@ -531,31 +558,9 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem  
-            {
-                Id = 3711,
-                AtrbCd = AttributeCodes.OEM_PLTFRM_LNCH_DT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-                Template = "#=gridUtils.uiIconWrapper(data, 'OEM_PLTFRM_LNCH_DT')#",
-                Label = "OEM Platform Launch Date",
-                Width = 100,
-                IsRequired = false
-            });
-            items.Add(new UiTemplateContainerItem  
-            {
-                Id = 3712,
-                AtrbCd = AttributeCodes.OEM_PLTFRM_EOL_DT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-                Template = "#=gridUtils.uiIconWrapper(data, 'OEM_PLTFRM_EOL_DT')#",
-                Label = "OEM Platform EOL Date",
-                Width = 100,
-                IsRequired = false
-            });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3684,
                 AtrbCd = AttributeCodes.PRD_BCKT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -567,7 +572,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 86,
                 AtrbCd = "CAP",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
@@ -578,7 +583,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 201,
                 AtrbCd = "YCS2",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.TENDER },
@@ -589,7 +594,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 5,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -599,7 +604,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 5,
                 AtrbCd = AttributeCodes.ECAP_PRICE + "_____20_____1",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -611,7 +616,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 202,
                 AtrbCd = "TEMP_KIT_REBATE",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -624,7 +629,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3681,
                 AtrbCd = AttributeCodes.DSCNT_PER_LN,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -635,7 +640,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3682,
                 AtrbCd = AttributeCodes.QTY,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -646,7 +651,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 203,
                 AtrbCd = "TEMP_TOTAL_DSCNT_PER_LN",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -659,6 +664,32 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3717,
+                AtrbCd = AttributeCodes.PERIOD_PROFILE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 160,
+                Label = "Period Profile",
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3719,
+                AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 240,
+                Label = "AR Settlement Level",
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'AR_SETTLEMENT_LVL')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3348,
                 AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -667,7 +698,29 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 39,
+                Id = 3711,
+                AtrbCd = AttributeCodes.OEM_PLTFRM_LNCH_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiIconWrapper(data, 'OEM_PLTFRM_LNCH_DT')#",
+                Label = "OEM Platform Launch Date",
+                Width = 100,
+                IsRequired = false
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3712,
+                AtrbCd = AttributeCodes.OEM_PLTFRM_EOL_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                Template = "#=gridUtils.uiIconWrapper(data, 'OEM_PLTFRM_EOL_DT')#",
+                Label = "OEM Platform EOL Date",
+                Width = 100,
+                IsRequired = false
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3620,
                 AtrbCd = AttributeCodes.GEO_COMBINED,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsDefaultable = true,
@@ -725,7 +778,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 120,
@@ -737,9 +790,13 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
+            /// PROGRAM_PAYMENT column behaviours in various deal types
+            ///  ECAP - Editable
+            ///  KIT - Readonly
+            ///  VOLTIER, PROGRAM - Readonly and Hidden
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3495,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
@@ -754,7 +811,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3495,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT }, //KIT TODO: should it be readonly and thus here or do we move it up to be editable like ECAP?
@@ -768,13 +825,9 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = true,
                 IsReadOnly = true   //only editable for ECAP deals
             });
-            /// PROGRAM_PAYMENT column behaviours in various deal types
-            ///  ECAP - Editable
-            ///  KIT - Readonly
-            ///  VOLTIER, PROGRAM - Readonly and Hiden
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3495,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
@@ -807,7 +860,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 37,
+                Id = 18,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
@@ -823,7 +876,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 37,
+                Id = 18,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
@@ -839,7 +892,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 36,
+                Id = 21,
                 AtrbCd = AttributeCodes.TIER_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -851,7 +904,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 38,
+                Id = 3474,
                 AtrbCd = AttributeCodes.MRKT_SEG,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsDefaultable = true,
@@ -867,7 +920,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 41,
+                Id = 3662,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 DataType = "string",
@@ -880,7 +933,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 39,
+                Id = 3569,
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 200,
@@ -891,7 +944,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 39,
+                Id = 3011,
                 AtrbCd = AttributeCodes.CUST_MBR_SID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 50,
@@ -901,7 +954,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 36,
+                Id = 3490,
                 AtrbCd = AttributeCodes.NUM_OF_TIERS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
@@ -2462,7 +2515,7 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
+                Id = 3717,
                 AtrbCd = AttributeCodes.PERIOD_PROFILE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 160,
@@ -2478,6 +2531,25 @@ namespace Intel.MyDeals.DataLibrary
                 ExcelTemplate = "#=PERIOD_PROFILE#",
                 IsRequired = true
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3719,
+                AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 240,
+                IsDefaultable = true,
+                Label = "AR Settlement Level",
+                UiType = "DROPDOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'AR_SETTLEMENT_LVL')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,
+                ExcelTemplate = "#=AR_SETTLEMENT_LVL#",
+                IsRequired = true
+            });
+
             //items.Add(new UiTemplateContainerItem  // WIP All types
             //{
             //    Id = 0,

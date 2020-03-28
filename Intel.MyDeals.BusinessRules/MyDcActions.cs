@@ -819,6 +819,14 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void DisableForActivityOrAccrual(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
         public static void CheckDropDownValues(params object[] args)
         {
             List<string> eligibleDropDowns = new List<string>

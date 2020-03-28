@@ -86,7 +86,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Forecast Volume required if L1",
                     ActionRule = MyDcActions.ForecastVolumeRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() }
                 },
                 new MyOpRule
