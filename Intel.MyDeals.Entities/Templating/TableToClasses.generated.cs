@@ -1278,46 +1278,49 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.String HOST_GEO {set;get;}
-	
-	
-	/*
-	private static List<MyCustomersInformation> MyCustomersInformationFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<MyCustomersInformation>();
-	int IDX_ACCESS_TYPE = DB.GetReaderOrdinal(rdr, "ACCESS_TYPE");
-	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-	int IDX_CUST_CHNL = DB.GetReaderOrdinal(rdr, "CUST_CHNL");
-	int IDX_CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
-	int IDX_CUST_DIV_SID = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
-	int IDX_CUST_LVL_SID = DB.GetReaderOrdinal(rdr, "CUST_LVL_SID");
-	int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
-	int IDX_CUST_SID = DB.GetReaderOrdinal(rdr, "CUST_SID");
-	int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
-	int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
-	int IDX_HOST_GEO = DB.GetReaderOrdinal(rdr, "HOST_GEO");
-	
-	while (rdr.Read()){
-	ret.Add(new MyCustomersInformation {
-	ACCESS_TYPE = (IDX_ACCESS_TYPE < 0 || rdr.IsDBNull(IDX_ACCESS_TYPE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACCESS_TYPE),
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-	CUST_CHNL = (IDX_CUST_CHNL < 0 || rdr.IsDBNull(IDX_CUST_CHNL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CHNL),
-	CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
-	CUST_DIV_SID = (IDX_CUST_DIV_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID),
-	CUST_LVL_SID = (IDX_CUST_LVL_SID < 0 || rdr.IsDBNull(IDX_CUST_LVL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_LVL_SID),
-	CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
-	CUST_SID = (IDX_CUST_SID < 0 || rdr.IsDBNull(IDX_CUST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_SID),
-	DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
-	DISP_NM = (IDX_DISP_NM < 0 || rdr.IsDBNull(IDX_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM),
-	HOST_GEO = (IDX_HOST_GEO < 0 || rdr.IsDBNull(IDX_HOST_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOST_GEO)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
-	} // End of class MyCustomersInformation
+
+    [DataMember]
+    public System.String DFLT_PERD_PRFL { set; get; }
+
+
+        /*
+        private static List<MyCustomersInformation> MyCustomersInformationFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<MyCustomersInformation>();
+        int IDX_ACCESS_TYPE = DB.GetReaderOrdinal(rdr, "ACCESS_TYPE");
+        int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+        int IDX_CUST_CHNL = DB.GetReaderOrdinal(rdr, "CUST_CHNL");
+        int IDX_CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
+        int IDX_CUST_DIV_SID = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
+        int IDX_CUST_LVL_SID = DB.GetReaderOrdinal(rdr, "CUST_LVL_SID");
+        int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+        int IDX_CUST_SID = DB.GetReaderOrdinal(rdr, "CUST_SID");
+        int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
+        int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
+        int IDX_HOST_GEO = DB.GetReaderOrdinal(rdr, "HOST_GEO");
+
+        while (rdr.Read()){
+        ret.Add(new MyCustomersInformation {
+        ACCESS_TYPE = (IDX_ACCESS_TYPE < 0 || rdr.IsDBNull(IDX_ACCESS_TYPE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACCESS_TYPE),
+        ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+        CUST_CHNL = (IDX_CUST_CHNL < 0 || rdr.IsDBNull(IDX_CUST_CHNL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CHNL),
+        CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
+        CUST_DIV_SID = (IDX_CUST_DIV_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID),
+        CUST_LVL_SID = (IDX_CUST_LVL_SID < 0 || rdr.IsDBNull(IDX_CUST_LVL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_LVL_SID),
+        CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+        CUST_SID = (IDX_CUST_SID < 0 || rdr.IsDBNull(IDX_CUST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_SID),
+        DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
+        DISP_NM = (IDX_DISP_NM < 0 || rdr.IsDBNull(IDX_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM),
+        HOST_GEO = (IDX_HOST_GEO < 0 || rdr.IsDBNull(IDX_HOST_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOST_GEO)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class MyCustomersInformation
 
 	///<summary>
 	/// Class created via template - Do Not Modify!

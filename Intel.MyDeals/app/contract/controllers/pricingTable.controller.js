@@ -1874,6 +1874,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     data[r][key] = fillValue;
                                 }
 
+                                //Update default value
+                                switch (key) {
+                                    case "PERIOD_PROFILE": {
+                                        root.curPricingTable[key] = root.contractData.Customer.DFLT_PERD_PRFL;
+                                    } break;
+                                }
+
                                 // Auto fill default values from Pricing Strategy level
                                 if ((root.curPricingTable[key] !== undefined) &&
 									(root.curPricingTable[key] !== null) &&

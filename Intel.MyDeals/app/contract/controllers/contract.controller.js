@@ -19,7 +19,7 @@
             $scope.MEETCOMP_TEST_RESULT = "";
             $scope.COST_TEST_RESULT = "";
         }
-        
+
         $scope.selectedTAB = 'PTR'; // Tender Deals
         $scope._tabDetails = []; // Tender Deals
         $scope.templates = $scope.templates || templateData.data;
@@ -54,7 +54,7 @@
         $scope.forceNavigation = false;
         $scope.usrRole = window.usrRole;
         $scope.actualClikedTabName = 'PTR';
-        $scope.currentTAB = 'PTR';        
+        $scope.currentTAB = 'PTR';
         $scope.isTenderWidgetVisible = false;
         $scope.inCompleteCapMissing = false;
         $scope.enablePTRReload = false;
@@ -335,7 +335,7 @@
             $scope.currentTAB = 'DE'; // DE- Deal Editor
         }
 
-        $scope.setMcTag = function (bit){
+        $scope.setMcTag = function (bit) {
             $scope.showMCTag = bit;
         }
 
@@ -405,7 +405,7 @@
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
                     if (($scope.actualClikedTabName == 'MC' || $scope.actualClikedTabName == 'PD') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
-                        if ($scope.isMCForceRunReq() && !$scope.inCompleteCapMissing ) {
+                        if ($scope.isMCForceRunReq() && !$scope.inCompleteCapMissing) {
                             $scope.gotoMCPage();
                         }
                         else {
@@ -672,9 +672,9 @@
                             unWatchEndDate = true;
                         }
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
@@ -736,9 +736,9 @@
                         },
                             500);
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var getCurrentQuarterDetails = function () {
@@ -782,9 +782,9 @@
                             unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
                         }, 500);
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var errInGettingDates = function (response) {
@@ -1000,12 +1000,12 @@
                                 hasFiles = response.data.length > 0;
                                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
                             },
-                            function (response) {
-                                logger.error("Unable to retrieve attachments.", response, response.statusText);
-                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                                $scope.initComplete = true;
-                                hasFiles = false;
-                            });
+                                function (response) {
+                                    logger.error("Unable to retrieve attachments.", response, response.statusText);
+                                    $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                                    $scope.initComplete = true;
+                                    hasFiles = false;
+                                });
                     }
                 }
             },
@@ -1039,12 +1039,12 @@
                             // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                             $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
                         },
-                        function (response) {
-                            logger.error("Unable to delete attachment.", null, "Delete failed");
+                            function (response) {
+                                logger.error("Unable to delete attachment.", null, "Delete failed");
 
-                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
-                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
-                        });
+                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                                $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                            });
                 }
             }
         ];
@@ -1440,7 +1440,7 @@
 
             // if its hybrid PS and already contains a PS do not allow to create one mor pricing table.
             if (ps.IS_HYBRID_PRC_STRAT !== undefined && ps.IS_HYBRID_PRC_STRAT == "1" && ps.PRC_TBL != undefined && ps.PRC_TBL.length > 0) {
-                kendo.alert("You add only one Pricing Table within a Hybrid Pricing Stratergy");
+                kendo.alert("You can add only one pricing table within a hybrid pricing stratergy");
                 return;
             }
             $scope.isAddPricingTableHidden = false;
@@ -2346,6 +2346,111 @@
             });
         }
 
+        // this function takes an array of date ranges in this format:
+        // [{ start: Date, end: Date}]
+        // the array is first sorted, and then checked for any overlap
+
+        function hasDuplicateProduct(pricingTableRows) {
+            var rows = angular.copy(pricingTableRows);
+            var sortedRanges = rows.sort((previous, current) => {
+
+                previous.START_DT = previous.START_DT instanceof Date ? previous.START_DT : new Date(previous.START_DT);
+                current.END_DT = current.END_DT instanceof Date ? current.END_DT : new Date(current.END_DT);
+
+                previous.END_DT = previous.END_DT instanceof Date ? previous.END_DT : new Date(previous.END_DT);
+                current.START_DT = current.START_DT instanceof Date ? current.START_DT : new Date(current.START_DT);
+
+                // get the start date from previous and current
+                var previousTime = previous.START_DT.getTime();
+                var currentTime = current.END_DT.getTime();
+
+                // if the previous is earlier than the current
+                if (previousTime < currentTime) {
+                    return -1;
+                }
+
+                // if the previous time is the same as the current time
+                if (previousTime === currentTime) {
+                    return 0;
+                }
+
+                // if the previous time is later than the current time
+                return 1;
+            });
+
+            var dictDuplicateProducts = {};
+
+            var result = sortedRanges.reduce((result, current, idx, arr) => {
+                // get the previous range
+                if (idx === 0) { return result; }
+                var previous = arr[idx - 1];
+
+
+                // check for any overlap
+                var previousEnd = previous.END_DT.getTime();
+                var currentStart = current.START_DT.getTime();
+                var overlap = (previousEnd >= currentStart);
+
+                // store the result
+                if (overlap) {
+                    if (previous.PTR_SYS_PRD !== "") {
+                        var sysProducts = JSON.parse(previous.PTR_SYS_PRD);
+                        for (var key in sysProducts) {
+                            if (sysProducts.hasOwnProperty(key)) {
+                                angular.forEach(sysProducts[key], function (item) {
+                                    if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
+                                        dictDuplicateProducts[item.PRD_MBR_SID] = previous.DC_ID;
+                                    } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(previous.DC_ID.toString()) < 0) {
+                                        dictDuplicateProducts[item.PRD_MBR_SID] += "," + previous.DC_ID;
+                                        if (result.duplicateProductDCIds[previous.DC_ID] == undefined) {
+                                            result.duplicateProductDCIds[previous.DC_ID] = {
+                                                "OverlapDCID": dictDuplicateProducts[item.PRD_MBR_SID],
+                                                "OverlapProduct": key
+                                            }
+                                        } else {
+                                            result.duplicateProductDCIds[previous.DC_ID].OverlapDCID += "," + dictDuplicateProducts[item.PRD_MBR_SID];
+                                            result.duplicateProductDCIds[previous.DC_ID].OverlapProduct += "," + key;
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    if (current.PTR_SYS_PRD !== "") {
+                        var sysProducts = JSON.parse(current.PTR_SYS_PRD);
+                        for (var key in sysProducts) {
+                            if (sysProducts.hasOwnProperty(key)) {
+                                angular.forEach(sysProducts[key], function (item) {
+                                    if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
+                                        dictDuplicateProducts[item.PRD_MBR_SID] = current.DC_ID;
+                                    } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(current.DC_ID.toString()) < 0) {
+                                        dictDuplicateProducts[item.PRD_MBR_SID] += "," + current.DC_ID;
+                                        if (result.duplicateProductDCIds[current.DC_ID] == undefined) {
+                                            result.duplicateProductDCIds[current.DC_ID] = {
+                                                "OverlapDCID": dictDuplicateProducts[item.PRD_MBR_SID],
+                                                "OverlapProduct": key
+                                            }
+                                        } else {
+                                            result.duplicateProductDCIds[current.DC_ID].OverlapDCID += "," + dictDuplicateProducts[item.PRD_MBR_SID];
+                                            result.duplicateProductDCIds[current.DC_ID].OverlapProduct += "," + key;
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return result;
+
+                // seed the reduce  
+            }, { overlap: false, duplicateProductDCIds: {} });
+
+            // return the final results  
+            return result;
+        }
+
         // **** SAVE CONTRACT Methods ****
         //
         $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, bypassLowerContract) {
@@ -2458,10 +2563,15 @@
                     var dictCustDivision = {};
                     var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
+                    // Check if the rows have duplicate products
+                    var duplicateProductRows = isHybridPS ? hasDuplicateProduct(sData) : {};
+
                     var errDeals = [];
-                    if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT") {
+                    if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT"
+                        || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                         for (var s = 0; s < sData.length; s++) {
                             if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
+                            if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
                             if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" || sData[s].TIER_NBR === 1) {
                                 if (sData[s]["REBATE_TYPE"] === "TENDER") {
                                     hasTender = true;
@@ -2484,19 +2594,26 @@
                                     el._behaviors.isError["REBATE_TYPE"] = true;
                                     el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".");
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
                                 if (Object.keys(dictPayoutBasedon).length > 1) {
                                     el._behaviors.isError["PAYOUT_BASED_ON"] = true;
                                     el._behaviors.validMsg["PAYOUT_BASED_ON"] = "Cannot mix Consumption or Billing type deals in a Hybrid Pricing Stratergy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Cannot mix Consumption or Billing type deals in a Hybrid Pricing Stratergy.");
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PAYOUT_BASED_ON"]);
                                 }
                                 if (Object.keys(dictCustDivision).length > 1) {
                                     el._behaviors.isError["CUST_ACCNT_DIV"] = true;
                                     el._behaviors.validMsg["CUST_ACCNT_DIV"] = "Customer Division has to be the same for all the deals within a Hybrid Pricing Stratergy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Customer Division has to be the same for all the deals within a Hybrid Pricing Stratergy.");
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["CUST_ACCNT_DIV"]);
+                                }
+                                if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
+                                    el._behaviors.isError["PTR_USER_PRD"] = true;
+                                    el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
+                                        duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapProduct + " are duplicate within rows " + duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PTR_USER_PRD"]);
                                 }
                             }
                         }
@@ -2529,73 +2646,73 @@
                         //var isProgramNRE = sData[s].REBATE_TYPE === "NRE" && sData[s].OBJ_SET_TYPE_CD === "PROGRAM";
                         // fix date formats
                         for (var d = 0; d < dateFields.length; d++) {
-                                sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                if (sData[s][dateFields[d]] === "Invalid date") {
-                                    if (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT") {//(isProgramNRE === true || (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT"))
+                            sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                            if (sData[s][dateFields[d]] === "Invalid date") {
+                                if (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT") {//(isProgramNRE === true || (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT"))
+                                    if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                    if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                    if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                    sData[s]._behaviors.isError[dateFields[d]] = true;
+                                    sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
+                                }
+                            } else {
+                                // check dates against contract
+                                if (dateFields[d] === "START_DT") {
+                                    var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
+                                    var isTenderFlag = "0";
+                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                        sData[s]._behaviors.isError[dateFields[d]] = true;
-                                        sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
+                                        sData[s]._behaviors.isError['START_DT'] = true;
+                                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
+                                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                     }
-                                } else {
-                                    // check dates against contract
-                                    if (dateFields[d] === "START_DT") {
-                                        var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                        var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
-                                        var isTenderFlag = "0";
-                                        if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-
-                                        // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                        if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
-                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                            sData[s]._behaviors.isError['START_DT'] = true;
-                                            sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
-                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
-                                        }
-                                    }
-                                    if (dateFields[d] === "END_DT") {
-                                        var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                        var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
-                                        var isTenderFlag = "0";
-                                        if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-
-                                        // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                        if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
-                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                            sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
-                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
-                                        }
-                                    }
-                                    //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
-                                    //{
-                                    //    var tblOEMEOLDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                    //    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
-                                    //    var isTenderFlag = "0";
-                                    //    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-
-                                    //    // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    //    if (moment(endDate).isAfter(tblOEMEOLDate) && isTenderFlag !== "1") {
-                                    //        if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                    //        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                    //        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                    //        sData[s]._behaviors.isError['OEM_PLTFRM_EOL_DT'] = true;
-                                    //        sData[s]._behaviors.validMsg['OEM_PLTFRM_EOL_DT'] = "OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
-                                    //        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    //        errs.PRC_TBL_ROW.push("OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
-                                    //    }
-                                    //}
                                 }
+                                if (dateFields[d] === "END_DT") {
+                                    var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
+                                    var isTenderFlag = "0";
+                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
+                                        if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                        sData[s]._behaviors.isError['END_DT'] = true;
+                                        sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                    }
+                                }
+                                //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
+                                //{
+                                //    var tblOEMEOLDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                //    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
+                                //    var isTenderFlag = "0";
+                                //    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+
+                                //    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                //    if (moment(endDate).isAfter(tblOEMEOLDate) && isTenderFlag !== "1") {
+                                //        if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                //        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                //        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                //        sData[s]._behaviors.isError['OEM_PLTFRM_EOL_DT'] = true;
+                                //        sData[s]._behaviors.validMsg['OEM_PLTFRM_EOL_DT'] = "OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                //        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                //        errs.PRC_TBL_ROW.push("OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                //    }
+                                //}
                             }
+                        }
                         //}
                         if (forceValidation) {
                             // check for rows that need to be translated
@@ -3516,7 +3633,7 @@
                             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                                 // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
                                 //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
-                                for (var i = 0 ; i < $scope.maxKITproducts; i++) {
+                                for (var i = 0; i < $scope.maxKITproducts; i++) {
                                     var tierToDel = (t + 1 + i);
                                     lData[dimAtrbs[a] + dimKey + tierToDel] = "";
                                 }
@@ -3769,9 +3886,9 @@
         $scope.saveContract = function () {
             if ($scope.isTenderContract) {
                 $scope.setBusy("Saving Tender Folio", "Saving the Tender Folio Information");
-            }else {
+            } else {
                 $scope.setBusy("Saving Contract", "Saving the Contract Information");
-            }           
+            }
 
             // Contract Data
             var ct = $scope.contractData;
@@ -3991,7 +4108,7 @@
             ps.DC_PARENT_ID = ct.DC_ID;
             ps.PRC_TBL = [];
             ps.TITLE = $scope.newStrategy.TITLE;
-            ps.IS_HYBRID_PRC_STRAT = ($scope.newStrategy.IS_HYBRID_PRC_STRAT === true? 1:0);
+            ps.IS_HYBRID_PRC_STRAT = ($scope.newStrategy.IS_HYBRID_PRC_STRAT === true ? 1 : 0);
 
             // Add to DB first... then add to screen
             objsetService.createPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
@@ -4502,7 +4619,7 @@
             }
         }
 
-        $scope.validateWipDeals = function (callback) {            
+        $scope.validateWipDeals = function (callback) {
             $scope.saveEntireContractBase($state.current.name, true, true, null, null, null, callback);
         }
 
@@ -4699,7 +4816,7 @@
                     }, 2000);
                 }
             );
-            
+
         });
 
         $scope.isMCForceRunReq = function () {
@@ -4723,10 +4840,10 @@
                     function (x) {
                         return (x.PASSED_VALIDATION === 'Dirty');
                     }).ToArray();
-                if (dirtyItems.length > 0) isPtrDirty = true;  
+                if (dirtyItems.length > 0) isPtrDirty = true;
             }
             else {
-                isPtrDirty = true;                
+                isPtrDirty = true;
             }
             //IF DE
             if (selectedTab == 'DE') {
@@ -4898,7 +5015,7 @@
                 $scope[_actionName]();
         }
         $scope.exlusionList = [];
-        $scope.addExclusionList = function (dataItem) {            
+        $scope.addExclusionList = function (dataItem) {
             if ($scope.exlusionList.indexOf(dataItem.id) > -1) {
                 $scope.exlusionList.splice($scope.exlusionList.indexOf(dataItem.id), 1);
             } else {
@@ -4912,7 +5029,7 @@
                 for (var i = 0; i < $scope.wipData.length; i++) {
                     $scope.exlusionList.push($scope.wipData[i].DC_ID);
                 }
-            }                        
+            }
         }
         $scope.publishTenderDeal = function () {
             $scope.setBusy("Publishing deals", "Converting into individual deals. Then we will redirect you to Tender Dashboard.");
@@ -4942,7 +5059,7 @@
                 }
             );
         }
-        
+
         $scope.loadPublishGrid = function () {
             // Generates options that kendo's html directives will use
             var root = $scope;	// Access to parent scope
@@ -4953,15 +5070,15 @@
             $scope.msg = "Loading Deals";
             function initGrid(data) {
 
-                $timeout(function () {                    
+                $timeout(function () {
                     var order = 0;
                     var dealTypes = [
                         { dealType: $scope.curPricingTable.OBJ_SET_TYPE_CD, name: $scope.curPricingTable.OBJ_SET_TYPE_CD },
 
                     ];
                     var show = [
-                        "EXCLUDE_AUTOMATION","DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
-                        "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE","DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
+                        "EXCLUDE_AUTOMATION", "DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
+                        "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
                         "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "QUOTE_LN_ID", "PERIOD_PROFILE", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON",
                         "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
@@ -5004,7 +5121,7 @@
 
                             var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[dealType.dealType];
                             if (wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION') > 0) {
-                                wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'),1);
+                                wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'), 1);
                             }
 
                             if (window.usrRole === "GA") {
@@ -5030,7 +5147,7 @@
                                     lockable: false
                                 });
                             }
-                            
+
                             wipTemplate.columns.push({
                                 bypassExport: false,
                                 field: "NOTES",
