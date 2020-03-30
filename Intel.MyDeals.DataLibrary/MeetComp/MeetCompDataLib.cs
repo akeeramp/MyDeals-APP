@@ -477,25 +477,26 @@ namespace Intel.MyDeals.DataLibrary
                 lstMeetComp.ForEach(x =>
                 {
                     x.CUST_MBR_SID = lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
-                    var product = lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()).First();
-                    x.PRD_MBR_SID = product.ProductId;
-                    decimal dblCompBench = Math.Round(product.IsServerProduct ? x.COMP_BNCH : 0, 0);
-                    decimal dblIABench = Math.Round(product.IsServerProduct ? x.IA_BNCH : 0, 0);
-                    dt.AddRow(new MeetCompUpdate
+                    foreach (var product in lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()))
                     {
-                        COMP_BNCH = dblCompBench,
-                        IA_BNCH = dblIABench,
-                        COMP_PRC = x.MEET_COMP_PRC,
-                        COMP_SKU = x.MEET_COMP_PRD,
-                        CUST_NM_SID = x.CUST_MBR_SID,
-                        GRP_PRD_SID = x.PRD_MBR_SID.ToString(),
-                        GRP = string.Empty, //Dummy value since type is not null
-                        DEAL_PRD_TYPE = string.Empty, //Dummy value since type is not null
-                        PRD_CAT_NM = string.Empty, //Dummy value since type is not null
-                        GRP_PRD_NM = string.Empty, //Dummy value since type is not null
-                        DEAL_OBJ_SID = 0, //Dummy value since type is not null
-                        MEET_COMP_UPD_FLG = 'T', //Dummy value since type is not null
-                    });
+                        decimal dblCompBench = Math.Round(product.IsServerProduct ? x.COMP_BNCH : 0, 0);
+                        decimal dblIABench = Math.Round(product.IsServerProduct ? x.IA_BNCH : 0, 0);
+                        dt.AddRow(new MeetCompUpdate
+                        {
+                            COMP_BNCH = dblCompBench,
+                            IA_BNCH = dblIABench,
+                            COMP_PRC = x.MEET_COMP_PRC,
+                            COMP_SKU = x.MEET_COMP_PRD,
+                            CUST_NM_SID = x.CUST_MBR_SID,
+                            GRP_PRD_SID = product.ProductId.ToString(),
+                            GRP = string.Empty, //Dummy value since type is not null
+                            DEAL_PRD_TYPE = string.Empty, //Dummy value since type is not null
+                            PRD_CAT_NM = string.Empty, //Dummy value since type is not null
+                            GRP_PRD_NM = string.Empty, //Dummy value since type is not null
+                            DEAL_OBJ_SID = 0, //Dummy value since type is not null
+                            MEET_COMP_UPD_FLG = 'T', //Dummy value since type is not null
+                        });
+                    }
                 });
 
                 Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP cmd = new Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP()
