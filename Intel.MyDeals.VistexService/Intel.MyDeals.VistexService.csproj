@@ -32,21 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Intel.MyDeals.Entities">
+      <HintPath>..\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Intel.Opaque">
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
-    </Reference>
-    <Reference Include="Intel.Opaque.Data">
-      <HintPath>..\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Intel.Opaque.DBAccess">
-      <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="Intel.Opaque.Templating">
-      <HintPath>..\Shared Libraries\Intel.Opaque.Templating.dll</HintPath>
-    </Reference>
-    <Reference Include="Intel.Opaque.Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Shared Libraries\Intel.Opaque.Tools.dll</HintPath>
     </Reference>
     <Reference Include="Intel.Opaque.Utilities.Server">
       <HintPath>..\Shared Libraries\Intel.Opaque.Utilities.Server.dll</HintPath>
@@ -57,14 +47,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
@@ -89,20 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Intel.MyDeals.DataAccessLib\Intel.MyDeals.DataAccessLib.csproj">
-      <Project>{bd90141b-f4de-4fa3-b6d0-45bb04a3596f}</Project>
-      <Name>Intel.MyDeals.DataAccessLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj">
-      <Project>{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}</Project>
-      <Name>Intel.MyDeals.DataLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
-      <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
-      <Name>Intel.MyDeals.Entities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
