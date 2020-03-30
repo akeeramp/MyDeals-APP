@@ -2571,7 +2571,7 @@
                         || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                         for (var s = 0; s < sData.length; s++) {
                             if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
-                            if (duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
+                            if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
                             if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" || sData[s].TIER_NBR === 1) {
                                 if (sData[s]["REBATE_TYPE"] === "TENDER") {
                                     hasTender = true;
