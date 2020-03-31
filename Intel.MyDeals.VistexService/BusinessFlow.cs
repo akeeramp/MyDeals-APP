@@ -36,7 +36,7 @@ namespace Intel.MyDeals.VistexService
             VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
             dataRecord = await DataAccessLayer.GetVistexDataOutBound("VISTEX_DEALS", runMode);
 
-            if (dataRecord.BatchId == "0")
+            if (dataRecord.BatchId == "0" || dataRecord.BatchId == null)
             {
                 Console.WriteLine("There is no outbound data to push..");
             }

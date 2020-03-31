@@ -51,6 +51,12 @@
                         </tr>
                     </tbody>
                 </table>
+                <a ng-if="vm.responseData.length > 10" ng-click="vm.showAll(vm.numberOfRecrods)"
+                   class="showMore" title={{vm.btnText}}>
+                    {{vm.btnText}}
+                    <i ng-if="vm.btnText == 'Show more '" class="intelicon-down"></i>
+                    <i ng-if="vm.btnText == 'Show less '" class="intelicon-up"></i>
+                </a>
             </div>
         </div>
     </div>

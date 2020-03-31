@@ -15,7 +15,8 @@
         vm.apiList = [];
         vm.apiSelectedCD = "";
         vm.responseData = [];
-        vm.numberOfRecrods = 5;
+        vm.numberOfRecrods = 10;
+        vm.btnText = 'Show more ';
         //API KEY Value Pair
         vm.apiPair = {
             "C": 'GetVistexDFStageData',
@@ -57,15 +58,23 @@
             var selectedIndex = comboboxApi._prev;
             if (vm.apiSelectedCD == "") {
                 logger.warning('Please select an API to run Simulator...');
-            }
-            //} else if (vm.apiSelectedCD == 'D') {
-            //    logger.warning('Deal API is not ready to be Tested');
-            //}
+            }            
             else {
                 vm.callAPI(vm.apiSelectedCD);
             }
         }
 
+        vm.showAll = function (recordCnt) {
+            if (recordCnt == 10 && vm.responseData.length > 10) {
+                vm.btnText = 'Show less ';
+                vm.numberOfRecrods = vm.responseData.length;
+            }
+            else {
+                vm.btnText = 'Show more ';
+                vm.numberOfRecrods = 10;
+            }
+
+        }    
         vm.callAPI = function (mode) {
             vm.spinnerMessageHeader = "Test your API";
             vm.spinnerMessageDescription = "Please wait while we are running your API..";

@@ -37,23 +37,29 @@ namespace Intel.MyDeals.BusinessLogic
         public VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode) //VTX_OBJ: DEALS
         {
             List<VistexQueueObject> dataRecords = new List<VistexQueueObject>();
+            VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
             dataRecords = _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
             // Construct the send JSON from the list of bodies we got
+            if(dataRecords.Count > 0)
+            {
+                VistexDealsDataLoadObject tempObj = new VistexDealsDataLoadObject();
+                tempObj.BatchId = dataRecords[0].BatchId;
+                tempObj.Action = "create";
+                tempObj.SourceSystem = "My Deals";
+                tempObj.TargetSystem = "Vistex";
 
-            VistexDealsDataLoadObject tempObj = new VistexDealsDataLoadObject();
-            tempObj.SourceSystem = "My Deals";
-            tempObj.TargetSystem = "Vistex";
-            tempObj.Action = "create";
-            tempObj.BatchId = dataRecords[0].BatchId;
-            tempObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
+                var test = JsonConvert.SerializeObject(tempObj);
+                
+                tempObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
 
-            string jsonData = JsonConvert.SerializeObject(tempObj);
+                string jsonData = JsonConvert.SerializeObject(tempObj);
 
-            VistexDFDataResponseObject responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecords[0].BatchId.ToString());
+                responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecords[0].BatchId.ToString());
 
-            //UpDate Status
-            UpdateVistexDFStageData(responseObj);
-
+                //UpDate Status
+                UpdateVistexDFStageData(responseObj);
+            }
+            
             return responseObj;
 
 
@@ -147,9 +153,9 @@ namespace Intel.MyDeals.BusinessLogic
                 //Parsing Response from SAP PO
                 VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
                 //Assigning Message Body to be Tranferred 
-                responseObj.BatchMessage = visResponse.Message ?? string.Empty;
+                responseObj.BatchMessage = runMode == "D" ? "PO_Processing_Complete" : visResponse.Message ?? string.Empty;
                 //API Type                
-                responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
+                responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 //Status of the Call
                 responseObj.BatchStatus = "PROCESSED";
             }

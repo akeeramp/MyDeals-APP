@@ -57,7 +57,8 @@ namespace Intel.MyDeals.VistexService
         #region MyDeals Data Fetch Calls
         public static async Task<VistexDFDataResponseObject> GetVistexDataOutBound(string dataType, string runMode) //VTX_OBJ: DEALS
         {
-            List<VistexDFDataResponseObject> records = new List<VistexDFDataResponseObject>();
+            VistexDFDataResponseObject records = new VistexDFDataResponseObject();
+            VistexDFDataResponseObject blah = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;
             try
             {
@@ -69,21 +70,18 @@ namespace Intel.MyDeals.VistexService
                 {
                     xmlRecords = await response.Content.ReadAsStringAsync();
                 }
-                else
-                {
-                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
-                List<VistexDFDataResponseObject> blah = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
-                VistexDFDataResponseObject arg = blah.FirstOrDefault();
+                
+                blah = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
+                //VistexDFDataResponseObject arg = blah.FirstOrDefault();
                 //return records = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
-                return arg;
+                //return blah;
             }
             catch (Exception ex)
             {
                 //JmsQCommon.HandleException(ex);
             }
 
-            return records.FirstOrDefault();
+            return blah;
         }
 
 
