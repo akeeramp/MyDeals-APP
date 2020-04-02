@@ -1875,12 +1875,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
 
                                 //Update default value  THIS WILL REMOVE WHEN PT SETS DEFAULT
-                                switch (key) {
-                                case "PERIOD_PROFILE":
-                                    {
-                                        root.curPricingTable[key] = root.contractData.Customer.DFLT_PERD_PRFL;
+                                if (root.curPricingTable[key] == "") {
+                                    switch (key) {
+                                        case "PERIOD_PROFILE":
+                                            {
+                                                root.curPricingTable[key] = root.contractData.Customer.DFLT_PERD_PRFL;
+                                            }
+                                            break;
                                     }
-                                    break;
                                 }
 
                                 // Set to read only and blank (HERE MAHESH)

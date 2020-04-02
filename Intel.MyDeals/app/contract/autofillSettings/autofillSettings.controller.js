@@ -20,6 +20,16 @@
             autofillData.DEFAULT.GEO_COMBINED["extra"] = true;
         }
 
+        if (!!vm.autofillData.DEFAULT.PERIOD_PROFILE) {
+            //add extra tag to PERIOD_PROFILE so that templates give it button behavior
+            autofillData.DEFAULT.PERIOD_PROFILE.type = "BUTTONGROUP";
+        }
+
+        if (!!vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL) {
+            //add extra tag to AR_SETTLEMENT_LVL so that templates give it button behavior
+            autofillData.DEFAULT.AR_SETTLEMENT_LVL.type = "BUTTONGROUP";
+        }
+
         // If tender... change dropdown url to remove frontend YCS2
         if (vm.autofillData.ISTENDER) {
             vm.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
