@@ -64,6 +64,7 @@
             }
         }
 
+        //
         vm.showAll = function (recordCnt) {
             if (recordCnt == 10 && vm.responseData.length > 10) {
                 vm.btnText = 'Show less ';
@@ -74,7 +75,9 @@
                 vm.numberOfRecrods = 10;
             }
 
-        }    
+        }  
+
+        //
         vm.callAPI = function (mode) {
             vm.spinnerMessageHeader = "Test your API";
             vm.spinnerMessageDescription = "Please wait while we are running your API..";

@@ -41,25 +41,28 @@ namespace Intel.MyDeals.BusinessLogic
             dataRecords = _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
             // Construct the send JSON from the list of bodies we got
             if(dataRecords.Count > 0)
-            {
-                VistexDealsDataLoadObject tempObj = new VistexDealsDataLoadObject();
-                tempObj.BatchId = dataRecords[0].BatchId;
-                tempObj.Action = "create";
-                tempObj.SourceSystem = "My Deals";
-                tempObj.TargetSystem = "Vistex";
+            {               
+                string header = "{\"VistexDealsSendHeader\":{\"BatchId\":\""+ dataRecords[0].BatchId+"\",\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"Vistex\",\"Agreements\":{\"AgreementDetails\":[";
+                string jsonData = "";
 
-                var test = JsonConvert.SerializeObject(tempObj);
-                
-                tempObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
+                foreach (VistexQueueObject r in dataRecords)
+                {
+                    jsonData = jsonData + "," + r.RqstJsonData;
+                }
+                //Removing first comma
+                jsonData = jsonData.Remove(0, 1);                
+                //Footer item
+                string footer = "]}}}";
+                //Constructing Complete JSON
+                var finalJSON = header + jsonData + footer;                
+                //Sending to SAP PO
+                responseObj = ConnectSAPPOandResponse(finalJSON, runMode, dataRecords[0].BatchId.ToString());
+                //Update Status
+                SetVistexDealOutBoundStage(dataRecords[0].BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback");
 
-                string jsonData = JsonConvert.SerializeObject(tempObj);
 
-                responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecords[0].BatchId.ToString());
-
-                //UpDate Status
-                UpdateVistexDFStageData(responseObj);
             }
-            
+
             return responseObj;
 
 
@@ -91,8 +94,8 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
                 responseObj.BatchName = "PRODUCT_VERTICAL";
 
-                //UpDate Status
-                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
+                //UpDate Status                
+                SetVistexDealOutBoundStage(batchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback");
 
             }
 
@@ -153,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //Parsing Response from SAP PO
                 VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
                 //Assigning Message Body to be Tranferred 
-                responseObj.BatchMessage = runMode == "D" ? "PO_Processing_Complete" : visResponse.Message ?? string.Empty;
+                responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : visResponse.Message ?? string.Empty;
                 //API Type                
                 responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 //Status of the Call
