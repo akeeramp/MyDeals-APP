@@ -4485,7 +4485,7 @@
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is sone here anyhow.
-                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.contractData.Customer.DFLT_PERD_PRFL == null ?
+                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = ($scope.contractData.Customer != undefined && $scope.contractData.Customer.DFLT_PERD_PRFL == null) ?
                         "" : $scope.contractData.Customer.DFLT_PERD_PRFL; 
                     if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "";
                         // Uncomment this once we have DFLT_AR_SETL_LVL coming as part of customer attributes

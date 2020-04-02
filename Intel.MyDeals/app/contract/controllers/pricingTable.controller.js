@@ -1873,21 +1873,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                     data[r][key] = fillValue;
                                 }
-                                // Set to read only and blank (HERE MAHESH)
-                                if ($scope.$parent.$parent.curPricingTable.PROGRAM_PAYMENT !== "Backend") {
-                                    // Need to add in NRE/MDF item check as well here
-                                    // Update default value
-                                    switch (key) {
-                                        case "PERIOD_PROFILE":
-                                        case "AR_SETTLEMENT_LVL":
-                                        {
-                                            root.curPricingTable[key] = ""; // Blank out the value
-                                            root.curPricingTable._behaviors.isReadOnly[key] = true; // Need to trigger readonly update after this
-                                        }
-                                        break;
-                                    }
-                                }
-
                                 // Auto fill default values from Pricing Strategy level
                                 if ((root.curPricingTable[key] !== undefined) &&
 									(root.curPricingTable[key] !== null) &&
@@ -1901,6 +1886,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     } else {
                                         data[r][key] = root.curPricingTable[key];
                                     }
+                                }
+
+                                // For rebate type MDF ACCRUAL,MDF ACTIVITY & NRE ACCRUAL make period profile/ar settlement blank
+                                if (data[r]["REBATE_TYPE"] != undefined && (data[r]["REBATE_TYPE"] == "MDF ACCRUAL"
+                                    || data[r]["REBATE_TYPE"] == "MDF ACTIVITY"
+                                    || data[r]["REBATE_TYPE"] == "NRE ACCRUAL")) {
+                                    if (data[r]["PERIOD_PROFILE"] !== undefined) {
+                                        data[r]["PERIOD_PROFILE"] = "";
+                                    }
+                                    //if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
+                                    //    data[r]["AR_SETTLEMENT_LVL"] = "";
+                                    //}
+                                }
+
+                                if (data[r]["PROGRAM_PAYMENT"] != undefined && (data[r]["PROGRAM_PAYMENT"] != "Backend")) {
+                                    if (data[r]["PERIOD_PROFILE"] !== undefined) {
+                                        data[r]["PERIOD_PROFILE"] = "";
+                                    }
+                                    //if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
+                                    //    data[r]["AR_SETTLEMENT_LVL"] = "";
+                                    //}
                                 }
                             }
                         }
