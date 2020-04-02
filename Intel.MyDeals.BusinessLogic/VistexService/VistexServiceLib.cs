@@ -42,33 +42,37 @@ namespace Intel.MyDeals.BusinessLogic
             // Construct the send JSON from the list of bodies we got
             if(dataRecords.Count > 0)
             {               
-                string header = "{\"VistexDealsSendHeader\":{\"BatchId\":\""+ dataRecords[0].BatchId+"\",\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"Vistex\",\"Agreements\":{\"AgreementDetails\":[";
                 string jsonData = "";
-
-                foreach (VistexQueueObject r in dataRecords)
+                int indx = 0;
+                for (; indx < dataRecords.Count; indx++)
                 {
-                    jsonData = jsonData + "," + r.RqstJsonData;
-                }
-                //Removing first comma
-                jsonData = jsonData.Remove(0, 1);                
-                //Footer item
-                string footer = "]}}}";
-                //Constructing Complete JSON
-                var finalJSON = header + jsonData + footer;                
-                //Sending to SAP PO
-                responseObj = ConnectSAPPOandResponse(finalJSON, runMode, dataRecords[0].BatchId.ToString());
-                //Update Status
-                SetVistexDealOutBoundStage(dataRecords[0].BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback");
-
-
+                    jsonData = jsonData + "," + dataRecords[indx].RqstJsonData;
+                    //Checking less the 4MB packet size
+                    if(jsonData.Length * sizeof(Char) > 4000000 || indx == dataRecords.Count - 1)
+                    {
+                        jsonData = jsonData.Remove(0, 1);
+                        responseObj = sendDealdataToSapPo(dataRecords[0].BatchId, jsonData);
+                        jsonData = "";
+                    }
+                }                
             }
-
             return responseObj;
-
-
-            //return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
+        public VistexDFDataResponseObject sendDealdataToSapPo(Guid BatchId, string jsonData)
+        {
+            string header = "{\"VistexDealsSendHeader\":{\"BatchId\":\"" + BatchId.ToString() + "\",\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"Vistex\",\"Agreements\":{\"AgreementDetails\":[";
+            //Footer item
+            string footer = "]}}}";
+            //Constructing Complete JSON
+            var finalJSON = header + jsonData + footer;
+            //Sending to SAP PO
+            VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
+            responseObj = ConnectSAPPOandResponse(jsonData, "D", BatchId.ToString());
+            //Update Status
+            SetVistexDealOutBoundStage(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback");
+            return responseObj;
+        }
         public VistexDFDataResponseObject GetVistexDataOutBound(string packetType) //VTX_OBJ: VERTICALS
         {
             List<VistexQueueObject> records = new List<VistexQueueObject>();            
