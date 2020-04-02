@@ -92,6 +92,9 @@ namespace Intel.MyDeals.Entities
             {
                 public int DealId { get; set; }
                 public string ErrMessage { get; set; }
+                public string Status { get; set; }
+                public int AgreementId { get; set; }
+                public string DealType { get; set; }
             }
         }
     }

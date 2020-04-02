@@ -887,7 +887,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                    data[myRowIndex + i]["DEAL_GRP_NM"] = data[myRowIndex]["DEAL_GRP_NM"];
 					                }
 
-					                // Look for another occurance of the Deal Group Name (AKA - Kit Name)
+					                // Look for another occurence of the Deal Group Name (AKA - Kit Name)
 					                for (var i = 0; i < data.length; i++) {
 					                    if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == formatStringForDictKey(myRow["DEAL_GRP_NM"])
 											&& parseInt(data[i]["TIER_NBR"]) == 1
@@ -897,7 +897,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					                    }
 					                }
 
-					                if (dealGrpKeyFirstIndex != myRowIndex) { // Another occurance of the Deal Group Name (AKA - Kit Name) exists
+					                if (dealGrpKeyFirstIndex != myRowIndex) { // Another occurence of the Deal Group Name (AKA - Kit Name) exists
 					                    var existingRow = data[dealGrpKeyFirstIndex];
 					                    var isNonEditableKITname = ((parseInt(existingRow["HAS_TRACKER"]) || 0) == 1 || (!!existingRow._behaviors && !!existingRow._behaviors.isReadOnly && existingRow._behaviors.isReadOnly["PTR_USER_PRD"] == true));
 
@@ -1873,14 +1873,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                     data[r][key] = fillValue;
                                 }
-
-                                //Update default value
-                                switch (key) {
-                                    case "PERIOD_PROFILE": {
-                                        root.curPricingTable[key] = root.contractData.Customer.DFLT_PERD_PRFL;
-                                    } break;
-                                }
-
                                 // Auto fill default values from Pricing Strategy level
                                 if ((root.curPricingTable[key] !== undefined) &&
 									(root.curPricingTable[key] !== null) &&
@@ -1890,10 +1882,31 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 									&& (data[r][key] === null || data[r][key] === "") // don't override if there is an existing value
 								) {
                                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" && key === "NUM_OF_TIERS") {
-                                        // Dont override the row num tiers with pricing table numtiiers for kit deals
+                                        // Don't override the row num tiers with pricing table num tiers for kit deals
                                     } else {
                                         data[r][key] = root.curPricingTable[key];
                                     }
+                                }
+
+                                // For rebate type MDF ACCRUAL,MDF ACTIVITY & NRE ACCRUAL make period profile/ar settlement blank
+                                if (data[r]["REBATE_TYPE"] != undefined && (data[r]["REBATE_TYPE"] == "MDF ACCRUAL"
+                                    || data[r]["REBATE_TYPE"] == "MDF ACTIVITY"
+                                    || data[r]["REBATE_TYPE"] == "NRE ACCRUAL")) {
+                                    if (data[r]["PERIOD_PROFILE"] !== undefined) {
+                                        data[r]["PERIOD_PROFILE"] = "";
+                                    }
+                                    //if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
+                                    //    data[r]["AR_SETTLEMENT_LVL"] = "";
+                                    //}
+                                }
+
+                                if (data[r]["PROGRAM_PAYMENT"] != undefined && (data[r]["PROGRAM_PAYMENT"] != "Backend")) {
+                                    if (data[r]["PERIOD_PROFILE"] !== undefined) {
+                                        data[r]["PERIOD_PROFILE"] = "";
+                                    }
+                                    //if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
+                                    //    data[r]["AR_SETTLEMENT_LVL"] = "";
+                                    //}
                                 }
                             }
                         }
