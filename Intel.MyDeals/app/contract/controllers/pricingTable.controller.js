@@ -1873,18 +1873,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                     data[r][key] = fillValue;
                                 }
-
-                                //Update default value  THIS WILL REMOVE WHEN PT SETS DEFAULT
-                                if (root.curPricingTable[key] == "") {
-                                    switch (key) {
-                                        case "PERIOD_PROFILE":
-                                            {
-                                                root.curPricingTable[key] = root.contractData.Customer.DFLT_PERD_PRFL;
-                                            }
-                                            break;
-                                    }
-                                }
-
                                 // Set to read only and blank (HERE MAHESH)
                                 if ($scope.$parent.$parent.curPricingTable.PROGRAM_PAYMENT !== "Backend") {
                                     // Need to add in NRE/MDF item check as well here
