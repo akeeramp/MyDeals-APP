@@ -672,9 +672,9 @@
                             unWatchEndDate = true;
                         }
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
@@ -736,9 +736,9 @@
                         },
                             500);
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var getCurrentQuarterDetails = function () {
@@ -782,9 +782,9 @@
                             unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
                         }, 500);
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var errInGettingDates = function (response) {
@@ -1000,12 +1000,12 @@
                                 hasFiles = response.data.length > 0;
                                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
                             },
-                            function (response) {
-                                logger.error("Unable to retrieve attachments.", response, response.statusText);
-                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                                $scope.initComplete = true;
-                                hasFiles = false;
-                            });
+                                function (response) {
+                                    logger.error("Unable to retrieve attachments.", response, response.statusText);
+                                    $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                                    $scope.initComplete = true;
+                                    hasFiles = false;
+                                });
                     }
                 }
             },
@@ -1039,12 +1039,12 @@
                             // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                             $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
                         },
-                        function (response) {
-                            logger.error("Unable to delete attachment.", null, "Delete failed");
+                            function (response) {
+                                logger.error("Unable to delete attachment.", null, "Delete failed");
 
-                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
-                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
-                        });
+                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                                $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                            });
                 }
             }
         ];
@@ -1569,7 +1569,7 @@
 
         function getTenderBasedDefaults() {
             var data = $scope.newPricingTable["_defaultAtrbs"];
-            
+
             if ($scope.isTenderContract) {
                 data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
                     .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/true");
@@ -4485,12 +4485,12 @@
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is sone here anyhow.
-                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = ($scope.contractData.Customer != undefined && $scope.contractData.Customer.DFLT_PERD_PRFL == null) ?
-                        "" : $scope.contractData.Customer.DFLT_PERD_PRFL; 
-                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "";
-                        // Uncomment this once we have DFLT_AR_SETL_LVL coming as part of customer attributes
-                        //$scope.contractData.Customer.DFLT_AR_SETL_LVL == null ?
-                        //"" : $scope.contractData.Customer.DFLT_AR_SETL_LVL; 
+                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
+                        ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
+                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
+                       ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.AR_SETTLEMENT_LVL;
+                    //$scope.contractData.Customer.DFLT_AR_SETL_LVL == null ?
+                    //"" : $scope.contractData.Customer.DFLT_AR_SETL_LVL; 
 
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
