@@ -1888,26 +1888,39 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                 }
 
-                                // For rebate type MDF ACCRUAL,MDF ACTIVITY & NRE ACCRUAL make period profile/ar settlement blank
-                                if (data[r]["REBATE_TYPE"] != undefined && (data[r]["REBATE_TYPE"] == "MDF ACCRUAL"
-                                    || data[r]["REBATE_TYPE"] == "MDF ACTIVITY"
-                                    || data[r]["REBATE_TYPE"] == "NRE ACCRUAL")) {
-                                    if (data[r]["PERIOD_PROFILE"] !== undefined) {
-                                        data[r]["PERIOD_PROFILE"] = "";
+
+                                // Set this to true if any conditions to blank out values is set
+                                var isBlankoutValueCondition = false;
+                                isBlankoutValueCondition = root.curPricingTable["PROGRAM_PAYMENT"] != "Backend" ||
+                                    root.curPricingTable["REBATE_TYPE"] == "MDF ACCRUAL" ||
+                                    root.curPricingTable["REBATE_TYPE"] == "MDF ACTIVITY" ||
+                                    root.curPricingTable["REBATE_TYPE"] == "NRE ACCRUAL";
+                                switch (key) {
+                                    case "PERIOD_PROFILE":
+                                    {
+                                        if (data[r][key] !== undefined) {
+                                            if (isBlankoutValueCondition == true) {
+                                                data[r][key] = "";
+                                            } else {
+                                                data[r][key] = root.contractData.Customer.DFLT_PERD_PRFL;
+                                            }
+                                        }
+                                        break;
                                     }
-                                    //if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
-                                    //    data[r]["AR_SETTLEMENT_LVL"] = "";
-                                    //}
+                                    case "AR_SETTLEMENT_LVL":
+                                    {
+                                        if (data[r][key] !== undefined) {
+                                            if (isBlankoutValueCondition == true) {
+                                                data[r][key] = "";
+                                            } else {
+                                                data[r][key] = ""; // Fill in later with correct default value
+                                                //data[r][key] = root.contractData.Customer.DFLT_PERD_PRFL;
+                                            }
+                                        }
+                                        break;
+                                    }
                                 }
 
-                                if (data[r]["PROGRAM_PAYMENT"] != undefined && (data[r]["PROGRAM_PAYMENT"] != "Backend")) {
-                                    if (data[r]["PERIOD_PROFILE"] !== undefined) {
-                                        data[r]["PERIOD_PROFILE"] = "";
-                                    }
-                                    //if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
-                                    //    data[r]["AR_SETTLEMENT_LVL"] = "";
-                                    //}
-                                }
                             }
                         }
                         // increment pivot dim (example tier 1 to tier 2)

@@ -288,7 +288,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Read Only and Blank value if Rebate Type is...",
                     ActionRule = MyDcActions.DisableForActivityOrAccrual,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && (de.HasValue("MDF ACTIVITY") ||
                                                                                                                  de.HasValue("MDF ACCRUAL") ||
@@ -336,7 +336,8 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Readonly if Frontend Deal",
                     ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate, MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()
                         && !String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>

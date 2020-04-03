@@ -111,6 +111,25 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    // If deal type is Vol Tier and Type is MDF ACTIVITY, then ensure that user fills in VOLUME values
+                    Title="Setting Vistex Required for certain Payment and Rebate Types",
+                    ActionRule = MyDcActions.VistexRequiredFields,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     // If deal type is Program and Type is NRE, then ensure that user fills in OEM_PLTFRM_LNCH_DT, OEM_PLTFRM_EOL_DT values
                     Title="Required if Program Type is NRE",
                     ActionRule = MyDcActions.ProgramNreDateChecks,

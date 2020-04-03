@@ -1648,7 +1648,7 @@ namespace Intel.MyDeals.BusinessRules
                 case OpDataElementType.PRC_TBL_ROW:
                     IOpDataElement deHasTrkr = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
                     IOpDataElement deInRedeal = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
-                    if (deParentStage == null || deHasTrkr == null || deInRedeal == null) return; // Because apparently meeto comp uses this as well and doesn't bring these fields down
+                    if (deParentStage == null || deHasTrkr == null || deInRedeal == null) return; // Because apparently meet comp uses this as well and doesn't bring these fields down
                     testObject = ((deHasTrkr.AtrbValue.ToString() == "0") || (deHasTrkr.AtrbValue.ToString() == "1" && deInRedeal.AtrbValue.ToString() == "1")) &&
                         (!parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString()));
                     break;
@@ -1661,6 +1661,25 @@ namespace Intel.MyDeals.BusinessRules
 
             if (testObject) // If the testObject meets above requirements, run this test...
             {
+                r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            }
+        }
+
+        public static void VistexRequiredFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+
+            if (programPayment == null || rebateType == null) return; // Safety check, if they are missing, skip!
+
+            string programPaymentValue = programPayment.AtrbValue.ToString();
+            string rebateTypeValue = rebateType.AtrbValue.ToString();
+            if (programPaymentValue == "Backend" && !(rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL"))
+            {
+                // Apply the action from the rule (SetRequired) to the targets (Anything in Target[])
                 r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
             }
         }
