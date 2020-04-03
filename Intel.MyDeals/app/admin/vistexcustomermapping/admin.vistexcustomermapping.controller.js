@@ -84,8 +84,30 @@
             valuePrimitive: true
         };
 
+        vm.ARSettlementLevelOptions = {
+            placeholder: "Select AR Settlement Level",
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: {
+                        url: "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL"
+                    }
+                }
+            },
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true
+        };
+
         vm.PeriodProfileDropDownEditor = function (container, options) {
             var editor = $('<select id="cmb_DFLT_PERD_PRFL"  kendo-combo-box k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
+
+        vm.ARSettlementLevelDropDownEditor = function (container, options) {
+            var AREditor = $('<select id="cmb_DFLT_AR_SETL_LVL"  kendo-combo-box k-options="vm.ARSettlementLevelOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.gridOptions = {
@@ -132,7 +154,10 @@
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
                 },
-                { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor }]
+                { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
+                { field: "DFLT_AR_SETL_LVL", title: "AR Settlement", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor }
+            ]
+
         }
     }
 })();

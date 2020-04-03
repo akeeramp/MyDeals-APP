@@ -29,6 +29,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    int IDX_DFLT_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_AR_SETL_LVL");
                     int IDX_VISTEX_CUST_FLAG = DB.GetReaderOrdinal(rdr, "VISTEX_CUST_FLAG");
                     int IDX_DFLT_PERD_PRFL = DB.GetReaderOrdinal(rdr, "DFLT_PERD_PRFL");
 
@@ -38,6 +39,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                            DFLT_AR_SETL_LVL = (IDX_DFLT_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_AR_SETL_LVL),
                             VISTEX_CUST_FLAG = (IDX_VISTEX_CUST_FLAG < 0 || rdr.IsDBNull(IDX_VISTEX_CUST_FLAG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_VISTEX_CUST_FLAG),
                             DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL)
                         });
@@ -70,12 +72,14 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     in_cust_mbr_sid = data.CUST_MBR_SID,
                     in_vistex_cust_flag = data.VISTEX_CUST_FLAG,
+                    @in_dflt_ar_setl_lvl = data.DFLT_AR_SETL_LVL,
                     in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                     in_dflt_perd_prfl = data.DFLT_PERD_PRFL == null ? string.Empty : data.DFLT_PERD_PRFL
                 }))
                 {
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    int IDX_DFLT_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_AR_SETL_LVL");
                     int IDX_VISTEX_CUST_FLAG = DB.GetReaderOrdinal(rdr, "VISTEX_CUST_FLAG");
                     int IDX_DFLT_PERD_PRFL = DB.GetReaderOrdinal(rdr, "DFLT_PERD_PRFL");
 
@@ -85,6 +89,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                            DFLT_AR_SETL_LVL = (IDX_DFLT_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_AR_SETL_LVL),
                             VISTEX_CUST_FLAG = (IDX_VISTEX_CUST_FLAG < 0 || rdr.IsDBNull(IDX_VISTEX_CUST_FLAG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_VISTEX_CUST_FLAG),
                             DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL)
                         });

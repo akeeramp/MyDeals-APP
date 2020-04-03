@@ -99,6 +99,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
                     int IDX_HOST_GEO = DB.GetReaderOrdinal(rdr, "HOST_GEO");
                     int IDX_DFLT_PERD_PRFL = DB.GetReaderOrdinal(rdr, "DFLT_PERD_PRFL");
+                    int IDX_DFLT_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_AR_SETL_LVL");
 
                     while (rdr.Read())
                     {
@@ -115,7 +116,8 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
                             DISP_NM = (IDX_DISP_NM < 0 || rdr.IsDBNull(IDX_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM),
                             HOST_GEO = (IDX_HOST_GEO < 0 || rdr.IsDBNull(IDX_HOST_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOST_GEO),
-                            DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL)
+                            DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL),
+                            DFLT_AR_SETL_LVL = (IDX_DFLT_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_AR_SETL_LVL)
                         });
                     } // while
 
