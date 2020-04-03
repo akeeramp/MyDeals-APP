@@ -65,7 +65,8 @@
                         CUST_MBR_SID: { editable: false },
                         CUST_NM: { editable: false, nullable: true },
                         VISTEX_CUST_FLAG: { type: "boolean" },
-                        PERIOD_PROFILE: { editable: true, nullable: true },
+                        DFLT_PERD_PRFL: { editable: true, nullable: true },
+                        DFLT_AR_SETL_LVL: { editable: true, nullable: true }
                     }
                 }
             }
