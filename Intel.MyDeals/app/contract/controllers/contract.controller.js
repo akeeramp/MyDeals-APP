@@ -672,9 +672,9 @@
                             unWatchEndDate = true;
                         }
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
@@ -736,9 +736,9 @@
                         },
                             500);
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var getCurrentQuarterDetails = function () {
@@ -782,9 +782,9 @@
                             unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
                         }, 500);
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var errInGettingDates = function (response) {
@@ -1000,12 +1000,12 @@
                                 hasFiles = response.data.length > 0;
                                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
                             },
-                                function (response) {
-                                    logger.error("Unable to retrieve attachments.", response, response.statusText);
-                                    $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                                    $scope.initComplete = true;
-                                    hasFiles = false;
-                                });
+                            function (response) {
+                                logger.error("Unable to retrieve attachments.", response, response.statusText);
+                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                                $scope.initComplete = true;
+                                hasFiles = false;
+                            });
                     }
                 }
             },
@@ -1039,12 +1039,12 @@
                             // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                             $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
                         },
-                            function (response) {
-                                logger.error("Unable to delete attachment.", null, "Delete failed");
+                        function (response) {
+                            logger.error("Unable to delete attachment.", null, "Delete failed");
 
-                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
-                                $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
-                            });
+                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                        });
                 }
             }
         ];
@@ -1569,7 +1569,7 @@
 
         function getTenderBasedDefaults() {
             var data = $scope.newPricingTable["_defaultAtrbs"];
-
+            
             if ($scope.isTenderContract) {
                 data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
                     .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/true");
@@ -1647,6 +1647,8 @@
             if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
             if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
             if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
+            if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
+            if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
 
             //not sure if necessary, javascript pass by value/reference always throwin' me off. :(
             $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
@@ -4468,7 +4470,6 @@
             if (oldValue === newValue) return;
 
             if (oldValue != null && newValue == null) return;
-
             if ((oldValue == null && newValue != null) || ($scope.isTenderContract && $scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT')) {
                 //initialize, hard coded for now, build into an admin page in future.
                 var marketSegment = ($scope.isTenderContract) ? "Corp" : "All Direct Market Segments";
@@ -4484,6 +4485,12 @@
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is sone here anyhow.
+                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = ($scope.contractData.Customer != undefined && $scope.contractData.Customer.DFLT_PERD_PRFL == null) ?
+                        "" : $scope.contractData.Customer.DFLT_PERD_PRFL; 
+                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "";
+                        // Uncomment this once we have DFLT_AR_SETL_LVL coming as part of customer attributes
+                        //$scope.contractData.Customer.DFLT_AR_SETL_LVL == null ?
+                        //"" : $scope.contractData.Customer.DFLT_AR_SETL_LVL; 
 
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
@@ -4500,6 +4507,8 @@
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = $scope.currentPricingTable["NUM_OF_TIERS"] != "" ? $scope.currentPricingTable["NUM_OF_TIERS"] : "1";
                     if (!!newValue["SERVER_DEAL_TYPE"]) newValue["SERVER_DEAL_TYPE"].value = $scope.currentPricingTable["SERVER_DEAL_TYPE"];
+                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.currentPricingTable["PERIOD_PROFILE"];
+                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = $scope.currentPricingTable["AR_SETTLEMENT_LVL"];
                 }
             } else {
                 // TODO: Hook these up to service (add service into injection and physical files)

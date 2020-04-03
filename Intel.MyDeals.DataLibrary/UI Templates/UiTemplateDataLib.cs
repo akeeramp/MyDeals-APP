@@ -293,7 +293,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 160,
                 IsDefaultable = true,
                 Label = "Period Profile",
-                UiType = "DROPDOWN",
+                UiType = "BUTTONGROUP",
                 Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
                 LookupText = "DROP_DOWN",
@@ -307,11 +307,35 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 240,
                 IsDefaultable = true,
                 Label = "AR Settlement Level",
-                UiType = "DROPDOWN",
+                UiType = "BUTTONGROUP",
                 Template = "#=gridUtils.uiControlWrapper(data, 'AR_SETTLEMENT_LVL')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3573,
+                AtrbCd = AttributeCodes.REBATE_OA_MAX_VOL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 140,
+                Label = "Overarching Maximum Volume",
+                Format = "{0:d}",
+                UiType = "IntegerTextBox",
+                DataType = "number",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_VOL', 'number')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3574,
+                AtrbCd = AttributeCodes.REBATE_OA_MAX_AMT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 140,
+                Label = "Overarching Maximum Dollar",
+                Format = "{0:d}",
+                UiType = "NumericTextBox",
+                DataType = "number",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"
             });
 
             #endregion PRICING TABLE
@@ -687,6 +711,30 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3573,
+                AtrbCd = AttributeCodes.REBATE_OA_MAX_VOL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 140,
+                Label = "Overarching Maximum Volume",
+                Format = "{0:d}",
+                UiType = "IntegerTextBox",
+                DataType = "number",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_VOL', 'number')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3574,
+                AtrbCd = AttributeCodes.REBATE_OA_MAX_AMT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 140,
+                Label = "Overarching Maximum Dollar",
+                Format = "{0:d}",
+                UiType = "NumericTextBox",
+                DataType = "number",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem
             {
