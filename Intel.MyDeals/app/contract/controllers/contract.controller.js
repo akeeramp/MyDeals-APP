@@ -2564,6 +2564,7 @@
                     var dictPayoutBasedon = {};
                     var dictCustDivision = {};
                     var dictArSettlement = {};
+                    var dictPeriodProfile = {};
                     var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
                     // Check if the rows have duplicate products
@@ -2584,7 +2585,8 @@
                                 if (isHybridPS) {
                                     dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
                                     dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
-                                    dictCustDivision[sData[s]["AR_SETTLEMENT_LVL"]] = s;
+                                    dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
+                                    dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
                                 }
                             }
                         }
@@ -2600,11 +2602,17 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
-                                if (dictArSettlement) {
+                                if (Object.keys(dictArSettlement).length > 1) {
                                     el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
                                     el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All settlement levels must be same in hybrid pricing stratergy"
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                                }
+                                if (Object.keys(dictPeriodProfile).length > 1) {
+                                    el._behaviors.isError["PERIOD_PROFILE"] = true;
+                                    el._behaviors.validMsg["PERIOD_PROFILE"] = "All period profile must be same in hybrid pricing stratergy"
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
                                 }
                                 if (Object.keys(dictPayoutBasedon).length > 1) {
                                     el._behaviors.isError["PAYOUT_BASED_ON"] = true;
