@@ -4488,9 +4488,7 @@
                     if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
                         ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
                     if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
-                       ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.AR_SETTLEMENT_LVL;
-                    //$scope.contractData.Customer.DFLT_AR_SETL_LVL == null ?
-                    //"" : $scope.contractData.Customer.DFLT_AR_SETL_LVL; 
+                        ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
 
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
@@ -4514,18 +4512,6 @@
                 // TODO: Hook these up to service (add service into injection and physical files)
                 if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);
                 if (!!newValue[GEO]) newValue[GEO].value = MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue[GEO].value, oldValue[GEO].value);
-
-                //if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
-                //}
-
-                //if (oldValue["PAYOUT_BASED_ON"] != newValue["PAYOUT_BASED_ON"]) {
-                //}
-
-                //if (oldValue["MEET_COMP_PRICE_QSTN"] != newValue["MEET_COMP_PRICE_QSTN"]) {
-                //}
-
-                //if (oldValue["PROGRAM_PAYMENT"] != newValue["PROGRAM_PAYMENT"]) {
-                //}
             }
         },
             true);
