@@ -41,31 +41,38 @@ namespace Intel.MyDeals.BusinessLogic
             dataRecords = _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
             // Construct the send JSON from the list of bodies we got
             if(dataRecords.Count > 0)
-            {
-                VistexDealsDataLoadObject tempObj = new VistexDealsDataLoadObject();
-                tempObj.BatchId = dataRecords[0].BatchId;
-                tempObj.Action = "create";
-                tempObj.SourceSystem = "My Deals";
-                tempObj.TargetSystem = "Vistex";
-
-                var test = JsonConvert.SerializeObject(tempObj);
-                
-                tempObj.DealObjectsJson = "[" + string.Join(",", dataRecords.Select(d => d.RqstJsonData)) + "]"; ;
-
-                string jsonData = JsonConvert.SerializeObject(tempObj);
-
-                responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecords[0].BatchId.ToString());
-
-                //UpDate Status
-                UpdateVistexDFStageData(responseObj);
+            {               
+                string jsonData = "";
+                int indx = 0;
+                for (; indx < dataRecords.Count; indx++)
+                {
+                    jsonData = jsonData + "," + dataRecords[indx].RqstJsonData;
+                    //Checking less the 4MB packet size
+                    if(jsonData.Length * sizeof(Char) > 4000000 || indx == dataRecords.Count - 1)
+                    {
+                        jsonData = jsonData.Remove(0, 1);
+                        responseObj = sendDealdataToSapPo(dataRecords[0].BatchId, jsonData);
+                        jsonData = "";
+                    }
+                }                
             }
-            
             return responseObj;
-
-
-            //return _vistexServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
         }
 
+        public VistexDFDataResponseObject sendDealdataToSapPo(Guid BatchId, string jsonData)
+        {
+            string header = "{\"VistexDealsSendHeader\":{\"BatchId\":\"" + BatchId.ToString() + "\",\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"Vistex\",\"Agreements\":{\"AgreementDetails\":[";
+            //Footer item
+            string footer = "]}}}";
+            //Constructing Complete JSON
+            var finalJSON = header + jsonData + footer;
+            //Sending to SAP PO
+            VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
+            responseObj = ConnectSAPPOandResponse(jsonData, "D", BatchId.ToString());
+            //Update Status
+            SetVistexDealOutBoundStage(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback");
+            return responseObj;
+        }
         public VistexDFDataResponseObject GetVistexDataOutBound(string packetType) //VTX_OBJ: VERTICALS
         {
             List<VistexQueueObject> records = new List<VistexQueueObject>();            
@@ -91,8 +98,8 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString());
                 responseObj.BatchName = "PRODUCT_VERTICAL";
 
-                //UpDate Status
-                SetVistexDealOutBoundStage(batchId, "PO_Processing_Complete");//For testing i am removing it
+                //UpDate Status                
+                SetVistexDealOutBoundStage(batchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback");
 
             }
 
@@ -153,7 +160,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //Parsing Response from SAP PO
                 VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
                 //Assigning Message Body to be Tranferred 
-                responseObj.BatchMessage = runMode == "D" ? "PO_Processing_Complete" : visResponse.Message ?? string.Empty;
+                responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : visResponse.Message ?? string.Empty;
                 //API Type                
                 responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
                 //Status of the Call
