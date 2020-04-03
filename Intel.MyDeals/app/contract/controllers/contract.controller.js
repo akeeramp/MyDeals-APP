@@ -2563,6 +2563,7 @@
                     var hasNonTender = false;
                     var dictPayoutBasedon = {};
                     var dictCustDivision = {};
+                    var dictArSettlement = {};
                     var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
                     // Check if the rows have duplicate products
@@ -2583,6 +2584,7 @@
                                 if (isHybridPS) {
                                     dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
                                     dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                                    dictCustDivision[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                 }
                             }
                         }
@@ -2597,6 +2599,12 @@
                                     el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
+                                }
+                                if (hasTender && hasNonTender) {
+                                    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All settlement levels must be same in hybrid pricing stratergy"
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                                 }
                                 if (Object.keys(dictPayoutBasedon).length > 1) {
                                     el._behaviors.isError["PAYOUT_BASED_ON"] = true;
