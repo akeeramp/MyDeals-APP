@@ -2600,7 +2600,7 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
-                                if (hasTender && hasNonTender) {
+                                if (dictArSettlement) {
                                     el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
                                     el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All settlement levels must be same in hybrid pricing stratergy"
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
