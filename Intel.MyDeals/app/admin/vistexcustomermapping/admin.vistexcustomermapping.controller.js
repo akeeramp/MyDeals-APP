@@ -41,13 +41,18 @@
                             kendo.alert("Default value of <b>Period Profile</b> cannot be empty for Vistex customer!");
                         }
                         else {
-                            vistexcustomermappingService.UpdateVistexCustomer(e.data)
-                                .then(function (response) {
-                                    e.success(response.data);
-                                    logger.success("Vistex Customer Mapping updated.");
-                                }, function (response) {
-                                    logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
-                                });
+                            if (e.data.DFLT_AR_SETL_LVL != null && e.data.DFLT_AR_SETL_LVL != '' && $("#cmb_DFLT_AR_SETL_LVL option[value='" + e.data.DFLT_AR_SETL_LVL + "']").length == 0) {
+                                kendo.alert("Please select valid <b>AR Settlement</b>")
+                            }
+                            else {
+                                vistexcustomermappingService.UpdateVistexCustomer(e.data)
+                                    .then(function (response) {
+                                        e.success(response.data);
+                                        logger.success("Vistex Customer Mapping updated.");
+                                    }, function (response) {
+                                        logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
+                                    });
+                            }
                         }
                     }
                 },
