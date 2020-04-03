@@ -189,23 +189,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ClearSysComments,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
                 },
-				//new MyOpRule
-				//{
-				//	Title="End Volume must be greater than Start volume",
-				//	ActionRule = MyDcActions.ExecuteActions,
-				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-    //                AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_VOL) && de.HasValue()).Any(),
-				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-				//	{
-				//		new OpRuleAction<IOpDataElement>
-				//		{
-				//			Action = MyDeActions.IsGreaterThan,
-				//			Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_VOL}) || de.AtrbCdIn(new List<string> {AttributeCodes.STRT_VOL}),
-				//			Args = new object[] {"{0} must be positive"},
-				//		}
-				//	}
-				//},
-				new MyOpRule
+                new MyOpRule
                 {
                     Title="Check for Atrb Changes for TimeLine",
                     ActionRule = MyDcActions.TimelineAtrbChangeCheck,
@@ -271,7 +255,6 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-
                 new MyOpRule
                 {
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
@@ -280,24 +263,6 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
-                // Removed since it was a dummy test for date in past check.  Will bring back when real rule is needed.
-                //new MyOpRule
-                //{
-                //    Title="Change title if in the past",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.START_DT) && de.IsDateInPast() && de.HasValue()).Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetAtrbValue,
-                //            Args = new object[] {"New Title"},
-                //            Target = new[] {AttributeCodes.TITLE}
-                //        }
-                //    }
-
-                //},
                 new MyOpRule
                 {
                     Title="Title already exists check",
@@ -375,22 +340,13 @@ namespace Intel.MyDeals.BusinessRules
                     // Change to this is Jyoti asks for Tracker only implement of this:
                     //AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
                 },
-                //new MyOpRule
-                //{
-                //    Title="Make sure End Date is later than Credit Date",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                //    AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, AttributeCodes.BLLG_DT),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = MyDeActions.AddMessage,
-                //            Args = new object[] {"End date must be greater than any Credit date."},
-                //            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
-                //        }
-                //    }
-                //},
+                new MyOpRule
+                {
+                    Title="Blank Profile Values for Hybrid Deals",
+                    ActionRule = MyDcActions.VistexBlankFields,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
+                },
                 new MyOpRule
                 {
                     Title="Default Workflow on Save",
