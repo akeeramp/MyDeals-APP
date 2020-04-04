@@ -2561,10 +2561,14 @@
                     //
                     var hasTender = false;
                     var hasNonTender = false;
+                    var dictRebateType = {};
                     var dictPayoutBasedon = {};
                     var dictCustDivision = {};
-                    var dictArSettlement = {};
+                    var dictPayoutBasedon = {};
+                    var dictGeoCombined = {};
                     var dictPeriodProfile = {};
+                    var dictArSettlement = {};
+                    var dictProgramPayment = {};
                     var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
                     // Check if the rows have duplicate products
@@ -2583,10 +2587,13 @@
                                     hasNonTender = true;
                                 }
                                 if (isHybridPS) {
+                                    dictRebateType[sData[s]["REBATE_TYPE"]] = s;
                                     dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
                                     dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
-                                    dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
+                                    dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
                                     dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
+                                    dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
+                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
                                 }
                             }
                         }
@@ -2598,33 +2605,51 @@
                                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
                                 if (hasTender && hasNonTender) {
                                     el._behaviors.isError["REBATE_TYPE"] = true;
-                                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
+                                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
-                                if (Object.keys(dictArSettlement).length > 1) {
-                                    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All settlement levels must be same in hybrid pricing stratergy"
+                                if (Object.keys(dictRebateType).length > 1) {
+                                    el._behaviors.isError["REBATE_TYPE"] = true;
+                                    el._behaviors.validMsg["REBATE_TYPE"] = "All Rebate Types must be the same within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
-                                }
-                                if (Object.keys(dictPeriodProfile).length > 1) {
-                                    el._behaviors.isError["PERIOD_PROFILE"] = true;
-                                    el._behaviors.validMsg["PERIOD_PROFILE"] = "All period profile must be same in hybrid pricing stratergy"
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
                                 if (Object.keys(dictPayoutBasedon).length > 1) {
                                     el._behaviors.isError["PAYOUT_BASED_ON"] = true;
-                                    el._behaviors.validMsg["PAYOUT_BASED_ON"] = "Cannot mix Consumption or Billing type deals in a Hybrid Pricing Stratergy.";
+                                    el._behaviors.validMsg["PAYOUT_BASED_ON"] = "Cannot mix Consumption or Billing types within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PAYOUT_BASED_ON"]);
                                 }
                                 if (Object.keys(dictCustDivision).length > 1) {
                                     el._behaviors.isError["CUST_ACCNT_DIV"] = true;
-                                    el._behaviors.validMsg["CUST_ACCNT_DIV"] = "Customer Division has to be the same for all the deals within a Hybrid Pricing Stratergy.";
+                                    el._behaviors.validMsg["CUST_ACCNT_DIV"] = "All Customer Divisions must all be the same for deals within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["CUST_ACCNT_DIV"]);
+                                }
+                                if (Object.keys(dictGeoCombined).length > 1) {
+                                    el._behaviors.isError["GEO_COMBINED"] = true;
+                                    el._behaviors.validMsg["GEO_COMBINED"] = "All Geos must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["GEO_COMBINED"]);
+                                }
+                                if (Object.keys(dictPeriodProfile).length > 1) {
+                                    el._behaviors.isError["PERIOD_PROFILE"] = true;
+                                    el._behaviors.validMsg["PERIOD_PROFILE"] = "All Period Profiles must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
+                                }
+                                if (Object.keys(dictArSettlement).length > 1) {
+                                    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All AR Settlement Levels must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                                }
+                                if (Object.keys(dictProgramPayment).length > 1) {
+                                    el._behaviors.isError["PROGRAM_PAYMENT"] = true;
+                                    el._behaviors.validMsg["PROGRAM_PAYMENT"] = "All Program Payments must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
                                 }
                                 if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
                                     el._behaviors.isError["PTR_USER_PRD"] = true;
@@ -4500,11 +4525,16 @@
                         //if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
-                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is sone here anyhow.
-                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
-                        ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
-                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
-                        ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
+                    if ($scope.isTenderContract) { // Tenders are defaulted ALWAYS
+                        if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Bi-Weekly (2 weeks)";
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "Cash";
+                    } else {
+                        if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
+                            ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
+                            ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                    }
 
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];

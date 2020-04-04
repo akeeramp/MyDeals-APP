@@ -300,8 +300,7 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[]
                             {
-                                AttributeCodes.PERIOD_PROFILE,
-                                AttributeCodes.AR_SETTLEMENT_LVL
+                                AttributeCodes.PERIOD_PROFILE
                             }
                         }
                     }

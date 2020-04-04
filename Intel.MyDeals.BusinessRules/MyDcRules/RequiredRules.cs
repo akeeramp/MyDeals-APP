@@ -111,9 +111,26 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    // If deal type is Vol Tier and Type is MDF ACTIVITY, then ensure that user fills in VOLUME values
                     Title="Setting Vistex Required for certain Payment and Rebate Types",
                     ActionRule = MyDcActions.VistexRequiredFields,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.PERIOD_PROFILE
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Setting Vistex Required for certain Payments Only",
+                    ActionRule = MyDcActions.VistexRequiredFieldsProgramPaymentOnly,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
@@ -122,7 +139,6 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetRequired,
                             Target = new[] {
-                                AttributeCodes.PERIOD_PROFILE,
                                 AttributeCodes.AR_SETTLEMENT_LVL
                             }
                         }

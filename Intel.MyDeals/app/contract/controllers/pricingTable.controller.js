@@ -1874,14 +1874,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     data[r][key] = fillValue;
                                 }
 
-                                //Set default value if Autofill is not saved. Autofill is not forced to save default values for Tender deals
+                                //Tender contracts ALWAYS force these values to be set and un-editable. (US604926)
                                 if (root.isTenderContract && root.curPricingTable[key] == "") {
                                     switch (key) {
                                         case "PERIOD_PROFILE": {
-                                            root.curPricingTable[key] = root.contractData.Customer.DFLT_PERD_PRFL;
+                                            root.curPricingTable[key] = "Bi-Weekly (2 weeks)";  //root.contractData.Customer.DFLT_PERD_PRFL;
                                         } break;
                                         case "AR_SETTLEMENT_LVL": {
-                                            root.curPricingTable[key] = root.contractData.Customer.DFLT_AR_SETL_LVL;
+                                            root.curPricingTable[key] = "Cash";  //root.contractData.Customer.DFLT_AR_SETL_LVL;
                                         } break;
                                     }
                                 }
