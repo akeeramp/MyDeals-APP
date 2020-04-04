@@ -161,7 +161,7 @@
                     attributes: { style: "text-align: center;" }
                 },
                 { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
-                { field: "DFLT_AR_SETL_LVL", title: "AR Settlement", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor }
+                { field: "DFLT_AR_SETL_LVL", title: "AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor }
             ]
 
         }
