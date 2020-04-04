@@ -1684,6 +1684,59 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void VistexRequiredFieldsProgramPaymentOnly(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (programPayment == null) return; // Safety check, if they are missing, skip!
+
+            string programPaymentValue = programPayment.AtrbValue.ToString();
+            if (programPaymentValue == "Backend")
+            {
+                // Apply the action from the rule (SetRequired) to the targets (Anything in Target[])
+                r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            }
+        }
+
+        public static void VistexBlankFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dealType = r.Dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+            IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            IOpDataElement periodProfile = r.Dc.GetDataElement(AttributeCodes.PERIOD_PROFILE);
+            IOpDataElement arSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+
+            if (dealType == null || programPayment == null || rebateType == null || periodProfile == null || arSettlementLvl == null) return; // Safety check, if they are missing, skip!
+
+            string dealTypeValue = dealType.AtrbValue.ToString();
+            string programPaymentValue = programPayment.AtrbValue.ToString();
+            string rebateTypeValue = rebateType.AtrbValue.ToString();
+            // Period Profile has different blanking rules then Settlement Level
+            if (dealTypeValue == "PROGRAM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL")
+            {
+                if (periodProfile.AtrbValue != "")
+                {
+                    periodProfile.AtrbValue = "";
+                    periodProfile.State = OpDataElementState.Modified;
+                }
+            }
+
+            if (programPaymentValue != "Backend")
+            {
+                if (arSettlementLvl.AtrbValue != "")
+                {
+                    arSettlementLvl.AtrbValue = "";
+                    arSettlementLvl.State = OpDataElementState.Modified;
+                }
+            }
+        }
+        
         public static void PastEndDateExtendOnly(params object[] args)
         {
             // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.

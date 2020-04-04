@@ -473,6 +473,8 @@ namespace Intel.MyDeals.BusinessLogic
             testPTRData.Add("PTR_SYS_PRD", someProduct); // "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
             testPTRData.Add("PROD_INCLDS", "Tray");
             testPTRData.Add("PASSED_VALIDATION", "Complete");
+            testPTRData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
+            testPTRData.Add("AR_SETTLEMENT_LVL", "Cash");
             testPTRData.Add("SYS_COMMENT", "SalesForce Created Pricing Table Row: i3-8300");
             testData.PricingTableRow.Add(testPTRData);
 
@@ -513,6 +515,8 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("PRODUCT_CATEGORIES", "DT"); // From PTR_SYS_PRD
             testDealData.Add("SALESFORCE_ID", dealSfId); // Sales Force ID 3715
             testDealData.Add("QUOTE_LN_ID", quoteLineId); // Quote Line ID 3716
+            testDealData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
+            testDealData.Add("AR_SETTLEMENT_LVL", "Cash");
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
             testDealData.Add("IN_REDEAL", "0");
             testDealData.Add("EXCLUDE_AUTOMATION", "Yes");

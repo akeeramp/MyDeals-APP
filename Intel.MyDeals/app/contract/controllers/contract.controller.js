@@ -672,9 +672,9 @@
                             unWatchEndDate = true;
                         }
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
@@ -736,9 +736,9 @@
                         },
                             500);
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var getCurrentQuarterDetails = function () {
@@ -782,9 +782,9 @@
                             unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
                         }, 500);
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var errInGettingDates = function (response) {
@@ -1000,12 +1000,12 @@
                                 hasFiles = response.data.length > 0;
                                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
                             },
-                                function (response) {
-                                    logger.error("Unable to retrieve attachments.", response, response.statusText);
-                                    $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                                    $scope.initComplete = true;
-                                    hasFiles = false;
-                                });
+                            function (response) {
+                                logger.error("Unable to retrieve attachments.", response, response.statusText);
+                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                                $scope.initComplete = true;
+                                hasFiles = false;
+                            });
                     }
                 }
             },
@@ -1039,12 +1039,12 @@
                             // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                             $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
                         },
-                            function (response) {
-                                logger.error("Unable to delete attachment.", null, "Delete failed");
+                        function (response) {
+                            logger.error("Unable to delete attachment.", null, "Delete failed");
 
-                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
-                                $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
-                            });
+                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                        });
                 }
             }
         ];
@@ -2561,8 +2561,14 @@
                     //
                     var hasTender = false;
                     var hasNonTender = false;
+                    var dictRebateType = {};
                     var dictPayoutBasedon = {};
                     var dictCustDivision = {};
+                    var dictPayoutBasedon = {};
+                    var dictGeoCombined = {};
+                    var dictPeriodProfile = {};
+                    var dictArSettlement = {};
+                    var dictProgramPayment = {};
                     var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
                     // Check if the rows have duplicate products
@@ -2581,8 +2587,13 @@
                                     hasNonTender = true;
                                 }
                                 if (isHybridPS) {
+                                    dictRebateType[sData[s]["REBATE_TYPE"]] = s;
                                     dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
                                     dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                                    dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
+                                    dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
+                                    dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
+                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
                                 }
                             }
                         }
@@ -2594,21 +2605,51 @@
                                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
                                 if (hasTender && hasNonTender) {
                                     el._behaviors.isError["REBATE_TYPE"] = true;
-                                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle;
+                                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
+                                }
+                                if (Object.keys(dictRebateType).length > 1) {
+                                    el._behaviors.isError["REBATE_TYPE"] = true;
+                                    el._behaviors.validMsg["REBATE_TYPE"] = "All Rebate Types must be the same within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
                                 if (Object.keys(dictPayoutBasedon).length > 1) {
                                     el._behaviors.isError["PAYOUT_BASED_ON"] = true;
-                                    el._behaviors.validMsg["PAYOUT_BASED_ON"] = "Cannot mix Consumption or Billing type deals in a Hybrid Pricing Stratergy.";
+                                    el._behaviors.validMsg["PAYOUT_BASED_ON"] = "Cannot mix Consumption or Billing types within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PAYOUT_BASED_ON"]);
                                 }
                                 if (Object.keys(dictCustDivision).length > 1) {
                                     el._behaviors.isError["CUST_ACCNT_DIV"] = true;
-                                    el._behaviors.validMsg["CUST_ACCNT_DIV"] = "Customer Division has to be the same for all the deals within a Hybrid Pricing Stratergy.";
+                                    el._behaviors.validMsg["CUST_ACCNT_DIV"] = "All Customer Divisions must all be the same for deals within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["CUST_ACCNT_DIV"]);
+                                }
+                                if (Object.keys(dictGeoCombined).length > 1) {
+                                    el._behaviors.isError["GEO_COMBINED"] = true;
+                                    el._behaviors.validMsg["GEO_COMBINED"] = "All Geos must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["GEO_COMBINED"]);
+                                }
+                                if (Object.keys(dictPeriodProfile).length > 1) {
+                                    el._behaviors.isError["PERIOD_PROFILE"] = true;
+                                    el._behaviors.validMsg["PERIOD_PROFILE"] = "All Period Profiles must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
+                                }
+                                if (Object.keys(dictArSettlement).length > 1) {
+                                    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All AR Settlement Levels must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                                }
+                                if (Object.keys(dictProgramPayment).length > 1) {
+                                    el._behaviors.isError["PROGRAM_PAYMENT"] = true;
+                                    el._behaviors.validMsg["PROGRAM_PAYMENT"] = "All Program Payments must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
                                 }
                                 if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
                                     el._behaviors.isError["PTR_USER_PRD"] = true;
@@ -4484,11 +4525,16 @@
                         //if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
-                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is sone here anyhow.
-                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
-                        ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
-                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
-                        ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
+                    if ($scope.isTenderContract) { // Tenders are defaulted ALWAYS
+                        if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Bi-Weekly (2 weeks)";
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "Cash";
+                    } else {
+                        if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
+                            ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
+                            ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                    }
 
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
@@ -4505,8 +4551,8 @@
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = $scope.currentPricingTable["NUM_OF_TIERS"] != "" ? $scope.currentPricingTable["NUM_OF_TIERS"] : "1";
                     if (!!newValue["SERVER_DEAL_TYPE"]) newValue["SERVER_DEAL_TYPE"].value = $scope.currentPricingTable["SERVER_DEAL_TYPE"];
-                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.currentPricingTable["PERIOD_PROFILE"];
-                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = $scope.currentPricingTable["AR_SETTLEMENT_LVL"];
+                    if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.currentPricingTable["PERIOD_PROFILE"] != "" ? $scope.currentPricingTable["PERIOD_PROFILE"] : $scope.contractData.Customer.DFLT_PERD_PRFL;
+                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = $scope.currentPricingTable["AR_SETTLEMENT_LVL"] != "" ? $scope.currentPricingTable["AR_SETTLEMENT_LVL"] : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
                 }
             } else {
                 // TODO: Hook these up to service (add service into injection and physical files)
@@ -5075,7 +5121,7 @@
                         "EXCLUDE_AUTOMATION", "DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
                         "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
-                        "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "QUOTE_LN_ID", "PERIOD_PROFILE", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON",
+                        "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "QUOTE_LN_ID", "PERIOD_PROFILE", "AR_SETTLEMENT_LVL", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON",
                         "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
                     ];
                     var usedCols = [];
