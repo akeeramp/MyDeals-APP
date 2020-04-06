@@ -68,7 +68,7 @@ namespace Intel.MyDeals.BusinessLogic
             var finalJSON = header + jsonData + footer;
             //Sending to SAP PO
             VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
-            responseObj = ConnectSAPPOandResponse(jsonData, "D", BatchId.ToString());
+            responseObj = ConnectSAPPOandResponse(finalJSON, "D", BatchId.ToString());
             //Update Status
             SetVistexDealOutBoundStage(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback");
             return responseObj;
