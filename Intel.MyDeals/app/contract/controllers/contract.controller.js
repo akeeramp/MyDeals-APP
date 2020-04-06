@@ -4294,6 +4294,7 @@
             pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
             pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
             pt.TITLE = $scope.newPricingTable.TITLE;
+            pt.IS_HYBRID_PRC_STRAT = pt.IS_HYBRID_PRC_STRAT !== undefined ? $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT : "";
 
             for (var atrb in $scope.newPricingTable._extraAtrbs) {
                 if ($scope.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
