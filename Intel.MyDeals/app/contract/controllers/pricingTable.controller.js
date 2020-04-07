@@ -203,6 +203,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
+        // For tender contracts make the Period profile and Ar settlement level as readonly
+        if (root.isTenderContract && ptTemplate.model.fields["PERIOD_PROFILE"] !== undefined) {
+            ptTemplate.model.fields.PERIOD_PROFILE.editable = false;
+        }
+        if (root.isTenderContract && ptTemplate.model.fields["AR_SETTLEMENT_LVL"] !== undefined) {
+            ptTemplate.model.fields.AR_SETTLEMENT_LVL.editable = false;
+        }
+
         // Remove tender only columns for non tender deals.
         if (!root.isTenderContract) {
             root.tenderOnlyColumns.forEach(function (x) {
