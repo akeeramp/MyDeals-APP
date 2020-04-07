@@ -1,4 +1,6 @@
-﻿@using Intel.MyDeals.Entities
+﻿@using System
+@using System.Collections.Generic
+@using Intel.MyDeals.Entities
 @using Intel.Opaque
 @using Intel.MyDeals.App
 @{
@@ -305,7 +307,7 @@
                     @if (usrRole == "DA" || usrRole == "GA" || isRealSA || isDeveloper)
                     {
                         <li class="dropdown-submenu">
-                            <a tabindex="-1">Rules Management</a>
+                            <a tabindex="-1">Approval Rules Management</a>
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/rules/">Price Rules</a></li>
                                 <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>

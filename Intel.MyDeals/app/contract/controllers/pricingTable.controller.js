@@ -526,6 +526,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'PTR_SYS_PRD': "",
             'PTR_SYS_INVLD_PRD': "",
             'PROGRAM_PAYMENT': root.curPricingTable["PROGRAM_PAYMENT"],
+            'IS_HYBRID_PRC_STRAT': root.curPricingTable["IS_HYBRID_PRC_STRAT"],
             'PROD_INCLDS': root.curPricingTable["PROD_INCLDS"]
         };
 
@@ -1798,6 +1799,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
                         data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
                         data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+                        data[r]["IS_HYBRID_PRC_STRAT"] = $scope.$parent.$parent.curPricingTable.IS_HYBRID_PRC_STRAT;
                         if (!isAddedByTrackerNumber) {
                             data[r]["VOLUME"] = null;
                             data[r]["ECAP_PRICE"] = null;
@@ -1813,10 +1815,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
                             data[r]["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
                         } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
-                            // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+                            // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a required flag with no value. We need to find out why that is :<
                             data[r]["ADJ_ECAP_UNIT"] = 0;
                         } else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "ECAP") {
-                            // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a requred flag with no value. We need to find out why that is :<
+                            // TODO: this is defaulted because for some reason the ADJ_ECAP_UNIT col won't have a required flag with no value. We need to find out why that is :<
                             data[r]["ECAP_PRICE"] = 0;
                         }
 
@@ -2826,6 +2828,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         'START_DT': moment(currentPricingTableRowData.START_DT).format("l"),
                         'END_DT': moment(currentPricingTableRowData.END_DT).format("l"),
                         'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
+                        'IS_HYBRID_PRC_STRAT': currentPricingTableRowData.IS_HYBRID_PRC_STRAT,
                         'GEO_COMBINED': getFormatedGeos(currentPricingTableRowData.GEO_COMBINED),
                         'PTR_SYS_PRD': currentPricingTableRowData.PTR_SYS_PRD,
                         'PROGRAM_PAYMENT': currentPricingTableRowData.PROGRAM_PAYMENT,
@@ -2836,6 +2839,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         'START_DT': moment(contract.START_DT).format("l"),
                         'END_DT': moment(contract.END_DT).format("l"),
                         'CUST_MBR_SID': contract.CUST_MBR_SID,
+                        'IS_HYBRID_PRC_STRAT': root.curPricingTable["IS_HYBRID_PRC_STRAT"],
                         'GEO_COMBINED': getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
                         'PTR_SYS_PRD': "",
                         'PTR_SYS_INVLD_PRD': "",
@@ -3016,6 +3020,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 GEO_COMBINED: getFormatedGeos(row.GEO_COMBINED),
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
+                IS_HYBRID_PRC_STRAT: row.IS_HYBRID_PRC_STRAT,
                 SendToTranslation: !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
@@ -3033,6 +3038,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         "GEO_COMBINED": getFormatedGeos(obj.GEO_COMBINED),
                         "PROGRAM_PAYMENT": obj.PROGRAM_PAYMENT,
                         "CUST_MBR_SID": $scope.contractData.CUST_MBR_SID,
+                        "IS_HYBRID_PRC_STRAT": obj.IS_HYBRID_PRC_STRAT,
                         "SendToTranslation": !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
                     }
                     translationInput.push(object);

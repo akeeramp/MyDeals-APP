@@ -101,7 +101,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                     }
                                 };
 
-                                //flatten service data for use by paired multiselect
+                                //flatten service data for use by paired multi-select
                                 serviceData = flattenTreeData(serviceData);
 
                             }
