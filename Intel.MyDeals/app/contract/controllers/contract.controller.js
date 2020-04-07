@@ -2656,6 +2656,12 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
                                 }
+                                if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).contains("Backend"))) {
+                                    el._behaviors.isError["PROGRAM_PAYMENT"] = true;
+                                    el._behaviors.validMsg["PROGRAM_PAYMENT"] = "Hybrid Pricing Strategy Deals must be Backend only.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
+                                }
                                 if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
                                     el._behaviors.isError["PTR_USER_PRD"] = true;
                                     el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
