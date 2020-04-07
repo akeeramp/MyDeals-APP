@@ -2594,9 +2594,11 @@
                                     dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
                                     dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
                                     dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
-                                    dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
+                                    if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
+                                        dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
+                                    }
                                     dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
-                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
+                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;                                    
                                 }
                             }
                         }

@@ -56,6 +56,12 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }                
             }
+            else
+            {
+                responseObj.BatchName = "VISTEX_DEALS";
+                responseObj.BatchId = "0";
+                responseObj.BatchMessage = "No data to be Uploaded";
+            }
             return responseObj;
         }
 
