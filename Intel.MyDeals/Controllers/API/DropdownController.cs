@@ -232,5 +232,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetHybridPaymentDropdowns/{atrbCd}")]
+        public IEnumerable<BasicDropdown> GetHybridPaymentDropdowns(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd).Where(d => d.DROP_DOWN.Contains("Frontend") != true )
+                , $"Unable to get Dropdowns for {atrbCd}"
+            );
+        }
+
     }
 }

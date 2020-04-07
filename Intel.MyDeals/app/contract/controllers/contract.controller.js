@@ -61,6 +61,7 @@
         $scope.showMCTag = false;
         // custom Contract Titles
         $scope.isTenderContract = isTender;
+        $scope.isVistexHybrid = 0;
         $scope.isPerformanceDisplayUser = window.isTester || window.isDeveloper;
 
         $scope.contractType = "Contract";
@@ -1464,6 +1465,7 @@
             }
         }
         $scope.showEditPricingTableDefaults = function (pt) {
+            $scope.isVistexHybrid = pt.IS_HYBRID_PRC_STRAT;
             openAutofillModal(pt);
         }
         $scope.addByECAPTracker = function () {
@@ -1593,6 +1595,7 @@
 
             var autofillData = {
                 'ISTENDER': $scope.isTenderContract,
+                'isVistexHybrid': $scope.isVistexHybrid,
                 'DEALTYPE': $scope.newPricingTable["OBJ_SET_TYPE_CD"],
                 'EXTRA': $scope.newPricingTable["_extraAtrbs"],             //may not be needed, extras are a one time set thing such as num tiers that we may choose to keep in the LNAV
                 'DEFAULT': getTenderBasedDefaults()
@@ -1632,7 +1635,7 @@
         function updateNPTDefaultValues(pt) {
             var nptDefaults = $scope.newPricingTable["_defaultAtrbs"];
 
-            //note: copy pasted from the watch function far below, slight modificaitons, can probably be compressed to 1 function call for reusability?
+            //note: copy pasted from the watch function far below, slight modifications, can probably be compressed to 1 function call for re-usability?
             if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
             if (!!nptDefaults[MRKT_SEG]) nptDefaults[MRKT_SEG].value = pt[MRKT_SEG].split(',');
             if (!!nptDefaults[GEO]) {
@@ -1650,7 +1653,7 @@
             if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
             if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
 
-            //not sure if necessary, javascript pass by value/reference always throwin' me off. :(
+            //not sure if necessary, javascript pass by value/reference always throwing me off. :(
             $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
         }
 
