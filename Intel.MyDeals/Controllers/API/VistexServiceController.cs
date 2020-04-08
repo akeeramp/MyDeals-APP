@@ -51,14 +51,15 @@ namespace Intel.MyDeals.Controllers.API
         public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS_RESPONSE
         {
             bool saveSuccessful = false;
-            //try
-            //{
-            saveSuccessful = _vistexServiceLib.SaveVistexResponseData(jsonDataPacket);
-            //}
-            //catch(Exception ex)
-            //{
-            //OpLogPerf.Log($"Message: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
-            //}
+            try
+            {
+                saveSuccessful = _vistexServiceLib.SaveVistexResponseData(jsonDataPacket);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log($"Message: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
+                throw ex;
+            }
             return saveSuccessful;
         }
 
