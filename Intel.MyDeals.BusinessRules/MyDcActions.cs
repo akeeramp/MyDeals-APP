@@ -827,6 +827,31 @@ namespace Intel.MyDeals.BusinessRules
             r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
+        public static void DisableForVistexHybrid(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            List<string> readonlyAtrbs = new List<string> {
+                AttributeCodes.REBATE_TYPE,
+                AttributeCodes.PAYOUT_BASED_ON,
+                AttributeCodes.CUST_ACCNT_DIV,
+                AttributeCodes.GEO_COMBINED,
+                AttributeCodes.PROGRAM_PAYMENT,
+                AttributeCodes.PERIOD_PROFILE,
+                AttributeCodes.AR_SETTLEMENT_LVL };
+
+            string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
+
+            if (deIsHybridPrcStratValue == "1")
+            {
+                foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+                {
+                    de.SetReadOnly();
+                }
+            }
+            //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
         public static void CheckDropDownValues(params object[] args)
         {
             List<string> eligibleDropDowns = new List<string>

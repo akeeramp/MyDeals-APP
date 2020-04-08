@@ -305,6 +305,13 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="Read Only for Vistex Hybrid Deals...",
+                    ActionRule = MyDcActions.DisableForVistexHybrid,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
+                },
 
                 new MyOpRule
                 {

@@ -24,9 +24,10 @@
         if (vm.autofillData.ISTENDER) {
             vm.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
         }
-        else if (vm.autofillData.isVistexHybrid == 1) {
-            vm.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetHybridPaymentDropdowns/PROGRAM_PAYMENT";
-        }
+        // Add back in some day if we decide to make a button bar that can contain only one button.  :)
+        //else if (vm.autofillData.isVistexHybrid == 1) {
+        //    vm.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetHybridPaymentDropdowns/PROGRAM_PAYMENT";
+        //}
 
         vm.autofillData.DEALTYPE_DISPLAY = vm.autofillData.DEALTYPE.replace("_", "").toUpperCase();
 
