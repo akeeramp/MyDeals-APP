@@ -2,6 +2,7 @@
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using System.Web.Http;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -49,14 +50,14 @@ namespace Intel.MyDeals.Controllers.API
         [Route("SaveVistexResponseData")]
         public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS_RESPONSE
         {
-            Boolean saveSuccessful = false;
+            bool saveSuccessful = false;
             try
             {
                 saveSuccessful = _vistexServiceLib.SaveVistexResponseData(jsonDataPacket);
             }
             catch(Exception ex)
             {
-                OpLog.Log($"Message: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}");
+                OpLogPerf.Log($"Message: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
             }
             return saveSuccessful;
         }
