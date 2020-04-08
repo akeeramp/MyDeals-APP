@@ -49,8 +49,15 @@ namespace Intel.MyDeals.Controllers.API
         [Route("SaveVistexResponseData")]
         public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS_RESPONSE
         {
-            Boolean saveSuccessful = _vistexServiceLib.SaveVistexResponseData(jsonDataPacket);
-
+            Boolean saveSuccessful = false;
+            try
+            {
+                saveSuccessful = _vistexServiceLib.SaveVistexResponseData(jsonDataPacket);
+            }
+            catch(Exception ex)
+            {
+                OpLog.Log($"Message: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}");
+            }
             return saveSuccessful;
         }
 
