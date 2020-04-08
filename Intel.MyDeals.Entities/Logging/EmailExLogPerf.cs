@@ -8,14 +8,14 @@ namespace Intel.MyDeals.Entities.Logging
 {
     public class EmailExLogPerf : IOpLogPerf
     {
-        private static string _toEmailList = "mahesh.biradar@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+        private static string _toEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 
-//// not sure why this #if debug doesn't work, but we aren't getting emails from DEV/ITT/etc servers anymore. temp commenting out.
-//#if DEBUG
-//        private static string ToEmailList = OpUserStack.MyOpUserToken.Usr.Email;
-//#else
-//        private static string ToEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
-//#endif
+        //// not sure why this #if debug doesn't work, but we aren't getting emails from DEV/ITT/etc servers anymore. temp commenting out.
+        //#if DEBUG
+        //        private static string ToEmailList = OpUserStack.MyOpUserToken.Usr.Email;
+        //#else
+        //        private static string ToEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+        //#endif
 
         private static string _fromEmail = "MyDealsSupport@intel.com";
         public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
