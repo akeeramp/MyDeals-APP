@@ -65,6 +65,12 @@ namespace Intel.MyDeals.Entities.Logging
             // Get the tools environment
             string env = OpLog.GetEnv();
 
+            // if it is a local environment, only send it to the current user, otherwise, set it to the standard developers list above.
+            if (env == "LOCAL")
+            {
+                _toEmailList = opUserToken.Usr.Email != null? opUserToken.Usr.Email: "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com";
+            }
+
             // construct message
             string shortMsg = msg.Message.Truncate(50) + "...";  // Was string shortMsg = msg.Message.Truncate(50) + "...";
             string title = string.Format(EmailEmailSubject, env, shortMsg);
