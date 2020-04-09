@@ -42,6 +42,7 @@
                             <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION === 'Valid'" title="{{curPricingStrategy.PASSED_VALIDATION}}"></i>
                             <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION === 'Dirty'" title="{{(curPricingStrategy.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : curPricingStrategy.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
                             <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION !== 'Valid' && curPricingStrategy.PASSED_VALIDATION !== 'Dirty' && curPricingStrategy.PASSED_VALIDATION !== 'Complete' && curPricingStrategy.PASSED_VALIDATION !== 'Finalizing'" title="{{curPricingStrategy.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                            <span ng-show="curPricingStrategy.IS_HYBRID_PRC_STRAT === '1'" class="isHybridIdentHeader_{{curPricingStrategy.PASSED_VALIDATION}}">H</span>
                         </div>
                     </td>
 					<td style="width: 100%;">

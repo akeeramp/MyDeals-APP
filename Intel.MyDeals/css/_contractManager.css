@@ -542,8 +542,30 @@
     .validf_, .validf_0, .validf_Dirty {
         color: #f9521a;
     }
- 
 
+    .isHybridIdent, .isHybridIdent_Complete {
+        font-size: 8px;
+        font-weight: bold;
+        color: blue; 
+        position: absolute; 
+        margin-left: -13px; 
+    }
+
+    .isHybridIdent_Finalizing, .isHybridIdent_Valid, .isHybridIdent_Dirty, .isHybridIdent_0, .isHybridIdent_ {
+        font-size: 8px;
+        font-weight: bold;
+        color: white; 
+        position: absolute; 
+        margin-left: -13px; 
+    }
+ 
+    .isHybridIdentHeader, .isHybridIdentHeader_Complete, .isHybridIdentHeader_Finalizing, .isHybridIdentHeader_Valid, .isHybridIdentHeader_Dirty, .isHybridIdentHeader_0, .isHybridIdentHeader_ {
+        font-size: 11px;
+        font-weight: bold;
+        color: blue; 
+        position: absolute; 
+        margin-left: -17px; 
+    }
 
     /*Navigation Styles*/
     .psNav {
