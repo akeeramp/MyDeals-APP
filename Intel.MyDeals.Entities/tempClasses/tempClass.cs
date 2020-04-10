@@ -2255,10 +2255,10 @@ public partial class DealTemplateDataGram
         public System.Decimal COMP_PRC { set; get; }
 
         [DataMember]
-        public System.Decimal COMP_BNCH { set; get; }
+        public System.Decimal? COMP_BNCH { set; get; }
 
         [DataMember]
-        public System.Decimal IA_BNCH { set; get; }
+        public System.Decimal? IA_BNCH { set; get; }
 
         [DataMember]
         public System.String COMP_OVRRD_RSN { set; get; }

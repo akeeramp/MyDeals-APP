@@ -53,27 +53,26 @@ namespace Intel.MyDeals.BusinessLogic
             meetCompValidation.IsEmptyMeetCompPriceAvailable = lstMeetComp.Where(x => x.MEET_COMP_PRC <= 0).Count() > 0;
             meetCompValidation.IsEmptyMeetCompSkuAvailable = lstMeetComp.Where(x => x.MEET_COMP_PRD.Trim() == string.Empty).Count() > 0;
             meetCompValidation.IsEmptyProductAvailable = lstMeetComp.Where(x => x.HIER_VAL_NM.Trim() == string.Empty).Count() > 0;
-            meetCompValidation.InValidCustomers = lstMeetComp.Select(x => x.CUST_NM.Trim().ToLower()).Except(DataCollections.GetMyCustomers().CustomerInfo.Select(x => x.CUST_NM.ToLower())).Where(x => x != string.Empty).ToList();
+            meetCompValidation.InValidCustomers = lstMeetComp.Where(x => x.CUST_NM.Trim() != string.Empty).Select(x => x.CUST_NM.Trim().ToLower()).Except(DataCollections.GetMyCustomers().CustomerInfo.Select(x => x.CUST_NM.ToLower())).Where(x => x != string.Empty).ToList();
             List<MeetCompProductValidation> lstValidatedProducts = _meetCompCollectorLib.GetValidProducts(lstMeetComp.Select(x => x.HIER_VAL_NM).ToList());
-            meetCompValidation.InValidProducts = lstMeetComp.Select(x => x.HIER_VAL_NM.Trim().ToLower()).Except(lstValidatedProducts.Select(x => x.ProductName).ToList()).ToList();
+            meetCompValidation.InValidProducts = lstMeetComp.Where(x => x.HIER_VAL_NM.Trim() != string.Empty).Select(x => x.HIER_VAL_NM.Trim().ToLower()).Except(lstValidatedProducts.Select(x => x.ProductName).ToList()).ToList();
             meetCompValidation.ProductsRequiredBench = lstMeetComp.Where(x => x.IA_BNCH <= 0 || x.COMP_BNCH <= 0).Select(x => x.HIER_VAL_NM.Trim().ToLower()).Intersect(lstValidatedProducts.Where(x => x.IsServerProduct).Select(x => x.ProductName)).ToList();
             meetCompValidation.IsInvalidIABenchAvailable = lstMeetComp.Where(x => x.IA_BNCH <= 0 && meetCompValidation.ProductsRequiredBench.Contains(x.HIER_VAL_NM.Trim().ToLower())).Count() > 0;
             meetCompValidation.IsInvalidCompBenchAvailable = lstMeetComp.Where(x => x.COMP_BNCH <= 0 && meetCompValidation.ProductsRequiredBench.Contains(x.HIER_VAL_NM.Trim().ToLower())).Count() > 0;
+            meetCompValidation.DuplicateMeetCompsSKU = lstMeetComp.GroupBy(x => string.Concat(x.CUST_NM.Trim().ToLower(), x.HIER_VAL_NM.Trim().ToLower(), x.MEET_COMP_PRD.Trim().ToLower())).Where(x => x.Count() > 1).Select(x => x.First()).ToList();
             meetCompValidation.HasInvalidMeetComp = meetCompValidation.InValidCustomers.Count > 0
                 || meetCompValidation.InValidProducts.Count > 0
-                || meetCompValidation.IsEmptyCustomerAvailable
                 || meetCompValidation.IsEmptyMeetCompPriceAvailable
                 || meetCompValidation.IsEmptyMeetCompSkuAvailable
                 || meetCompValidation.IsEmptyProductAvailable
                 || meetCompValidation.IsInvalidIABenchAvailable
-                || meetCompValidation.IsInvalidCompBenchAvailable;
+                || meetCompValidation.IsInvalidCompBenchAvailable
+                || meetCompValidation.DuplicateMeetCompsSKU.Count > 0;
 
             if (meetCompValidation.HasInvalidMeetComp)
             {
                 //To show in UI with orders
                 meetCompValidation.ValidatedMeetComps = new List<MeetComp>();
-                if (meetCompValidation.IsEmptyCustomerAvailable)
-                    meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(x => x.CUST_NM.Trim() == string.Empty));
                 if (meetCompValidation.IsEmptyProductAvailable)
                     meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(x => x.HIER_VAL_NM.Trim() == string.Empty));
                 if (meetCompValidation.IsEmptyMeetCompSkuAvailable)
@@ -86,13 +85,32 @@ namespace Intel.MyDeals.BusinessLogic
                     meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(x => meetCompValidation.InValidProducts.Contains(x.HIER_VAL_NM.Trim().ToLower())));
                 if (meetCompValidation.IsInvalidIABenchAvailable || meetCompValidation.IsInvalidCompBenchAvailable)
                     meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(x => (x.IA_BNCH <= 0 || x.COMP_BNCH <= 0) && meetCompValidation.ProductsRequiredBench.Contains(x.HIER_VAL_NM.Trim().ToLower())));
+                if (meetCompValidation.DuplicateMeetCompsSKU.Count > 0)
+                {
+                    meetCompValidation.DuplicateMeetCompsSKU.ForEach(x =>
+                    {
+                        meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(y => y.CUST_NM == x.CUST_NM && y.HIER_VAL_NM == x.HIER_VAL_NM && y.MEET_COMP_PRD == y.MEET_COMP_PRD));
+                    });
+
+                }
+                if (meetCompValidation.IsEmptyCustomerAvailable)
+                    meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(x => x.CUST_NM.Trim() == string.Empty));
 
                 meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp);
                 meetCompValidation.ValidatedMeetComps = meetCompValidation.ValidatedMeetComps.Distinct(new DistinctItemComparerMeetComp()).ToList();
             }
             else
             {
-                meetCompValidation.ValidatedMeetComps = lstMeetComp;
+                if (meetCompValidation.IsEmptyCustomerAvailable)
+                {
+                    meetCompValidation.ValidatedMeetComps = new List<MeetComp>();
+                    meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp.Where(x => x.CUST_NM.Trim() == string.Empty));
+
+                    meetCompValidation.ValidatedMeetComps.AddRange(lstMeetComp);
+                    meetCompValidation.ValidatedMeetComps = meetCompValidation.ValidatedMeetComps.Distinct(new DistinctItemComparerMeetComp()).ToList();
+                }
+                else
+                    meetCompValidation.ValidatedMeetComps = lstMeetComp;
             }
 
             return meetCompValidation;

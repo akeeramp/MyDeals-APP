@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Runtime.Serialization;
 
@@ -50,8 +51,14 @@ namespace Intel.MyDeals.Entities
             r["DEAL_OBJ_SID"] = itm.DEAL_OBJ_SID;
             r["COMP_SKU"] = itm.COMP_SKU;
             r["COMP_PRC"] = itm.COMP_PRC;
-            r["COMP_BNCH"] = itm.COMP_BNCH;
-            r["IA_BNCH"] = itm.IA_BNCH;
+            if (itm.COMP_BNCH.HasValue)
+                r["COMP_BNCH"] = itm.COMP_BNCH.Value;
+            else
+                r["COMP_BNCH"] = DBNull.Value;
+            if (itm.IA_BNCH.HasValue)
+                r["IA_BNCH"] = itm.IA_BNCH.Value;
+            else
+                r["IA_BNCH"] = DBNull.Value;
             r["COMP_OVRRD_RSN"] = itm.COMP_OVRRD_RSN;
             r["COMP_OVRRD_FLG"] = itm.COMP_OVRRD_FLG;
             r["MEET_COMP_UPD_FLG"] = itm.MEET_COMP_UPD_FLG;           
@@ -77,8 +84,14 @@ namespace Intel.MyDeals.Entities
                 r["DEAL_OBJ_SID"] = itm.DEAL_OBJ_SID;
                 r["COMP_SKU"] = itm.COMP_SKU;
                 r["COMP_PRC"] = itm.COMP_PRC;
-                r["COMP_BNCH"] = itm.COMP_BNCH;
-                r["IA_BNCH"] = itm.IA_BNCH;
+                if (itm.COMP_BNCH.HasValue)
+                    r["COMP_BNCH"] = itm.COMP_BNCH.Value;
+                else
+                    r["COMP_BNCH"] = DBNull.Value;
+                if (itm.IA_BNCH.HasValue)
+                    r["IA_BNCH"] = itm.IA_BNCH.Value;
+                else
+                    r["IA_BNCH"] = DBNull.Value;
                 r["COMP_OVRRD_RSN"] = itm.COMP_OVRRD_RSN;
                 r["COMP_OVRRD_FLG"] = itm.COMP_OVRRD_FLG;
                 r["MEET_COMP_UPD_FLG"] = itm.MEET_COMP_UPD_FLG;

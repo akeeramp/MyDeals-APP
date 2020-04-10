@@ -12,6 +12,7 @@
 
     function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q, $uibModal) { 
         var vm = this;
+        vm.HasBulkUploadAccess = window.usrRole == "DA";
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
             	var newState = msg != undefined && msg !== "";

@@ -3,7 +3,7 @@
     <div class="col-md-9">
         <h2>Meet Comp</h2>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" ng-if="vm.HasBulkUploadAccess">
         <button ng-click="vm.OpenBulkUploadMeetCompModal()" class="btn btn-primary" style="float:right; margin-top: 15px">Upload Meet Comp</button>
     </div>
 </div>
