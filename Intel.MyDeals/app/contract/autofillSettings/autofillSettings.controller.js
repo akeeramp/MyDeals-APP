@@ -32,11 +32,35 @@
         vm.autofillData.DEALTYPE_DISPLAY = vm.autofillData.DEALTYPE.replace("_", "").toUpperCase();
 
         vm.ok = function () {
-            var returnVal = vm.autofillData.DEFAULT;
-            $uibModalInstance.close(returnVal);
+            vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
+            vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
+            if (vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null &&
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "" &&
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null &&
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "") {
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg =
+                    "Both Overarching Maximum Dollars and Overarching Maximum Volume cannot be fill out.  Pick one.";
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = true;
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg =
+                    "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be fill out.  Pick one.";
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = true;
+            } else if (vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = "Overarching Maximum Dollars must be blank or > 0";
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = true;
+            } else if (vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" || vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "Overarching Maximum Volume must be blank or > 0";
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = true;
+            } else {
+                var returnVal = vm.autofillData.DEFAULT;
+                $uibModalInstance.close(returnVal);
+            }
         };
 
         vm.close = function () {
+            // Clear out values if they need to be
+            vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
+            vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
+
             $uibModalInstance.dismiss(autofillData.DEALTYPE);
         }
 
