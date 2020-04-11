@@ -19,7 +19,12 @@
         vm.VistexStatuses = [];  
 
         vm.init = function () {
-            dsaService.getVistexLogs('PROD_VERT_RULES').then(function (response) {
+            var postData = {
+                "Dealmode": 'PROD_VERT_RULES',
+                "StartDate": moment().subtract(3, 'months').format("MM/DD/YYYY"),
+                "EndDate": moment().format("MM/DD/YYYY")
+            }
+            dsaService.getVistexLogs(postData).then(function (response) {
                 vm.Vistex = response.data;
                 vm.vistexDataSource.read();
             }, function (response) {
@@ -40,17 +45,17 @@
             vm.spinnerMessageDescription = "Please wait while updating the status..";
             dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, null, vm.EnteredMessage).then(function (response) {
                 if (response.data == strTransantionId) {
-                    angular.forEach(vm.Vistex.filter(x => x.TransanctionId === response.data), function (dataItem) {
-                        dataItem.Status = vm.SelectedStatus;
-                        dataItem.Message = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
+                    angular.forEach(vm.Vistex.filter(x => x.BTCH_ID === response.data), function (dataItem) {
+                        dataItem.RQST_STS = vm.SelectedStatus;
+                        dataItem.ERR_MSG = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
                     });
                     vm.vistexDataSource.read();
                     logger.success("Status has been updated with the message!");
                 } else {
-                    logger.error("Unable to update the status2!");
+                    logger.error("Unable to update the status!");
                 }
             }, function (response) {
-                logger.error("Unable to update the status3!");
+                logger.error("Unable to update the status!");
             });
         }
 
@@ -63,28 +68,28 @@
             pageSize: 25,
             schema: {
                 model: {
-                    id: "Id",
+                    id: "RQST_SID",
                     fields: {
-                        Id: { editable: false, nullable: false },
-                        TransanctionId: { editable: false, nullable: true },
-                        Status: { editable: true },
-                        Message: { editable: true },
-                        CreatedOn: { editable: false, nullable: false },
-                        SendToPoOn: { editable: false, nullable: true },
-                        ProcessedOn: { editable: false, nullable: true },
+                        RQST_SID: { editable: false, nullable: false },
+                        BTCH_ID: { editable: false, nullable: true },
+                        RQST_STS: { editable: true },
+                        ERR_MSG: { editable: true },
+                        CRE_DTM: { editable: false, nullable: false },
+                        INTRFC_RQST_DTM: { editable: false, nullable: true },
+                        INTRFC_RSPN_DTM: { editable: false, nullable: true },
                     }
                 }
             },
-            sort: { field: "CreatedOn", dir: "desc" }
+            //sort: { field: "CreatedOn", dir: "desc" }
         });
 
         vm.MessageEditor = function (container, options) {
-            vm.EnteredMessage = options.model.Message;
+            vm.EnteredMessage = options.model.ERR_MSG;
             var editor = $('<input class="form-control md" type="text" ng-model="vm.EnteredMessage" placeholder="Enter your message here.." title="Enter your message here.." style="width:95%;">').appendTo(container);
         }
 
         vm.StatusDropDownEditor = function (container, options) {
-            vm.SelectedStatus = options.model.Status;
+            vm.SelectedStatus = options.model.RQST_STS;
             var editor = $('<select kendo-drop-down-list k-data-source="vm.VistexStatusesDataSource" k-options="vm.StatusesOptions" k-ng-model="vm.SelectedStatus" style="width:100%"></select>').appendTo(container);
         }
 
@@ -117,7 +122,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.TransanctionId);
+                vm.UpdateVistexStatus(e.model.BTCH_ID);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
@@ -128,18 +133,18 @@
                     command: [
                         {
                             name: "edit",
-                            template: "<a ng-if='dataItem.TransanctionId != \"00000000-0000-0000-0000-000000000000\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
+                            template: "<a ng-if='dataItem.BTCH_ID != \"00000000-0000-0000-0000-000000000000\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
                         }
                     ],
                     title: " ",
                     width: "70px"
                 },
-                { field: "TransanctionId", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(TransanctionId == '00000000-0000-0000-0000-000000000000'){#-#} else {##= TransanctionId ##}#</span>" },                
-                { field: "Status", title: "Status", width: "250px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
-                { field: "Message", title: "Message", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
-                { field: "CreatedOn", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
-                { field: "SendToPoOn", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(SendToPoOn == '1/1/1900'){#-#} else {##= SendToPoOn ##}#</span>" },
-                { field: "ProcessedOn", title: "Processed On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(ProcessedOn == '1/1/1900'){#-#} else {##= ProcessedOn ##}#</span>" }
+                { field: "BTCH_ID", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(BTCH_ID == '00000000-0000-0000-0000-000000000000'){#-#} else {##= BTCH_ID ##}#</span>" },                
+                { field: "RQST_STS", title: "Status", width: "250px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
+                { field: "ERR_MSG", title: "Message", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
+                { field: "CRE_DTM", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
+                { field: "INTRFC_RQST_DTM", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RQST_DTM == '1/1/1900'){#-#} else {##= INTRFC_RQST_DTM ##}#</span>" },
+                { field: "INTRFC_RSPN_DTM", title: "Processed On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RSPN_DTM == '1/1/1900'){#-#} else {##= INTRFC_RSPN_DTM ##}#</span>" }
             ]
         };
 
@@ -147,7 +152,7 @@
             return {
                 dataSource: {
                     transport: {
-                        read: "/api/DSA/GetProductVerticalBody/" + dataItem.Id
+                        read: "/api/DSA/GetProductVerticalBody/" + dataItem.RQST_SID
                     },
                     pageSize: 25
                 },

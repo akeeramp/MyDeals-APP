@@ -269,6 +269,7 @@
     <Compile Include="UiTemplateContainerItem.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />
+    <Compile Include="VistexLogFilters.cs" />
     <Compile Include="WfActnItem.cs" />
     <Compile Include="WipDealQuickViewPacket.cs" />
     <Compile Include="WorkFlowQueueItem.cs" />

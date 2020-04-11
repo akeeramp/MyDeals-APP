@@ -29,8 +29,8 @@
             return dataService.post(apiBaseUrl + 'SendVistexData', lstDealIds);
         }
 
-        function getVistexLogs(strVistexMode) {
-            return dataService.get(apiBaseUrl + 'GetVistexLogs/' + strVistexMode);
+        function getVistexLogs(postData) {
+            return dataService.post(apiBaseUrl + 'GetVistexLogs', postData);
         }
 
         function getVistexOutBoundData() {
