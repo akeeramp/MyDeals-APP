@@ -239,12 +239,12 @@
                 },
                 { field: "RQST_SID", title: "Request ID", width: "130px", filterable: { multi: true, search: true } },
                 { field: "BTCH_ID", title: "Batch ID", width: "310px", filterable: { multi: true, search: true }, template: "<span>#if(BTCH_ID == '00000000-0000-0000-0000-000000000000'){#-#} else {##= BTCH_ID ##}#</span>" },
-                { field: "VISTEX_HYBRID_TYPE", title: "Vistex Hybrid Type", width: "160px", filterable: { multi: true, search: true } },
+                { field: "VISTEX_HYBRID_TYPE", title: "Vistex Hybrid Type", width: "190px", filterable: { multi: true, search: true } },
                 { field: "DEAL_ID", title: "Strategy/Deal ID", width: "170px", filterable: { multi: true, search: true } },
                 { field: "RQST_STS", title: "Status", width: "190px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },                
-                { field: "ERR_MSG", title: "Message", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
-                { field: "INTRFC_RQST_DTM", title: "Send To PO On", width: "140px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RQST_DTM == '1/1/1900'){#-#} else {##= INTRFC_RQST_DTM ##}#</span>" },
-                { field: "INTRFC_RSPN_DTM", title: "Processed On", width: "140px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RSPN_DTM == '1/1/1900'){#-#} else {##= INTRFC_RSPN_DTM ##}#</span>" },
+                { field: "ERR_MSG", title: "Message", width: "300px", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
+                { field: "INTRFC_RQST_DTM", title: "Send To PO On", width: "160px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RQST_DTM == '1/1/1900'){#-#} else {##= INTRFC_RQST_DTM ##}#</span>" },
+                { field: "INTRFC_RSPN_DTM", title: "Processed On", width: "150px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RSPN_DTM == '1/1/1900'){#-#} else {##= INTRFC_RSPN_DTM ##}#</span>" },
                 { field: "CRE_DTM", title: "Created On", width: "140px", filterable: { multi: true, search: true } }
                                
             ]
