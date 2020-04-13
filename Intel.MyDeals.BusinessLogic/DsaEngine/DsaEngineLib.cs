@@ -14,9 +14,9 @@ namespace Intel.MyDeals.BusinessLogic
 
         }
 
-        public List<VistexLogs> GetVistexLogs(VistexMode vistexMode)
+        public List<VistexLogsInfo> GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate)
         {
-            return new VistexAdminDataLib().GetVistexLogs(vistexMode);
+            return new VistexAdminDataLib().GetVistexLogs(vistexMode, StartDate, EndDate);
         }
 
         public List<string> GetVistexStatuses()
@@ -24,7 +24,7 @@ namespace Intel.MyDeals.BusinessLogic
             return new VistexAdminDataLib().GetStatuses();
         }
 
-        public List<VistexLogs> AddVistexData(List<int> lstDealIds)
+        public List<VistexLogsInfo> AddVistexData(List<int> lstDealIds)
         {
             return new VistexAdminDataLib().AddVistexData(lstDealIds);
         }

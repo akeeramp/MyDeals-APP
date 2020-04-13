@@ -425,6 +425,11 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CHECK_SF_ID] '50130000000X14c', '001i000001AWbWu'");
 	ds.Tables[0].TableName = "TendersSFIDCheck";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	
+	//VistexLogs Info
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_DSA_RQST_RSPN_LOG] @in_rqst_type = 'VISTEX_DEALS',@in_from_dt='4/1/2020',@in_to_dt='5/1/2020'");
+	ds.Tables[0].TableName = "VistexLogsInfo";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

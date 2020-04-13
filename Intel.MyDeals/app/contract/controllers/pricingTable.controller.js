@@ -195,10 +195,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
         // Remove tender only columns when its a non tender deal
-        if (!root.isTenderContract && ptTemplate !== undefined && ptTemplate !== null) {
+        if (ptTemplate !== undefined && ptTemplate !== null) {
             for (var i = ptTemplate.columns.length - 1; i >= 0; i--) {
-                if (root.tenderOnlyColumns.indexOf(ptTemplate.columns[i].field) !== -1 && !root.isTenderContract) {
+                if (!root.isTenderContract && root.tenderOnlyColumns.indexOf(ptTemplate.columns[i].field) !== -1) {
                     ptTemplate.columns.splice(i, 1);
+                }
+                if (root.isTenderContract) {
+                    if (root.vistextHybridOnlyColumns.indexOf(ptTemplate.columns[i].field) !== -1) {
+                        ptTemplate.columns.splice(i, 1);
+                    }
                 }
             }
         }
@@ -209,6 +214,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         if (root.isTenderContract && ptTemplate.model.fields["AR_SETTLEMENT_LVL"] !== undefined) {
             ptTemplate.model.fields.AR_SETTLEMENT_LVL.editable = false;
+        }
+
+        // Show oevrarcghing colums only for hybrid deals
+        if (root.isTenderContract) {
+            root.vistextHybridOnlyColumns.forEach(function (x) {
+                delete ptTemplate.model.fields[x];
+            });
         }
 
         // Remove tender only columns for non tender deals.

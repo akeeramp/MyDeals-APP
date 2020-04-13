@@ -57,8 +57,7 @@ namespace Intel.MyDeals.DataLibrary
                     }
                 }
             }
-            IEnumerable<string> lstAllowedCustomer = DataCollections.GetMyCustomers().CustomerInfo.Select(x => x.CUST_NM.ToLower());
-            return lstRtn.Distinct(new DistinctItemComparerMeetComp()).Where(x => lstAllowedCustomer.Contains(x.CUST_NM.Trim().ToLower())).ToList();
+            return lstRtn.Distinct(new DistinctItemComparerMeetComp()).ToList();
         }
 
         public FileAttachmentData GetMeetCompTemplateFile()
@@ -66,9 +65,7 @@ namespace Intel.MyDeals.DataLibrary
             FileAttachmentData fileAttachmentData = new FileAttachmentData();
             fileAttachmentData.FILE_NM = "MeetComp.xlsx";
             fileAttachmentData.IS_COMPRS = false;
-            string strTemplateContent = string.Join("\n", string.Join("\t", "Customer", "Deal Product", "Meet Comp Sku", "Meet Comp Price", "IA Bench", "Comp Bench")
-                , string.Join("\t", "Acer", "E10G41BFLR", "Mellanox 1", "100", "0", "0")
-                , string.Join("\t", "Acer", "AU80610006225AA", "Mellanox 2", "110", "0", "0"));
+            string strTemplateContent = string.Join("\n", string.Join("\t", "Customer", "Deal Product", "Meet Comp Sku", "Meet Comp Price", "IA Bench", "Comp Bench"));
             string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             using (ExcelPackage excelPackage = new ExcelPackage())
             {

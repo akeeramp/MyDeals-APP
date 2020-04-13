@@ -1749,6 +1749,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     periodProfile.AtrbValue = "";
                     periodProfile.State = OpDataElementState.Modified;
+                    periodProfile.AddMessage("Period Profile value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
                 }
             }
 
@@ -1758,6 +1759,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     arSettlementLvl.AtrbValue = "";
                     arSettlementLvl.State = OpDataElementState.Modified;
+                    arSettlementLvl.AddMessage("AR Settlement Level value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
                 }
             }
         }

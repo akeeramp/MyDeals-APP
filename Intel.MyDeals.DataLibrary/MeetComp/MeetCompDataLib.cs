@@ -473,14 +473,14 @@ namespace Intel.MyDeals.DataLibrary
                 List<MeetCompProductValidation> lstValidProducts = GetValidProducts(lstMeetComp.Select(x => x.HIER_VAL_NM.Trim().ToLower()).ToList());
                 List<MyCustomersInformation> lstMyCustomersInformation = DataCollections.GetMyCustomers().CustomerInfo;
                 in_t_meet_comp dt = new in_t_meet_comp();
-
                 lstMeetComp.ForEach(x =>
                 {
-                    x.CUST_MBR_SID = lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
+                    //Allow to all customer if cutomer name is empty
+                    x.CUST_MBR_SID = x.CUST_NM.Trim() == string.Empty ? 1 : lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
                     foreach (var product in lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()))
                     {
-                        decimal dblCompBench = Math.Round(product.IsServerProduct ? x.COMP_BNCH : 0, 0);
-                        decimal dblIABench = Math.Round(product.IsServerProduct ? x.IA_BNCH : 0, 0);
+                        decimal? dblCompBench = product.IsServerProduct ? Math.Round(x.COMP_BNCH, 0) : default(System.Decimal?);
+                        decimal? dblIABench = product.IsServerProduct ? Math.Round(x.IA_BNCH, 0) : default(System.Decimal?);
                         dt.AddRow(new MeetCompUpdate
                         {
                             COMP_BNCH = dblCompBench,
@@ -501,7 +501,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP cmd = new Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP()
                 {
-                    USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    l_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                     var_meet_comp = dt
                 };
 

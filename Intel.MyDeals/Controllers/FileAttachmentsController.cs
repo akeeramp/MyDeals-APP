@@ -94,7 +94,15 @@ namespace Intel.MyDeals.Controllers
                     }
                 }
             }
-            return lstMeetComps.Count > 0 ? Json(lstMeetComps) : Json(string.Empty);
+            if (lstMeetComps.Count > 0)
+            {
+                var jsonResult = Json(lstMeetComps, JsonRequestBehavior.AllowGet);
+                if (lstMeetComps.Count > 5000)
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            else
+                return Json(string.Empty);
         }
     }
 }

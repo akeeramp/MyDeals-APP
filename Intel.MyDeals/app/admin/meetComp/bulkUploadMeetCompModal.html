@@ -5,10 +5,10 @@
             <i id="btnClose" class="intelicon-close" ng-click="vm.CloseWindow()" title="Close this window"></i>
             <h3 id="modalTitle">Bulk Upload - Meet Comp</h3>
         </div>
-        <div id="modalBodyDiv" class="modal-body">
+        <div id="modalBodyDiv" class="modal-body" ng-if="vm.HasBulkUploadAccess">
             <div id="extractMeetComp" ng-if="vm.MeetComps.length <= 0">
                 <div class="col-md-11 notes">
-                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate entries will be ignored. Unauthorized customers will not be allowed. Your attachment will upload after clicking the "Extract Meet Comp" button.</span><br /><br />
+                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate entries will be ignored. Your attachment will upload after clicking the "Extract Meet Comp" button.</span><br /><br />
                 </div>
                 <div class="form-group row">
                     <div class="col-md-11">
@@ -26,21 +26,26 @@
                         <a download target="_blank" href="/api/FileAttachments/GetMeetCompTemplateFile">Click here to download the template</a>
                     </div>
                     <div class="col-md-3">
-                        <button ng-click="vm.uploadFile()" class="btn btn-primary" style="margin-left: 15px">Extract Meet Comp</button>
+                        <button ng-click="vm.uploadFile()" class="btn btn-primary" style="margin-left: 15px">Upload Meet Comp</button>
                     </div>
                 </div>
             </div>
             <div ng-if="vm.MeetComps.length > 0">
-                <kendo-spreadsheet id="spreadsheetMeetComp" style="width: 718px; height: 270px; float:left;" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets"></kendo-spreadsheet>
+                <kendo-spreadsheet id="spreadsheetMeetComp" style="width: 718px; height: 270px; float:left;" k-rows="vm.SpreadSheetRowsCount" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets" k-options="vm.SpreadSheetOptions"></kendo-spreadsheet>
             </div>
         </div>
-        <div class="modal-footer" ng-if="vm.MeetComps.length > 0">
+        <div class="modal-footer" ng-if="vm.MeetComps.length > 0 && vm.HasBulkUploadAccess">
             <div class="form-group row action_btns">
                 <div class="col-md-12">
                     <button ng-click="vm.ValidateMeetComps()" class="btn btn-primary" style="margin-left: 15px">Validate Imported Meet Comp Data</button>
-                    <button class="btn btn-primary" ng-click="vm.SaveMeetComps()" ng-disabled="!(vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.ValidatedMeetComps.length > 0)" style="margin-left: 15px">Save Imported Data</button>
+                    <button class="btn btn-primary" ng-click="vm.SaveMeetComps()" ng-disabled="!(vm.IsSpreadSheetEdited == false && vm.MeetCompValidation != null && vm.MeetCompValidation.HasInvalidMeetComp == false && vm.MeetCompValidation.ValidatedMeetComps.length > 0)" style="margin-left: 15px">Save Imported Data</button>
                     <button ng-click="vm.CloseWindow()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="!vm.HasBulkUploadAccess">
+            <div class="alert alert-danger">
+                <span>You don't have access to this page.  Only DA user is allowed.</span>
             </div>
         </div>
     </div>

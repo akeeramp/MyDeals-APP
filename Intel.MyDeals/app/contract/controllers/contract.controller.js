@@ -77,7 +77,8 @@
         //Tender only columns for PRC_TBL_ROW
         $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO"];
         $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
-
+        $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
+                                            
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         else if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
@@ -1465,7 +1466,6 @@
             }
         }
         $scope.showEditPricingTableDefaults = function (pt) {
-            $scope.isVistexHybrid = pt.IS_HYBRID_PRC_STRAT;
             openAutofillModal(pt);
         }
         $scope.addByECAPTracker = function () {
@@ -1593,6 +1593,8 @@
                 updateNPTDefaultValues(pt);
             }
 
+            $scope.isVistexHybrid = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined ? $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT : "0";
+
             var autofillData = {
                 'ISTENDER': $scope.isTenderContract,
                 'isVistexHybrid': $scope.isVistexHybrid,
@@ -1652,7 +1654,8 @@
             if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
             if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
             if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
-
+            if (!!nptDefaults["REBATE_OA_MAX_VOL"]) nptDefaults["REBATE_OA_MAX_VOL"].value = pt["REBATE_OA_MAX_VOL"];
+            if (!!nptDefaults["REBATE_OA_MAX_AMT"]) nptDefaults["REBATE_OA_MAX_AMT"].value = pt["REBATE_OA_MAX_AMT"];     
             //not sure if necessary, javascript pass by value/reference always throwing me off. :(
             $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
         }
@@ -2572,6 +2575,8 @@
                     var dictPeriodProfile = {};
                     var dictArSettlement = {};
                     var dictProgramPayment = {};
+                    var dictOverarchingVolume = {};
+                    var dictOverarchingDollar = {};
                     var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
                     // Check if the rows have duplicate products
@@ -2598,7 +2603,9 @@
                                         dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
                                     }
                                     dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
-                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;                                    
+                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
+                                    dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
+                                    dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
                                 }
                             }
                         }
@@ -2655,6 +2662,18 @@
                                     el._behaviors.validMsg["PROGRAM_PAYMENT"] = "All Program Payments must be same within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
+                                }
+                                if (Object.keys(dictOverarchingVolume).length > 1) {
+                                    el._behaviors.isError["REBATE_OA_MAX_VOL"] = true;
+                                    el._behaviors.validMsg["REBATE_OA_MAX_VOL"] = "All Overarching Max Volume values must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
+                                }
+                                if (Object.keys(dictOverarchingDollar).length > 1) {
+                                    el._behaviors.isError["REBATE_OA_MAX_AMT"] = true;
+                                    el._behaviors.validMsg["REBATE_OA_MAX_AMT"] = "All Overarching Max Dollar values must be same within a Hybrid Pricing Strategy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
                                 }
                                 if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).contains("Backend"))) {
                                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
@@ -2809,6 +2828,8 @@
                 if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
                 var isHybridPricingStatergy = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
                 var dictGroupType = {};
+                var dictWipOverMaxVol = {};
+                var dictWipOverMaxAmt = {};
 
                 //for (var iterator = 0; iterator < gData.length; iterator++) {
                 //    if (gData[iterator].EXPIRE_FLG === true) {
@@ -2877,7 +2898,25 @@
                                 gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
                                 gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("All deals within a PS should have the same 'Group Type' value");
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
+                            }
+                            dictWipOverMaxVol[gData[i]["REBATE_OA_MAX_VOL"]] = i;
+                            if (Object.keys(dictWipOverMaxVol).length > 1) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['REBATE_OA_MAX_VOL'] = true;
+                                gData[i]._behaviors.validMsg['REBATE_OA_MAX_VOL'] = "All deals within a PS should have the same 'Over Arching Max Volume' value";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['REBATE_OA_MAX_VOL']);
+                            }
+                            dictWipOverMaxAmt[gData[i]["REBATE_OA_MAX_AMT"]] = i;
+                            if (Object.keys(dictWipOverMaxAmt).length > 1) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['REBATE_OA_MAX_AMT'] = true;
+                                gData[i]._behaviors.validMsg['REBATE_OA_MAX_AMT'] = "All deals within a PS should have the same 'Over Arching Max Dollar' value";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['REBATE_OA_MAX_AMT']);
                             }
                         }
                     }
@@ -4547,6 +4586,8 @@
                         if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
                             ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
                     }
+                    if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = "";
+                    if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = "";
 
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
@@ -4565,6 +4606,8 @@
                     if (!!newValue["SERVER_DEAL_TYPE"]) newValue["SERVER_DEAL_TYPE"].value = $scope.currentPricingTable["SERVER_DEAL_TYPE"];
                     if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.currentPricingTable["PERIOD_PROFILE"] != "" ? $scope.currentPricingTable["PERIOD_PROFILE"] : $scope.contractData.Customer.DFLT_PERD_PRFL;
                     if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = $scope.currentPricingTable["AR_SETTLEMENT_LVL"] != "" ? $scope.currentPricingTable["AR_SETTLEMENT_LVL"] : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                    if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = $scope.currentPricingTable["REBATE_OA_MAX_VOL"]
+                    if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = $scope.currentPricingTable["REBATE_OA_MAX_AMT"]
                 }
             } else {
                 // TODO: Hook these up to service (add service into injection and physical files)
