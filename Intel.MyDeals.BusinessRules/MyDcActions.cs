@@ -519,15 +519,15 @@ namespace Intel.MyDeals.BusinessRules
                 string matchedValue = custs.ToList()
                         .Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM)
                         .FirstOrDefault();
-                    if (string.IsNullOrEmpty(matchedValue))
-                    {
-                        foundMisMatch = true;
-                        matchedDivs.Add(divNm);
-                    }
-                    else
-                    {
-                        matchedDivs.Add(matchedValue);
-                    }
+                if (string.IsNullOrEmpty(matchedValue))
+                {
+                    foundMisMatch = true;
+                    matchedDivs.Add(divNm);
+                }
+                else
+                {
+                    matchedDivs.Add(matchedValue);
+                }
                 //}
                 //else
                 //{
@@ -1570,6 +1570,52 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ValidateOverarchingInPTR(params object[] args)
+        {
+            //Validation Rules for overarching deals
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
+            IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
+
+            if (deOAMaxAmt == null || deOAMaxVol == null) return;
+
+            string overarchingMaxVol = deOAMaxVol.AtrbValue.ToString();
+            string overarchingMaxAmt = deOAMaxAmt.AtrbValue.ToString();
+
+            //do not run validation if no user input
+            if (overarchingMaxVol == "" && deOAMaxAmt.AtrbValue.ToString() == "") return;
+
+            int numMaxVol;
+            decimal numMaxAmt;
+
+            if (!decimal.TryParse(overarchingMaxAmt, out numMaxAmt) && overarchingMaxAmt != "")
+            {   //Non decimal type input error
+                deOAMaxAmt.AddMessage("Overarching Max Dollar Amount is not a valid dollar amount.");
+            }
+            if (!int.TryParse(overarchingMaxVol, out numMaxVol) && overarchingMaxVol != "")
+            {   //Non integer type input error
+                deOAMaxVol.AddMessage("Overarching Max Volume is not a valid integer value.");
+            }
+            if (numMaxVol < 0)
+            {
+                deOAMaxVol.AddMessage("Overarching Max Volume cannot be a negative value.");
+            }
+            if (numMaxAmt < 0)
+            {
+                deOAMaxAmt.AddMessage("Overarching Max Dollar Amount cannot be a negative value.");
+            }
+
+            //if user adds an overarching deal id, then one but not both overarching max values are required
+            if (overarchingMaxAmt != "" && overarchingMaxVol != "")
+            {
+                deOAMaxAmt.AddMessage("Cannot have both Overarching Max Dollar Amount and Overarching Max Volume.");
+                deOAMaxVol.AddMessage("Cannot have both Overarching Max Volume and Overarching Max Dollar Amount.");
+            }
+
+        }
+
         public static void BackdateRequired(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -1763,7 +1809,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
         }
-        
+
         public static void PastEndDateExtendOnly(params object[] args)
         {
             // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.
@@ -2040,7 +2086,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
                         }
-                        
+
                     }
                 }
             }
