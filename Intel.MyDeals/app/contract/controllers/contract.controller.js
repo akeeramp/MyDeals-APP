@@ -2588,7 +2588,7 @@
                         for (var s = 0; s < sData.length; s++) {
                             if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
                             if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
-                            if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" || sData[s].TIER_NBR === 1) {
+                            if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER") || sData[s].TIER_NBR === 1) {
                                 if (sData[s]["REBATE_TYPE"] === "TENDER") {
                                     hasTender = true;
                                 } else {
@@ -2604,8 +2604,13 @@
                                     }
                                     dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                     dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
-                                    dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
-                                    dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
+
+                                    // The next two values if left blank can come in as either null or "", make them one pattern.
+                                    if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
+                                    else dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
+
+                                    if (sData[s]["REBATE_OA_MAX_VOL"] == null) dictOverarchingVolume[""] = s;
+                                    else dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
                                 }
                             }
                         }
