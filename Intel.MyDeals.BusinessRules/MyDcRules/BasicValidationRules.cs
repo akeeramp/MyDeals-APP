@@ -416,6 +416,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Overarching Validation in PTR",
+                    ActionRule = MyDcActions.ValidateOverarchingInPTR,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     Title="Server Deal Type Validation",
                     ActionRule = MyDcActions.ValidateServerDealType,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
