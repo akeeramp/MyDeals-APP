@@ -38,15 +38,15 @@ namespace Intel.MyDeals.DataLibrary
                                 decimal dblIABench = 0;
                                 decimal dblCompBench = 0;
 
-                                decimal.TryParse(worksheet.Cells[i, 4].Value.ToString(), out dblMeetCompPrc);
-                                decimal.TryParse(worksheet.Cells[i, 5].Value.ToString(), out dblIABench);
-                                decimal.TryParse(worksheet.Cells[i, 6].Value.ToString(), out dblCompBench);
+                                decimal.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString() : "0", out dblMeetCompPrc);
+                                decimal.TryParse(worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString() : "0", out dblIABench);
+                                decimal.TryParse(worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString() : "0", out dblCompBench);
 
                                 lstRtn.Add(new MeetComp
                                 {
-                                    CUST_NM = worksheet.Cells[i, 1].Value.ToString(),
-                                    HIER_VAL_NM = worksheet.Cells[i, 2].Value.ToString(),
-                                    MEET_COMP_PRD = worksheet.Cells[i, 3].Value.ToString(),
+                                    CUST_NM = worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString() : string.Empty,
+                                    HIER_VAL_NM = worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString() : string.Empty,
+                                    MEET_COMP_PRD = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString() : string.Empty,
                                     MEET_COMP_PRC = dblMeetCompPrc,
                                     IA_BNCH = dblIABench,
                                     COMP_BNCH = dblCompBench
