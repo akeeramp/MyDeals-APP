@@ -71,6 +71,10 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="RunCommands\VISTEXSapPoUploadCustomer.cmd" />
+    <None Include="RunCommands\VISTEXSapPoUploadDeal.cmd" />
+    <None Include="RunCommands\VISTEXSapPoUploadProduct.cmd" />
+    <None Include="RunCommands\VISTEXSapPoUploadVertical.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -78,5 +82,6 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
