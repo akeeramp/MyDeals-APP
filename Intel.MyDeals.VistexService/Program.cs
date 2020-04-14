@@ -47,7 +47,7 @@ namespace Intel.MyDeals.VistexService
                 //Thread.Sleep(myArgs.sleepSeconds * 1000);
                 //JmsQCommon.Log("Done sleeping.");
             }
-
+            
             // Set JobType Mode Flag
             switch (myArgs.jobMode)
             {
@@ -61,12 +61,11 @@ namespace Intel.MyDeals.VistexService
                     break;
                 case JobMode.SendProductsVistex:
                     Console.WriteLine("Sending Products to Vistex from My Deals...");
-                    await SendDFDataToSapPo("P");
+                    await SendDFDataToSapPo("P");                    
                     break;
                 case JobMode.SendVerticalsVistex:
                     Console.WriteLine("Sending Verticals to Vistex from My Deals...");
-                    await SendVerticalsToSapPo();
-                    Console.ReadLine();
+                    await SendVerticalsToSapPo();                 
                     break;
                 case JobMode.ProcessDealsTenders:
                     Console.WriteLine("Processing Tenders deals in My Deals...");

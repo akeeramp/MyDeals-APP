@@ -9,26 +9,17 @@ namespace Intel.MyDeals.VistexService
     {
         private static async Task SendDFDataToSapPo(string runMode) //VTX_OBJ: CUSTOMERS, PRODUCTS
         {
-            List<VistexDFDataResponseObject> dataRecord = new List<VistexDFDataResponseObject>();
+            VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
             dataRecord = await DataAccessLayer.GetVistexDFStageData(runMode);
-            foreach(VistexDFDataResponseObject r in dataRecord)
+            if (dataRecord.BatchId == "0")
             {
-                if (r.BatchId == "0")
-                {
-                    Console.WriteLine("There is no outbound data to push..");
-                }
-                else
-                {
-                    if (r.BatchStatus.ToLower() == "processed")
-                    {
-                        Console.WriteLine("Outbound data pushed to SAP completed successfully..");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Data pushed to SAP Completed, Status: " + r.BatchStatus + " - " + r.BatchMessage);
-                    }
-                }
+                Console.WriteLine("There is no outbound data to push..");
             }
+            else
+            {
+                Console.WriteLine("Data pushed to SAP Completed, Status: " + dataRecord.BatchStatus + " - " + dataRecord.BatchMessage);
+            }
+            
         }
 
         private static async Task SendDealsDataToSapPo(string runMode) //VTX_OBJ: DEALS
@@ -43,7 +34,7 @@ namespace Intel.MyDeals.VistexService
             else if (dataRecord.BatchStatus.ToLower() == "processed")
             {
                 Console.WriteLine("Outbound data pushed to SAP successfully..");
-            }
+            }            
         }
 
         private static async Task<bool> SendVerticalsToSapPo() //VTX_OBJ: VERTICALS
