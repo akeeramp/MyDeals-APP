@@ -333,11 +333,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("IsDuplicateContractTitle/{dcId}/{title}")]
-        [HttpGet]
-        public bool IsDuplicateContractTitle(int dcId, string title)
+        [Route("IsDuplicateContractTitle/{dcId}")]
+        [HttpPost]
+        public bool IsDuplicateContractTitle(int dcId, string[] title)
         {
-            return SafeExecutor(() => _contractsLib.IsDuplicateContractTitle(dcId, title)
+            return SafeExecutor(() => _contractsLib.IsDuplicateContractTitle(dcId, title[0])
                 , "Unable to validate contract name {title}"
             );
         }        

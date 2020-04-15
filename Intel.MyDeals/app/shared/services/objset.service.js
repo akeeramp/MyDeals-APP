@@ -131,7 +131,8 @@ function objsetService($http, dataService, logger, $q, $location) {
         return dataService.get(apiBaseContractUrl + 'DeleteContract/' + custId + '/' + contractId);
     }
     function isDuplicateContractTitle(dcId, title) {
-        return dataService.get(apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId + '/' + title);
+        //var titleArr.push(title);
+        return dataService.post(apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId, [title]);
     }
     function getExportContract(id) {
         return dataService.get(apiBaseContractUrl + 'GetExportContract/' + id);
