@@ -42,7 +42,7 @@ namespace Intel.MyDeals.VistexService
             VistexDFDataResponseObject records = new VistexDFDataResponseObject();
             while (true)
             {
-                records = await DataAccessLayer.GetVistexVerticalStageData("PROD_VERT_RULES");
+                records = await DataAccessLayer.GetVistexVerticalStageData("V");
 
                 if (records.BatchId == "0" || records.BatchStatus == "ERROR")
                 {

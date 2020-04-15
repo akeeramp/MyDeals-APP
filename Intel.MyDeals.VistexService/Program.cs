@@ -65,7 +65,7 @@ namespace Intel.MyDeals.VistexService
                     break;
                 case JobMode.SendVerticalsVistex:
                     Console.WriteLine("Sending Verticals to Vistex from My Deals...");
-                    await SendVerticalsToSapPo();                 
+                    await SendVerticalsToSapPo();                    
                     break;
                 case JobMode.ProcessDealsTenders:
                     Console.WriteLine("Processing Tenders deals in My Deals...");
