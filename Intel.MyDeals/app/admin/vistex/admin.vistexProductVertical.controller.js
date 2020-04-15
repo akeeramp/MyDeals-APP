@@ -16,27 +16,39 @@
         vm.isBusyShowFunFact = true;
         vm.Vistex = [];
         vm.SelectedStatus = null;
-        vm.VistexStatuses = [];  
+        vm.VistexStatuses = [];
+        vm.startDate = moment().subtract(30, 'days').format("MM/DD/YYYY");
+        vm.endDate = moment().format("MM/DD/YYYY");
 
         vm.init = function () {
-            var postData = {
-                "Dealmode": 'PROD_VERT_RULES',
-                "StartDate": moment().subtract(3, 'months').format("MM/DD/YYYY"),
-                "EndDate": moment().format("MM/DD/YYYY")
-            }
-            dsaService.getVistexLogs(postData).then(function (response) {
-                vm.Vistex = response.data;
-                vm.vistexDataSource.read();
-            }, function (response) {
-                logger.error("Operation failed");
-            });
+            vm.startDate = moment(vm.startDate).format("MM/DD/YYYY");
+            vm.endDate = moment(vm.endDate).format("MM/DD/YYYY");
 
-            dsaService.getVistexStatuses().then(function (response) {
-                vm.VistexStatuses = response.data;
-                vm.VistexStatusesDataSource.read();
-            }, function (response) {
-                logger.error("Unable to get statuses of vistex");
-            });
+            if (moment(vm.startDate, "MM/DD/YYYY", true).isValid() && moment(vm.endDate, "MM/DD/YYYY", true).isValid() && moment(vm.startDate).isBefore(vm.endDate)) {
+                var postData = {
+                    "Dealmode": 'PROD_VERT_RULES',
+                    "StartDate": vm.startDate,
+                    "EndDate": vm.endDate
+                }
+                dsaService.getVistexLogs(postData).then(function (response) {
+                    vm.Vistex = response.data;
+                    vm.vistexDataSource.read();
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+
+                dsaService.getVistexStatuses().then(function (response) {
+                    vm.VistexStatuses = response.data;
+                    vm.VistexStatusesDataSource.read();
+                }, function (response) {
+                    logger.error("Unable to get statuses of vistex");
+                });
+            }
+            else {
+                kendo.alert("Please provide valid <b>Start and End Date</b>");
+                vm.startDate = moment().subtract(30, 'days').format("MM/DD/YYYY");
+                vm.endDate = moment().format("MM/DD/YYYY");
+            }
         }
 
         vm.UpdateVistexStatus = function (strTransantionId) {
@@ -77,11 +89,58 @@
                         CRE_DTM: { editable: false, nullable: false },
                         INTRFC_RQST_DTM: { editable: false, nullable: true },
                         INTRFC_RSPN_DTM: { editable: false, nullable: true },
+                        RQST_JSON_DATA: { editable: false, nullable: true }
                     }
                 }
             },
             //sort: { field: "CreatedOn", dir: "desc" }
         });
+
+        $scope.detailInit = function (parentDataItem) {
+            var columns = [];
+
+            if (parentDataItem.RQST_JSON_DATA.length > 0) {
+                columns.push({
+                    field: "RQST_JSON_DATA",
+                    title: "Request JSON Data",
+                    template: "<div>#=RQST_JSON_DATA#</div>",
+                    width: "50%",
+                    filterable: { multi: true, search: false }
+                });
+            }
+
+            return {
+                dataSource: {
+                    transport: {
+                        read: function (e) {
+                            e.success(parentDataItem);
+                        },
+                        create: function (e) {
+                        }
+                    },
+                    pageSize: 1,
+                    serverPaging: false,
+                    serverFiltering: false,
+                    serverSorting: false,
+                    schema: {
+                        model: {
+                            id: "ID",
+                            fields: {
+                                ID: {
+                                    nullable: true
+                                },
+                                RQST_JSON_DATA: { type: "string" },
+                            }
+                        }
+                    },
+                },
+                filterable: false,
+                sortable: false,
+                resizable: true,
+                reorderable: false,
+                columns: columns
+            };
+        };
 
         vm.MessageEditor = function (container, options) {
             vm.EnteredMessage = options.model.ERR_MSG;
@@ -116,6 +175,7 @@
             columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
+            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget' kendo-grid k-options='detailInit(dataItem)'></div>",
             toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(true),
             editable: { mode: "inline", confirmation: false },
             pageable: {
@@ -139,44 +199,17 @@
                     title: " ",
                     width: "70px"
                 },
-                { field: "BTCH_ID", title: "Transanction Id", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(BTCH_ID == '00000000-0000-0000-0000-000000000000'){#-#} else {##= BTCH_ID ##}#</span>" },                
+                { field: "RQST_SID", title: "Request ID", width: "130px", filterable: { multi: true, search: true } },
+                { field: "BTCH_ID", title: "Batch ID", width: "320px", filterable: { multi: true, search: true }, template: "<span>#if(BTCH_ID == '00000000-0000-0000-0000-000000000000'){#-#} else {##= BTCH_ID ##}#</span>" },
                 { field: "RQST_STS", title: "Status", width: "250px", filterable: { multi: true, search: true }, editor: vm.StatusDropDownEditor },
                 { field: "ERR_MSG", title: "Message", filterable: { multi: true, search: true }, editor: vm.MessageEditor },
-                { field: "CRE_DTM", title: "Created On", width: "125px", filterable: { multi: true, search: true } },
-                { field: "INTRFC_RQST_DTM", title: "Send To PO On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RQST_DTM == '1/1/1900'){#-#} else {##= INTRFC_RQST_DTM ##}#</span>" },
-                { field: "INTRFC_RSPN_DTM", title: "Processed On", width: "125px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RSPN_DTM == '1/1/1900'){#-#} else {##= INTRFC_RSPN_DTM ##}#</span>" }
+                { field: "INTRFC_RQST_DTM", title: "Send To PO On", width: "160px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RQST_DTM == '1/1/1900'){#-#} else {##= INTRFC_RQST_DTM ##}#</span>" },
+                { field: "INTRFC_RSPN_DTM", title: "Processed On", width: "150px", filterable: { multi: true, search: true }, template: "<span>#if(INTRFC_RSPN_DTM == '1/1/1900'){#-#} else {##= INTRFC_RSPN_DTM ##}#</span>" },
+                { field: "CRE_DTM", title: "Created On", width: "140px", filterable: { multi: true, search: true } }
+
             ]
         };
 
-        vm.GetVistexDataBody = function (dataItem) {
-            return {
-                dataSource: {
-                    transport: {
-                        read: "/api/DSA/GetProductVerticalBody/" + dataItem.RQST_SID
-                    },
-                    pageSize: 25
-                },
-                filterable: true,
-                sortable: true,
-                selectable: true,
-                resizable: true,
-                columnMenu: true,
-                pageable: {
-                    refresh: true
-                },
-                columns: [
-                    { field: "GDM_PRD_TYPE_NM", title: "Type", filterable: { multi: true, search: true } },
-                    { field: "GDM_VRT_NM", title: "Name", filterable: { multi: true, search: true } },
-                    { field: "OP_CD", title: "OP Code", filterable: { multi: true, search: true } },
-                    { field: "DIV_NM", title: "Division", filterable: { multi: true, search: true } },
-                    { field: "DEAL_PRD_TYPE", title: "Deal Type", filterable: { multi: true, search: true } },
-                    { field: "PRD_CAT_NM", title: "Category", filterable: { multi: true, search: true } },
-                    { field: "ACTV_IND", title: "Is Active?", filterable: { multi: true, search: true }, template: "<span>#if(ACTV_IND){#Yes#} else {#No#}#</span>" },
-                    { field: "CRE_DTM", title: "Created On", filterable: { multi: true, search: true } },
-                    { field: "CHG_DTM", title: "Updated On", filterable: { multi: true, search: true } }
-                ]
-            }
-        }
 
         vm.init();
     }
