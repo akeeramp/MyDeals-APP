@@ -25,6 +25,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         CredentialCache GetVistexCredentials(string url);
 
-
+        Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode);
     }
 }

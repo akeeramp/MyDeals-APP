@@ -25,6 +25,10 @@ namespace Intel.MyDeals.DataLibrary
         private string _mIdsid;
         private string vistexBaseURL;
         private string vistexUID;
+        private string vistexDealApi;
+        private string vistexCustApi;
+        private string vistexProdApi;
+        private string vistexVertApi;
         private Dictionary<string, string> vistexEnvs;
 
         private IConnection connection;
@@ -39,8 +43,93 @@ namespace Intel.MyDeals.DataLibrary
             vistexEnvs = DataLibrary.GetEnvConfigs();
             vistexBaseURL = vistexEnvs.ContainsKey("vistexBaseURL") ? vistexEnvs["vistexBaseURL"] : "";
             vistexUID = vistexEnvs.ContainsKey("vistexUID") ? vistexEnvs["vistexUID"] : "";
+            
+            //Getting APi Key            
+            vistexBaseURL = ConfigurationManager.AppSettings["vistexBaseURL"];
+            vistexDealApi = ConfigurationManager.AppSettings["vistexDealApi"];
+            vistexCustApi = ConfigurationManager.AppSettings["vistexCustApi"];
+            vistexProdApi = ConfigurationManager.AppSettings["vistexProdApi"];
+            vistexVertApi = ConfigurationManager.AppSettings["vistexVertApi"];
         }
+        private string GetVistexUrlByMode(string mode)
+        {
+            if(mode == "D")
+            {
+                return vistexBaseURL + "/" + vistexDealApi;
+            }
+            else if(mode == "C")
+            {
+                return vistexBaseURL + "/" + vistexCustApi;
+            }
+            else if (mode == "P")
+            {
+                return vistexBaseURL + "/" + vistexProdApi;
+            }
+            else if (mode == "V")
+            {
+                return vistexBaseURL + "/" + vistexVertApi;
+            }
+            else
+            {
+                return "";
+            }
+            
+        }
+        public Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
 
+            //URL Setting - Reading from Key Value Pair 
+            string url = GetVistexUrlByMode(mode);
+
+            // Create a request using a URL that can receive a post.   
+            WebRequest request = WebRequest.Create(url);
+            request.Credentials = GetVistexCredentials(url);
+            // Set the Method property of the request to POST.  
+            request.Method = "POST";
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+
+            // Set the ContentType property of the WebRequest.  
+            request.ContentType = "application/x-www-form-urlencoded";
+            // Set the ContentLength property of the WebRequest.  
+            request.ContentLength = byteArray.Length;
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                WebResponse response = request.GetResponse(); // Get the response.
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log($"Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace} | Response {responseObjectDictionary["Status"]}", LogCategory.Error);
+                responseObjectDictionary.Add("Status", ex.Message);
+                responseObjectDictionary.Add("Message", ex.Message);
+            }
+
+            return responseObjectDictionary;
+        }
 
         public List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode) //VTX_OBJ: DEALS
         {

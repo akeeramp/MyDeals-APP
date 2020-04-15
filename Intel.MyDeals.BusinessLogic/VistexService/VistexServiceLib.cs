@@ -16,14 +16,14 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class VistexServiceLib : IVistexServiceLib
     {
-        //Connection Master - > Can be moved to App.Config
-        public static Dictionary<string, string> conDict = new Dictionary<string, string>()
-        {
-            {"D", "http://sappodev.intel.com:8415/RESTAdapter/MyDeals"},
-            {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
-            {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
-            {"V", "http://sappodev.intel.com:8415/RESTAdapter/ProductVertical"},
-        };
+        ////Connection Master - > Can be moved to App.Config
+        //public static Dictionary<string, string> conDict = new Dictionary<string, string>()
+        //{
+        //    {"D", "http://sappodev.intel.com:8415/RESTAdapter/MyDeals"},
+        //    {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
+        //    {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
+        //    {"V", "http://sappodev.intel.com:8415/RESTAdapter/ProductVertical"},
+        //};
 
         private readonly IVistexServiceDataLib _vistexServiceDataLib;
 
@@ -156,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // Step 2: Post Data to SAP PO API
             Dictionary<string, string> sendResponse = new Dictionary<string, string>();
-            sendResponse = PublishToSapPo(jsonData, runMode);
+            sendResponse = _vistexServiceDataLib.PublishToSapPoDCPV(jsonData, runMode);
             VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
             if (sendResponse["Status"].ToLower() == "ok" || sendResponse["Status"].ToLower() == "accepted")
             {                
@@ -204,7 +204,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             jsonData = jsonData.Replace("CustomerBRD", "Customer");
             //URL Setting - Reading from Key Value Pair
-            url = @conDict[mode];
+            //url = @conDict[mode];
 
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
