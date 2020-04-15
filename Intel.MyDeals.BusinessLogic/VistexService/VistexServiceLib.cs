@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
             {"D", "http://sappodev.intel.com:8415/RESTAdapter/MyDeals"},
             {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
             {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
-            {"V", "https://sappodev.intel.com:8215/RESTAdapter/ProductVertical"},
+            {"V", "http://sappodev.intel.com:8415/RESTAdapter/ProductVertical"},
         };
 
         private readonly IVistexServiceDataLib _vistexServiceDataLib;
