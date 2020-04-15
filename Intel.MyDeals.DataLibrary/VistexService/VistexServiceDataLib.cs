@@ -75,9 +75,16 @@ namespace Intel.MyDeals.DataLibrary
             }
             
         }
+
+        /// <summary>
+        /// Publish JSON data to SAP PO
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
         public Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
 
             //URL Setting - Reading from Key Value Pair 
             string url = GetVistexUrlByMode(mode);
