@@ -29,7 +29,7 @@ namespace Intel.MyDeals.DataLibrary
                         int iRows = worksheet.Dimension.Rows;
                         int iColumns = worksheet.Dimension.Columns;
 
-                        if (iColumns >= 6)
+                        if (iRows >= 2 && iColumns >= 6)
                         {
                             // loop through the worksheet rows and columns
                             for (int i = 2; i <= iRows; i++)
