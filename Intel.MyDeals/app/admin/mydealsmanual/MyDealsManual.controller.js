@@ -57,7 +57,7 @@
 						page += "</ul>";
 					}
 					currTopic = object.REF_LNK;
-					page += "<li><a data-toggle='collapse' href='javascript:;' id='#" + currTopic + "' data-target='#" + currTopic + "'>" + object.REF_TTL + "<i class='fa expansion-indicator pull-right fa-chevron-down'></i></a></li>";
+					page += "<li><a data-toggle='collapse' href='javascript:;' id='#" + currTopic + "' data-target='#" + currTopic + "' ng-click='loadContent(\"" + object.REF_LNK + "\");'>" + object.REF_TTL + "<i class='fa expansion-indicator pull-right fa-chevron-down'></i></a></li>";
 					page += "<ul id='" + currTopic + "' class='panel-collapse collapse' style='list-style: none; font-size: 12px; margin-left: -25px'>";
 				}
 				else {

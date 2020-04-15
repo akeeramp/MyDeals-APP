@@ -255,20 +255,7 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
 
     vm.DeleteSpreadsheetAutoHeader = function () {
         var sheet = vm.spreadsheet.activeSheet();
-        sheet.deleteRow(0);
-        sheet.range("A1:C" + vm.SpreadSheetRowsCount).color("black");
-        sheet.range("A1:C" + vm.SpreadSheetRowsCount).textAlign("left");
-        sheet.range("D1:F" + vm.SpreadSheetRowsCount).textAlign("right");
-        sheet.range("D1:D" + vm.SpreadSheetRowsCount).format("$#,##0.00");
-        sheet.range("D1:D" + vm.SpreadSheetRowsCount).validation({
-            dataType: "custom",
-            from: "REGEXP_MATCH_MONEY(D1)",
-            allowNulls: true,
-            type: "reject",
-            titleTemplate: "Invalid Price",
-            messageTemplate: "Format of the price is invalid. This should be greater than zero."
-        });
-        sheet.range("E1:F" + vm.SpreadSheetRowsCount).format("#");
+
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[4]).find("div").html("Meet Comp Sku");
@@ -276,17 +263,48 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
 
-        var i;
-        if (vm.MeetComps.length > vm.SpreadSheetRowsCount - 2) {
-            for (i = vm.SpreadSheetRowsCount - 2; i <= vm.MeetComps.length; i++) {
-                sheet.range("A" + i).value(vm.MeetComps[i - 1].CUST_NM);
-                sheet.range("B" + i).value(vm.MeetComps[i - 1].HIER_VAL_NM);
-                sheet.range("C" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRD);
-                sheet.range("D" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRC);
-                sheet.range("E" + i).value(vm.MeetComps[i - 1].IA_BNCH);
-                sheet.range("F" + i).value(vm.MeetComps[i - 1].COMP_BNCH);
-            }
+        for (i = 0; i < sheet.dataSource._pristineData.length; i++) {
+            var row = i + 1;
+            sheet.range("A" + row).value(vm.MeetComps[i].CUST_NM);
+            sheet.range("B" + row).value(vm.MeetComps[i].HIER_VAL_NM);
+            sheet.range("C" + row).value(vm.MeetComps[i].MEET_COMP_PRD);
+            sheet.range("D" + row).value(vm.MeetComps[i].MEET_COMP_PRC);
+            sheet.range("E" + row).value(vm.MeetComps[i].IA_BNCH);
+            sheet.range("F" + row).value(vm.MeetComps[i].COMP_BNCH);
         }
+        // Not sure why the below has issues on row deletion, but replaced everything below with above lines and tested...
+        //sheet.deleteRow(0);
+        //sheet.range("A1:C" + vm.SpreadSheetRowsCount).color("black");
+        //sheet.range("A1:C" + vm.SpreadSheetRowsCount).textAlign("left");
+        //sheet.range("D1:F" + vm.SpreadSheetRowsCount).textAlign("right");
+        //sheet.range("D1:D" + vm.SpreadSheetRowsCount).format("$#,##0.00");
+        //sheet.range("D1:D" + vm.SpreadSheetRowsCount).validation({
+        //    dataType: "custom",
+        //    from: "REGEXP_MATCH_MONEY(D1)",
+        //    allowNulls: true,
+        //    type: "reject",
+        //    titleTemplate: "Invalid Price",
+        //    messageTemplate: "Format of the price is invalid. This should be greater than zero."
+        //});
+        //sheet.range("E1:F" + vm.SpreadSheetRowsCount).format("#");
+        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
+        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
+        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[4]).find("div").html("Meet Comp Sku");
+        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[6]).find("div").html("Meet Comp Price");
+        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
+        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
+
+        //var i;
+        //if (vm.MeetComps.length > vm.SpreadSheetRowsCount - 2) {
+        //    for (i = vm.SpreadSheetRowsCount - 2; i <= vm.MeetComps.length; i++) {
+        //        sheet.range("A" + i).value(vm.MeetComps[i - 1].CUST_NM);
+        //        sheet.range("B" + i).value(vm.MeetComps[i - 1].HIER_VAL_NM);
+        //        sheet.range("C" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRD);
+        //        sheet.range("D" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRC);
+        //        sheet.range("E" + i).value(vm.MeetComps[i - 1].IA_BNCH);
+        //        sheet.range("F" + i).value(vm.MeetComps[i - 1].COMP_BNCH);
+        //    }
+        //}
     }
 
     kendo.spreadsheet.defineFunction("REGEXP_MATCH_MONEY", function (str) {
