@@ -19,8 +19,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj);
 
-        Dictionary<string, string> PublishSapPo(string url, string jsonData);
-
         VistexDFDataResponseObject GetVistexStageData(string runMode);
 
         Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);

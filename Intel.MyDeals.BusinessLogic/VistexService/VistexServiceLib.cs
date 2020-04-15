@@ -16,15 +16,6 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class VistexServiceLib : IVistexServiceLib
     {
-        ////Connection Master - > Can be moved to App.Config
-        //public static Dictionary<string, string> conDict = new Dictionary<string, string>()
-        //{
-        //    {"D", "http://sappodev.intel.com:8415/RESTAdapter/MyDeals"},
-        //    {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
-        //    {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
-        //    {"V", "http://sappodev.intel.com:8415/RESTAdapter/ProductVertical"},
-        //};
-
         private readonly IVistexServiceDataLib _vistexServiceDataLib;
 
         public VistexServiceLib(IVistexServiceDataLib vistexServiceDataLib)
@@ -189,72 +180,6 @@ namespace Intel.MyDeals.BusinessLogic
         public void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj) //VTX_OBJ: CUSTOMER
         {
             _vistexServiceDataLib.UpdateVistexDFStageData(responseObj);
-        }
-
-        public Dictionary<string, string> PublishSapPo(string url, string jsonData)
-        {
-            return _vistexServiceDataLib.PublishSapPo(url, jsonData);
-        }
-
-
-        public Dictionary<string, string> PublishToSapPo(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
-            string url = "";
-
-            jsonData = jsonData.Replace("CustomerBRD", "Customer");
-            //URL Setting - Reading from Key Value Pair
-            //url = @conDict[mode];
-
-            // Create a request using a URL that can receive a post.   
-            WebRequest request = WebRequest.Create(url);
-            request.Credentials = _vistexServiceDataLib.GetVistexCredentials(url);
-            // Set the Method property of the request to POST.  
-            request.Method = "POST";
-
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
-
-            // Set the ContentType property of the WebRequest.  
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.  
-            request.ContentLength = byteArray.Length;
-
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-                        
-            try
-            {
-                WebResponse response = request.GetResponse(); // Get the response.
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
-                
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
-                {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                }
-                
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                
-                responseObjectDictionary.Add("Status", e.Message );
-                responseObjectDictionary.Add("Message", e.Message);
-                
-            }            
-
-            return responseObjectDictionary;
         }
 
         public Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS
