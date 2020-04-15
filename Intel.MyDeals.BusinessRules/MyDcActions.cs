@@ -799,6 +799,47 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        /// <summary>
+        /// Set read only 
+        /// </summary>
+        /// <param name="args"></param>
+        public static void ReadOnlyNonHybridOverarchingFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
+
+            if (deIsHybridPrcStratValue != "1")
+            {
+                List<string> readonlyAtrbs = new List<string> { AttributeCodes.REBATE_OA_MAX_AMT, AttributeCodes.REBATE_OA_MAX_VOL };
+
+                IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
+                IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
+
+                if (deOAMaxAmt == null || deOAMaxVol == null)
+                {
+                    foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+                    {
+                        de.SetReadOnly();
+                    }
+                    return;
+                }
+
+                string overarchingMaxVol = deOAMaxVol.AtrbValue.ToString();
+                string overarchingMaxAmt = deOAMaxAmt.AtrbValue.ToString();
+
+                //do not run validation if no user input
+                if (overarchingMaxVol == "" && overarchingMaxVol == "")
+                {
+                    foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+                    {
+                        de.SetReadOnly();
+                    }
+                }
+            }
+        }
+
         public static void ShowExpireYCS2(params object[] args)
         {
             // DE28754 - Expire YCS2 Should be Editable for Front End Active Deals only.
@@ -1510,18 +1551,16 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IOpDataElement deOADealId = r.Dc.GetDataElement(AttributeCodes.REBATE_DEAL_ID);
             IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
             IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
 
-            if (deOADealId == null || deOAMaxAmt == null || deOAMaxVol == null) return;
+            if ( deOAMaxAmt == null || deOAMaxVol == null) return;
 
-            string overarchingDealIds = deOADealId.AtrbValue.ToString();
             string overarchingMaxVol = deOAMaxVol.AtrbValue.ToString();
             string overarchingMaxAmt = deOAMaxAmt.AtrbValue.ToString();
 
             //do not run validation if no user input
-            if (overarchingDealIds == "" && overarchingMaxVol == "" && deOAMaxAmt.AtrbValue.ToString() == "") return;
+            if (overarchingMaxVol == "" && deOAMaxAmt.AtrbValue.ToString() == "") return;
 
             int numMaxVol;
             decimal numMaxAmt;
@@ -1544,30 +1583,13 @@ namespace Intel.MyDeals.BusinessRules
                 deOAMaxAmt.AddMessage("Overarching Max Dollar Amount cannot be a negative value.");
             }
 
-            if (overarchingDealIds == "")
-            {   //if user does not add an overarching deal id, then they should also not have an overarching max volume or dollar amt
-                if (deOAMaxAmt.AtrbValue.ToString() != "")
-                {
-                    deOADealId.AddMessage("Overarching Deal ID required if Overarching Max Dollar Amount not empty.");
-                }
-                else if (deOAMaxVol.AtrbValue.ToString() != "")
-                {
-                    deOADealId.AddMessage("Overarching Deal ID required if Overarching Max Volume not empty.");
-                }
+            //if user adds an overarching deal id, then one but not both overarching max values are required
+            if (overarchingMaxAmt != "" && overarchingMaxVol != "")
+            {
+                deOAMaxAmt.AddMessage("Cannot have both Overarching Max Dollar Amount and Overarching Max Volume.");
+                deOAMaxVol.AddMessage("Cannot have both Overarching Max Volume and Overarching Max Dollar Amount.");
             }
-            else
-            {   //if user adds an overarching deal id, then one but not both overarching max values are required
-                if (overarchingMaxAmt != "" && overarchingMaxVol != "")
-                {
-                    deOAMaxAmt.AddMessage("Cannot have both Overarching Max Dollar Amount and Overarching Max Volume.");
-                    deOAMaxVol.AddMessage("Cannot have both Overarching Max Volume and Overarching Max Dollar Amount.");
-                }
-                else if (overarchingMaxAmt == "" && overarchingMaxVol == "")
-                {
-                    deOAMaxAmt.AddMessage("Overarching Max Volume OR Max Dollar required if Overarching Deal IDs entered.");
-                    deOAMaxVol.AddMessage("Overarching Max Volume OR Max Dollar required if Overarching Deal IDs entered.");
-                }
-            }
+
         }
 
         public static void ValidateOverarchingInPTR(params object[] args)

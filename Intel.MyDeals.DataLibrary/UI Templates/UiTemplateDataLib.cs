@@ -2388,7 +2388,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Label = "Overarching Deal IDs",
                 Width = 140,
-                //Format = "{0:d}",
+                IsReadOnly = true,
                 IsFilterable = true,
                 IsSortable = true,
                 //UiType = "IntegerTextBox",

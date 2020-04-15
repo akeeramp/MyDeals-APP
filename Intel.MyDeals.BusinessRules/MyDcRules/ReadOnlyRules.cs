@@ -151,6 +151,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Readonly for Overarching Max Volume and Dollar for Non Hybrid Deals if they dont contain any value",
+                    ActionRule = MyDcActions.ReadOnlyNonHybridOverarchingFields,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
+                },
+                new MyOpRule
+                {
                     Title="Readonly for Frontend With Tracker",
                     ActionRule = MyDcActions.ReadOnlyFrontendWithTracker,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW },
