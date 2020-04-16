@@ -197,6 +197,10 @@ namespace Intel.MyDeals.BusinessLogic
             return _vistexServiceDataLib.SaveVistexResponseData(batchId, dealsMessages);
         }
 
+        public Dictionary<string, string> PublishSapPo(string url, string jsonDatab)
+        {
+            return _vistexServiceDataLib.PublishSapPo(url, jsonDatab.ToString());
+        }
 
     }
 }

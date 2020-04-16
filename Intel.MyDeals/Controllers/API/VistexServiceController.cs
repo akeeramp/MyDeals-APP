@@ -6,6 +6,7 @@ using Intel.Opaque;
 using Intel.MyDeals.Helpers;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -65,6 +66,13 @@ namespace Intel.MyDeals.Controllers.API
                 throw ex;
             }
             return saveSuccessful;
+        }
+
+        [Route("PublishSapPo/{url}")]
+        [HttpPost]
+        public Dictionary<string, string> PublishSapPo(JObject jsonDatab, string url)
+        {
+            return _vistexServiceLib.PublishSapPo(url, jsonDatab.ToString());
         }
 
     }

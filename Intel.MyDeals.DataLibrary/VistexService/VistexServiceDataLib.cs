@@ -268,6 +268,8 @@ namespace Intel.MyDeals.DataLibrary
             request.Credentials = GetVistexCredentials(url);
             request.Method = "POST";
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             // Convert POST data as a byte array.  
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
             request.ContentType = "application/x-www-form-urlencoded";
