@@ -147,8 +147,8 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
 
     vm.ValidateSheet = function () {
         if (vm.MeetCompValidation != null) {
-            vm.MeetComps = vm.MeetCompValidation.ValidatedMeetComps;
-            vm.dataSourceSpreadSheet.read();
+            vm.MeetComps = vm.MeetCompValidation.ValidatedMeetComps;           
+            //vm.dataSourceSpreadSheet.read();
             vm.DeleteSpreadsheetAutoHeader();
 
             if (vm.MeetCompValidation.HasInvalidMeetComp) {
@@ -263,7 +263,7 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
         $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
 
-        for (i = 0; i < sheet.dataSource._pristineData.length; i++) {
+        for (i = 0; i < vm.MeetComps.length; i++) {
             var row = i + 1;
             sheet.range("A" + row).value(vm.MeetComps[i].CUST_NM);
             sheet.range("B" + row).value(vm.MeetComps[i].HIER_VAL_NM);
