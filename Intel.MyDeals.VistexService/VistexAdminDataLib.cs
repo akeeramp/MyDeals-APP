@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Intel.MyDeals.Entities;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;

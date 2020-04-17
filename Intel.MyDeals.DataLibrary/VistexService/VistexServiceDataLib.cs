@@ -84,8 +84,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
         {
-            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12; // .NET 4.5 -- The client and server cannot communicate, because they do not possess a common algorithm.
-
             //URL Setting - Reading from Key Value Pair 
             string url = GetVistexUrlByMode(mode);
 
@@ -94,6 +92,8 @@ namespace Intel.MyDeals.DataLibrary
             request.Credentials = GetVistexCredentials(url);
             // Set the Method property of the request to POST.  
             request.Method = "POST";
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             // Create POST data and convert it to a byte array.  
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
@@ -268,6 +268,8 @@ namespace Intel.MyDeals.DataLibrary
             request.Credentials = GetVistexCredentials(url);
             request.Method = "POST";
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             // Convert POST data as a byte array.  
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
             request.ContentType = "application/x-www-form-urlencoded";
@@ -353,7 +355,6 @@ namespace Intel.MyDeals.DataLibrary
 
         public CredentialCache GetVistexCredentials(string url)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
             CredentialCache credentialCache = new CredentialCache();
             credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential(ConfigurationManager.AppSettings["vistexUID"],
                 StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password")));

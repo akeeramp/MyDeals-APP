@@ -23,5 +23,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
 
+        Dictionary<string, string> PublishSapPo(string url, string jsonData);
+
     }
 }
