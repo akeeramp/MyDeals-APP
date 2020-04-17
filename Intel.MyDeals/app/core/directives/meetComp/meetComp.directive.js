@@ -998,10 +998,10 @@
 
                             //Setting DICT for Confrim box
                             $scope.msgDescDict = {
-                                'COMP_SKU_NEW': 'You have entered a new Meet Comp SKU and price. <BR/>Please make sure to store the Meet Comp SKU and price source in My Deals or in a legal approved repository as required by the MCA guidelines. <BR/>Also, work with your Division Approver so they can update the necessary documentation.',
-                                'COMP_SKU_UPD': 'You have overwritten the pre-populated Meet Comp Price. <BR/>Please make sure to store the Meet Comp price source in My Deals or in a legal approved repository as required by the MCA guidelines.',
-                                'IA_BNCH': 'You have overwritten the pre-populated IA Bench. <BR/>Please make sure to store the IA Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.',
-                                'COMP_BNCH': 'You have overwritten the pre-populated Comp Bench. <BR/>Please make sure to store the Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.'
+                                'COMP_SKU_NEW': 'You have entered a new Meet Comp SKU and price. Please make sure to store the Meet Comp SKU and price source in My Deals or in a legal approved repository as required by the MCA guidelines. Also, work with your Division Approver so they can update the necessary documentation.',
+                                'COMP_SKU_UPD': 'You have overwritten the pre-populated Meet Comp Price. Please make sure to store the Meet Comp price source in My Deals or in a legal approved repository as required by the MCA guidelines.',
+                                'IA_BNCH': 'You have overwritten the pre-populated IA Bench. Please make sure to store the IA Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.',
+                                'COMP_BNCH': 'You have overwritten the pre-populated Comp Bench. Please make sure to store the Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.'
                             };
 
                             function editorIABench(container, options) {
