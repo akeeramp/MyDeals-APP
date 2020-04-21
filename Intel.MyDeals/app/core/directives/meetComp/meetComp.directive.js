@@ -1184,7 +1184,10 @@
                                 else {
                                     var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                         .Where(function (x) {
-                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID);
+                                            return (
+                                                x.GRP_PRD_SID == options.model.GRP_PRD_SID && 
+                                                x.GRP == options.model.GRP
+                                            );
                                         })
                                         .GroupBy(function (x) {
                                             return (x.COMP_SKU);
@@ -1313,7 +1316,9 @@
 
                                     var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                         .Where(function (x) {
-                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.COMP_PRC != null);
+                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                x.COMP_PRC != null &&
+                                                x.GRP == options.model.GRP);
                                         })
                                         .GroupBy(function (x) {
                                             return (x.COMP_PRC);
